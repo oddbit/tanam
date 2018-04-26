@@ -1,0 +1,40 @@
+{
+  "name": "tanam",
+  "version": "0.0.1",
+  "description": "Pluggable CMS for Firebase",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "watch": "tsc -w -p .",
+    "build": "tsc -p .",
+    "test": "echo \"Warning: no test specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oddbit/tanam.git"
+  },
+  "keywords": [
+    "CMS",
+    "Firebase"
+  ],
+  "contributors": [
+    {
+      "name": "Prabu Rangki",
+      "email": "praburangki@gmail.com"
+    },
+    {
+      "name": "Dennis Alund",
+      "email": "dennis.alund@gmail.com"
+    }
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/oddbit/tanam/issues"
+  },
+  "homepage": "https://github.com/oddbit/tanam#readme",
+  "devDependencies": {},
+  "dependencies": {
+    "firebase-admin": "~5.12.0",
+    "firebase-functions": "~1.0.2"
+  }
+}
