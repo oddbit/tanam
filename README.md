@@ -1,4 +1,4 @@
-# Tanam
+# Tanam 🌱
 ![License](https://img.shields.io/npm/l/tanam.svg)
 ![NPM version](https://img.shields.io/npm/v/tanam.svg)
 ![Total NPM downloads](https://img.shields.io/npm/dt/tanam.svg)
