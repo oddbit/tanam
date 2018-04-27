@@ -1,3 +1,8 @@
+language: node_js
+node_js:
+  - "node"
+cache:
+  - node_modules
 deploy:
   provider: npm
   email: contact@oddbit.id
