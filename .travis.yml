@@ -3,6 +3,10 @@ node_js:
   - "node"
 cache:
   - node_modules
+branches:
+  only:
+    - develop
+    - master
 deploy:
   provider: npm
   email: contact@oddbit.id
