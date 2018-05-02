@@ -1,0 +1,22 @@
+{
+  "functions": {
+    "predeploy": [
+      "npm --prefix functions run lint",
+      "npm --prefix functions run build"
+    ]
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
