@@ -6,6 +6,21 @@
 
 A pluggable web based CMS for Firebase.
 
+## Configuration
+
+### Your first user
+Before logging in with your first user, you want to make sure that it's only you who get access to your site.
+
+Configure yourself as the owner of the site by running this command in your project root
+
+```bash
+firebase functions:config:set tanam.owner=john.doe@example.com
+```
+
+Exchange the email `john.doe@example.com` with the email that you will login as the "site owner". Don't worry,
+you can add more admin users later. This is just to enable you to login directly after deploying the site.
+
+
 ## License
 This project is under [Apache License 2.0](LICENSE)
 
