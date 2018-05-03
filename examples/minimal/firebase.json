@@ -1,22 +1,27 @@
 {
   "functions": {
     "predeploy": [
-      "npm --prefix functions run lint",
-      "npm --prefix functions run build"
-    ]
+      "npm --prefix \"$RESOURCE_DIR\" run lint",
+      "npm --prefix \"$RESOURCE_DIR\" run build"
+    ],
+    "source": "functions"
   },
   "hosting": {
     "public": "public",
+    "rewrites": [
+      {
+        "source": "/admin/",
+        "function": "adminClient"
+      },
+      {
+        "source": "/admin/**",
+        "function": "adminClient"
+      }
+    ],
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
     ]
   }
 }
