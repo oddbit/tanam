@@ -62,3 +62,5 @@ typings/
 
 # build output
 dist/
+
+.vscode
