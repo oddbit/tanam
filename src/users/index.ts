@@ -4,60 +4,69 @@ import { Change, EventContext } from "firebase-functions";
 import { UserRecord } from "firebase-functions/lib/providers/auth";
 import { MD5 } from "crypto-js";
 
-interface UserProfile {
+export class User {
+    uid: string;
     name: string;
     email: string;
-    photoUrl?: string;
+    photoUrl: string;
     role: string;
+
+    constructor(user: User) {
+        this.uid = user.uid;
+        this.name = user.name;
+        this.email = user.email;
+        this.photoUrl = user.photoUrl;
+        this.role = user.role;
+    }
+
+    toJson() {
+        return {
+            name: this.name,
+            email: this.email,
+            photoUrl: this.photoUrl,
+            role: this.role
+        };
+    }
+}
+
+export function remove(uid: string) {
+    console.log(`[tanam.user.remove] uid: ${uid}`);
+    return firebase.firestore().collection("users").doc(uid).delete();
+}
+
+export function save(user: User) {
+    return firebase.firestore().collection("users").doc(user.uid).set(user.toJson());
 }
 
 /**
- * Clean up user data if an account is being removed.
+ * Applies the `User.role` to firebase auth custom claims so that we can make role based auth
+ * in both databases and cloud storage.
+ *
+ * @param user `User`
  */
-export function cleanUpDeletedUser(firebaseUser: UserRecord) {
-    console.log(`[tanam.cleanUpDeletedUser] User account deleted: ${firebaseUser.email} (${firebaseUser.uid})`);
-    return firebase.firestore().collection("users").doc(firebaseUser.uid).delete();
+export function setUserRoleToAuth(user: User) {
+    console.log(`[setUserRoleToAuth] Updating auth with: {role: ${user.role}, uid: ${user.uid}}`);
+    return firebase.auth().setCustomUserClaims(user.uid, { role: user.role });
 }
 
 /**
- * Create a user document when a Firebase account is being created.
+ * Create a Tanam user object from firebase auth user
+ *
+ * @param firebaseUser Firebase auth user
  */
-export function scaffoldNewUserProfile(firebaseUser: UserRecord) {
-    const ownerEmail = functions.config().tanam && functions.config().tanam.owner;
-    const role = ownerEmail === firebaseUser.email ? "owner" : "guest";
-    console.log(`[tanam.scaffoldNewUserProfile] New account email=${firebaseUser.email}, role=${role}, uid=${firebaseUser.uid}`);
-
+export function createUserFromFirebaseAuth(firebaseUser: UserRecord) {
     // Use gravatar as default if photoUrl isn't specified in user data
     // https://en.gravatar.com/site/implement/images/
     const gravatarHash = MD5(firebaseUser.email).toString().toLowerCase();
-    const userProfile: UserProfile = {
+
+    // Check for preconfigured owner of this site
+    const ownerEmail = (functions.config().tanam && functions.config().tanam.owner) || "-";
+
+    return new User({
+        uid: firebaseUser.uid,
         name: firebaseUser.displayName || firebaseUser.email,
         email: firebaseUser.email,
         photoUrl: firebaseUser.photoURL || `https://www.gravatar.com/avatar/${gravatarHash}.jpg?s=1024&d=identicon`,
-        role: role
-    };
-
-    return Promise.all([
-        firebase.firestore().collection("users").doc(firebaseUser.uid).set(userProfile),
-        firebase.auth().setCustomUserClaims(firebaseUser.uid, { role: role })
-    ]);
-}
-
-export function onUserUpdated(change: Change<FirebaseFirestore.DocumentSnapshot>, context?: EventContext) {
-    if (!context) {
-        throw new Error("Context parameter not set. Tanam can not make updates without knowing the UID.");
-    }
-
-    const userBefore = change.before.data() as UserProfile;
-    const userAfter = change.after.data() as UserProfile;
-    const uid = context.params.uid;
-
-    const promises = [];
-
-    if (userBefore.role !== userAfter.role) {
-        console.log(`[tanam.onUserUpdated] User role changed from=${userBefore.role}, to=${userAfter.role}, uid=${uid}`);
-        promises.push(firebase.auth().setCustomUserClaims(uid, { role: userAfter.role }));
-    }
-
-    return Promise.all(promises);
+        role: ownerEmail === firebaseUser.email ? "owner" : "guest"
+    } as User);
 }
