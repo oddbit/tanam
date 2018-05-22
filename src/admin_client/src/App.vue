@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <v-app>
-      <Drawer />
-      <Toolbar />
+      <div v-if="currentUser">
+        <Drawer />
+        <Toolbar />
+      </div>
       <v-content>
         <router-view />
       </v-content>
@@ -11,6 +13,8 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+import { CURRENT_USER, LOGOUT } from '@/store/types';
 import Drawer from '@/components/Drawer/Drawer';
 import Toolbar from '@/components/Toolbar';
 
@@ -19,6 +23,16 @@ export default {
   components: {
     Drawer,
     Toolbar
+  },
+  computed: {
+    ...mapGetters({
+      currentUser: CURRENT_USER
+    })
+  },
+  methods: {
+    ...mapActions({
+      onLogout: LOGOUT
+    })
   }
 };
 </script>
