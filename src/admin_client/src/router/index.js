@@ -12,6 +12,16 @@ const routerOptions = [
     path: '/login',
     name: 'login',
     component: 'Login'
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: 'Profile/MyProfile'
+  },
+  {
+    path: '/profile/account-settings',
+    name: 'accountSettings',
+    component: 'Profile/AccountSettings'
   }
 ];
 
