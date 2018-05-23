@@ -11,13 +11,14 @@
   },
   "dependencies": {
     "firebase": "^5.0.3",
+    "firebaseui": "^3.0.0",
+    "node-sass": "^4.9.0",
     "register-service-worker": "^1.0.0",
+    "sass-loader": "^7.0.1",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1",
-    "node-sass": "^4.9.0",
-    "sass-loader": "^7.0.1",
-    "vuetify": "^1.0.18"
+    "vuetify": "^1.0.18",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-beta.11",

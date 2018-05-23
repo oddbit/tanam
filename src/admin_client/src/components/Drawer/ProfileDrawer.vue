@@ -3,7 +3,7 @@
 
     <div class="info-wrapper">
       <span class="img-wrapper">
-        <img src="@/assets/images/gravatar.jpg" />
+        <img src="@/assets/images/gravatar.jpg">
       </span>
       <h2>Ananda Widiprabawa</h2>
       <h4>@anandaprabawa</h4>

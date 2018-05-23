@@ -2,36 +2,38 @@
   <v-container fluid>
     <v-layout column align-center>
       <v-flex xs12>
-        <div class="text-xs-center">
-          <v-btn 
-            round 
-            color="red" 
-            dark
-            @click.prevent="loginGoogle">Login with Google
-            <v-icon right dark>lock_open</v-icon>
-            <span slot="loader" class="custom-loader">
-              <v-icon light>cached</v-icon>
-            </span>
-          </v-btn>
-        </div>
+        <div class="text-xs-center" id="firebaseui-container" />
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import { CURRENT_USER, LOGIN_GOOGLE } from '@/store/types';
+import { mapGetters } from 'vuex';
+import { CURRENT_USER } from '@/store/types';
+import firebase from 'firebase/app';
+import { firebaseUI } from '@/utils/firebase';
+
+const uiConfig = {
+  signInSuccessUrl: '/',
+  signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+    firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+    firebase.auth.GithubAuthProvider.PROVIDER_ID,
+    firebase.auth.EmailAuthProvider.PROVIDER_ID
+  ],
+  tosUrl: '/#tos',
+  signInFlow: 'popup'
+};
 
 export default {
+  mounted() {
+    firebaseUI.start('#firebaseui-container', uiConfig);
+  },
   computed: {
     ...mapGetters({
       currentUser: CURRENT_USER
-    })
-  },
-  methods: {
-    ...mapActions({
-      loginGoogle: LOGIN_GOOGLE
     })
   },
   watch: {
@@ -44,6 +46,5 @@ export default {
 };
 </script>
 
-
-<style scoped>
+<style src="firebaseui/dist/firebaseui.css">
 </style>

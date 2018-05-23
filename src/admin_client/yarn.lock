@@ -2753,6 +2753,10 @@ detect-node@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.0.3.tgz#a2033c09cc8e158d37748fbde7507832bd6ce127"
 
+dialog-polyfill@^0.4.7:
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/dialog-polyfill/-/dialog-polyfill-0.4.9.tgz#c690b3727c3d82e0f947bd5b910b32af8a2ef57d"
+
 diff@3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.5.0.tgz#800c0dd1e0a8bfbc95835c202ad220fe317e5a12"
@@ -3473,7 +3477,7 @@ find-up@^2.1.0:
   dependencies:
     locate-path "^2.0.0"
 
-firebase@^5.0.3:
+firebase@^5.0.0, firebase@^5.0.3:
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-5.0.3.tgz#b3e9334022cd90567d398b31f49fb67f0489e271"
   dependencies:
@@ -3485,6 +3489,13 @@ firebase@^5.0.3:
     "@firebase/messaging" "0.3.3"
     "@firebase/polyfill" "0.3.2"
     "@firebase/storage" "0.2.2"
+
+firebaseui@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/firebaseui/-/firebaseui-3.0.0.tgz#c3749683c6889c5e4ac0ebf8d62c112414351a3c"
+  dependencies:
+    dialog-polyfill "^0.4.7"
+    firebase "^5.0.0"
 
 flat-cache@^1.2.1:
   version "1.3.0"
