@@ -11,6 +11,7 @@ import {
   VToolbar,
   VSubheader,
   VCard,
+  VMenu,
   transitions
 } from 'vuetify';
 import 'vuetify/src/stylus/app.styl';
@@ -27,6 +28,7 @@ Vue.use(Vuetify, {
     VToolbar,
     VSubheader,
     VCard,
+    VMenu,
     transitions
   }
 });
