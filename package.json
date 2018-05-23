@@ -8,7 +8,7 @@
     "buildClient": "cp -r ./src/admin_client/dist/ ./dist/admin_client/public",
     "watch": "tsc -w -p .",
     "build": "tsc -p . && npm run buildClient",
-    "test": "echo \"Warning: no test specified\" && exit 0"
+    "test": "mocha --reporter spec"
   },
   "repository": {
     "type": "git",
@@ -34,7 +34,10 @@
   },
   "homepage": "https://github.com/oddbit/tanam#readme",
   "devDependencies": {
-    "@types/crypto-js": "^3.1.39"
+    "@types/crypto-js": "^3.1.39",
+    "@types/mocha": "^5.2.0",
+    "firebase-functions-test": "^0.1.2",
+    "mocha": "^5.1.1"
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
