@@ -46,4 +46,15 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+@media screen and (max-width: 1263px) {
+  .mobile-flex {
+    display: flex;
+  }
+  .mobile-justify-center {
+    justify-content: center !important;
+  }
+  .mobile-align-center {
+    align-items: center !important;
+  }
+}
 </style>
