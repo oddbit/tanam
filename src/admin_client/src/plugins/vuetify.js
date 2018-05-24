@@ -12,6 +12,8 @@ import {
   VSubheader,
   VCard,
   VMenu,
+  VForm,
+  VTextField,
   transitions
 } from 'vuetify';
 import 'vuetify/src/stylus/app.styl';
@@ -29,6 +31,8 @@ Vue.use(Vuetify, {
     VSubheader,
     VCard,
     VMenu,
+    VForm,
+    VTextField,
     transitions
   }
 });
