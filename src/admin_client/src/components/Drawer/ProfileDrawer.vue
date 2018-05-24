@@ -15,7 +15,7 @@
         @click="handleLogout"
         color="primary"
         dark
-        class="mt-3">Sign Out</v-btn>
+        class="mt-3">Logout</v-btn>
     </v-layout>
 
     <v-list subheader>
