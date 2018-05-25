@@ -1,47 +1,59 @@
 <template>
   <v-card>
-    <v-card-title class="card-title">Profile</v-card-title>
+    <v-card-title class="card-title px-4">Profile</v-card-title>
 
-    <v-form>
-      <v-container fluid grid-list-lg>
-        <v-layout wrap>
-          <v-flex xs12 md4 class="mobile-flex mobile-justify-center">
-            <div class="img-wrapper">
-              <input 
-                ref="inputAvatar"
-                type="file" 
-                name="avatar" 
-                accept="image/*"
-                class="input-avatar"
-                @change="handleChangeAvatar">
-              <img :src="avatar">
-              <span class="bg-overlay" />
-              <span class="action" @click="handleClickAvatar">
-                <v-icon dark large>cloud_upload</v-icon>
-                <p>Click to change photo</p>
-              </span>
-            </div>
-          </v-flex>
-          <v-flex xs12 md8>
-            <v-text-field name="firstName" label="First Name" v-model="firstName" />
-            <v-text-field name="lastName" label="Last Name" v-model="lastName" />
-          </v-flex>
-        </v-layout>
-        <v-layout>
-          <v-flex xs12>
-            <v-text-field name="publicDisplay" label="Public Display Name" v-model="publicDisplay" />
-            <v-text-field 
-              name="about" 
-              label="About Me" 
-              v-model="about"
-              multi-line />
-          </v-flex>
-        </v-layout>
-        <v-layout justify-end>
-          <v-btn color="primary">Save Profile</v-btn>
-        </v-layout>
-      </v-container>
-    </v-form>
+    <v-container fluid grid-list-xl>
+      <v-form>
+        
+        <div>
+          <v-layout wrap>
+            <v-flex xs12 md4 class="mobile-flex mobile-justify-center">
+              <div class="img-wrapper">
+                <input 
+                  ref="inputAvatar"
+                  type="file" 
+                  name="avatar" 
+                  accept="image/*"
+                  class="input-avatar"
+                  @change="handleChangeAvatar">
+                <img :src="avatar">
+                <span class="bg-overlay" />
+                <span class="action" @click="handleClickAvatar">
+                  <v-icon dark large>cloud_upload</v-icon>
+                  <p>Click to change photo</p>
+                </span>
+              </div>
+            </v-flex>
+            <v-flex xs12 md8>
+              <v-text-field name="firstName" label="First Name" v-model="firstName" />
+              <v-text-field name="lastName" label="Last Name" v-model="lastName" />
+            </v-flex>
+          </v-layout>
+        </div>
+
+        <div>
+          <v-layout>
+            <v-flex xs12>
+              <v-text-field name="publicDisplay" label="Public Display Name" v-model="publicDisplay" />
+              <v-text-field 
+                name="about" 
+                label="About Me" 
+                v-model="about"
+                multi-line />
+            </v-flex>
+          </v-layout>
+        </div>
+        
+        <div>
+          <v-layout>
+            <v-flex d-flex justify-end>
+              <v-btn color="primary" class="ma-0 btn-save">Save Profile</v-btn>
+            </v-flex>
+          </v-layout>
+        </div>
+
+      </v-form>
+    </v-container>
 
   </v-card>
 </template>
@@ -121,5 +133,8 @@ export default {
       padding: 0 1em;
     }
   }
+}
+.btn-save {
+  flex: 0 1 auto !important;
 }
 </style>

@@ -2,7 +2,7 @@
   <v-container>
     <v-layout
       justify-center
-      class="py-4 layout">
+      class="py-4">
       <v-flex
         xs12
         md8>
