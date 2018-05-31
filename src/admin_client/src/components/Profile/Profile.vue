@@ -1,73 +1,86 @@
 <template>
-  <v-card>
-    <v-card-title class="card-title px-4">Profile</v-card-title>
+  <div>
+    <v-card>
+      <v-card-title class="card-title px-4">Profile</v-card-title>
 
-    <v-container fluid grid-list-xl>
-      <v-form>
+      <v-container fluid grid-list-xl>
+        <v-form>
         
-        <div>
-          <v-layout wrap>
-            <v-flex xs12 md4 class="mobile-flex mobile-justify-center">
-              <div class="img-wrapper">
-                <input 
-                  ref="inputAvatar"
-                  type="file" 
-                  name="avatar" 
-                  accept="image/*"
-                  class="input-avatar"
-                  @change="handleChangeAvatar">
-                <img :src="avatar">
-                <span class="bg-overlay" />
-                <span class="action" @click="handleClickAvatar">
-                  <v-icon dark large>cloud_upload</v-icon>
-                  <p>Click to change photo</p>
-                </span>
-              </div>
-            </v-flex>
-            <v-flex xs12 md8>
-              <v-text-field name="firstName" label="First Name" v-model="firstName" />
-              <v-text-field name="lastName" label="Last Name" v-model="lastName" />
-            </v-flex>
-          </v-layout>
-        </div>
+          <div>
+            <v-layout wrap>
+              <v-flex xs12 md4 class="mobile-flex mobile-justify-center">
+                <div class="img-wrapper">
+                  <input 
+                    ref="inputAvatar"
+                    type="file" 
+                    name="avatar" 
+                    accept="image/*"
+                    class="input-avatar"
+                    @change="handleChangeAvatar">
+                  <img :src="avatar">
+                  <span class="bg-overlay" />
+                  <span class="action" @click="handleClickAvatar">
+                    <v-icon dark large>cloud_upload</v-icon>
+                    <p>Click to change photo</p>
+                  </span>
+                </div>
+              </v-flex>
+              <v-flex xs12 md8>
+                <v-text-field name="firstName" label="First Name" v-model="firstName" />
+                <v-text-field name="lastName" label="Last Name" v-model="lastName" />
+              </v-flex>
+            </v-layout>
+          </div>
 
-        <div>
-          <v-layout>
-            <v-flex xs12>
-              <v-text-field name="publicDisplay" label="Public Display Name" v-model="publicDisplay" />
-              <v-text-field 
-                name="about" 
-                label="About Me" 
-                v-model="about"
-                multi-line />
-            </v-flex>
-          </v-layout>
-        </div>
+          <div>
+            <v-layout>
+              <v-flex xs12>
+                <v-text-field name="publicDisplay" label="Public Display Name" v-model="publicDisplay" />
+                <v-text-field 
+                  name="about" 
+                  label="About Me" 
+                  v-model="about"
+                  multi-line />
+              </v-flex>
+            </v-layout>
+          </div>
         
-        <div>
-          <v-layout>
-            <v-flex d-flex justify-end>
-              <v-btn color="primary" class="ma-0 btn-save">Save Profile</v-btn>
-            </v-flex>
-          </v-layout>
-        </div>
+          <div>
+            <v-layout>
+              <v-flex d-flex justify-end>
+                <v-btn color="primary" class="ma-0 btn-save">Save Profile</v-btn>
+              </v-flex>
+            </v-layout>
+          </div>
 
-      </v-form>
-    </v-container>
+        </v-form>
+      </v-container>
 
-  </v-card>
+    </v-card>
+
+    <DialogImageCropper 
+      :dialog="dialog" 
+      :image="avatarTemp" 
+      @handleToggleDialog="handleToggleDialog" 
+      @handleChangeCropAvatar="handleChangeCropAvatar" />
+  </div>
 </template>
 
 <script>
 import gravatar from '@/assets/images/gravatar.jpg';
 
 export default {
+  components: {
+    DialogImageCropper: () => import('@/components/Profile/DialogImageCropper')
+  },
   data: () => ({
     avatar: gravatar,
     firstName: null,
     lastName: null,
     publicDisplay: null,
-    about: null
+    about: null,
+    dialog: false,
+    avatarTemp: null
   }),
   methods: {
     handleClickAvatar() {
@@ -78,8 +91,16 @@ export default {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = e => {
-        this.avatar = e.target.result;
+        this.avatarTemp = e.target.result;
+        this.handleToggleDialog(true);
+        this.$refs.inputAvatar.value = null;
       };
+    },
+    handleToggleDialog(val) {
+      this.dialog = val;
+    },
+    handleChangeCropAvatar(img) {
+      this.avatar = img;
     }
   }
 };
