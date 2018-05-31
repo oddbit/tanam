@@ -1,19 +1,28 @@
 <template>
-  <v-container fluid>
-    <v-layout column align-center>
-      <v-flex xs12>
-        <div class="text-xs-center">
-          <v-btn 
-            round 
-            color="red" 
-            dark
-            @click.prevent="loginGoogle">Login with Google
-            <v-icon right dark>lock_open</v-icon>
+  <v-container fluid fill-height class="primary">
+    <v-layout column align-center justify-center>
+      <v-flex xs12 d-flex align-center>
+        <v-card flat color="transparent" class="text-xs-center">
+          <div class="head-wrapper mb-4">
+            <div class="logo-wrapper pa-1 mb-2">
+              <img src="@/assets/images/tanam-circle.png">
+            </div>
+            <h2 class="white--text head-title">Welcome to Tanam<span>CMS</span></h2>
+          </div>
+          <v-btn
+            color="white"
+            light
+            class="btn-wrapper"
+            @click.prevent="loginGoogle">
+            <span class="img-wrapper">
+              <img src="@/assets/images/google-icon-color.svg">
+            </span>
+            <span class="text pl-3 grey--text text--darken-3">Sign in with Google</span>
             <span slot="loader" class="custom-loader">
               <v-icon light>cached</v-icon>
             </span>
           </v-btn>
-        </div>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>
@@ -44,6 +53,40 @@ export default {
 };
 </script>
 
-
-<style scoped>
+<style lang="scss" scoped>
+.head-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  .logo-wrapper {
+    display: flex;
+    align-items: center;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    img {
+      max-width: 100px;
+    }
+  }
+  .head-title {
+    font-weight: 400;
+    span {
+      font-weight: 700;
+    }
+  }
+}
+.btn-wrapper {
+  .img-wrapper {
+    display: flex;
+    align-items: center;
+    img {
+      width: 18px;
+      height: 18px;
+      vertical-align: middle;
+    }
+  }
+  .text {
+    text-transform: initial;
+  }
+}
 </style>
