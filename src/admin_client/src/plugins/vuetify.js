@@ -14,6 +14,7 @@ import {
   VMenu,
   VForm,
   VTextField,
+  VDialog,
   transitions
 } from 'vuetify';
 import 'vuetify/src/stylus/app.styl';
@@ -33,6 +34,10 @@ Vue.use(Vuetify, {
     VMenu,
     VForm,
     VTextField,
+    VDialog,
     transitions
+  },
+  theme: {
+    primary: '#4caf50'
   }
 });
