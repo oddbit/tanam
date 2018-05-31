@@ -2,6 +2,7 @@ import '@babel/polyfill';
 import Vue from 'vue';
 import './plugins/vuetify';
 import './plugins/vueMq';
+import './plugins/vueCropper';
 import { store } from '@/store';
 import { AUTO_LOGIN } from '@/store/types';
 const App = () => import('./App.vue');
