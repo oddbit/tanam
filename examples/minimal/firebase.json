@@ -10,12 +10,8 @@
     "public": "public",
     "rewrites": [
       {
-        "source": "/admin/",
-        "function": "adminClient"
-      },
-      {
-        "source": "/admin/**",
-        "function": "adminClient"
+        "source": "**",
+        "function": "theme"
       }
     ],
     "ignore": [
