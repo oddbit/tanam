@@ -5,3 +5,6 @@ export const AUTO_LOGIN = 'users/autoLogin';
 export const LOGOUT = 'users/logout';
 
 export const TOGGLE_DRAWER = 'drawer/toggleDrawer';
+
+export const SET_LAYOUT = 'layout/setLayout';
+export const CURRENT_LAYOUT = 'layout/currentLayout';

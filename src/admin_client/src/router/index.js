@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import firebase from 'firebase/app';
+import { SET_LAYOUT } from '@/store/types';
+import { store } from '@/store';
 
 const routerOptions = [
   {
@@ -11,7 +13,18 @@ const routerOptions = [
   {
     path: '/login',
     name: 'login',
-    component: 'Login'
+    component: 'Login',
+    meta: { layout: 'SimpleLayout' }
+  },
+  {
+    path: '/events',
+    name: 'events',
+    component: 'Events/index'
+  },
+  {
+    path: '/events/:slug',
+    name: 'events-slug',
+    component: 'Events/_slug'
   },
   {
     path: '/profile',
@@ -20,7 +33,7 @@ const routerOptions = [
   },
   {
     path: '/profile/account-settings',
-    name: 'accountSettings',
+    name: 'account-settings',
     component: 'Profile/AccountSettings'
   }
 ];
@@ -38,6 +51,8 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+  store.commit(SET_LAYOUT, to.meta.layout);
+
   const isAuthenticated = firebase.auth().currentUser;
   if (isAuthenticated) {
     next();
