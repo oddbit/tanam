@@ -65,3 +65,5 @@ dist/
 
 .vscode
 *.lock
+
+\.idea/
