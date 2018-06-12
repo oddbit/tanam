@@ -1,30 +1,40 @@
 <template>
   <div>
 
-    <div class="info-wrapper">
+    <v-layout 
+      justify-center 
+      align-center 
+      column 
+      class="my-4">
       <span class="img-wrapper">
-        <img src="@/assets/images/gravatar.jpg" />
+        <img src="@/assets/images/gravatar.jpg">
       </span>
-      <h2>Ananda Widiprabawa</h2>
+      <h2 class="mt-2">Ananda Widiprabawa</h2>
       <h4>@anandaprabawa</h4>
-      <v-btn color="light-green darken-4" dark>Sign Out</v-btn>
-    </div>
+      <v-btn
+        @click="handleLogout"
+        color="primary"
+        dark
+        class="mt-3">Logout</v-btn>
+    </v-layout>
 
     <v-list subheader>
       <v-subheader>PROFILE</v-subheader>
       <v-list-tile
         to="/profile"
+        exact
         ripple
-        @click="() => null"
-        active-class="light-green--text text--darken-4">
+        active-class="primary--text"
+        @click="() => null">
         <v-list-tile-action><v-icon>person</v-icon></v-list-tile-action>
         <v-list-tile-title>My Profile</v-list-tile-title>
       </v-list-tile>
       <v-list-tile
-        to="/profile/account-setting"
+        to="/profile/account-settings"
+        exact
         ripple
-        @click="() => null"
-        active-class="light-green--text text--darken-4">
+        active-class="primary--text"
+        @click="() => null">
         <v-list-tile-action><v-icon>settings</v-icon></v-list-tile-action>
         <v-list-tile-title>Account Settings</v-list-tile-title>
       </v-list-tile>
@@ -33,14 +43,21 @@
   </div>
 </template>
 
+<script>
+import { mapActions } from 'vuex';
+import { LOGOUT } from '@/store/types';
+
+export default {
+  methods: {
+    ...mapActions({
+      handleLogout: LOGOUT
+    })
+  }
+};
+</script>
+
+
 <style lang="scss" scoped>
-.info-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 1em 0;
-}
 .img-wrapper {
   width: 50%;
   display: flex;
