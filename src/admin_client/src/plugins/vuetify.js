@@ -15,6 +15,9 @@ import {
   VForm,
   VTextField,
   VDialog,
+  VTabs,
+  VDatePicker,
+  VDivider,
   transitions
 } from 'vuetify';
 import 'vuetify/src/stylus/app.styl';
@@ -35,6 +38,9 @@ Vue.use(Vuetify, {
     VForm,
     VTextField,
     VDialog,
+    VTabs,
+    VDatePicker,
+    VDivider,
     transitions
   },
   theme: {

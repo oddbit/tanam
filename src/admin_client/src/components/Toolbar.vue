@@ -4,6 +4,7 @@
     app
     fixed
     clipped-left
+    clipped-right
     color="primary"
     dark>
     <v-toolbar-side-icon
@@ -18,6 +19,9 @@
       icon
       to="/">
       <v-icon>dashboard</v-icon>
+    </v-btn>
+    <v-btn v-if="isEventPostDetail" icon @click="handleToggleEventPostSettings">
+      <v-icon>settings</v-icon>
     </v-btn>
     <v-btn icon>
       <v-icon>notifications</v-icon>
@@ -60,6 +64,9 @@ export default {
   computed: {
     isProfileRoute() {
       return /\/profile/gi.test(this.$route.path);
+    },
+    isEventPostDetail() {
+      return this.$route.name === 'events-slug';
     }
   },
   methods: {
@@ -68,6 +75,9 @@ export default {
     }),
     handleClickMenu() {
       this.$store.commit('drawer/toggleDrawer', true);
+    },
+    handleToggleEventPostSettings() {
+      this.$store.commit('drawer/toggleDrawerEventPost');
     }
   }
 };

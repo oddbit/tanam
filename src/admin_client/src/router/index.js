@@ -24,7 +24,8 @@ const routerOptions = [
   {
     path: '/events/:slug',
     name: 'events-slug',
-    component: 'Events/_slug'
+    component: 'Events/_slug',
+    meta: { layout: 'SinglePostLayout' }
   },
   {
     path: '/profile',

@@ -9,11 +9,13 @@ import { mapGetters } from 'vuex';
 import { CURRENT_LAYOUT } from '@/store/types';
 import DefaultLayout from '@/layouts/Default';
 import SimpleLayout from '@/layouts/Simple';
+import SinglePostLayout from '@/layouts/SinglePost';
 
 export default {
   components: {
     DefaultLayout,
-    SimpleLayout
+    SimpleLayout,
+    SinglePostLayout
   },
   computed: {
     ...mapGetters({
@@ -29,7 +31,6 @@ export default {
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 @media screen and (max-width: 1263px) {
