@@ -10,18 +10,10 @@
     <v-list>
       <v-list-group>
         <v-list-tile slot="activator">
-          <v-list-tile-title>Title</v-list-tile-title>
-        </v-list-tile>
-        <div class="px-3">
-          <v-text-field placeholder="Title" v-model="title" />
-        </div>
-      </v-list-group>
-      <v-list-group>
-        <v-list-tile slot="activator">
           <v-list-tile-title>Place</v-list-tile-title>
         </v-list-tile>
         <div class="px-3">
-          <v-text-field placeholder="Place" v-model="place" />
+          <v-text-field placeholder="Place" v-model="postPlace" />
         </div>
       </v-list-group>
       <v-list-group>
@@ -37,19 +29,19 @@
             width="290"
             content-class="ma-0"
             v-model="dialogStartDate"
-            :return-value.sync="dateStart"
+            :return-value.sync="postDateStart"
           >
             <v-text-field
               slot="activator"
-              v-model="dateStart"
+              v-model="postDateStart"
               label="Start At"
               prepend-icon="event"
               readonly
             />
-            <v-date-picker v-model="dateStart">
+            <v-date-picker v-model="postDateStart">
               <v-spacer />
               <v-btn flat color="primary" @click="dialogStartDate = false">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.startAt.save(dateStart)">OK</v-btn>
+              <v-btn flat color="primary" @click="$refs.startAt.save(postDateStart)">OK</v-btn>
             </v-date-picker>
           </v-dialog>
           <v-dialog
@@ -60,19 +52,19 @@
             content-class="ma-0"
             full-width
             v-model="dialogEndDate"
-            :return-value.sync="dateEnd"
+            :return-value.sync="postDateEnd"
           >
             <v-text-field
               slot="activator"
-              v-model="dateEnd"
+              v-model="postDateEnd"
               label="End At"
               prepend-icon="event"
               readonly
             />
-            <v-date-picker v-model="dateEnd">
+            <v-date-picker v-model="postDateEnd">
               <v-spacer />
               <v-btn flat color="primary" @click="dialogEndDate = false">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.endAt.save(dateEnd)">OK</v-btn>
+              <v-btn flat color="primary" @click="$refs.endAt.save(postDateEnd)">OK</v-btn>
             </v-date-picker>
           </v-dialog>
         </div>
@@ -82,8 +74,8 @@
           <v-list-tile-title>Price</v-list-tile-title>
         </v-list-tile>
         <div class="px-3">
-          <v-text-field label="Reguler" prefix="Rp" v-model="priceReguler" />
-          <v-text-field label="Member" prefix="Rp" v-model="priceMember" />
+          <v-text-field label="Regular" prefix="Rp" v-model="postPriceRegular" />
+          <v-text-field label="Member" prefix="Rp" v-model="postPriceMember" />
         </div>
       </v-list-group>
       <v-list-group>
@@ -91,9 +83,9 @@
           <v-list-tile-title>RSVP</v-list-tile-title>
         </v-list-tile>
         <div class="px-3">
-          <v-text-field label="Email" v-model="rsvpEmail" />
-          <v-text-field label="Url" v-model="rsvpUrl" />
-          <v-text-field label="Facebook" v-model="rsvpFacebook" />
+          <v-text-field label="Email" v-model="postRsvpEmail" />
+          <v-text-field label="Url" v-model="postRsvpUrl" />
+          <v-text-field label="Facebook" v-model="postRsvpFacebook" />
         </div>
       </v-list-group>
       <v-list-group>
@@ -102,7 +94,15 @@
         </v-list-tile>
         <div class="px-3">
           <div class="featured-img-wrapper">
-            <v-btn class="btn-set" @click="$refs.featuredImg.click()">Set Featured Image</v-btn>
+            <div v-if="postFeaturedImage" class="img-wrapper"><img :src="postFeaturedImage"></div>
+            <v-btn v-if="!postFeaturedImage" class="btn-set" @click="$refs.featuredImg.click()">Set Featured Image</v-btn>
+            <v-btn 
+              v-else 
+              icon 
+              small
+              @click="handleCloseFeaturedImg"
+              class="btn-close elevation-4" 
+              color="white"><v-icon small>close</v-icon></v-btn>
             <input 
               ref="featuredImg" 
               type="file" 
@@ -116,7 +116,11 @@
           <v-list-tile-title>Permalink</v-list-tile-title>
         </v-list-tile>
         <div class="px-3">
-          <v-text-field readonly disabled :value="permalink" />
+          <v-text-field 
+            readonly 
+            placeholder="https://" 
+            disabled 
+            :value="postPermalink" />
         </div>
       </v-list-group>
     </v-list>
@@ -128,29 +132,110 @@
 </template>
 
 <script>
+import {
+  POST_PLACE,
+  POST_DATE_START,
+  POST_DATE_END,
+  POST_PRICE_REGULAR,
+  POST_PRICE_MEMBER,
+  POST_RSVP_EMAIL,
+  POST_RSVP_URL,
+  POST_RSVP_FACEBOOK,
+  POST_FEATURED_IMAGE,
+  POST_PERMALINK
+} from '@/store/types';
+
 export default {
   data: () => ({
     dialogStartDate: false,
-    dialogEndDate: false,
-    title: null,
-    place: null,
-    dateStart: null,
-    dateEnd: null,
-    priceReguler: 0,
-    priceMember: 0,
-    rsvpEmail: null,
-    rsvpUrl: null,
-    rsvpFacebook: null,
-    permalink: 'https://localhost'
+    dialogEndDate: false
   }),
   computed: {
     drawer() {
       return this.$store.state.drawer.statusEventPost;
+    },
+    postPlace: {
+      get() {
+        return this.$store.getters[POST_PLACE];
+      },
+      set(val) {
+        this.$store.commit(POST_PLACE, val);
+      }
+    },
+    postDateStart: {
+      get() {
+        return this.$store.getters[POST_DATE_START];
+      },
+      set(val) {
+        this.$store.commit(POST_DATE_START, val);
+      }
+    },
+    postDateEnd: {
+      get() {
+        return this.$store.getters[POST_DATE_END];
+      },
+      set(val) {
+        this.$store.commit(POST_DATE_END, val);
+      }
+    },
+    postPriceRegular: {
+      get() {
+        return this.$store.getters[POST_PRICE_REGULAR];
+      },
+      set(val) {
+        this.$store.commit(POST_PRICE_MEMBER, val);
+      }
+    },
+    postPriceMember: {
+      get() {
+        return this.$store.getters[POST_PRICE_MEMBER];
+      },
+      set(val) {
+        this.$store.commit(POST_PRICE_MEMBER, val);
+      }
+    },
+    postRsvpEmail: {
+      get() {
+        return this.$store.getters[POST_RSVP_EMAIL];
+      },
+      set(val) {
+        this.$store.commit(POST_RSVP_EMAIL, val);
+      }
+    },
+    postRsvpUrl: {
+      get() {
+        return this.$store.getters[POST_RSVP_URL];
+      },
+      set(val) {
+        this.$store.commit(POST_RSVP_URL, val);
+      }
+    },
+    postRsvpFacebook: {
+      get() {
+        return this.$store.getters[POST_RSVP_FACEBOOK];
+      },
+      set(val) {
+        this.$store.commit(POST_RSVP_FACEBOOK, val);
+      }
+    },
+    postFeaturedImage() {
+      return this.$store.getters[POST_FEATURED_IMAGE];
+    },
+    postPermalink() {
+      return this.$store.getters[POST_PERMALINK];
     }
   },
   methods: {
     handleChangeFeaturedImg(e) {
-      console.log(e.target.files);
+      const reader = new FileReader();
+      reader.readAsDataURL(e.target.files[0]);
+      reader.onload = event => {
+        this.$store.commit(POST_FEATURED_IMAGE, event.target.result);
+      };
+    },
+    handleCloseFeaturedImg() {
+      this.$store.commit(POST_FEATURED_IMAGE, null);
+      this.$refs.featuredImg.value = null;
     },
     handleInputDrawer(val) {
       this.$store.commit('drawer/toggleDrawerEventPost', val);
@@ -185,6 +270,26 @@ export default {
 
   .input-img {
     display: none;
+  }
+
+  .btn-close {
+    position: absolute;
+    top: -16px;
+    right: -16px;
+  }
+
+  .img-wrapper {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 }
 

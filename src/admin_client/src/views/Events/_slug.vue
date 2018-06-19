@@ -63,25 +63,57 @@
         </v-flex>
       </v-layout>
     </div>
-    <v-layout justify-center fill-height>
+    <v-layout justify-center fill-height class="content-wrapper">
       <v-flex xs12 md8>
-        <div id="editor" class="editor-content" />
+        <v-layout>
+          <v-flex xs12>
+            <v-text-field
+              placeholder="Title"
+              class="post-title-field"
+              :value="postTitle"
+              solo
+              flat
+              multi-line
+              auto-grow
+              rows="1" />
+          </v-flex>
+        </v-layout>
+        <v-layout v-if="postFeaturedImage">
+          <v-flex x12>
+            <div class="featured-img-wrapper px-3 mb-3"><img :src="postFeaturedImage"></div>
+          </v-flex>
+        </v-layout>
+        <v-layout>
+          <v-flex xs12>
+            <div id="editor" class="editor-content" />
+          </v-flex>
+        </v-layout>
       </v-flex>
     </v-layout>
   </div>
 </template>
 
 <script>
+import { POST_TITLE, POST_FEATURED_IMAGE } from '@/store/types';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 
 export default {
+  data: () => ({
+    title: null
+  }),
   computed: {
     slug() {
       return this.$route.params.slug;
     },
     drawer() {
       return this.$store.state.drawer.statusEventPost;
+    },
+    postTitle() {
+      return this.$store.getters[POST_TITLE];
+    },
+    postFeaturedImage() {
+      return this.$store.getters[POST_FEATURED_IMAGE];
     }
   },
   mounted() {
@@ -115,9 +147,22 @@ export default {
   }
 }
 
+.featured-img-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  img {
+    max-width: 100%;
+  }
+}
+
+.content-wrapper {
+  padding: 8em 0;
+}
+
 .editor-content {
   border: none;
-  padding: 8em 0;
 }
 
 @media screen and (min-width: 960px) {
@@ -133,6 +178,19 @@ export default {
 
   .drawer-off {
     padding-right: 0;
+  }
+}
+</style>
+
+<style lang="scss">
+.post-title-field {
+  background: transparent !important;
+  margin-bottom: 2em;
+
+  textarea {
+    font-size: 32px;
+    font-weight: bold;
+    color: #2c3e50 !important;
   }
 }
 </style>
