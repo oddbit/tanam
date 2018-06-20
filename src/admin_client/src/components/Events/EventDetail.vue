@@ -70,7 +70,7 @@
             <v-text-field
               placeholder="Title"
               class="post-title-field"
-              :value="postTitle"
+              v-model="postTitle"
               solo
               flat
               multi-line
@@ -109,8 +109,13 @@ export default {
     drawer() {
       return this.$store.state.drawer.statusEventPost;
     },
-    postTitle() {
-      return this.$store.getters[POST_TITLE];
+    postTitle: {
+      get() {
+        return this.$store.getters[POST_TITLE];
+      },
+      set(val) {
+        return this.$store.commit(POST_TITLE, val);
+      }
     },
     postFeaturedImage() {
       return this.$store.getters[POST_FEATURED_IMAGE];

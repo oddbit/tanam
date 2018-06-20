@@ -1,4 +1,9 @@
-const setTitle = (state, payload) => (state.title = payload);
+import createPermalink from '@/helpers/createPermalink';
+
+const setTitle = (state, payload) => {
+  state.title = payload;
+  state.permalink = payload ? createPermalink(payload) : null;
+};
 const setPlace = (state, payload) => (state.place = payload);
 const setDateStart = (state, payload) => (state.dateStart = payload);
 const setDateEnd = (state, payload) => (state.dateEnd = payload);
