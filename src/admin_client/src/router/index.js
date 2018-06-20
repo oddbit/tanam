@@ -22,9 +22,15 @@ const routerOptions = [
     component: 'Events/index'
   },
   {
-    path: '/events/:slug',
-    name: 'events-slug',
-    component: 'Events/_slug',
+    path: '/events/post',
+    name: 'events-post',
+    component: 'Events/Post/index',
+    meta: { layout: 'SinglePostLayout' }
+  },
+  {
+    path: '/events/post/:slug',
+    name: 'events-post-slug',
+    component: 'Events/Post/_slug',
     meta: { layout: 'SinglePostLayout' }
   },
   {

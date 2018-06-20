@@ -20,9 +20,6 @@
       to="/">
       <v-icon>dashboard</v-icon>
     </v-btn>
-    <v-btn v-if="isEventPostDetail" icon @click="handleToggleEventPostSettings">
-      <v-icon>settings</v-icon>
-    </v-btn>
     <v-btn icon>
       <v-icon>notifications</v-icon>
     </v-btn>
@@ -64,9 +61,6 @@ export default {
   computed: {
     isProfileRoute() {
       return /\/profile/gi.test(this.$route.path);
-    },
-    isEventPostDetail() {
-      return this.$route.name === 'events-slug';
     }
   },
   methods: {

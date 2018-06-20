@@ -2,7 +2,7 @@
   <div class="wrapper">
     <v-layout>
       <v-layout column align-start justify-center>
-        <router-link to="/events/slug"><h3>Lorem ipsum dolor sit amet this is the title</h3></router-link>
+        <router-link to="/events/post/slug"><h3>Lorem ipsum dolor sit amet this is the title</h3></router-link>
         <p class="mb-0">Jun 18, 2018 - 5:00 PM</p>
       </v-layout>
       <v-spacer />

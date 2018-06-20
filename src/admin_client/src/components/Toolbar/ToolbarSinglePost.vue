@@ -7,7 +7,7 @@
     clipped-right
     color="primary"
     dark>
-    <v-btn icon><v-icon>close</v-icon></v-btn>
+    <v-btn icon @click="$router.back()"><v-icon>close</v-icon></v-btn>
     <v-spacer />
     <v-btn icon @click="handleToggleEventPostSettings">
       <v-icon>settings</v-icon>
