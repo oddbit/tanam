@@ -22,3 +22,4 @@ export const POST_RSVP_FACEBOOK = 'post/rsvpFacebook';
 export const POST_FEATURED_IMAGE = 'post/featuredImage';
 export const POST_PERMALINK = 'post/permalink';
 export const POST_CONTENT = 'post/content';
+export const EVENT_POST_SUBMIT = 'post/event/submit';

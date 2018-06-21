@@ -9,23 +9,27 @@ import {
   POST_RSVP_URL,
   POST_RSVP_FACEBOOK,
   POST_FEATURED_IMAGE,
-  POST_PERMALINK
+  POST_PERMALINK,
+  POST_CONTENT,
+  EVENT_POST_SUBMIT
 } from '../types';
 import mutations from './mutations';
 import getters from './getters';
+import actions from './actions';
 
 const state = {
   title: null,
   place: null,
   dateStart: null,
   dateEnd: null,
-  priceRegular: 0,
-  priceMember: 0,
+  priceRegular: null,
+  priceMember: null,
   rsvpEmail: null,
   rsvpUrl: null,
   rsvpFacebook: null,
   featuredImage: null,
-  permalink: null
+  permalink: null,
+  content: null
 };
 
 export default {
@@ -41,7 +45,8 @@ export default {
     [POST_RSVP_URL]: getters.rsvpUrl,
     [POST_RSVP_FACEBOOK]: getters.rsvpFacebook,
     [POST_FEATURED_IMAGE]: getters.featuredImage,
-    [POST_PERMALINK]: getters.permalink
+    [POST_PERMALINK]: getters.permalink,
+    [POST_CONTENT]: getters.content
   },
   mutations: {
     [POST_TITLE]: mutations.setTitle,
@@ -54,6 +59,10 @@ export default {
     [POST_RSVP_URL]: mutations.setRsvpUrl,
     [POST_RSVP_FACEBOOK]: mutations.setRsvpFacebook,
     [POST_FEATURED_IMAGE]: mutations.setFeaturedImage,
-    [POST_PERMALINK]: mutations.setPermalink
+    [POST_PERMALINK]: mutations.setPermalink,
+    [POST_CONTENT]: mutations.setContent
+  },
+  actions: {
+    [EVENT_POST_SUBMIT]: actions.submitEvent
   }
 };

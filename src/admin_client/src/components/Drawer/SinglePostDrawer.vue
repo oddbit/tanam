@@ -74,8 +74,16 @@
           <v-list-tile-title>Price</v-list-tile-title>
         </v-list-tile>
         <div class="px-3">
-          <v-text-field label="Regular" prefix="Rp" v-model="postPriceRegular" />
-          <v-text-field label="Member" prefix="Rp" v-model="postPriceMember" />
+          <v-text-field 
+            label="Regular" 
+            prefix="Rp" 
+            placeholder="0" 
+            v-model="postPriceRegular" />
+          <v-text-field 
+            label="Member" 
+            prefix="Rp" 
+            placeholder="0" 
+            v-model="postPriceMember" />
         </div>
       </v-list-group>
       <v-list-group>
@@ -118,8 +126,7 @@
         <div class="px-3">
           <v-text-field 
             readonly 
-            placeholder="https://" 
-            disabled 
+            placeholder="-"
             :value="postPermalink" />
         </div>
       </v-list-group>

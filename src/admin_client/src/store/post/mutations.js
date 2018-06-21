@@ -14,6 +14,7 @@ const setRsvpUrl = (state, payload) => (state.rsvpUrl = payload);
 const setRsvpFacebook = (state, payload) => (state.rsvpFacebook = payload);
 const setFeaturedImage = (state, payload) => (state.featuredImage = payload);
 const setPermalink = (state, payload) => (state.permalink = payload);
+const setContent = (state, payload) => (state.content = payload);
 
 export default {
   setTitle,
@@ -26,5 +27,6 @@ export default {
   setRsvpUrl,
   setRsvpFacebook,
   setFeaturedImage,
-  setPermalink
+  setPermalink,
+  setContent
 };

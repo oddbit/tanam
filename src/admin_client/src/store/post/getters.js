@@ -9,6 +9,7 @@ const rsvpUrl = state => state.rsvpUrl;
 const rsvpFacebook = state => state.rsvpFacebook;
 const featuredImage = state => state.featuredImage;
 const permalink = state => state.permalink;
+const content = state => state.content;
 
 export default {
   title,
@@ -21,5 +22,6 @@ export default {
   rsvpUrl,
   rsvpFacebook,
   featuredImage,
-  permalink
+  permalink,
+  content
 };

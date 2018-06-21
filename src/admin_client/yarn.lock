@@ -6462,6 +6462,10 @@ querystringify@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.0.0.tgz#fa3ed6e68eb15159457c89b37bc6472833195755"
 
+quill-delta-to-html@^0.8.4:
+  version "0.8.4"
+  resolved "https://registry.yarnpkg.com/quill-delta-to-html/-/quill-delta-to-html-0.8.4.tgz#a98878d6e9c39da0e86b3baad201f6d4e47f2f85"
+
 quill-delta@^3.6.2:
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/quill-delta/-/quill-delta-3.6.2.tgz#76eed0163b8b09a076fba6ade29307c42b40b8d8"

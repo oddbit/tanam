@@ -11,7 +11,6 @@ const yymmddDate = () => {
 
 const createPermalink = str => {
   const title = str.replace(/\s+/g, '-').toLowerCase();
-  console.log(title);
   return `${yymmddDate()}-${title}`;
 };
 

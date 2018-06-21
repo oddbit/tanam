@@ -12,7 +12,7 @@
     <v-btn icon @click="handleToggleEventPostSettings">
       <v-icon>settings</v-icon>
     </v-btn>
-    <v-btn v-if="$mq === 'desktop'" light>
+    <v-btn v-if="$mq === 'desktop'" light @click="handleClickPublish">
       Publish
     </v-btn>
     <v-btn v-if="$mq === 'mobile'" icon>
@@ -22,10 +22,15 @@
 </template>
 
 <script>
+import { EVENT_POST_SUBMIT } from '@/store/types';
+
 export default {
   methods: {
     handleToggleEventPostSettings() {
       this.$store.commit('drawer/toggleDrawerEventPost');
+    },
+    handleClickPublish() {
+      this.$store.dispatch(EVENT_POST_SUBMIT);
     }
   }
 };

@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { POST_TITLE, POST_FEATURED_IMAGE } from '@/store/types';
+import { POST_TITLE, POST_FEATURED_IMAGE, POST_CONTENT } from '@/store/types';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 
@@ -122,12 +122,16 @@ export default {
     }
   },
   mounted() {
-    new Quill('#editor', {
+    const quill = new Quill('#editor', {
       theme: 'snow',
       modules: {
         toolbar: '#editor-toolbar'
       },
       placeholder: 'Write here...'
+    });
+
+    quill.on('editor-change', () => {
+      this.$store.commit(POST_CONTENT, quill.getContents().ops);
     });
   }
 };
