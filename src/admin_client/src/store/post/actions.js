@@ -2,17 +2,19 @@ import firebase from 'firebase/app';
 import 'firebase/database';
 import quillToHtml from '@/helpers/quillToHtml';
 
-const postsEventsRef = firebase.database().ref('/posts/events');
-
-const submitEvent = ({ state }) => {
+const publishEvent = ({ state }) => {
   const content = quillToHtml(state.content);
+  const publishedAt = new Date().toISOString();
+
+  const postsEventsRef = firebase.database().ref('/posts/events/published');
   const newPostRef = postsEventsRef.push();
   newPostRef.set({
     ...state,
-    content
+    content,
+    publishedAt
   });
 };
 
 export default {
-  submitEvent
+  publishEvent
 };

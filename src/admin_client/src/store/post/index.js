@@ -29,7 +29,11 @@ const state = {
   rsvpFacebook: null,
   featuredImage: null,
   permalink: null,
-  content: null
+  content: null,
+  createdAt: null,
+  publishedAt: null,
+  updatedAt: null,
+  deletedAt: null
 };
 
 export default {
@@ -63,6 +67,6 @@ export default {
     [POST_CONTENT]: mutations.setContent
   },
   actions: {
-    [EVENT_POST_SUBMIT]: actions.submitEvent
+    [EVENT_POST_SUBMIT]: actions.publishEvent
   }
 };
