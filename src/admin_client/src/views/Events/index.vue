@@ -31,7 +31,7 @@
                   :published-event="event" />
               </v-tab-item>
               <v-tab-item id="draft">
-                <DraftEvents v-for="event in draftEvents" :key="event.key" />
+                <DraftEvents v-for="event in draftEvents" :key="event.key" :draft-event="event" />
               </v-tab-item>
             </v-tabs-items>
           </v-flex>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { GET_PUBLISHED_EVENTS } from '@/store/types';
+import { GET_PUBLISHED_EVENTS, GET_DRAFT_EVENTS } from '@/store/types';
 
 export default {
   components: {
@@ -59,6 +59,12 @@ export default {
     this.$store.dispatch(GET_PUBLISHED_EVENTS).then(snapshot => {
       snapshot.forEach(snap => {
         this.publishedEvents.push({ key: snap.key, ...snap.val() });
+      });
+    });
+    this.$store.dispatch(GET_DRAFT_EVENTS).then(snapshot => {
+      snapshot.forEach(snap => {
+        console.log(snap.val());
+        this.draftEvents.push({ key: snap.key, ...snap.val() });
       });
     });
   }

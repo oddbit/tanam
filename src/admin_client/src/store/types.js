@@ -25,3 +25,4 @@ export const POST_CONTENT = 'post/content';
 export const EVENT_POST_SUBMIT = 'post/event/submit';
 
 export const GET_PUBLISHED_EVENTS = 'get/events/published';
+export const GET_DRAFT_EVENTS = 'get/events/draft';
