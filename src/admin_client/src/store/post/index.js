@@ -33,7 +33,8 @@ const state = {
   createdAt: null,
   publishedAt: null,
   updatedAt: null,
-  deletedAt: null
+  deletedAt: null,
+  status: null
 };
 
 export default {
