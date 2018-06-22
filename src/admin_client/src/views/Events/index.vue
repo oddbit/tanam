@@ -63,7 +63,6 @@ export default {
     });
     this.$store.dispatch(GET_DRAFT_EVENTS).then(snapshot => {
       snapshot.forEach(snap => {
-        console.log(snap.val());
         this.draftEvents.push({ key: snap.key, ...snap.val() });
       });
     });
