@@ -25,10 +25,13 @@
             </v-tabs>
             <v-tabs-items v-model="tabsModel" class="mt-3 elevation-1">
               <v-tab-item id="published">
-                <Event v-for="n in 3" :key="n" id="published" />
+                <PublishedEvents 
+                  v-for="event in publishedEvents" 
+                  :key="event.key"
+                  :published-event="event" />
               </v-tab-item>
               <v-tab-item id="draft">
-                <Event v-for="n in 3" :key="n" id="draft" />
+                <DraftEvents v-for="event in draftEvents" :key="event.key" />
               </v-tab-item>
             </v-tabs-items>
           </v-flex>
@@ -39,15 +42,25 @@
 </template>
 
 <script>
-import Event from '@/components/Events/Event';
+import { GET_PUBLISHED_EVENTS } from '@/store/types';
 
 export default {
   components: {
-    Event
+    PublishedEvents: () => import('@/components/Events/PublishedEvents'),
+    DraftEvents: () => import('@/components/Events/DraftEvents')
   },
   data: () => ({
     tabItems: ['published', 'draft'],
-    tabsModel: 'published'
-  })
+    tabsModel: 'published',
+    publishedEvents: [],
+    draftEvents: []
+  }),
+  mounted() {
+    this.$store.dispatch(GET_PUBLISHED_EVENTS).then(snapshot => {
+      snapshot.forEach(snap => {
+        this.publishedEvents.push({ key: snap.key, ...snap.val() });
+      });
+    });
+  }
 };
 </script>
