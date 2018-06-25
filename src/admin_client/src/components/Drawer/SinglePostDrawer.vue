@@ -136,7 +136,8 @@
       <v-btn 
         flat 
         class="ma-0" 
-        block><v-icon left>delete</v-icon>Delete</v-btn>
+        block
+        @click="handleClickDelete"><v-icon left>delete</v-icon>Delete</v-btn>
     </div>
   </v-navigation-drawer>
 </template>
@@ -152,7 +153,9 @@ import {
   POST_RSVP_URL,
   POST_RSVP_FACEBOOK,
   POST_FEATURED_IMAGE,
-  POST_PERMALINK
+  POST_PERMALINK,
+  DELETE_POST,
+  POST_ID
 } from '@/store/types';
 
 export default {
@@ -249,6 +252,11 @@ export default {
     },
     handleInputDrawer(val) {
       this.$store.commit('drawer/toggleDrawerEventPost', val);
+    },
+    handleClickDelete() {
+      this.$store
+        .dispatch(DELETE_POST, this.$store.getters[POST_ID])
+        .then(() => this.$router.push('/events'));
     }
   }
 };

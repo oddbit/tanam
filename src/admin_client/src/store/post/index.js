@@ -14,7 +14,8 @@ import {
   EVENT_POST_SUBMIT,
   EVENT_POST_UPDATE,
   SET_POST,
-  SET_POST_TO_NULL
+  SET_POST_TO_NULL,
+  DELETE_POST
 } from '../types';
 import mutations from './mutations';
 import getters from './getters';
@@ -74,6 +75,7 @@ export default {
   },
   actions: {
     [EVENT_POST_SUBMIT]: actions.publishEvent,
-    [EVENT_POST_UPDATE]: actions.updateEvent
+    [EVENT_POST_UPDATE]: actions.updateEvent,
+    [DELETE_POST]: actions.deleteEvent
   }
 };

@@ -26,7 +26,15 @@ const updateEvent = ({ state }, payload) => {
     .set({ ...state, content, updatedAt });
 };
 
+const deleteEvent = (context, payload) => {
+  firebase
+    .database()
+    .ref('/posts/events/' + payload)
+    .remove();
+};
+
 export default {
   publishEvent,
-  updateEvent
+  updateEvent,
+  deleteEvent
 };
