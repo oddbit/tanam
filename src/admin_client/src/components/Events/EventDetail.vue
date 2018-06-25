@@ -99,6 +99,12 @@ import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 
 export default {
+  props: {
+    mode: {
+      type: String,
+      default: 'post'
+    }
+  },
   data: () => ({
     title: null
   }),
@@ -129,6 +135,13 @@ export default {
       },
       placeholder: 'Write here...'
     });
+
+    if (this.mode === 'edit') {
+      quill.clipboard.dangerouslyPasteHTML(
+        0,
+        this.$store.getters[POST_CONTENT]
+      );
+    }
 
     quill.on('editor-change', () => {
       this.$store.commit(POST_CONTENT, quill.getContents().ops);

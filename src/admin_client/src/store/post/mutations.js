@@ -16,6 +16,19 @@ const setFeaturedImage = (state, payload) => (state.featuredImage = payload);
 const setPermalink = (state, payload) => (state.permalink = payload);
 const setContent = (state, payload) => (state.content = payload);
 
+const setPost = (state, payload) => {
+  const keys = Object.keys(payload);
+  keys.forEach(key => {
+    state[key] = payload[key];
+  });
+};
+const setPostToNull = state => {
+  const keys = Object.keys(state);
+  keys.forEach(key => {
+    state[key] = null;
+  });
+};
+
 export default {
   setTitle,
   setPlace,
@@ -28,5 +41,7 @@ export default {
   setRsvpFacebook,
   setFeaturedImage,
   setPermalink,
-  setContent
+  setContent,
+  setPost,
+  setPostToNull
 };

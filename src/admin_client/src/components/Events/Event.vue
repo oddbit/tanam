@@ -2,7 +2,7 @@
   <div class="wrapper">
     <v-layout>
       <v-layout column align-start justify-center>
-        <router-link to="/events/post/slug"><h3><slot name="title" /></h3></router-link>
+        <router-link :to="`/events/post/${linkTo}`"><h3><slot name="title" /></h3></router-link>
         <p class="mb-0"><slot name="datetime" /></p>
       </v-layout>
       <v-spacer />
@@ -15,6 +15,18 @@
     </v-layout>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    linkTo: {
+      type: String,
+      default: ''
+    }
+  }
+};
+</script>
+
 
 <style lang="scss" scoped>
 .wrapper {

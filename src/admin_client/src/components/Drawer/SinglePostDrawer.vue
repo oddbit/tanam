@@ -133,7 +133,10 @@
     </v-list>
     <div class="delete-wrapper">
       <v-divider />
-      <v-btn flat class="ma-0" block><v-icon left>delete</v-icon>Delete</v-btn>
+      <v-btn 
+        flat 
+        class="ma-0" 
+        block><v-icon left>delete</v-icon>Delete</v-btn>
     </div>
   </v-navigation-drawer>
 </template>
@@ -190,7 +193,7 @@ export default {
         return this.$store.getters[POST_PRICE_REGULAR];
       },
       set(val) {
-        this.$store.commit(POST_PRICE_MEMBER, val);
+        this.$store.commit(POST_PRICE_REGULAR, val);
       }
     },
     postPriceMember: {

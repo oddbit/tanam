@@ -11,7 +11,10 @@ import {
   POST_FEATURED_IMAGE,
   POST_PERMALINK,
   POST_CONTENT,
-  EVENT_POST_SUBMIT
+  EVENT_POST_SUBMIT,
+  EVENT_POST_UPDATE,
+  SET_POST,
+  SET_POST_TO_NULL
 } from '../types';
 import mutations from './mutations';
 import getters from './getters';
@@ -65,9 +68,12 @@ export default {
     [POST_RSVP_FACEBOOK]: mutations.setRsvpFacebook,
     [POST_FEATURED_IMAGE]: mutations.setFeaturedImage,
     [POST_PERMALINK]: mutations.setPermalink,
-    [POST_CONTENT]: mutations.setContent
+    [POST_CONTENT]: mutations.setContent,
+    [SET_POST]: mutations.setPost,
+    [SET_POST_TO_NULL]: mutations.setPostToNull
   },
   actions: {
-    [EVENT_POST_SUBMIT]: actions.publishEvent
+    [EVENT_POST_SUBMIT]: actions.publishEvent,
+    [EVENT_POST_UPDATE]: actions.updateEvent
   }
 };

@@ -16,6 +16,17 @@ const publishEvent = ({ state }) => {
   });
 };
 
+const updateEvent = ({ state }, payload) => {
+  const content = quillToHtml(state.content);
+  const updatedAt = new Date().toISOString();
+
+  firebase
+    .database()
+    .ref('/posts/events/' + payload)
+    .set({ ...state, content, updatedAt });
+};
+
 export default {
-  publishEvent
+  publishEvent,
+  updateEvent
 };
