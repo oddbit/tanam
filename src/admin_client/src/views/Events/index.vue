@@ -42,7 +42,12 @@
 </template>
 
 <script>
-import { GET_PUBLISHED_EVENTS, GET_DRAFT_EVENTS } from '@/store/types';
+import {
+  GET_PUBLISHED_EVENTS,
+  GET_DRAFT_EVENTS,
+  PUBLISHED_EVENTS,
+  DRAFT_EVENTS
+} from '@/store/types';
 
 export default {
   components: {
@@ -51,21 +56,19 @@ export default {
   },
   data: () => ({
     tabItems: ['published', 'draft'],
-    tabsModel: 'published',
-    publishedEvents: [],
-    draftEvents: []
+    tabsModel: 'published'
   }),
+  computed: {
+    publishedEvents() {
+      return this.$store.getters[PUBLISHED_EVENTS];
+    },
+    draftEvents() {
+      return this.$store.getters[DRAFT_EVENTS];
+    }
+  },
   mounted() {
-    this.$store.dispatch(GET_PUBLISHED_EVENTS).then(snapshot => {
-      snapshot.forEach(snap => {
-        this.publishedEvents.push({ key: snap.key, ...snap.val() });
-      });
-    });
-    this.$store.dispatch(GET_DRAFT_EVENTS).then(snapshot => {
-      snapshot.forEach(snap => {
-        this.draftEvents.push({ key: snap.key, ...snap.val() });
-      });
-    });
+    this.$store.dispatch(GET_PUBLISHED_EVENTS);
+    this.$store.dispatch(GET_DRAFT_EVENTS);
   }
 };
 </script>

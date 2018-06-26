@@ -12,18 +12,33 @@
 </template>
 
 <script>
+import { DELETE_POST } from '@/store/types';
+
 export default {
+  props: {
+    postId: {
+      type: String,
+      default: ''
+    }
+  },
   data: () => ({
     listAction: [
       { name: 'edit', text: 'Edit', icon: 'edit' },
-      { name: 'view', text: 'View', icon: 'visibility' },
-      { name: 'share', text: 'Share', icon: 'share' },
       { name: 'delete', text: 'Delete', icon: 'delete' }
     ]
   }),
   methods: {
-    handleClickActionItem() {
-      return null;
+    handleClickActionItem(name) {
+      switch (name) {
+        case 'edit':
+          this.$router.push('/events/post/' + this.postId);
+          break;
+        case 'delete':
+          this.$store.dispatch(DELETE_POST, this.postId);
+          break;
+        default:
+          break;
+      }
     }
   }
 };

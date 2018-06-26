@@ -2,7 +2,7 @@
   <Event :link-to="publishedEvent.key">
     <template slot="title">{{ publishedEvent.title }}</template>
     <template slot="datetime">{{ publishedEvent.publishedAt | isoDateToDatetime }}</template>
-    <template slot="action-menu-item"><PublishedActionMenuItem /></template>
+    <template slot="action-menu-item"><PublishedActionMenuItem :post-id="publishedEvent.key" /></template>
   </Event>
 </template>
 

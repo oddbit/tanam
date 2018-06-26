@@ -30,6 +30,8 @@ export const SET_POST = 'post/setFromFirebase';
 export const SET_POST_TO_NULL = 'post/setToNull';
 export const DELETE_POST = 'post/delete';
 
+export const PUBLISHED_EVENTS = 'events/published';
+export const DRAFT_EVENTS = 'events/draft';
 export const GET_PUBLISHED_EVENTS = 'get/events/published';
 export const GET_DRAFT_EVENTS = 'get/events/draft';
 export const GET_EVENT_BY = 'get/events/by';
