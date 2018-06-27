@@ -4,6 +4,7 @@
     app
     fixed
     clipped-left
+    clipped-right
     color="primary"
     dark>
     <v-toolbar-side-icon
@@ -68,6 +69,9 @@ export default {
     }),
     handleClickMenu() {
       this.$store.commit('drawer/toggleDrawer', true);
+    },
+    handleToggleEventPostSettings() {
+      this.$store.commit('drawer/toggleDrawerEventPost');
     }
   }
 };
