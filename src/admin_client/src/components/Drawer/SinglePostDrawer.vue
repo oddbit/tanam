@@ -1,145 +1,148 @@
 <template>
-  <v-navigation-drawer
-    :value="drawer"
-    :clipped="$mq === 'desktop'"
-    right
-    fixed
-    app
-    @input="handleInputDrawer"
-    class="drawer-wrapper">
-    <v-list>
-      <v-list-group>
-        <v-list-tile slot="activator">
-          <v-list-tile-title>Place</v-list-tile-title>
-        </v-list-tile>
-        <div class="px-3">
-          <v-text-field placeholder="Place" v-model="postPlace" />
-        </div>
-      </v-list-group>
-      <v-list-group>
-        <v-list-tile slot="activator">
-          <v-list-tile-title>Date</v-list-tile-title>
-        </v-list-tile>
-        <div class="px-3">
-          <v-dialog
-            ref="startAt"
-            lazy
-            persistent
-            full-width
-            width="290"
-            content-class="ma-0"
-            v-model="dialogStartDate"
-            :return-value.sync="postDateStart"
-          >
-            <v-text-field
-              slot="activator"
-              v-model="postDateStart"
-              label="Start At"
-              prepend-icon="event"
-              readonly
-            />
-            <v-date-picker v-model="postDateStart">
-              <v-spacer />
-              <v-btn flat color="primary" @click="dialogStartDate = false">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.startAt.save(postDateStart)">OK</v-btn>
-            </v-date-picker>
-          </v-dialog>
-          <v-dialog
-            ref="endAt"
-            lazy
-            persistent
-            width="290"
-            content-class="ma-0"
-            full-width
-            v-model="dialogEndDate"
-            :return-value.sync="postDateEnd"
-          >
-            <v-text-field
-              slot="activator"
-              v-model="postDateEnd"
-              label="End At"
-              prepend-icon="event"
-              readonly
-            />
-            <v-date-picker v-model="postDateEnd">
-              <v-spacer />
-              <v-btn flat color="primary" @click="dialogEndDate = false">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.endAt.save(postDateEnd)">OK</v-btn>
-            </v-date-picker>
-          </v-dialog>
-        </div>
-      </v-list-group>
-      <v-list-group>
-        <v-list-tile slot="activator">
-          <v-list-tile-title>Price</v-list-tile-title>
-        </v-list-tile>
-        <div class="px-3">
-          <v-text-field 
-            label="Regular" 
-            prefix="Rp" 
-            placeholder="0" 
-            v-model="postPriceRegular" />
-          <v-text-field 
-            label="Member" 
-            prefix="Rp" 
-            placeholder="0" 
-            v-model="postPriceMember" />
-        </div>
-      </v-list-group>
-      <v-list-group>
-        <v-list-tile slot="activator">
-          <v-list-tile-title>RSVP</v-list-tile-title>
-        </v-list-tile>
-        <div class="px-3">
-          <v-text-field label="Email" v-model="postRsvpEmail" />
-          <v-text-field label="Url" v-model="postRsvpUrl" />
-          <v-text-field label="Facebook" v-model="postRsvpFacebook" />
-        </div>
-      </v-list-group>
-      <v-list-group>
-        <v-list-tile slot="activator">
-          <v-list-tile-title>Featured Image</v-list-tile-title>
-        </v-list-tile>
-        <div class="px-3">
-          <div class="featured-img-wrapper">
-            <div v-if="postFeaturedImage" class="img-wrapper"><img :src="postFeaturedImage"></div>
-            <v-btn v-if="!postFeaturedImage" class="btn-set" @click="$refs.featuredImg.click()">Set Featured Image</v-btn>
-            <v-btn 
-              v-else 
-              icon 
-              small
-              @click="handleCloseFeaturedImg"
-              class="btn-close elevation-4" 
-              color="white"><v-icon small>close</v-icon></v-btn>
-            <input 
-              ref="featuredImg" 
-              type="file" 
-              @change="handleChangeFeaturedImg" 
-              class="input-img">
+  <div>
+    <v-navigation-drawer
+      :value="drawer"
+      :clipped="$mq === 'desktop'"
+      right
+      fixed
+      app
+      @input="handleInputDrawer"
+      class="drawer-wrapper">
+      <v-list>
+        <v-list-group>
+          <v-list-tile slot="activator">
+            <v-list-tile-title>Place</v-list-tile-title>
+          </v-list-tile>
+          <div class="px-3">
+            <v-text-field placeholder="Place" v-model="postPlace" />
           </div>
-        </div>
-      </v-list-group>
-      <v-list-group>
-        <v-list-tile slot="activator">
-          <v-list-tile-title>Permalink</v-list-tile-title>
-        </v-list-tile>
-        <div class="px-3">
-          <v-text-field 
-            readonly 
-            placeholder="-"
-            :value="postPermalink" />
-        </div>
-      </v-list-group>
-    </v-list>
-    <div class="delete-wrapper">
-      <v-divider />
-      <v-btn 
-        flat 
-        class="ma-0" 
-        block
-        @click="handleClickDelete"><v-icon left>delete</v-icon>Delete</v-btn>
-    </div>
-  </v-navigation-drawer>
+        </v-list-group>
+        <v-list-group>
+          <v-list-tile slot="activator">
+            <v-list-tile-title>Date</v-list-tile-title>
+          </v-list-tile>
+          <div class="px-3">
+            <v-dialog
+              ref="startAt"
+              lazy
+              persistent
+              full-width
+              width="290"
+              content-class="ma-0"
+              v-model="dialogStartDate"
+              :return-value.sync="postDateStart"
+            >
+              <v-text-field
+                slot="activator"
+                v-model="postDateStart"
+                label="Start At"
+                prepend-icon="event"
+                readonly
+              />
+              <v-date-picker v-model="postDateStart">
+                <v-spacer />
+                <v-btn flat color="primary" @click="dialogStartDate = false">Cancel</v-btn>
+                <v-btn flat color="primary" @click="$refs.startAt.save(postDateStart)">OK</v-btn>
+              </v-date-picker>
+            </v-dialog>
+            <v-dialog
+              ref="endAt"
+              lazy
+              persistent
+              width="290"
+              content-class="ma-0"
+              full-width
+              v-model="dialogEndDate"
+              :return-value.sync="postDateEnd"
+            >
+              <v-text-field
+                slot="activator"
+                v-model="postDateEnd"
+                label="End At"
+                prepend-icon="event"
+                readonly
+              />
+              <v-date-picker v-model="postDateEnd">
+                <v-spacer />
+                <v-btn flat color="primary" @click="dialogEndDate = false">Cancel</v-btn>
+                <v-btn flat color="primary" @click="$refs.endAt.save(postDateEnd)">OK</v-btn>
+              </v-date-picker>
+            </v-dialog>
+          </div>
+        </v-list-group>
+        <v-list-group>
+          <v-list-tile slot="activator">
+            <v-list-tile-title>Price</v-list-tile-title>
+          </v-list-tile>
+          <div class="px-3">
+            <v-text-field 
+              label="Regular" 
+              prefix="Rp" 
+              placeholder="0" 
+              v-model="postPriceRegular" />
+            <v-text-field 
+              label="Member" 
+              prefix="Rp" 
+              placeholder="0" 
+              v-model="postPriceMember" />
+          </div>
+        </v-list-group>
+        <v-list-group>
+          <v-list-tile slot="activator">
+            <v-list-tile-title>RSVP</v-list-tile-title>
+          </v-list-tile>
+          <div class="px-3">
+            <v-text-field label="Email" v-model="postRsvpEmail" />
+            <v-text-field label="Url" v-model="postRsvpUrl" />
+            <v-text-field label="Facebook" v-model="postRsvpFacebook" />
+          </div>
+        </v-list-group>
+        <v-list-group>
+          <v-list-tile slot="activator">
+            <v-list-tile-title>Featured Image</v-list-tile-title>
+          </v-list-tile>
+          <div class="px-3">
+            <div class="featured-img-wrapper">
+              <div v-if="postFeaturedImage" class="img-wrapper"><img :src="postFeaturedImage"></div>
+              <v-btn v-if="!postFeaturedImage" class="btn-set" @click="$refs.featuredImg.click()">Set Featured Image</v-btn>
+              <v-btn 
+                v-else 
+                icon 
+                small
+                @click="handleCloseFeaturedImg"
+                class="btn-close elevation-4" 
+                color="white"><v-icon small>close</v-icon></v-btn>
+              <input 
+                ref="featuredImg" 
+                type="file" 
+                @change="handleChangeFeaturedImg" 
+                class="input-img">
+            </div>
+          </div>
+        </v-list-group>
+        <v-list-group>
+          <v-list-tile slot="activator">
+            <v-list-tile-title>Permalink</v-list-tile-title>
+          </v-list-tile>
+          <div class="px-3">
+            <v-text-field 
+              readonly 
+              placeholder="-"
+              :value="postPermalink" />
+          </div>
+        </v-list-group>
+      </v-list>
+      <div class="delete-wrapper">
+        <v-divider />
+        <v-btn 
+          flat 
+          class="ma-0" 
+          block
+          @click="handleClickDelete"><v-icon left>delete</v-icon>Delete</v-btn>
+      </div>
+    </v-navigation-drawer>
+    <DialogDelete />
+  </div>
 </template>
 
 <script>
@@ -154,11 +157,15 @@ import {
   POST_RSVP_FACEBOOK,
   POST_FEATURED_IMAGE,
   POST_PERMALINK,
-  DELETE_POST,
+  POST_DIALOG_DELETE,
   POST_ID
 } from '@/store/types';
+import DialogDelete from '@/components/Events/DialogDelete';
 
 export default {
+  components: {
+    DialogDelete
+  },
   data: () => ({
     dialogStartDate: false,
     dialogEndDate: false
@@ -254,9 +261,10 @@ export default {
       this.$store.commit('drawer/toggleDrawerEventPost', val);
     },
     handleClickDelete() {
-      this.$store
-        .dispatch(DELETE_POST, this.$store.getters[POST_ID])
-        .then(() => this.$router.push('/events'));
+      this.$store.commit(POST_DIALOG_DELETE, {
+        dialogDelete: true,
+        id: this.$store.getters[POST_ID]
+      });
     }
   }
 };

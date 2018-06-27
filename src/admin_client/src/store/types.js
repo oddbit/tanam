@@ -10,6 +10,7 @@ export const TOGGLE_DRAWER_EVENT_POST = 'drawer/toggleDrawerEventPost';
 export const SET_LAYOUT = 'layout/setLayout';
 export const CURRENT_LAYOUT = 'layout/currentLayout';
 export const POST_MODE = 'ui/postMode';
+export const POST_DIALOG_DELETE = 'post/dialog/delete';
 
 export const POST_TITLE = 'post/title';
 export const POST_PLACE = 'post/place';
@@ -29,6 +30,7 @@ export const POST_ID = 'post/id';
 export const SET_POST = 'post/setFromFirebase';
 export const SET_POST_TO_NULL = 'post/setToNull';
 export const DELETE_POST = 'post/delete';
+export const CUSTOM_DELETE_POST = '/post/custom/delete';
 
 export const PUBLISHED_EVENTS = 'events/published';
 export const DRAFT_EVENTS = 'events/draft';

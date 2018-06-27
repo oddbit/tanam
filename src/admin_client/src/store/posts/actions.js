@@ -1,6 +1,13 @@
 import firebase from 'firebase/app';
 import 'firebase/database';
-import { SET_POST, PUBLISHED_EVENTS, DRAFT_EVENTS } from '../types';
+import {
+  SET_POST,
+  PUBLISHED_EVENTS,
+  DRAFT_EVENTS,
+  POST_DIALOG_DELETE,
+  DELETE_POST,
+  POST_ID
+} from '../types';
 
 const getPublishedEvents = ({ dispatch }) => {
   const publishedEventsRef = firebase
@@ -48,10 +55,17 @@ const getEventBy = async ({ commit }, payload) => {
   commit(SET_POST, snapshot.val());
 };
 
+const deletePost = ({ dispatch, commit, getters }) => {
+  dispatch(DELETE_POST, getters[POST_ID]);
+  commit(POST_DIALOG_DELETE, { dialogDelete: false });
+  commit(POST_ID, null);
+};
+
 export default {
   getPublishedEvents,
   getDraftEvents,
   getEventBy,
   setPublishedEvents,
-  setDraftEvents
+  setDraftEvents,
+  deletePost
 };

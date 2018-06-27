@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { DELETE_POST } from '@/store/types';
+import { POST_DIALOG_DELETE } from '@/store/types';
 
 export default {
   props: {
@@ -34,7 +34,10 @@ export default {
           this.$router.push('/events/post/' + this.postId);
           break;
         case 'delete':
-          this.$store.dispatch(DELETE_POST, this.postId);
+          this.$store.commit(POST_DIALOG_DELETE, {
+            dialogDelete: true,
+            id: this.postId
+          });
           break;
         default:
           break;

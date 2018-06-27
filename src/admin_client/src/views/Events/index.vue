@@ -38,6 +38,7 @@
         </v-layout>
       </div>
     </v-slide-y-transition>
+    <DialogDelete />
   </v-container>
 </template>
 
@@ -48,11 +49,13 @@ import {
   PUBLISHED_EVENTS,
   DRAFT_EVENTS
 } from '@/store/types';
+import DialogDelete from '@/components/Events/DialogDelete';
 
 export default {
   components: {
     PublishedEvents: () => import('@/components/Events/PublishedEvents'),
-    DraftEvents: () => import('@/components/Events/DraftEvents')
+    DraftEvents: () => import('@/components/Events/DraftEvents'),
+    DialogDelete
   },
   data: () => ({
     tabItems: ['published', 'draft'],
