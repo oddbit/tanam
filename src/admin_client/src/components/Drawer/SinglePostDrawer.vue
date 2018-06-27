@@ -22,52 +22,104 @@
             <v-list-tile-title>Date</v-list-tile-title>
           </v-list-tile>
           <div class="px-3">
-            <v-dialog
-              ref="startAt"
-              lazy
-              persistent
-              full-width
-              width="290"
-              content-class="ma-0"
-              v-model="dialogStartDate"
-              :return-value.sync="postDateStart"
-            >
-              <v-text-field
-                slot="activator"
-                v-model="postDateStart"
-                label="Start At"
-                prepend-icon="event"
-                readonly
-              />
-              <v-date-picker v-model="postDateStart">
-                <v-spacer />
-                <v-btn flat color="primary" @click="dialogStartDate = false">Cancel</v-btn>
-                <v-btn flat color="primary" @click="$refs.startAt.save(postDateStart)">OK</v-btn>
-              </v-date-picker>
-            </v-dialog>
-            <v-dialog
-              ref="endAt"
-              lazy
-              persistent
-              width="290"
-              content-class="ma-0"
-              full-width
-              v-model="dialogEndDate"
-              :return-value.sync="postDateEnd"
-            >
-              <v-text-field
-                slot="activator"
-                v-model="postDateEnd"
-                label="End At"
-                prepend-icon="event"
-                readonly
-              />
-              <v-date-picker v-model="postDateEnd">
-                <v-spacer />
-                <v-btn flat color="primary" @click="dialogEndDate = false">Cancel</v-btn>
-                <v-btn flat color="primary" @click="$refs.endAt.save(postDateEnd)">OK</v-btn>
-              </v-date-picker>
-            </v-dialog>
+            <h4 class="datetime-title">START</h4>
+            <div class="datetime-wrapper">
+              <span class="date-wrapper">
+                <v-dialog
+                  ref="dateStart"
+                  lazy
+                  persistent
+                  width="290"
+                  content-class="ma-0"
+                  v-model="dialogDateStart"
+                  :return-value.sync="postDateStart"
+                >
+                  <v-text-field
+                    slot="activator"
+                    v-model="postDateStart"
+                    label="Date"
+                    readonly
+                  />
+                  <v-date-picker v-model="postDateStart">
+                    <v-spacer />
+                    <v-btn flat color="primary" @click="dialogDateStart = false">Cancel</v-btn>
+                    <v-btn flat color="primary" @click="$refs.dateStart.save(postDateStart)">OK</v-btn>
+                  </v-date-picker>
+                </v-dialog>
+              </span>
+              <span class="time-wrapper">
+                <v-dialog
+                  ref="timeStart"
+                  v-model="dialogTimeStart"
+                  :return-value.sync="postTimeStart"
+                  persistent
+                  lazy
+                  width="290"
+                  content-class="ma-0"
+                >
+                  <v-text-field
+                    slot="activator"
+                    v-model="postTimeStart"
+                    label="Time"
+                    readonly
+                  />
+                  <v-time-picker v-model="postTimeStart" actions>
+                    <v-spacer />
+                    <v-btn flat color="primary" @click="dialogTimeStart = false">Cancel</v-btn>
+                    <v-btn flat color="primary" @click="$refs.timeStart.save(postTimeStart)">OK</v-btn>
+                  </v-time-picker>
+                </v-dialog>
+              </span>
+            </div>
+            <h4 class="datetime-title">END</h4>
+            <div class="datetime-wrapper">
+              <span class="date-wrapper">
+                <v-dialog
+                  ref="dateEnd"
+                  lazy
+                  persistent
+                  width="290"
+                  content-class="ma-0"
+                  v-model="dialogDateEnd"
+                  :return-value.sync="postDateEnd"
+                >
+                  <v-text-field
+                    slot="activator"
+                    v-model="postDateEnd"
+                    label="Date"
+                    readonly
+                  />
+                  <v-date-picker v-model="postDateEnd">
+                    <v-spacer />
+                    <v-btn flat color="primary" @click="dialogDateEnd = false">Cancel</v-btn>
+                    <v-btn flat color="primary" @click="$refs.dateEnd.save(postDateEnd)">OK</v-btn>
+                  </v-date-picker>
+                </v-dialog>
+              </span>
+              <span class="time-wrapper">
+                <v-dialog
+                  ref="timeEnd"
+                  v-model="dialogTimeEnd"
+                  :return-value.sync="postTimeEnd"
+                  persistent
+                  lazy
+                  width="290"
+                  content-class="ma-0"
+                >
+                  <v-text-field
+                    slot="activator"
+                    v-model="postTimeEnd"
+                    label="Time"
+                    readonly
+                  />
+                  <v-time-picker v-model="postTimeEnd" actions>
+                    <v-spacer />
+                    <v-btn flat color="primary" @click="dialogTimeEnd = false">Cancel</v-btn>
+                    <v-btn flat color="primary" @click="$refs.timeEnd.save(postTimeEnd)">OK</v-btn>
+                  </v-time-picker>
+                </v-dialog>
+              </span>
+            </div>
           </div>
         </v-list-group>
         <v-list-group>
@@ -149,7 +201,9 @@
 import {
   POST_PLACE,
   POST_DATE_START,
+  POST_TIME_START,
   POST_DATE_END,
+  POST_TIME_END,
   POST_PRICE_REGULAR,
   POST_PRICE_MEMBER,
   POST_RSVP_EMAIL,
@@ -167,8 +221,10 @@ export default {
     DialogDelete
   },
   data: () => ({
-    dialogStartDate: false,
-    dialogEndDate: false
+    dialogDateStart: false,
+    dialogTimeStart: false,
+    dialogDateEnd: false,
+    dialogTimeEnd: false
   }),
   computed: {
     drawer() {
@@ -190,12 +246,28 @@ export default {
         this.$store.commit(POST_DATE_START, val);
       }
     },
+    postTimeStart: {
+      get() {
+        return this.$store.getters[POST_TIME_START];
+      },
+      set(val) {
+        this.$store.commit(POST_TIME_START, val);
+      }
+    },
     postDateEnd: {
       get() {
         return this.$store.getters[POST_DATE_END];
       },
       set(val) {
         this.$store.commit(POST_DATE_END, val);
+      }
+    },
+    postTimeEnd: {
+      get() {
+        return this.$store.getters[POST_TIME_END];
+      },
+      set(val) {
+        this.$store.commit(POST_TIME_END, val);
       }
     },
     postPriceRegular: {
@@ -275,6 +347,23 @@ export default {
   display: flex;
   flex-direction: column;
   padding-bottom: 0;
+}
+
+.datetime-title {
+  color: #333;
+}
+
+.datetime-wrapper {
+  display: flex;
+  justify-content: space-between;
+
+  .date-wrapper {
+    width: 60%;
+  }
+
+  .time-wrapper {
+    width: 35%;
+  }
 }
 
 .featured-img-wrapper {

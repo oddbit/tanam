@@ -6,7 +6,9 @@ const setTitle = (state, payload) => {
 };
 const setPlace = (state, payload) => (state.place = payload);
 const setDateStart = (state, payload) => (state.dateStart = payload);
+const setTimeStart = (state, payload) => (state.timeStart = payload);
 const setDateEnd = (state, payload) => (state.dateEnd = payload);
+const setTimeEnd = (state, payload) => (state.timeEnd = payload);
 const setPriceRegular = (state, payload) => (state.priceRegular = payload);
 const setPriceMember = (state, payload) => (state.priceMember = payload);
 const setRsvpEmail = (state, payload) => (state.rsvpEmail = payload);
@@ -33,7 +35,9 @@ export default {
   setTitle,
   setPlace,
   setDateStart,
+  setTimeStart,
   setDateEnd,
+  setTimeEnd,
   setPriceRegular,
   setPriceMember,
   setRsvpEmail,

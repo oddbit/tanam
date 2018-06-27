@@ -1,7 +1,9 @@
 const title = state => state.title;
 const place = state => state.place;
 const dateStart = state => state.dateStart;
+const timeStart = state => state.timeStart;
 const dateEnd = state => state.dateEnd;
+const timeEnd = state => state.timeEnd;
 const priceRegular = state => state.priceRegular;
 const priceMember = state => state.priceMember;
 const rsvpEmail = state => state.rsvpEmail;
@@ -15,7 +17,9 @@ export default {
   title,
   place,
   dateStart,
+  timeStart,
   dateEnd,
+  timeEnd,
   priceRegular,
   priceMember,
   rsvpEmail,
