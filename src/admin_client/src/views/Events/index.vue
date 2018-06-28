@@ -25,13 +25,10 @@
             </v-tabs>
             <v-tabs-items v-model="tabsModel" class="mt-3 elevation-1">
               <v-tab-item id="published">
-                <PublishedEvents 
-                  v-for="event in publishedEvents" 
-                  :key="event.key"
-                  :published-event="event" />
+                <PublishedEvents />
               </v-tab-item>
               <v-tab-item id="draft">
-                <DraftEvents v-for="event in draftEvents" :key="event.key" :draft-event="event" />
+                <DraftEvents />
               </v-tab-item>
             </v-tabs-items>
           </v-flex>
@@ -43,35 +40,15 @@
 </template>
 
 <script>
-import {
-  GET_PUBLISHED_EVENTS,
-  GET_DRAFT_EVENTS,
-  PUBLISHED_EVENTS,
-  DRAFT_EVENTS
-} from '@/store/types';
-import DialogDelete from '@/components/Events/DialogDelete';
-
 export default {
   components: {
     PublishedEvents: () => import('@/components/Events/PublishedEvents'),
     DraftEvents: () => import('@/components/Events/DraftEvents'),
-    DialogDelete
+    DialogDelete: () => import('@/components/Events/DialogDelete')
   },
   data: () => ({
     tabItems: ['published', 'draft'],
     tabsModel: 'published'
-  }),
-  computed: {
-    publishedEvents() {
-      return this.$store.getters[PUBLISHED_EVENTS];
-    },
-    draftEvents() {
-      return this.$store.getters[DRAFT_EVENTS];
-    }
-  },
-  mounted() {
-    this.$store.dispatch(GET_PUBLISHED_EVENTS);
-    this.$store.dispatch(GET_DRAFT_EVENTS);
-  }
+  })
 };
 </script>

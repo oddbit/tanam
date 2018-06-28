@@ -94,7 +94,12 @@
 </template>
 
 <script>
-import { POST_TITLE, POST_FEATURED_IMAGE, POST_CONTENT } from '@/store/types';
+import {
+  POST_TITLE,
+  POST_FEATURED_IMAGE,
+  POST_CONTENT,
+  TOGGLE_DRAWER_POST
+} from '@/store/types';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 
@@ -113,7 +118,7 @@ export default {
       return this.$route.params.slug;
     },
     drawer() {
-      return this.$store.state.drawer.statusEventPost;
+      return this.$store.getters[TOGGLE_DRAWER_POST];
     },
     postTitle: {
       get() {

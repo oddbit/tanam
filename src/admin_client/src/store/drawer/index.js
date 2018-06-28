@@ -1,15 +1,20 @@
-import { TOGGLE_DRAWER, TOGGLE_DRAWER_EVENT_POST } from '../types';
+import { TOGGLE_DRAWER, TOGGLE_DRAWER_POST } from '../types';
 import mutations from './mutations';
+import getters from './getters';
 
 const state = {
   status: false,
-  statusEventPost: true
+  statusPost: true
 };
 
 export default {
   state,
+  getters: {
+    [TOGGLE_DRAWER]: getters.status,
+    [TOGGLE_DRAWER_POST]: getters.statusPost
+  },
   mutations: {
     [TOGGLE_DRAWER]: mutations.toggleDrawer,
-    [TOGGLE_DRAWER_EVENT_POST]: mutations.toggleDrawerEventPost
+    [TOGGLE_DRAWER_POST]: mutations.toggleDrawerPost
   }
 };
