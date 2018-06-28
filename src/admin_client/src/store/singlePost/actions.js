@@ -2,13 +2,14 @@ import firebase from 'firebase/app';
 import 'firebase/database';
 import quillToHtml from '@/helpers/quillToHtml';
 
-const publishEvent = ({ state }) => {
+const publishPost = ({ state }) => {
   const content = quillToHtml(state.content);
   const publishedAt = new Date().toISOString();
-
-  const postsEventsRef = firebase.database().ref('/posts/events');
-  const newPostRef = postsEventsRef.push();
-  newPostRef.set({
+  const ref = firebase
+    .database()
+    .ref('/posts/events')
+    .push();
+  ref.set({
     ...state,
     content,
     publishedAt,
@@ -16,17 +17,16 @@ const publishEvent = ({ state }) => {
   });
 };
 
-const updateEvent = ({ state }, payload) => {
+const updatePost = ({ state }, payload) => {
   const content = quillToHtml(state.content);
   const updatedAt = new Date().toISOString();
-
   firebase
     .database()
     .ref('/posts/events/' + payload)
     .set({ ...state, content, updatedAt });
 };
 
-const deleteEvent = (context, payload) => {
+const deletePost = (context, payload) => {
   firebase
     .database()
     .ref('/posts/events/' + payload)
@@ -34,7 +34,7 @@ const deleteEvent = (context, payload) => {
 };
 
 export default {
-  publishEvent,
-  updateEvent,
-  deleteEvent
+  publishPost,
+  updatePost,
+  deletePost
 };

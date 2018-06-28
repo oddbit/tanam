@@ -1,9 +1,8 @@
-const setLayout = (state, payload) =>
-  (state.layout = payload || 'DefaultLayout');
+const layout = (state, payload) => (state.layout = payload || 'DefaultLayout');
 
-const setPostMode = (state, payload) => (state.postMode = payload || 'post');
+const postMode = (state, payload) => (state.postMode = payload || 'post');
 
 export default {
-  setLayout,
-  setPostMode
+  layout,
+  postMode
 };

@@ -55,7 +55,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import { LOGOUT } from '@/store/types';
+import { LOGOUT, TOGGLE_DRAWER, TOGGLE_DRAWER_POST } from '@/store/types';
 
 export default {
   computed: {
@@ -68,10 +68,10 @@ export default {
       handleLogout: LOGOUT
     }),
     handleClickMenu() {
-      this.$store.commit('drawer/toggleDrawer', true);
+      this.$store.commit(TOGGLE_DRAWER, true);
     },
     handleToggleEventPostSettings() {
-      this.$store.commit('drawer/toggleDrawerEventPost');
+      this.$store.commit(TOGGLE_DRAWER_POST);
     }
   }
 };
