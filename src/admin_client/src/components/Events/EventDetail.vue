@@ -111,7 +111,9 @@ export default {
     }
   },
   data: () => ({
-    title: null
+    title: null,
+    quill: null,
+    quillContentOnce: false
   }),
   computed: {
     slug() {
@@ -130,10 +132,13 @@ export default {
     },
     postFeaturedImage() {
       return this.$store.getters[POST_FEATURED_IMAGE];
+    },
+    postContent() {
+      return this.$store.getters[POST_CONTENT];
     }
   },
   mounted() {
-    const quill = new Quill('#editor', {
+    this.quill = new Quill('#editor', {
       theme: 'snow',
       modules: {
         toolbar: '#editor-toolbar'
@@ -141,16 +146,17 @@ export default {
       placeholder: 'Write here...'
     });
 
-    if (this.mode === 'edit') {
-      quill.clipboard.dangerouslyPasteHTML(
-        0,
-        this.$store.getters[POST_CONTENT]
-      );
-    }
-
-    quill.on('editor-change', () => {
-      this.$store.commit(POST_CONTENT, quill.getContents().ops);
+    this.quill.on('editor-change', () => {
+      this.$store.commit(POST_CONTENT, this.quill.getContents().ops);
     });
+  },
+  watch: {
+    postContent(val) {
+      if (!this.quillContentOnce && this.mode === 'edit') {
+        this.quillContentOnce = true;
+        this.quill.clipboard.dangerouslyPasteHTML(0, val);
+      }
+    }
   }
 };
 </script>
