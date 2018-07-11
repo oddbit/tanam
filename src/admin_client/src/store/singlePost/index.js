@@ -25,10 +25,18 @@ import actions from './actions';
 const state = {
   title: null,
   place: null,
-  dateStart: null,
-  timeStart: null,
-  dateEnd: null,
-  timeEnd: null,
+  // dateStart: null,
+  // timeStart: null,
+  // dateEnd: null,
+  // timeEnd: null,
+  datetimeStart: {
+    date: null,
+    time: null
+  },
+  datetimeEnd: {
+    date: null,
+    time: null
+  },
   priceRegular: null,
   priceMember: null,
   rsvpEmail: null,
