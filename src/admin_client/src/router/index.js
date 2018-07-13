@@ -42,6 +42,17 @@ const routerOptions = [
     path: '/profile/account-settings',
     name: 'account-settings',
     component: 'Profile/AccountSettings'
+  },
+  {
+    path: '/blog',
+    name: 'blog',
+    component: 'Blog/index'
+  },
+  {
+    path: '/blog/post',
+    name: 'blog-post',
+    component: 'Blog/Post/index',
+    meta: { layout: 'SinglePostLayout' }
   }
 ];
 
