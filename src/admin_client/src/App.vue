@@ -10,12 +10,14 @@ import { CURRENT_LAYOUT } from '@/store/types';
 import DefaultLayout from '@/layouts/Default';
 import SimpleLayout from '@/layouts/Simple';
 import SinglePostLayout from '@/layouts/SinglePost';
+import SingleBlogLayout from '@/layouts/SingleBlog';
 
 export default {
   components: {
     DefaultLayout,
     SimpleLayout,
-    SinglePostLayout
+    SinglePostLayout,
+    SingleBlogLayout
   },
   computed: {
     ...mapGetters({

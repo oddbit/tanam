@@ -52,7 +52,7 @@ const routerOptions = [
     path: '/blog/post',
     name: 'blog-post',
     component: 'Blog/Post/index',
-    meta: { layout: 'SinglePostLayout' }
+    meta: { layout: 'SingleBlogLayout' }
   }
 ];
 
