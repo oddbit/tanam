@@ -94,7 +94,11 @@
 </template>
 
 <script>
-import { POST_TITLE, POST_FEATURED_IMAGE, POST_CONTENT } from '@/store/types';
+import {
+  BLOG_POST_TITLE,
+  BLOG_POST_FEATURED_IMAGE,
+  BLOG_POST_CONTENT
+} from '@/store/types';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 
@@ -106,7 +110,9 @@ export default {
     }
   },
   data: () => ({
-    title: null
+    title: null,
+    quill: null,
+    quillContentOnce: false
   }),
   computed: {
     slug() {
@@ -117,18 +123,21 @@ export default {
     },
     postTitle: {
       get() {
-        return this.$store.getters[POST_TITLE];
+        return this.$store.getters[BLOG_POST_TITLE];
       },
       set(val) {
-        return this.$store.commit(POST_TITLE, val);
+        return this.$store.commit(BLOG_POST_TITLE, val);
       }
     },
     postFeaturedImage() {
-      return this.$store.getters[POST_FEATURED_IMAGE];
+      return this.$store.getters[BLOG_POST_FEATURED_IMAGE];
+    },
+    postContent() {
+      return this.$store.getters[BLOG_POST_CONTENT];
     }
   },
   mounted() {
-    const quill = new Quill('#editor', {
+    this.quill = new Quill('#editor', {
       theme: 'snow',
       modules: {
         toolbar: '#editor-toolbar'
@@ -136,16 +145,17 @@ export default {
       placeholder: 'Write here...'
     });
 
-    if (this.mode === 'edit') {
-      quill.clipboard.dangerouslyPasteHTML(
-        0,
-        this.$store.getters[POST_CONTENT]
-      );
-    }
-
-    quill.on('editor-change', () => {
-      this.$store.commit(POST_CONTENT, quill.getContents().ops);
+    this.quill.on('editor-change', () => {
+      this.$store.commit(BLOG_POST_CONTENT, this.quill.getContents().ops);
     });
+  },
+  watch: {
+    postContent(val) {
+      if (!this.quillContentOnce && this.mode === 'edit') {
+        this.quillContentOnce = true;
+        this.quill.clipboard.dangerouslyPasteHTML(0, val);
+      }
+    }
   }
 };
 </script>

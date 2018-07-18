@@ -59,122 +59,26 @@
 
 <script>
 import {
-  POST_PLACE,
-  POST_DATE_START,
-  POST_TIME_START,
-  POST_DATE_END,
-  POST_TIME_END,
-  POST_PRICE_REGULAR,
-  POST_PRICE_MEMBER,
-  POST_RSVP_EMAIL,
-  POST_RSVP_URL,
-  POST_RSVP_FACEBOOK,
-  POST_FEATURED_IMAGE,
-  POST_PERMALINK,
-  POST_DIALOG_DELETE,
-  POST_ID
+  BLOG_POST_FEATURED_IMAGE,
+  BLOG_POST_PERMALINK,
+  BLOG_POST_DIALOG_DELETE,
+  BLOG_POST_ID
 } from '@/store/types';
-import DialogDelete from '@/components/Events/DialogDelete';
+import DialogDelete from '@/components/Blog/DialogDelete';
 
 export default {
   components: {
     DialogDelete
   },
-  data: () => ({
-    dialogDateStart: false,
-    dialogTimeStart: false,
-    dialogDateEnd: false,
-    dialogTimeEnd: false
-  }),
   computed: {
     drawer() {
       return this.$store.state.drawer.statusEventPost;
     },
-    postPlace: {
-      get() {
-        return this.$store.getters[POST_PLACE];
-      },
-      set(val) {
-        this.$store.commit(POST_PLACE, val);
-      }
-    },
-    postDateStart: {
-      get() {
-        return this.$store.getters[POST_DATE_START];
-      },
-      set(val) {
-        this.$store.commit(POST_DATE_START, val);
-      }
-    },
-    postTimeStart: {
-      get() {
-        return this.$store.getters[POST_TIME_START];
-      },
-      set(val) {
-        this.$store.commit(POST_TIME_START, val);
-      }
-    },
-    postDateEnd: {
-      get() {
-        return this.$store.getters[POST_DATE_END];
-      },
-      set(val) {
-        this.$store.commit(POST_DATE_END, val);
-      }
-    },
-    postTimeEnd: {
-      get() {
-        return this.$store.getters[POST_TIME_END];
-      },
-      set(val) {
-        this.$store.commit(POST_TIME_END, val);
-      }
-    },
-    postPriceRegular: {
-      get() {
-        return this.$store.getters[POST_PRICE_REGULAR];
-      },
-      set(val) {
-        this.$store.commit(POST_PRICE_REGULAR, val);
-      }
-    },
-    postPriceMember: {
-      get() {
-        return this.$store.getters[POST_PRICE_MEMBER];
-      },
-      set(val) {
-        this.$store.commit(POST_PRICE_MEMBER, val);
-      }
-    },
-    postRsvpEmail: {
-      get() {
-        return this.$store.getters[POST_RSVP_EMAIL];
-      },
-      set(val) {
-        this.$store.commit(POST_RSVP_EMAIL, val);
-      }
-    },
-    postRsvpUrl: {
-      get() {
-        return this.$store.getters[POST_RSVP_URL];
-      },
-      set(val) {
-        this.$store.commit(POST_RSVP_URL, val);
-      }
-    },
-    postRsvpFacebook: {
-      get() {
-        return this.$store.getters[POST_RSVP_FACEBOOK];
-      },
-      set(val) {
-        this.$store.commit(POST_RSVP_FACEBOOK, val);
-      }
-    },
     postFeaturedImage() {
-      return this.$store.getters[POST_FEATURED_IMAGE];
+      return this.$store.getters[BLOG_POST_FEATURED_IMAGE];
     },
     postPermalink() {
-      return this.$store.getters[POST_PERMALINK];
+      return this.$store.getters[BLOG_POST_PERMALINK];
     }
   },
   methods: {
@@ -182,20 +86,20 @@ export default {
       const reader = new FileReader();
       reader.readAsDataURL(e.target.files[0]);
       reader.onload = event => {
-        this.$store.commit(POST_FEATURED_IMAGE, event.target.result);
+        this.$store.commit(BLOG_POST_FEATURED_IMAGE, event.target.result);
       };
     },
     handleCloseFeaturedImg() {
-      this.$store.commit(POST_FEATURED_IMAGE, null);
+      this.$store.commit(BLOG_POST_FEATURED_IMAGE, null);
       this.$refs.featuredImg.value = null;
     },
     handleInputDrawer(val) {
       this.$store.commit('drawer/toggleDrawerEventPost', val);
     },
     handleClickDelete() {
-      this.$store.commit(POST_DIALOG_DELETE, {
+      this.$store.commit(BLOG_POST_DIALOG_DELETE, {
         dialogDelete: true,
-        id: this.$store.getters[POST_ID]
+        id: this.$store.getters[BLOG_POST_ID]
       });
     }
   }

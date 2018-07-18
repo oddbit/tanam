@@ -25,7 +25,10 @@
             </v-tabs>
             <v-tabs-items v-model="tabsModel" class="mt-3 elevation-1">
               <v-tab-item id="published">
-                <h1>Hello</h1>
+                <PublishedBlogs 
+                  v-for="blog in publishedBlogs" 
+                  :key="blog.key"
+                  :published-blog="blog" />
               </v-tab-item>
               <v-tab-item id="draft" />
             </v-tabs-items>
@@ -33,14 +36,30 @@
         </v-layout>
       </div>
     </v-slide-y-transition>
+    <DialogDelete />
   </v-container>
 </template>
 
 <script>
+import { GET_PUBLISHED_BLOGS, PUBLISHED_BLOGS } from '@/store/types';
+import DialogDelete from '@/components/Blog/DialogDelete';
+
 export default {
+  components: {
+    PublishedBlogs: () => import('@/components/Blog/PublishedBlogs'),
+    DialogDelete
+  },
   data: () => ({
     tabItems: ['published', 'draft'],
     tabsModel: 'published'
-  })
+  }),
+  computed: {
+    publishedBlogs() {
+      return this.$store.getters[PUBLISHED_BLOGS];
+    }
+  },
+  mounted() {
+    this.$store.dispatch(GET_PUBLISHED_BLOGS);
+  }
 };
 </script>

@@ -53,6 +53,12 @@ const routerOptions = [
     name: 'blog-post',
     component: 'Blog/Post/index',
     meta: { layout: 'SingleBlogLayout' }
+  },
+  {
+    path: '/blog/post/:slug',
+    name: 'blog-post-slug',
+    component: 'Blog/Post/_slug',
+    meta: { layout: 'SingleBlogLayout' }
   }
 ];
 
