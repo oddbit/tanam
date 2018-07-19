@@ -32,7 +32,10 @@ export default {
   },
   methods: {
     handleDialogCancel() {
-      this.$store.commit(BLOG_POST_DIALOG_DELETE, false);
+      this.$store.commit(BLOG_POST_DIALOG_DELETE, {
+        dialogDelete: false,
+        id: this.$route.params.slug
+      });
     },
     handleDialogDelete() {
       this.$store
