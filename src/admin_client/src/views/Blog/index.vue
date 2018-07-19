@@ -41,7 +41,11 @@
 </template>
 
 <script>
-import { GET_PUBLISHED_BLOGS, PUBLISHED_BLOGS } from '@/store/types';
+import {
+  GET_PUBLISHED_BLOGS,
+  PUBLISHED_BLOGS,
+  BLOG_POST_ID
+} from '@/store/types';
 import DialogDelete from '@/components/Blog/DialogDelete';
 
 export default {
@@ -59,6 +63,7 @@ export default {
     }
   },
   mounted() {
+    this.$store.commit(BLOG_POST_ID, null);
     this.$store.dispatch(GET_PUBLISHED_BLOGS);
   }
 };

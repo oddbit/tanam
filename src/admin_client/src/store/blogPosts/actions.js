@@ -12,8 +12,7 @@ const getPublishedBlogs = ({ commit }) => {
   firestore
     .collection('posts-blogs')
     .where('status', '==', 'published')
-    .get()
-    .then(snapshot => {
+    .onSnapshot(snapshot => {
       const arr = [];
       commit(PUBLISHED_BLOGS, []);
       snapshot.forEach(doc => {
@@ -21,6 +20,15 @@ const getPublishedBlogs = ({ commit }) => {
       });
       commit(PUBLISHED_BLOGS, arr);
     });
+  // .get()
+  // .then(snapshot => {
+  //   const arr = [];
+  //   commit(PUBLISHED_BLOGS, []);
+  //   snapshot.forEach(doc => {
+  //     arr.push({ ...doc.data(), key: doc.id });
+  //   });
+  //   commit(PUBLISHED_BLOGS, arr);
+  // });
 };
 
 const getDraftBlogs = ({ commit }) => {

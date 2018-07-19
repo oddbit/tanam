@@ -44,7 +44,7 @@
           </div>
         </v-list-group>
       </v-list>
-      <div class="delete-wrapper">
+      <div v-if="postId" class="delete-wrapper">
         <v-divider />
         <v-btn 
           flat 
@@ -79,6 +79,9 @@ export default {
     },
     postPermalink() {
       return this.$store.getters[BLOG_POST_PERMALINK];
+    },
+    postId() {
+      return this.$store.getters[BLOG_POST_ID];
     }
   },
   methods: {
