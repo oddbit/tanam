@@ -97,7 +97,8 @@
 import {
   BLOG_POST_TITLE,
   BLOG_POST_FEATURED_IMAGE,
-  BLOG_POST_CONTENT
+  BLOG_POST_CONTENT,
+  BLOG_IS_VALID_TITLE
 } from '@/store/types';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
@@ -126,7 +127,7 @@ export default {
         return this.$store.getters[BLOG_POST_TITLE];
       },
       set(val) {
-        return this.$store.commit(BLOG_POST_TITLE, val);
+        this.$store.commit(BLOG_POST_TITLE, val);
       }
     },
     postFeaturedImage() {
@@ -155,7 +156,14 @@ export default {
         this.quillContentOnce = true;
         this.quill.clipboard.dangerouslyPasteHTML(0, val);
       }
+    },
+    postTitle(val) {
+      const isValid = val ? true : false;
+      this.$store.commit(BLOG_IS_VALID_TITLE, isValid);
     }
+  },
+  beforeDestroy() {
+    this.$store.commit(BLOG_IS_VALID_TITLE, false);
   }
 };
 </script>

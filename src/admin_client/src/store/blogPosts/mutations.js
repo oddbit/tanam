@@ -15,9 +15,14 @@ const setDialogDelete = (state, payload) => {
   state.postID = payload.id || null;
 };
 
+const setIsValidTitle = (state, payload) => {
+  state.isValidTitle = payload;
+};
+
 export default {
   setPostID,
   setPublishedBlogs,
   setDraftBlogs,
-  setDialogDelete
+  setDialogDelete,
+  setIsValidTitle
 };

@@ -6,7 +6,8 @@ import {
   BLOG_POST_DIALOG_DELETE,
   GET_PUBLISHED_BLOGS,
   GET_DRAFT_BLOGS,
-  BLOG_CUSTOM_DELETE_POST
+  BLOG_CUSTOM_DELETE_POST,
+  BLOG_IS_VALID_TITLE
 } from '../types';
 import actions from './actions';
 import mutations from './mutations';
@@ -16,7 +17,8 @@ const state = {
   postID: null,
   publishedBlogs: [],
   draftBlogs: [],
-  dialogDelete: false
+  dialogDelete: false,
+  isValidTitle: false
 };
 
 export default {
@@ -25,13 +27,15 @@ export default {
     [BLOG_POST_ID]: mutations.setPostID,
     [PUBLISHED_BLOGS]: mutations.setPublishedBlogs,
     [DRAFT_BLOGS]: mutations.setDraftBlogs,
-    [BLOG_POST_DIALOG_DELETE]: mutations.setDialogDelete
+    [BLOG_POST_DIALOG_DELETE]: mutations.setDialogDelete,
+    [BLOG_IS_VALID_TITLE]: mutations.setIsValidTitle
   },
   getters: {
     [BLOG_POST_ID]: getters.getPostID,
     [PUBLISHED_BLOGS]: getters.getPublishedBlogs,
     [DRAFT_BLOGS]: getters.getDraftBlogs,
-    [BLOG_POST_DIALOG_DELETE]: getters.getDialogDelete
+    [BLOG_POST_DIALOG_DELETE]: getters.getDialogDelete,
+    [BLOG_IS_VALID_TITLE]: getters.getIsValidTitle
   },
   actions: {
     [GET_BLOG_BY]: actions.getBlogBy,

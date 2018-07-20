@@ -57,3 +57,5 @@ export const BLOG_SET_POST_TO_NULL = 'post/blog/setToNull';
 export const BLOG_DELETE_POST = 'post/blog/delete';
 export const BLOG_CUSTOM_DELETE_POST = 'post/blog/custom/delete';
 export const BLOG_POST_DIALOG_DELETE = 'post/blog/dialog/delete';
+export const BLOG_IS_VALID_TITLE = 'post/blog/isValid/title';
+export const BLOG_IS_VALID_BODY = 'post/blog/isValid/body';
