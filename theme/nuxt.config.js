@@ -9,9 +9,7 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'Tanam Basic Theme' }
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   /*
   ** Customize the progress bar color
@@ -25,29 +23,29 @@ module.exports = {
     publicPath: '/assets/',
     extractCSS: true,
     babel: {
-      presets: [
-        'es2015',
-        'stage-0'
-      ],
+      presets: ['es2015', 'stage-0'],
       plugins: [
-        ["transform-runtime", {
-          "polyfill": true,
-          "regenerator": true
-        }],
+        [
+          'transform-runtime',
+          {
+            polyfill: true,
+            regenerator: true
+          }
+        ]
       ]
     },
     /*
     ** Run ESLint on save
     */
-    extend (config, { isDev, isClient }) {
+    extend(config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules)/
-        })
+        });
       }
     }
   }
-}
+};
