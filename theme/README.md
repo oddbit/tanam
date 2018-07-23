@@ -1,6 +1,6 @@
 # theme
 
-> Theme Tanam
+> Tanam Basic Theme
 
 ## Build Setup
 
