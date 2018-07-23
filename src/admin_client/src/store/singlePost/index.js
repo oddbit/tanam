@@ -13,11 +13,10 @@ import {
   POST_FEATURED_IMAGE,
   POST_PERMALINK,
   POST_CONTENT,
-  EVENT_POST_SUBMIT,
-  EVENT_POST_UPDATE,
-  SET_POST,
-  SET_POST_TO_NULL,
-  DELETE_POST
+  POST_ACTION_SUBMIT,
+  POST_ACTION_UPDATE,
+  POST_SET,
+  POST_ACTION_DELETE
 } from '../types';
 import mutations from './mutations';
 import getters from './getters';
@@ -26,10 +25,18 @@ import actions from './actions';
 const state = {
   title: null,
   place: null,
-  dateStart: null,
-  timeStart: null,
-  dateEnd: null,
-  timeEnd: null,
+  // dateStart: null,
+  // timeStart: null,
+  // dateEnd: null,
+  // timeEnd: null,
+  datetimeStart: {
+    date: null,
+    time: null
+  },
+  datetimeEnd: {
+    date: null,
+    time: null
+  },
   priceRegular: null,
   priceMember: null,
   rsvpEmail: null,
@@ -64,26 +71,25 @@ export default {
     [POST_CONTENT]: getters.content
   },
   mutations: {
-    [POST_TITLE]: mutations.setTitle,
-    [POST_PLACE]: mutations.setPlace,
-    [POST_DATE_START]: mutations.setDateStart,
-    [POST_TIME_START]: mutations.setTimeStart,
-    [POST_DATE_END]: mutations.setDateEnd,
-    [POST_TIME_END]: mutations.setTimeEnd,
-    [POST_PRICE_REGULAR]: mutations.setPriceRegular,
-    [POST_PRICE_MEMBER]: mutations.setPriceMember,
-    [POST_RSVP_EMAIL]: mutations.setRsvpEmail,
-    [POST_RSVP_URL]: mutations.setRsvpUrl,
-    [POST_RSVP_FACEBOOK]: mutations.setRsvpFacebook,
-    [POST_FEATURED_IMAGE]: mutations.setFeaturedImage,
-    [POST_PERMALINK]: mutations.setPermalink,
-    [POST_CONTENT]: mutations.setContent,
-    [SET_POST]: mutations.setPost,
-    [SET_POST_TO_NULL]: mutations.setPostToNull
+    [POST_TITLE]: mutations.title,
+    [POST_PLACE]: mutations.place,
+    [POST_DATE_START]: mutations.dateStart,
+    [POST_TIME_START]: mutations.timeStart,
+    [POST_DATE_END]: mutations.dateEnd,
+    [POST_TIME_END]: mutations.timeEnd,
+    [POST_PRICE_REGULAR]: mutations.priceRegular,
+    [POST_PRICE_MEMBER]: mutations.priceMember,
+    [POST_RSVP_EMAIL]: mutations.rsvpEmail,
+    [POST_RSVP_URL]: mutations.rsvpUrl,
+    [POST_RSVP_FACEBOOK]: mutations.rsvpFacebook,
+    [POST_FEATURED_IMAGE]: mutations.featuredImage,
+    [POST_PERMALINK]: mutations.permalink,
+    [POST_CONTENT]: mutations.content,
+    [POST_SET]: mutations.post
   },
   actions: {
-    [EVENT_POST_SUBMIT]: actions.publishEvent,
-    [EVENT_POST_UPDATE]: actions.updateEvent,
-    [DELETE_POST]: actions.deleteEvent
+    [POST_ACTION_SUBMIT]: actions.publishPost,
+    [POST_ACTION_UPDATE]: actions.updatePost,
+    [POST_ACTION_DELETE]: actions.deletePost
   }
 };

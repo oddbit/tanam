@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import users from './users';
 import drawer from './drawer';
 import layout from './layout';
-import post from './post';
+import singlePost from './singlePost';
 import posts from './posts';
 import blogPost from './blogPost';
 import blogPosts from './blogPosts';
@@ -18,6 +18,7 @@ export const store = new Vuex.Store({
     post,
     posts,
     blogPost,
-    blogPosts
+    blogPosts,
+    singlePost
   }
 });

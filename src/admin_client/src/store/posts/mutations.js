@@ -11,8 +11,7 @@ const setDraftEvents = (state, payload) => {
 };
 
 const setDialogDelete = (state, payload) => {
-  state.dialogDelete = payload.dialogDelete;
-  state.postID = payload.id || null;
+  state.dialogDelete = payload;
 };
 
 export default {

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import firebase from 'firebase/app';
-import { SET_LAYOUT } from '@/store/types';
+import { LAYOUT } from '@/store/types';
 import { store } from '@/store';
 
 const routerOptions = [
@@ -75,7 +75,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  store.commit(SET_LAYOUT, to.meta.layout);
+  store.commit(LAYOUT, to.meta.layout);
 
   const isAuthenticated = firebase.auth().currentUser;
   if (isAuthenticated) {

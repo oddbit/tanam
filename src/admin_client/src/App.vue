@@ -6,7 +6,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { CURRENT_LAYOUT } from '@/store/types';
+import { LAYOUT } from '@/store/types';
 import DefaultLayout from '@/layouts/Default';
 import SimpleLayout from '@/layouts/Simple';
 import SinglePostLayout from '@/layouts/SinglePost';
@@ -21,7 +21,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      layout: CURRENT_LAYOUT
+      layout: LAYOUT
     })
   }
 };

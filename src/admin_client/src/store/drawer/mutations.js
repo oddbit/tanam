@@ -1,11 +1,10 @@
 const toggleDrawer = (state, payload) => (state.status = payload);
 
-const toggleDrawerEventPost = (state, payload) => {
-  state.statusEventPost =
-    payload !== undefined ? payload : !state.statusEventPost;
+const toggleDrawerPost = (state, payload) => {
+  state.statusPost = payload !== undefined ? payload : !state.statusPost;
 };
 
 export default {
   toggleDrawer,
-  toggleDrawerEventPost
+  toggleDrawerPost
 };

@@ -212,7 +212,7 @@ import {
   POST_FEATURED_IMAGE,
   POST_PERMALINK,
   POST_DIALOG_DELETE,
-  POST_ID
+  TOGGLE_DRAWER_POST
 } from '@/store/types';
 import DialogDelete from '@/components/Events/DialogDelete';
 
@@ -228,7 +228,7 @@ export default {
   }),
   computed: {
     drawer() {
-      return this.$store.state.drawer.statusEventPost;
+      return this.$store.getters[TOGGLE_DRAWER_POST];
     },
     postPlace: {
       get() {
@@ -330,13 +330,10 @@ export default {
       this.$refs.featuredImg.value = null;
     },
     handleInputDrawer(val) {
-      this.$store.commit('drawer/toggleDrawerEventPost', val);
+      this.$store.commit(TOGGLE_DRAWER_POST, val);
     },
     handleClickDelete() {
-      this.$store.commit(POST_DIALOG_DELETE, {
-        dialogDelete: true,
-        id: this.$store.getters[POST_ID]
-      });
+      this.$store.commit(POST_DIALOG_DELETE, true);
     }
   }
 };
