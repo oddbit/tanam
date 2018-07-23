@@ -1,4 +1,4 @@
-import { SET_LAYOUT, CURRENT_LAYOUT, POST_MODE } from '../types';
+import { LAYOUT, POST_MODE } from '../types';
 import mutations from './mutations';
 import getters from './getters';
 
@@ -10,11 +10,11 @@ const state = {
 export default {
   state,
   mutations: {
-    [SET_LAYOUT]: mutations.setLayout,
-    [POST_MODE]: mutations.setPostMode
+    [LAYOUT]: mutations.layout,
+    [POST_MODE]: mutations.postMode
   },
   getters: {
-    [CURRENT_LAYOUT]: getters.currentLayout,
+    [LAYOUT]: getters.layout,
     [POST_MODE]: getters.postMode
   }
 };

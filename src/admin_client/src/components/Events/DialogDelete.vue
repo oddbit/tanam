@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { POST_DIALOG_DELETE, CUSTOM_DELETE_POST } from '@/store/types';
+import { POST_DIALOG_DELETE, POST_ID, POST_ACTION_DELETE } from '@/store/types';
 
 export default {
   computed: {
@@ -23,7 +23,7 @@ export default {
         return this.$store.getters[POST_DIALOG_DELETE];
       },
       set(val) {
-        this.$store.commit(POST_DIALOG_DELETE, { dialogDelete: val });
+        this.$store.commit(POST_DIALOG_DELETE, val);
       }
     }
   },
@@ -33,8 +33,12 @@ export default {
     },
     handleDialogDelete() {
       this.$store
-        .dispatch(CUSTOM_DELETE_POST)
-        .then(() => this.$router.push('/events'));
+        .dispatch(POST_ACTION_DELETE, this.$store.getters[POST_ID])
+        .then(() => {
+          this.$store.commit(POST_DIALOG_DELETE, false);
+          this.$store.commit(POST_ID, null);
+          this.$router.push('/events');
+        });
     }
   }
 };

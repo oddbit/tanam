@@ -33,10 +33,11 @@
 
 <script>
 import {
-  EVENT_POST_SUBMIT,
+  POST_ACTION_SUBMIT,
   POST_MODE,
-  EVENT_POST_UPDATE,
-  POST_ID
+  POST_ACTION_UPDATE,
+  POST_ID,
+  TOGGLE_DRAWER_POST
 } from '@/store/types';
 
 export default {
@@ -47,16 +48,19 @@ export default {
   },
   methods: {
     handleToggleEventPostSettings() {
-      this.$store.commit('drawer/toggleDrawerEventPost');
+      this.$store.commit(TOGGLE_DRAWER_POST);
     },
     handleClickPublish() {
-      this.$store.dispatch(EVENT_POST_SUBMIT);
+      this.$store.dispatch(POST_ACTION_SUBMIT);
       this.$router.push('/events');
     },
     handleClickUpdate() {
-      this.$store.dispatch(EVENT_POST_UPDATE, this.$store.getters[POST_ID]);
-      this.$store.commit(POST_ID, null);
-      this.$router.push('/events');
+      this.$store
+        .dispatch(POST_ACTION_UPDATE, this.$store.getters[POST_ID])
+        .then(() => {
+          this.$store.commit(POST_ID, null);
+          this.$router.push('/events');
+        });
     }
   }
 };
