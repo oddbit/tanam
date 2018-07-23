@@ -15,7 +15,6 @@ export const store = new Vuex.Store({
     users,
     drawer,
     layout,
-    post,
     posts,
     blogPost,
     blogPosts,
