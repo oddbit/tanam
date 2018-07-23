@@ -24,6 +24,39 @@ export const POST_CONTENT = 'post/field/content';
 
 export const POST_MODE = 'post/mode';
 export const POST_ID = 'post/id';
+
+export const SET_POST = 'post/setFromFirebase';
+export const SET_POST_TO_NULL = 'post/setToNull';
+export const DELETE_POST = 'post/delete';
+export const CUSTOM_DELETE_POST = '/post/custom/delete';
+
+export const PUBLISHED_EVENTS = 'events/published';
+export const DRAFT_EVENTS = 'events/draft';
+export const GET_PUBLISHED_EVENTS = 'get/events/published';
+export const GET_DRAFT_EVENTS = 'get/events/draft';
+export const GET_EVENT_BY = 'get/events/by';
+
+export const PUBLISHED_BLOGS = 'blogs/published';
+export const DRAFT_BLOGS = 'blogs/draft';
+export const GET_PUBLISHED_BLOGS = 'get/blogs/published';
+export const GET_DRAFT_BLOGS = 'get/blogs/draft';
+export const GET_BLOG_BY = 'get/blogs/by';
+
+export const BLOG_POST_TITLE = 'post/blog/title';
+export const BLOG_POST_FEATURED_IMAGE = 'post/blog/featuredImage';
+export const BLOG_POST_PERMALINK = 'post/blog/permalink';
+export const BLOG_POST_CONTENT = 'post/blog/content';
+export const BLOG_POST_SUBMIT = 'post/blog/submit';
+export const BLOG_POST_UPDATE = 'post/blog/update';
+export const BLOG_POST_ID = 'post/blog/id';
+export const BLOG_SET_POST = 'post/blog/setFromFirebase';
+export const BLOG_SET_POST_TO_NULL = 'post/blog/setToNull';
+export const BLOG_DELETE_POST = 'post/blog/delete';
+export const BLOG_CUSTOM_DELETE_POST = 'post/blog/custom/delete';
+export const BLOG_POST_DIALOG_DELETE = 'post/blog/dialog/delete';
+export const BLOG_IS_VALID_TITLE = 'post/blog/isValid/title';
+export const BLOG_IS_VALID_BODY = 'post/blog/isValid/body';
+
 export const POST_SET = 'post/set';
 export const POST_PUBLISHED = 'post/published';
 export const POST_DRAFT = 'post/draft';
