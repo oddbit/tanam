@@ -1,8 +1,8 @@
 {
   "name": "theme",
   "version": "1.0.0",
-  "description": "Theme Tanam",
-  "author": "praburangki <prabu@oddbit.id>",
+  "description": "Tanam Basic Theme",
+  "author": "praburangki <praburangki@gmail.com>",
   "private": true,
   "scripts": {
     "dev": "nuxt",
@@ -17,14 +17,20 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "jquery": "^3.3.1",
     "nuxt": "^1.0.0"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.1",
+    "babel-eslint": "^8.2.6",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "eslint": "^4.15.0",
+    "eslint": "^5.2.0",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-friendly-formatter": "^3.0.0",
-    "eslint-loader": "^1.7.1",
-    "eslint-plugin-vue": "^4.0.0"
+    "eslint-loader": "^2.1.0",
+    "eslint-plugin-prettier": "^2.6.2",
+    "eslint-plugin-vue": "^4.7.0",
+    "node-sass": "^4.9.2",
+    "prettier": "^1.13.7",
+    "sass-loader": "^7.0.3"
   }
 }

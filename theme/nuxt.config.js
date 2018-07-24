@@ -1,5 +1,7 @@
+/* eslint-disable */
+const webpack = require('webpack');
+
 module.exports = {
-  debug: true,
   /*
   ** Headers of the page
   */
@@ -8,12 +10,13 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Theme Tanam' }
+      { hid: 'description', name: 'description', content: 'Tanam Basic Theme' }
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
+  css: [
+    '@/assets/styles/main.scss'
+  ],
   /*
   ** Customize the progress bar color
   */
@@ -26,29 +29,38 @@ module.exports = {
     publicPath: '/assets/',
     extractCSS: true,
     babel: {
-      presets: [
-        'es2015',
-        'stage-0'
-      ],
+      presets: ['es2015', 'stage-0'],
       plugins: [
-        ["transform-runtime", {
-          "polyfill": true,
-          "regenerator": true
-        }],
+        [
+          'transform-runtime',
+          {
+            polyfill: true,
+            regenerator: true
+          }
+        ]
       ]
     },
     /*
     ** Run ESLint on save
     */
-    extend (config, { isDev, isClient }) {
-      if (isDev && isClient) {
+    vendor: ['jquery'],
+    plugins: [
+      // set shortcuts as global for bootstrap
+      new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery'
+      })
+    ],
+    extend(config, { isDev, isClient }) {
+      if (isDev && process.client) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /(node_modules)/
-        })
+          exclude: /node_modules/
+        });
       }
-    }
+    },
   }
-}
+};
