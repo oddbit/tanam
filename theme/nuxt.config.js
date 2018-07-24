@@ -1,4 +1,3 @@
-/* eslint-disable */
 const webpack = require('webpack');
 
 module.exports = {
@@ -14,9 +13,7 @@ module.exports = {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
-  css: [
-    '@/assets/styles/main.scss'
-  ],
+  css: ['@/assets/styles/main.scss'],
   /*
   ** Customize the progress bar color
   */
@@ -61,6 +58,16 @@ module.exports = {
           exclude: /node_modules/
         });
       }
-    },
+    }
+  },
+  env: {
+    firebase: {
+      apiKey: 'AIzaSyD-sz6tSPCKKhQBJnl1SuAzrnMktnMOFSI',
+      authDomain: 'tanam-dev.firebaseapp.com',
+      databaseURL: 'https://tanam-dev.firebaseio.com',
+      projectId: 'tanam-dev',
+      storageBucket: 'tanam-dev.appspot.com',
+      messagingSenderId: '2622678578'
+    }
   }
 };

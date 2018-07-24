@@ -36,14 +36,16 @@
               <input 
                 id="name" 
                 type="text" 
-                name="name" >
+                name="name"
+                autocomplete="name" >
             </div>
             <div class="field">
               <label for="email">Email</label>
               <input 
                 id="email" 
                 type="email" 
-                name="email" >
+                name="email"
+                autocomplete="email" >
             </div>
             <div class="field">
               <label for="message">Message</label>
@@ -144,8 +146,6 @@ export default {
         event.stopPropagation();
       })
       .on('click', 'a', function(event) {
-        var href = $(this).attr('href');
-
         event.preventDefault();
         event.stopPropagation();
 
