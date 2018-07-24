@@ -1,3 +1,6 @@
+/* eslint-disable */
+const webpack = require('webpack');
+
 module.exports = {
   /*
   ** Headers of the page
@@ -40,6 +43,15 @@ module.exports = {
     /*
     ** Run ESLint on save
     */
+    vendor: ['jquery'],
+    plugins: [
+      // set shortcuts as global for bootstrap
+      new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery'
+      })
+    ],
     extend(config, { isDev, isClient }) {
       if (isDev && process.client) {
         config.module.rules.push({
