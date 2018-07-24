@@ -11,6 +11,9 @@ module.exports = {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
+  css: [
+    '@/assets/styles/main.scss'
+  ],
   /*
   ** Customize the progress bar color
   */
@@ -38,14 +41,14 @@ module.exports = {
     ** Run ESLint on save
     */
     extend(config, { isDev, isClient }) {
-      if (isDev && isClient) {
+      if (isDev && process.client) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /(node_modules)/
+          exclude: /node_modules/
         });
       }
-    }
+    },
   }
 };

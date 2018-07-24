@@ -28,6 +28,8 @@
     "eslint-loader": "^2.1.0",
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-vue": "^4.7.0",
-    "prettier": "^1.13.7"
+    "node-sass": "^4.9.2",
+    "prettier": "^1.13.7",
+    "sass-loader": "^7.0.3"
   }
 }

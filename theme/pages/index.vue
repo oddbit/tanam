@@ -1,64 +1,137 @@
 <template>
-  <section class="container">
-    <div>
-      <app-logo/>
-      <h1 class="title">
-        theme
-      </h1>
-      <h2 class="subtitle">
-        Tanam Basic Theme
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green">Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey">GitHub</a>
+  <div>
+    <section id="banner">
+      <div class="inner">
+        <div class="logo"><span class="icon fa-diamond"/></div>
+        <h2>This is Solid State</h2>
+        <p>Another free + fully responsive site template by <a href="http://html5up.net">HTML5 UP</a></p>
       </div>
-    </div>
-  </section>
+    </section>
+    <section id="wrapper">
+      <section 
+        id="one" 
+        class="wrapper spotlight style1">
+        <div class="inner">
+          <a 
+            href="#" 
+            class="image"><img 
+              src="~/assets/images/pic01.jpg" 
+              alt="" ></a>
+          <div class="content">
+            <h2 class="major">Magna arcu feugiat</h2>
+            <p>Lorem ipsum dolor sit amet, etiam lorem adipiscing elit. Cras turpis ante, nullam sit amet turpis non, sollicitudin posuere urna. Mauris id tellus arcu. Nunc vehicula id nulla dignissim dapibus. Nullam ultrices, neque et faucibus viverra, ex nulla cursus.</p>
+            <a 
+              href="#" 
+              class="special">Learn more</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Two -->
+      <section 
+        id="two" 
+        class="wrapper alt spotlight style2">
+        <div class="inner">
+          <a 
+            href="#" 
+            class="image"><img 
+              src="~/assets/images/pic02.jpg" 
+              alt="" ></a>
+          <div class="content">
+            <h2 class="major">Tempus adipiscing</h2>
+            <p>Lorem ipsum dolor sit amet, etiam lorem adipiscing elit. Cras turpis ante, nullam sit amet turpis non, sollicitudin posuere urna. Mauris id tellus arcu. Nunc vehicula id nulla dignissim dapibus. Nullam ultrices, neque et faucibus viverra, ex nulla cursus.</p>
+            <a 
+              href="#" 
+              class="special">Learn more</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Three -->
+      <section 
+        id="three" 
+        class="wrapper spotlight style3">
+        <div class="inner">
+          <a 
+            href="#" 
+            class="image"><img 
+              src="~/assets/images/pic03.jpg" 
+              alt="" ></a>
+          <div class="content">
+            <h2 class="major">Nullam dignissim</h2>
+            <p>Lorem ipsum dolor sit amet, etiam lorem adipiscing elit. Cras turpis ante, nullam sit amet turpis non, sollicitudin posuere urna. Mauris id tellus arcu. Nunc vehicula id nulla dignissim dapibus. Nullam ultrices, neque et faucibus viverra, ex nulla cursus.</p>
+            <a 
+              href="#" 
+              class="special">Learn more</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Four -->
+      <section 
+        id="four" 
+        class="wrapper alt style1">
+        <div class="inner">
+          <h2 class="major">Vitae phasellus</h2>
+          <p>Cras mattis ante fermentum, malesuada neque vitae, eleifend erat. Phasellus non pulvinar erat. Fusce tincidunt, nisl eget mattis egestas, purus ipsum consequat orci, sit amet lobortis lorem lacus in tellus. Sed ac elementum arcu. Quisque placerat auctor laoreet.</p>
+          <section class="features">
+            <article>
+              <a 
+                href="#" 
+                class="image"><img 
+                  src="~/assets/images/pic04.jpg" 
+                  alt="" ></a>
+              <h3 class="major">Sed feugiat lorem</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing vehicula id nulla dignissim dapibus ultrices.</p>
+              <a 
+                href="#" 
+                class="special">Learn more</a>
+            </article>
+            <article>
+              <a 
+                href="#" 
+                class="image"><img 
+                  src="~/assets/images/pic05.jpg" 
+                  alt="" ></a>
+              <h3 class="major">Nisl placerat</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing vehicula id nulla dignissim dapibus ultrices.</p>
+              <a 
+                href="#" 
+                class="special">Learn more</a>
+            </article>
+            <article>
+              <a 
+                href="#" 
+                class="image"><img 
+                  src="~/assets/images/pic06.jpg" 
+                  alt="" ></a>
+              <h3 class="major">Ante fermentum</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing vehicula id nulla dignissim dapibus ultrices.</p>
+              <a 
+                href="#" 
+                class="special">Learn more</a>
+            </article>
+            <article>
+              <a 
+                href="#" 
+                class="image"><img 
+                  src="~/assets/images/pic07.jpg" 
+                  alt="" ></a>
+              <h3 class="major">Fusce consequat</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing vehicula id nulla dignissim dapibus ultrices.</p>
+              <a 
+                href="#" 
+                class="special">Learn more</a>
+            </article>
+          </section>
+          <ul class="actions">
+            <li><a 
+              href="#" 
+              class="button">Browse All</a></li>
+          </ul>
+        </div>
+      </section>
+
+    </section>
+  </div>
 </template>
-
-<script>
-import AppLogo from '~/components/AppLogo.vue'
-
-export default {
-  components: {
-    AppLogo
-  }
-}
-</script>
-
-<style>
-.container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>

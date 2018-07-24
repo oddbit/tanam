@@ -15,7 +15,7 @@ const config = {
 const nuxt = new Nuxt(config);
 
 const handleRequest = (req, res) => {
-  console.log('REQUEST STARTED!');
+  res.set('Cache-Control', 'public, max-age=600, s-maxage=1200');
   return nuxt.render(req, res);
 }
 
