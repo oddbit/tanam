@@ -1,4 +1,4 @@
-const getPostID = state => state.postID;
+const getPostID = state => state.postId;
 
 const getPublishedBlogs = state => state.publishedBlogs;
 

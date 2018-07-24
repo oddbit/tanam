@@ -95,27 +95,25 @@
 
 <script>
 import {
-  POST_TITLE,
-  POST_FEATURED_IMAGE,
-  POST_CONTENT,
-  TOGGLE_DRAWER_POST
+  POST_FIELD_TITLE,
+  POST_FIELD_FEATURED_IMAGE,
+  POST_FIELD_BODY,
+  TOGGLE_DRAWER_POST,
+  POST_MODE
 } from '@/store/types';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 
 export default {
-  props: {
-    mode: {
-      type: String,
-      default: 'new'
-    }
-  },
   data: () => ({
     title: null,
     quill: null,
     quillContentOnce: false
   }),
   computed: {
+    postMode() {
+      return this.$store.getters[POST_MODE];
+    },
     slug() {
       return this.$route.params.slug;
     },
@@ -124,17 +122,17 @@ export default {
     },
     postTitle: {
       get() {
-        return this.$store.getters[POST_TITLE];
+        return this.$store.getters[POST_FIELD_TITLE];
       },
       set(val) {
-        return this.$store.commit(POST_TITLE, val);
+        return this.$store.commit(POST_FIELD_TITLE, val);
       }
     },
     postFeaturedImage() {
-      return this.$store.getters[POST_FEATURED_IMAGE];
+      return this.$store.getters[POST_FIELD_FEATURED_IMAGE];
     },
     postContent() {
-      return this.$store.getters[POST_CONTENT];
+      return this.$store.getters[POST_FIELD_BODY];
     }
   },
   mounted() {
@@ -147,12 +145,12 @@ export default {
     });
 
     this.quill.on('editor-change', () => {
-      this.$store.commit(POST_CONTENT, this.quill.getContents().ops);
+      this.$store.commit(POST_FIELD_BODY, this.quill.getContents().ops);
     });
   },
   watch: {
     postContent(val) {
-      if (!this.quillContentOnce && this.mode === 'edit') {
+      if (!this.quillContentOnce && this.postMode === 'edit') {
         this.quillContentOnce = true;
         this.quill.clipboard.dangerouslyPasteHTML(0, val);
       }

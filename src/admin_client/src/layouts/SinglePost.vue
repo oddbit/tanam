@@ -10,7 +10,7 @@
 
 <script>
 import Drawer from '@/components/Drawer/SinglePostDrawer';
-import Toolbar from '@/components/Toolbar/ToolbarSinglePost';
+import Toolbar from '@/components/Toolbar/SinglePostToolbar';
 
 export default {
   components: {

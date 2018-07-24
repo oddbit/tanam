@@ -14,7 +14,7 @@ import mutations from './mutations';
 import getters from './getters';
 
 const state = {
-  postID: null,
+  postId: null,
   publishedBlogs: [],
   draftBlogs: [],
   dialogDelete: false,

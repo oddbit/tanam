@@ -23,7 +23,7 @@ export default {
   },
   components: {
     SingleListPost,
-    DraftActionMenuItem: () => import('@/components/Events/DraftActionMenuItem')
+    DraftActionMenuItem: () => import('@/components/Post/DraftActionMenuItem')
   },
   filters: {
     isoDateToDatetime(isodate) {

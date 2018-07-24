@@ -1,13 +1,17 @@
-const setPostID = (state, payload) => {
-  state.postID = payload;
+const setContentType = (state, payload) => {
+  state.contentType = payload;
 };
 
-const setPublishedEvents = (state, payload) => {
-  state.publishedEvents = payload;
+const setPostId = (state, payload) => {
+  state.postId = payload;
 };
 
-const setDraftEvents = (state, payload) => {
-  state.draftEvents = payload;
+const setPublishedPosts = (state, payload) => {
+  state.publishedPosts = payload;
+};
+
+const setDraftPosts = (state, payload) => {
+  state.draftPosts = payload;
 };
 
 const setDialogDelete = (state, payload) => {
@@ -15,8 +19,9 @@ const setDialogDelete = (state, payload) => {
 };
 
 export default {
-  setPostID,
-  setPublishedEvents,
-  setDraftEvents,
+  setContentType,
+  setPostId,
+  setPublishedPosts,
+  setDraftPosts,
   setDialogDelete
 };

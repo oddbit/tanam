@@ -1,4 +1,5 @@
 import {
+  POST_CONTENT_TYPE,
   POST_BY,
   POST_ID,
   POST_PUBLISHED,
@@ -10,29 +11,32 @@ import mutations from './mutations';
 import getters from './getters';
 
 const state = {
-  postID: null,
-  publishedEvents: [],
-  draftEvents: [],
+  contentType: null,
+  postId: null,
+  publishedPosts: [],
+  draftPosts: [],
   dialogDelete: false
 };
 
 export default {
   state,
   mutations: {
-    [POST_ID]: mutations.setPostID,
-    [POST_PUBLISHED]: mutations.setPublishedEvents,
-    [POST_DRAFT]: mutations.setDraftEvents,
+    [POST_CONTENT_TYPE]: mutations.setContentType,
+    [POST_ID]: mutations.setPostId,
+    [POST_PUBLISHED]: mutations.setPublishedPosts,
+    [POST_DRAFT]: mutations.setDraftPosts,
     [POST_DIALOG_DELETE]: mutations.setDialogDelete
   },
   getters: {
-    [POST_ID]: getters.getPostID,
-    [POST_PUBLISHED]: getters.getPublishedEvent,
-    [POST_DRAFT]: getters.getDraftEvent,
+    [POST_CONTENT_TYPE]: getters.getContentType,
+    [POST_ID]: getters.getPostId,
+    [POST_PUBLISHED]: getters.getPublishedPosts,
+    [POST_DRAFT]: getters.getDraftPosts,
     [POST_DIALOG_DELETE]: getters.getDialogDelete
   },
   actions: {
-    [POST_BY]: actions.getEventBy,
-    [POST_PUBLISHED]: actions.getPublishedEvents,
-    [POST_DRAFT]: actions.getDraftEvents
+    [POST_BY]: actions.getPostBy,
+    [POST_PUBLISHED]: actions.getPublishedPosts,
+    [POST_DRAFT]: actions.getDraftPosts
   }
 };

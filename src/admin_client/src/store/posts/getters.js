@@ -1,14 +1,17 @@
-const getPostID = state => state.postID;
+const getContentType = state => state.contentType;
 
-const getPublishedEvent = state => state.publishedEvents;
+const getPostId = state => state.postId;
 
-const getDraftEvent = state => state.draftEvents;
+const getPublishedPosts = state => state.publishedPosts;
+
+const getDraftPosts = state => state.draftPosts;
 
 const getDialogDelete = state => state.dialogDelete;
 
 export default {
-  getPostID,
-  getPublishedEvent,
-  getDraftEvent,
+  getContentType,
+  getPostId,
+  getPublishedPosts,
+  getDraftPosts,
   getDialogDelete
 };

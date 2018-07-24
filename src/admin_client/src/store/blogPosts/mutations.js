@@ -1,5 +1,5 @@
 const setPostID = (state, payload) => {
-  state.postID = payload;
+  state.postId = payload;
 };
 
 const setPublishedBlogs = (state, payload) => {
@@ -12,7 +12,7 @@ const setDraftBlogs = (state, payload) => {
 
 const setDialogDelete = (state, payload) => {
   state.dialogDelete = payload.dialogDelete;
-  state.postID = payload.id || null;
+  state.postId = payload.id || null;
 };
 
 const setIsValidTitle = (state, payload) => {

@@ -1,5 +1,5 @@
 <template>
-  <SingleEvent />
+  <SingleEvent post-mode="new" />
 </template>
 
 <script>

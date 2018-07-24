@@ -1,18 +1,6 @@
 <template>
-  <v-toolbar
-    :dense="$mq === 'desktop'"
-    app
-    fixed
-    clipped-left
-    clipped-right
-    color="primary"
-    dark>
-    <v-btn icon @click="$router.back()"><v-icon>close</v-icon></v-btn>
-    <v-spacer />
-    <v-btn icon @click="handleToggleEventPostSettings">
-      <v-icon>settings</v-icon>
-    </v-btn>
-    <div v-if="postMode === 'post'">
+  <div>
+    <div v-if="postMode === 'new'">
       <v-btn v-if="$mq === 'desktop'" light @click="handleClickPublish">
         Publish
       </v-btn>
@@ -28,7 +16,7 @@
         <v-icon>send</v-icon>
       </v-btn>
     </div>
-  </v-toolbar>
+  </div>
 </template>
 
 <script>
@@ -36,9 +24,9 @@ import {
   POST_ACTION_SUBMIT,
   POST_MODE,
   POST_ACTION_UPDATE,
-  POST_ID,
-  TOGGLE_DRAWER_POST
+  POST_ID
 } from '@/store/types';
+import { event } from '@/config/post';
 
 export default {
   computed: {
@@ -47,30 +35,18 @@ export default {
     }
   },
   methods: {
-    handleToggleEventPostSettings() {
-      this.$store.commit(TOGGLE_DRAWER_POST);
-    },
     handleClickPublish() {
       this.$store.dispatch(POST_ACTION_SUBMIT);
-      this.$router.push('/events');
+      this.$router.push(event.indexLink);
     },
     handleClickUpdate() {
       this.$store
         .dispatch(POST_ACTION_UPDATE, this.$store.getters[POST_ID])
         .then(() => {
           this.$store.commit(POST_ID, null);
-          this.$router.push('/events');
+          this.$router.push(event.indexLink);
         });
     }
   }
 };
 </script>
-
-
-<style lang="scss" scoped>
-.toolbar-title {
-  color: #fff;
-  text-decoration: none;
-  font-weight: 600;
-}
-</style>

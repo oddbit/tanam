@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import firebase from 'firebase/app';
 import { LAYOUT } from '@/store/types';
 import { store } from '@/store';
+import { event } from '@/config/post';
 
 const routerOptions = [
   {
@@ -17,19 +18,19 @@ const routerOptions = [
     meta: { layout: 'SimpleLayout' }
   },
   {
-    path: '/events',
-    name: 'events',
+    path: event.indexLink,
+    name: event.indexName,
     component: 'Events/index'
   },
   {
-    path: '/events/post',
-    name: 'events-post',
+    path: event.createEventLink,
+    name: event.createEventName,
     component: 'Events/Post/index',
     meta: { layout: 'SinglePostLayout' }
   },
   {
-    path: '/events/post/:slug',
-    name: 'events-post-slug',
+    path: `${event.createEventLink}/:slug`,
+    name: `${event.createEventName}-slug`,
     component: 'Events/Post/_slug',
     meta: { layout: 'SinglePostLayout' }
   },
@@ -52,13 +53,13 @@ const routerOptions = [
     path: '/blog/post',
     name: 'blog-post',
     component: 'Blog/Post/index',
-    meta: { layout: 'SingleBlogLayout' }
+    meta: { layout: 'SinglePostLayout' }
   },
   {
     path: '/blog/post/:slug',
     name: 'blog-post-slug',
     component: 'Blog/Post/_slug',
-    meta: { layout: 'SingleBlogLayout' }
+    meta: { layout: 'SinglePostLayout' }
   }
 ];
 

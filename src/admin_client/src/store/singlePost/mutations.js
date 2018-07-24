@@ -4,27 +4,36 @@ const title = (state, payload) => {
   state.title = payload;
   state.permalink = payload ? createPermalink(payload) : null;
 };
+
 const place = (state, payload) => (state.place = payload);
-// const dateStart = (state, payload) => (state.dateStart = payload);
-// const timeStart = (state, payload) => (state.timeStart = payload);
+
 const dateStart = (state, payload) =>
   (state.datetimeStart = { ...state.datetimeStart, date: payload });
+
 const timeStart = (state, payload) =>
   (state.datetimeStart = { ...state.datetimeStart, time: payload });
-// const dateEnd = (state, payload) => (state.dateEnd = payload);
-// const timeEnd = (state, payload) => (state.timeEnd = payload);
+
 const dateEnd = (state, payload) =>
   (state.datetimeEnd = { ...state.datetimeEnd, date: payload });
+
 const timeEnd = (state, payload) =>
   (state.datetimeEnd = { ...state.datetimeEnd, time: payload });
+
 const priceRegular = (state, payload) => (state.priceRegular = payload);
+
 const priceMember = (state, payload) => (state.priceMember = payload);
+
 const rsvpEmail = (state, payload) => (state.rsvpEmail = payload);
+
 const rsvpUrl = (state, payload) => (state.rsvpUrl = payload);
+
 const rsvpFacebook = (state, payload) => (state.rsvpFacebook = payload);
+
 const featuredImage = (state, payload) => (state.featuredImage = payload);
+
 const permalink = (state, payload) => (state.permalink = payload);
-const content = (state, payload) => (state.content = payload);
+
+const body = (state, payload) => (state.body = payload);
 
 const post = (state, payload) => {
   if (payload) {
@@ -54,6 +63,6 @@ export default {
   rsvpFacebook,
   featuredImage,
   permalink,
-  content,
+  body,
   post
 };
