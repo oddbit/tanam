@@ -8,7 +8,8 @@
       app
       @input="handleInputDrawer"
       class="drawer-wrapper">
-      <EventDrawerList />
+      <EventDrawerList v-if="contentType === 'event'" />
+      <BlogDrawerList v-else />
       <div class="delete-wrapper">
         <v-divider />
         <v-btn 
@@ -27,17 +28,23 @@
 import {
   POST_DIALOG_DELETE,
   TOGGLE_DRAWER_POST,
-  POST_MODE
+  POST_MODE,
+  POST_CONTENT_TYPE
 } from '@/store/types';
 import EventDrawerList from '@/components/Event/DrawerList';
+import BlogDrawerList from '@/components/Blog/DrawerList';
 import DialogDelete from '@/components/Post/DialogDelete';
 
 export default {
   components: {
     EventDrawerList,
+    BlogDrawerList,
     DialogDelete
   },
   computed: {
+    contentType() {
+      return this.$store.getters[POST_CONTENT_TYPE];
+    },
     drawer() {
       return this.$store.getters[TOGGLE_DRAWER_POST];
     },

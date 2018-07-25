@@ -12,7 +12,8 @@
 </template>
 
 <script>
-import { POST_DIALOG_DELETE, POST_ID } from '@/store/types';
+import { POST_DIALOG_DELETE, POST_ID, POST_CONTENT_TYPE } from '@/store/types';
+import { blog, event } from '@/config/post';
 
 export default {
   props: {
@@ -27,11 +28,20 @@ export default {
       { name: 'delete', text: 'Delete', icon: 'delete' }
     ]
   }),
+  computed: {
+    contentType() {
+      return this.$store.getters[POST_CONTENT_TYPE];
+    }
+  },
   methods: {
     handleClickActionItem(name) {
       switch (name) {
         case 'edit':
-          this.$router.push('/events/post/' + this.postId);
+          this.$router.push(
+            `${
+              this.contentType === 'event' ? event.createLink : blog.createLink
+            }/` + this.postId
+          );
           break;
         case 'delete':
           this.$store.commit(POST_ID, this.postId);

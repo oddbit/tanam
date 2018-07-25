@@ -12,8 +12,8 @@ export const event = {
   contentType: 'event',
   indexLink: '/events',
   indexName: 'events',
-  createEventLink: '/events/post',
-  createEventName: 'event-posts',
+  createLink: '/events/post',
+  createName: 'event-posts',
   firestore: 'event-posts',
   fields: state => {
     const fieldsArr = [
@@ -39,8 +39,17 @@ export const blog = {
   contentType: 'blog',
   indexLink: '/blogs',
   indexName: 'blogs',
-  createEventLink: '/blogs/post',
-  createEventName: 'blog-posts',
+  createLink: '/blogs/post',
+  createName: 'blog-posts',
   firestore: 'blog-posts',
-  fields: [...autoFields, 'title', 'body', 'featuredImage']
+  fields: state => {
+    const fieldsArr = [
+      'title',
+      'body',
+      'featuredImage',
+      'status',
+      ...autoFields
+    ];
+    return filterFields(state, fieldsArr);
+  }
 };

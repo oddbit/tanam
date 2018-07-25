@@ -14,10 +14,19 @@
 </template>
 
 <script>
-import { POST_DIALOG_DELETE, POST_ID, POST_ACTION_DELETE } from '@/store/types';
+import {
+  POST_DIALOG_DELETE,
+  POST_ID,
+  POST_ACTION_DELETE,
+  POST_CONTENT_TYPE
+} from '@/store/types';
+import { blog, event } from '@/config/post';
 
 export default {
   computed: {
+    contentType() {
+      return this.$store.getters[POST_CONTENT_TYPE];
+    },
     dialogDelete: {
       get() {
         return this.$store.getters[POST_DIALOG_DELETE];
@@ -25,6 +34,9 @@ export default {
       set(val) {
         this.$store.commit(POST_DIALOG_DELETE, val);
       }
+    },
+    routerPush() {
+      return this.contentType === 'event' ? event.indexLink : blog.indexLink;
     }
   },
   methods: {
@@ -37,7 +49,7 @@ export default {
         .then(() => {
           this.$store.commit(POST_DIALOG_DELETE, false);
           this.$store.commit(POST_ID, null);
-          this.$router.push('/events');
+          this.$router.push(this.routerPush);
         });
     }
   }

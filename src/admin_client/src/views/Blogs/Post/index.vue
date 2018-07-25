@@ -1,5 +1,5 @@
 <template>
-  <SingleBlog />
+  <SingleBlog post-mode="new" />
 </template>
 
 <script>

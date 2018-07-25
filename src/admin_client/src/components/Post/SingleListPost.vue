@@ -2,7 +2,7 @@
   <div class="wrapper">
     <v-layout>
       <v-layout column align-start justify-center>
-        <router-link :to="`/events/post/${linkTo}`"><h3><slot name="title" /></h3></router-link>
+        <router-link :to="`${pushLink}/${linkTo}`"><h3><slot name="title" /></h3></router-link>
         <p class="mb-0"><slot name="datetime" /></p>
       </v-layout>
       <v-spacer />
@@ -17,11 +17,22 @@
 </template>
 
 <script>
+import { POST_CONTENT_TYPE } from '@/store/types';
+import { blog, event } from '@/config/post';
+
 export default {
   props: {
     linkTo: {
       type: String,
       default: ''
+    }
+  },
+  computed: {
+    contentType() {
+      return this.$store.getters[POST_CONTENT_TYPE];
+    },
+    pushLink() {
+      return this.contentType === 'event' ? event.createLink : blog.createLink;
     }
   }
 };

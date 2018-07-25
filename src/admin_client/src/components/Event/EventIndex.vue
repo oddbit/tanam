@@ -1,6 +1,6 @@
 <template>
   <PostIndex>
-    <template slot="button-create"><ButtonCreate :to="createEventLink" text="create event" icon="event" /></template>
+    <template slot="button-create"><ButtonCreate :to="createLink" text="create event" icon="event" /></template>
     <template slot="published"><Published /></template>
     <template slot="draft"><Draft /></template>
     <template slot="dialog-delete"><DialogDelete /></template>
@@ -22,7 +22,7 @@ export default {
     DialogDelete: () => import('@/components/Post/DialogDelete')
   },
   data: () => ({
-    createEventLink: event.createEventLink
+    createLink: event.createLink
   }),
   created() {
     this.$store.commit(POST_CONTENT_TYPE, event.contentType);

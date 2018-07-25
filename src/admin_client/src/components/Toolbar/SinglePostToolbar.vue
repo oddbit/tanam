@@ -12,17 +12,20 @@
     <v-btn icon @click="handleToggleEventPostSettings">
       <v-icon>settings</v-icon>
     </v-btn>
-    <EventToolbar v-if="contentType" />
+    <EventToolbar v-if="contentType === 'event'" />
+    <BlogToolbar v-else />
   </v-toolbar>
 </template>
 
 <script>
 import { TOGGLE_DRAWER_POST, POST_CONTENT_TYPE } from '@/store/types';
 import EventToolbar from '@/components/Event/Toolbar';
+import BlogToolbar from '@/components/Blog/Toolbar';
 
 export default {
   components: {
-    EventToolbar
+    EventToolbar,
+    BlogToolbar
   },
   computed: {
     contentType() {
