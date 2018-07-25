@@ -1,3 +1,5 @@
+import filterFields from '@/utils/filterFields';
+
 const autoFields = [
   'createdAt',
   'publishedAt',
@@ -29,7 +31,7 @@ export const event = {
       'status',
       ...autoFields
     ];
-    return Object.keys(state).filter(key => fieldsArr.includes(key));
+    return filterFields(state, fieldsArr);
   }
 };
 

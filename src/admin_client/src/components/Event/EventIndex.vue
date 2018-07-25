@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { POST_CONTENT_TYPE } from '@/store/types';
 import { event } from '@/config/post';
 import PostIndex from '@/components/Post/PostIndex';
 import ButtonCreate from '@/components/Post/ButtonCreate';
@@ -22,6 +23,9 @@ export default {
   },
   data: () => ({
     createEventLink: event.createEventLink
-  })
+  }),
+  created() {
+    this.$store.commit(POST_CONTENT_TYPE, event.contentType);
+  }
 };
 </script>

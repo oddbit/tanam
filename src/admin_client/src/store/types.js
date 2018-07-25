@@ -6,6 +6,8 @@ export const LOGOUT = 'users/logout';
 export const TOGGLE_DRAWER = 'drawer/toggle';
 export const TOGGLE_DRAWER_POST = 'drawer/toggle/post';
 export const LAYOUT = 'layout';
+export const BTN_DELETE_SINGLE_POST = 'btn/delete/singlePost';
+export const BTN_SUBMIT_SINGLE_POST = 'btn/submit/singlePost';
 
 export const POST_CONTENT_TYPE = 'post/contentType';
 export const POST_MODE = 'post/mode';
@@ -25,6 +27,8 @@ export const POST_FIELD_RSVP_FACEBOOK = 'post/field/rsvpFacebook';
 export const POST_FIELD_FEATURED_IMAGE = 'post/field/featuredImage';
 export const POST_FIELD_PERMALINK = 'post/field/permalink';
 export const POST_FIELD_BODY = 'post/field/body';
+
+export const POST_VALIDATE_TITLE = 'post/validate/title';
 
 export const POST_SET_POSTS = 'post/set/posts';
 export const POST_PUBLISHED = 'post/published';

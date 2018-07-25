@@ -6,8 +6,7 @@ const getPublishedPosts = ({ commit, getters }) => {
   firestore
     .collection(collection(getters))
     .where('status', '==', 'published')
-    .get()
-    .then(snapshot => {
+    .onSnapshot(snapshot => {
       const arr = [];
       commit(POST_PUBLISHED, []);
       snapshot.forEach(doc => {
@@ -21,8 +20,7 @@ const getDraftPosts = ({ commit, getters }) => {
   firestore
     .collection(collection(getters))
     .where('status', '==', 'draft')
-    .get()
-    .then(snapshot => {
+    .onSnapshot(snapshot => {
       const arr = [];
       commit(POST_DRAFT, []);
       snapshot.forEach(doc => {

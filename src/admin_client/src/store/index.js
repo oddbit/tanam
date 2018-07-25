@@ -5,6 +5,7 @@ import drawer from './drawer';
 import layout from './layout';
 import posts from './posts';
 import singlePost from './singlePost';
+import ui from './ui';
 
 Vue.use(Vuex);
 
@@ -14,6 +15,7 @@ export const store = new Vuex.Store({
     drawer,
     layout,
     posts,
-    singlePost
+    singlePost,
+    ui
   }
 });

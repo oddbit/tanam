@@ -17,14 +17,14 @@ const updatePost = ({ state, getters }, payload) => {
   firestore
     .collection(collection(getters))
     .doc(payload)
-    .update({ ...state, body, updatedAt });
+    .update({ ...event.fields(state), body, updatedAt });
 };
 
 const deletePost = ({ getters }, payload) => {
   firestore
     .collection(collection(getters))
     .doc(payload)
-    .remove();
+    .delete();
 };
 
 export default {

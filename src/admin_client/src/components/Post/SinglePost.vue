@@ -125,7 +125,7 @@ export default {
         return this.$store.getters[POST_FIELD_TITLE];
       },
       set(val) {
-        return this.$store.commit(POST_FIELD_TITLE, val);
+        this.$store.commit(POST_FIELD_TITLE, val);
       }
     },
     postFeaturedImage() {

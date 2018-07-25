@@ -145,22 +145,7 @@
         <v-list-tile-title>Featured Image</v-list-tile-title>
       </v-list-tile>
       <div class="px-3">
-        <div class="featured-img-wrapper">
-          <div v-if="postFeaturedImage" class="img-wrapper"><img :src="postFeaturedImage"></div>
-          <v-btn v-if="!postFeaturedImage" class="btn-set" @click="$refs.featuredImg.click()">Set Featured Image</v-btn>
-          <v-btn 
-            v-else 
-            icon 
-            small
-            @click="handleCloseFeaturedImg"
-            class="btn-close elevation-4" 
-            color="white"><v-icon small>close</v-icon></v-btn>
-          <input 
-            ref="featuredImg" 
-            type="file" 
-            @change="handleChangeFeaturedImg" 
-            class="input-img">
-        </div>
+        <FeaturedImageField :post-featured-image="postFeaturedImage" @handleCloseFeaturedImg="handleCloseFeaturedImg" @handleChangeFeaturedImg="handleChangeFeaturedImg" />
       </div>
     </v-list-group>
     <v-list-group>
@@ -192,8 +177,12 @@ import {
   POST_FIELD_FEATURED_IMAGE,
   POST_FIELD_PERMALINK
 } from '@/store/types';
+import FeaturedImageField from '@/components/Post/FeaturedImageField';
 
 export default {
+  components: {
+    FeaturedImageField
+  },
   data: () => ({
     dialogDateStart: false,
     dialogTimeStart: false,
@@ -296,10 +285,29 @@ export default {
         this.$store.commit(POST_FIELD_FEATURED_IMAGE, event.target.result);
       };
     },
-    handleCloseFeaturedImg() {
+    handleCloseFeaturedImg(refs) {
       this.$store.commit(POST_FIELD_FEATURED_IMAGE, null);
-      this.$refs.featuredImg.value = null;
+      refs.value = null;
     }
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.datetime-title {
+  color: #333;
+}
+
+.datetime-wrapper {
+  display: flex;
+  justify-content: space-between;
+
+  .date-wrapper {
+    width: 60%;
+  }
+
+  .time-wrapper {
+    width: 35%;
+  }
+}
+</style>

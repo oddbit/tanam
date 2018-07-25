@@ -3,6 +3,7 @@ import createPermalink from '@/helpers/createPermalink';
 const title = (state, payload) => {
   state.title = payload;
   state.permalink = payload ? createPermalink(payload) : null;
+  validateTitle(state);
 };
 
 const place = (state, payload) => (state.place = payload);
@@ -41,11 +42,21 @@ const post = (state, payload) => {
     keys.forEach(key => {
       state[key] = payload[key];
     });
+    validateTitle(state);
   } else {
     const keys = Object.keys(state);
     keys.forEach(key => {
       state[key] = null;
     });
+    validateTitle(state);
+  }
+};
+
+const validateTitle = state => {
+  if (state.title) {
+    state.validTitle = true;
+  } else {
+    state.validTitle = false;
   }
 };
 
@@ -64,5 +75,6 @@ export default {
   featuredImage,
   permalink,
   body,
-  post
+  post,
+  validateTitle
 };

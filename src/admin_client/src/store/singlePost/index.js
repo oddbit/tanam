@@ -16,7 +16,8 @@ import {
   POST_ACTION_SUBMIT,
   POST_ACTION_UPDATE,
   POST_SET_POSTS,
-  POST_ACTION_DELETE
+  POST_ACTION_DELETE,
+  POST_VALIDATE_TITLE
 } from '../types';
 import mutations from './mutations';
 import getters from './getters';
@@ -45,7 +46,8 @@ const state = {
   publishedAt: null,
   updatedAt: null,
   deletedAt: null,
-  status: null
+  status: null,
+  validTitle: false
 };
 
 export default {
@@ -64,7 +66,8 @@ export default {
     [POST_FIELD_RSVP_FACEBOOK]: getters.rsvpFacebook,
     [POST_FIELD_FEATURED_IMAGE]: getters.featuredImage,
     [POST_FIELD_PERMALINK]: getters.permalink,
-    [POST_FIELD_BODY]: getters.body
+    [POST_FIELD_BODY]: getters.body,
+    [POST_VALIDATE_TITLE]: getters.validTitle
   },
   mutations: {
     [POST_FIELD_TITLE]: mutations.title,
@@ -81,7 +84,8 @@ export default {
     [POST_FIELD_FEATURED_IMAGE]: mutations.featuredImage,
     [POST_FIELD_PERMALINK]: mutations.permalink,
     [POST_FIELD_BODY]: mutations.body,
-    [POST_SET_POSTS]: mutations.post
+    [POST_SET_POSTS]: mutations.post,
+    [POST_VALIDATE_TITLE]: mutations.validateTitle
   },
   actions: {
     [POST_ACTION_SUBMIT]: actions.publishPost,
