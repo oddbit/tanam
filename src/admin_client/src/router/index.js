@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import firebase from 'firebase/app';
 import { LAYOUT } from '@/store/types';
 import { store } from '@/store';
+import { event, blog } from '@/config/post';
 
 const routerOptions = [
   {
@@ -17,19 +18,19 @@ const routerOptions = [
     meta: { layout: 'SimpleLayout' }
   },
   {
-    path: '/events',
-    name: 'events',
+    path: event.indexLink,
+    name: event.indexName,
     component: 'Events/index'
   },
   {
-    path: '/events/post',
-    name: 'events-post',
+    path: event.createLink,
+    name: event.createName,
     component: 'Events/Post/index',
     meta: { layout: 'SinglePostLayout' }
   },
   {
-    path: '/events/post/:slug',
-    name: 'events-post-slug',
+    path: `${event.createLink}/:slug`,
+    name: `${event.createName}-slug`,
     component: 'Events/Post/_slug',
     meta: { layout: 'SinglePostLayout' }
   },
@@ -44,21 +45,21 @@ const routerOptions = [
     component: 'Profile/AccountSettings'
   },
   {
-    path: '/blog',
-    name: 'blog',
-    component: 'Blog/index'
+    path: blog.indexLink,
+    name: blog.indexName,
+    component: 'Blogs/index'
   },
   {
-    path: '/blog/post',
-    name: 'blog-post',
-    component: 'Blog/Post/index',
-    meta: { layout: 'SingleBlogLayout' }
+    path: blog.createLink,
+    name: blog.createName,
+    component: 'Blogs/Post/index',
+    meta: { layout: 'SinglePostLayout' }
   },
   {
-    path: '/blog/post/:slug',
-    name: 'blog-post-slug',
-    component: 'Blog/Post/_slug',
-    meta: { layout: 'SingleBlogLayout' }
+    path: `${blog.createLink}/:slug`,
+    name: `${blog.createName}-slug`,
+    component: 'Blogs/Post/_slug',
+    meta: { layout: 'SinglePostLayout' }
   }
 ];
 

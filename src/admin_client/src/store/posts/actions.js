@@ -1,12 +1,12 @@
 import firestore from '@/utils/firestore';
-import { POST_SET, POST_PUBLISHED, POST_DRAFT } from '../types';
+import { POST_SET_POSTS, POST_PUBLISHED, POST_DRAFT } from '../types';
+import { collection } from '@/utils/firestoreCollection';
 
-const getPublishedEvents = ({ commit }) => {
+const getPublishedPosts = ({ commit, getters }) => {
   firestore
-    .collection('posts-events')
+    .collection(collection(getters))
     .where('status', '==', 'published')
-    .get()
-    .then(snapshot => {
+    .onSnapshot(snapshot => {
       const arr = [];
       commit(POST_PUBLISHED, []);
       snapshot.forEach(doc => {
@@ -16,12 +16,11 @@ const getPublishedEvents = ({ commit }) => {
     });
 };
 
-const getDraftEvents = ({ commit }) => {
+const getDraftPosts = ({ commit, getters }) => {
   firestore
-    .collection('posts-events')
+    .collection(collection(getters))
     .where('status', '==', 'draft')
-    .get()
-    .then(snapshot => {
+    .onSnapshot(snapshot => {
       const arr = [];
       commit(POST_DRAFT, []);
       snapshot.forEach(doc => {
@@ -31,18 +30,18 @@ const getDraftEvents = ({ commit }) => {
     });
 };
 
-const getEventBy = async ({ commit }, payload) => {
+const getPostBy = async ({ commit, getters }, payload) => {
   firestore
-    .collection('posts-events')
+    .collection(collection(getters))
     .doc(payload)
     .get()
     .then(doc => {
-      commit(POST_SET, doc.data());
+      commit(POST_SET_POSTS, doc.data());
     });
 };
 
 export default {
-  getPublishedEvents,
-  getDraftEvents,
-  getEventBy
+  getPublishedPosts,
+  getDraftPosts,
+  getPostBy
 };

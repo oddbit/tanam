@@ -1,28 +1,34 @@
 import firestore from '@/utils/firestore';
 import quillToHtml from '@/helpers/quillToHtml';
+import { collection } from '@/utils/firestoreCollection';
+import contentType from '@/utils/contentType';
 
-const publishPost = ({ state }) => {
-  const content = quillToHtml(state.content);
+const publishPost = ({ state, getters }) => {
+  const body = quillToHtml(state.body);
   const publishedAt = new Date().toISOString();
-  firestore
-    .collection('posts-events')
-    .add({ ...state, content, publishedAt, status: 'published' });
+
+  firestore.collection(collection(getters)).add({
+    ...contentType(state, getters),
+    body,
+    publishedAt,
+    status: 'published'
+  });
 };
 
-const updatePost = ({ state }, payload) => {
-  const content = quillToHtml(state.content);
+const updatePost = ({ state, getters }, payload) => {
+  const body = quillToHtml(state.body);
   const updatedAt = new Date().toISOString();
   firestore
-    .collection('posts-events')
+    .collection(collection(getters))
     .doc(payload)
-    .update({ ...state, content, updatedAt });
+    .update({ ...contentType(state, getters), body, updatedAt });
 };
 
-const deletePost = (context, payload) => {
+const deletePost = ({ getters }, payload) => {
   firestore
-    .collection('posts-events')
+    .collection(collection(getters))
     .doc(payload)
-    .remove();
+    .delete();
 };
 
 export default {

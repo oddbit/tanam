@@ -10,7 +10,7 @@
 
 <script>
 import Drawer from '@/components/Drawer/Drawer';
-import Toolbar from '@/components/Toolbar';
+import Toolbar from '@/components/Toolbar/MainToolbar';
 
 export default {
   components: {

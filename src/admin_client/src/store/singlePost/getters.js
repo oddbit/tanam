@@ -1,9 +1,5 @@
 const title = state => state.title;
 const place = state => state.place;
-// const dateStart = state => state.dateStart;
-// const timeStart = state => state.timeStart;
-// const dateEnd = state => state.dateEnd;
-// const timeEnd = state => state.timeEnd;
 const dateStart = state =>
   state.datetimeStart ? state.datetimeStart.date : null;
 const timeStart = state =>
@@ -17,7 +13,8 @@ const rsvpUrl = state => state.rsvpUrl;
 const rsvpFacebook = state => state.rsvpFacebook;
 const featuredImage = state => state.featuredImage;
 const permalink = state => state.permalink;
-const content = state => state.content;
+const body = state => state.body;
+const validTitle = state => state.validTitle;
 
 export default {
   title,
@@ -33,5 +30,6 @@ export default {
   rsvpFacebook,
   featuredImage,
   permalink,
-  content
+  body,
+  validTitle
 };
