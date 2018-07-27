@@ -4,7 +4,7 @@
       <SingleListPost :link-to="post.key">
         <template slot="title">{{ post.title }}</template>
         <template slot="datetime">{{ post.publishedAt | isoDateToDatetime }}</template>
-        <template slot="action-menu-item"><PublishedActionMenuItem :post-id="post.key" /></template>
+        <template slot="action-menu-item"><PublishedActionMenuItem :post-id="post.key" :post-featured-image-path="post.featuredImage.fullPath" /></template>
       </SingleListPost>
     </div>
   </div>

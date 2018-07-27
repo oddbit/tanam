@@ -30,7 +30,11 @@ const rsvpUrl = (state, payload) => (state.rsvpUrl = payload);
 
 const rsvpFacebook = (state, payload) => (state.rsvpFacebook = payload);
 
-const featuredImage = (state, payload) => (state.featuredImage = payload);
+const featuredImage = (state, payload) =>
+  (state.featuredImage = { ...state.featuredImage, url: payload });
+
+const featuredImagePath = (state, payload) =>
+  (state.featuredImage = { ...state.featuredImage, fullPath: payload });
 
 const permalink = (state, payload) => (state.permalink = payload);
 
@@ -73,6 +77,7 @@ export default {
   rsvpUrl,
   rsvpFacebook,
   featuredImage,
+  featuredImagePath,
   permalink,
   body,
   post,

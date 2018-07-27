@@ -47,17 +47,25 @@ export default {
     }
   },
   methods: {
-    handleClickPublish() {
-      this.$store.dispatch(POST_ACTION_SUBMIT);
-      this.$router.push(event.indexLink);
+    async handleClickPublish() {
+      try {
+        await this.$store.dispatch(POST_ACTION_SUBMIT);
+        this.$router.push(event.indexLink);
+      } catch (error) {
+        alert('Failed to publish');
+      }
     },
-    handleClickUpdate() {
-      this.$store
-        .dispatch(POST_ACTION_UPDATE, this.$store.getters[POST_ID])
-        .then(() => {
-          this.$store.commit(POST_ID, null);
-          this.$router.push(event.indexLink);
-        });
+    async handleClickUpdate() {
+      try {
+        await this.$store.dispatch(
+          POST_ACTION_UPDATE,
+          this.$store.getters[POST_ID]
+        );
+        this.$store.commit(POST_ID, null);
+        this.$router.push(event.indexLink);
+      } catch (error) {
+        alert('Failed to update');
+      }
     }
   }
 };

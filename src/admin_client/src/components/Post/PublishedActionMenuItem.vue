@@ -12,14 +12,23 @@
 </template>
 
 <script>
-import { POST_DIALOG_DELETE, POST_ID, POST_CONTENT_TYPE } from '@/store/types';
+import {
+  POST_DIALOG_DELETE,
+  POST_ID,
+  POST_CONTENT_TYPE,
+  POST_FIELD_FEATURED_IMAGE_PATH
+} from '@/store/types';
 import { blog, event } from '@/config/post';
 
 export default {
   props: {
     postId: {
       type: String,
-      default: ''
+      default: null
+    },
+    postFeaturedImagePath: {
+      type: String,
+      default: null
     }
   },
   data: () => ({
@@ -45,6 +54,10 @@ export default {
           break;
         case 'delete':
           this.$store.commit(POST_ID, this.postId);
+          this.$store.commit(
+            POST_FIELD_FEATURED_IMAGE_PATH,
+            this.postFeaturedImagePath
+          );
           this.$store.commit(POST_DIALOG_DELETE, true);
           break;
         default:

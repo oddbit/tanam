@@ -11,7 +11,14 @@ const priceMember = state => state.priceMember;
 const rsvpEmail = state => state.rsvpEmail;
 const rsvpUrl = state => state.rsvpUrl;
 const rsvpFacebook = state => state.rsvpFacebook;
-const featuredImage = state => state.featuredImage;
+const featuredImage = state =>
+  state.featuredImage && state.featuredImage.url
+    ? state.featuredImage.url
+    : null;
+const featuredImagePath = state =>
+  state.featuredImage && state.featuredImage.fullPath
+    ? state.featuredImage.fullPath
+    : null;
 const permalink = state => state.permalink;
 const body = state => state.body;
 const validTitle = state => state.validTitle;
@@ -29,6 +36,7 @@ export default {
   rsvpUrl,
   rsvpFacebook,
   featuredImage,
+  featuredImagePath,
   permalink,
   body,
   validTitle

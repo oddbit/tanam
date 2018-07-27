@@ -15,6 +15,7 @@ export const event = {
   createLink: '/events/post',
   createName: 'event-posts',
   firestore: 'event-posts',
+  storageName: 'events',
   fields: state => {
     const fieldsArr = [
       'title',
@@ -42,6 +43,7 @@ export const blog = {
   createLink: '/blogs/post',
   createName: 'blog-posts',
   firestore: 'blog-posts',
+  storageName: 'blogs',
   fields: state => {
     const fieldsArr = [
       'title',
