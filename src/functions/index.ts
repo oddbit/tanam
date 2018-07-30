@@ -2,11 +2,12 @@ import * as functions from 'firebase-functions';
 import * as express from 'express';
 import { Nuxt } from 'nuxt';
 
-const app = express();
+const themeDir = './node_modules/tanam/dist/theme';
+const adminDir = './node_modules/tanam/dist/admin_client';
 
 const config = {
   dev: false,
-  buildDir: './node_modules/tanam/dist/theme',
+  buildDir: themeDir,
   build: {
     publicPath: '/assets/'
   }
@@ -14,17 +15,20 @@ const config = {
 
 const nuxt = new Nuxt(config);
 
-const handleRequest = (req, res) => {
+const handleThemeRequest = (req, res) => {
   res.set('Cache-Control', 'public, max-age=600, s-maxage=1200');
   return nuxt.render(req, res);
 }
 
-const adminPage = (req, res) => {
-  console.log('admin page');
-  res.send('admin page');
-}
+const adminPage = adminDir + '/';
 
-app.get('/admin', adminPage);
-app.get('**', handleRequest);
+const app = express();
+
+app.use('/admin/', express.static(adminPage));
+app.use('/admin/**', (req, res) => {
+  res.status(200).sendFile('index.html', { root: adminPage });
+});
+
+app.get('**', handleThemeRequest);
 
 export const theme = functions.https.onRequest(app);
