@@ -21,7 +21,7 @@ module.exports = {
   /*
   ** Build configuration
   */
-  buildDir: '../src/theme',
+  buildDir: '../../dist/theme',
   build: {
     publicPath: '/assets/',
     extractCSS: true,

@@ -6,7 +6,7 @@ const app = express();
 
 const config = {
   dev: false,
-  buildDir: '../../../dist/theme',
+  buildDir: './node_modules/tanam/dist/theme',
   build: {
     publicPath: '/assets/'
   }

@@ -65,6 +65,3 @@ dist/
 
 .vscode
 *.lock
-
-# Tanam Build Process
-src/theme
