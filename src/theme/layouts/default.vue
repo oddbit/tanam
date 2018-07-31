@@ -1,7 +1,7 @@
 <template>
   <div id="page-wrapper">
-    <header 
-      id="header" 
+    <header
+      id="header"
     >
       <h1>
         <nuxt-link to="/">Tanam Theme</nuxt-link>
@@ -15,10 +15,11 @@
         <h2>Menu</h2>
         <ul class="links">
           <li><nuxt-link to="/">Home</nuxt-link></li>
+          <li><nuxt-link to="/blogs">Blogs</nuxt-link></li>
           <li><nuxt-link to="/events">Events</nuxt-link></li>
         </ul>
-        <a 
-          href="#" 
+        <a
+          href="#"
           class="close">Close</a>
       </div>
     </nav>
@@ -27,37 +28,37 @@
       <div class="inner">
         <h2 class="major">Get in touch</h2>
         <p>Cras mattis ante fermentum, malesuada neque vitae, eleifend erat. Phasellus non pulvinar erat. Fusce tincidunt, nisl eget mattis egestas, purus ipsum consequat orci, sit amet lobortis lorem lacus in tellus. Sed ac elementum arcu. Quisque placerat auctor laoreet.</p>
-        <form 
-          method="post" 
+        <form
+          method="post"
           action="#">
           <div class="fields">
             <div class="field">
               <label for="name">Name</label>
-              <input 
-                id="name" 
-                type="text" 
+              <input
+                id="name"
+                type="text"
                 name="name"
                 autocomplete="name" >
             </div>
             <div class="field">
               <label for="email">Email</label>
-              <input 
-                id="email" 
-                type="email" 
+              <input
+                id="email"
+                type="email"
                 name="email"
                 autocomplete="email" >
             </div>
             <div class="field">
               <label for="message">Message</label>
-              <textarea 
-                id="message" 
-                name="message" 
+              <textarea
+                id="message"
+                name="message"
                 rows="4"/>
             </div>
           </div>
           <ul class="actions">
-            <li><input 
-              type="submit" 
+            <li><input
+              type="submit"
               value="Send Message" ></li>
           </ul>
         </form>
