@@ -1,8 +1,6 @@
-import * as tanam from "../../../../dist";
+import * as functions from 'firebase-functions';
+import * as Tanam from 'tanam';
 
-// Export the necessary helper functions from tanam/functions
-// export * from "../../../../dist/functions";
+const mainApp = new Tanam.App().app;
 
-tanam.configure({});
-
-export * from "../../../../dist";
+export const serve = functions.https.onRequest(mainApp);
