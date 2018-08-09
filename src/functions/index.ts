@@ -10,10 +10,10 @@ export class App {
   constructor(tanamConfig: BaseConfig = {}) {
     this._tanamConfig = new TanamConfig(tanamConfig);
 
-    const { configuration } = this._tanamConfig;
+    const { configuration, nuxtConfig } = this._tanamConfig;
     const { adminUrl, adminDir } = configuration;
 
-    this.nuxt = new Nuxt(configuration.nuxtConfig);
+    this.nuxt = new Nuxt(nuxtConfig);
 
     this.app = express();
 

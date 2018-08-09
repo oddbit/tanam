@@ -18,24 +18,27 @@ export interface BaseConfig {
 
 class TanamConfig {
   public configuration: BaseConfig;
+  public nuxtConfig: NuxtConfig;
 
   constructor(baseConfig: BaseConfig) {
-    const defaultThemeDir = './node_modules/tanam/dist/theme';
+    const defaultThemeDir = '../node_modules/tanam/dist/theme';
     this.configuration = {
       isNuxt: true,
-      themeDir: defaultThemeDir,
-      adminDir: './node_modules/tanam/dist/admin_client/',
+      adminDir: '../node_modules/tanam/dist/admin_client/',
       adminUrl: 'admin',
-      nuxtConfig: {
-        dev: false,
-        buildDir: defaultThemeDir,
-        build: {
-          publicPath: '/assets/'
-        }
-      },
       ...baseConfig
-    }
-  };
+    };
+
+    this.nuxtConfig = {
+      dev: false,
+      buildDir: defaultThemeDir,
+      build: {
+        publicPath: '/assets/'
+      },
+      ...baseConfig.nuxtConfig
+    };
+
+  }
 }
 
 export default TanamConfig;
