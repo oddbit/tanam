@@ -1,30 +1,32 @@
-import * as functions from 'firebase-functions';
 import * as express from 'express';
 import { Nuxt } from 'nuxt';
+import TanamConfig, { BaseConfig } from './config';
 
-const app = express();
+export class App {
+  public app: express.Application;
+  private nuxt: any;
+  private _tanamConfig: TanamConfig;
 
-const config = {
-  dev: false,
-  buildDir: '../../../dist/theme',
-  build: {
-    publicPath: '/assets/'
+  constructor(tanamConfig: BaseConfig = {}) {
+    this._tanamConfig = new TanamConfig(tanamConfig);
+
+    const { configuration } = this._tanamConfig;
+    const { adminUrl, adminDir } = configuration;
+
+    this.nuxt = new Nuxt(configuration.nuxtConfig);
+
+    this.app = express();
+
+    this.app.use(`/${adminUrl}/`, express.static(adminDir));
+    this.app.use(`/${adminUrl}/**`, (req: express.Request, res: express.Response) => {
+      res.status(200).sendFile('index.html', { root: adminDir });
+    });
+
+    this.app.get('**', this.handleThemeRequest.bind(this));
   }
-};
 
-const nuxt = new Nuxt(config);
-
-const handleRequest = (req, res) => {
-  console.log('REQUEST STARTED!');
-  return nuxt.render(req, res);
+  handleThemeRequest(req: express.Request, res: express.Response) {
+    res.set('Cache-Control', 'public, max-age=600, s-maxage=1200');
+    return this.nuxt.render(req, res);
+  }
 }
-
-const adminPage = (req, res) => {
-  console.log('admin page');
-  res.send('admin page');
-}
-
-app.get('/admin', adminPage);
-app.get('**', handleRequest);
-
-export const theme = functions.https.onRequest(app);

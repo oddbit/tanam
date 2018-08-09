@@ -70,7 +70,10 @@ const routes = routerOptions.map(route => ({
 
 Vue.use(Router);
 
+const base = process.env.NODE_ENV === 'development' ? '/' : '/admin/';
+
 const router = new Router({
+  base,
   mode: 'history',
   routes
 });
