@@ -10,9 +10,9 @@ const autoLogin = ({ commit }, payload) => {
   });
 };
 
-const logout = ({ commit }) => {
-  firebase.auth().signOut();
-  commit(SET_USER, null);
+const logout = async ({ commit }) => {
+  await firebase.auth().signOut();
+  await commit(SET_USER, null);
   router.push('/login');
 };
 
