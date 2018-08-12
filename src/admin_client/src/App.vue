@@ -1,37 +1,25 @@
 <template>
   <div id="app">
-    <v-app>
-      <div v-if="currentUser">
-        <Drawer />
-        <Toolbar />
-      </div>
-      <v-content>
-        <router-view />
-      </v-content>
-    </v-app>
+    <component :is="layout" />
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import { CURRENT_USER, LOGOUT } from '@/store/types';
-import Drawer from '@/components/Drawer/Drawer';
-import Toolbar from '@/components/Toolbar';
+import { mapGetters } from 'vuex';
+import { LAYOUT } from '@/store/types';
+import DefaultLayout from '@/layouts/Default';
+import SimpleLayout from '@/layouts/Simple';
+import SinglePostLayout from '@/layouts/SinglePost';
 
 export default {
-  name: 'App',
   components: {
-    Drawer,
-    Toolbar
+    DefaultLayout,
+    SimpleLayout,
+    SinglePostLayout
   },
   computed: {
     ...mapGetters({
-      currentUser: CURRENT_USER
-    })
-  },
-  methods: {
-    ...mapActions({
-      onLogout: LOGOUT
+      layout: LAYOUT
     })
   }
 };
@@ -43,7 +31,6 @@ export default {
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 @media screen and (max-width: 1263px) {

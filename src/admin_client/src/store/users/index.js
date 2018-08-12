@@ -1,10 +1,4 @@
-import {
-  CURRENT_USER,
-  SET_USER,
-  LOGIN_GOOGLE,
-  AUTO_LOGIN,
-  LOGOUT
-} from '../types';
+import { CURRENT_USER, SET_USER, AUTO_LOGIN, LOGOUT } from '../types';
 import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
@@ -16,7 +10,6 @@ const state = {
 export default {
   state,
   actions: {
-    [LOGIN_GOOGLE]: actions.loginGoogle,
     [AUTO_LOGIN]: actions.autoLogin,
     [LOGOUT]: actions.logout
   },

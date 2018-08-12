@@ -1,21 +1,16 @@
 {
   "functions": {
     "predeploy": [
-      "npm --prefix functions run lint",
-      "npm --prefix functions run build"
-    ],
-    "source": "functions"
+      "npm --prefix \"$RESOURCE_DIR\" run lint",
+      "npm --prefix \"$RESOURCE_DIR\" run build"
+    ]
   },
   "hosting": {
     "public": "public",
     "rewrites": [
       {
-        "source": "/admin/",
-        "function": "adminClient"
-      },
-      {
-        "source": "/admin/**",
-        "function": "adminClient"
+        "source": "**",
+        "function": "serve"
       }
     ],
     "ignore": [

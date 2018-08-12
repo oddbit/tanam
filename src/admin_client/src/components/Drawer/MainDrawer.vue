@@ -5,7 +5,6 @@
       <v-list-tile
         to="/"
         ripple
-        active-class="primary--text"
         @click="() => null">
         <v-list-tile-action><v-icon>dashboard</v-icon></v-list-tile-action>
         <v-list-tile-title>Dashboard</v-list-tile-title>
@@ -22,27 +21,15 @@
       <v-subheader>MANAGE</v-subheader>
       <v-list-tile
         ripple
-        @click="() => null">
+        :to="toBlog">
         <v-list-tile-action><v-icon>library_books</v-icon></v-list-tile-action>
-        <v-list-tile-title>Posts</v-list-tile-title>
+        <v-list-tile-title>Blog Posts</v-list-tile-title>
       </v-list-tile>
       <v-list-tile
         ripple
-        @click="() => null">
-        <v-list-tile-action><v-icon>pages</v-icon></v-list-tile-action>
-        <v-list-tile-title>Pages</v-list-tile-title>
-      </v-list-tile>
-      <v-list-tile
-        ripple
-        @click="() => null">
-        <v-list-tile-action><v-icon>perm_media</v-icon></v-list-tile-action>
-        <v-list-tile-title>Media</v-list-tile-title>
-      </v-list-tile>
-      <v-list-tile
-        ripple
-        @click="() => null">
-        <v-list-tile-action><v-icon>comment</v-icon></v-list-tile-action>
-        <v-list-tile-title>Comments</v-list-tile-title>
+        :to="toEvent">
+        <v-list-tile-action><v-icon>event</v-icon></v-list-tile-action>
+        <v-list-tile-title>Events</v-list-tile-title>
       </v-list-tile>
     </v-list>
 
@@ -64,3 +51,14 @@
 
   </div>
 </template>
+
+<script>
+import { event, blog } from '@/config/post';
+
+export default {
+  data: () => ({
+    toBlog: blog.indexLink,
+    toEvent: event.indexLink
+  })
+};
+</script>
