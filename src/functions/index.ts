@@ -3,7 +3,7 @@ import * as express from 'express';
 import TanamConfig, { BaseConfig } from './config';
 import * as Vue from 'vue';
 import * as VueServerRenderer from 'vue-server-renderer';
-import * as utils from './util';
+import * as utils from './utils/routing';
 
 export class App {
   public app: express.Application;

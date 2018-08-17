@@ -1,13 +1,13 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import * as https from 'https';
-import * as utils from './util';
-
+import * as utils from './utils/routing';
+import * as cache from './utils/cache';
 
 export const tanam_route_create = functions.firestore.document('/{type}/{documentId}').onCreate((snap, context) => {
     const document = snap.data();
     if (!document.permalink) {
-        throw new Error('Missing attribute "permalink"');
+        console.log('Document is missing attribute "permalink": nothing to do');
+        return null;
     }
 
     const documentRef = snap.ref.toString();
@@ -19,7 +19,8 @@ export const tanam_route_update = functions.firestore.document('/{type}/{documen
     const beforeChange = snap.before.data();
     const afterChange = snap.after.data();
     if (!beforeChange.permalink || !afterChange.permalink) {
-        throw new Error('Missing attribute "permalink"');
+        console.log('Document is missing attribute "permalink": nothing to do');
+        return null;
     }
 
     if (beforeChange.permalink === afterChange.permalink) {
@@ -41,7 +42,8 @@ export const tanam_route_update = functions.firestore.document('/{type}/{documen
 export const tanam_route_delete = functions.firestore.document('/{type}/{documentId}').onDelete((snap, context) => {
     const document = snap.data();
     if (!document.permalink) {
-        throw new Error('Missing attribute "permalink"');
+        console.log('Document is missing attribute "permalink": nothing to do');
+        return null;
     }
 
     const documentRef = snap.ref.toString();
@@ -49,19 +51,24 @@ export const tanam_route_delete = functions.firestore.document('/{type}/{documen
     return admin.database().ref('routes').child(utils.encodePath(document.permalink)).remove();
 });
 
-const tanam_purgeCache = functions.firestore.document('/{type}/{documentId}').onUpdate((snap, context) => {
-    const docData = snap.before.data();
-    if (!docData.url) {
+export const tanam_cache_update = functions.firestore.document('/{type}/{documentId}').onUpdate((snap, context) => {
+    const document = snap.before.data();
+    if (!document.permalink) {
+        console.log('Deleted a document without a permalink. Nothing to do.');
         return null;
     }
 
-    console.log(`Purging cache: ${docData.url}`);
-    https.request({
-        hostname: 'site-domain...', // TODO replace this
-        port: 443,
-        path: docData.url,
-        method: 'PURGE'
-    });
+    // TODO: Add support for custom URL cache paths
+    return cache.purgeCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, document.permalink);
+});
 
-    return null;
+export const tanam_cache_delete = functions.firestore.document('/{type}/{documentId}').onDelete((snap, context) => {
+    const document = snap.data();
+    if (!document.permalink) {
+        console.log('Deleted a document without a permalink. Nothing to do.');
+        return null;
+    }
+
+    // TODO: Add support for custom URL cache paths
+    return cache.purgeCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, document.permalink);
 });
