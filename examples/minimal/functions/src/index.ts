@@ -1,6 +1,5 @@
-import * as functions from 'firebase-functions';
-import * as Tanam from 'tanam';
+import * as admin from 'firebase-admin';
+import * as tanam from '../../../../dist'
 
-const mainApp = new Tanam.App().app;
-
-export const serve = functions.https.onRequest(mainApp);
+admin.initializeApp();
+tanam.initializeApp();
