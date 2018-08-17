@@ -1,4 +1,4 @@
-function encodePath(path) {
+export function encodePath(path) {
     function encodeAndAsssemble(str, splitter) {
         return str
             .split(splitter)
