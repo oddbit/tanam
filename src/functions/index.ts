@@ -3,6 +3,7 @@ import * as express from 'express';
 import TanamConfig, { BaseConfig } from './config';
 import * as Vue from 'vue';
 import * as VueServerRenderer from 'vue-server-renderer';
+import * as utils from './util';
 
 export class App {
   public app: express.Application;
@@ -27,7 +28,7 @@ export class App {
   async handlePwaManifestReq(request: express.Request, response: express.Response) {
     const pwaManifest = await firebase.database().ref('/config/pwa').once('value');
 
-    if (!pwaManifest) {
+    if (!pwaManifest.exists()) {
       response.status(404).send('Not found.');
       return;
     }
@@ -38,45 +39,58 @@ export class App {
       .send(pwaManifest.val());
   }
 
-  async handleThemeRequest(req: express.Request, res: express.Response) {
+  async handleThemeRequest(request: express.Request, response: express.Response) {
     const renderer = VueServerRenderer.createRenderer();
-    const queryResult = await firebase.firestore().collection('events').where('url', '==', req.url).get();
 
-    if (queryResult.docs.length === 0) {
-      res.status(404).send('Not found.');
+    const documentRoute = await firebase.database().ref(encodePath(request.url)).once('value');
+    if (!documentRoute.exists()) {
+      response.status(404).send('Not found.');
       return;
     }
 
-    if (queryResult.docs.length > 1) {
-      res.status(500).send('URL is not uniquely mapped to a single document.');
-      return;
+    const firestoreDoc = await firebase.firestore().doc(documentRoute.val()).get();
+    if (!firestoreDoc.exists) {
+      response.status(404).send('Not found.');
+      console.error(`Database inconsistency! Path '${request.url}' pointed to non-existing document: ${documentRoute.val()}`);
+      return documentRoute.ref.remove();
     }
 
-    const contentDoc = queryResult.docs[0].data();
-    const [buffer] = await firebase.storage().bucket().file(contentDoc.templateFile).download();
+
+    const contentPost = firestoreDoc.data();
+
+    const contentPostFile = firebase.storage().bucket().file(`/themes/default/${contentPost.template}.tmpl.html`);
+    const contentPostTemplateHtml = (await contentPostFile.exists())
+      ? (await contentPostFile.download())[0].toString('utf8')
+      : '<div>This is default template for {{ title }}</div>';
+
+    const masterTemplateFile = firebase.storage().bucket().file('/themes/default/master.tmpl.html');
+    const masterTemplateHtml = (await masterTemplateFile.exists())
+      ? (await masterTemplateFile.download())[0].toString('utf8')
+      : `
+      <!DOCTYPE html>
+
+      <html lang="en">
+        <head>
+        <title>${firestoreDoc.id}</title></head>
+        <body>${contentPostTemplateHtml}</body>
+      </html>
+    `;
 
     const app = new Vue.default({
-      data: {
-        url: req.url
-      },
-      template: buffer.toString('utf8')
+      data: contentPost.data,
+      template: masterTemplateHtml
     });
 
     // Cache will be purged by cloud function every time a content document is updated
     renderer.renderToString(app, context, (err, html) => {
       if (err) {
-        res.status(500).end('Internal Server Error');
+        response.status(500).end('Internal Server Error');
         return;
       }
-
-      res.set('Cache-Control', `public, max-age=600, s-maxage=${60 * 60 * 24 * 365}`);
-      res.end(`
-      <!DOCTYPE html>
-      <html lang="en">
-        <head><title>Hello</title></head>
-        <body>${html}</body>
-      </html>
-    `);
+      response
+        .set('Tanam-Created', new Date().toUTCString())
+        .set('Cache-Control', `public, max-age=600, s-maxage=${60 * 60 * 24 * 365}`)
+        .end(html);
     });
   }
 }
