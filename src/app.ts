@@ -1,26 +1,22 @@
 import * as firebase from 'firebase-admin';
 import * as express from 'express';
-import TanamConfig, { BaseConfig } from './config';
+import TanamConfig from './config';
 import * as Vue from 'vue';
 import * as VueServerRenderer from 'vue-server-renderer';
 import * as utils from './utils/routing';
 
 export class App {
   public app: express.Application;
-  private _tanamConfig: TanamConfig;
 
-  constructor(tanamConfig: BaseConfig = {}) {
-    this._tanamConfig = new TanamConfig(tanamConfig);
-
-    const { configuration, nuxtConfig } = this._tanamConfig;
-    const { adminUrl, adminDir } = configuration;
-
+  constructor(tanamConfig: TanamConfig = {}) {
     this.app = express();
 
-    this.app.use(`/${adminUrl}/`, express.static(adminDir));
+    const adminUrl = tanamConfig.adminUrl || 'admin';
+    this.app.use(`/${adminUrl}/`, express.static('./admin_client'));
     this.app.use(`/${adminUrl}/**`, (req: express.Request, res: express.Response) => {
-      res.status(200).sendFile('index.html', { root: adminDir });
+      res.status(200).sendFile('index.html', { root: './admin_client' });
     });
+
     this.app.get('/manifest.json', this.handlePwaManifestReq.bind(this));
     this.app.get('**', this.handleThemeRequest.bind(this));
   }
