@@ -1,7 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import * as utils from './utils/routing';
-import * as cache from './utils/cache';
+import * as utils from '../utils/routing';
 
 export const tanam_route_create = functions.firestore.document('/{type}/{documentId}').onCreate((snap, context) => {
     const document = snap.data();
@@ -49,26 +48,4 @@ export const tanam_route_delete = functions.firestore.document('/{type}/{documen
     const documentRef = snap.ref.toString();
     console.log(`document=${documentRef}, permalink=${document.permalink}`);
     return admin.database().ref('routes').child(utils.encodePath(document.permalink)).remove();
-});
-
-export const tanam_cache_update = functions.firestore.document('/{type}/{documentId}').onUpdate((snap, context) => {
-    const document = snap.before.data();
-    if (!document.permalink) {
-        console.log('Deleted a document without a permalink. Nothing to do.');
-        return null;
-    }
-
-    // TODO: Add support for custom URL cache paths
-    return cache.purgeCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, document.permalink);
-});
-
-export const tanam_cache_delete = functions.firestore.document('/{type}/{documentId}').onDelete((snap, context) => {
-    const document = snap.data();
-    if (!document.permalink) {
-        console.log('Deleted a document without a permalink. Nothing to do.');
-        return null;
-    }
-
-    // TODO: Add support for custom URL cache paths
-    return cache.purgeCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, document.permalink);
 });

@@ -1,5 +1,4 @@
-import * as admin from 'firebase-admin';
-
-admin.initializeApp();
-
-export * from './functions';
+export * from './admin_client';
+export * from './cloud_functions';
+export * from './app';
+export * from './config';

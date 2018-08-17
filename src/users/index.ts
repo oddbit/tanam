@@ -1,6 +1,5 @@
 import * as firebase from "firebase-admin";
 import * as functions from "firebase-functions";
-import { Change, EventContext } from "firebase-functions";
 import { UserRecord } from "firebase-functions/lib/providers/auth";
 import { MD5 } from "crypto-js";
 
