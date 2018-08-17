@@ -20,8 +20,22 @@ export class App {
     this.app.use(`/${adminUrl}/**`, (req: express.Request, res: express.Response) => {
       res.status(200).sendFile('index.html', { root: adminDir });
     });
-
+    this.app.get('/manifest.json', this.handlePwaManifestReq.bind(this));
     this.app.get('**', this.handleThemeRequest.bind(this));
+  }
+
+  async handlePwaManifestReq(request: express.Request, response: express.Response) {
+    const pwaManifest = await firebase.database().ref('/config/pwa').once('value');
+
+    if (!pwaManifest) {
+      response.status(404).send('Not found.');
+      return;
+    }
+
+    response.set('Tanam-Created', new Date().toUTCString())
+      .set('Content-Type', 'application/json')
+      .set('Cache-Control', `public, max-age=600, s-maxage=${60 * 60}`)
+      .send(pwaManifest.val());
   }
 
   async handleThemeRequest(req: express.Request, res: express.Response) {
