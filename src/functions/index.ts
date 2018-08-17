@@ -42,12 +42,19 @@ export class App {
   async handleThemeRequest(request: express.Request, response: express.Response) {
     const renderer = VueServerRenderer.createRenderer();
 
-    const documentRoute = await firebase.database().ref(encodePath(request.url)).once('value');
-    if (!documentRoute.exists()) {
+    // The document route is a base64 encoded version of the URL (to comply with Firebase key constraints)
+    // It maps to a Firestore document reference of the content document that we want to render
+    const documentRoute = await firebase.database()
+      .ref('routes')
+      .child(utils.encodePath(request.url))
+      .once('value');
+
+      if (!documentRoute.exists()) {
       response.status(404).send('Not found.');
       return;
     }
 
+    // This is the corresponding Firestore document that is mapped by the URL
     const firestoreDoc = await firebase.firestore().doc(documentRoute.val()).get();
     if (!firestoreDoc.exists) {
       response.status(404).send('Not found.');
@@ -55,15 +62,21 @@ export class App {
       return documentRoute.ref.remove();
     }
 
+    // Fetch the name of the theme. Template files are located under the theme name in cloud storage
+    const siteTheme = (await firebase.database().ref('site/settings/theme').once('value')).val() || 'default';
 
+    // The data of the document contains meta data such as what template to use fo rendering etc
     const contentPost = firestoreDoc.data();
 
-    const contentPostFile = firebase.storage().bucket().file(`/themes/default/${contentPost.template}.tmpl.html`);
-    const contentPostTemplateHtml = (await contentPostFile.exists())
-      ? (await contentPostFile.download())[0].toString('utf8')
+    // The content post has a corresponding template file in the theme folder. This makes it possible to display
+    // 'blog' posts differently from 'event' posts etc
+    const contentPostTemlateFile = firebase.storage().bucket().file(`/themes/${siteTheme}/${contentPost.template}.tmpl.html`);
+    const contentPostTemplateHtml = (await contentPostTemlateFile.exists())
+      ? (await contentPostTemlateFile.download())[0].toString('utf8')
       : '<div>This is default template for {{ title }}</div>';
 
-    const masterTemplateFile = firebase.storage().bucket().file('/themes/default/master.tmpl.html');
+    // The master template contains the header, footer and everything that wraps the content type
+    const masterTemplateFile = firebase.storage().bucket().file(`/themes/${siteTheme}/master.tmpl.html`);
     const masterTemplateHtml = (await masterTemplateFile.exists())
       ? (await masterTemplateFile.download())[0].toString('utf8')
       : `
@@ -76,19 +89,28 @@ export class App {
       </html>
     `;
 
+
+    // Everything below here is just taken out of the example on VUE SSR documentation page
+    // https://vuejs.org/v2/guide/ssr.html
     const app = new Vue.default({
       data: contentPost.data,
       template: masterTemplateHtml
     });
 
-    // Cache will be purged by cloud function every time a content document is updated
     renderer.renderToString(app, context, (err, html) => {
       if (err) {
         response.status(500).end('Internal Server Error');
         return;
       }
       response
+        // Set this header so that we can inspect and verify whether we got a cached document or not.
         .set('Tanam-Created', new Date().toUTCString())
+
+        // Use this for ability to link back to which document that was actually rendered
+        .set('Tanam-Document', firestoreDoc.ref.toString())
+
+        // We can cache the document for indefinite time. Because we manually purge cache on all document changes
+        // via cloud function triggers
         .set('Cache-Control', `public, max-age=600, s-maxage=${60 * 60 * 24 * 365}`)
         .end(html);
     });
