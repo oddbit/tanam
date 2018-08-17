@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import * as utils from '../utils/routing';
+import * as utils from 'utils/routing';
 
 export const tanam_route_create = functions.firestore.document('/{type}/{documentId}').onCreate((snap, context) => {
     const document = snap.data();
@@ -11,7 +11,7 @@ export const tanam_route_create = functions.firestore.document('/{type}/{documen
 
     const documentRef = snap.ref.toString();
     console.log(`document=${documentRef}, permalink=${document.permalink}`);
-    return admin.database().ref('routes').child(utils.encodePath(document.permalink)).set(documentRef);
+    return admin.database().ref('routes').child(utils.encodeRoutingTablePath(document.permalink)).set(documentRef);
 });
 
 export const tanam_route_update = functions.firestore.document('/{type}/{documentId}').onUpdate((snap, context) => {
@@ -33,8 +33,8 @@ export const tanam_route_update = functions.firestore.document('/{type}/{documen
     const afterDocumentRef = snap.after.ref.toString();
     console.log(`afterDocumentRef=${afterDocumentRef}, afterPermalink=${afterChange.permalink}`);
     return Promise.all([
-        admin.database().ref('routes').child(utils.encodePath(beforeChange.permalink)).remove(),
-        admin.database().ref('routes').child(utils.encodePath(afterChange.permalink)).set(afterDocumentRef)
+        admin.database().ref('routes').child(utils.encodeRoutingTablePath(beforeChange.permalink)).remove(),
+        admin.database().ref('routes').child(utils.encodeRoutingTablePath(afterChange.permalink)).set(afterDocumentRef)
     ]);
 });
 
@@ -47,5 +47,5 @@ export const tanam_route_delete = functions.firestore.document('/{type}/{documen
 
     const documentRef = snap.ref.toString();
     console.log(`document=${documentRef}, permalink=${document.permalink}`);
-    return admin.database().ref('routes').child(utils.encodePath(document.permalink)).remove();
+    return admin.database().ref('routes').child(utils.encodeRoutingTablePath(document.permalink)).remove();
 });
