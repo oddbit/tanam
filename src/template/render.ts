@@ -92,22 +92,14 @@ async function injectTemplate(theme: string, template: string, html: string) {
     ? (await templateFile.download())[0].toString('utf8')
     : defaultTemplate.templateMap[template];
 
+  // Loop to see if there are any embedded template inserts in the template.
+  // If so recursively inject those templates into this template.
   for (const embeddedTemplate of findTemplateInserts(templateHtml)) {
     console.log(`Found embedded template "${embeddedTemplate}"`);
     templateHtml = await injectTemplate(theme, embeddedTemplate, templateHtml);
   }
 
   return html.replace(regexp, templateHtml);
-}
-
-async function foo() {
-  let html = '';
-  const templates = findTemplateInserts(html);
-  for (const template of templates) {
-    html = await injectTemplate('default', template, html);
-  }
-
-  return html;
 }
 
 async function buildSiteInfo() {
