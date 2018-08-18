@@ -36,6 +36,7 @@
   "homepage": "https://github.com/oddbit/tanam#readme",
   "devDependencies": {
     "@types/crypto-js": "^3.1.39",
+    "@types/handlebars": "^4.0.39",
     "@types/mocha": "^5.2.0",
     "debug": "^3.1.0",
     "firebase-functions-test": "^0.1.3",

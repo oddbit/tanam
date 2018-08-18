@@ -3,7 +3,7 @@ import * as functions from 'firebase-functions';
 import * as url from 'url';
 import * as express from 'express';
 import * as routing from './utils/routing';
-import * as render from './utils/render';
+import * as render from './template/render';
 
 const app = express();
 
