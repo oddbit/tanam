@@ -2,9 +2,8 @@ import * as firebase from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import * as url from 'url';
 import * as express from 'express';
-import * as Vue from 'vue';
-import * as VueServerRenderer from 'vue-server-renderer';
 import * as routing from './utils/routing';
+import * as render from './utils/render';
 
 const app = express();
 
@@ -21,14 +20,14 @@ export function initializeApp(tanamConfig: TanamConfig = {}) {
     res.status(200).sendFile('index.html', { root: './admin_client' });
   });
 
-  app.get('/manifest.json', handlePwaManifestReq);
+  app.get('/manifest.json', handleWebManifestReq);
   app.get('**', handleThemeRequest);
 }
 
-async function handlePwaManifestReq(request: express.Request, response: express.Response) {
-  const pwaManifest = await firebase.database().ref('/config/pwa').once('value');
+async function handleWebManifestReq(request: express.Request, response: express.Response) {
+  const webManifest = await firebase.database().ref('/config/manifest').once('value');
 
-  if (!pwaManifest.exists()) {
+  if (!webManifest.exists()) {
     response.status(404).send('Not found.');
     return;
   }
@@ -36,12 +35,10 @@ async function handlePwaManifestReq(request: express.Request, response: express.
   response
     .set('Tanam-Created', new Date().toUTCString())
     .set('Cache-Control', `public, max-age=600, s-maxage=${60 * 60}`)
-    .json(pwaManifest.val());
+    .json(webManifest.val());
 }
 
 async function handleThemeRequest(request: express.Request, response: express.Response) {
-  const renderer = VueServerRenderer.createRenderer();
-
   // The document route is a base64 encoded version of the URL (to comply with Firebase key constraints)
   // It maps to a Firestore document reference of the content document that we want to render
   const documentRoute = await firebase.database()
@@ -62,56 +59,20 @@ async function handleThemeRequest(request: express.Request, response: express.Re
     return documentRoute.ref.remove();
   }
 
-  // Fetch the name of the theme. Template files are located under the theme name in cloud storage
-  const siteTheme = (await firebase.database().ref('site/settings/theme').once('value')).val() || 'default';
+  const templateData = await render.buildTemplateData(firestoreDoc);
+  const pageHtml = await render.renderPage(templateData);
 
-  // The data of the document contains meta data such as what template to use fo rendering etc
-  const contentPost = firestoreDoc.data();
+  // Set this header so that we can inspect and verify whether we got a cached document or not.
+  response.set('Tanam-Created', new Date().toUTCString());
 
-  // The content post has a corresponding template file in the theme folder. This makes it possible to display
-  // 'blog' posts differently from 'event' posts etc
-  const contentPostTemlateFile = firebase.storage().bucket().file(`/themes/${siteTheme}/${contentPost.template}.tmpl.html`);
-  const contentPostTemplateHtml = (await contentPostTemlateFile.exists())
-    ? (await contentPostTemlateFile.download())[0].toString('utf8')
-    : '<div>This is default template for {{ title }}</div>';
+  // Use this for ability to link back to which document that was actually rendered
+  response.set('Tanam-Id', templateData.contextMeta.docRef);
 
-  // The master template contains the header, footer and everything that wraps the content type
-  const masterTemplateFile = firebase.storage().bucket().file(`/themes/${siteTheme}/master.tmpl.html`);
-  const masterTemplateHtml = (await masterTemplateFile.exists())
-    ? (await masterTemplateFile.download())[0].toString('utf8')
-    : `
-    <!DOCTYPE html>
-
-    <html lang="en">
-      <head>
-      <title>${firestoreDoc.id}</title></head>
-      <body>${contentPostTemplateHtml}</body>
-    </html>
-  `;
-
-
-  // Everything below here is just taken out of the example on VUE SSR documentation page
-  // https://vuejs.org/v2/guide/ssr.html
-  const vueApp = new Vue.default({
-    data: contentPost.data,
-    template: masterTemplateHtml
-  });
-
-  renderer.renderToString(vueApp, context, (err, html) => {
-    if (err) {
-      response.status(500).end('Internal Server Error');
-      return;
-    }
-    response
-      // Set this header so that we can inspect and verify whether we got a cached document or not.
-      .set('Tanam-Created', new Date().toUTCString())
-
-      // Use this for ability to link back to which document that was actually rendered
-      .set('Tanam-Document', firestoreDoc.ref.toString())
-
-      // We can cache the document for indefinite time. Because we manually purge cache on all document changes
-      // via cloud function triggers
-      .set('Cache-Control', `public, max-age=600, s-maxage=${60 * 60 * 24 * 365}`)
-      .end(html);
-  });
+  // We can cache the document for indefinite time. Because we manually purge cache on all document changes
+  // via cloud function triggers
+  const serverCache = functions.config().cache.serverAge || 60 * 60 * 24 * 365;
+  const clientCache = functions.config().cache.clientAge || 600;
+  console.log(`Setting cache options: clientAge=${clientCache}, serverAge=${serverCache}`);
+  response.set('Cache-Control', `public, max-age=${clientCache}, s-maxage=${serverCache}`);
+  response.end(pageHtml);
 }
