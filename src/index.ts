@@ -33,10 +33,10 @@ async function handlePwaManifestReq(request: express.Request, response: express.
     return;
   }
 
-  response.set('Tanam-Created', new Date().toUTCString())
-    .set('Content-Type', 'application/json')
+  response
+    .set('Tanam-Created', new Date().toUTCString())
     .set('Cache-Control', `public, max-age=600, s-maxage=${60 * 60}`)
-    .send(pwaManifest.val());
+    .json(pwaManifest.val());
 }
 
 async function handleThemeRequest(request: express.Request, response: express.Response) {
