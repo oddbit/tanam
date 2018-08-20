@@ -20,6 +20,16 @@ firebase functions:config:set tanam.owner=john.doe@example.com
 Exchange the email `john.doe@example.com` with the email that you will login as the "site owner". Don't worry,
 you can add more admin users later. This is just to enable you to login directly after deploying the site.
 
+### Cache
+The default values for client/browser cache and server/CDN cache are set in (`routing.ts`)[/src/utils/routing.ts].
+
+Configure alternative caching values with cloud functions config.
+
+```bash
+firebase functions:config:set cache.serverAge=12345
+firebase functions:config:set cache.clientAge=123
+```
+
 
 ## License
 This project is under [Apache License 2.0](LICENSE)
