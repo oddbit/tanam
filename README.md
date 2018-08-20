@@ -21,7 +21,8 @@ Exchange the email `john.doe@example.com` with the email that you will login as 
 you can add more admin users later. This is just to enable you to login directly after deploying the site.
 
 ### Cache
-The default values for client/browser cache and server/CDN cache are set in (`routing.ts`)[/src/utils/routing.ts].
+The default values for client/browser cache and server/CDN cache are set in 
+[`src/utils/routing.ts`](src/utils/routing.ts)
 
 Configure alternative caching values with cloud functions config.
 
