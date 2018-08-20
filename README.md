@@ -22,7 +22,7 @@ you can add more admin users later. This is just to enable you to login directly
 
 ### Cache
 The default values for client/browser cache and server/CDN cache are set in 
-[`src/utils/routing.ts`](src/utils/routing.ts)
+[`src/utils/cache.ts`](src/utils/cache.ts)
 
 Configure alternative caching values with cloud functions config.
 
