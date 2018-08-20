@@ -21,7 +21,8 @@ export function initializeApp(tanamConfig: TanamConfig = {}) {
   });
 
   app.get('/manifest.json', handleWebManifestReq);
-  app.get('**', handleThemeRequest);
+  app.get('**', handlePageRequest);
+
 }
 
 async function handleWebManifestReq(request: express.Request, response: express.Response) {
@@ -38,7 +39,7 @@ async function handleWebManifestReq(request: express.Request, response: express.
     .json(webManifest.val());
 }
 
-async function handleThemeRequest(request: express.Request, response: express.Response) {
+async function handlePageRequest(request: express.Request, response: express.Response) {
   // The document route is a base64 encoded version of the URL (to comply with Firebase key constraints)
   // It maps to a Firestore document reference of the content document that we want to render
   const documentRoute = await firebase.database()
