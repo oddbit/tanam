@@ -1,6 +1,5 @@
 import * as firebase from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import * as url from 'url';
 import * as express from 'express';
 import * as routing from './utils/routing';
 import * as cache from './utils/cache';
@@ -41,25 +40,8 @@ async function handleWebManifestReq(request: express.Request, response: express.
 }
 
 async function handlePageRequest(request: express.Request, response: express.Response) {
-  // The document route is a base64 encoded version of the URL (to comply with Firebase key constraints)
-  // It maps to a Firestore document reference of the content document that we want to render
-  const documentRoute = await firebase.database()
-    .ref('routes')
-    .child(routing.encodeRoutingTablePath(url.parse(request.url).pathname))
-    .once('value');
-
-  if (!documentRoute.exists()) {
-    response.status(404).send('Not found.');
-    return;
-  }
-
   // This is the corresponding Firestore document that is mapped by the URL
-  const firestoreDoc = await firebase.firestore().doc(documentRoute.val()).get();
-  if (!firestoreDoc.exists) {
-    response.status(404).send('Not found.');
-    console.error(`Database inconsistency! Path '${request.url}' pointed to non-existing document: ${documentRoute.val()}`);
-    return documentRoute.ref.remove();
-  }
+  const firestoreDoc = await routing.getFirestoreDocument(request, response);
 
   const templateData = await render.buildTemplateData(firestoreDoc);
   const pageHtml = await render.renderPage(templateData);

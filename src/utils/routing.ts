@@ -1,16 +1,26 @@
-// See spec https://firebase.google.com/docs/database/usage/limits#data_tree
-const FIREBASE_KEY_MAX_LENGTH = 768;
+import * as admin from 'firebase-admin';
+import * as express from 'express';
 
-export function encodeRoutingTablePath(path) {
-  const base64encodedPath = Buffer.from(path).toString('base64');
-  const encodedPathBuffer = Buffer.from(base64encodedPath);
-  const encodedByteLength = encodedPathBuffer.length;
-  console.log(`Encoding path: ${path} resulted in ${encodedByteLength} bytes base64 string: ${base64encodedPath}`);
+export async function getFirestoreDocument(request: express.Request, response: express.Response) {
+  const collections = await admin.firestore().getCollections();
+  const documents = [];
 
-  const routingTable = [];
-  for (let i = 0; i < encodedByteLength; i += FIREBASE_KEY_MAX_LENGTH) {
-    const slice = encodedPathBuffer.slice(i, i + FIREBASE_KEY_MAX_LENGTH);
-    routingTable.push(slice.toString());
+  for (const collection of collections) {
+    const snap = await collection.where('permalink', '==', request.url).get();
+    snap.docs.forEach(doc => {
+      documents.push(doc);
+    });
   }
-  return routingTable.join('/');
+
+  if (documents.length === 0) {
+    response.status(404).end();
+    throw new Error(`No document found for URL ${request.url}`);
+  }
+
+  if (documents.length > 1) {
+    response.status(500).send('Database inconsistency. Path maps to more than one document.').end();
+    throw new Error('Found more than one document');
+  }
+
+  return documents[0];
 }
