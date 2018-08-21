@@ -1,7 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import * as cache from '../utils/cache';
-import * as routing from '../utils/routing';
 
 export const tanam_route_create = functions.firestore.document('/{type}/{documentId}').onCreate(async (snap, _) => {
   const document = snap.data();
@@ -12,7 +11,6 @@ export const tanam_route_create = functions.firestore.document('/{type}/{documen
 
   const documentRef = snap.ref.toString();
   console.log(`document=${documentRef}, permalink=${document.permalink}`);
-  // await admin.database().ref('routes').child(routing.encodeRoutingTablePath(document.permalink)).set(documentRef);
 
   // TODO: Add support for custom URL cache paths
   return cache.heatCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, document.permalink);
@@ -36,13 +34,9 @@ export const tanam_route_update = functions.firestore.document('/{type}/{documen
 
   const afterDocumentRef = snap.after.ref.toString();
   console.log(`afterDocumentRef=${afterDocumentRef}, afterPermalink=${afterChange.permalink}`);
-  await Promise.all([
-    // TODO: Add support for custom URL cache paths
-    cache.purgeCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, afterChange.permalink),
-    // admin.database().ref('routes').child(routing.encodeRoutingTablePath(beforeChange.permalink)).remove(),
-    // admin.database().ref('routes').child(routing.encodeRoutingTablePath(afterChange.permalink)).set(afterDocumentRef)
-  ]);
 
+  // TODO: Add support for custom URL cache paths
+  await cache.purgeCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, afterChange.permalink);
   return cache.heatCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, afterChange.permalink);
 });
 
@@ -56,9 +50,6 @@ export const tanam_route_delete = functions.firestore.document('/{type}/{documen
   const documentRef = snap.ref.toString();
   console.log(`document=${documentRef}, permalink=${document.permalink}`);
 
-  return Promise.all([
-    // TODO: Add support for custom URL cache paths
-    cache.purgeCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, document.permalink),
-    // admin.database().ref('routes').child(routing.encodeRoutingTablePath(document.permalink)).remove()
-  ]);
+  // TODO: Add support for custom URL cache paths
+  return cache.purgeCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, document.permalink);
 });

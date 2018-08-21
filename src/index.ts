@@ -43,9 +43,20 @@ async function handleWebManifestReq(request: express.Request, response: express.
 
 async function handlePageRequest(request: express.Request, response: express.Response) {
   // This is the corresponding Firestore document that is mapped by the URL
-  const firestoreDoc = await routing.getFirestoreDocument(request, response);
+  const documents = await routing.getFirestoreDocument(request.url);
 
-  const templateData = await render.buildTemplateData(firestoreDoc);
+  if (documents.length === 0) {
+    response.status(404).end();
+    return;
+  }
+
+  if (documents.length > 1) {
+    response.status(500).send('Database inconsistency. URL is not uniquely resolved.').end();
+    console.error(`URL '${request.url}' maps to ${documents.length} documents: ${JSON.stringify(documents.map(doc => doc.ref.path))}`);
+    return;
+  }
+
+  const templateData = await render.buildTemplateData(documents[0]);
   const pageHtml = await render.renderPage(templateData);
 
   // Set this header so that we can inspect and verify whether we got a cached document or not.
