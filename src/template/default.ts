@@ -5,6 +5,7 @@ templateMap['header'] = `
 <html lang="en">
   <head>
   <title>{{ context.title }}</title>
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 `;
 

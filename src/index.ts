@@ -4,6 +4,7 @@ import * as express from 'express';
 import * as routing from './utils/routing';
 import * as cache from './utils/cache';
 import * as render from './template/render';
+import * as defaultStyles from './template/styles';
 
 firebase.initializeApp();
 const app = express();
@@ -23,7 +24,21 @@ export function initializeApp(tanamConfig: TanamConfig = {}) {
   });
 
   app.get('/manifest.json', handleWebManifestReq);
+  app.get('*.css', handleCssRequest);
   app.get('**', handlePageRequest);
+
+}
+
+async function handleCssRequest(request: express.Request, response: express.Response) {
+  const documents = await routing.getFirestoreDocument(request.url);
+
+  response.set('Content-Type', 'text/css');
+
+  if (documents.length === 0) {
+    response.send(defaultStyles.styles);
+    return;
+  }
+
 
 }
 
@@ -71,5 +86,5 @@ async function handlePageRequest(request: express.Request, response: express.Res
   const clientCache = cache.getClientCacheAge(functions.config());
   console.log(`Setting cache options: clientAge=${clientCache}, serverAge=${serverCache}`);
   response.set('Cache-Control', `public, max-age=${clientCache}, s-maxage=${serverCache}`);
-  response.end(pageHtml);
+  response.send(pageHtml);
 }

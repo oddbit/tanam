@@ -80,7 +80,8 @@ async function injectTemplate(theme: string, template: string, html: string) {
   console.log(`Injecting template into html: theme=${theme}, template=${template}`);
   const templateFile = firebase.storage().bucket().file(`/themes/${theme}/${template}.tmpl.html`);
 
-  const templateFileExists = await templateFile.exists()[0];
+  const [templateFileExists] = await templateFile.exists();
+
   if (!templateFileExists) {
     console.error(`No file template file "${template}" in theme "${theme}"`);
 
