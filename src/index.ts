@@ -5,7 +5,9 @@ import * as routing from './utils/routing';
 import * as cache from './utils/cache';
 import * as render from './template/render';
 
+firebase.initializeApp();
 const app = express();
+firebase.firestore().settings({ timestampsInSnapshots: true });
 
 export * from './cloud_functions';
 export const tanam = functions.https.onRequest(app);

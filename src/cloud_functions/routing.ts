@@ -12,7 +12,7 @@ export const tanam_route_create = functions.firestore.document('/{type}/{documen
 
   const documentRef = snap.ref.toString();
   console.log(`document=${documentRef}, permalink=${document.permalink}`);
-  await admin.database().ref('routes').child(routing.encodeRoutingTablePath(document.permalink)).set(documentRef);
+  // await admin.database().ref('routes').child(routing.encodeRoutingTablePath(document.permalink)).set(documentRef);
 
   // TODO: Add support for custom URL cache paths
   return cache.heatCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, document.permalink);
@@ -39,8 +39,8 @@ export const tanam_route_update = functions.firestore.document('/{type}/{documen
   await Promise.all([
     // TODO: Add support for custom URL cache paths
     cache.purgeCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, afterChange.permalink),
-    admin.database().ref('routes').child(routing.encodeRoutingTablePath(beforeChange.permalink)).remove(),
-    admin.database().ref('routes').child(routing.encodeRoutingTablePath(afterChange.permalink)).set(afterDocumentRef)
+    // admin.database().ref('routes').child(routing.encodeRoutingTablePath(beforeChange.permalink)).remove(),
+    // admin.database().ref('routes').child(routing.encodeRoutingTablePath(afterChange.permalink)).set(afterDocumentRef)
   ]);
 
   return cache.heatCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, afterChange.permalink);
@@ -59,6 +59,6 @@ export const tanam_route_delete = functions.firestore.document('/{type}/{documen
   return Promise.all([
     // TODO: Add support for custom URL cache paths
     cache.purgeCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, document.permalink),
-    admin.database().ref('routes').child(routing.encodeRoutingTablePath(document.permalink)).remove()
+    // admin.database().ref('routes').child(routing.encodeRoutingTablePath(document.permalink)).remove()
   ]);
 });

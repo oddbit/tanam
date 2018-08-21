@@ -36,10 +36,12 @@ export interface TemplateData {
  */
 export async function renderPage(templateData: TemplateData) {
   console.log(`Render page: theme=${templateData.theme}, template=${templateData.template}`);
-  const masterTemplateHtml = injectTemplate(templateData.theme, templateData.template, `{% insert ${templateData.template}.tmpl.html %}`);
+  const masterTemplateHtml = await injectTemplate(templateData.theme, templateData.template, `{% include ${templateData.template}.tmpl.html %}`);
 
   // Compile and render the whole page
-  return handlebars.compile(masterTemplateHtml);
+  return handlebars.compile(masterTemplateHtml)({
+    context: { ...templateData.context }
+  });
 }
 
 export async function buildTemplateData(firestoreDocument: firebase.firestore.DocumentSnapshot) {
@@ -62,7 +64,8 @@ export async function buildTemplateData(firestoreDocument: firebase.firestore.Do
  */
 function findTemplateInserts(html) {
   const regexpStr = '{%\\s+include\\s+(.*)\\.tmpl\\.html\\s*%}';
-  return html.match(new RegExp(regexpStr, 'gi'))
+  const matchedString = html.match(new RegExp(regexpStr, 'gi')) || [];
+  return matchedString
     .map((regexpMatch) => regexpMatch.match(new RegExp(regexpStr, 'i'))[1]);
 }
 
@@ -77,7 +80,7 @@ async function injectTemplate(theme: string, template: string, html: string) {
   console.log(`Injecting template into html: theme=${theme}, template=${template}`);
   const templateFile = firebase.storage().bucket().file(`/themes/${theme}/${template}.tmpl.html`);
 
-  const templateFileExists = await templateFile.exists();
+  const templateFileExists = await templateFile.exists()[0];
   if (!templateFileExists) {
     console.error(`No file template file "${template}" in theme "${theme}"`);
 
@@ -115,7 +118,7 @@ async function buildSiteInfo() {
 function buildContextMeta(firestoreDocument: firebase.firestore.DocumentSnapshot) {
   return {
     docId: firestoreDocument.id,
-    docRef: firestoreDocument.ref.toString(),
+    docRef: firestoreDocument.ref.path,
     createdAt: firestoreDocument.createTime.toDate(),
     updatedAt: firestoreDocument.updateTime.toDate(),
     readAt: firestoreDocument.readTime.toDate()

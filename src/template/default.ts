@@ -1,4 +1,6 @@
-export const header = `
+export const templateMap = {};
+
+templateMap['header'] = `
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,11 +8,9 @@ export const header = `
 </head>
 `;
 
-export const footer = `</html>`;
+templateMap['footer'] = `</html>`;
 
-export const templateMap = {};
-
-templateMap['page']  = `
+templateMap['page'] = `
 {% include header.tmpl.html %}
 <body>
   {{ context.body }}
@@ -18,7 +18,7 @@ templateMap['page']  = `
 {% include footer.tmpl.html %}
 `;
 
-templateMap['blog']  = `
+templateMap['blog'] = `
 {% include header.tmpl.html %}
 <body>
   <h1>{{ context.title }} <h1>
