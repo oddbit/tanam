@@ -108,13 +108,14 @@ async function handlePageRequest(request: express.Request, response: express.Res
   const documents = await routing.getFirestoreDocument(request.url);
 
   if (documents.length === 0) {
-    response.status(404).end();
+    console.log(`[HTTP 404] document found for: ${request.url}`);
+    response.status(404).send('Not found');
     return;
   }
 
   if (documents.length > 1) {
-    response.status(500).send('Database inconsistency. URL is not uniquely resolved.').end();
-    console.error(`URL '${request.url}' maps to ${documents.length} documents: ${JSON.stringify(documents.map(doc => doc.ref.path))}`);
+    console.error(`[HTTP 500] URL '${request.url}' maps to ${documents.length} documents: ${JSON.stringify(documents.map(doc => doc.ref.path))}`);
+    response.status(500).send('Database inconsistency. URL is not uniquely resolved.');
     return;
   }
 
