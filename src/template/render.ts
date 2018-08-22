@@ -1,8 +1,6 @@
 import * as firebase from 'firebase-admin';
 import * as handlebars from 'handlebars';
 import * as defaultTemplate from './default';
-import * as defaultStyles from './styles';
-import * as defaultScript from './scripts';
 
 export interface SiteInfo {
   name: string;
@@ -128,40 +126,6 @@ function buildContextMeta(firestoreDocument: firebase.firestore.DocumentSnapshot
   } as ContextMeta;
 }
 
-async function getSiteThemeName() {
+export async function getSiteThemeName() :Promise<string> {
   return (await firebase.database().ref('site/settings/theme').once('value')).val() || 'default';
-}
-
-export async function renderStylesheet(fileUrl: string) {
-  const theme = getSiteThemeName();
-  const stylesheetFile = firebase.storage().bucket().file(`/themes/${theme}${fileUrl}`);
-  const [stylesheetExists] = await stylesheetFile.exists();
-
-  if (!stylesheetExists) {
-    console.error(`No stylesheet file "${fileUrl}" in theme "${theme}"`);
-
-    return defaultStyles.styles;
-  }
-
-  console.log('Found stylesheet file');
-  const stylesheet = (await stylesheetFile.download())[0].toString('utf8');
-
-  return stylesheet;
-}
-
-export async function renderJavascript(fileUrl: string) {
-  const theme = getSiteThemeName();
-  const javascriptFile = firebase.storage().bucket().file(`/themes/${theme}${fileUrl}`);
-  const [javascriptExists] = await javascriptFile.exists();
-
-  if (!javascriptExists) {
-    console.error(`No javascript file "${fileUrl}" in theme "${theme}"`);
-
-    return defaultScript.script;
-  }
-
-  console.log('Found javascript file');
-  const javascript = (await javascriptFile.download())[0].toString('utf8');
-
-  return javascript;
 }

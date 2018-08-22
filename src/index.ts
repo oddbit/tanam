@@ -12,6 +12,16 @@ const defaultConfig: TanamConfig = {
   adminUrl: 'admin'
 };
 
+const CONTENT_IMAGE = 'image';
+const CONTENT_TYPE_JS = 'text/javascript';
+const CONTENT_TYPE_CSS = 'text/css';
+
+const supportedContentTypes = {
+  CONTENT_IMAGE: /\.(gif|jpg|jpeg|tiff|png)$/i,
+  CONTENT_CSS: /\.(css)$/i,
+  CONTENT_JS: /\.(js)$/i
+};
+
 const app = express();
 export * from './cloud_functions';
 export const tanam = functions.https.onRequest(app);
@@ -30,39 +40,67 @@ export function initializeApp(tanamConfig: TanamConfig = {}) {
   });
 
   app.get('/manifest.json', handleWebManifestReq);
-  app.get('*.css', handleCssRequest);
-  app.get('*.js', handleJsRequest);
-  app.get('**', handlePageRequest);
+  app.get('**', handleRequest);
 }
 
-async function handleCssRequest(request: express.Request, response: express.Response) {
-  const cssContent = await render.renderStylesheet(request.url);
-
-  response.set('Content-Type', 'text/css');
-
-  response.send(cssContent);
+function getContentType(url: string) {
+  for (const contentType in supportedContentTypes) {
+    if (supportedContentTypes[contentType]) {
+      return contentType;
+    }
+  }
+  return null;
 }
 
-async function handleJsRequest(request: express.Request, response: express.Response) {
-  const jsContent = await render.renderJavascript(request.url);
+function handleRequest(request: express.Request, response: express.Response) {
+  console.log(`${request.method.toUpperCase()} ${request.url}`);
+  const contentType = getContentType(request.url);
 
-  response.set('Content-Type', 'text/javascript');
+  try {
+    if (contentType.startsWith('text')) {
+      handleTextContentRequest(request, response, contentType);
+    } else {
+      handlePageRequest(request, response);
+    }
+  } catch (err) {
+    response.status(err.code || 500).send(err.message);
+  }
+}
 
-  response.send(jsContent);
+async function handleTextContentRequest(request: express.Request, response: express.Response, contentType: string) {
+  const theme = await render.getSiteThemeName();
+  const contentFile = admin.storage().bucket().file(`/themes/${theme}${request.url}`);
+  const [contentExists] = await contentFile.exists();
+
+  if (!contentExists) {
+    console.log(`[HTTP 404] No content file file "${request.url}" in theme "${theme}"`);
+    response.status(404).send(`Not found: ${request.url}`);
+    return;
+  }
+
+  const [content] = await contentFile.download();
+  console.log(`File size: ${content.byteLength} bytes`);
+
+  // Set this header so that we can inspect and verify whether we got a cached document or not.
+  response.set('Tanam-Created', new Date().toUTCString());
+  response.set('Content-Type', `${contentType}; charset=utf-8`);
+  response.set('Cache-Control', `public, max-age=600, s-maxage=${60 * 60}`);
+  response.send(content.toString('utf8'));
 }
 
 async function handleWebManifestReq(request: express.Request, response: express.Response) {
-  const webManifest = await admin.database().ref('/config/manifest').once('value');
+  const webManifest = await admin.database().ref('web_manifest').once('value');
 
   if (!webManifest.exists()) {
+    console.log(`[HTTP 404] No web manifest present`);
     response.status(404).send('Not found.');
     return;
   }
 
-  response
-    .set('Tanam-Created', new Date().toUTCString())
-    .set('Cache-Control', `public, max-age=600, s-maxage=${60 * 60}`)
-    .json(webManifest.val());
+  // Set this header so that we can inspect and verify whether we got a cached document or not.
+  response.set('Tanam-Created', new Date().toUTCString());
+  response.set('Cache-Control', `public, max-age=600, s-maxage=${60 * 60}`);
+  response.json(webManifest.val());
 }
 
 async function handlePageRequest(request: express.Request, response: express.Response) {
