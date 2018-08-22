@@ -7,7 +7,6 @@ import * as render from './template/render';
 import * as defaultStyles from './template/styles';
 
 const app = express();
-admin.firestore().settings({ timestampsInSnapshots: true });
 
 export * from './cloud_functions';
 export const tanam = functions.https.onRequest(app);
@@ -19,6 +18,7 @@ export function initializeApp(tanamConfig: TanamConfig = {}) {
     throw new Error('You must initialize Firebase Admin before Tanam.');
   }
 
+  admin.firestore().settings({ timestampsInSnapshots: true });
   const adminUrl = tanamConfig.adminUrl || 'admin';
 
   app.use(`/${adminUrl}/`, express.static('./admin_client'));
