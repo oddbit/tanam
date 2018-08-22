@@ -4,6 +4,9 @@
   "description": "Pluggable CMS for Firebase",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "engines": {
+    "node": "8"
+  },
   "scripts": {
     "watch": "tsc -w -p .",
     "build": "tsc -p .",

@@ -2,9 +2,8 @@ import * as https from 'https';
 
 const defaultCacheConfig = {
   cache: {
-    // serverAge: 60 * 60 * 24 * 365,    // Time in seconds to keep cache on CDN
-    serverAge: 60,    // For testing purpose
-    clientAge: 60 * 10                // Time in seconds to keep cache in browser
+    server_age: 60 * 60 * 24 * 365,    // Time in seconds to keep cache on CDN
+    client_age: 60 * 10                // Time in seconds to keep cache in browser
   }
 };
 
@@ -45,7 +44,7 @@ export function heatCache(host: string, path: string) {
  */
 export function getServerCacheAge(functionsConfig: any) {
   const cacheConfig = { ...defaultCacheConfig, ...(functionsConfig || {}) };
-  return cacheConfig.cache.serverAge;
+  return cacheConfig.cache.server_age;
 }
 
 /**
@@ -56,5 +55,5 @@ export function getServerCacheAge(functionsConfig: any) {
  */
 export function getClientCacheAge(functionsConfig: any) {
   const cacheConfig = { ...defaultCacheConfig, ...(functionsConfig || {}) };
-  return cacheConfig.cache.clientAge;
+  return cacheConfig.cache.client_age;
 }
