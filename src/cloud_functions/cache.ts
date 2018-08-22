@@ -3,47 +3,51 @@ import * as cache from '../utils/cache';
 
 export const tanam_doc_create_cache = functions.firestore.document('/{type}/{documentId}').onCreate(async (snap, _) => {
   const document = snap.data();
-  if (!document.permalink) {
-    console.log('Document is missing attribute "permalink": nothing to do');
+  if (!document.path) {
+    console.log('Document is missing attribute "path": nothing to do');
     return null;
   }
 
   const documentRef = snap.ref.path;
-  console.log(`document=${documentRef}, permalink=${document.permalink}`);
+  const permalink = document.path[0];
+  console.log(`document=${documentRef}, permalink=${permalink}`);
 
   // TODO: Add support for custom URL cache paths
-  return cache.heatCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, document.permalink);
+  return cache.heatCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, permalink);
 });
 
 export const tanam_doc_update_cache = functions.firestore.document('/{type}/{documentId}').onUpdate(async (snap, _) => {
   const beforeChange = snap.before.data();
   const afterChange = snap.after.data();
-  if (!beforeChange.permalink || !afterChange.permalink) {
-    console.log('Document is missing attribute "permalink": nothing to do');
+  if (!beforeChange.path || !afterChange.path) {
+    console.log('Document(s) are missing attribute "path": nothing to do');
     return null;
   }
 
   const beforeDocumentRef = snap.before.ref.path;
-  console.log(`beforeDocumentRef=${beforeDocumentRef}, beforePermalink=${beforeChange.permalink}`);
+  const beforePermalink = beforeChange.path[0];
+  console.log(`beforeDocumentRef=${beforeDocumentRef}, beforePermalink=${beforePermalink}`);
 
   const afterDocumentRef = snap.after.ref.path;
-  console.log(`afterDocumentRef=${afterDocumentRef}, afterPermalink=${afterChange.permalink}`);
+  const afterPermalink = afterChange.path[0];
+  console.log(`afterDocumentRef=${afterDocumentRef}, afterPermalink=${afterPermalink}`);
 
   // TODO: Add support for custom URL cache paths
-  await cache.purgeCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, afterChange.permalink);
-  return cache.heatCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, afterChange.permalink);
+  await cache.purgeCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, beforePermalink);
+  return cache.heatCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, afterPermalink);
 });
 
 export const tanam_doc_delete_cache = functions.firestore.document('/{type}/{documentId}').onDelete((snap, _) => {
   const document = snap.data();
-  if (!document.permalink) {
-    console.log('Document is missing attribute "permalink": nothing to do');
+  if (!document.path) {
+    console.log('Document is missing attribute "path": nothing to do');
     return null;
   }
 
   const documentRef = snap.ref.path;
-  console.log(`document=${documentRef}, permalink=${document.permalink}`);
+  const permalink = document.path[0];
+  console.log(`document=${documentRef}, permalink=${permalink}`);
 
   // TODO: Add support for custom URL cache paths
-  return cache.purgeCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, document.permalink);
+  return cache.purgeCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, permalink);
 });
