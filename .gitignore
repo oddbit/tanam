@@ -63,7 +63,5 @@ typings/
 # build output
 dist/
 
-.vscode
-*.lock
-
+\.vscode
 \.idea/
