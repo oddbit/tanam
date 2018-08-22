@@ -2,6 +2,7 @@ import * as firebase from 'firebase-admin';
 import * as handlebars from 'handlebars';
 import * as defaultTemplate from './default';
 import * as defaultStyles from './styles';
+import * as defaultScript from './scripts';
 
 export interface SiteInfo {
   name: string;
@@ -142,4 +143,21 @@ export async function renderStylesheet(fileUrl: string) {
   const stylesheet = (await stylesheetFile.download())[0].toString('utf8');
 
   return stylesheet;
+}
+
+export async function renderJavascript(fileUrl: string) {
+  const theme = (await firebase.database().ref('site/settings/theme').once('value')).val() || 'default';
+  const javascriptFile = firebase.storage().bucket().file(`/themes/${theme}${fileUrl}`);
+  const [javascriptExists] = await javascriptFile.exists();
+
+  if (!javascriptExists) {
+    console.error(`No javascript file "${fileUrl}" in theme "${theme}"`);
+
+    return defaultScript.script;
+  }
+
+  console.log('Found javascript file');
+  const javascript = (await javascriptFile.download())[0].toString('utf8');
+
+  return javascript;
 }

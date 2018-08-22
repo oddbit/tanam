@@ -31,6 +31,7 @@ export function initializeApp(tanamConfig: TanamConfig = {}) {
 
   app.get('/manifest.json', handleWebManifestReq);
   app.get('*.css', handleCssRequest);
+  app.get('*.js', handleJsRequest);
   app.get('**', handlePageRequest);
 }
 
@@ -40,6 +41,14 @@ async function handleCssRequest(request: express.Request, response: express.Resp
   response.set('Content-Type', 'text/css');
 
   response.send(cssContent);
+}
+
+async function handleJsRequest(request: express.Request, response: express.Response) {
+  const jsContent = await render.renderJavascript(request.url);
+
+  response.set('Content-Type', 'text/javascript');
+
+  response.send(jsContent);
 }
 
 async function handleWebManifestReq(request: express.Request, response: express.Response) {

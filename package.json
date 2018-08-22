@@ -10,6 +10,7 @@
   "scripts": {
     "watch": "tsc -w -p .",
     "build": "tsc -p .",
+    "copyfiles": "cp -r src/cloud_functions examples/minimal/functions/src/tanam/ && cp -r src/template examples/minimal/functions/src/tanam/ && cp -r src/utils examples/minimal/functions/src/tanam/ && cp src/index.ts examples/minimal/functions/src/tanam/",
     "start": "nuxt start",
     "theme:build": "cd src/theme && npm run build",
     "test": "mocha --reporter spec"
