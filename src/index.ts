@@ -4,6 +4,8 @@ import * as express from 'express';
 import * as handlers from './handlers';
 import * as cache from './utils/cache';
 
+admin.initializeApp();
+
 export interface TanamConfig {
   adminUrl?: string;
 }
@@ -15,10 +17,6 @@ const app = express();
 export * from './cloud_functions';
 export const tanam = functions.https.onRequest(app);
 export function initializeApp(tanamConfig: TanamConfig = {}) {
-  if (admin.apps.length === 0) {
-    throw new Error('You must initialize Firebase Admin before Tanam.');
-  }
-
   const appConfig = { ...defaultConfig, ...(tanamConfig || {}) };
 
   app.use(`/${appConfig.adminUrl}/`, express.static('./admin_client'));
