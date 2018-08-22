@@ -150,7 +150,7 @@ export async function renderStylesheet(fileUrl: string) {
 }
 
 export async function renderJavascript(fileUrl: string) {
-  const theme = (await firebase.database().ref('site/settings/theme').once('value')).val() || 'default';
+  const theme = getSiteThemeName();
   const javascriptFile = firebase.storage().bucket().file(`/themes/${theme}${fileUrl}`);
   const [javascriptExists] = await javascriptFile.exists();
 
