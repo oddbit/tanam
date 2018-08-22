@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as cache from '../utils/cache';
 
-export const tanam_cache_create = functions.firestore.document('/{type}/{documentId}').onCreate(async (snap, _) => {
+export const tanam_doc_create_cache = functions.firestore.document('/{type}/{documentId}').onCreate(async (snap, _) => {
   const document = snap.data();
   if (!document.permalink) {
     console.log('Document is missing attribute "permalink": nothing to do');
@@ -15,7 +15,7 @@ export const tanam_cache_create = functions.firestore.document('/{type}/{documen
   return cache.heatCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, document.permalink);
 });
 
-export const tanam_cache_update = functions.firestore.document('/{type}/{documentId}').onUpdate(async (snap, _) => {
+export const tanam_doc_update_cache = functions.firestore.document('/{type}/{documentId}').onUpdate(async (snap, _) => {
   const beforeChange = snap.before.data();
   const afterChange = snap.after.data();
   if (!beforeChange.permalink || !afterChange.permalink) {
@@ -34,7 +34,7 @@ export const tanam_cache_update = functions.firestore.document('/{type}/{documen
   return cache.heatCache(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, afterChange.permalink);
 });
 
-export const tanam_cache_delete = functions.firestore.document('/{type}/{documentId}').onDelete((snap, _) => {
+export const tanam_doc_delete_cache = functions.firestore.document('/{type}/{documentId}').onDelete((snap, _) => {
   const document = snap.data();
   if (!document.permalink) {
     console.log('Document is missing attribute "permalink": nothing to do');
