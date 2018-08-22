@@ -1,4 +1,4 @@
-import * as firebase from 'firebase-admin';
+import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import * as express from 'express';
 import * as routing from './utils/routing';
@@ -7,7 +7,7 @@ import * as render from './template/render';
 import * as defaultStyles from './template/styles';
 
 const app = express();
-firebase.firestore().settings({ timestampsInSnapshots: true });
+admin.firestore().settings({ timestampsInSnapshots: true });
 
 export * from './cloud_functions';
 export const tanam = functions.https.onRequest(app);
@@ -15,6 +15,10 @@ export interface TanamConfig {
   adminUrl?: string;
 }
 export function initializeApp(tanamConfig: TanamConfig = {}) {
+  if (admin.apps.length === 0) {
+    throw new Error('You must initialize Firebase Admin before Tanam.');
+  }
+
   const adminUrl = tanamConfig.adminUrl || 'admin';
 
   app.use(`/${adminUrl}/`, express.static('./admin_client'));
@@ -25,7 +29,6 @@ export function initializeApp(tanamConfig: TanamConfig = {}) {
   app.get('/manifest.json', handleWebManifestReq);
   app.get('*.css', handleCssRequest);
   app.get('**', handlePageRequest);
-
 }
 
 async function handleCssRequest(request: express.Request, response: express.Response) {
@@ -42,7 +45,7 @@ async function handleCssRequest(request: express.Request, response: express.Resp
 }
 
 async function handleWebManifestReq(request: express.Request, response: express.Response) {
-  const webManifest = await firebase.database().ref('/config/manifest').once('value');
+  const webManifest = await admin.database().ref('/config/manifest').once('value');
 
   if (!webManifest.exists()) {
     response.status(404).send('Not found.');
