@@ -6,7 +6,6 @@ import * as cache from './utils/cache';
 import * as render from './template/render';
 import * as defaultStyles from './template/styles';
 
-firebase.initializeApp();
 const app = express();
 firebase.firestore().settings({ timestampsInSnapshots: true });
 
