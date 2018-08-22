@@ -8,7 +8,7 @@ const defaultCacheConfig = {
 };
 
 export function purgeCache(host: string, path: string) {
-  console.log(`Purging cache: ${host}${path}`);
+  console.log(`[purgeCache] ${host}${path}`);
   const opts = {
     hostname: host,
     port: 443,
@@ -17,12 +17,15 @@ export function purgeCache(host: string, path: string) {
   };
 
   return new Promise((resolve, _) => {
-    https.request(opts, resolve);
+    https.get(opts, (res) => {
+      console.log(`[purgeCache] Finished request: ${res.statusCode} ${res.statusMessage}`);
+      resolve(res);
+    });
   });
 }
 
 export function heatCache(host: string, path: string) {
-  console.log(`Heating cache: ${host}${path}`);
+  console.log(`[heatCache] ${host}${path}`);
   const opts = {
     hostname: host,
     port: 443,
@@ -31,7 +34,10 @@ export function heatCache(host: string, path: string) {
   };
 
   return new Promise((resolve, _) => {
-    https.get(opts, resolve);
+    https.get(opts, (res) => {
+      console.log(`[heatCache] Finished request: ${res.statusCode} ${res.statusMessage}`);
+      resolve(res);
+    });
   });
 }
 
