@@ -27,8 +27,8 @@ The default values for client/browser cache and server/CDN cache are set in
 Configure alternative caching values with cloud functions config.
 
 ```bash
-firebase functions:config:set cache.serverAge=12345
-firebase functions:config:set cache.clientAge=123
+firebase functions:config:set cache.server_age=12345
+firebase functions:config:set cache.client_age=123
 ```
 
 
