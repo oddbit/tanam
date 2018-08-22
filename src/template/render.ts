@@ -49,7 +49,7 @@ export async function renderPage(templateData: TemplateData) {
 export async function buildTemplateData(firestoreDocument: firebase.firestore.DocumentSnapshot) {
   const docData = firestoreDocument.data();
   return {
-    theme: (await firebase.database().ref('site/settings/theme').once('value')).val() || 'default',
+    theme: await getSiteThemeName(),
     template: docData.template,
     permalink: docData.permalink,
     site: await buildSiteInfo(),
@@ -128,8 +128,12 @@ function buildContextMeta(firestoreDocument: firebase.firestore.DocumentSnapshot
   } as ContextMeta;
 }
 
+async function getSiteThemeName() {
+  return (await firebase.database().ref('site/settings/theme').once('value')).val() || 'default';
+}
+
 export async function renderStylesheet(fileUrl: string) {
-  const theme = (await firebase.database().ref('site/settings/theme').once('value')).val() || 'default';
+  const theme = getSiteThemeName();
   const stylesheetFile = firebase.storage().bucket().file(`/themes/${theme}${fileUrl}`);
   const [stylesheetExists] = await stylesheetFile.exists();
 
