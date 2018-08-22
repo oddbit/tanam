@@ -4,8 +4,6 @@ import * as express from 'express';
 import * as routing from './utils/routing';
 import * as cache from './utils/cache';
 import * as render from './template/render';
-import * as defaultStyles from './template/styles';
-
 
 export interface TanamConfig {
   adminUrl?: string;
@@ -24,7 +22,7 @@ export function initializeApp(tanamConfig: TanamConfig = {}) {
 
   admin.firestore().settings({ timestampsInSnapshots: true });
 
-  const appConfig =  { ...defaultConfig, ...(tanamConfig || {}) };
+  const appConfig = { ...defaultConfig, ...(tanamConfig || {}) };
 
   app.use(`/${appConfig.adminUrl}/`, express.static('./admin_client'));
   app.use(`/${appConfig.adminUrl}/**`, (req: express.Request, res: express.Response) => {
@@ -37,16 +35,11 @@ export function initializeApp(tanamConfig: TanamConfig = {}) {
 }
 
 async function handleCssRequest(request: express.Request, response: express.Response) {
-  const documents = await routing.getFirestoreDocument(request.url);
+  const cssContent = await render.renderStylesheet(request.url);
 
   response.set('Content-Type', 'text/css');
 
-  if (documents.length === 0) {
-    response.send(defaultStyles.styles);
-    return;
-  }
-
-
+  response.send(cssContent);
 }
 
 async function handleWebManifestReq(request: express.Request, response: express.Response) {

@@ -1,6 +1,7 @@
 import * as firebase from 'firebase-admin';
 import * as handlebars from 'handlebars';
 import * as defaultTemplate from './default';
+import * as defaultStyles from './styles';
 
 export interface SiteInfo {
   name: string;
@@ -124,4 +125,21 @@ function buildContextMeta(firestoreDocument: firebase.firestore.DocumentSnapshot
     updatedAt: firestoreDocument.updateTime.toDate(),
     readAt: firestoreDocument.readTime.toDate()
   } as ContextMeta;
+}
+
+export async function renderStylesheet(fileUrl: string) {
+  const theme = (await firebase.database().ref('site/settings/theme').once('value')).val() || 'default';
+  const stylesheetFile = firebase.storage().bucket().file(`/themes/${theme}${fileUrl}`);
+  const [stylesheetExists] = await stylesheetFile.exists();
+
+  if (!stylesheetExists) {
+    console.error(`No stylesheet file "${fileUrl}" in theme "${theme}"`);
+
+    return defaultStyles.styles;
+  }
+
+  console.log('Found stylesheet file');
+  const stylesheet = (await stylesheetFile.download())[0].toString('utf8');
+
+  return stylesheet;
 }
