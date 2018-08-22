@@ -30,8 +30,6 @@ export function initializeApp(tanamConfig: TanamConfig = {}) {
     throw new Error('You must initialize Firebase Admin before Tanam.');
   }
 
-  admin.firestore().settings({ timestampsInSnapshots: true });
-
   const appConfig = { ...defaultConfig, ...(tanamConfig || {}) };
 
   app.use(`/${appConfig.adminUrl}/`, express.static('./admin_client'));
