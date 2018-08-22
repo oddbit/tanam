@@ -2,7 +2,6 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import * as express from 'express';
 import * as handlers from './handlers';
-import * as cache from './utils/cache';
 
 admin.initializeApp();
 
@@ -27,4 +26,3 @@ export function initializeApp(tanamConfig: TanamConfig = {}) {
   app.get('/manifest.json', handlers.handleWebManifestReq);
   app.get('**', handlers.handleRequest);
 }
-
