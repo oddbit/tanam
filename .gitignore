@@ -65,3 +65,5 @@ dist/
 
 \.vscode
 \.idea/
+
+src/admin_client/src/firebaseConfig.js
