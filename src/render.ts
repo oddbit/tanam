@@ -126,7 +126,7 @@ async function injectTemplate(template: string, html: string) {
 async function buildSiteInfo() {
   const defaultData: SiteInfo = {
     name: process.env.GCLOUD_PROJECT,
-    domain: `${process.env.GCLOUD_PROJECT}.firebaseapp.com`
+    domain: await site.getDomain()
   };
 
   const siteInfoData = (await admin.database().ref('site/info').once('value')).val() || {};

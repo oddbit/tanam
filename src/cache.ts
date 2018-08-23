@@ -1,6 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as https from 'https';
 import { firestore } from 'firebase-admin';
+import * as site from './site';
 
 export type TanamCacheType = 'purgeable' | 'stylesheet' | 'javascript' | 'image';
 
@@ -39,13 +40,20 @@ export function getCacheHeader(type: TanamCacheType): string {
 export async function onDocWriteUpdateCache(snap: functions.Change<firestore.DocumentSnapshot>, context: functions.EventContext) {
   console.log(`${context.eventType} ${context.params.type}/${context.params.documentId}`);
   const docBeforeChange = snap.before.data();
+
+  const domain = await site.getDomain();
+  console.log(`Site domain: ${domain}`);
   if (snap.before.exists && !!docBeforeChange.path) {
-    await requestPurge(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, docBeforeChange.path[0]);
+    await Promise.all([
+      // Sitemap will only be purged, not heated. Let it lazily be triggered by crawlers.
+      requestPurge(domain, '/sitemap.xml'),
+      requestPurge(domain, docBeforeChange.path[0])
+    ]);
   }
 
   const docAfterChange = snap.after.data();
   if (snap.after.exists && !!docAfterChange.path) {
-    await requestHeat(`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, docAfterChange.path[0]);
+    await requestHeat(domain, docAfterChange.path[0]);
   }
 
   return null;
