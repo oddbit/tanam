@@ -30,6 +30,28 @@ export interface TemplateData {
   contextMeta: ContextMeta;   // Meta data for the page or post to render
 }
 
+export async function renderSitemap(docs: admin.firestore.DocumentSnapshot[]) {
+  const domain = await site.getDomain();
+  const siteMapEntries = docs.map(doc => {
+    const docData = doc.data();
+    const lastModified = docData.modifiedAt || doc.updateTime.toDate();
+    return !docData.path ? '' : `
+      <url>
+        <loc>https://${domain}${docData.path[0]}</loc>
+        <lastmod>${lastModified.toISOString().substr(0, 10)}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+      </url>
+      `;
+  });
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      ${siteMapEntries.join('\n')}
+    </urlset>
+  `;
+}
+
 export async function renderPage(doc: admin.firestore.DocumentSnapshot) {
   const templateData = await buildTemplateData(doc);
   console.log(`Render page: theme=${templateData.theme}, template=${templateData.template}`);
