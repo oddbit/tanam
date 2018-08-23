@@ -28,7 +28,6 @@ const CONFIG_DEFAULT: { [key: string]: CacheConfig; } = {
     max_age: 60 * 10
   }
 };
-export const firebaseFunctionsDocPath = '/{type}/{documentId}';
 
 export function getCacheHeader(type: TanamCacheType): string {
   const config = { ...CONFIG_DEFAULT, ...(functions.config().cache || {}) };
@@ -37,7 +36,7 @@ export function getCacheHeader(type: TanamCacheType): string {
   return `public, max-age=${typeConfig.max_age}, s-maxage=${typeConfig.s_max_age}`;
 }
 
-export async function onDocWriteUpdateCache(snap: functions.Change<firestore.DocumentSnapshot>, context: functions.EventContext): Promise<any> {
+export const tanam_onDocWriteUpdateCache = functions.firestore.document('/{type}/{documentId}').onWrite(async (snap, context) => {
   console.log(`${context.eventType} ${context.params.type}/${context.params.documentId}`);
   const docBeforeChange = snap.before.data();
 
@@ -57,7 +56,7 @@ export async function onDocWriteUpdateCache(snap: functions.Change<firestore.Doc
   }
 
   return null;
-}
+});
 
 export function requestPurge(host: string, path: string) {
   console.log(`[purgeCache] ${host}${path}`);
