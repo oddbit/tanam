@@ -1,18 +1,17 @@
 import * as admin from 'firebase-admin';
-import * as functions from 'firebase-functions';
 import * as express from 'express';
-import * as routing from './utils/routing';
-import * as cache from './utils/cache';
-import * as render from './template/render';
+import * as site from './site';
+import * as cache from './cache';
+import * as render from './render';
 
 const supportedContentTypes = {
-  'image': /\.(gif|jpg|jpeg|tiff|png)$/i,
+  'image/jpeg': /\.(gif|jpg|jpeg|tiff|png)$/i,
   'text/css': /\.(css)$/i,
   'text/javascript': /\.(js)$/i
 };
 
 export async function handleWebManifestReq(request: express.Request, response: express.Response) {
-  const webManifest = await admin.database().ref('web_manifest').once('value');
+  const webManifest = await getHostingFile(request.url);
 
   if (!webManifest.exists()) {
     console.log(`[HTTP 404] No web manifest present`);
@@ -43,7 +42,7 @@ export function handleRequest(request: express.Request, response: express.Respon
 
 function getContentType(url: string) {
   for (const contentType in supportedContentTypes) {
-    if (supportedContentTypes[contentType]) {
+    if (supportedContentTypes[contentType].test(url)) {
       return contentType;
     }
   }
@@ -51,7 +50,7 @@ function getContentType(url: string) {
 }
 
 async function handleTextContentRequest(request: express.Request, response: express.Response, contentType: string) {
-  const theme = await render.getSiteThemeName();
+  const theme = await site.getThemeName();
   const contentFile = admin.storage().bucket().file(`/themes/${theme}${request.url}`);
   const [contentExists] = await contentFile.exists();
 
@@ -61,19 +60,19 @@ async function handleTextContentRequest(request: express.Request, response: expr
     return;
   }
 
-  const [content] = await contentFile.download();
-  console.log(`File size: ${content.byteLength} bytes`);
+  const [fileContent] = await contentFile.download();
+  console.log(`File size: ${fileContent.byteLength} bytes`);
 
   // Set this header so that we can inspect and verify whether we got a cached document or not.
   response.set('Tanam-Created', new Date().toUTCString());
   response.set('Content-Type', `${contentType}; charset=utf-8`);
-  response.set('Cache-Control', `public, max-age=600, s-maxage=${60 * 60}`);
-  response.send(content.toString('utf8'));
+  response.set('Cache-Control', cache.getCacheHeader('stylesheet'));
+  response.send(fileContent.toString('utf8'));
 }
 
 async function handlePageRequest(request: express.Request, response: express.Response) {
   // This is the corresponding Firestore document that is mapped by the URL
-  const documents = await routing.getFirestoreDocument(request.url);
+  const documents = await getFirestoreDocument(request.url);
 
   if (documents.length === 0) {
     console.log(`[HTTP 404] document found for: ${request.url}`);
@@ -87,21 +86,31 @@ async function handlePageRequest(request: express.Request, response: express.Res
     return;
   }
 
-  const templateData = await render.buildTemplateData(documents[0]);
-  const pageHtml = await render.renderPage(templateData);
+  const contentDoc = documents[0];
+  const pageHtml = await render.renderPage(contentDoc);
 
-  // Set this header so that we can inspect and verify whether we got a cached document or not.
   response.set('Tanam-Created', new Date().toUTCString());
-
-  // Use this for ability to link back to which document that was actually rendered
-  response.set('Tanam-Id', templateData.contextMeta.docRef);
-
-  // We can cache the document for indefinite time. Because we manually purge cache on all document changes
-  // via cloud function triggers
-  const serverCache = cache.getServerCacheAge(functions.config());
-  const clientCache = cache.getClientCacheAge(functions.config());
-  console.log(`Setting cache options: clientAge=${clientCache}, serverAge=${serverCache}`);
-  response.set('Cache-Control', `public, max-age=${clientCache}, s-maxage=${serverCache}`);
+  response.set('Tanam-Id', contentDoc.ref.path);
+  response.set('Cache-Control', cache.getCacheHeader('purgeable'));
   response.send(pageHtml);
 }
 
+async function getFirestoreDocument(url: string) {
+  const collections = await admin.firestore().getCollections();
+  const documents = [];
+
+  for (const collection of collections) {
+    const snap = await collection.where('path', 'array-contains', url).get();
+    snap.docs.forEach(doc => {
+      documents.push(doc);
+    });
+  }
+
+  return documents;
+}
+
+async function getHostingFile(url: string) {
+  const normalizedName = url.replace('.', '_');
+  const fileRef = await admin.database().ref('files').child(normalizedName).once('value');
+  return fileRef.exists() ? fileRef.val() : null;
+}

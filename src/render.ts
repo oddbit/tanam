@@ -1,6 +1,7 @@
-import * as firebase from 'firebase-admin';
+import * as admin from 'firebase-admin';
 import * as handlebars from 'handlebars';
-import * as defaultTemplate from './default';
+import * as site from './site';
+import * as templates from './templates';
 
 export interface SiteInfo {
   name: string;
@@ -29,14 +30,10 @@ export interface TemplateData {
   contextMeta: ContextMeta;   // Meta data for the page or post to render
 }
 
-/**
- * Render the page by fetching the "master" template to render the page with.
- *
- * @param templateData
- */
-export async function renderPage(templateData: TemplateData) {
+export async function renderPage(doc: admin.firestore.DocumentSnapshot) {
+  const templateData = await buildTemplateData(doc);
   console.log(`Render page: theme=${templateData.theme}, template=${templateData.template}`);
-  const masterTemplateHtml = await injectTemplate(templateData.theme, templateData.template, `{% include ${templateData.template}.tmpl.html %}`);
+  const masterTemplateHtml = await injectTemplate(templateData.template, `{% include ${templateData.template}.tmpl.html %}`);
 
   // Compile and render the whole page
   return handlebars.compile(masterTemplateHtml)({
@@ -44,10 +41,10 @@ export async function renderPage(templateData: TemplateData) {
   });
 }
 
-export async function buildTemplateData(firestoreDocument: firebase.firestore.DocumentSnapshot) {
+async function buildTemplateData(firestoreDocument: admin.firestore.DocumentSnapshot) {
   const docData = firestoreDocument.data();
   return {
-    theme: await getSiteThemeName(),
+    theme: await site.getThemeName(),
     template: docData.template,
     permalink: docData.permalink,
     site: await buildSiteInfo(),
@@ -72,20 +69,18 @@ function findTemplateInserts(html) {
 /**
  * Injects one template file into another where it is marked up with "include" statement (i.e. `{% include filename.tmpl.html %}`)
  *
- * @param theme Name of theme
  * @param template Name of template file
  * @param html The HTML string in which to inject the content of `template`
  */
-async function injectTemplate(theme: string, template: string, html: string) {
-  console.log(`Injecting template into html: theme=${theme}, template=${template}`);
-  const templateFile = firebase.storage().bucket().file(`/themes/${theme}/${template}.tmpl.html`);
-
+async function injectTemplate(template: string, html: string) {
+  console.log(`Injecting template into html: ${template}`);
+  const templateFile = await getTemplateFile(template);
   const [templateFileExists] = await templateFile.exists();
 
   if (!templateFileExists) {
-    console.error(`No file template file "${template}" in theme "${theme}"`);
+    console.error(`No template file with name: ${template}`);
 
-    if (!(template in defaultTemplate.templateMap)) {
+    if (!(template in templates.tanamDefaultTheme)) {
       console.error(`No default template for "${template}" either. Will return content "as is".`);
       return html;
     }
@@ -94,13 +89,13 @@ async function injectTemplate(theme: string, template: string, html: string) {
   const regexp = RegExp(`{%\\s+include\\s+${template}\\.tmpl\\.html\\s*%}`, 'gi');
   let templateHtml = templateFileExists
     ? (await templateFile.download())[0].toString('utf8')
-    : defaultTemplate.templateMap[template];
+    : templates.tanamDefaultTheme[template];
 
   // Loop to see if there are any embedded template inserts in the template.
   // If so recursively inject those templates into this template.
   for (const embeddedTemplate of findTemplateInserts(templateHtml)) {
     console.log(`Found embedded template "${embeddedTemplate}"`);
-    templateHtml = await injectTemplate(theme, embeddedTemplate, templateHtml);
+    templateHtml = await injectTemplate(embeddedTemplate, templateHtml);
   }
 
   return html.replace(regexp, templateHtml);
@@ -112,11 +107,11 @@ async function buildSiteInfo() {
     domain: `${process.env.GCLOUD_PROJECT}.firebaseapp.com`
   };
 
-  const siteInfoData = (await firebase.database().ref('site/info').once('value')).val() || {};
+  const siteInfoData = (await admin.database().ref('site/info').once('value')).val() || {};
   return { ...defaultData, ...siteInfoData } as SiteInfo;
 }
 
-function buildContextMeta(firestoreDocument: firebase.firestore.DocumentSnapshot) {
+function buildContextMeta(firestoreDocument: admin.firestore.DocumentSnapshot) {
   return {
     docId: firestoreDocument.id,
     docRef: firestoreDocument.ref.path,
@@ -126,6 +121,8 @@ function buildContextMeta(firestoreDocument: firebase.firestore.DocumentSnapshot
   } as ContextMeta;
 }
 
-export async function getSiteThemeName() :Promise<string> {
-  return (await firebase.database().ref('site/settings/theme').once('value')).val() || 'default';
+async function getTemplateFile(template: string) {
+  const theme = await site.getThemeName();
+  console.log(`Get template file '${template}' for theme '${theme}'`);
+  return admin.storage().bucket().file(`/themes/${theme}/${template}.tmpl.html`);
 }
