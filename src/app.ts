@@ -18,6 +18,7 @@ const tanamDefaultAppConfig: TanamConfig = {
 export const app = express();
 export function initializeApp(tanamConfig: TanamConfig = {}) {
   const appConfig = { ...tanamDefaultAppConfig, ...(tanamConfig || {}) };
+  admin.firestore().settings({ timestampsInSnapshots: true});
 
   app.get('/manifest.json', handlers.handleWebManifestReq);
   app.get('/robots.txt', handlers.handleRobotsReq);
