@@ -1,22 +1,15 @@
 import * as admin from 'firebase-admin';
-import * as functions from 'firebase-functions';
 import * as express from 'express';
 import * as handlers from './handlers';
 
-admin.initializeApp();
-
-export interface TanamConfig {
-  adminUrl?: string;
+if (admin.apps.length === 0) {
+  admin.initializeApp();
 }
-const defaultConfig: TanamConfig = {
-  adminUrl: 'admin'
-};
 
-const app = express();
-export * from './cloud_functions';
-export const tanam = functions.https.onRequest(app);
+export * from './cache';
+export const app = express();
 export function initializeApp(tanamConfig: TanamConfig = {}) {
-  const appConfig = { ...defaultConfig, ...(tanamConfig || {}) };
+  const appConfig = { ...tanamDefaultAppConfig, ...(tanamConfig || {}) };
 
   app.use(`/${appConfig.adminUrl}/`, express.static('./admin_client'));
   app.use(`/${appConfig.adminUrl}/**`, (req: express.Request, res: express.Response) => {
@@ -26,3 +19,11 @@ export function initializeApp(tanamConfig: TanamConfig = {}) {
   app.get('/manifest.json', handlers.handleWebManifestReq);
   app.get('**', handlers.handleRequest);
 }
+
+export interface TanamConfig {
+  adminUrl?: string;
+}
+
+const tanamDefaultAppConfig: TanamConfig = {
+  adminUrl: 'admin'
+};

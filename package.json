@@ -46,7 +46,7 @@
     "debug": "^3.1.0",
     "mocha": "^5.1.1",
     "tslint": "^5.8.0",
-    "typescript": "^2.5.3"
+    "typescript": "^3.0.1"
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",

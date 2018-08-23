@@ -1,6 +1,6 @@
-export const templateMap = {};
+export const tanamDefaultTheme = {};
 
-templateMap['header'] = `
+tanamDefaultTheme['header'] = `
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,9 +9,11 @@ templateMap['header'] = `
 </head>
 `;
 
-templateMap['footer'] = `</html>`;
+tanamDefaultTheme['footer'] = `
+</html>
+`;
 
-templateMap['page'] = `
+tanamDefaultTheme['page'] = `
 {% include header.tmpl.html %}
 <body>
   {{ context.body }}
@@ -19,7 +21,7 @@ templateMap['page'] = `
 {% include footer.tmpl.html %}
 `;
 
-templateMap['blog'] = `
+tanamDefaultTheme['blog'] = `
 {% include header.tmpl.html %}
 <body>
   <h1>{{ context.title }} <h1>
