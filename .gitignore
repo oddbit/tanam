@@ -67,3 +67,4 @@ dist/
 \.idea/
 
 src/admin_client/src/firebaseConfig.js
+*.cache
