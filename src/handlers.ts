@@ -5,7 +5,16 @@ import * as cache from './cache';
 import * as render from './render';
 
 const supportedContentTypes = {
-  'image/jpeg': /\.(gif|jpg|jpeg|tiff|png)$/i,
+  'font/woff': /\.(woff)$/i,
+  'font/woff2': /\.(woff2)$/i,
+  'image/jpeg': /\.(jpg|jpeg)$/i,
+  'image/gif': /\.(gif)$/i,
+  'image/png': /\.(png)$/i,
+  'image/tiff': /\.(tif|tiff)$/i,
+  'image/webp': /\.(webp)$/i,
+  'image/bmp': /\.(bmp)$/i,
+  'image/ico': /\.(ico)$/i,
+  'image/svg+xml': /\.(svg)$/i,
   'text/css': /\.(css)$/i,
   'text/javascript': /\.(js)$/i
 };
@@ -58,18 +67,44 @@ export async function handleRequest(request: express.Request, response: express.
 
   if (contentType.startsWith('text')) {
     await handleTextContentRequest(request, response, contentType);
+  } else if (contentType.startsWith('image')) {
+    await handleBinaryRequest(request, response, contentType);
   } else {
     await handlePageRequest(request, response);
   }
 }
 
 function getContentType(url: string) {
+  console.log(`Resolving content type for: ${url}`);
   for (const contentType in supportedContentTypes) {
     if (supportedContentTypes[contentType].test(url)) {
+      console.log(`Content type ${contentType} for: ${url}`);
       return contentType;
     }
   }
+
+  console.log(`No special content type found for: ${url}`);
   return 'default';
+}
+
+async function handleBinaryRequest(request: express.Request, response: express.Response, contentType: string) {
+  const theme = await site.getThemeName();
+  const contentFile = admin.storage().bucket().file(`/themes/${theme}${request.url}`);
+  const [contentExists] = await contentFile.exists();
+
+  if (!contentExists) {
+    console.log(`[HTTP 404] No media file "${request.url}" in theme "${theme}"`);
+    response.status(404).send(`Not found: ${request.url}`);
+    return;
+  }
+
+  const [fileContent] = await contentFile.download();
+  console.log(`File size: ${fileContent.byteLength} bytes`);
+
+  response.set('Tanam-Created', new Date().toUTCString());
+  response.set('Content-Type', contentType);
+  response.set('Cache-Control', cache.getCacheHeader('image'));
+  response.send(fileContent);
 }
 
 async function handleTextContentRequest(request: express.Request, response: express.Response, contentType: string) {
@@ -78,7 +113,7 @@ async function handleTextContentRequest(request: express.Request, response: expr
   const [contentExists] = await contentFile.exists();
 
   if (!contentExists) {
-    console.log(`[HTTP 404] No content file file "${request.url}" in theme "${theme}"`);
+    console.log(`[HTTP 404] No content file "${request.url}" in theme "${theme}"`);
     response.status(404).send(`Not found: ${request.url}`);
     return;
   }
@@ -86,7 +121,6 @@ async function handleTextContentRequest(request: express.Request, response: expr
   const [fileContent] = await contentFile.download();
   console.log(`File size: ${fileContent.byteLength} bytes`);
 
-  // Set this header so that we can inspect and verify whether we got a cached document or not.
   response.set('Tanam-Created', new Date().toUTCString());
   response.set('Content-Type', `${contentType}; charset=utf-8`);
   response.set('Cache-Control', cache.getCacheHeader('stylesheet'));
@@ -94,7 +128,6 @@ async function handleTextContentRequest(request: express.Request, response: expr
 }
 
 async function handlePageRequest(request: express.Request, response: express.Response) {
-  // This is the corresponding Firestore document that is mapped by the URL
   const documents = await getFirestoreDocuments(request.url);
 
   if (documents.length === 0) {
