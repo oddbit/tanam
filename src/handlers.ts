@@ -10,8 +10,8 @@ const supportedContentTypes = {
   'text/javascript': /\.(js)$/i
 };
 
-export async function handleWebManifestReq(request: express.Request, response: express.Response) {
-  const webManifest = await getHostingFile(request.url);
+export async function handleWebManifestReq(_, response: express.Response) {
+  const webManifest = await getPublicHtmlFile('manifest');
 
   if (!webManifest.exists()) {
     console.log(`[HTTP 404] No web manifest present`);
@@ -19,24 +19,52 @@ export async function handleWebManifestReq(request: express.Request, response: e
     return;
   }
 
-  // Set this header so that we can inspect and verify whether we got a cached document or not.
-  response.set('Tanam-Created', new Date().toUTCString());
-  response.set('Cache-Control', `public, max-age=600, s-maxage=${60 * 60}`);
+  response.set('Cache-Control', cache.getCacheHeader('purgeable'));
   response.json(webManifest.val());
 }
 
-export function handleRequest(request: express.Request, response: express.Response) {
+export async function handleRobotsReq(_, response: express.Response) {
+  const robotsFile = await getPublicHtmlFile('robots');
+
+  if (!robotsFile.exists()) {
+    console.log(`[HTTP 404] No robots.txt file present`);
+    response.status(404).send('Not found.');
+    return;
+  }
+
+  response.set('Cache-Control', cache.getCacheHeader('purgeable'));
+  response.send(robotsFile.val());
+}
+
+
+export async function handleSitemapReq(_, response: express.Response) {
+  const documents = await getFirestoreDocuments();
+  if (documents.length === 0) {
+    console.log(`[HTTP 404] No documents, so no sitemap present either`);
+    response.status(404).send('Not found.');
+  }
+
+  const siteMap = await render.renderSitemap(documents);
+  response.set('Cache-Control', cache.getCacheHeader('purgeable'));
+  response.set('Content-Type', 'text/xml; charset=utf-8');
+  response.send(siteMap);
+}
+
+export async function handleRequest(request: express.Request, response: express.Response) {
   console.log(`${request.method.toUpperCase()} ${request.url}`);
   const contentType = getContentType(request.url);
 
+  response.set('Tanam-Created', new Date().toUTCString());
+
   try {
     if (contentType.startsWith('text')) {
-      handleTextContentRequest(request, response, contentType);
+      await handleTextContentRequest(request, response, contentType);
     } else {
-      handlePageRequest(request, response);
+      await handlePageRequest(request, response);
     }
   } catch (err) {
-    response.status(err.code || 500).send(err.message);
+    console.error(err.message);
+    response.status(err.code || 500).send('Uh, oh. We had some issues.');
   }
 }
 
@@ -46,7 +74,7 @@ function getContentType(url: string) {
       return contentType;
     }
   }
-  return null;
+  return 'default';
 }
 
 async function handleTextContentRequest(request: express.Request, response: express.Response, contentType: string) {
@@ -72,7 +100,7 @@ async function handleTextContentRequest(request: express.Request, response: expr
 
 async function handlePageRequest(request: express.Request, response: express.Response) {
   // This is the corresponding Firestore document that is mapped by the URL
-  const documents = await getFirestoreDocument(request.url);
+  const documents = await getFirestoreDocuments(request.url);
 
   if (documents.length === 0) {
     console.log(`[HTTP 404] document found for: ${request.url}`);
@@ -95,21 +123,28 @@ async function handlePageRequest(request: express.Request, response: express.Res
   response.send(pageHtml);
 }
 
-async function getFirestoreDocument(url: string) {
+async function getFirestoreDocuments(url?: string) {
+  console.log(!!url ? `Find document matching URL: ${url}` : 'Get ALL documents n ALL collections');
   const collections = await admin.firestore().getCollections();
-  const documents = [];
 
+  console.log(`Found ${collections.length} collections: ${JSON.stringify(collections.map(coll => coll.path))}`);
+
+  const documents: admin.firestore.DocumentSnapshot[] = [];
   for (const collection of collections) {
-    const snap = await collection.where('path', 'array-contains', url).get();
+    const query = !!url ? collection.where('path', 'array-contains', url) : collection;
+    const snap = await query.get();
+
+    console.log(`Found ${snap.docs.length} documents in collection '${collection.path}'.`);
     snap.docs.forEach(doc => {
       documents.push(doc);
     });
   }
 
+  console.log(`Found ${documents.length} documents in total`);
   return documents;
 }
 
-async function getHostingFile(url: string) {
+async function getPublicHtmlFile(url: string) {
   const normalizedName = url.replace('.', '_');
   const fileRef = await admin.database().ref('files').child(normalizedName).once('value');
   return fileRef.exists() ? fileRef.val() : null;
