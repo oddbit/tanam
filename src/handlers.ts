@@ -56,15 +56,10 @@ export async function handleRequest(request: express.Request, response: express.
 
   response.set('Tanam-Created', new Date().toUTCString());
 
-  try {
-    if (contentType.startsWith('text')) {
-      await handleTextContentRequest(request, response, contentType);
-    } else {
-      await handlePageRequest(request, response);
-    }
-  } catch (err) {
-    console.error(err.message);
-    response.status(err.code || 500).send('Uh, oh. We had some issues.');
+  if (contentType.startsWith('text')) {
+    await handleTextContentRequest(request, response, contentType);
+  } else {
+    await handlePageRequest(request, response);
   }
 }
 
