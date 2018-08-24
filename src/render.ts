@@ -1,4 +1,5 @@
 import * as admin from 'firebase-admin';
+import * as fs from 'fs';
 import * as handlebars from 'handlebars';
 import * as site from './site';
 import * as templates from './templates';
@@ -147,4 +148,10 @@ async function getTemplateFile(template: string) {
   const theme = await site.getThemeName();
   console.log(`Get template file '${template}' for theme '${theme}'`);
   return admin.storage().bucket().file(`/themes/${theme}/${template}.tmpl.html`);
+}
+
+export function renderAdminPage(indexFileName: string, firebaseConfig: any) {
+  const indexFile = fs.readFileSync(indexFileName, 'utf8');
+  firebaseConfig['stringify'] = JSON.stringify(firebaseConfig);
+  return handlebars.compile(indexFile)({ fbConfig: firebaseConfig });
 }
