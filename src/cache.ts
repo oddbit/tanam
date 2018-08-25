@@ -1,6 +1,5 @@
 import * as functions from 'firebase-functions';
 import * as https from 'https';
-import { firestore } from 'firebase-admin';
 import * as site from './site';
 
 export type TanamCacheType = 'purgeable' | 'stylesheet' | 'javascript' | 'image';

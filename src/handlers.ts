@@ -1,3 +1,4 @@
+import * as url from 'url';
 import * as admin from 'firebase-admin';
 import * as express from 'express';
 import * as site from './site';
@@ -53,20 +54,40 @@ export async function handleSitemapReq(_, response: express.Response) {
     response.status(404).send('Not found.');
   }
 
-  const siteMap = await render.renderSitemap(documents);
+  const domain = await site.getDomain();
+  const siteMapEntries = documents.filter(doc => !!doc.data().path).map(doc => {
+    const docData = doc.data();
+    const lastModified = docData.modifiedAt || doc.updateTime.toDate();
+    return [
+      `  <url>`,
+      `    <loc>https://${domain}${docData.path[0]}</loc>`,
+      `    <lastmod>${lastModified.toISOString().substr(0, 10)}</lastmod>`,
+      `    <changefreq>weekly</changefreq>`,
+      `    <priority>0.5</priority>`,
+      `  </url>`
+    ].join('\n');
+  });
+
+  const siteMap = [
+    `<?xml version="1.0" encoding="UTF-8"?>`,
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
+    siteMapEntries.join('\n'),
+    `</urlset>`].join('\n');
+
   response.set('Cache-Control', cache.getCacheHeader('purgeable'));
   response.set('Content-Type', 'text/xml; charset=utf-8');
   response.send(siteMap);
 }
 
 export async function handleRequest(request: express.Request, response: express.Response) {
-  console.log(`${request.method.toUpperCase()} ${request.url}`);
-  const contentType = getContentType(request.url);
+  const requestUrl = url.parse(request.url).pathname;
+  console.log(`${request.method.toUpperCase()} ${requestUrl}`);
+  const contentType = getContentType(requestUrl);
 
   response.set('Tanam-Created', new Date().toUTCString());
 
   if (contentType.startsWith('text')) {
-    await handleTextContentRequest(request, response, contentType);
+    await handleTextAssetRequest(request, response, contentType);
   } else if (contentType.startsWith('image')) {
     await handleBinaryRequest(request, response, contentType);
   } else {
@@ -74,27 +95,29 @@ export async function handleRequest(request: express.Request, response: express.
   }
 }
 
-function getContentType(url: string) {
-  console.log(`Resolving content type for: ${url}`);
+function getContentType(requestUrl: string) {
+  console.log(`Resolving content type for: ${requestUrl}`);
   for (const contentType in supportedContentTypes) {
-    if (supportedContentTypes[contentType].test(url)) {
-      console.log(`Content type ${contentType} for: ${url}`);
+    if (supportedContentTypes[contentType].test(requestUrl)) {
+      console.log(`Content type ${contentType} for: ${requestUrl}`);
       return contentType;
     }
   }
 
-  console.log(`No special content type found for: ${url}`);
+  console.log(`No special content type found for: ${requestUrl}`);
   return 'default';
 }
 
 async function handleBinaryRequest(request: express.Request, response: express.Response, contentType: string) {
+  const requestUrl = url.parse(request.url).pathname;
   const theme = await site.getThemeName();
-  const contentFile = admin.storage().bucket().file(`/themes/${theme}${request.url}`);
+  const assetFilePath = `/themes/${theme}${requestUrl}`;
+  const contentFile = admin.storage().bucket().file(assetFilePath);
   const [contentExists] = await contentFile.exists();
 
   if (!contentExists) {
-    console.log(`[HTTP 404] No media file "${request.url}" in theme "${theme}"`);
-    response.status(404).send(`Not found: ${request.url}`);
+    console.log(`[HTTP 404] No media file: ${assetFilePath}`);
+    response.status(404).send(`Not found: ${requestUrl}`);
     return;
   }
 
@@ -107,14 +130,16 @@ async function handleBinaryRequest(request: express.Request, response: express.R
   response.send(fileContent);
 }
 
-async function handleTextContentRequest(request: express.Request, response: express.Response, contentType: string) {
+async function handleTextAssetRequest(request: express.Request, response: express.Response, contentType: string) {
+  const requestUrl = url.parse(request.url).pathname;
   const theme = await site.getThemeName();
-  const contentFile = admin.storage().bucket().file(`/themes/${theme}${request.url}`);
+  const assetFilePath = `/themes/${theme}${requestUrl}`;
+  const contentFile = admin.storage().bucket().file(assetFilePath);
   const [contentExists] = await contentFile.exists();
 
   if (!contentExists) {
-    console.log(`[HTTP 404] No content file "${request.url}" in theme "${theme}"`);
-    response.status(404).send(`Not found: ${request.url}`);
+    console.log(`[HTTP 404] No text asset file: ${assetFilePath}`);
+    response.status(404).send(`Not found: ${requestUrl}`);
     return;
   }
 
@@ -128,22 +153,24 @@ async function handleTextContentRequest(request: express.Request, response: expr
 }
 
 async function handlePageRequest(request: express.Request, response: express.Response) {
-  const documents = await getFirestoreDocuments(request.url);
+  const requestUrl = url.parse(request.url).pathname;
+  const documents = await getFirestoreDocuments(requestUrl);
 
   if (documents.length === 0) {
-    console.log(`[HTTP 404] document found for: ${request.url}`);
+    console.log(`[HTTP 404] document found for: ${requestUrl}`);
     response.status(404).send('Not found');
     return;
   }
 
   if (documents.length > 1) {
-    console.error(`[HTTP 500] URL '${request.url}' maps to ${documents.length} documents: ${JSON.stringify(documents.map(doc => doc.ref.path))}`);
+    const documentList = JSON.stringify(documents.map(doc => doc.ref.path));
+    console.error(`[HTTP 500] URL '${requestUrl}' maps to ${documents.length} documents: ${documentList}`);
     response.status(500).send('Database inconsistency. URL is not uniquely resolved.');
     return;
   }
 
   const contentDoc = documents[0];
-  const pageHtml = await render.renderPage(contentDoc);
+  const pageHtml = await render.renderDocument(contentDoc);
 
   response.set('Tanam-Created', new Date().toUTCString());
   response.set('Tanam-Id', contentDoc.ref.path);
@@ -151,15 +178,15 @@ async function handlePageRequest(request: express.Request, response: express.Res
   response.send(pageHtml);
 }
 
-async function getFirestoreDocuments(url?: string) {
-  console.log(!!url ? `Find document matching URL: ${url}` : 'Get ALL documents n ALL collections');
+async function getFirestoreDocuments(requestUrl?: string) {
+  console.log(!!requestUrl ? `Find document matching URL: ${requestUrl}` : 'Get ALL documents n ALL collections');
   const collections = await admin.firestore().getCollections();
 
   console.log(`Found ${collections.length} collections: ${JSON.stringify(collections.map(coll => coll.path))}`);
 
   const documents: admin.firestore.DocumentSnapshot[] = [];
   for (const collection of collections) {
-    const query = !!url ? collection.where('path', 'array-contains', url) : collection;
+    const query = !!requestUrl ? collection.where('path', 'array-contains', requestUrl) : collection;
     const snap = await query.get();
 
     console.log(`Found ${snap.docs.length} documents in collection '${collection.path}'.`);
@@ -172,8 +199,8 @@ async function getFirestoreDocuments(url?: string) {
   return documents;
 }
 
-async function getPublicHtmlFile(url: string) {
-  const normalizedName = url.replace('.', '_');
+async function getPublicHtmlFile(requestUrl: string) {
+  const normalizedName = requestUrl.replace('.', '_');
   const fileRef = await admin.database().ref('files').child(normalizedName).once('value');
   return fileRef.exists() ? fileRef.val() : null;
 }
