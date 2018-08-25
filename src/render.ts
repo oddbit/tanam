@@ -1,6 +1,7 @@
 import * as dust from "dustjs-linkedin";
 import * as site from "./site";
 import * as admin from "firebase-admin";
+import * as fs from "fs";
 
 export type ContentState = 'published' | 'unpublished';
 
@@ -26,7 +27,7 @@ dust.helpers.document = async (chunk, context, bodies, params) => {
 };
 
 dust.helpers.debugDump = async function(chunk, context) {
-  return JSON.stringify(context).replace(/&quot;/gi, '"');
+  return JSON.stringify(context);
 };
 
 dust.helpers.documents = async (chunk, context, bodies, params) => {
@@ -79,4 +80,21 @@ async function getTemplateFiles(theme: string) {
   const dustFiles = files.filter(file => file.name.endsWith('.dust'));
   console.log(`[getTemplateFiles] Found ${dustFiles.length} templates out of totally ${files.length} files.`);
   return dustFiles;
+}
+
+export function renderAdminPage(indexFileName: string, firebaseConfig: any) {
+  const indexFile = fs.readFileSync(indexFileName, 'utf8');
+  firebaseConfig['stringify'] = JSON.stringify(firebaseConfig);
+  return new Promise((resolve, reject) => {
+    dust.renderSource(indexFile, {fbConfig: firebaseConfig }, (err, out) => {
+      if (err) {
+        console.log(`Error rendering: ${JSON.stringify(err)}`);
+        reject(err);
+        return;
+      }
+
+      console.log(`[Finished rendering`);
+      resolve(out);
+    });
+  });
 }

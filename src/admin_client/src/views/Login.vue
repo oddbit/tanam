@@ -18,15 +18,21 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { CURRENT_USER } from '@/store/types';
+import { store } from '@/store';
+import { AUTO_LOGIN, CURRENT_USER } from '@/store/types';
 import firebase from 'firebase/app';
 import { firebaseUI } from '@/utils/firebase';
 
 const uiConfig = {
-  signInSuccessUrl: '/',
   signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
   tosUrl: '/#tos',
-  signInFlow: 'popup'
+  signInFlow: 'popup',
+  callbacks: {
+    signInSuccessWithAuthResult: function(authResult) {
+      store.dispatch(AUTO_LOGIN, authResult.user);
+      return false;
+    }
+  }
 };
 
 export default {

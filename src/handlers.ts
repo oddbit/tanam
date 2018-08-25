@@ -204,3 +204,7 @@ async function getPublicHtmlFile(requestUrl: string) {
   const fileRef = await admin.database().ref('files').child(normalizedName).once('value');
   return fileRef.exists() ? fileRef.val() : null;
 }
+
+export async function handleAdminPage(adminClientDir: string, firebaseConfig: any) {
+  return await render.renderAdminPage(adminClientDir, firebaseConfig);
+}
