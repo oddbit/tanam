@@ -31,8 +31,20 @@ dust.helpers.debugDump = async function(chunk, context) {
 };
 
 dust.helpers.documents = async (chunk, context, bodies, params) => {
-  const results = [];
-  return results;
+  const collectionPath = params.collection;
+  const limit = params.limit || 10;
+  const orderBy = params.orderBy || 'publishTime';
+  const sortOrder = params.sortOrder || 'desc';
+  console.log(`[dust documents] Fetch documents from: ${collectionPath}`);
+
+  const snap = await admin.firestore()
+    .collection(collectionPath)
+    .orderBy(orderBy, sortOrder)
+    .limit(parseInt(limit))
+    .get();
+
+  console.log(`[dust documents] Fetched ${snap.docs.length} documents`);
+  return snap.docs.map(doc => doc.data());
 };
 
 export async function renderDocument(document: admin.firestore.DocumentSnapshot) {
