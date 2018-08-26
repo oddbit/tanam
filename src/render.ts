@@ -5,26 +5,68 @@ import * as fs from "fs";
 
 export type ContentState = 'published' | 'unpublished';
 
-export interface ContentDocument {
-  data: { [key: string]: any };
-  path: string[];
-  publishTime: Date;
+export interface DocumentMeta {
+  id: string;
+  path: string;
+  createTime: Date;
   updateTime: Date;
-  status: ContentState;
-  template: string;
+  readTime: Date;
 }
 
+export class ContentDocument {
+  readonly id: string;
+  readonly meta: DocumentMeta;
+  readonly data: { [key: string]: any };
+  readonly path: string[];
+  readonly publishTime: Date;
+  readonly updateTime: Date;
+  readonly template: string;
+
+  constructor(document: admin.firestore.DocumentSnapshot) {
+    this.id = document.id;
+    this.meta = {
+      path: document.ref.path,
+      createTime: document.createTime.toDate(),
+      updateTime: document.updateTime.toDate(),
+      readTime: document.readTime.toDate()
+    } as DocumentMeta;
+
+    this.data = document.data().data;
+    this.path = (document.data().path as string[]).slice();
+    this.publishTime = document.data().publishTime;
+    this.updateTime = document.data().updateTime;
+    this.template = document.data().template;
+  }
+}
+
+export interface TemplateContext {
+  page: ContentDocument;
+  site: site.SiteInfo;
+}
+
+/**
+ * Fetch a single document for injection in template.
+ *
+ * @param chunk
+ * @param context
+ * @param bodies
+ * @param params
+ */
 dust.helpers.document = async (chunk, context, bodies, params) => {
   const documentPath = params.path;
   console.log(`[dust document] Fetch document: ${documentPath}`);
-  const snap = await admin.firestore().doc(documentPath).get();
-  return snap.data();
+  const doc = await admin.firestore().doc(documentPath).get();
+  return new ContentDocument(doc);
 };
 
-dust.helpers.debugDump = async function(chunk, context) {
-  return JSON.stringify(context);
-};
-
+/**
+ * Get a list of documents for injection in template.
+ *
+ * @param chunk
+ * @param context
+ * @param bodies
+ * @param params
+ */
 dust.helpers.documents = async (chunk, context, bodies, params) => {
   const collectionPath = params.collection;
   const limit = params.limit || 10;
@@ -34,16 +76,27 @@ dust.helpers.documents = async (chunk, context, bodies, params) => {
 
   const snap = await admin.firestore()
     .collection(collectionPath)
+    .where('status', '==', 'published')
     .orderBy(orderBy, sortOrder)
     .limit(parseInt(limit))
     .get();
 
   console.log(`[dust documents] Fetched ${snap.docs.length} documents`);
-  return snap.docs.map(doc => doc.data());
+  return snap.docs.map(doc => new ContentDocument(doc));
+};
+
+/**
+ * Psst, unofficial support for debug dumping context data.
+ *
+ * @param chunk
+ * @param context
+ */
+dust.helpers.debugDump = async function (chunk, context) {
+  return JSON.stringify(context);
 };
 
 export async function renderDocument(document: admin.firestore.DocumentSnapshot) {
-  const content = document.data() as ContentDocument;
+  const content = new ContentDocument(document);
   const theme = await site.getThemeName();
   const templateFiles = await getTemplateFiles(theme);
 
@@ -93,7 +146,7 @@ export function renderAdminPage(indexFileName: string, firebaseConfig: any) {
   const indexFile = fs.readFileSync(indexFileName, 'utf8');
   firebaseConfig['stringify'] = JSON.stringify(firebaseConfig);
   return new Promise((resolve, reject) => {
-    dust.renderSource(indexFile, {fbConfig: firebaseConfig }, (err, out) => {
+    dust.renderSource(indexFile, { fbConfig: firebaseConfig }, (err, out) => {
       if (err) {
         console.log(`Error rendering: ${JSON.stringify(err)}`);
         reject(err);
