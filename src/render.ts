@@ -15,15 +15,10 @@ export interface ContentDocument {
 }
 
 dust.helpers.document = async (chunk, context, bodies, params) => {
-  const rand = () => Math.random().toString(16).substr(2);
-  const id = rand();
-  return {
-    id: id,
-    data: {
-      title: `Document title (${id.substr(3)})`,
-      body: Array(10).map(rand).join(' ')
-    }
-  };
+  const documentPath = params.path;
+  console.log(`[dust document] Fetch document: ${documentPath}`);
+  const snap = await admin.firestore().doc(documentPath).get();
+  return snap.data();
 };
 
 dust.helpers.debugDump = async function(chunk, context) {
