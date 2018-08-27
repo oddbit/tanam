@@ -160,6 +160,11 @@ export function getPublicPathToStorageFile(storageFilePath: string) {
 }
 
 export const tanam_onFileChangeUpdateRegistry = functions.storage.object().onFinalize((object) => {
+  if (!object.name.startsWith('content/')) {
+    console.log(`File is not a user content file. Ignoring it.`);
+    return null;
+  }
+
   console.log(`File updated: gs://${object.bucket}/${object.name} (${object.md5Hash})`);
   const id = SHA256(object.bucket + object.name + object.timeCreated).toString().toLowerCase();
   const data = {
@@ -174,6 +179,11 @@ export const tanam_onFileChangeUpdateRegistry = functions.storage.object().onFin
 });
 
 export const tanam_onFileDeleteUpdateRegistry = functions.storage.object().onDelete(async (object) => {
+  if (!object.name.startsWith('content/')) {
+    console.log(`File is not a user content file. Ignoring it.`);
+    return null;
+  }
+
   console.log(`File deleted: gs://${object.bucket}/${object.name} (${object.md5Hash})`);
   const id = SHA256(object.bucket + object.name + object.timeCreated).toString().toLowerCase();
   return admin.database().ref(ContentFirebasePath.fileMetaData).child(id).remove();
