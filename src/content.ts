@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import * as url from 'url';
 import * as site from './site';
+import { SHA256 } from 'crypto-js';
 
 export type ContentState = 'published' | 'unpublished';
 export type TemplateType = 'dust';
@@ -29,29 +30,6 @@ interface ContentDocument {
   tags: string[];                 // Optional document tags
 }
 
-class ContentFileMeta {
-  readonly name: string;
-  readonly bucket: string;
-  readonly md5: string;
-  readonly updateTime: number;
-  readonly contentType: string;
-
-  constructor(fileObject: functions.storage.ObjectMetadata) {
-    this.name = fileObject.name;
-    this.bucket = fileObject.bucket;
-    this.md5 = fileObject.md5Hash;
-    this.updateTime = admin.database.ServerValue.TIMESTAMP;
-    this.contentType = fileObject.contentType;
-  }
-
-  isEqual(other: ContentFileMeta) {
-    return this.name === other.name && this.bucket === other.bucket && this.md5 === other.md5;
-  }
-
-  toString() {
-    return `gs://${this.bucket}/${this.name} (${this.md5})`;
-  }
-}
 /**
  * Page context class is the object that is passed into the template and can be accessed via the `page` attribute.
  */
@@ -182,30 +160,21 @@ export function getPublicPathToStorageFile(storageFilePath: string) {
 }
 
 export const tanam_onFileChangeUpdateRegistry = functions.storage.object().onFinalize((object) => {
-  const updatedFile = new ContentFileMeta(object);
-  console.log(`File updated: ${updatedFile}.`);
-  return admin.database().ref(ContentFirebasePath.fileMetaData).push(updatedFile);
+  console.log(`File updated: gs://${object.bucket}/${object.name} (${object.md5Hash})`);
+  const id = SHA256(object.bucket + object.name + object.timeCreated).toString().toLowerCase();
+  const data = {
+    bucket: object.bucket,
+    name: object.name,
+    md5: object.md5Hash,
+    updateTime: admin.database.ServerValue.TIMESTAMP,
+    contentType: object.contentType
+  };
+
+  return admin.database().ref(ContentFirebasePath.fileMetaData).child(id).set(data);
 });
 
 export const tanam_onFileDeleteUpdateRegistry = functions.storage.object().onDelete(async (object) => {
-  const promises = [];
-  const deletedFile = new ContentFileMeta(object);
-  console.log(`File deleted: ${deletedFile}.`);
-  const querySnap = await admin.database()
-    .ref(ContentFirebasePath.fileMetaData)
-    .orderByChild('md5')
-    .equalTo(deletedFile.md5)
-    .once('value');
-
-  querySnap.forEach(dataSnap => {
-    const foundFile = dataSnap.val() as ContentFileMeta;
-    if (deletedFile.isEqual(foundFile)) {
-      console.log(`Removing meta data at: ${dataSnap.ref.path}`);
-      promises.push(dataSnap.ref.remove());
-      return true;
-    }
-    return false;
-  });
-
-  return Promise.all(promises);
+  console.log(`File deleted: gs://${object.bucket}/${object.name} (${object.md5Hash})`);
+  const id = SHA256(object.bucket + object.name + object.timeCreated).toString().toLowerCase();
+  return admin.database().ref(ContentFirebasePath.fileMetaData).child(id).remove();
 });
