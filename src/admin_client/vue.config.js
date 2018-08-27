@@ -4,7 +4,7 @@ module.exports = {
       config.plugin('html').tap(args => {
         args[0].fbConfig = `
           <script>
-            window.__FIREBASE_CONFIG__ = {{{fbConfig.stringify}}};
+            window.__FIREBASE_CONFIG__ = {fbConfig|js|s};
           </script>
         `;
         return args;

@@ -67,7 +67,6 @@ export async function renderDocument(document: admin.firestore.DocumentSnapshot)
 export function renderAdminPage(indexFileName: string, firebaseConfig: any) {
 
   const indexFile = fs.readFileSync(indexFileName, 'utf8');
-  firebaseConfig['stringify'] = JSON.stringify(firebaseConfig);
   return new Promise((resolve, reject) => {
     dust.renderSource(indexFile, { fbConfig: firebaseConfig }, (err, out) => {
       if (err) {

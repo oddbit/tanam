@@ -2,8 +2,8 @@
   "name": "tanam",
   "version": "0.0.16",
   "description": "Pluggable CMS for Firebase",
-  "main": "dist/src/index.js",
-  "typings": "dist/src/index.d.ts",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "engines": {
     "node": "8"
   },

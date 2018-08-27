@@ -1,6 +1,7 @@
 import * as url from 'url';
 import * as admin from 'firebase-admin';
 import * as express from 'express';
+import * as path from 'path';
 import * as site from './site';
 import * as cache from './cache';
 import * as render from './render';
@@ -43,6 +44,32 @@ async function handleAssetRequest(request: express.Request, response: express.Re
   response.set('Tanam-Created', new Date().toUTCString());
   response.set('Cache-Control', cache.getCacheHeader('image'));
   response.send(fileContent);
+}
+
+async function handlePageRequest(request: express.Request, response: express.Response) {
+  const requestUrl = url.parse(request.url).pathname;
+  const documents = await content.getDocumentsByUrl(requestUrl);
+
+  if (documents.length === 0) {
+    console.log(`[HTTP 404] document found for: ${requestUrl}`);
+    response.status(404).send('Not found');
+    return;
+  }
+
+  if (documents.length > 1) {
+    const documentList = JSON.stringify(documents.map(doc => doc.ref.path));
+    console.error(`[HTTP 500] URL '${requestUrl}' maps to ${documents.length} documents: ${documentList}`);
+    response.status(500).send('Database inconsistency. URL is not uniquely resolved.');
+    return;
+  }
+
+  const contentDoc = documents[0];
+  const pageHtml = await render.renderDocument(contentDoc);
+
+  response.set('Tanam-Created', new Date().toUTCString());
+  response.set('Tanam-Id', contentDoc.ref.path);
+  response.set('Cache-Control', cache.getCacheHeader('purgeable'));
+  response.send(pageHtml);
 }
 
 export async function handlePublicDirectoryFileReq(request: express.Request, response: express.Response) {
@@ -122,32 +149,9 @@ function getContentType(requestUrl: string) {
   return 'default';
 }
 
-async function handlePageRequest(request: express.Request, response: express.Response) {
-  const requestUrl = url.parse(request.url).pathname;
-  const documents = await content.getDocumentsByUrl(requestUrl);
+export async function handleAdminPage(response: express.Response, adminClientDir: string, firebaseConfig: any) {
+  const indexFileName = path.join(adminClientDir, '/index.html');
+  const compiledHtml = await render.renderAdminPage(indexFileName, firebaseConfig);
 
-  if (documents.length === 0) {
-    console.log(`[HTTP 404] document found for: ${requestUrl}`);
-    response.status(404).send('Not found');
-    return;
-  }
-
-  if (documents.length > 1) {
-    const documentList = JSON.stringify(documents.map(doc => doc.ref.path));
-    console.error(`[HTTP 500] URL '${requestUrl}' maps to ${documents.length} documents: ${documentList}`);
-    response.status(500).send('Database inconsistency. URL is not uniquely resolved.');
-    return;
-  }
-
-  const contentDoc = documents[0];
-  const pageHtml = await render.renderDocument(contentDoc);
-
-  response.set('Tanam-Created', new Date().toUTCString());
-  response.set('Tanam-Id', contentDoc.ref.path);
-  response.set('Cache-Control', cache.getCacheHeader('purgeable'));
-  response.send(pageHtml);
-}
-
-export async function handleAdminPage(adminClientDir: string, firebaseConfig: any) {
-  return await render.renderAdminPage(adminClientDir, firebaseConfig);
+  response.send(compiledHtml);
 }
