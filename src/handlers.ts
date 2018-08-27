@@ -17,39 +17,33 @@ const supportedContentTypes = {
   'image/bmp': /\.(bmp)$/i,
   'image/ico': /\.(ico)$/i,
   'image/svg+xml': /\.(svg)$/i,
+  'text/plain': /\.(txt)$/i,
   'text/css': /\.(css)$/i,
-  'text/javascript': /\.(js)$/i
+  'text/javascript': /\.(js)$/i,
+  'application/json': /\.(json)$/i
 };
 
-export async function handleWebManifestReq(_, response: express.Response) {
-  const webManifest = await getPublicHtmlFile('manifest');
+export async function handlePublicDirectoryFileReq(request: express.Request, response: express.Response) {
+  const requestUrl = url.parse(request.url).pathname;
+  console.log(`${request.method.toUpperCase()} ${requestUrl}`);
+  const normalizedName = requestUrl.replace('.', '_');
+  const fileRef = await admin.database().ref('publicFiles').child(normalizedName).once('value');
 
-  if (!webManifest.exists()) {
-    console.log(`[HTTP 404] No web manifest present`);
+  if (!fileRef.exists()) {
+    console.log(`[HTTP 404] No ${requestUrl} file present`);
     response.status(404).send('Not found.');
     return;
   }
 
+  const contentType = getContentType(requestUrl);
   response.set('Cache-Control', cache.getCacheHeader('purgeable'));
-  response.json(webManifest.val());
+  response.set('Content-Type', `${contentType}; charset=utf-8`);
+  response.send(fileRef.val());
 }
 
-export async function handleRobotsReq(_, response: express.Response) {
-  const robotsFile = await getPublicHtmlFile('robots');
-
-  if (!robotsFile.exists()) {
-    console.log(`[HTTP 404] No robots.txt file present`);
-    response.status(404).send('Not found.');
-    return;
-  }
-
-  response.set('Cache-Control', cache.getCacheHeader('purgeable'));
-  response.send(robotsFile.val());
-}
-
-
-export async function handleSitemapReq(_, response: express.Response) {
-  const documents = await getFirestoreDocuments();
+export async function handleSitemapReq(request: express.Request, response: express.Response) {
+  console.log(`${request.method.toUpperCase()} ${request.url}`);
+  const documents = await content.getAllDocuments();
   if (documents.length === 0) {
     console.log(`[HTTP 404] No documents, so no sitemap present either`);
     response.status(404).send('Not found.');
@@ -111,6 +105,7 @@ function getContentType(requestUrl: string) {
 
 async function handleBinaryRequest(request: express.Request, response: express.Response, contentType: string) {
   const requestUrl = url.parse(request.url).pathname;
+  console.log(`${request.method.toUpperCase()} ${request.url}`);
   const theme = await site.getThemeName();
   const assetFilePath = `/themes/${theme}${requestUrl}`;
   const contentFile = admin.storage().bucket().file(assetFilePath);
@@ -177,14 +172,6 @@ async function handlePageRequest(request: express.Request, response: express.Res
   response.set('Tanam-Id', contentDoc.ref.path);
   response.set('Cache-Control', cache.getCacheHeader('purgeable'));
   response.send(pageHtml);
-}
-
-
-
-async function getPublicHtmlFile(requestUrl: string) {
-  const normalizedName = requestUrl.replace('.', '_');
-  const fileRef = await admin.database().ref('files').child(normalizedName).once('value');
-  return fileRef.exists() ? fileRef.val() : null;
 }
 
 export async function handleAdminPage(adminClientDir: string, firebaseConfig: any) {

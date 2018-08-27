@@ -66,6 +66,10 @@ export async function getDocumentByPath(documentPath: string) {
   return new PageContext(doc);
 }
 
+export function getAllDocuments() {
+  return getDocumentsByUrl();
+}
+
 export async function getDocumentsByUrl(requestUrl?: string) {
   const urlPath = !!requestUrl ? url.parse(requestUrl).pathname : '';
   console.log(!!requestUrl ? `Find document matching URL: ${requestUrl}` : 'Get ALL documents n ALL collections');

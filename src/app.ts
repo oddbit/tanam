@@ -27,8 +27,8 @@ export function initializeApp(tanamConfig: TanamConfig = {}) {
     const compiledHtml = await handlers.handleAdminPage(indexFileName, tanamConfig.firebaseConfig);
     res.send(compiledHtml);
   });
-  app.get('/manifest.json', handlers.handleWebManifestReq);
-  app.get('/robots.txt', handlers.handleRobotsReq);
+  app.get('/manifest.json', handlers.handlePublicDirectoryFileReq);
+  app.get('/robots.txt', handlers.handlePublicDirectoryFileReq);
   app.get('/sitemap.xml', handlers.handleSitemapReq);
   app.get('**', handlers.handleRequest);
 }
