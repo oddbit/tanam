@@ -31,7 +31,7 @@ export const tanam_onDocWriteUpdateCache = functions.firestore.document('/{type}
   console.log(`${context.eventType} ${context.params.type}/${context.params.documentId}`);
   const docBeforeChange = snap.before.data();
 
-  const domain = await site.getDomain();
+  const domain = await site.getPrimaryDomain();
   console.log(`[getCacheHeader] Site domain: ${domain}`);
   if (snap.before.exists && !!docBeforeChange.path) {
     await Promise.all([

@@ -15,7 +15,7 @@ export async function getThemeName(): Promise<string> {
   return (await admin.database().ref(SiteFirebasePath.themeName).once('value')).val() || 'default';
 }
 
-export async function getDomain(): Promise<string> {
+export async function getPrimaryDomain(): Promise<string> {
   return (await admin.database().ref(SiteFirebasePath.domain).once('value')).val() || `${process.env.GCLOUD_PROJECT}.firebaseapp.com`;
 }
 
@@ -31,7 +31,7 @@ export async function getDomains(): Promise<string[]> {
 export async function getSiteInfo() {
   const defaultData: SiteInfo = {
     name: process.env.GCLOUD_PROJECT,
-    domain: await getDomain()
+    domain: await getPrimaryDomain()
   };
 
   const siteInfoData = (await admin.database().ref('site/info').once('value')).val() || {};

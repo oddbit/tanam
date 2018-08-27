@@ -68,7 +68,18 @@ async function handlePageRequest(request: express.Request, response: express.Res
   response.set('Tanam-Created', new Date().toUTCString());
   response.set('Tanam-Id', contentDoc.ref.path);
   response.set('Cache-Control', cache.getCacheHeader());
-  response.send(pageHtml);
+
+  const primaryDomain = await site.getPrimaryDomain();
+  if (primaryDomain !== request.hostname) {
+    console.log(`[handlePageRequest] Request is on secondary domain '${request.hostname}'. Adding canonical link to: ${primaryDomain}`);
+    const htmlWithCanonicalLink = pageHtml
+    .replace(
+      /<\/head>/gi,
+      `<link rel="canonical" href="https://${primaryDomain}${request.url}" /></head>`);
+    response.send(htmlWithCanonicalLink);
+  } else {
+    response.send(pageHtml);
+  }
 }
 
 export async function handlePublicDirectoryFileReq(request: express.Request, response: express.Response) {
@@ -97,7 +108,7 @@ export async function handleSitemapReq(request: express.Request, response: expre
     response.status(404).send('Not found.');
   }
 
-  const domain = await site.getDomain();
+  const domain = await site.getPrimaryDomain();
   const siteMapEntries = documents.filter(doc => !!doc.data().path).map(doc => {
     const docData = doc.data();
     const lastModified = docData.modifiedAt || doc.updateTime.toDate();
@@ -125,7 +136,7 @@ export async function handleSitemapReq(request: express.Request, response: expre
 
 export async function handleRequest(request: express.Request, response: express.Response) {
   const requestUrl = url.parse(request.url).pathname;
-  console.log(`${request.method.toUpperCase()} ${requestUrl}`);
+  console.log(`[handleRequest] ${request.method.toUpperCase()} ${request.hostname}${requestUrl}`);
 
   response.set('Tanam-Created', new Date().toUTCString());
 
