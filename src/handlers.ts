@@ -27,7 +27,6 @@ const supportedContentTypes = {
 };
 
 async function handleAssetRequest(request: express.Request, response: express.Response) {
-  console.log(`[handleAssetRequest] ${request.method.toUpperCase()} ${request.url}`);
   const contentFile = await content.getCloudStorageFile(request.url);
   const [contentExists] = await contentFile.exists();
 
@@ -51,14 +50,14 @@ async function handlePageRequest(request: express.Request, response: express.Res
   const documents = await content.getDocumentsByUrl(requestUrl);
 
   if (documents.length === 0) {
-    console.log(`[HTTP 404] document found for: ${requestUrl}`);
+    console.log(`[handlePageRequest] [HTTP 404] document found for: ${requestUrl}`);
     response.status(404).send('Not found');
     return;
   }
 
   if (documents.length > 1) {
     const documentList = JSON.stringify(documents.map(doc => doc.ref.path));
-    console.error(`[HTTP 500] URL '${requestUrl}' maps to ${documents.length} documents: ${documentList}`);
+    console.error(`[handlePageRequest] [HTTP 500] URL '${requestUrl}' maps to ${documents.length} documents: ${documentList}`);
     response.status(500).send('Database inconsistency. URL is not uniquely resolved.');
     return;
   }
@@ -74,7 +73,7 @@ async function handlePageRequest(request: express.Request, response: express.Res
 
 export async function handlePublicDirectoryFileReq(request: express.Request, response: express.Response) {
   const requestUrl = url.parse(request.url).pathname;
-  console.log(`${request.method.toUpperCase()} ${requestUrl}`);
+  console.log(`[handlePublicDirectoryFileReq] ${request.method.toUpperCase()} ${requestUrl}`);
   const normalizedName = requestUrl.replace('.', '_');
   const fileRef = await admin.database().ref('publicFiles').child(normalizedName).once('value');
 
@@ -90,7 +89,7 @@ export async function handlePublicDirectoryFileReq(request: express.Request, res
 }
 
 export async function handleSitemapReq(request: express.Request, response: express.Response) {
-  console.log(`${request.method.toUpperCase()} ${request.url}`);
+  console.log(`[handleSitemapReq] ${request.method.toUpperCase()} ${request.url}`);
   const documents = await content.getAllDocuments();
   if (documents.length === 0) {
     console.log(`[HTTP 404] No documents, so no sitemap present either`);
