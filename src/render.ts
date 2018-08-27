@@ -1,51 +1,37 @@
-import * as dust from "dustjs-linkedin";
-import * as site from "./site";
-import * as admin from "firebase-admin";
-import * as fs from "fs";
+import * as dust from 'dustjs-linkedin';
+import * as site from './site';
+import * as admin from 'firebase-admin';
+import * as fs from 'fs';
+import * as content from './content';
 
-export type ContentState = 'published' | 'unpublished';
-
-export interface ContentDocument {
-  data: { [key: string]: any };
-  path: string[];
-  publishTime: Date;
-  updateTime: Date;
-  status: ContentState;
-  template: string;
+export interface TemplateContext {
+  page: content.PageContext;
+  site: site.SiteInfo;
 }
 
-dust.helpers.document = async (chunk, context, bodies, params) => {
-  const documentPath = params.path;
-  console.log(`[dust document] Fetch document: ${documentPath}`);
-  const snap = await admin.firestore().doc(documentPath).get();
-  return snap.data();
-};
+// ----------------------------------------------------------------------------
+// DUST HELPERS
+// Implements Tanam helper extensions for the template engine
+//
+dust.helpers.debugDump = (chunk, context) => JSON.stringify(context);
+dust.helpers.document = (chunk, context, bodies, params) => content.getDocumentByPath(params.path);
+dust.helpers.documents = (chunk, context, bodies, params) =>
+  content.getDocumentsInCollection(
+    params.collection,
+    params.orderBy || 'publishTime',
+    params.sortOrder || 'desc',
+    parseInt(params.limit) || 10);
 
-dust.helpers.debugDump = async function(chunk, context) {
-  return JSON.stringify(context);
-};
 
-dust.helpers.documents = async (chunk, context, bodies, params) => {
-  const collectionPath = params.collection;
-  const limit = params.limit || 10;
-  const orderBy = params.orderBy || 'publishTime';
-  const sortOrder = params.sortOrder || 'desc';
-  console.log(`[dust documents] Fetch documents from: ${collectionPath}`);
-
-  const snap = await admin.firestore()
-    .collection(collectionPath)
-    .orderBy(orderBy, sortOrder)
-    .limit(parseInt(limit))
-    .get();
-
-  console.log(`[dust documents] Fetched ${snap.docs.length} documents`);
-  return snap.docs.map(doc => doc.data());
-};
-
+/**
+ * Renders a HTML page from a given Firestore document that contains Tanam content data.
+ *
+ * @param document Firestore content document
+ */
 export async function renderDocument(document: admin.firestore.DocumentSnapshot) {
-  const content = document.data() as ContentDocument;
+  const contentDocument = new content.PageContext(document);
   const theme = await site.getThemeName();
-  const templateFiles = await getTemplateFiles(theme);
+  const templateFiles = await content.getTemplateFiles(theme);
 
   for (const file of templateFiles) {
     const [fileContent] = await file.download();
@@ -64,7 +50,7 @@ export async function renderDocument(document: admin.firestore.DocumentSnapshot)
   };
 
   return new Promise((resolve, reject) => {
-    dust.render(content.template, context, (err, out) => {
+    dust.render(contentDocument.template, context, (err, out) => {
       if (err) {
         console.log(`[renderDocument] Error rendering: ${JSON.stringify(err)}`);
         reject(err);
@@ -77,19 +63,9 @@ export async function renderDocument(document: admin.firestore.DocumentSnapshot)
   });
 }
 
-async function getTemplateFiles(theme: string) {
-  console.log(`[getTemplateFiles] Get template files for theme '${theme}'`);
-  const queryOptions = {
-    prefix: `themes/${theme}/`
-  };
-
-  const [files] = await admin.storage().bucket().getFiles(queryOptions);
-  const dustFiles = files.filter(file => file.name.endsWith('.dust'));
-  console.log(`[getTemplateFiles] Found ${dustFiles.length} templates out of totally ${files.length} files.`);
-  return dustFiles;
-}
 
 export function renderAdminPage(indexFileName: string, firebaseConfig: any) {
+
   const indexFile = fs.readFileSync(indexFileName, 'utf8');
   return new Promise((resolve, reject) => {
     dust.renderSource(indexFile, { fbConfig: firebaseConfig }, (err, out) => {

@@ -5,6 +5,7 @@ import * as path from 'path';
 import * as site from './site';
 import * as cache from './cache';
 import * as render from './render';
+import * as content from './content';
 
 const supportedContentTypes = {
   'font/woff': /\.(woff)$/i,
@@ -155,7 +156,7 @@ async function handleTextAssetRequest(request: express.Request, response: expres
 
 async function handlePageRequest(request: express.Request, response: express.Response) {
   const requestUrl = url.parse(request.url).pathname;
-  const documents = await getFirestoreDocuments(requestUrl);
+  const documents = await content.getDocumentsByUrl(requestUrl);
 
   if (documents.length === 0) {
     console.log(`[HTTP 404] document found for: ${requestUrl}`);
@@ -179,26 +180,7 @@ async function handlePageRequest(request: express.Request, response: express.Res
   response.send(pageHtml);
 }
 
-async function getFirestoreDocuments(requestUrl?: string) {
-  console.log(!!requestUrl ? `Find document matching URL: ${requestUrl}` : 'Get ALL documents n ALL collections');
-  const collections = await admin.firestore().getCollections();
 
-  console.log(`Found ${collections.length} collections: ${JSON.stringify(collections.map(coll => coll.path))}`);
-
-  const documents: admin.firestore.DocumentSnapshot[] = [];
-  for (const collection of collections) {
-    const query = !!requestUrl ? collection.where('path', 'array-contains', requestUrl) : collection;
-    const snap = await query.get();
-
-    console.log(`Found ${snap.docs.length} documents in collection '${collection.path}'.`);
-    snap.docs.forEach(doc => {
-      documents.push(doc);
-    });
-  }
-
-  console.log(`Found ${documents.length} documents in total`);
-  return documents;
-}
 
 async function getPublicHtmlFile(requestUrl: string) {
   const normalizedName = requestUrl.replace('.', '_');
