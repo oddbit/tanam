@@ -40,8 +40,8 @@
         <v-layout class="pa-3">
           <span class="img-wrapper"><img src="@/assets/images/gravatar.jpg"></span>
           <div class="ml-3 text-xs-left user">
-            <h4>I Made Ananda Widiprabawa</h4>
-            <p>ananda.widiprabawa@gmail.com</p>
+            <h4>{{ currentUser.displayName }}</h4>
+            <p>{{ currentUser.email }}</p>
           </div>
         </v-layout>
         <v-layout class="px-2 py-1 grey lighten-3" justify-space-between>
@@ -54,14 +54,22 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import { LOGOUT, TOGGLE_DRAWER, TOGGLE_DRAWER_POST } from '@/store/types';
+import { mapActions, mapGetters } from 'vuex';
+import {
+  LOGOUT,
+  TOGGLE_DRAWER,
+  TOGGLE_DRAWER_POST,
+  CURRENT_USER
+} from '@/store/types';
 
 export default {
   computed: {
     isProfileRoute() {
       return /\/profile/gi.test(this.$route.path);
-    }
+    },
+    ...mapGetters({
+      currentUser: CURRENT_USER
+    })
   },
   methods: {
     ...mapActions({
