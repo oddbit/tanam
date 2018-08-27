@@ -45,7 +45,7 @@ export async function renderDocument(document: admin.firestore.DocumentSnapshot)
   }
 
   const context = {
-    page: content,
+    page: contentDocument,
     site: await site.getSiteInfo()
   };
 
