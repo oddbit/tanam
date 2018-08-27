@@ -1,6 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as https from 'https';
 import * as site from './site';
+import * as content from './content';
 
 export type TanamCacheType = 'purgeable' | 'stylesheet' | 'javascript' | 'image';
 
@@ -31,7 +32,7 @@ const CONFIG_DEFAULT: { [key: string]: CacheConfig; } = {
 export function getCacheHeader(type: TanamCacheType): string {
   const config = { ...CONFIG_DEFAULT, ...(functions.config().cache || {}) };
   const typeConfig = config[type] as CacheConfig;
-  console.log(`Get cache header ${type} configuration: ${JSON.stringify(typeConfig)}`);
+  console.log(`[getCacheHeader] Get cache header ${type} configuration: ${JSON.stringify(typeConfig)}`);
   return `public, max-age=${typeConfig.max_age}, s-maxage=${typeConfig.s_max_age}`;
 }
 
@@ -40,7 +41,7 @@ export const tanam_onDocWriteUpdateCache = functions.firestore.document('/{type}
   const docBeforeChange = snap.before.data();
 
   const domain = await site.getDomain();
-  console.log(`Site domain: ${domain}`);
+  console.log(`[getCacheHeader] Site domain: ${domain}`);
   if (snap.before.exists && !!docBeforeChange.path) {
     await Promise.all([
       // Sitemap will only be purged, not heated. Let it lazily be triggered by crawlers.
@@ -51,10 +52,44 @@ export const tanam_onDocWriteUpdateCache = functions.firestore.document('/{type}
 
   const docAfterChange = snap.after.data();
   if (snap.after.exists && !!docAfterChange.path) {
-    await requestHeat(domain, docAfterChange.path[0]);
+    const SLEEP_SECONDS = 15;
+    console.log(`[getCacheHeader] Sleep for ${SLEEP_SECONDS} seconds.`);
+    await new Promise((resolve) => setTimeout(resolve, 1000 * SLEEP_SECONDS)); // Sleep for a while before heating cache
+    return requestHeat(domain, docAfterChange.path[0]);
   }
 
   return null;
+});
+
+export const tanam_onThemeChangeUpdateCache = functions.database.ref(site.SiteFirebasePath.themeName).onWrite(async (snap, context) => {
+  if (!snap.before.exists()) {
+    console.log('Nothing to do when setting theme for the first time.');
+    return null;
+  }
+
+  const domains = await site.getDomains();
+  const previousTheme = snap.before.val();
+
+  console.log(`Clearing cache for theme assets: ${previousTheme}`);
+  const themeFiles = await content.getThemeFiles(previousTheme);
+  const documents = await content.getAllDocuments();
+
+  const promises = [];
+  for (const domain of domains) {
+    console.log(`Clearing all caches for ${domain}.`);
+
+    for (const themeFile of themeFiles) {
+      // Removes the "themes/<theme name>" and makes it into a path that will resolve as a Tanam theme file should
+      const themeAssetPath = '/theme/' + themeFile.name.split('/').filter(item => !!item).splice(2).join('/');
+      promises.push(requestPurge(domain, themeAssetPath));
+    }
+
+    for (const document of documents) {
+      promises.push(requestPurge(domain, document.data().path[0]));
+    }
+  }
+
+  return Promise.all(promises);
 });
 
 export function requestPurge(host: string, path: string) {
