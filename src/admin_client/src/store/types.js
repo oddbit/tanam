@@ -39,3 +39,5 @@ export const POST_DIALOG_DELETE = 'post/dialog/delete';
 export const POST_ACTION_SUBMIT = 'post/action/submit';
 export const POST_ACTION_UPDATE = 'post/action/update';
 export const POST_ACTION_DELETE = 'post/action/delete';
+
+export const TEMPLATE_IMAGES = 'template/images';
