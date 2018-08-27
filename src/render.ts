@@ -5,10 +5,14 @@ import * as fs from 'fs';
 import * as content from './content';
 
 export interface TemplateContext {
-  page: content.ContentDocument;
+  page: content.PageContext;
   site: site.SiteInfo;
 }
 
+// ----------------------------------------------------------------------------
+// DUST HELPERS
+// Implements Tanam helper extensions for the template engine
+//
 dust.helpers.debugDump = (chunk, context) => JSON.stringify(context);
 dust.helpers.document = (chunk, context, bodies, params) => content.getDocumentByPath(params.path);
 dust.helpers.documents = (chunk, context, bodies, params) =>
@@ -18,8 +22,14 @@ dust.helpers.documents = (chunk, context, bodies, params) =>
     params.sortOrder || 'desc',
     parseInt(params.limit) || 10);
 
+
+/**
+ * Renders a HTML page from a given Firestore document that contains Tanam content data.
+ *
+ * @param document Firestore content document
+ */
 export async function renderDocument(document: admin.firestore.DocumentSnapshot) {
-  const contentDocument = new content.ContentDocument(document);
+  const contentDocument = new content.PageContext(document);
   const theme = await site.getThemeName();
   const templateFiles = await content.getTemplateFiles(theme);
 
@@ -55,6 +65,7 @@ export async function renderDocument(document: admin.firestore.DocumentSnapshot)
 
 
 export function renderAdminPage(indexFileName: string, firebaseConfig: any) {
+
   const indexFile = fs.readFileSync(indexFileName, 'utf8');
   firebaseConfig['stringify'] = JSON.stringify(firebaseConfig);
   return new Promise((resolve, reject) => {
