@@ -140,3 +140,15 @@ export async function getCloudStorageFile(requestUrl: string) {
   console.log(`[getCloudStorageFile] requestUrl=${requestUrl}, assetFilePath=${assetFilePath}`);
   return admin.storage().bucket().file(assetFilePath);
 }
+
+export function getPublicPathToStorageFile(storageFilePath: string) {
+  console.log(`[getPublicPathToStorageFile] storageFilePath=${storageFilePath}`);
+  if (storageFilePath.startsWith('/themes/') || storageFilePath.startsWith('themes/')) {
+    // Removes the "themes/<theme name>" and makes it into a path that will resolve as a Tanam theme file should
+    const publicPath = '/theme/' + storageFilePath.split('/').filter(item => !!item).splice(2).join('/');
+    console.log(`[getPublicPathToStorageFile] storageFilePath=${storageFilePath} => ${publicPath}`);
+    return publicPath;
+  }
+
+  return storageFilePath.startsWith('/') ? storageFilePath : `/${storageFilePath}`;
+}

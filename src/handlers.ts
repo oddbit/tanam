@@ -41,7 +41,7 @@ async function handleAssetRequest(request: express.Request, response: express.Re
 
   response.set('Content-Type', getContentType(request.url));
   response.set('Tanam-Created', new Date().toUTCString());
-  response.set('Cache-Control', cache.getCacheHeader('image'));
+  response.set('Cache-Control', cache.getCacheHeader());
   response.send(fileContent);
 }
 
@@ -67,7 +67,7 @@ async function handlePageRequest(request: express.Request, response: express.Res
 
   response.set('Tanam-Created', new Date().toUTCString());
   response.set('Tanam-Id', contentDoc.ref.path);
-  response.set('Cache-Control', cache.getCacheHeader('purgeable'));
+  response.set('Cache-Control', cache.getCacheHeader());
   response.send(pageHtml);
 }
 
@@ -83,7 +83,8 @@ export async function handlePublicDirectoryFileReq(request: express.Request, res
     return;
   }
 
-  response.set('Cache-Control', cache.getCacheHeader('purgeable'));
+  response.set('Tanam-Created', new Date().toUTCString());
+  response.set('Cache-Control', cache.getCacheHeader());
   response.set('Content-Type', getContentType(requestUrl));
   response.send(fileRef.val());
 }
@@ -116,7 +117,8 @@ export async function handleSitemapReq(request: express.Request, response: expre
     siteMapEntries.join('\n'),
     `</urlset>`].join('\n');
 
-  response.set('Cache-Control', cache.getCacheHeader('purgeable'));
+  response.set('Tanam-Created', new Date().toUTCString());
+  response.set('Cache-Control', cache.getCacheHeader());
   response.set('Content-Type', 'text/xml; charset=utf-8');
   response.send(siteMap);
 }
