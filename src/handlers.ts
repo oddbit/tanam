@@ -1,6 +1,7 @@
 import * as url from 'url';
 import * as admin from 'firebase-admin';
 import * as express from 'express';
+import * as path from 'path';
 import * as site from './site';
 import * as cache from './cache';
 import * as render from './render';
@@ -205,6 +206,9 @@ async function getPublicHtmlFile(requestUrl: string) {
   return fileRef.exists() ? fileRef.val() : null;
 }
 
-export async function handleAdminPage(adminClientDir: string, firebaseConfig: any) {
-  return await render.renderAdminPage(adminClientDir, firebaseConfig);
+export async function handleAdminPage(response: express.Response, adminClientDir: string, firebaseConfig: any) {
+  const indexFileName = path.join(adminClientDir, '/index.html');
+  const compiledHtml = await render.renderAdminPage(indexFileName, firebaseConfig);
+
+  response.send(compiledHtml);
 }

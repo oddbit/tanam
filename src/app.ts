@@ -14,6 +14,7 @@ const tanamDefaultAppConfig: TanamConfig = {
 };
 
 const app = express();
+app.enable('strict routing'); // Redirect to trailing slash
 export const tanam = functions.https.onRequest(app);
 export function initializeApp(tanamConfig: TanamConfig = {}) {
   const adminClientDir = path.join(__dirname, 'admin_client');
@@ -22,10 +23,11 @@ export function initializeApp(tanamConfig: TanamConfig = {}) {
   admin.firestore().settings({ timestampsInSnapshots: true });
 
   app.use(`/${appConfig.adminUrl}/public`, express.static(path.join(adminClientDir, 'public')));
-  app.use(`/${appConfig.adminUrl}/**`, async (req: express.Request, res: express.Response) => {
-    const indexFileName = path.join(adminClientDir, '/index.html');
-    const compiledHtml = await handlers.handleAdminPage(indexFileName, tanamConfig.firebaseConfig);
-    res.send(compiledHtml);
+  app.all(`/${appConfig.adminUrl}`, (req: express.Request, res: express.Response) => {
+    res.redirect('/admin/');
+  });
+  app.use(`/${appConfig.adminUrl}/**`, (req: express.Request, res: express.Response) => {
+    handlers.handleAdminPage(res, adminClientDir, tanamConfig.firebaseConfig);
   });
   app.get('/manifest.json', handlers.handleWebManifestReq);
   app.get('/robots.txt', handlers.handleRobotsReq);

@@ -91,9 +91,8 @@ async function getTemplateFiles(theme: string) {
 
 export function renderAdminPage(indexFileName: string, firebaseConfig: any) {
   const indexFile = fs.readFileSync(indexFileName, 'utf8');
-  firebaseConfig['stringify'] = JSON.stringify(firebaseConfig);
   return new Promise((resolve, reject) => {
-    dust.renderSource(indexFile, {fbConfig: firebaseConfig }, (err, out) => {
+    dust.renderSource(indexFile, { fbConfig: firebaseConfig }, (err, out) => {
       if (err) {
         console.log(`Error rendering: ${JSON.stringify(err)}`);
         reject(err);
