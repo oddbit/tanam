@@ -1,5 +1,6 @@
 import * as admin from "firebase-admin";
 import * as url from 'url';
+import * as site from './site';
 
 export type ContentState = 'published' | 'unpublished';
 export type TemplateType = 'dust';
@@ -66,6 +67,10 @@ export async function getDocumentByPath(documentPath: string) {
   return new PageContext(doc);
 }
 
+export function getAllDocuments() {
+  return getDocumentsByUrl();
+}
+
 export async function getDocumentsByUrl(requestUrl?: string) {
   const urlPath = !!requestUrl ? url.parse(requestUrl).pathname : '';
   console.log(!!requestUrl ? `Find document matching URL: ${requestUrl}` : 'Get ALL documents n ALL collections');
@@ -119,4 +124,19 @@ export async function getThemeFiles(theme: string) {
   console.log(`[getThemeFiles] Found ${files.length} files in theme "${theme}".`);
 
   return files;
+}
+
+export async function getCloudStorageFile(requestUrl: string) {
+  let assetFilePath = url.parse(requestUrl).pathname;
+
+  if (assetFilePath.startsWith('/theme/')) {
+    const pathPart = assetFilePath.substr('/theme/'.length);
+    const theme = await site.getThemeName();
+    assetFilePath = `/themes/${theme}/${pathPart}`;
+  } else if (!assetFilePath.startsWith('/content/')) {
+    assetFilePath = `/content${assetFilePath}`;
+  }
+
+  console.log(`[getCloudStorageFile] requestUrl=${requestUrl}, assetFilePath=${assetFilePath}`);
+  return admin.storage().bucket().file(assetFilePath);
 }

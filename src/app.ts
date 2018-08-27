@@ -29,8 +29,8 @@ export function initializeApp(tanamConfig: TanamConfig = {}) {
   app.use(`/${appConfig.adminUrl}/**`, (req: express.Request, res: express.Response) => {
     handlers.handleAdminPage(res, adminClientDir, tanamConfig.firebaseConfig);
   });
-  app.get('/manifest.json', handlers.handleWebManifestReq);
-  app.get('/robots.txt', handlers.handleRobotsReq);
+  app.get('/manifest.json', handlers.handlePublicDirectoryFileReq);
+  app.get('/robots.txt', handlers.handlePublicDirectoryFileReq);
   app.get('/sitemap.xml', handlers.handleSitemapReq);
   app.get('**', handlers.handleRequest);
 }
