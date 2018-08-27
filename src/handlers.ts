@@ -7,6 +7,8 @@ import * as render from './render';
 import * as content from './content';
 
 const supportedContentTypes = {
+  'font/otf': /\.(otf)$/i,
+  'font/ttf': /\.(ttf)$/i,
   'font/woff': /\.(woff)$/i,
   'font/woff2': /\.(woff2)$/i,
   'image/jpeg': /\.(jpg|jpeg)$/i,
@@ -17,11 +19,31 @@ const supportedContentTypes = {
   'image/bmp': /\.(bmp)$/i,
   'image/ico': /\.(ico)$/i,
   'image/svg+xml': /\.(svg)$/i,
-  'text/plain': /\.(txt)$/i,
-  'text/css': /\.(css)$/i,
-  'text/javascript': /\.(js)$/i,
-  'application/json': /\.(json)$/i
+  'text/plain; charset=utf-8': /\.(txt)$/i,
+  'text/css; charset=utf-8': /\.(css)$/i,
+  'text/javascript; charset=utf-8': /\.(js)$/i,
+  'application/json; charset=utf-8': /\.(json)$/i
 };
+
+async function handleAssetRequest(request: express.Request, response: express.Response) {
+  console.log(`[handleAssetRequest] ${request.method.toUpperCase()} ${request.url}`);
+  const contentFile = await content.getCloudStorageFile(request.url);
+  const [contentExists] = await contentFile.exists();
+
+  if (!contentExists) {
+    console.log(`[HTTP 404] No media file: ${request.url}`);
+    response.status(404).send(`Not found: ${request.url}`);
+    return;
+  }
+
+  const [fileContent] = await contentFile.download();
+  console.log(`[handleAssetRequest] File size: ${fileContent.byteLength} bytes`);
+
+  response.set('Content-Type', getContentType(request.url));
+  response.set('Tanam-Created', new Date().toUTCString());
+  response.set('Cache-Control', cache.getCacheHeader('image'));
+  response.send(fileContent);
+}
 
 export async function handlePublicDirectoryFileReq(request: express.Request, response: express.Response) {
   const requestUrl = url.parse(request.url).pathname;
@@ -35,9 +57,8 @@ export async function handlePublicDirectoryFileReq(request: express.Request, res
     return;
   }
 
-  const contentType = getContentType(requestUrl);
   response.set('Cache-Control', cache.getCacheHeader('purgeable'));
-  response.set('Content-Type', `${contentType}; charset=utf-8`);
+  response.set('Content-Type', getContentType(requestUrl));
   response.send(fileRef.val());
 }
 
@@ -77,75 +98,28 @@ export async function handleSitemapReq(request: express.Request, response: expre
 export async function handleRequest(request: express.Request, response: express.Response) {
   const requestUrl = url.parse(request.url).pathname;
   console.log(`${request.method.toUpperCase()} ${requestUrl}`);
-  const contentType = getContentType(requestUrl);
 
   response.set('Tanam-Created', new Date().toUTCString());
 
-  if (contentType.startsWith('text')) {
-    await handleTextAssetRequest(request, response, contentType);
-  } else if (contentType.startsWith('image')) {
-    await handleBinaryRequest(request, response, contentType);
-  } else {
+  if (getContentType(requestUrl) === 'default') {
     await handlePageRequest(request, response);
+  } else {
+    await handleAssetRequest(request, response);
   }
 }
 
 function getContentType(requestUrl: string) {
-  console.log(`Resolving content type for: ${requestUrl}`);
+  const requestPath = url.parse(requestUrl).pathname;
+  console.log(`Resolving content type for: ${requestPath}`);
   for (const contentType in supportedContentTypes) {
-    if (supportedContentTypes[contentType].test(requestUrl)) {
-      console.log(`Content type ${contentType} for: ${requestUrl}`);
+    if (supportedContentTypes[contentType].test(requestPath)) {
+      console.log(`Content type ${contentType} for: ${requestPath}`);
       return contentType;
     }
   }
 
-  console.log(`No special content type found for: ${requestUrl}`);
+  console.log(`No special content type found for: ${requestPath}`);
   return 'default';
-}
-
-async function handleBinaryRequest(request: express.Request, response: express.Response, contentType: string) {
-  const requestUrl = url.parse(request.url).pathname;
-  console.log(`${request.method.toUpperCase()} ${request.url}`);
-  const theme = await site.getThemeName();
-  const assetFilePath = `/themes/${theme}${requestUrl}`;
-  const contentFile = admin.storage().bucket().file(assetFilePath);
-  const [contentExists] = await contentFile.exists();
-
-  if (!contentExists) {
-    console.log(`[HTTP 404] No media file: ${assetFilePath}`);
-    response.status(404).send(`Not found: ${requestUrl}`);
-    return;
-  }
-
-  const [fileContent] = await contentFile.download();
-  console.log(`File size: ${fileContent.byteLength} bytes`);
-
-  response.set('Tanam-Created', new Date().toUTCString());
-  response.set('Content-Type', contentType);
-  response.set('Cache-Control', cache.getCacheHeader('image'));
-  response.send(fileContent);
-}
-
-async function handleTextAssetRequest(request: express.Request, response: express.Response, contentType: string) {
-  const requestUrl = url.parse(request.url).pathname;
-  const theme = await site.getThemeName();
-  const assetFilePath = `/themes/${theme}${requestUrl}`;
-  const contentFile = admin.storage().bucket().file(assetFilePath);
-  const [contentExists] = await contentFile.exists();
-
-  if (!contentExists) {
-    console.log(`[HTTP 404] No text asset file: ${assetFilePath}`);
-    response.status(404).send(`Not found: ${requestUrl}`);
-    return;
-  }
-
-  const [fileContent] = await contentFile.download();
-  console.log(`File size: ${fileContent.byteLength} bytes`);
-
-  response.set('Tanam-Created', new Date().toUTCString());
-  response.set('Content-Type', `${contentType}; charset=utf-8`);
-  response.set('Cache-Control', cache.getCacheHeader('stylesheet'));
-  response.send(fileContent.toString('utf8'));
 }
 
 async function handlePageRequest(request: express.Request, response: express.Response) {
