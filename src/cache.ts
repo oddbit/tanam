@@ -16,7 +16,7 @@ interface CachedDomain {
 }
 
 const CONFIG_DEFAULT: CacheConfig = {
-  s_max_age: 60 * 60 * 24 * 365,
+  s_max_age: 60 * 60 * 24,
   max_age: 60 * 10
 };
 
