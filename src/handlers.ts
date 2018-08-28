@@ -89,7 +89,15 @@ async function handleAssetRequest(request: express.Request, response: express.Re
 }
 
 async function handlePageRequest(request: express.Request, response: express.Response) {
-  const requestUrl = url.parse(request.url).pathname;
+  let requestUrl = url.parse(request.url).pathname;
+
+  if (requestUrl.endsWith('/')) {
+    requestUrl += 'index.html';
+  } else if (!requestUrl.endsWith('.html')) {
+    requestUrl += '/index.html';
+  }
+
+  console.log(`[handlePageRequest] Using effective URL: ${requestUrl}`);
   const documents = await content.getDocumentsByUrl(requestUrl);
 
   if (documents.length === 0) {
@@ -105,6 +113,7 @@ async function handlePageRequest(request: express.Request, response: express.Res
     return;
   }
 
+  const host = request.hostname;
   const contentDoc = documents[0];
   const pageHtml = await render.renderDocument(contentDoc);
 
@@ -113,12 +122,12 @@ async function handlePageRequest(request: express.Request, response: express.Res
   response.set('Cache-Control', cache.getCacheHeader());
 
   const primaryDomain = await site.getPrimaryDomain();
-  if (primaryDomain !== request.hostname) {
-    console.log(`[handlePageRequest] Request is on secondary domain '${request.hostname}'. Adding canonical link to: ${primaryDomain}`);
+  if (primaryDomain !== host) {
+    console.log(`[handlePageRequest] Request is on secondary domain '${host}'. Adding canonical link to: ${primaryDomain}`);
     const htmlWithCanonicalLink = pageHtml
-    .replace(
-      /<\/head>/gi,
-      `<link rel="canonical" href="https://${primaryDomain}${request.url}" /></head>`);
+      .replace(
+        /<\/head>/gi,
+        `<link rel="canonical" href="https://${primaryDomain}${request.url}" /></head>`);
     response.send(htmlWithCanonicalLink);
   } else {
     response.send(pageHtml);
@@ -178,8 +187,9 @@ export async function handleSitemapReq(request: express.Request, response: expre
 }
 
 export async function handleRequest(request: express.Request, response: express.Response) {
+  const host = request.hostname;
   const requestUrl = url.parse(request.url).pathname;
-  console.log(`[handleRequest] ${request.method.toUpperCase()} ${request.hostname}${requestUrl}`);
+  console.log(`[handleRequest] ${request.method.toUpperCase()} ${host}${requestUrl}`);
 
   response.set('Tanam-Created', new Date().toUTCString());
 
@@ -187,6 +197,10 @@ export async function handleRequest(request: express.Request, response: express.
     await handlePageRequest(request, response);
   } else {
     await handleAssetRequest(request, response);
+  }
+
+  if (response.statusCode === 200) {
+    await cache.registerRequest(host, requestUrl);
   }
 }
 

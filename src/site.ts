@@ -15,8 +15,12 @@ export async function getThemeName(): Promise<string> {
   return (await admin.database().ref(SiteFirebasePath.themeName).once('value')).val() || 'default';
 }
 
+export function getDefaultDomain() {
+  return `${process.env.GCLOUD_PROJECT}.firebaseapp.com`;
+}
+
 export async function getPrimaryDomain(): Promise<string> {
-  return (await admin.database().ref(SiteFirebasePath.domain).once('value')).val() || `${process.env.GCLOUD_PROJECT}.firebaseapp.com`;
+  return (await admin.database().ref(SiteFirebasePath.domain).once('value')).val() || getDefaultDomain();
 }
 
 export async function getDomains(): Promise<string[]> {
