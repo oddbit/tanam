@@ -172,7 +172,8 @@ export const tanam_onFileChangeUpdateRegistry = functions.storage.object().onFin
     name: object.name,
     md5: object.md5Hash,
     updateTime: admin.database.ServerValue.TIMESTAMP,
-    contentType: object.contentType
+    contentType: object.contentType,
+    fileType: object.contentType.split('/')[0]
   };
 
   return admin.database().ref(ContentFirebasePath.fileMetaData).child(id).set(data);
