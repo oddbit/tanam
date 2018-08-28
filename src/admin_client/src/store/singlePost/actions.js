@@ -1,9 +1,11 @@
-import firestore from '@/utils/firestore';
+import { firestore } from '@/utils/firebase';
 import storageRef, { child } from '@/utils/storageRef';
 import quillToHtml from '@/helpers/quillToHtml';
-import { collection } from '@/utils/firestoreCollection';
 import contentType from '@/utils/contentType';
-import { POST_FIELD_FEATURED_IMAGE_PATH } from '@/store/types';
+import {
+  POST_CONTENT_TYPE,
+  POST_FIELD_FEATURED_IMAGE_PATH
+} from '@/store/types';
 
 const publishPost = ({ state, getters }) => {
   const body = quillToHtml(state.body);
@@ -12,7 +14,7 @@ const publishPost = ({ state, getters }) => {
   return new Promise(async (resolve, reject) => {
     if (state.featuredImage && state.featuredImage.url) {
       try {
-        const docRef = firestore.collection(collection(getters)).doc();
+        const docRef = firestore.collection(getters[POST_CONTENT_TYPE]).doc();
         const imageRef = storageRef.child(`${child(getters)}/${docRef.id}`);
         const snapshot = await imageRef.putString(
           state.featuredImage.url,
@@ -32,7 +34,7 @@ const publishPost = ({ state, getters }) => {
       }
     } else {
       try {
-        await firestore.collection(collection(getters)).add({
+        await firestore.collection(getters[POST_CONTENT_TYPE]).add({
           ...contentType(state, getters),
           featuredImage: { fullPath: null, url: null },
           body,
@@ -61,7 +63,7 @@ const updatePost = ({ state, getters }, payload) => {
         );
         const downloadUrl = await imageRef.getDownloadURL();
         await firestore
-          .collection(collection(getters))
+          .collection(getters[POST_CONTENT_TYPE])
           .doc(payload)
           .update({
             ...contentType(state, getters),
@@ -79,7 +81,7 @@ const updatePost = ({ state, getters }, payload) => {
     } else {
       try {
         await firestore
-          .collection(collection(getters))
+          .collection(getters[POST_CONTENT_TYPE])
           .doc(payload)
           .update({
             ...contentType(state, getters),
@@ -102,7 +104,7 @@ const deletePost = async ({ getters }, payload) => {
       try {
         await imageRef.delete();
         await firestore
-          .collection(collection(getters))
+          .collection(getters[POST_CONTENT_TYPE])
           .doc(payload)
           .delete();
         resolve();
@@ -112,7 +114,7 @@ const deletePost = async ({ getters }, payload) => {
     } else {
       try {
         await firestore
-          .collection(collection(getters))
+          .collection(getters[POST_CONTENT_TYPE])
           .doc(payload)
           .delete();
         resolve();
