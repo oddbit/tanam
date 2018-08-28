@@ -42,7 +42,7 @@ export const blog = {
   indexName: 'blogs',
   createLink: '/blogs/post',
   createName: 'blog-posts',
-  firestore: 'blog-posts',
+  firestore: 'blog',
   storageName: 'blogs',
   fields: state => {
     const fieldsArr = [

@@ -2,8 +2,8 @@
   <div>
     <div v-for="post in posts" :key="post.key">
       <SingleListPost :link-to="post.key">
-        <template slot="title">{{ post.title }}</template>
-        <template slot="datetime">{{ post.createdAt | isoDateToDatetime }}</template>
+        <template slot="title">{{ post.data.title }}</template>
+        <template slot="datetime">{{ post.updateTime | formatDate }}</template>
         <template slot="action-menu-item"><DraftActionMenuItem /></template>
       </SingleListPost>
     </div>
@@ -12,7 +12,7 @@
 
 <script>
 import SingleListPost from '@/components/Post/SingleListPost';
-import isoDateToDatetime from '@/helpers/isoDateToDatetime';
+import formatDate from '@/helpers/formatDate';
 
 export default {
   props: {
@@ -26,8 +26,8 @@ export default {
     DraftActionMenuItem: () => import('@/components/Post/DraftActionMenuItem')
   },
   filters: {
-    isoDateToDatetime(isodate) {
-      return isoDateToDatetime(isodate);
+    formatDate(timestamp) {
+      return formatDate(timestamp);
     }
   }
 };
