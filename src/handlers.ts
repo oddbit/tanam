@@ -189,18 +189,14 @@ export async function handleSitemapReq(request: express.Request, response: expre
 export async function handleRequest(request: express.Request, response: express.Response) {
   const host = request.hostname;
   const requestUrl = url.parse(request.url).pathname;
-  console.log(`[handleRequest] ${request.method.toUpperCase()} ${host}${requestUrl}`);
 
-  response.set('Tanam-Created', new Date().toUTCString());
+  console.log(`[handleRequest] ${request.method.toUpperCase()} ${host}${requestUrl}`);
+  await cache.registerRequestHost(host);
 
   if (getContentType(requestUrl) === 'default') {
     await handlePageRequest(request, response);
   } else {
     await handleAssetRequest(request, response);
-  }
-
-  if (response.statusCode === 200) {
-    await cache.registerRequest(host, requestUrl);
   }
 }
 

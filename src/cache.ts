@@ -10,13 +10,18 @@ interface CacheConfig {
   s_max_age: number;  // Time in seconds to keep cache in browser
 }
 
+interface CachedDomain {
+  domain: string;     // A domain that Tanam has received request on
+  lastSeen: number;  // Timestamp when it was last requested
+}
+
 const CONFIG_DEFAULT: CacheConfig = {
   s_max_age: 60 * 60 * 24 * 365,
   max_age: 60 * 10
 };
 
 abstract class CacheFirebasePath {
-  static readonly pathRegistry = 'cache';
+  static readonly hostRegistry = 'cacheDomains';
 }
 
 export function getCacheHeader(): string {
@@ -35,14 +40,14 @@ export const tanam_onDocWriteUpdateCache = functions.firestore.document('/{type}
     await Promise.all([
       // Sitemap will only be purged, not heated. Let it lazily be triggered by crawlers.
       purgeCache('/sitemap.xml'),
-      
+
       purgeCache(docBeforeChange.path[0])
     ]);
   }
 
   const docAfterChange = snap.after.data();
   if (snap.after.exists && !!docAfterChange.path) {
-    return heatCache(domain, docAfterChange.path[0]);
+    return heatCache(docAfterChange.path[0]);
   }
 
   return null;
@@ -80,65 +85,76 @@ export const tanam_onThemeChangeUpdateCache = functions.database.ref(site.SiteFi
 export const tanam_onFileChangeUpdateCache = functions.storage.object().onFinalize(async (object) => {
   console.log(`File updated: ${object.name}.`);
   const filePath = content.getPublicPathToStorageFile(object.name);
-
-  const promises = [];
-  const domains = await site.getDomains();
-  for (const domain of domains) {
-    console.log(`Updating cache for file=${filePath}, domain=${domain}.`);
-    await purgeCache(filePath);
-    promises.push(heatCache(domain, filePath));
-  }
-
-  return Promise.all(promises);
+  console.log(`Updating cache for file=${filePath}.`);
+  await purgeCache(filePath);
+  return heatCache(filePath);
 });
 
 export const tanam_onFileDeleteUpdateCache = functions.storage.object().onDelete(async (object) => {
   console.log(`File deleted: ${object.name}.`);
   const filePath = content.getPublicPathToStorageFile(object.name);
-
-  const promises = [];
-  const domains = await site.getDomains();
-  for (const domain of domains) {
-    console.log(`Removing cache for file=${filePath}, domain=${domain}.`);
-    promises.push(purgeCache(filePath));
-  }
-
-  return Promise.all(promises);
+  return purgeCache(filePath);
 });
 
-export function registerRequest(host: string, filePath: string) {
+export function registerRequestHost(host: string) {
   const promises = [];
   const hosts = [host];
-
   if (host.endsWith('.cloudfunctions.net')) {
     // Reqeusts to the firebaseapp.com domain resolves to the cloud functions domain. So register both.
     hosts.push(site.getDefaultDomain());
   }
 
   for (const currentHost of hosts) {
-    console.log(`[registerRequest] Register request host=${currentHost}, filePath=${filePath}`);
-    const fileHash = SHA256(filePath).toString().toLowerCase();
+    console.log(`[registerRequest] Register request host=${currentHost}`);
     const hostHash = SHA256(currentHost).toString().toLowerCase();
-    promises.push(admin.database().ref(CacheFirebasePath.pathRegistry).child(fileHash).child(hostHash).set(currentHost));
+    const cachedDomainData: CachedDomain = {
+      domain: currentHost,
+      lastSeen: admin.database.ServerValue.TIMESTAMP
+    };
+
+    promises.push(admin.database().ref(CacheFirebasePath.hostRegistry).child(hostHash).set(cachedDomainData));
   }
 
   return Promise.all(promises);
 }
 
-async function heatCache(host: string, filePath: string, delay: number = 10000) {
-  console.log(`[heatCache] host=${host}, filePath=${filePath}, delay=${delay / 1000} seconds.`);
+async function heatCache(filePath: string, delay: number = 10000) {
+  console.log(`[heatCache] filePath=${filePath}, delay=${delay / 1000} seconds.`);
   await new Promise((resolve) => setTimeout(resolve, delay)); // Sleep for a while before heating cache
-  return heatUpCdn(host, filePath);
+
+  const promises = [];
+  const filenameVariants = [filePath];
+  if (filePath.endsWith('/index.html')) {
+    filenameVariants.push(filePath.substr(0, filePath.lastIndexOf('/index.html')));
+    filenameVariants.push(filePath.substr(0, filePath.lastIndexOf('index.html')));
+  }
+
+  const snap = await admin.database().ref(CacheFirebasePath.hostRegistry).once('value');
+  snap.forEach(childSnap => {
+    const hostData = childSnap.val() as CachedDomain;
+    for (const filenameVariant of filenameVariants) {
+      promises.push(heatUpCdn(hostData.domain, filenameVariant));
+    }
+    return false;
+  });
+
+  return Promise.all(promises);
 }
 
 async function purgeCache(filePath: string) {
   const promises = [];
-  const fileHash = SHA256(filePath).toString().toLowerCase();
-  const snap = await admin.database().ref(CacheFirebasePath.pathRegistry).child(fileHash).once('value');
+  const filenameVariants = [filePath];
+  if (filePath.endsWith('/index.html')) {
+    filenameVariants.push(filePath.substr(0, filePath.lastIndexOf('/index.html')));
+    filenameVariants.push(filePath.substr(0, filePath.lastIndexOf('index.html')));
+  }
+
+  const snap = await admin.database().ref(CacheFirebasePath.hostRegistry).once('value');
   snap.forEach(childSnap => {
-    const cachedHost = childSnap.val();
-    promises.push(childSnap.ref.remove());
-    promises.push(purgeFromCdn(cachedHost, filePath));
+    const hostData = childSnap.val();
+    for (const filenameVariant of filenameVariants) {
+      promises.push(purgeFromCdn(hostData.domain, filenameVariant));
+    }
     return false;
   });
 
