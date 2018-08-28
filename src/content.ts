@@ -20,7 +20,7 @@ export interface DocumentMeta {
   readTime: Date;       // Time of read
 }
 
-interface ContentDocument {
+export interface ContentDocument {
   data: { [key: string]: any };   // Contains the document's contextual data (title, body, images, etc)
   path: string[];                 // Array of path sections. Index 0 always contain the full permalink
   publishTime: Date;              // Time of publishing the document/page (manually, unrestricted set by author)
@@ -159,7 +159,7 @@ export function getPublicPathToStorageFile(storageFilePath: string) {
   return storageFilePath.startsWith('/') ? storageFilePath : `/${storageFilePath}`;
 }
 
-export const tanam_onFileChangeUpdateRegistry = functions.storage.object().onFinalize((object) => {
+export const tanam_onFileFinalizedUpdateRegistry = functions.storage.object().onFinalize((object) => {
   if (!object.name.startsWith('content/')) {
     console.log(`File is not a user content file. Ignoring it.`);
     return null;
