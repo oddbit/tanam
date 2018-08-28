@@ -18,7 +18,9 @@ import {
   POST_SET_POSTS,
   POST_ACTION_DELETE,
   POST_VALIDATE_TITLE,
-  POST_FIELD_FEATURED_IMAGE_PATH
+  POST_FIELD_FEATURED_IMAGE_PATH,
+  POST_FIELD_TEMPLATE,
+  POST_FIELD_TAGS
 } from '../types';
 import mutations from './mutations';
 import getters from './getters';
@@ -45,6 +47,8 @@ const state = {
     url: null
   },
   permalink: null,
+  template: null,
+  tags: [],
   body: null,
   createdAt: null,
   publishedAt: null,
@@ -89,6 +93,8 @@ export default {
     [POST_FIELD_FEATURED_IMAGE]: mutations.featuredImage,
     [POST_FIELD_FEATURED_IMAGE_PATH]: mutations.featuredImagePath,
     [POST_FIELD_PERMALINK]: mutations.permalink,
+    [POST_FIELD_TEMPLATE]: mutations.template,
+    [POST_FIELD_TAGS]: mutations.tags,
     [POST_FIELD_BODY]: mutations.body,
     [POST_SET_POSTS]: mutations.post,
     [POST_VALIDATE_TITLE]: mutations.validateTitle

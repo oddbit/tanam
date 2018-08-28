@@ -14,6 +14,8 @@ export const POST_MODE = 'post/mode';
 export const POST_ID = 'post/id';
 
 export const POST_FIELD_TITLE = 'post/field/title';
+export const POST_FIELD_TEMPLATE = 'post/field/template';
+export const POST_FIELD_TAGS = 'post/field/tags';
 export const POST_FIELD_PLACE = 'post/field/place';
 export const POST_FIELD_DATE_START = 'post/field/dateStart';
 export const POST_FIELD_TIME_START = 'post/field/timeStart';

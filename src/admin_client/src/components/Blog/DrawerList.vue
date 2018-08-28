@@ -1,34 +1,53 @@
 <template>
   <v-list>
-    <v-list-group>
-      <v-list-tile slot="activator">
-        <v-list-tile-title>Featured Image</v-list-tile-title>
-      </v-list-tile>
-      <div class="px-3">
-        <FeaturedImageField :post-featured-image="postFeaturedImage" @handleCloseFeaturedImg="handleCloseFeaturedImg" @handleChangeFeaturedImg="handleChangeFeaturedImg" />
-      </div>
-    </v-list-group>
-    <v-list-group>
-      <v-list-tile slot="activator">
-        <v-list-tile-title>Permalink</v-list-tile-title>
-      </v-list-tile>
-      <div class="px-3">
-        <v-text-field 
-          readonly 
-          placeholder="-"
-          :value="postPermalink" />
-      </div>
-    </v-list-group>
+    <DrawerSettings>
+      <template slot="title">Featured Image</template>
+      <FeaturedImageField :post-featured-image="postFeaturedImage" @handleCloseFeaturedImg="handleCloseFeaturedImg" @handleChangeFeaturedImg="handleChangeFeaturedImg" />
+    </DrawerSettings>
+    <DrawerSettings>
+      <template slot="title">Permalink</template>
+      <v-text-field 
+        readonly 
+        placeholder="-"
+        :value="postPermalink" />
+    </DrawerSettings>
+    <DrawerSettings>
+      <template slot="title">Template</template>
+      <v-select
+        :items="['blog']"
+        label="Template"
+        solo
+        v-model="postTemplate"
+      />
+    </DrawerSettings>
+    <DrawerSettings>
+      <template slot="title">Tags</template>
+      <v-select
+        :items="[]"
+        label="Tags"
+        multiple
+        chips
+        tags
+        v-model="postTags"
+      />
+    </DrawerSettings>
   </v-list>
 </template>
 
 <script>
-import { POST_FIELD_FEATURED_IMAGE, POST_FIELD_PERMALINK } from '@/store/types';
+import {
+  POST_FIELD_FEATURED_IMAGE,
+  POST_FIELD_PERMALINK,
+  POST_FIELD_TEMPLATE,
+  POST_FIELD_TAGS
+} from '@/store/types';
 import FeaturedImageField from '@/components/Post/FeaturedImageField';
+import DrawerSettings from '@/components/Shared/DrawerSettings';
 
 export default {
   components: {
-    FeaturedImageField
+    FeaturedImageField,
+    DrawerSettings
   },
   computed: {
     postFeaturedImage() {
@@ -36,6 +55,22 @@ export default {
     },
     postPermalink() {
       return this.$store.getters[POST_FIELD_PERMALINK];
+    },
+    postTemplate: {
+      get() {
+        return this.$store.getters[POST_FIELD_TEMPLATE];
+      },
+      set(val) {
+        this.$store.commit(POST_FIELD_TEMPLATE, val);
+      }
+    },
+    postTags: {
+      get() {
+        return this.$store.getters[POST_FIELD_TAGS];
+      },
+      set(val) {
+        this.$store.commit(POST_FIELD_TAGS, val);
+      }
     }
   },
   methods: {

@@ -37,6 +37,8 @@ const featuredImagePath = (state, payload) =>
   (state.featuredImage = { ...state.featuredImage, fullPath: payload });
 
 const permalink = (state, payload) => (state.permalink = payload);
+const template = (state, payload) => (state.template = payload);
+const tags = (state, payload) => (state.tags = payload);
 
 const body = (state, payload) => (state.body = payload);
 
@@ -80,6 +82,8 @@ export default {
   featuredImagePath,
   permalink,
   body,
+  template,
+  tags,
   post,
   validateTitle
 };
