@@ -19,7 +19,7 @@ async function handleAssetRequest(request: express.Request, response: express.Re
   }
 
   const [fileContent] = await contentFile.download();
-  console.log(`[handleAssetRequest] File size: ${fileContent.byteLength} bytes`);
+  console.log(`[handleAssetRequest] File size: ${fileContent.byteLength / 1024} kB`);
 
   response.set('Content-Type', contentTypes.getContentType(request.url));
   response.set('Tanam-Created', new Date().toUTCString());
