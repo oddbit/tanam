@@ -37,7 +37,6 @@
 <script>
 import {
   POST_FIELD_FEATURED_IMAGE,
-  POST_FIELD_PERMALINK,
   POST_FIELD_TEMPLATE,
   POST_FIELD_TAGS
 } from '@/store/types';
@@ -50,15 +49,18 @@ export default {
     DrawerSettings
   },
   computed: {
+    postState() {
+      return this.$store.state.singlePost;
+    },
     postFeaturedImage() {
-      return this.$store.getters[POST_FIELD_FEATURED_IMAGE];
+      return this.postState.featuredImage;
     },
     postPermalink() {
-      return this.$store.getters[POST_FIELD_PERMALINK];
+      return this.postState.permalink;
     },
     postTemplate: {
       get() {
-        return this.$store.getters[POST_FIELD_TEMPLATE];
+        return this.postState.template;
       },
       set(val) {
         this.$store.commit(POST_FIELD_TEMPLATE, val);
@@ -66,7 +68,7 @@ export default {
     },
     postTags: {
       get() {
-        return this.$store.getters[POST_FIELD_TAGS];
+        return this.postState.tags;
       },
       set(val) {
         this.$store.commit(POST_FIELD_TAGS, val);

@@ -20,6 +20,7 @@ const uploadFeaturedImage = async (imgName, featuredImage) => {
 
 const publishPost = ({ state, getters }) => {
   const { body, title, template, featuredImage, tags } = state;
+  const permalink = metadata.generatePermalink(title);
 
   return new Promise(async (resolve, reject) => {
     const docRef = collectionRef(getters[POST_CONTENT_TYPE], true);
@@ -30,7 +31,8 @@ const publishPost = ({ state, getters }) => {
         body: quillToHtml(body),
         title
       },
-      path: metadata.generatePaths(title, template),
+      path: metadata.generatePaths(permalink, template),
+      permalink,
       publishTime: new Date(),
       updateTime: new Date(),
       status: 'published',
@@ -39,7 +41,7 @@ const publishPost = ({ state, getters }) => {
     };
 
     if (featuredImage) {
-      imgName = metadata.generateFeaturedImageName(title);
+      imgName = metadata.generateFeaturedImageName(permalink);
       await uploadFeaturedImage(imgName, featuredImage);
       properties.data.featuredImage = imgName;
     }

@@ -1,5 +1,13 @@
 import metadata from '@/helpers/metadata';
 
+const validateTitle = state => {
+  if (state.title) {
+    state.validTitle = true;
+  } else {
+    state.validTitle = false;
+  }
+};
+
 const title = (state, payload) => {
   state.title = payload;
   state.permalink = payload ? metadata.generatePermalink(payload) : null;
@@ -40,25 +48,20 @@ const body = (state, payload) => (state.body = payload);
 
 const post = (state, payload) => {
   if (payload) {
-    const keys = Object.keys(payload);
-    keys.forEach(key => {
-      state[key] = payload[key];
+    const { data, ...rest } = payload;
+    const incomingState = {
+      ...data,
+      ...rest
+    };
+    Object.keys(incomingState).forEach(key => {
+      state[key] = incomingState[key];
     });
     validateTitle(state);
   } else {
-    const keys = Object.keys(state);
-    keys.forEach(key => {
+    Object.keys(state).forEach(key => {
       state[key] = null;
     });
     validateTitle(state);
-  }
-};
-
-const validateTitle = state => {
-  if (state.title) {
-    state.validTitle = true;
-  } else {
-    state.validTitle = false;
   }
 };
 

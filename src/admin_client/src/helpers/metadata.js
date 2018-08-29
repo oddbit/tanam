@@ -7,11 +7,11 @@ const generatePermalink = title => {
 };
 
 const generateFeaturedImageName = title => {
-  return `/content/images/featured-${generatePermalink(title)}.jpg`;
+  return `/content/images/featured-${title}.jpg`;
 };
 
 const generatePaths = (title, template) => [
-  `/${template}/${generatePermalink(title)}.html`,
+  `/${template}/${title}.html`,
   `/${template}`
 ];
 
