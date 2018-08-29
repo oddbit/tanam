@@ -19,7 +19,7 @@ const uploadFeaturedImage = async (imgName, featuredImage) => {
 };
 
 const publishPost = ({ state, getters }) => {
-  const { body, title, template, featuredImage } = state;
+  const { body, title, template, featuredImage, tags } = state;
 
   return new Promise(async (resolve, reject) => {
     const docRef = collectionRef(getters[POST_CONTENT_TYPE], true);
@@ -34,7 +34,8 @@ const publishPost = ({ state, getters }) => {
       publishTime: new Date(),
       updateTime: new Date(),
       status: 'published',
-      template
+      template,
+      tags
     };
 
     if (featuredImage) {

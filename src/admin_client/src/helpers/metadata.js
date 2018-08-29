@@ -7,7 +7,7 @@ const generatePermalink = title => {
 };
 
 const generateFeaturedImageName = title => {
-  return `/content/images/featured-${parseTitle(title)}.jpg`;
+  return `/content/images/featured-${generatePermalink(title)}.jpg`;
 };
 
 const generatePaths = (title, template) => [

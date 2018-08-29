@@ -1,29 +1,15 @@
 <template>
   <div>
-    <div v-if="postMode === 'new'">
-      <v-btn 
-        v-if="$mq === 'desktop'" 
-        light 
-        @click="handleClickPublish" 
-        :disabled="isDisableBtnSubmit">
-        Publish
-      </v-btn>
-      <v-btn v-if="$mq === 'mobile'" icon :disabled="isDisableBtnSubmit">
-        <v-icon>send</v-icon>
-      </v-btn>
-    </div>
-    <div v-if="postMode === 'edit'">
-      <v-btn 
-        v-if="$mq === 'desktop'" 
-        light 
-        @click="handleClickUpdate" 
-        :disabled="isDisableBtnSubmit">
-        Update
-      </v-btn>
-      <v-btn v-if="$mq === 'mobile'" icon :disabled="isDisableBtnSubmit">
-        <v-icon>send</v-icon>
-      </v-btn>
-    </div>
+    <v-btn 
+      v-if="$mq === 'desktop'" 
+      light 
+      @click="handleClickSubmit" 
+      :disabled="isDisableBtnSubmit">
+      {{ postMode === 'new' ? 'Publish' : 'Update' }}
+    </v-btn>
+    <v-btn v-if="$mq === 'mobile'" icon :disabled="isDisableBtnSubmit">
+      <v-icon>send</v-icon>
+    </v-btn>
   </div>
 </template>
 
@@ -47,24 +33,21 @@ export default {
     }
   },
   methods: {
-    async handleClickPublish() {
+    async handleClickSubmit() {
       try {
-        await this.$store.dispatch(POST_ACTION_SUBMIT);
+        if (this.postMode === 'new') {
+          await this.$store.dispatch(POST_ACTION_SUBMIT);
+        } else {
+          await this.$store.dispatch(
+            POST_ACTION_UPDATE,
+            this.$store.getters[POST_ID]
+          );
+          this.$store.commit(POST_ID, null);
+        }
         this.$router.push(blog.indexLink);
       } catch (error) {
-        alert('Failed to publish');
-      }
-    },
-    async handleClickUpdate() {
-      try {
-        await this.$store.dispatch(
-          POST_ACTION_UPDATE,
-          this.$store.getters[POST_ID]
-        );
-        this.$store.commit(POST_ID, null);
-        this.$router.push(blog.indexLink);
-      } catch (error) {
-        alert('Failed to update');
+        const alertText = this.postMode === 'new' ? 'publish' : 'update';
+        alert(`Failed to ${alertText}`);
       }
     }
   }
