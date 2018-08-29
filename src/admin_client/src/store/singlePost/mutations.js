@@ -51,7 +51,11 @@ const post = (state, payload) => {
     const { data, ...rest } = payload;
     const incomingState = {
       ...data,
-      ...rest
+      ...rest,
+      featuredImage: {
+        src: data.featuredImage,
+        dataUri: false
+      }
     };
     Object.keys(incomingState).forEach(key => {
       state[key] = incomingState[key];

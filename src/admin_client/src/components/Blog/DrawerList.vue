@@ -53,7 +53,7 @@ export default {
       return this.$store.state.singlePost;
     },
     postFeaturedImage() {
-      return this.postState.featuredImage;
+      return this.$store.getters[POST_FIELD_FEATURED_IMAGE];
     },
     postPermalink() {
       return this.postState.permalink;
@@ -80,7 +80,10 @@ export default {
       const reader = new FileReader();
       reader.readAsDataURL(e.target.files[0]);
       reader.onload = event => {
-        this.$store.commit(POST_FIELD_FEATURED_IMAGE, event.target.result);
+        this.$store.commit(POST_FIELD_FEATURED_IMAGE, {
+          src: event.target.result,
+          dataUri: true
+        });
       };
     },
     handleCloseFeaturedImg(refs) {

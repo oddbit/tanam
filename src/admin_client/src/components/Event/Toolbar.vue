@@ -29,7 +29,7 @@
 
 <script>
 import {
-  POST_ACTION_SUBMIT,
+  POST_ACTION_UPLOAD,
   POST_MODE,
   POST_ACTION_UPDATE,
   POST_ID,
@@ -49,7 +49,7 @@ export default {
   methods: {
     async handleClickPublish() {
       try {
-        await this.$store.dispatch(POST_ACTION_SUBMIT);
+        await this.$store.dispatch(POST_ACTION_UPLOAD);
         this.$router.push(event.indexLink);
       } catch (error) {
         alert('Failed to publish');

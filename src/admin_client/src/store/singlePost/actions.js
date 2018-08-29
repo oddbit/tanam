@@ -4,7 +4,7 @@ import quillToHtml from '@/helpers/quillToHtml';
 import contentType from '@/utils/contentType';
 import { POST_CONTENT_TYPE, POST_FIELD_FEATURED_IMAGE } from '@/store/types';
 
-const collectionRef = (collectionName, newPost = false, uid = null) => {
+const collectionRef = (collectionName, newPost = true, uid = null) => {
   const collection = firestore.collection(collectionName);
   return newPost ? collection.doc() : collection.doc(uid);
 };
@@ -18,13 +18,14 @@ const uploadFeaturedImage = async (imgName, featuredImage) => {
   }
 };
 
-const publishPost = ({ state, getters }) => {
+const uploadPost = ({ state, getters, rootState }, payload) => {
   const { body, title, template, featuredImage, tags } = state;
+  const {
+    layout: { postMode }
+  } = rootState;
   const permalink = metadata.generatePermalink(title);
 
   return new Promise(async (resolve, reject) => {
-    const docRef = collectionRef(getters[POST_CONTENT_TYPE], true);
-
     let imgName;
     const properties = {
       data: {
@@ -40,64 +41,26 @@ const publishPost = ({ state, getters }) => {
       tags
     };
 
-    if (featuredImage) {
+    if (featuredImage.dataUri) {
       imgName = metadata.generateFeaturedImageName(permalink);
-      await uploadFeaturedImage(imgName, featuredImage);
+      await uploadFeaturedImage(imgName, featuredImage.src);
       properties.data.featuredImage = imgName;
+    } else if (featuredImage.src) {
+      properties.data.featuredImage = featuredImage.src;
     }
 
     try {
-      await docRef.set(properties);
+      let docRef;
+      if (postMode === 'edit') {
+        docRef = collectionRef(getters[POST_CONTENT_TYPE], false, payload);
+        await docRef.set(properties, { merge: true });
+      } else {
+        docRef = collectionRef(getters[POST_CONTENT_TYPE]);
+        await docRef.set(properties);
+      }
       resolve();
     } catch (error) {
       reject(error);
-    }
-  });
-};
-
-const updatePost = ({ state, getters }, payload) => {
-  const body = quillToHtml(state.body);
-  const updatedAt = new Date().toISOString();
-
-  return new Promise(async (resolve, reject) => {
-    if (state.featuredImage && state.featuredImage.url) {
-      try {
-        const imageRef = await storageRef.child(`${child(getters)}/${payload}`);
-        const snapshot = await imageRef.putString(
-          state.featuredImage.url,
-          'data_url'
-        );
-        const downloadUrl = await imageRef.getDownloadURL();
-        await firestore
-          .collection(getters[POST_CONTENT_TYPE])
-          .doc(payload)
-          .update({
-            ...contentType(state, getters),
-            featuredImage: {
-              fullPath: snapshot.ref.fullPath,
-              url: downloadUrl
-            },
-            body,
-            updatedAt
-          });
-        resolve();
-      } catch (error) {
-        reject();
-      }
-    } else {
-      try {
-        await firestore
-          .collection(getters[POST_CONTENT_TYPE])
-          .doc(payload)
-          .update({
-            ...contentType(state, getters),
-            body,
-            updatedAt
-          });
-        resolve();
-      } catch (error) {
-        reject();
-      }
     }
   });
 };
@@ -132,7 +95,6 @@ const deletePost = async ({ getters }, payload) => {
 };
 
 export default {
-  publishPost,
-  updatePost,
+  uploadPost,
   deletePost
 };

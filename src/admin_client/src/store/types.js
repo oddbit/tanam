@@ -9,6 +9,8 @@ export const LAYOUT = 'layout';
 export const BTN_DELETE_SINGLE_POST = 'btn/delete/singlePost';
 export const BTN_SUBMIT_SINGLE_POST = 'btn/submit/singlePost';
 
+export const POST_RESET_STATE = 'post/resetState';
+
 export const POST_CONTENT_TYPE = 'post/contentType';
 export const POST_MODE = 'post/mode';
 export const POST_ID = 'post/id';
@@ -37,8 +39,7 @@ export const POST_PUBLISHED = 'post/published';
 export const POST_DRAFT = 'post/draft';
 export const POST_BY = 'post/by';
 export const POST_DIALOG_DELETE = 'post/dialog/delete';
-export const POST_ACTION_SUBMIT = 'post/action/submit';
-export const POST_ACTION_UPDATE = 'post/action/update';
+export const POST_ACTION_UPLOAD = 'post/action/upload';
 export const POST_ACTION_DELETE = 'post/action/delete';
 
 export const TEMPLATE_IMAGES = 'template/images';

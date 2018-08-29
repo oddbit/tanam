@@ -15,9 +15,8 @@
 
 <script>
 import {
-  POST_ACTION_SUBMIT,
+  POST_ACTION_UPLOAD,
   POST_MODE,
-  POST_ACTION_UPDATE,
   POST_ID,
   POST_VALIDATE_TITLE
 } from '@/store/types';
@@ -36,10 +35,10 @@ export default {
     async handleClickSubmit() {
       try {
         if (this.postMode === 'new') {
-          await this.$store.dispatch(POST_ACTION_SUBMIT);
+          await this.$store.dispatch(POST_ACTION_UPLOAD);
         } else {
           await this.$store.dispatch(
-            POST_ACTION_UPDATE,
+            POST_ACTION_UPLOAD,
             this.$store.getters[POST_ID]
           );
           this.$store.commit(POST_ID, null);
