@@ -32,14 +32,52 @@ export interface ContentDocument {
 
 /**
  * Page context class is the object that is passed into the template and can be accessed via the `page` attribute.
+ *
+ * The attributes are much like the ones of `ContentDocument` with the difference that some additional data is added
+ * and simplified for use in template. This is like the "public API" version of `ContentDocument`.
+ *
+ * The `url` and `template` attributes are optional, since it is possible to have content that does not offer a URL
+ * to access them on. Examples of that would be for example to create a dynamic pricing table on the website where
+ * it will always be displayed as an embedded part of another page. Or for example "addresses" that should only be
+ * placed in a list on the contact page. Both types might want to offer a rich set of information in the `data`
+ * attribute, but neither of them need to have a page that you can access them individually.
+ *
+ * ## Example PageContext
+ *
+ * ```
+ *  {
+ *    meta: {
+ *      id: "0NcBcuKolxZNqJHmqtcF",
+ *      path: "/blog/0NcBcuKolxZNqJHmqtcF",
+ *      collection: "blog",
+ *      createTime: <Date>,
+ *      updateTime: <Date>,
+ *      readTime: <Date>,
+ *    },
+ *    data: {
+ *      title: "My blog post",
+ *      body: "Lorem ipsum...",
+ *      feaaturedImage: "/content/images/my-featured-image.jpg",
+ *      somethingElse: "You can add what ever fields you want",
+ *      forReal: true,
+ *      whenWasThat: <Date>
+ *    },
+ *    url: "/blog/2018/my-blog-post",
+ *    publishTime: <Date>,
+ *    updateTime: <Date>,
+ *    template: "blog",
+ *    tags: ["fun", "profit"],
+ *  }
+ * ```
+ *
  */
 export class PageContext {
   readonly meta: DocumentMeta;
   readonly data: { [key: string]: any };
-  readonly path: string[];
+  readonly url?: string;
   readonly publishTime: Date;
   readonly updateTime: Date;
-  readonly template: string;
+  readonly template?: string;
   readonly tags: string[];
 
   constructor(document: admin.firestore.DocumentSnapshot) {
@@ -53,11 +91,11 @@ export class PageContext {
     } as DocumentMeta;
 
     const contentDocument = document.data() as ContentDocument;
-    this.data = contentDocument.data;
-    this.path = contentDocument.path.slice();
-    this.publishTime = contentDocument.publishTime;
-    this.updateTime = contentDocument.updateTime;
-    this.template = contentDocument.template;
+    this.data = contentDocument.data || {};
+    this.url = !!contentDocument.path ? contentDocument.path[0] : null;
+    this.publishTime = contentDocument.publishTime || new Date();
+    this.updateTime = contentDocument.updateTime || new Date();
+    this.template = contentDocument.template || null;
     this.tags = (contentDocument.tags || []).slice();
   }
 }
