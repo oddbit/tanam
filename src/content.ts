@@ -42,7 +42,7 @@ export interface ContentDocument {
  * placed in a list on the contact page. Both types might want to offer a rich set of information in the `data`
  * attribute, but neither of them need to have a page that you can access them individually.
  *
- * ## Example PageContext
+ * ## Example DocumentContext
  *
  * ```
  *  {
@@ -71,7 +71,7 @@ export interface ContentDocument {
  * ```
  *
  */
-export class PageContext {
+export class DocumentContext {
   readonly meta: DocumentMeta;
   readonly data: { [key: string]: any };
   readonly url?: string;
@@ -100,6 +100,31 @@ export class PageContext {
   }
 }
 
+/**
+ * The "template context" is the largest set of data about the page and the site, which is injected at the highest level
+ * with the "main template" that is being rendered. That means that this is the data that is avaialble to the whole page
+ * during rendering.
+ *
+ * This is different from the "page context" that can be found in "sub templates" that are injected on a page.
+ *
+ * For example, on a page that lists blog posts, each list item (blog post) would be a `DocumentContext` while only the
+ * page itself would contain all the data of `PageContext`.
+ */
+export class PageContext {
+  readonly site: site.SiteInfo;
+  readonly page: DocumentContext;
+
+  private constructor(_site: site.SiteInfo, _page: DocumentContext) {
+    this.site = _site;
+    this.page = _page;
+  }
+
+  static async createForDocument(data: DocumentContext) {
+    const siteData = await site.getSiteInfo();
+    return new PageContext(siteData, data);
+  }
+}
+
 export async function getDocumentByPath(documentPath: string) {
   console.log(`[getDocumentByPath] Fetch document: ${documentPath}`);
   const doc = await admin.firestore().doc(documentPath).get();
@@ -108,7 +133,7 @@ export async function getDocumentByPath(documentPath: string) {
     return null;
   }
 
-  return new PageContext(doc);
+  return new DocumentContext(doc);
 }
 
 export function getAllDocuments() {
@@ -146,7 +171,7 @@ export async function getDocumentsInCollection(collection: string, orderBy = 'pu
     .get();
 
   console.log(`[dust documents] Fetched ${snap.docs.length} documents`);
-  return snap.docs.map(doc => new PageContext(doc));
+  return snap.docs.map(doc => new DocumentContext(doc));
 }
 
 export async function getTemplateFiles(theme: string, templateType: TemplateType = 'dust') {
