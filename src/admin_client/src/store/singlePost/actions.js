@@ -11,7 +11,7 @@ const collectionRef = (collectionName, newPost = true, uid = null) => {
 
 const uploadFeaturedImage = async (imgName, featuredImage) => {
   try {
-    const imgRef = storageRef.child(`content/images/${imgName}`);
+    const imgRef = storageRef.child(imgName);
     await imgRef.putString(featuredImage, 'data_url');
   } catch (error) {
     throw new Error(error);
@@ -73,30 +73,21 @@ const uploadPost = ({ state, getters, rootState }, payload) => {
 };
 
 const deletePost = async ({ getters }, payload) => {
-  const featuredImagePath = getters[POST_FIELD_FEATURED_IMAGE];
+  const featuredImage = getters[POST_FIELD_FEATURED_IMAGE];
+
   return new Promise(async (resolve, reject) => {
-    if (featuredImagePath) {
-      const imageRef = storageRef.child(featuredImagePath);
-      try {
+    try {
+      if (featuredImage) {
+        const imageRef = storageRef.child(featuredImage);
         await imageRef.delete();
-        await firestore
-          .collection(getters[POST_CONTENT_TYPE])
-          .doc(payload)
-          .delete();
-        resolve();
-      } catch (error) {
-        reject();
       }
-    } else {
-      try {
-        await firestore
-          .collection(getters[POST_CONTENT_TYPE])
-          .doc(payload)
-          .delete();
-        resolve();
-      } catch (error) {
-        reject();
-      }
+
+      const docRef = collectionRef(getters[POST_CONTENT_TYPE], false, payload);
+      await docRef.delete();
+      resolve();
+    } catch (error) {
+      console.log('ERROR', error);
+      reject();
     }
   });
 };

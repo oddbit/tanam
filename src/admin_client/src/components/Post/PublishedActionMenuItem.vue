@@ -12,7 +12,12 @@
 </template>
 
 <script>
-import { POST_DIALOG_DELETE, POST_ID, POST_CONTENT_TYPE } from '@/store/types';
+import {
+  POST_DIALOG_DELETE,
+  POST_ID,
+  POST_CONTENT_TYPE,
+  POST_FIELD_FEATURED_IMAGE
+} from '@/store/types';
 import { blog, event } from '@/config/post';
 
 export default {
@@ -49,10 +54,10 @@ export default {
           break;
         case 'delete':
           this.$store.commit(POST_ID, this.postId);
-          this.$store.commit(
-            POST_FIELD_FEATURED_IMAGE_PATH,
-            this.postFeaturedImagePath
-          );
+          this.$store.commit(POST_FIELD_FEATURED_IMAGE, {
+            src: this.postFeaturedImage,
+            dataUri: false
+          });
           this.$store.commit(POST_DIALOG_DELETE, true);
           break;
         default:

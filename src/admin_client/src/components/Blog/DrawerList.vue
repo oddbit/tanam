@@ -109,7 +109,10 @@ export default {
       };
     },
     handleCloseFeaturedImg(refs) {
-      this.$store.commit(POST_FIELD_FEATURED_IMAGE, null);
+      this.$store.commit(POST_FIELD_FEATURED_IMAGE, {
+        src: null,
+        dataUri: false
+      });
       refs.value = null;
     }
   }
