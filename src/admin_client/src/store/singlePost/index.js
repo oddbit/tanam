@@ -18,7 +18,6 @@ import {
   POST_SET_POSTS,
   POST_ACTION_DELETE,
   POST_VALIDATE_TITLE,
-  POST_FIELD_FEATURED_IMAGE_PATH,
   POST_FIELD_TEMPLATE,
   POST_FIELD_TAGS
 } from '../types';
@@ -42,10 +41,7 @@ const state = {
   rsvpEmail: null,
   rsvpUrl: null,
   rsvpFacebook: null,
-  featuredImage: {
-    fullPath: null,
-    url: null
-  },
+  featuredImage: null,
   permalink: null,
   template: null,
   tags: [],
@@ -73,7 +69,6 @@ export default {
     [POST_FIELD_RSVP_URL]: getters.rsvpUrl,
     [POST_FIELD_RSVP_FACEBOOK]: getters.rsvpFacebook,
     [POST_FIELD_FEATURED_IMAGE]: getters.featuredImage,
-    [POST_FIELD_FEATURED_IMAGE_PATH]: getters.featuredImagePath,
     [POST_FIELD_PERMALINK]: getters.permalink,
     [POST_FIELD_BODY]: getters.body,
     [POST_VALIDATE_TITLE]: getters.validTitle
@@ -91,7 +86,6 @@ export default {
     [POST_FIELD_RSVP_URL]: mutations.rsvpUrl,
     [POST_FIELD_RSVP_FACEBOOK]: mutations.rsvpFacebook,
     [POST_FIELD_FEATURED_IMAGE]: mutations.featuredImage,
-    [POST_FIELD_FEATURED_IMAGE_PATH]: mutations.featuredImagePath,
     [POST_FIELD_PERMALINK]: mutations.permalink,
     [POST_FIELD_TEMPLATE]: mutations.template,
     [POST_FIELD_TAGS]: mutations.tags,

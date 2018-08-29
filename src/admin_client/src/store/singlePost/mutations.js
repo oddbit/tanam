@@ -1,8 +1,8 @@
-import createPermalink from '@/helpers/createPermalink';
+import metadata from '@/helpers/metadata';
 
 const title = (state, payload) => {
   state.title = payload;
-  state.permalink = payload ? createPermalink(payload) : null;
+  state.permalink = payload ? metadata.generatePermalink(payload) : null;
   validateTitle(state);
 };
 
@@ -30,11 +30,7 @@ const rsvpUrl = (state, payload) => (state.rsvpUrl = payload);
 
 const rsvpFacebook = (state, payload) => (state.rsvpFacebook = payload);
 
-const featuredImage = (state, payload) =>
-  (state.featuredImage = { ...state.featuredImage, url: payload });
-
-const featuredImagePath = (state, payload) =>
-  (state.featuredImage = { ...state.featuredImage, fullPath: payload });
+const featuredImage = (state, payload) => (state.featuredImage = payload);
 
 const permalink = (state, payload) => (state.permalink = payload);
 const template = (state, payload) => (state.template = payload);
@@ -79,7 +75,6 @@ export default {
   rsvpUrl,
   rsvpFacebook,
   featuredImage,
-  featuredImagePath,
   permalink,
   body,
   template,

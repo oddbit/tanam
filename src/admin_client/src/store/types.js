@@ -27,7 +27,6 @@ export const POST_FIELD_RSVP_EMAIL = 'post/field/rsvpEmail';
 export const POST_FIELD_RSVP_URL = 'post/field/rsvpUrl';
 export const POST_FIELD_RSVP_FACEBOOK = 'post/field/rsvpFacebook';
 export const POST_FIELD_FEATURED_IMAGE = 'post/field/featuredImage';
-export const POST_FIELD_FEATURED_IMAGE_PATH = 'post/field/featuredImage/path';
 export const POST_FIELD_PERMALINK = 'post/field/permalink';
 export const POST_FIELD_BODY = 'post/field/body';
 

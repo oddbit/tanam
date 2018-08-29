@@ -5,7 +5,7 @@
         <template slot="title">{{ post.data.title }}</template>
         <template slot="datetime">{{ post.updateTime | formatDate }}</template>
         <template slot="action-menu-item">
-          <PublishedActionMenuItem :post-id="post.key" :post-featured-image-path="post.data.featuredImage" />
+          <PublishedActionMenuItem :post-id="post.key" :post-featured-image="post.data.featuredImage" />
         </template>
       </SingleListPost>
     </div>

@@ -12,12 +12,7 @@
 </template>
 
 <script>
-import {
-  POST_DIALOG_DELETE,
-  POST_ID,
-  POST_CONTENT_TYPE,
-  POST_FIELD_FEATURED_IMAGE_PATH
-} from '@/store/types';
+import { POST_DIALOG_DELETE, POST_ID, POST_CONTENT_TYPE } from '@/store/types';
 import { blog, event } from '@/config/post';
 
 export default {
@@ -26,7 +21,7 @@ export default {
       type: String,
       default: null
     },
-    postFeaturedImagePath: {
+    postFeaturedImage: {
       type: String,
       default: null
     }
