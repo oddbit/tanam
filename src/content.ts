@@ -1,9 +1,15 @@
-import * as admin from "firebase-admin";
+import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 import * as url from 'url';
 import * as site from './site';
+import { SHA256 } from 'crypto-js';
 
 export type ContentState = 'published' | 'unpublished';
 export type TemplateType = 'dust';
+
+export abstract class ContentFirebasePath {
+  static readonly fileMetaData = 'contentFiles';
+}
 
 export interface DocumentMeta {
   id: string;           // The document's ID
@@ -14,7 +20,7 @@ export interface DocumentMeta {
   readTime: Date;       // Time of read
 }
 
-interface ContentDocument {
+export interface ContentDocument {
   data: { [key: string]: any };   // Contains the document's contextual data (title, body, images, etc)
   path: string[];                 // Array of path sections. Index 0 always contain the full permalink
   publishTime: Date;              // Time of publishing the document/page (manually, unrestricted set by author)
@@ -140,3 +146,46 @@ export async function getCloudStorageFile(requestUrl: string) {
   console.log(`[getCloudStorageFile] requestUrl=${requestUrl}, assetFilePath=${assetFilePath}`);
   return admin.storage().bucket().file(assetFilePath);
 }
+
+export function getPublicPathToStorageFile(storageFilePath: string) {
+  console.log(`[getPublicPathToStorageFile] storageFilePath=${storageFilePath}`);
+  if (storageFilePath.startsWith('/themes/') || storageFilePath.startsWith('themes/')) {
+    // Removes the "themes/<theme name>" and makes it into a path that will resolve as a Tanam theme file should
+    const publicPath = '/theme/' + storageFilePath.split('/').filter(item => !!item).splice(2).join('/');
+    console.log(`[getPublicPathToStorageFile] storageFilePath=${storageFilePath} => ${publicPath}`);
+    return publicPath;
+  }
+
+  return storageFilePath.startsWith('/') ? storageFilePath : `/${storageFilePath}`;
+}
+
+export const tanam_onFileFinalizedUpdateRegistry = functions.storage.object().onFinalize((object) => {
+  if (!object.name.startsWith('content/')) {
+    console.log(`File is not a user content file. Ignoring it.`);
+    return null;
+  }
+
+  console.log(`File updated: gs://${object.bucket}/${object.name} (${object.md5Hash})`);
+  const id = SHA256(object.bucket + object.name + object.timeCreated).toString().toLowerCase();
+  const data = {
+    bucket: object.bucket,
+    name: object.name,
+    md5: object.md5Hash,
+    updateTime: admin.database.ServerValue.TIMESTAMP,
+    contentType: object.contentType,
+    fileType: object.contentType.split('/')[0]
+  };
+
+  return admin.database().ref(ContentFirebasePath.fileMetaData).child(id).set(data);
+});
+
+export const tanam_onFileDeleteUpdateRegistry = functions.storage.object().onDelete(async (object) => {
+  if (!object.name.startsWith('content/')) {
+    console.log(`File is not a user content file. Ignoring it.`);
+    return null;
+  }
+
+  console.log(`File deleted: gs://${object.bucket}/${object.name} (${object.md5Hash})`);
+  const id = SHA256(object.bucket + object.name + object.timeCreated).toString().toLowerCase();
+  return admin.database().ref(ContentFirebasePath.fileMetaData).child(id).remove();
+});

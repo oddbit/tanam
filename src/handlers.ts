@@ -6,28 +6,9 @@ import * as site from './site';
 import * as cache from './cache';
 import * as render from './render';
 import * as content from './content';
-
-const supportedContentTypes = {
-  'font/otf': /\.(otf)$/i,
-  'font/ttf': /\.(ttf)$/i,
-  'font/woff': /\.(woff)$/i,
-  'font/woff2': /\.(woff2)$/i,
-  'image/jpeg': /\.(jpg|jpeg)$/i,
-  'image/gif': /\.(gif)$/i,
-  'image/png': /\.(png)$/i,
-  'image/tiff': /\.(tif|tiff)$/i,
-  'image/webp': /\.(webp)$/i,
-  'image/bmp': /\.(bmp)$/i,
-  'image/ico': /\.(ico)$/i,
-  'image/svg+xml': /\.(svg)$/i,
-  'text/plain; charset=utf-8': /\.(txt)$/i,
-  'text/css; charset=utf-8': /\.(css)$/i,
-  'text/javascript; charset=utf-8': /\.(js)$/i,
-  'application/json; charset=utf-8': /\.(json)$/i
-};
+import * as contentTypes from './contentTypes';
 
 async function handleAssetRequest(request: express.Request, response: express.Response) {
-  console.log(`[handleAssetRequest] ${request.method.toUpperCase()} ${request.url}`);
   const contentFile = await content.getCloudStorageFile(request.url);
   const [contentExists] = await contentFile.exists();
 
@@ -38,43 +19,63 @@ async function handleAssetRequest(request: express.Request, response: express.Re
   }
 
   const [fileContent] = await contentFile.download();
-  console.log(`[handleAssetRequest] File size: ${fileContent.byteLength} bytes`);
+  console.log(`[handleAssetRequest] File size: ${fileContent.byteLength / 1024} kB`);
 
-  response.set('Content-Type', getContentType(request.url));
+  response.set('Content-Type', contentTypes.getContentType(request.url));
   response.set('Tanam-Created', new Date().toUTCString());
-  response.set('Cache-Control', cache.getCacheHeader('image'));
+  response.set('Cache-Control', cache.getCacheHeader());
   response.send(fileContent);
 }
 
 async function handlePageRequest(request: express.Request, response: express.Response) {
-  const requestUrl = url.parse(request.url).pathname;
+  let requestUrl = url.parse(request.url).pathname;
+
+  if (requestUrl.endsWith('/')) {
+    requestUrl += 'index.html';
+  } else if (!requestUrl.endsWith('.html')) {
+    requestUrl += '/index.html';
+  }
+
+  console.log(`[handlePageRequest] Using effective URL: ${requestUrl}`);
   const documents = await content.getDocumentsByUrl(requestUrl);
 
   if (documents.length === 0) {
-    console.log(`[HTTP 404] document found for: ${requestUrl}`);
+    console.log(`[handlePageRequest] [HTTP 404] document found for: ${requestUrl}`);
     response.status(404).send('Not found');
     return;
   }
 
   if (documents.length > 1) {
     const documentList = JSON.stringify(documents.map(doc => doc.ref.path));
-    console.error(`[HTTP 500] URL '${requestUrl}' maps to ${documents.length} documents: ${documentList}`);
+    console.error(`[handlePageRequest] [HTTP 500] URL '${requestUrl}' maps to ${documents.length} documents: ${documentList}`);
     response.status(500).send('Database inconsistency. URL is not uniquely resolved.');
     return;
   }
 
+  const host = request.hostname;
   const contentDoc = documents[0];
   const pageHtml = await render.renderDocument(contentDoc);
 
   response.set('Tanam-Created', new Date().toUTCString());
   response.set('Tanam-Id', contentDoc.ref.path);
-  response.set('Cache-Control', cache.getCacheHeader('purgeable'));
-  response.send(pageHtml);
+  response.set('Cache-Control', cache.getCacheHeader());
+
+  const primaryDomain = await site.getPrimaryDomain();
+  if (primaryDomain !== host) {
+    console.log(`[handlePageRequest] Request is on secondary domain '${host}'. Adding canonical link to: ${primaryDomain}`);
+    const htmlWithCanonicalLink = pageHtml
+      .replace(
+        /<\/head>/gi,
+        `<link rel="canonical" href="https://${primaryDomain}${request.url}" /></head>`);
+    response.send(htmlWithCanonicalLink);
+  } else {
+    response.send(pageHtml);
+  }
 }
 
 export async function handlePublicDirectoryFileReq(request: express.Request, response: express.Response) {
   const requestUrl = url.parse(request.url).pathname;
-  console.log(`${request.method.toUpperCase()} ${requestUrl}`);
+  console.log(`[handlePublicDirectoryFileReq] ${request.method.toUpperCase()} ${requestUrl}`);
   const normalizedName = requestUrl.replace('.', '_');
   const fileRef = await admin.database().ref('publicFiles').child(normalizedName).once('value');
 
@@ -84,20 +85,21 @@ export async function handlePublicDirectoryFileReq(request: express.Request, res
     return;
   }
 
-  response.set('Cache-Control', cache.getCacheHeader('purgeable'));
-  response.set('Content-Type', getContentType(requestUrl));
+  response.set('Tanam-Created', new Date().toUTCString());
+  response.set('Cache-Control', cache.getCacheHeader());
+  response.set('Content-Type', contentTypes.getContentType(requestUrl));
   response.send(fileRef.val());
 }
 
 export async function handleSitemapReq(request: express.Request, response: express.Response) {
-  console.log(`${request.method.toUpperCase()} ${request.url}`);
+  console.log(`[handleSitemapReq] ${request.method.toUpperCase()} ${request.url}`);
   const documents = await content.getAllDocuments();
   if (documents.length === 0) {
     console.log(`[HTTP 404] No documents, so no sitemap present either`);
     response.status(404).send('Not found.');
   }
 
-  const domain = await site.getDomain();
+  const domain = await site.getPrimaryDomain();
   const siteMapEntries = documents.filter(doc => !!doc.data().path).map(doc => {
     const docData = doc.data();
     const lastModified = docData.modifiedAt || doc.updateTime.toDate();
@@ -117,36 +119,24 @@ export async function handleSitemapReq(request: express.Request, response: expre
     siteMapEntries.join('\n'),
     `</urlset>`].join('\n');
 
-  response.set('Cache-Control', cache.getCacheHeader('purgeable'));
+  response.set('Tanam-Created', new Date().toUTCString());
+  response.set('Cache-Control', cache.getCacheHeader());
   response.set('Content-Type', 'text/xml; charset=utf-8');
   response.send(siteMap);
 }
 
 export async function handleRequest(request: express.Request, response: express.Response) {
+  const host = request.hostname;
   const requestUrl = url.parse(request.url).pathname;
-  console.log(`${request.method.toUpperCase()} ${requestUrl}`);
 
-  response.set('Tanam-Created', new Date().toUTCString());
+  console.log(`[handleRequest] ${request.method.toUpperCase()} ${host}${requestUrl}`);
+  await cache.registerRequestHost(host);
 
-  if (getContentType(requestUrl) === 'default') {
+  if (contentTypes.getContentType(requestUrl) === 'default') {
     await handlePageRequest(request, response);
   } else {
     await handleAssetRequest(request, response);
   }
-}
-
-function getContentType(requestUrl: string) {
-  const requestPath = url.parse(requestUrl).pathname;
-  console.log(`Resolving content type for: ${requestPath}`);
-  for (const contentType in supportedContentTypes) {
-    if (supportedContentTypes[contentType].test(requestPath)) {
-      console.log(`Content type ${contentType} for: ${requestPath}`);
-      return contentType;
-    }
-  }
-
-  console.log(`No special content type found for: ${requestPath}`);
-  return 'default';
 }
 
 export async function handleAdminPage(response: express.Response, adminClientDir: string, firebaseConfig: any) {

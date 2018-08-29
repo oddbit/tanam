@@ -45,20 +45,19 @@ export async function renderDocument(document: admin.firestore.DocumentSnapshot)
   }
 
   const context = {
-    page: content,
+    page: contentDocument,
     site: await site.getSiteInfo()
   };
 
-  return new Promise((resolve, reject) => {
-    dust.render(contentDocument.template, context, (err, out) => {
+  return new Promise<string>((resolve, reject) => {
+    dust.render(contentDocument.template, context, (err: any, out: string) => {
       if (err) {
         console.log(`[renderDocument] Error rendering: ${JSON.stringify(err)}`);
-        reject(err);
-        return;
+        reject(JSON.stringify(err));
+      } else {
+        console.log(`[renderDocument] Finished rendering`);
+        resolve(out);
       }
-
-      console.log(`[renderDocument] Finished rendering`);
-      resolve(out);
     });
   });
 }

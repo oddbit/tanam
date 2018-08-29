@@ -1,16 +1,15 @@
 {
   "name": "tanam",
-  "version": "0.0.16",
+  "version": "0.0.27",
   "description": "Pluggable CMS for Firebase",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/src/index.js",
+  "typings": "dist/src/index.d.ts",
   "engines": {
     "node": "8"
   },
   "scripts": {
     "watch": "tsc -w -p .",
     "build": "tsc -p .",
-    "copyfiles": "cp -r src/cloud_functions examples/minimal/functions/src/tanam/ && cp -r src/template examples/minimal/functions/src/tanam/ && cp -r src/utils examples/minimal/functions/src/tanam/ && cp src/index.ts examples/minimal/functions/src/tanam/",
     "test": "mocha --reporter spec dist/test/**/*.spec.js"
   },
   "repository": {
@@ -41,7 +40,7 @@
     "@types/dustjs-linkedin": "^1.2.31",
     "@types/express": "^4.16.0",
     "@types/mocha": "^5.2.5",
-    "@types/sinon": "^5.0.1",
+    "@types/sinon": "^5.0.2",
     "chai": "^4.1.2",
     "debug": "^3.1.0",
     "mocha": "^5.1.1",
@@ -50,11 +49,9 @@
     "typescript": "^3.0.1"
   },
   "dependencies": {
-    "async-helpers": "^0.3.17",
     "crypto-js": "^3.1.9-1",
     "dustjs-helpers": "^1.7.4",
     "dustjs-linkedin": "^2.7.5",
-    "ejs": "^2.6.1",
     "express": "^4.16.3",
     "firebase-admin": "^6.0.0",
     "firebase-functions": "^2.0.5"
