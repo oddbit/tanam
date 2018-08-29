@@ -45,28 +45,25 @@ const template = (state, payload) => (state.template = payload);
 const tags = (state, payload) => (state.tags = payload);
 
 const body = (state, payload) => (state.body = payload);
+const status = (state, payload) => (state.status = payload);
 
 const post = (state, payload) => {
-  if (payload) {
-    const { data, ...rest } = payload;
-    const incomingState = {
-      ...data,
-      ...rest,
-      featuredImage: {
-        src: data.featuredImage,
-        dataUri: false
-      }
-    };
-    Object.keys(incomingState).forEach(key => {
-      state[key] = incomingState[key];
-    });
-    validateTitle(state);
-  } else {
-    Object.keys(state).forEach(key => {
-      state[key] = null;
-    });
-    validateTitle(state);
-  }
+  const { data, status, ...rest } = payload;
+  const postStatus = status === 'published';
+
+  const incomingState = {
+    ...data,
+    ...rest,
+    status: postStatus,
+    featuredImage: {
+      src: data.featuredImage,
+      dataUri: false
+    }
+  };
+  Object.keys(incomingState).forEach(key => {
+    state[key] = incomingState[key];
+  });
+  validateTitle(state);
 };
 
 export default {
@@ -84,6 +81,7 @@ export default {
   featuredImage,
   permalink,
   body,
+  status,
   template,
   tags,
   post,

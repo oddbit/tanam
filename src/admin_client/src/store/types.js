@@ -31,6 +31,7 @@ export const POST_FIELD_RSVP_FACEBOOK = 'post/field/rsvpFacebook';
 export const POST_FIELD_FEATURED_IMAGE = 'post/field/featuredImage';
 export const POST_FIELD_PERMALINK = 'post/field/permalink';
 export const POST_FIELD_BODY = 'post/field/body';
+export const POST_FIELD_STATUS = 'post/field/status';
 
 export const POST_VALIDATE_TITLE = 'post/validate/title';
 

@@ -1,44 +1,55 @@
 <template>
-  <v-list>
-    <DrawerSettings>
-      <template slot="title">Featured Image</template>
-      <FeaturedImageField :post-featured-image="postFeaturedImage" @handleCloseFeaturedImg="handleCloseFeaturedImg" @handleChangeFeaturedImg="handleChangeFeaturedImg" />
-    </DrawerSettings>
-    <DrawerSettings>
-      <template slot="title">Permalink</template>
-      <v-text-field 
-        readonly 
-        placeholder="-"
-        :value="postPermalink" />
-    </DrawerSettings>
-    <DrawerSettings>
-      <template slot="title">Template</template>
-      <v-select
-        :items="['blog']"
-        label="Template"
-        solo
-        v-model="postTemplate"
+  <div>
+    <div class="pa-3" v-if="editMode">
+      <v-switch
+        :label="postStatus ? 'Published' : 'Unpublished'"
+        v-model="postStatus"
+        hide-details
+        color="primary"
       />
-    </DrawerSettings>
-    <DrawerSettings>
-      <template slot="title">Tags</template>
-      <v-select
-        :items="[]"
-        label="Tags"
-        multiple
-        chips
-        tags
-        v-model="postTags"
-      />
-    </DrawerSettings>
-  </v-list>
+    </div>
+    <v-list>
+      <DrawerSettings>
+        <template slot="title">Featured Image</template>
+        <FeaturedImageField :post-featured-image="postFeaturedImage" @handleCloseFeaturedImg="handleCloseFeaturedImg" @handleChangeFeaturedImg="handleChangeFeaturedImg" />
+      </DrawerSettings>
+      <DrawerSettings>
+        <template slot="title">Permalink</template>
+        <v-text-field 
+          readonly 
+          placeholder="-"
+          :value="postPermalink" />
+      </DrawerSettings>
+      <DrawerSettings>
+        <template slot="title">Template</template>
+        <v-select
+          :items="['blog']"
+          label="Template"
+          solo
+          v-model="postTemplate"
+        />
+      </DrawerSettings>
+      <DrawerSettings>
+        <template slot="title">Tags</template>
+        <v-select
+          :items="[]"
+          label="Tags"
+          multiple
+          chips
+          tags
+          v-model="postTags"
+        />
+      </DrawerSettings>
+    </v-list>
+  </div>
 </template>
 
 <script>
 import {
   POST_FIELD_FEATURED_IMAGE,
   POST_FIELD_TEMPLATE,
-  POST_FIELD_TAGS
+  POST_FIELD_TAGS,
+  POST_FIELD_STATUS
 } from '@/store/types';
 import FeaturedImageField from '@/components/Post/FeaturedImageField';
 import DrawerSettings from '@/components/Shared/DrawerSettings';
@@ -49,8 +60,19 @@ export default {
     DrawerSettings
   },
   computed: {
+    editMode() {
+      return this.$store.state.layout.postMode !== 'new';
+    },
     postState() {
       return this.$store.state.singlePost;
+    },
+    postStatus: {
+      get() {
+        return this.postState.status;
+      },
+      set(val) {
+        this.$store.commit(POST_FIELD_STATUS, val);
+      }
     },
     postFeaturedImage() {
       return this.$store.getters[POST_FIELD_FEATURED_IMAGE];

@@ -1,7 +1,7 @@
 import { firestore, storageRef } from '@/utils/firebase';
 import metadata from '@/helpers/metadata';
 import quillToHtml from '@/helpers/quillToHtml';
-import contentType from '@/utils/contentType';
+// import contentType from '@/utils/contentType';
 import { POST_CONTENT_TYPE, POST_FIELD_FEATURED_IMAGE } from '@/store/types';
 
 const collectionRef = (collectionName, newPost = true, uid = null) => {
@@ -25,6 +25,13 @@ const uploadPost = ({ state, getters, rootState }, payload) => {
   } = rootState;
   const permalink = metadata.generatePermalink(title);
 
+  let status;
+  if (postMode === 'edit') {
+    status = state.status ? 'published' : 'unpublished';
+  } else {
+    status = 'published';
+  }
+
   return new Promise(async (resolve, reject) => {
     let imgName;
     const properties = {
@@ -36,7 +43,7 @@ const uploadPost = ({ state, getters, rootState }, payload) => {
       permalink,
       publishTime: new Date(),
       updateTime: new Date(),
-      status: 'published',
+      status,
       template,
       tags
     };

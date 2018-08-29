@@ -14,6 +14,7 @@ import {
   POST_FIELD_FEATURED_IMAGE,
   POST_FIELD_PERMALINK,
   POST_FIELD_BODY,
+  POST_FIELD_STATUS,
   POST_ACTION_UPLOAD,
   POST_SET_POSTS,
   POST_ACTION_DELETE,
@@ -98,6 +99,7 @@ export default {
     [POST_FIELD_TEMPLATE]: mutations.template,
     [POST_FIELD_TAGS]: mutations.tags,
     [POST_FIELD_BODY]: mutations.body,
+    [POST_FIELD_STATUS]: mutations.status,
     [POST_SET_POSTS]: mutations.post,
     [POST_VALIDATE_TITLE]: mutations.validateTitle
   },
