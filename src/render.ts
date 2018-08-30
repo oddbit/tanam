@@ -4,10 +4,6 @@ import * as admin from 'firebase-admin';
 import * as fs from 'fs';
 import * as content from './content';
 
-export interface TemplateContext {
-  page: content.PageContext;
-  site: site.SiteInfo;
-}
 
 // ----------------------------------------------------------------------------
 // DUST HELPERS
@@ -29,7 +25,7 @@ dust.helpers.documents = (chunk, context, bodies, params) =>
  * @param document Firestore content document
  */
 export async function renderDocument(document: admin.firestore.DocumentSnapshot) {
-  const contentDocument = new content.PageContext(document);
+  const contentDocument = new content.DocumentContext(document);
   const theme = await site.getThemeName();
   const templateFiles = await content.getTemplateFiles(theme);
 
@@ -44,13 +40,8 @@ export async function renderDocument(document: admin.firestore.DocumentSnapshot)
     dust.register(templateName, dust.loadSource(source));
   }
 
-  const context = {
-    page: contentDocument,
-    site: await site.getSiteInfo()
-  };
-
   return new Promise<string>((resolve, reject) => {
-    dust.render(contentDocument.template, context, (err: any, out: string) => {
+    dust.render(contentDocument.template, content.PageContext.createForDocument(contentDocument), (err: any, out: string) => {
       if (err) {
         console.log(`[renderDocument] Error rendering: ${JSON.stringify(err)}`);
         reject(JSON.stringify(err));
