@@ -34,7 +34,7 @@ const supportedContentTypes = {
   'application/rtf': /\.(rtf)$/i,
   'application/x-sh; charset=utf-8': /\.(sh)$/i,
   'application/x-tar': /\.(tar)$/i,
-  'application/typescript; charset=utf-8': /\.(ts)$/i,
+  'application/typescript; charset=utf-8': /\.(ts|d\.ts)$/i,
   'application/vnd.visio': /\.(vsd)$/i,
   'audio/wav': /\.(wav)$/i,
   'audio/webm': /\.(weba)$/i,
@@ -59,21 +59,21 @@ const supportedContentTypes = {
   'image/svg+xml': /\.(svg)$/i,
   'text/plain; charset=utf-8': /\.(txt)$/i,
   'text/css; charset=utf-8': /\.(css)$/i,
-  'text/javascript; charset=utf-8': /\.(js)$/i,
+  'text/javascript; charset=utf-8': /\.(js|js\.map)$/i,
   'application/json; charset=utf-8': /\.(json)$/i,
-  'text/template':  /\.(dust|hbs|ejs)$/i
+  'text/template': /\.(dust|hbs|ejs)$/i
 };
 
 export function getContentType(requestUrl: string) {
   const requestPath = url.parse(requestUrl).pathname;
-  console.log(`Resolving content type for: ${requestPath}`);
+  console.log(`[getContentType] Resolving content type for: ${requestPath}`);
   for (const contentType in supportedContentTypes) {
     if (supportedContentTypes[contentType].test(requestPath)) {
-      console.log(`Content type ${contentType} for: ${requestPath}`);
+      console.log(`[getContentType] Content type ${contentType} for: ${requestPath}`);
       return contentType;
     }
   }
 
-  console.log(`No special content type found for: ${requestPath}`);
+  console.log(`[getContentType] No special content type found for: ${requestPath}`);
   return 'default';
 }
