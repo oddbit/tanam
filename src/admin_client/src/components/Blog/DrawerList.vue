@@ -1,41 +1,100 @@
 <template>
-  <v-list>
-    <v-list-group>
-      <v-list-tile slot="activator">
-        <v-list-tile-title>Featured Image</v-list-tile-title>
-      </v-list-tile>
-      <div class="px-3">
+  <div>
+    <div class="pa-3" v-if="editMode">
+      <v-switch
+        :label="postStatus ? 'Published' : 'Unpublished'"
+        v-model="postStatus"
+        hide-details
+        color="primary"
+      />
+    </div>
+    <v-list>
+      <DrawerSettings>
+        <template slot="title">Featured Image</template>
         <FeaturedImageField :post-featured-image="postFeaturedImage" @handleCloseFeaturedImg="handleCloseFeaturedImg" @handleChangeFeaturedImg="handleChangeFeaturedImg" />
-      </div>
-    </v-list-group>
-    <v-list-group>
-      <v-list-tile slot="activator">
-        <v-list-tile-title>Permalink</v-list-tile-title>
-      </v-list-tile>
-      <div class="px-3">
+      </DrawerSettings>
+      <DrawerSettings>
+        <template slot="title">Permalink</template>
         <v-text-field 
           readonly 
           placeholder="-"
           :value="postPermalink" />
-      </div>
-    </v-list-group>
-  </v-list>
+      </DrawerSettings>
+      <DrawerSettings>
+        <template slot="title">Template</template>
+        <v-select
+          :items="['blog']"
+          label="Template"
+          solo
+          v-model="postTemplate"
+        />
+      </DrawerSettings>
+      <DrawerSettings>
+        <template slot="title">Tags</template>
+        <v-select
+          :items="[]"
+          label="Tags"
+          multiple
+          chips
+          tags
+          v-model="postTags"
+        />
+      </DrawerSettings>
+    </v-list>
+  </div>
 </template>
 
 <script>
-import { POST_FIELD_FEATURED_IMAGE, POST_FIELD_PERMALINK } from '@/store/types';
+import {
+  POST_FIELD_FEATURED_IMAGE,
+  POST_FIELD_TEMPLATE,
+  POST_FIELD_TAGS,
+  POST_FIELD_STATUS
+} from '@/store/types';
 import FeaturedImageField from '@/components/Post/FeaturedImageField';
+import DrawerSettings from '@/components/Shared/DrawerSettings';
 
 export default {
   components: {
-    FeaturedImageField
+    FeaturedImageField,
+    DrawerSettings
   },
   computed: {
+    editMode() {
+      return this.$store.state.layout.postMode !== 'new';
+    },
+    postState() {
+      return this.$store.state.singlePost;
+    },
+    postStatus: {
+      get() {
+        return this.postState.status;
+      },
+      set(val) {
+        this.$store.commit(POST_FIELD_STATUS, val);
+      }
+    },
     postFeaturedImage() {
       return this.$store.getters[POST_FIELD_FEATURED_IMAGE];
     },
     postPermalink() {
-      return this.$store.getters[POST_FIELD_PERMALINK];
+      return this.postState.permalink;
+    },
+    postTemplate: {
+      get() {
+        return this.postState.template;
+      },
+      set(val) {
+        this.$store.commit(POST_FIELD_TEMPLATE, val);
+      }
+    },
+    postTags: {
+      get() {
+        return this.postState.tags;
+      },
+      set(val) {
+        this.$store.commit(POST_FIELD_TAGS, val);
+      }
     }
   },
   methods: {
@@ -43,11 +102,17 @@ export default {
       const reader = new FileReader();
       reader.readAsDataURL(e.target.files[0]);
       reader.onload = event => {
-        this.$store.commit(POST_FIELD_FEATURED_IMAGE, event.target.result);
+        this.$store.commit(POST_FIELD_FEATURED_IMAGE, {
+          src: event.target.result,
+          dataUri: true
+        });
       };
     },
     handleCloseFeaturedImg(refs) {
-      this.$store.commit(POST_FIELD_FEATURED_IMAGE, null);
+      this.$store.commit(POST_FIELD_FEATURED_IMAGE, {
+        src: null,
+        dataUri: false
+      });
       refs.value = null;
     }
   }

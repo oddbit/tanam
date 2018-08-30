@@ -18,6 +18,11 @@ const routerOptions = [
     meta: { layout: 'SimpleLayout' }
   },
   {
+    path: '/templates/images',
+    name: 'templateImages',
+    component: 'Templates/Images'
+  },
+  {
     path: event.indexLink,
     name: event.indexName,
     component: 'Events/index'
