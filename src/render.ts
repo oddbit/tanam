@@ -40,8 +40,11 @@ export async function renderDocument(document: admin.firestore.DocumentSnapshot)
     dust.register(templateName, dust.loadSource(source));
   }
 
+  const template = contentDocument.template;
+  const context = await content.PageContext.createForDocument(contentDocument);
+
   return new Promise<string>((resolve, reject) => {
-    dust.render(contentDocument.template, content.PageContext.createForDocument(contentDocument), (err: any, out: string) => {
+    dust.render(template, context, (err: any, out: string) => {
       if (err) {
         console.log(`[renderDocument] Error rendering: ${JSON.stringify(err)}`);
         reject(JSON.stringify(err));
