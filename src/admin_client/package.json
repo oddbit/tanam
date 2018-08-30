@@ -10,6 +10,7 @@
     "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
+    "date-fns": "^1.29.0",
     "firebase": "^5.0.3",
     "firebaseui": "^3.0.0",
     "node-sass": "^4.9.0",
@@ -25,17 +26,17 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-rc.9",
-    "@vue/cli-plugin-e2e-cypress": "^3.0.0-rc.9",
-    "@vue/cli-plugin-eslint": "^3.0.0-rc.9",
-    "@vue/cli-plugin-pwa": "^3.0.0-rc.9",
-    "@vue/cli-plugin-unit-jest": "^3.0.0-rc.9",
-    "@vue/cli-service": "^3.0.0-rc.9",
-    "@vue/eslint-config-prettier": "^3.0.0-rc.9",
+    "@vue/cli-plugin-babel": "^3.0.1",
+    "@vue/cli-plugin-e2e-cypress": "^3.0.1",
+    "@vue/cli-plugin-eslint": "^3.0.1",
+    "@vue/cli-plugin-pwa": "^3.0.1",
+    "@vue/cli-plugin-unit-jest": "^3.0.1",
+    "@vue/cli-service": "^3.0.1",
+    "@vue/eslint-config-prettier": "^3.0.1",
     "@vue/test-utils": "^1.0.0-beta.20",
-    "babel-plugin-transform-imports": "^1.4.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^23.0.1",
+    "babel-plugin-transform-imports": "^1.4.1",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
     "stylus": "^0.54.5",

@@ -43,14 +43,20 @@ export default {
     handleDialogCancel() {
       this.$store.commit(POST_DIALOG_DELETE, false);
     },
-    handleDialogDelete() {
-      this.$store
-        .dispatch(POST_ACTION_DELETE, this.$store.getters[POST_ID])
-        .then(() => {
-          this.$store.commit(POST_DIALOG_DELETE, false);
-          this.$store.commit(POST_ID, null);
-          this.$router.push(this.routerPush);
-        });
+    async handleDialogDelete() {
+      try {
+        await this.$store.dispatch(
+          POST_ACTION_DELETE,
+          this.$store.getters[POST_ID]
+        );
+        this.$store.commit(POST_DIALOG_DELETE, false);
+        this.$store.commit(POST_ID, null);
+        this.$router.push(this.routerPush);
+      } catch (error) {
+        this.$store.commit(POST_DIALOG_DELETE, false);
+        this.$store.commit(POST_ID, null);
+        alert('Failed to delete');
+      }
     }
   }
 };

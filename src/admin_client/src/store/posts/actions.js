@@ -1,10 +1,14 @@
-import firestore from '@/utils/firestore';
-import { POST_SET_POSTS, POST_PUBLISHED, POST_DRAFT } from '../types';
-import { collection } from '@/utils/firestoreCollection';
+import { firestore } from '@/utils/firebase';
+import {
+  POST_SET_POSTS,
+  POST_PUBLISHED,
+  POST_DRAFT,
+  POST_CONTENT_TYPE
+} from '../types';
 
 const getPublishedPosts = ({ commit, getters }) => {
   firestore
-    .collection(collection(getters))
+    .collection(getters[POST_CONTENT_TYPE])
     .where('status', '==', 'published')
     .onSnapshot(snapshot => {
       const arr = [];
@@ -18,7 +22,7 @@ const getPublishedPosts = ({ commit, getters }) => {
 
 const getDraftPosts = ({ commit, getters }) => {
   firestore
-    .collection(collection(getters))
+    .collection(getters[POST_CONTENT_TYPE])
     .where('status', '==', 'draft')
     .onSnapshot(snapshot => {
       const arr = [];
@@ -32,7 +36,7 @@ const getDraftPosts = ({ commit, getters }) => {
 
 const getPostBy = async ({ commit, getters }, payload) => {
   firestore
-    .collection(collection(getters))
+    .collection(getters[POST_CONTENT_TYPE])
     .doc(payload)
     .get()
     .then(doc => {

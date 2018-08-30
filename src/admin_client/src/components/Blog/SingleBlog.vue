@@ -6,7 +6,7 @@
 import SinglePost from '@/components/Post/SinglePost';
 import {
   POST_MODE,
-  POST_SET_POSTS,
+  POST_RESET_STATE,
   POST_CONTENT_TYPE,
   POST_BY,
   POST_ID
@@ -32,7 +32,7 @@ export default {
     }
   },
   beforeDestroy() {
-    this.$store.commit(POST_SET_POSTS, null);
+    this.$store.commit(POST_RESET_STATE);
   },
   created() {
     this.$store.commit(POST_CONTENT_TYPE, blog.contentType);

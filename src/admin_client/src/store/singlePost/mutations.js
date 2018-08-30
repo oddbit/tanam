@@ -1,8 +1,16 @@
-import createPermalink from '@/helpers/createPermalink';
+import metadata from '@/helpers/metadata';
+
+const validateTitle = state => {
+  if (state.title) {
+    state.validTitle = true;
+  } else {
+    state.validTitle = false;
+  }
+};
 
 const title = (state, payload) => {
   state.title = payload;
-  state.permalink = payload ? createPermalink(payload) : null;
+  state.permalink = payload ? metadata.generatePermalink(payload) : null;
   validateTitle(state);
 };
 
@@ -33,31 +41,29 @@ const rsvpFacebook = (state, payload) => (state.rsvpFacebook = payload);
 const featuredImage = (state, payload) => (state.featuredImage = payload);
 
 const permalink = (state, payload) => (state.permalink = payload);
+const template = (state, payload) => (state.template = payload);
+const tags = (state, payload) => (state.tags = payload);
 
 const body = (state, payload) => (state.body = payload);
+const status = (state, payload) => (state.status = payload);
 
 const post = (state, payload) => {
-  if (payload) {
-    const keys = Object.keys(payload);
-    keys.forEach(key => {
-      state[key] = payload[key];
-    });
-    validateTitle(state);
-  } else {
-    const keys = Object.keys(state);
-    keys.forEach(key => {
-      state[key] = null;
-    });
-    validateTitle(state);
-  }
-};
+  const { data, status, ...rest } = payload;
+  const postStatus = status === 'published';
 
-const validateTitle = state => {
-  if (state.title) {
-    state.validTitle = true;
-  } else {
-    state.validTitle = false;
-  }
+  const incomingState = {
+    ...data,
+    ...rest,
+    status: postStatus,
+    featuredImage: {
+      src: data.featuredImage,
+      dataUri: false
+    }
+  };
+  Object.keys(incomingState).forEach(key => {
+    state[key] = incomingState[key];
+  });
+  validateTitle(state);
 };
 
 export default {
@@ -75,6 +81,9 @@ export default {
   featuredImage,
   permalink,
   body,
+  status,
+  template,
+  tags,
   post,
   validateTitle
 };

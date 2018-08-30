@@ -18,6 +18,8 @@ import {
   VTabs,
   VDatePicker,
   VTimePicker,
+  VSelect,
+  VSwitch,
   VDivider,
   transitions
 } from 'vuetify';
@@ -42,6 +44,8 @@ Vue.use(Vuetify, {
     VTabs,
     VDatePicker,
     VTimePicker,
+    VSelect,
+    VSwitch,
     VDivider,
     transitions
   },

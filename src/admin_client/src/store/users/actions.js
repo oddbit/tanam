@@ -3,10 +3,11 @@ import { SET_USER } from '@/store/types';
 import router from '@/router';
 
 const autoLogin = ({ commit }, payload) => {
-  const { uid, email } = payload;
+  const { uid, email, displayName } = payload;
   commit(SET_USER, {
     id: uid,
-    email
+    email,
+    displayName
   });
 };
 

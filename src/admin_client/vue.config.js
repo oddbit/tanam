@@ -1,4 +1,7 @@
 module.exports = {
+  configureWebpack: {
+    devtool: 'source-map'
+  },
   chainWebpack: config => {
     if (process.env.NODE_ENV !== 'development') {
       config.plugin('html').tap(args => {
