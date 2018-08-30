@@ -1,6 +1,6 @@
 {
   "name": "tanam",
-  "version": "0.0.29",
+  "version": "0.0.31",
   "description": "Pluggable CMS for Firebase",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",

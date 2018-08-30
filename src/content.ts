@@ -64,6 +64,7 @@ export interface ContentDocument {
  *    },
  *    url: "/blog/2018/my-blog-post",
  *    publishTime: <Date>,
+ *    status: "published",
  *    updateTime: <Date>,
  *    template: "blog",
  *    tags: ["fun", "profit"],
@@ -75,6 +76,7 @@ export class DocumentContext {
   readonly meta: DocumentMeta;
   readonly data: { [key: string]: any };
   readonly url?: string;
+  readonly status: ContentState;
   readonly publishTime: Date;
   readonly updateTime: Date;
   readonly template?: string;
@@ -91,10 +93,11 @@ export class DocumentContext {
     } as DocumentMeta;
 
     const contentDocument = document.data() as ContentDocument;
-    this.data = contentDocument.data || {};
+    this.data = !!contentDocument.data ? { ...contentDocument.data } : {};
     this.url = !!contentDocument.path ? contentDocument.path[0] : null;
-    this.publishTime = contentDocument.publishTime || new Date();
-    this.updateTime = contentDocument.updateTime || new Date();
+    this.status = contentDocument.status || 'unpublished';
+    this.publishTime = !!contentDocument.publishTime ? new Date(contentDocument.publishTime) : new Date();
+    this.updateTime = !!contentDocument.updateTime ? new Date(contentDocument.updateTime) : new Date();
     this.template = contentDocument.template || null;
     this.tags = (contentDocument.tags || []).slice();
   }
@@ -125,17 +128,6 @@ export class PageContext {
   }
 }
 
-export async function getDocumentByPath(documentPath: string) {
-  console.log(`[getDocumentByPath] Fetch document: ${documentPath}`);
-  const doc = await admin.firestore().doc(documentPath).get();
-  if (!doc) {
-    console.log(`[getDocumentByPath] Document not found: ${documentPath}`);
-    return null;
-  }
-
-  return new DocumentContext(doc);
-}
-
 export function getAllDocuments() {
   return getDocumentsByUrl();
 }
@@ -162,16 +154,36 @@ export async function getDocumentsByUrl(requestUrl?: string) {
   return documents.filter(doc => (doc.data() as ContentDocument).status === 'published');
 }
 
-export async function getDocumentsInCollection(collection: string, orderBy = 'publishTime', sortOrder: FirebaseFirestore.OrderByDirection = 'desc', limit = 10) {
-  const snap = await admin.firestore()
-    .collection(collection)
-    .where('status', '==', 'published')
-    .orderBy(orderBy, sortOrder)
-    .limit(limit)
-    .get();
+export async function getDocumentByPath(documentPath: string) {
+  console.log(`[getDocumentByPath] Fetch document: ${documentPath}`);
+  const doc = await admin.firestore().doc(documentPath).get();
+  if (!doc) {
+    console.log(`[getDocumentByPath] Document not found: ${documentPath}`);
+    return null;
+  }
 
-  console.log(`[dust documents] Fetched ${snap.docs.length} documents`);
-  return snap.docs.map(doc => new DocumentContext(doc));
+  return new DocumentContext(doc);
+}
+
+export async function getDocumentsInCollection(collection: string, orderBy = 'publishTime', sortOrder: FirebaseFirestore.OrderByDirection = 'desc', limit = 10) {
+  console.log(`[getDocumentsInCollection] collection=${collection}, orderBy=${orderBy}, sortOrder=${sortOrder}, limit=${limit}`);
+
+  try {
+    const snap = await admin.firestore()
+      .collection(collection)
+      .where('status', '==', 'published')
+      .orderBy(orderBy, sortOrder)
+      .limit(limit)
+      .get();
+
+    console.log(`[getDocumentsInCollection] Fetched ${snap.docs.length} documents`);
+    return snap.docs.map(doc => new DocumentContext(doc));
+  } catch (err) {
+
+    // This is reported in https://jetbrains.oddbit.id/youtrack/issue/TNM-108
+    console.error(`[getDocumentsInCollection] Could not get documents: ${err.message}`);
+    return [];
+  }
 }
 
 export async function getTemplateFiles(theme: string, templateType: TemplateType = 'dust') {
