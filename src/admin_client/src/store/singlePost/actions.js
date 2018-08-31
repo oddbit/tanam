@@ -1,7 +1,6 @@
 import { firestore, storageRef } from '@/utils/firebase';
 import metadata from '@/helpers/metadata';
 import quillToHtml from '@/helpers/quillToHtml';
-// import contentType from '@/utils/contentType';
 import { POST_CONTENT_TYPE, POST_FIELD_FEATURED_IMAGE } from '@/store/types';
 
 const collectionRef = (collectionName, newPost = true, uid = null) => {
@@ -19,11 +18,11 @@ const uploadFeaturedImage = async (imgName, featuredImage) => {
 };
 
 const uploadPost = ({ state, getters, rootState }, payload) => {
-  const { body, title, template, featuredImage, tags } = state;
+  const { body, title, featuredImage, tags, permalink } = state;
   const {
-    layout: { postMode }
+    layout: { postMode },
+    posts: { contentType }
   } = rootState;
-  const permalink = metadata.generatePermalink(title);
 
   let status;
   if (postMode === 'edit') {
@@ -32,21 +31,27 @@ const uploadPost = ({ state, getters, rootState }, payload) => {
     status = 'published';
   }
 
+  const template = contentType === 'pages' ? 'page' : state.template;
+  const path = metadata.generatePaths(permalink, template);
+  const properties = {
+    data: {
+      body: quillToHtml(body),
+      title
+    },
+    path,
+    permalink,
+    publishTime: new Date(),
+    updateTime: new Date(),
+    status,
+    template
+  };
+
+  if (contentType !== 'pages') {
+    properties.tags = tags;
+  }
+
   return new Promise(async (resolve, reject) => {
     let imgName;
-    const properties = {
-      data: {
-        body: quillToHtml(body),
-        title
-      },
-      path: metadata.generatePaths(permalink, template),
-      permalink,
-      publishTime: new Date(),
-      updateTime: new Date(),
-      status,
-      template,
-      tags
-    };
 
     if (featuredImage.dataUri) {
       imgName = metadata.generateFeaturedImageName(permalink);

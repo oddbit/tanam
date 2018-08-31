@@ -1,13 +1,13 @@
 <template>
-  <SingleBlog post-mode="edit" />
+  <SinglePage post-mode="edit" />
 </template>
 
 <script>
-import SingleBlog from '@/components/Blog/SingleBlog';
+import SinglePage from '@/components/Pages/SinglePage';
 
 export default {
   components: {
-    SingleBlog
+    SinglePage
   }
 };
 </script>

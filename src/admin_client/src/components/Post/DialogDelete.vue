@@ -36,7 +36,14 @@ export default {
       }
     },
     routerPush() {
-      return this.contentType === 'event' ? event.indexLink : blog.indexLink;
+      switch (this.contentType) {
+        case 'event':
+          return event.indexLink;
+        case 'blog':
+          return blog.indexLink;
+        default:
+          return '/templates/pages';
+      }
     }
   },
   methods: {

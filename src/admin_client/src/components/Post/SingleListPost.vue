@@ -32,7 +32,14 @@ export default {
       return this.$store.getters[POST_CONTENT_TYPE];
     },
     pushLink() {
-      return this.contentType === 'event' ? event.createLink : blog.createLink;
+      switch (this.contentType) {
+        case 'event':
+          return event.createLink;
+        case 'blog':
+          return blog.createLink;
+        default:
+          return '/templates/pages/post';
+      }
     }
   }
 };

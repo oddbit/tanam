@@ -42,7 +42,7 @@ export default {
           );
           this.$store.commit(POST_ID, null);
         }
-        // this.$router.push('/templates/pages');
+        this.$router.push('/templates/pages');
       } catch (error) {
         const alertText = this.postMode === 'new' ? 'publish' : 'update';
         alert(`Failed to ${alertText}`);
