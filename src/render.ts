@@ -1,15 +1,13 @@
-import * as dust from 'dustjs-linkedin';
+import * as dust from 'dustjs-helpers';
 import * as site from './site';
 import * as admin from 'firebase-admin';
 import * as fs from 'fs';
 import * as content from './content';
 
-
 // ----------------------------------------------------------------------------
 // DUST HELPERS
 // Implements Tanam helper extensions for the template engine
 //
-dust.helpers.debugDump = (chunk, context) => JSON.stringify(context);
 dust.helpers.document = (chunk, context, bodies, params) => content.getDocumentByPath(params.path);
 dust.helpers.documents = (chunk, context, bodies, params) =>
   content.getDocumentsInCollection(
