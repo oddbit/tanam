@@ -23,6 +23,23 @@ const routerOptions = [
     component: 'Templates/Images'
   },
   {
+    path: '/templates/pages',
+    name: 'templatePages',
+    component: 'Templates/Pages/index'
+  },
+  {
+    path: '/templates/pages/post',
+    name: 'page-posts',
+    component: 'Templates/Pages/Post/index',
+    meta: { layout: 'SinglePostLayout' }
+  },
+  {
+    path: `/templates/pages/post/:slug`,
+    name: `page-posts-slug`,
+    component: 'Templates/Pages/Post/_slug',
+    meta: { layout: 'SinglePostLayout' }
+  },
+  {
     path: event.indexLink,
     name: event.indexName,
     component: 'Events/index'

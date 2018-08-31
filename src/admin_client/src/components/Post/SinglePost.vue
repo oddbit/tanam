@@ -98,6 +98,7 @@ import {
   POST_FIELD_TITLE,
   POST_FIELD_FEATURED_IMAGE,
   POST_FIELD_BODY,
+  POST_CONTENT_TYPE,
   TOGGLE_DRAWER_POST,
   POST_MODE
 } from '@/store/types';
@@ -136,13 +137,20 @@ export default {
     }
   },
   mounted() {
-    this.quill = new Quill('#editor', {
+    const postType = this.$store.getters[POST_CONTENT_TYPE];
+    const quillSettings = {
       theme: 'snow',
       modules: {
         toolbar: '#editor-toolbar'
       },
       placeholder: 'Write here...'
-    });
+    };
+    if (postType === 'pages') {
+      quillSettings.modules.toolbar = false;
+      quillSettings.placeholder = 'Write here or paste in HTML';
+    }
+
+    this.quill = new Quill('#editor', quillSettings);
 
     this.quill.on('editor-change', () => {
       this.$store.commit(POST_FIELD_BODY, this.quill.getContents().ops);

@@ -42,7 +42,7 @@
 <script>
 export default {
   data: () => ({
-    tabItems: ['published', 'draft'],
+    tabItems: ['published', 'unpublished'],
     tabsModel: 'published'
   })
 };
