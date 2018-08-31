@@ -1,5 +1,3 @@
-import metadata from '@/helpers/metadata';
-
 const validateTitle = state => {
   if (state.title) {
     state.validTitle = true;
@@ -10,7 +8,6 @@ const validateTitle = state => {
 
 const title = (state, payload) => {
   state.title = payload;
-  state.permalink = payload ? metadata.generatePermalink(payload) : null;
   validateTitle(state);
 };
 

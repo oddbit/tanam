@@ -49,7 +49,8 @@ import {
   POST_FIELD_FEATURED_IMAGE,
   POST_FIELD_TEMPLATE,
   POST_FIELD_TAGS,
-  POST_FIELD_STATUS
+  POST_FIELD_STATUS,
+  POST_FIELD_PERMALINK
 } from '@/store/types';
 import FeaturedImageField from '@/components/Post/FeaturedImageField';
 import DrawerSettings from '@/components/Shared/DrawerSettings';
@@ -78,7 +79,7 @@ export default {
       return this.$store.getters[POST_FIELD_FEATURED_IMAGE];
     },
     postPermalink() {
-      return this.postState.permalink;
+      return this.$store.getters[POST_FIELD_PERMALINK];
     },
     postTemplate: {
       get() {

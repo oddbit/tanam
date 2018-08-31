@@ -1,3 +1,5 @@
+import metadata from '@/helpers/metadata';
+
 const title = state => state.title;
 const place = state => state.place;
 const dateStart = state =>
@@ -12,7 +14,12 @@ const rsvpEmail = state => state.rsvpEmail;
 const rsvpUrl = state => state.rsvpUrl;
 const rsvpFacebook = state => state.rsvpFacebook;
 const featuredImage = state => state.featuredImage.src;
-const permalink = state => state.permalink;
+const permalink = (state, _, rootState) => {
+  const { contentType } = rootState.posts;
+  return contentType === 'pages' || !state.title
+    ? state.title
+    : metadata.generatePermalink(state.title);
+};
 const body = state => state.body;
 const validTitle = state => state.validTitle;
 
