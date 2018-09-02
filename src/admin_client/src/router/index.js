@@ -12,6 +12,11 @@ const routerOptions = [
     component: 'Home'
   },
   {
+    path: '/authenticate',
+    name: 'home',
+    component: 'Authenticate'
+  },
+  {
     path: '/login',
     name: 'login',
     component: 'Login',
