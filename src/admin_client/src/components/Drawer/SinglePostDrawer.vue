@@ -9,7 +9,8 @@
       @input="handleInputDrawer"
       class="drawer-wrapper">
       <EventDrawerList v-if="contentType === 'event'" />
-      <BlogDrawerList v-else />
+      <BlogDrawerList v-else-if="contentType === 'blog'" />
+      <PagesDrawerList v-else />
       <div class="delete-wrapper">
         <v-divider />
         <v-btn 
@@ -33,12 +34,14 @@ import {
 } from '@/store/types';
 import EventDrawerList from '@/components/Event/DrawerList';
 import BlogDrawerList from '@/components/Blog/DrawerList';
+import PagesDrawerList from '@/components/Pages/DrawerList';
 import DialogDelete from '@/components/Post/DialogDelete';
 
 export default {
   components: {
     EventDrawerList,
     BlogDrawerList,
+    PagesDrawerList,
     DialogDelete
   },
   computed: {

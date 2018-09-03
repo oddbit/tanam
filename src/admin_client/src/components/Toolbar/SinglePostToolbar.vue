@@ -13,7 +13,8 @@
       <v-icon>settings</v-icon>
     </v-btn>
     <EventToolbar v-if="contentType === 'event'" />
-    <BlogToolbar v-else />
+    <BlogToolbar v-else-if="contentType === 'blog'" />
+    <PagesToolbar v-else />
   </v-toolbar>
 </template>
 
@@ -21,11 +22,13 @@
 import { TOGGLE_DRAWER_POST, POST_CONTENT_TYPE } from '@/store/types';
 import EventToolbar from '@/components/Event/Toolbar';
 import BlogToolbar from '@/components/Blog/Toolbar';
+import PagesToolbar from '@/components/Pages/Toolbar';
 
 export default {
   components: {
     EventToolbar,
-    BlogToolbar
+    BlogToolbar,
+    PagesToolbar
   },
   computed: {
     contentType() {

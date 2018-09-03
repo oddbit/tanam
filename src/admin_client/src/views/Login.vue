@@ -47,7 +47,7 @@ export default {
   watch: {
     currentUser(user) {
       if (user !== null && user !== undefined) {
-        this.$router.push('/');
+        this.$router.push('/authenticate');
       }
     }
   }

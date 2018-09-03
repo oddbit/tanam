@@ -8,9 +8,11 @@ const validateTitle = state => {
   }
 };
 
-const title = (state, payload) => {
-  state.title = payload;
-  state.permalink = payload ? metadata.generatePermalink(payload) : null;
+const title = (state, { title, contentType }) => {
+  state.title = title;
+  if (contentType !== 'pages') {
+    state.permalink = metadata.generatePermalink(title);
+  }
   validateTitle(state);
 };
 

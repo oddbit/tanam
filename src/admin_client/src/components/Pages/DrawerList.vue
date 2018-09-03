@@ -10,35 +10,11 @@
     </div>
     <v-list>
       <DrawerSettings>
-        <template slot="title">Featured Image</template>
-        <FeaturedImageField :post-featured-image="postFeaturedImage" @handleCloseFeaturedImg="handleCloseFeaturedImg" @handleChangeFeaturedImg="handleChangeFeaturedImg" />
-      </DrawerSettings>
-      <DrawerSettings>
-        <template slot="title">Permalink</template>
-        <v-text-field 
-          readonly 
-          placeholder="-"
-          :value="postPermalink" />
-      </DrawerSettings>
-      <DrawerSettings>
-        <template slot="title">Template</template>
-        <v-select
-          :items="['blog']"
-          label="Template"
-          solo
-          v-model="postTemplate"
-        />
-      </DrawerSettings>
-      <DrawerSettings>
-        <template slot="title">Tags</template>
-        <v-select
-          :items="[]"
-          label="Tags"
-          multiple
-          chips
-          tags
-          v-model="postTags"
-        />
+        <template slot="title">URL Path</template>
+        <v-text-field
+          hint="e.g. / or /about or /contact"
+          persistent-hint
+          v-model="postPermalink" />
       </DrawerSettings>
     </v-list>
   </div>
@@ -78,8 +54,13 @@ export default {
     postFeaturedImage() {
       return this.$store.getters[POST_FIELD_FEATURED_IMAGE];
     },
-    postPermalink() {
-      return this.$store.getters[POST_FIELD_PERMALINK];
+    postPermalink: {
+      get() {
+        return this.$store.getters[POST_FIELD_PERMALINK];
+      },
+      set(val) {
+        this.$store.commit(POST_FIELD_PERMALINK, val);
+      }
     },
     postTemplate: {
       get() {

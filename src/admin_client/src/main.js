@@ -8,7 +8,6 @@ const App = () => import('./App.vue');
 import router from './router';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import '@/utils/firebase';
 // import './registerServiceWorker';
 
 Vue.config.productionTip = false;
@@ -20,7 +19,9 @@ const unsubscribe = firebase.auth().onAuthStateChanged(user => {
     render: h => h(App),
     created() {
       if (user) {
-        store.dispatch(AUTO_LOGIN, user);
+        store
+          .dispatch(AUTO_LOGIN, user)
+          .then(() => router.push('/authenticate'));
       }
     }
   }).$mount('#app');

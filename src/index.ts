@@ -4,3 +4,4 @@ export * from './content';
 export * from './handlers';
 export * from './render';
 export * from './site';
+export * from './users';
