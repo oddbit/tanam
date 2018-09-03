@@ -1,6 +1,6 @@
 {
   "name": "tanam",
-  "version": "0.0.36",
+  "version": "0.0.37",
   "description": "Pluggable CMS for Firebase",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
@@ -42,7 +42,6 @@
     "@types/sinon": "^5.0.2",
     "chai": "^4.1.2",
     "debug": "^3.1.0",
-    "dustjs-linkedin": "^2.7.5",
     "mocha": "^5.1.1",
     "ts-node": "^7.0.1",
     "tslint": "^5.8.0",
@@ -50,6 +49,7 @@
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
+    "dustjs-linkedin": "^2.7.5",
     "dustjs-helpers": "^1.7.4",
     "express": "^4.16.3",
     "firebase-admin": "^6.0.0",
