@@ -33,9 +33,11 @@ const uploadPost = ({ state, getters, rootState }, payload) => {
 
   const template = contentType === 'pages' ? 'page' : state.template;
   const path = metadata.generatePaths(permalink, template);
+  console.log(body)
   const properties = {
     data: {
-      body: quillToHtml(body),
+      // body: quillToHtml(body),
+      body: body,
       title
     },
     path,

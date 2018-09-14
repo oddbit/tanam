@@ -156,14 +156,34 @@ export default {
     this.quill = new Quill('#editor', quillSettings);
 
     this.quill.on('editor-change', () => {
-      this.$store.commit(POST_FIELD_BODY, this.quill.getContents().ops);
+      console.log(this.quill.getContents().ops[0].insert)
+      this.$store.commit(POST_FIELD_BODY, this.quill.getContents().ops[0].insert);
     });
+
+
+    // Remove color when paste from text editor
+    this.quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
+      let ops = []
+      delta.ops.forEach(op => {
+        if (op.insert && typeof op.insert === 'string') {
+          ops.push({
+            insert: op.insert
+          })
+        }
+      })
+      delta.ops = ops
+      return delta
+    })
   },
   watch: {
     postContent(val) {
       if (!this.quillContentOnce && this.postMode === 'edit') {
         this.quillContentOnce = true;
-        this.quill.clipboard.dangerouslyPasteHTML(0, val);
+        // this.quill.clipboard.dangerouslyPasteHTML(0, val);
+        this.quill.setContents([
+          { insert: val },
+          { insert: '\n' }
+        ]);
       }
     }
   }
