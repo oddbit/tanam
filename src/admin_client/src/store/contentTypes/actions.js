@@ -1,41 +1,30 @@
-import { firestore } from '@/utils/firebase';
-import {
-  CONTENTTYPE_POST
-  // POST_DRAFT,
-  // POST_CONTENT_TYPE
-} from '../types';
+import { CONTENT_TYPES_NAMES, CONTENT_TYPES_FIELD } from '@/store/types';
+import { rtdb } from '@/utils/firebase';
 
-const getPublishedPosts = () => {
-  firestore
-    .collection('event')
-    .where('status', '==', 'published')
-    .onSnapshot(snapshot => {
-      console.log(snapshot)
-      // const arr = [];
-      // commit(POST_PUBLISHED, []);
-      // snapshot.forEach(doc => {
-      //   arr.push({ ...doc.data(), key: doc.id });
-      // });
-      // commit(POST_PUBLISHED, arr);
-    });
+export const dispatchNames = ({ commit }) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const snapshot = await rtdb.ref('contentTypes/names').once('value');
+      const names = snapshot.val();
+      commit(CONTENT_TYPES_NAMES, names);
+      resolve(names);
+    } catch (error) {
+      reject(error);
+    }
+  });
 };
 
-// const getDraftPosts = ({ commit, getters }) => {
-//   firestore
-//     .collection(getters[POST_CONTENT_TYPE])
-//     .where('status', '==', 'draft')
-//     .onSnapshot(snapshot => {
-//       const arr = [];
-//       commit(POST_DRAFT, []);
-//       snapshot.forEach(doc => {
-//         arr.push({ ...doc.data(), key: doc.id });
-//       });
-//       commit(POST_DRAFT, arr);
-//     });
-// };
-
-export default {
-  getPublishedPosts
-  // getDraftPosts,
-  // getPostBy
+export const dispatchField = ({ commit }, fieldName) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const snapshot = await rtdb
+        .ref('contentTypes/fields/' + fieldName)
+        .once('value');
+      const field = snapshot.val();
+      commit(CONTENT_TYPES_FIELD, { [fieldName]: field });
+      resolve(field);
+    } catch (error) {
+      reject(error);
+    }
+  });
 };

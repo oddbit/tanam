@@ -1,5 +1,3 @@
-const getPosts = state => state.contentTypePost;
+export const getNames = state => state.names;
 
-export default {
-  getPosts
-}
+export const getFields = state => state.fields;

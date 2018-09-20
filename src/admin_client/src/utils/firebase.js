@@ -30,4 +30,4 @@ const contentImages = rtdb
 
 const contentTypes = rtdb.ref('/contentTypes/names').once('value');
 
-export { firebaseUI, firestore, contentImages, storageRef, contentTypes };
+export { firebaseUI, firestore, contentImages, storageRef, contentTypes, rtdb };

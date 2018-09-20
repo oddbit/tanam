@@ -46,4 +46,8 @@ export const POST_ACTION_DELETE = 'post/action/delete';
 export const TEMPLATE_IMAGES = 'template/images';
 export const TEMPLATE_CONTENTTYPES = 'template/contentTypes';
 
-export const CONTENTTYPE_POST = 'contentType/post'
+export const CONTENTTYPE_POST = 'contentType/post';
+
+export const CONTENT_TYPES_NAMES = 'contentTypes/names';
+export const CONTENT_TYPES_FIELD = 'contentTypes/field';
+export const CONTENT_TYPES_FIELDS = 'contentTypes/fields';

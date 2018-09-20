@@ -1,58 +1,29 @@
 import {
-  CONTENTTYPE_POST
-} from '../types';
-import getters from './getters';
-import actions from './actions';
+  CONTENT_TYPES_NAMES,
+  CONTENT_TYPES_FIELD,
+  CONTENT_TYPES_FIELDS
+} from '@/store/types';
+import * as getters from './getters';
+import * as mutations from './mutations';
+import * as actions from './actions';
 
 const state = {
-  contentTypePost: {
-    event: [
-      {
-        data:{
-          body: 'Lorem ipsum',
-          ContentTitle: 'This published is ContentTitle'
-        },
-        time: '2018-09-12 11:32 AM',
-        status: 'published'
-      },
-      {
-        data: {
-          body: 'Lorem ipsum',
-          ContentTitle: 'This is ContentTitle'
-        },
-        time: '2018-09-12 11:32 AM',
-        status: 'unpublished'
-      }
-    ],
-    news: [
-      {
-        data: {
-          body: 'Lorem ipsum',
-          ContentTitle: 'This is published ContentTitle'
-        },
-        time: '2018-09-12 11:32 AM',
-        status: 'published'
-      },
-      {
-        data: {
-          body: 'Lorem ipsum',
-          ContentTitle: 'This is ContentTitle'
-        },
-        time: '2018-09-12 11:32 AM',
-        status: 'unpublished'
-      }
-    ]
-  } 
+  names: null,
+  fields: {}
 };
 
 export default {
   state,
   getters: {
-    [CONTENTTYPE_POST]: getters.getPosts
+    [CONTENT_TYPES_NAMES]: getters.getNames,
+    [CONTENT_TYPES_FIELDS]: getters.getFields
+  },
+  mutations: {
+    [CONTENT_TYPES_NAMES]: mutations.commitNames,
+    [CONTENT_TYPES_FIELD]: mutations.commitFields
   },
   actions: {
-    // [POST_BY]: actions.getPostBy,
-    [CONTENTTYPE_POST]: actions.getPublishedPosts
-    // [POST_DRAFT]: actions.getDraftPosts
+    [CONTENT_TYPES_NAMES]: actions.dispatchNames,
+    [CONTENT_TYPES_FIELD]: actions.dispatchField
   }
 };

@@ -19,7 +19,7 @@ const routerOptions = [
   },
   {
     path: '/authenticate',
-    name: 'home',
+    name: 'auth',
     component: 'Authenticate'
   },
   {
