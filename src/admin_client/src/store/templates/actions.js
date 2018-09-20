@@ -1,5 +1,5 @@
-import { contentImages, storageRef } from '@/utils/firebase';
-import { TEMPLATE_IMAGES } from '../types';
+import { contentImages, storageRef, contentTypes } from '@/utils/firebase';
+import { TEMPLATE_IMAGES, TEMPLATE_CONTENTTYPES } from '../types';
 
 const getImages = async ({ commit }) => {
   const imageSnapshots = await contentImages;
@@ -17,6 +17,27 @@ const getImages = async ({ commit }) => {
   return commit(TEMPLATE_IMAGES, imageUrls);
 };
 
+const getContentTypes = async ({ commit }) => {
+  const contentTypesSnapshots = await contentTypes;
+  console.log(contentTypesSnapshots.val())
+  // const arrContentTypes = [];
+  // contentTypesSnapshots.forEach(e => {
+  //   var header = e.key
+  //     .toLowerCase()
+  //     .split(' ')
+  //     .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+  //     .join(' ');
+  //   arrContentTypes.push({
+  //     val: e.val(),
+  //     header: header,
+  //     link: e.key
+  //   });
+  // });
+  // console.log(arrContentTypes);
+  return commit(TEMPLATE_CONTENTTYPES, contentTypesSnapshots.val());
+};
+
 export default {
-  getImages
+  getImages,
+  getContentTypes
 };
