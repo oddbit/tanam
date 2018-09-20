@@ -33,8 +33,8 @@
                   v-if="post.status == 'published'"
                   :key="index"
                   :link="post.data.link"
-                  :ContentTitle="post.data.ContentTitle"
-                  :time="post.time"
+                  :ContentTitle="post.data.title"
+                  :time="post.updateTime"
                   :status="post.status"/>
               </v-tab-item>
               <v-tab-item id="unpublished">
@@ -70,8 +70,8 @@ export default {
   },
   computed: {
     published () {
-      console.log(this.$store.getters[CONTENTTYPE_POST][this.link])
-      return this.$store.getters[CONTENTTYPE_POST][this.link]
+      console.log(this.$store.getters[CONTENTTYPE_POST])
+      return this.$store.getters[CONTENTTYPE_POST]
     }
   },
   mounted() {

@@ -1,5 +1,6 @@
 import { CONTENTTYPE_POST } from '../types';
 import getters from './getters';
+import mutations from './mutations';
 import actions from './actions';
 
 const state = {
@@ -45,6 +46,9 @@ const state = {
 
 export default {
   state,
+  mutations: {
+    [CONTENTTYPE_POST]: mutations.setPublishedPosts
+  },
   getters: {
     [CONTENTTYPE_POST]: getters.getPosts
   },
