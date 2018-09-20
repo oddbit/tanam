@@ -7,11 +7,7 @@ const getPublishedPosts = ({ commit }, payload) => {
     .collection(payload)
     .where('status', '==', 'published')
     .onSnapshot(snapshot => {
-<<<<<<< HEAD
       console.log(snapshot);
-=======
-      console.log(snapshot)
->>>>>>> 03c93fd8df6d394ef9d32160793a5858e5531c6b
       const arr = [];
       commit(CONTENTTYPE_POST, []);
       snapshot.forEach(doc => {
