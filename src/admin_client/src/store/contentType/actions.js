@@ -1,4 +1,4 @@
-import { CONTENT_TYPES_NAMES, CONTENT_TYPES_FIELD } from '@/store/types';
+import { CONTENT_TYPE_NAMES, CONTENT_TYPE_FIELD } from '@/store/types';
 import { rtdb } from '@/utils/firebase';
 
 export const dispatchNames = ({ commit }) => {
@@ -6,7 +6,7 @@ export const dispatchNames = ({ commit }) => {
     try {
       const snapshot = await rtdb.ref('contentTypes/names').once('value');
       const names = snapshot.val();
-      commit(CONTENT_TYPES_NAMES, names);
+      commit(CONTENT_TYPE_NAMES, names);
       resolve(names);
     } catch (error) {
       reject(error);
@@ -21,7 +21,7 @@ export const dispatchField = ({ commit }, fieldName) => {
         .ref('contentTypes/fields/' + fieldName)
         .once('value');
       const field = snapshot.val();
-      commit(CONTENT_TYPES_FIELD, { [fieldName]: field });
+      commit(CONTENT_TYPE_FIELD, { [fieldName]: field });
       resolve(field);
     } catch (error) {
       reject(error);
