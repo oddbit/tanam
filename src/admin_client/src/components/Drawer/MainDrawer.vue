@@ -31,7 +31,8 @@
         ripple
         v-for="(contentType, index) in dynamicContentTypes"
         :key="index"
-        :to="{name: 'contentType', params: {link: `${contentType.permalink}`}}">
+        :to="{name: 'contentType', params: {link: `${contentType.permalink}`}}"
+        @click="getData(contentType.permalink)">
         <v-list-tile-action><v-icon>{{contentType.icon}}</v-icon></v-list-tile-action>
         <v-list-tile-title>{{contentType.title}}</v-list-tile-title>
       </v-list-tile>
@@ -42,7 +43,7 @@
 <script>
 import { mapState } from 'vuex';
 import { navDrawerLists } from '@/config/navDrawerLists';
-import { TEMPLATE_CONTENTTYPES } from '@/store/types';
+import { TEMPLATE_CONTENTTYPES, CONTENTTYPE_POST, CONTENTTYPE_DRAFT } from '@/store/types';
 
 export default {
   data: () => ({
@@ -58,6 +59,12 @@ export default {
     ],
     navDrawerLists
   }),
+  methods: {
+    getData(link) {
+      this.$store.dispatch(CONTENTTYPE_POST, link);
+      this.$store.dispatch(CONTENTTYPE_DRAFT, link);
+    }
+  },
   mounted() {
     this.$store.dispatch(TEMPLATE_CONTENTTYPES);
   },
