@@ -28,4 +28,4 @@ const contentImages = rtdb
   .equalTo('image')
   .once('value');
 
-export { firebaseUI, firestore, contentImages, storageRef };
+export { firebaseUI, firestore, contentImages, storageRef, rtdb };
