@@ -8,6 +8,7 @@ import posts from './posts';
 import singlePost from './singlePost';
 import ui from './ui';
 import contentType from './contentType';
+import contentPost from './contentPost';
 
 Vue.use(Vuex);
 
@@ -20,6 +21,7 @@ export const store = new Vuex.Store({
     posts,
     singlePost,
     ui,
-    contentType
+    contentType,
+    contentPost
   }
 });
