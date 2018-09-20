@@ -30,7 +30,6 @@
               <v-tab-item id="published">
                 <List
                   v-for="(post, index) in published"
-                  v-if="post.status == 'published'"
                   :key="index"
                   :link="post.data.link"
                   :ContentTitle="post.data.title"
@@ -39,12 +38,11 @@
               </v-tab-item>
               <v-tab-item id="unpublished">
                 <List
-                  v-for="(post, index) in published"
-                  v-if="post.status == 'unpublished'"
+                  v-for="(post, index) in unpublished"
                   :key="index"
                   :link="post.data.link"
-                  :ContentTitle="post.data.ContentTitle"
-                  :time="post.time"
+                  :ContentTitle="post.data.title"
+                  :time="post.updateTime"
                   :status="post.status"/>
               </v-tab-item>
             </v-tabs-items>
@@ -59,7 +57,7 @@
 
 <script>
 import List from '@/components/ContentTypes/ContentTypesList';
-import { CONTENTTYPE_POST } from '@/store/types'
+import { CONTENTTYPE_POST, CONTENTTYPE_DRAFT } from '@/store/types'
 
 export default {
   props: [
@@ -72,10 +70,15 @@ export default {
     published () {
       console.log(this.$store.getters[CONTENTTYPE_POST])
       return this.$store.getters[CONTENTTYPE_POST]
+    },
+    unpublished () {
+      console.log(this.$store.getters[CONTENTTYPE_DRAFT])
+      return this.$store.getters[CONTENTTYPE_DRAFT]
     }
   },
   mounted() {
-    this.$store.dispatch(CONTENTTYPE_POST);
+    this.$store.dispatch(CONTENTTYPE_POST, this.link);
+    this.$store.dispatch(CONTENTTYPE_DRAFT, this.link);
   },
   data: () => ({
     tabItems: ['published', 'unpublished'],

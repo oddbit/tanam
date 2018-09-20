@@ -4,7 +4,7 @@
       <v-layout column align-start justify-center>
         <!-- <router-link :to="`${pushLink}/${linkTo}`"><h3><slot name="title" /></h3></router-link> -->
         <router-link to="#"><h3>{{ContentTitle}}</h3></router-link>
-        <p class="mb-0">{{updateTime | formatDate}}</p>
+        <p class="mb-0">{{time | formatDate}}</p>
       </v-layout>
       <v-spacer />
       <v-menu offset-y left min-width="150">
@@ -35,7 +35,7 @@ export default {
   ],
   filters: {
     formatDate(timestamp) {
-      return formatDate(timestamp.toDate());
+      return timestamp.toDate();
     }
   },
   data: () => ({
