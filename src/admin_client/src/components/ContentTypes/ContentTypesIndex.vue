@@ -4,7 +4,7 @@
       <div>
         <v-layout justify-center class="my-4">
           <v-flex xs12 md8>
-            <v-btn class="ma-0" color="white">
+            <v-btn class="ma-0" color="white" :to="{name: 'contentTypeNew', params: {link: `${link}`}}">
               <v-icon left>create</v-icon>
               Create {{link}}
             </v-btn>

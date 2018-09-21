@@ -7,6 +7,12 @@ import { event, blog } from '@/config/post';
 
 const routerOptions = [
   {
+    path: '/content-type/:link/new',
+    name: 'contentTypeNew',
+    component: 'ContentTypes/Post/index',
+    props: true
+  },
+  {
     path: '/content-type/:link',
     name: 'contentType',
     component: 'ContentTypes/index',
