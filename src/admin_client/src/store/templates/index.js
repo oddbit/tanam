@@ -1,4 +1,4 @@
-import { TEMPLATE_IMAGES, TEMPLATE_CONTENTTYPES } from '../types';
+import { TEMPLATE_IMAGES } from '../types';
 import actions from './actions';
 import mutations from './mutations';
 
@@ -10,11 +10,9 @@ const state = {
 export default {
   state,
   actions: {
-    [TEMPLATE_IMAGES]: actions.getImages,
-    [TEMPLATE_CONTENTTYPES]: actions.getContentTypes
+    [TEMPLATE_IMAGES]: actions.getImages
   },
   mutations: {
-    [TEMPLATE_IMAGES]: mutations.setImages,
-    [TEMPLATE_CONTENTTYPES]: mutations.setContentTypes
+    [TEMPLATE_IMAGES]: mutations.setImages
   }
 };
