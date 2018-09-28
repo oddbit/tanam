@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <Textfield label="Helo" valus="aye" />
+    <Textfield label="Helo"/>
   </v-container>
 </template>
 

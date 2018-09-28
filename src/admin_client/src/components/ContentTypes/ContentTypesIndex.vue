@@ -68,17 +68,21 @@ export default {
   },
   computed: {
     published () {
-      console.log(this.$store.getters[CONTENTTYPE_POST])
       return this.$store.getters[CONTENTTYPE_POST]
     },
     unpublished () {
-      console.log(this.$store.getters[CONTENTTYPE_DRAFT])
       return this.$store.getters[CONTENTTYPE_DRAFT]
     }
   },
   mounted() {
-    this.$store.dispatch(CONTENTTYPE_POST, this.link);
-    this.$store.dispatch(CONTENTTYPE_DRAFT, this.link);
+    this.$store.dispatch(CONTENTTYPE_POST, this.link)
+    this.$store.dispatch(CONTENTTYPE_DRAFT, this.link)
+  },
+  watch: {
+    link() {
+      this.$store.dispatch(CONTENTTYPE_POST, this.link)
+      this.$store.dispatch(CONTENTTYPE_DRAFT, this.link)
+    }
   },
   data: () => ({
     tabItems: ['published', 'unpublished'],

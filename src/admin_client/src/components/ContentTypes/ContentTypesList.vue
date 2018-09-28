@@ -13,6 +13,16 @@
         </v-btn>
         <v-list>
           <v-list-tile 
+            v-if="status == 'draft'"
+            v-for="item in listActionDraft" 
+            :key="item.name"
+            @click="handleClickActionItem(item.name)"
+            ripple>
+            <v-icon class="action-icon">{{ item.icon }}</v-icon>
+            <v-list-tile-title>{{ item.text }}</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile 
+            v-if="status == 'published'"
             v-for="item in listAction" 
             :key="item.name"
             @click="handleClickActionItem(item.name)"
@@ -40,6 +50,10 @@ export default {
   },
   data: () => ({
     listAction: [
+      { name: 'edit', text: 'Edit', icon: 'edit' },
+      { name: 'delete', text: 'Delete', icon: 'delete' }
+    ],
+    listActionDraft: [
       { name: 'edit', text: 'Edit', icon: 'edit' },
       { name: 'publish', text: 'Publish', icon: 'publish' },
       { name: 'delete', text: 'Delete', icon: 'delete' }
