@@ -10,7 +10,8 @@ const routerOptions = [
     path: '/content-type/:link/new',
     name: 'contentTypeNew',
     component: 'ContentTypes/Post/index',
-    props: true
+    props: true,
+    meta: { layout: 'SinglePostLayout' }
   },
   {
     path: '/content-type/:link',

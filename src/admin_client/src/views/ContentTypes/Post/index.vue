@@ -16,14 +16,11 @@ export default {
   components: {
     Textfield
   },
-  props: [
-    'link'
-  ],
+  props: ['link'],
   computed: {
-    fields () {
+    fields() {
       return this.$store.getters[CONTENT_TYPE_FIELDS][this.link];
     }
-  },
-  mounted () {}
-}
+  }
+};
 </script>
