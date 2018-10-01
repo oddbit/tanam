@@ -2,23 +2,29 @@
   <v-container>
     <div v-if="fields">
       <div v-for="(field,index) in fields" :key="index">
-        <Textfield v-if="field.type == 'text'" :label="field.title" />        
-        <!-- {{field}} -->
+        <text-field v-if="field.type === 'text'" :label="field.title" />
+        <image-field v-if="field.type === 'image'" :label="field.title" :name="field.title" />
       </div>
     </div>
-    <!-- {{fields}} -->
   </v-container>
 </template>
 
 <script>
-import Textfield from '@/components/Fields/Text';
 import { CONTENT_TYPES_GET } from '@/store/types';
+import TextField from '@/components/Fields/Text';
+import ImageField from '@/components/Fields/Image';
 
 export default {
   components: {
-    Textfield
+    TextField,
+    ImageField
   },
-  props: ['link'],
+  props: {
+    link: {
+      type: String,
+      default: 'name'
+    }
+  },
   computed: {
     fields() {
       const fields = this.$store.getters[CONTENT_TYPES_GET][this.link];
