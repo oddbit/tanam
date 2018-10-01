@@ -2,15 +2,17 @@
   <v-container>
     <div v-if="fields">
       <div v-for="(field,index) in fields" :key="index">
-        <Textfield v-if="field.type == 'Text'" :label="field.title" />        
+        <Textfield v-if="field.type == 'text'" :label="field.title" />        
+        <!-- {{field}} -->
       </div>
     </div>
+    <!-- {{fields}} -->
   </v-container>
 </template>
 
 <script>
 import Textfield from '@/components/Fields/Text';
-import { CONTENT_TYPE_FIELDS } from '@/store/types';
+import { CONTENT_TYPES_GET } from '@/store/types';
 
 export default {
   components: {
@@ -19,7 +21,11 @@ export default {
   props: ['link'],
   computed: {
     fields() {
-      return this.$store.getters[CONTENT_TYPE_FIELDS][this.link];
+      const fields = this.$store.getters[CONTENT_TYPES_GET][this.link];
+      if (fields && fields.fields) {
+        return fields.fields;
+      }
+      return fields;
     }
   }
 };
