@@ -3,7 +3,7 @@ import './plugins/vuetify';
 import './plugins/vueMq';
 import './plugins/vueCropper';
 import { store } from '@/store';
-import { AUTO_LOGIN } from '@/store/types';
+import { AUTO_LOGIN, CONTENT_TYPE_FIELDS } from '@/store/types';
 const App = () => import('./App.vue');
 import router from './router';
 import firebase from 'firebase/app';
@@ -19,7 +19,9 @@ const unsubscribe = firebase.auth().onAuthStateChanged(user => {
     render: h => h(App),
     created() {
       if (user) {
-        store.dispatch(AUTO_LOGIN, user).then(() => null);
+        store
+          .dispatch(AUTO_LOGIN, user)
+          .then(() => store.dispatch(CONTENT_TYPE_FIELDS));
         // .then(() => router.push('/authenticate'));
       }
     }

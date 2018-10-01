@@ -1,4 +1,4 @@
-import { CONTENT_TYPE_NAMES, CONTENT_TYPE_FIELD } from '@/store/types';
+import { CONTENT_TYPE_NAMES, CONTENT_TYPE_FIELDS } from '@/store/types';
 import { rtdb } from '@/utils/firebase';
 
 export const dispatchNames = ({ commit }) => {
@@ -14,15 +14,13 @@ export const dispatchNames = ({ commit }) => {
   });
 };
 
-export const dispatchField = ({ commit }, fieldName) => {
+export const dispatchFields = ({ commit }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const snapshot = await rtdb
-        .ref('contentTypes/fields/' + fieldName)
-        .once('value');
-      const field = snapshot.val();
-      commit(CONTENT_TYPE_FIELD, { [fieldName]: field });
-      resolve(field);
+      const snapshot = await rtdb.ref('contentTypes/fields').once('value');
+      const fields = snapshot.val();
+      commit(CONTENT_TYPE_FIELDS, fields);
+      resolve(fields);
     } catch (error) {
       reject(error);
     }

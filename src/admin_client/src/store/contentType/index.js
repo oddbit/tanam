@@ -20,10 +20,10 @@ export default {
   },
   mutations: {
     [CONTENT_TYPE_NAMES]: mutations.commitNames,
-    [CONTENT_TYPE_FIELD]: mutations.commitFields
+    [CONTENT_TYPE_FIELDS]: mutations.commitFields
   },
   actions: {
     [CONTENT_TYPE_NAMES]: actions.dispatchNames,
-    [CONTENT_TYPE_FIELD]: actions.dispatchField
+    [CONTENT_TYPE_FIELDS]: actions.dispatchFields
   }
 };
