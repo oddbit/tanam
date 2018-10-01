@@ -1,8 +1,4 @@
-import {
-  CONTENT_TYPE_NAMES,
-  CONTENT_TYPE_FIELD,
-  CONTENT_TYPE_FIELDS
-} from '@/store/types';
+import { CONTENT_TYPE_NAMES, CONTENT_TYPES_GET } from '@/store/types';
 import * as getters from './getters';
 import * as mutations from './mutations';
 import * as actions from './actions';
@@ -16,14 +12,13 @@ export default {
   state,
   getters: {
     [CONTENT_TYPE_NAMES]: getters.getNames,
-    [CONTENT_TYPE_FIELDS]: getters.getFields
+    [CONTENT_TYPES_GET]: getters.getFields
   },
   mutations: {
     [CONTENT_TYPE_NAMES]: mutations.commitNames,
-    [CONTENT_TYPE_FIELDS]: mutations.commitFields
+    [CONTENT_TYPES_GET]: mutations.commitFields
   },
   actions: {
-    [CONTENT_TYPE_NAMES]: actions.dispatchNames,
-    [CONTENT_TYPE_FIELDS]: actions.dispatchFields
+    [CONTENT_TYPES_GET]: actions.dispatchContentTypes
   }
 };

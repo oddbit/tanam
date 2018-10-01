@@ -15,10 +15,10 @@
       <v-list-tile
         ripple
         v-for="type in contentTypes"
-        :key="type.title"
-        :to="{name: 'contentType', params: {link: type.permalink}}">
-        <v-list-tile-action><v-icon>{{ type.icon }}</v-icon></v-list-tile-action>
-        <v-list-tile-title>{{ type.title }}</v-list-tile-title>
+        :key="type.meta.title"
+        :to="{name: 'contentType', params: {link: type.meta.permalink}}">
+        <v-list-tile-action><v-icon>{{ type.meta.icon }}</v-icon></v-list-tile-action>
+        <v-list-tile-title>{{ type.meta.title }}</v-list-tile-title>
       </v-list-tile>
     </v-list>
 
@@ -43,7 +43,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { navDrawerLists } from '@/config/navDrawerLists';
-import { CONTENT_TYPE_NAMES } from '@/store/types';
+import { CONTENT_TYPES_GET } from '@/store/types';
 
 export default {
   data: () => ({
@@ -59,16 +59,9 @@ export default {
     ],
     navDrawerLists
   }),
-  async mounted() {
-    try {
-      await this.$store.dispatch(CONTENT_TYPE_NAMES);
-    } catch (error) {
-      throw error;
-    }
-  },
   computed: {
     ...mapGetters({
-      contentTypes: [CONTENT_TYPE_NAMES]
+      contentTypes: [CONTENT_TYPES_GET]
     })
   }
 };
