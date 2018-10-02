@@ -6,6 +6,7 @@
         <image-field v-if="field.type === 'image'" :label="field.title" :name="field.title" />
         <date v-if="field.type === 'date'" :label="field.label" :name="field.title" />
       </div>
+      <WYSIWYG v-on:changeContent="wysiwyg($event)"/>
     </div>
   </v-container>
 </template>
@@ -17,12 +18,19 @@ export default {
   components: {
     TextField: () => import('@/components/Fields/Text'),
     ImageField: () => import('@/components/Fields/Image'),
-    Date: () => import('@/components/Fields/Date')
+    Date: () => import('@/components/Fields/Date'),
+    WYSIWYG: ()=> import('@/components/Fields/WYSIWYG')
   },
   props: {
     link: {
       type: String,
       default: 'name'
+    }
+  },
+  methods: {
+    wysiwyg(content) {
+      console.log('quil content:');
+      console.log(content);
     }
   },
   computed: {
