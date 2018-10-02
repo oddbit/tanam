@@ -4,6 +4,7 @@
       <div v-for="(field,index) in fields" :key="index">
         <text-field v-if="field.type === 'text'" :label="field.title" />
         <image-field v-if="field.type === 'image'" :label="field.title" :name="field.title" />
+        <date v-if="field.type === 'date'" :label="field.label" :name="field.title" />
       </div>
     </div>
   </v-container>
@@ -11,13 +12,12 @@
 
 <script>
 import { CONTENT_TYPES_GET } from '@/store/types';
-import TextField from '@/components/Fields/Text';
-import ImageField from '@/components/Fields/Image';
 
 export default {
   components: {
-    TextField,
-    ImageField
+    TextField: () => import('@/components/Fields/Text'),
+    ImageField: () => import('@/components/Fields/Image'),
+    Date: () => import('@/components/Fields/Date')
   },
   props: {
     link: {
