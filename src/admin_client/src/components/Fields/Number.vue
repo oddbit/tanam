@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-text-field
+      box
       type="number"
       name="input-1"
       :label="label"

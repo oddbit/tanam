@@ -10,6 +10,7 @@
       width="290px"
     >
       <v-text-field
+        box
         slot="activator"
         v-model="time"
         :label="label"        

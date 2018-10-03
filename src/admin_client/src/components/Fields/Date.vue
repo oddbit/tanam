@@ -13,6 +13,7 @@
         v-model="date"
         :label="label"
         prepend-icon="event"
+        box
         readonly
       />
       <v-date-picker v-model="date">
