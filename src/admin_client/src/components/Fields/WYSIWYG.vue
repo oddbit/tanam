@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrap">
     <div id="editor-toolbar">
       <span class="ql-formats">
         <select class="ql-header">
@@ -166,3 +166,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .wrap {
+    margin-bottom: 20px;
+  }
+</style>
+

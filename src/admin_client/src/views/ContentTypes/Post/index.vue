@@ -1,25 +1,59 @@
 <template>
   <v-container>
-    <div v-if="fields">
-      <div v-for="(field,index) in fields" :key="index">
-        <text-field v-if="field.type === 'text'" @input="textField" :label="field.title" />
+    <v-layout row wrap>
+      <div v-if="fields" style="width:100%">
+        <div v-for="(field,index) in fields" :key="index">
 
-        <image-field v-if="field.type === 'image'" v-on:changeImage="image($event)" :label="field.title" :name="field.title" />
+          <v-flex v-if="field.type === 'text'">
+            <text-field @input="textField" :label="field.title" />
+          </v-flex>
 
-        <date v-if="field.type === 'date'" v-on:changeDate="date($event)" :label="field.title" :name="field.title" />
-        <Time v-if="field.type === 'time'" v-on:changeTime="time($event)" :label="field.title" :name="field.title"/>
-        <WYSIWYG v-if="field.type ==='wysiwyg'" v-on:changeContent="wysiwyg($event)"/>
-        <select-field v-if="field.type === 'select'" v-on:changeSelected="selected($event)" :label="field.title" :items="field.items"/>
+          <v-flex v-if="field.type === 'image'">
+            <image-field v-on:changeImage="image($event)" :label="field.title" :name="field.title" />
+          </v-flex>
 
-        <radio-field v-if="field.type === 'radio'" @change="radio" :label="field.title" :items="field.items"/>
-        <checkbox-field v-if="field.type === 'checkbox'" v-on:changeCheckbox="checkbox($event)" :label="field.title" :items="field.items" />
+          <v-flex v-if="field.type === 'date'">
+            <date v-on:changeDate="date($event)" :label="field.title" :name="field.title" />
+          </v-flex>
 
-        <password-field v-if="field.type === 'password'" @input="password" :label="field.title"/>
-        <email-field v-if="field.type === 'email'" @input="email" :label="field.title"/>
-        <number v-if="field.type === 'number'" @input="number" :label="field.title"/>
-        <textarea-field v-if="field.type === 'textarea'" @input="textarea" :label="field.title"/>
+          <v-flex v-if="field.type === 'time'">
+            <Time v-if="field.type === 'time'" v-on:changeTime="time($event)" :label="field.title" :name="field.title"/>
+          </v-flex>
+
+          <v-flex v-if="field.type ==='wysiwyg'">
+            <WYSIWYG v-if="field.type ==='wysiwyg'" v-on:changeContent="wysiwyg($event)"/>
+          </v-flex>
+
+          <v-flex v-if="field.type === 'select'">
+            <select-field v-if="field.type === 'select'" v-on:changeSelected="selected($event)" :label="field.title" :items="field.items"/>
+          </v-flex>
+
+          <v-flex v-if="field.type === 'radio'">
+            <radio-field v-if="field.type === 'radio'" @change="radio" :label="field.title" :items="field.items"/>
+          </v-flex>
+
+          <v-flex v-if="field.type === 'checkbox'">
+            <checkbox-field v-if="field.type === 'checkbox'" v-on:changeCheckbox="checkbox($event)" :label="field.title" :items="field.items" />
+          </v-flex>
+
+          <v-flex v-if="field.type === 'password'">
+            <password-field @input="password" :label="field.title"/>
+          </v-flex>
+
+          <v-flex v-if="field.type === 'email'">
+            <email-field @input="email" :label="field.title"/>
+          </v-flex>
+
+          <v-flex v-if="field.type === 'number'">
+            <number @input="number" :label="field.title"/>
+          </v-flex>
+
+          <v-flex v-if="field.type === 'textarea'">
+            <textarea-field @input="textarea" :label="field.title"/>
+          </v-flex>
+        </div>
       </div>
-    </div>
+    </v-layout>
   </v-container>
 </template>
 
@@ -98,3 +132,10 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.tes {
+  width: 100%;
+}
+</style>
+
