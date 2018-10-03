@@ -39,6 +39,11 @@ export default {
   data: () => ({
     date: null,
     modal: false
-  })
+  }),
+  watch: {
+    date: function() {
+      this.$emit('changeDate', this.date);
+    }
+  }
 };
 </script>
