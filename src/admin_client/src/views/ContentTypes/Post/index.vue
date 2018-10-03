@@ -4,7 +4,7 @@
       <div v-for="(field,index) in fields" :key="index">
         <text-field v-if="field.type === 'text'" @input="textField" :label="field.title" />
 
-        <image-field v-if="field.type === 'image'" :label="field.title" :name="field.title" />
+        <image-field v-if="field.type === 'image'" v-on:changeImage="image($event)" :label="field.title" :name="field.title" />
 
         <date v-if="field.type === 'date'" v-on:changeDate="date($event)" :label="field.title" :name="field.title" />
         <Time v-if="field.type === 'time'" v-on:changeTime="time($event)" :label="field.title" :name="field.title"/>
@@ -82,6 +82,9 @@ export default {
     },
     checkbox(checbox) {
       console.log(checbox);
+    },
+    image(image) {
+      console.log(image);
     }
   },
   computed: {
