@@ -47,6 +47,7 @@ export const TEMPLATE_IMAGES = 'template/images';
 
 export const CONTENTTYPE_POST = 'contentType/post';
 export const CONTENTTYPE_DRAFT = 'contentType/draft';
+export const CONTENT_TYPES_POST_ADD = 'contentTypes/post/add';
 
 export const CONTENT_TYPE_FIELD = 'contentType/field';
 export const CONTENT_TYPES_GET = 'contentTypes/get';

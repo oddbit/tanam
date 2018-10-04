@@ -13,6 +13,7 @@
         v-model="date"
         :label="label"
         prepend-icon="event"
+        box
         readonly
       />
       <v-date-picker v-model="date">
@@ -39,6 +40,11 @@ export default {
   data: () => ({
     date: null,
     modal: false
-  })
+  }),
+  watch: {
+    date: function() {
+      this.$emit('changeDate', this.date);
+    }
+  }
 };
 </script>
