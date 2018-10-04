@@ -5,60 +5,61 @@
         <div v-for="(field,index) in fields" :key="index">
 
           <v-flex v-if="field.type === 'text'">
-            <text-field @input="textField" :label="field.title" />
+            <text-field @input="textField($event, field.title)" :label="field.title" />
           </v-flex>
 
           <v-flex v-if="field.type === 'image'">
-            <image-field v-on:changeImage="image($event)" :label="field.title" :name="field.title" />
+            <image-field v-on:changeImage="image($event, field.title)" :label="field.title" :name="field.title" />
           </v-flex>
 
           <v-flex v-if="field.type === 'date'">
-            <date v-on:changeDate="date($event)" :label="field.title" :name="field.title" />
+            <date v-on:changeDate="date($event, field.title)" :label="field.title" :name="field.title" />
           </v-flex>
 
           <v-flex v-if="field.type === 'time'">
-            <Time v-if="field.type === 'time'" v-on:changeTime="time($event)" :label="field.title" :name="field.title"/>
+            <Time v-if="field.type === 'time'" v-on:changeTime="time($event, field.title)" :label="field.title" :name="field.title"/>
           </v-flex>
 
           <v-flex v-if="field.type ==='wysiwyg'">
-            <WYSIWYG v-if="field.type ==='wysiwyg'" v-on:changeContent="wysiwyg($event)"/>
+            <WYSIWYG v-if="field.type ==='wysiwyg'" v-on:changeContent="wysiwyg($event, field.title)"/>
           </v-flex>
 
           <v-flex v-if="field.type === 'select'">
-            <select-field v-if="field.type === 'select'" v-on:changeSelected="selected($event)" :label="field.title" :items="field.items"/>
+            <select-field v-if="field.type === 'select'" v-on:changeSelected="selected($event, field.title)" :label="field.title" :items="field.items"/>
           </v-flex>
 
           <v-flex v-if="field.type === 'radio'">
-            <radio-field v-if="field.type === 'radio'" @change="radio" :label="field.title" :items="field.items"/>
+            <radio-field v-if="field.type === 'radio'" @change="radio($event, field.title)" :label="field.title" :items="field.items"/>
           </v-flex>
 
           <v-flex v-if="field.type === 'checkbox'">
-            <checkbox-field v-if="field.type === 'checkbox'" v-on:changeCheckbox="checkbox($event)" :label="field.title" :items="field.items" />
+            <checkbox-field v-if="field.type === 'checkbox'" v-on:changeCheckbox="checkbox($event, field.title)" :label="field.title" :items="field.items" />
           </v-flex>
 
           <v-flex v-if="field.type === 'password'">
-            <password-field @input="password" :label="field.title"/>
+            <password-field @input="password($event, field.title)" :label="field.title"/>
           </v-flex>
 
           <v-flex v-if="field.type === 'email'">
-            <email-field @input="email" :label="field.title"/>
+            <email-field @input="email($event, field.title)" :label="field.title"/>
           </v-flex>
 
           <v-flex v-if="field.type === 'number'">
-            <number @input="number" :label="field.title"/>
+            <number @input="number($event, field.title)" :label="field.title"/>
           </v-flex>
 
           <v-flex v-if="field.type === 'textarea'">
-            <textarea-field @input="textarea" :label="field.title"/>
+            <textarea-field @input="textarea($event, field.title)" :label="field.title"/>
           </v-flex>
         </div>
       </div>
+      <v-btn @click="addPost">POST</v-btn>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-import { CONTENT_TYPES_GET } from '@/store/types';
+import { CONTENT_TYPES_GET, CONTENT_TYPES_POST_ADD } from '@/store/types';
 
 export default {
   components: {
@@ -82,43 +83,67 @@ export default {
       default: 'name'
     }
   },
+  data: () => ({
+    post: {}
+  }),
   methods: {
-    wysiwyg(content) {
+    addPost() {
+      console.log(this.post);
+      console.log(this.link);
+      this.$store.dispatch(CONTENT_TYPES_POST_ADD, {
+        contentType: this.link,
+        post: this.post
+      });
+    },
+    wysiwyg(content, prop) {
       console.log('quil content:');
       console.log(content);
+      this.post[prop.toLowerCase()] = content;
     },
-    textField(value) {
+    textField(value, prop) {
       console.log(value);
+      console.log(prop);
+      this.post[prop.toLowerCase()] = value;
     },
-    date(date) {
+    date(date, prop) {
       console.log(date);
+      this.post[prop.toLowerCase()] = date;
     },
-    time(time) {
+    time(time, prop) {
       console.log(time);
+      this.post[prop.toLowerCase()] = time;
     },
-    selected(select) {
+    selected(select, prop) {
       console.log(select);
+      this.post[prop.toLowerCase()] = select;
     },
-    password(password) {
+    password(password, prop) {
       console.log(password);
+      this.post[prop.toLowerCase()] = password;
     },
-    email(email) {
+    email(email, prop) {
       console.log(email);
+      this.post[prop.toLowerCase()] = email;
     },
-    number(number) {
+    number(number, prop) {
       console.log(number);
+      this.post[prop.toLowerCase()] = number;
     },
-    textarea(textarea) {
+    textarea(textarea, prop) {
       console.log(textarea);
+      this.post[prop.toLowerCase()] = textarea;
     },
-    radio(radio) {
+    radio(radio, prop) {
       console.log(radio);
+      this.post[prop.toLowerCase()] = radio;
     },
-    checkbox(checbox) {
+    checkbox(checbox, prop) {
       console.log(checbox);
+      this.post[prop.toLowerCase()] = checbox;
     },
-    image(image) {
+    image(image, prop) {
       console.log(image);
+      this.post[prop.toLowerCase()] = 'static/image/link';
     }
   },
   computed: {
