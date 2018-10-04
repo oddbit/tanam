@@ -7,19 +7,6 @@ import { event, blog } from '@/config/post';
 
 const routerOptions = [
   {
-    path: '/content-type/:link/new',
-    name: 'contentTypeNew',
-    component: 'ContentTypes/Post/index',
-    props: true,
-    meta: { layout: 'SinglePostLayout' }
-  },
-  {
-    path: '/content-type/:link',
-    name: 'contentType',
-    component: 'ContentTypes/index',
-    props: true
-  },
-  {
     path: '/',
     name: 'home',
     component: 'Home'
@@ -100,6 +87,24 @@ const routerOptions = [
     name: `${blog.createName}-slug`,
     component: 'Blogs/Post/_slug',
     meta: { layout: 'SinglePostLayout' }
+  },
+  {
+    path: '/content-type/:link/new',
+    name: 'contentTypeNew',
+    component: 'ContentTypes/Post/index',
+    props: true,
+    meta: { layout: 'SinglePostLayout' }
+  },
+  {
+    path: '/content-type/:link',
+    name: 'contentType',
+    component: 'ContentTypes/index',
+    props: true
+  },
+  {
+    path: '/manage/content-type',
+    name: 'manageContentType',
+    component: 'Manage/ContentType'
   }
 ];
 

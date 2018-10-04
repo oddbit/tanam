@@ -50,3 +50,20 @@ export const CONTENTTYPE_DRAFT = 'contentType/draft';
 
 export const CONTENT_TYPE_FIELD = 'contentType/field';
 export const CONTENT_TYPES_GET = 'contentTypes/get';
+
+export const MANAGE_CT_DIALOG = 'manage/contentType/dialog';
+export const MANAGE_CT_EDITED_INDEX = 'manage/contentType/editedIndex';
+export const MANAGE_CT_CONTENT_TYPES = 'manage/contentType/contentTypes';
+export const MANAGE_CT_EDITED_ITEM = 'manage/contentType/editedItem';
+export const MANAGE_CT_EDITED_ITEM_DEFAULT =
+  'manage/contentType/editedItemDefault';
+export const MANAGE_CT_ADD_FIELD = 'manage/contentType/addField';
+export const MANAGE_CT_REMOVE_FIELD = 'manage/contentType/removeField';
+export const MANAGE_CT_FIELDS_ITEM = 'manage/contentType/fieldsItem';
+export const MANAGE_CT_FIELDS_ITEM_DEFAULT =
+  'manage/contentType/fieldsItemDefault';
+export const MANAGE_CT_FIELD_TYPE_ITEMS = 'manage/contentType/fieldTypeItems';
+export const MANAGE_CT_HEADERS_TABLE = 'manage/contentType/table/headers';
+export const MANAGE_CT_DIALOG_FORM = 'manage/contentType/dialogForm';
+export const MANAGE_CT_SET_CONTENT_TYPE = 'manage/contentType/set/';
+export const MANAGE_CT_REMOVE_CONTENT_TYPE = 'manage/contentType/remove/';
