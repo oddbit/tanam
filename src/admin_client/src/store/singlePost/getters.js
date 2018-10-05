@@ -15,8 +15,10 @@ const featuredImage = state => state.featuredImage.src;
 const permalink = state => state.permalink;
 const body = state => state.body;
 const validTitle = state => state.validTitle;
+const uploadPost = state => state.uploadPost;
 
 export default {
+  uploadPost,
   title,
   place,
   dateStart,

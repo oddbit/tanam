@@ -1,7 +1,11 @@
 import { firestore, storageRef } from '@/utils/firebase';
 import metadata from '@/helpers/metadata';
 import quillToHtml from '@/helpers/quillToHtml';
-import { POST_CONTENT_TYPE, POST_FIELD_FEATURED_IMAGE } from '@/store/types';
+import {
+  POST_CONTENT_TYPE,
+  POST_FIELD_FEATURED_IMAGE,
+  POST_ACTION_UPLOAD
+} from '@/store/types';
 
 const collectionRef = (collectionName, newPost = true, uid = null) => {
   const collection = firestore.collection(collectionName);
@@ -17,66 +21,68 @@ const uploadFeaturedImage = async (imgName, featuredImage) => {
   }
 };
 
-const uploadPost = ({ state, getters, rootState }, payload) => {
-  const { body, title, featuredImage, tags, permalink } = state;
-  const {
-    layout: { postMode },
-    posts: { contentType }
-  } = rootState;
+const uploadPost = ({ commit }, payload) => {
+  commit(POST_ACTION_UPLOAD, true);
 
-  let status;
-  if (postMode === 'edit') {
-    status = state.status ? 'published' : 'unpublished';
-  } else {
-    status = 'published';
-  }
+  // const { body, title, featuredImage, tags, permalink } = state;
+  // const {
+  //   layout: { postMode },
+  //   posts: { contentType }
+  // } = rootState;
 
-  const template = contentType === 'pages' ? 'page' : state.template;
-  const path = metadata.generatePaths(permalink, template);
-  console.log(body)
-  const properties = {
-    data: {
-      // body: quillToHtml(body),
-      body: body,
-      title
-    },
-    path,
-    permalink,
-    publishTime: new Date(),
-    updateTime: new Date(),
-    status,
-    template
-  };
+  // let status;
+  // if (postMode === 'edit') {
+  //   status = state.status ? 'published' : 'unpublished';
+  // } else {
+  //   status = 'published';
+  // }
 
-  if (contentType !== 'pages') {
-    properties.tags = tags;
-  }
+  // const template = contentType === 'pages' ? 'page' : state.template;
+  // const path = metadata.generatePaths(permalink, template);
+  // console.log(body)
+  // const properties = {
+  //   data: {
+  //     // body: quillToHtml(body),
+  //     body: body,
+  //     title
+  //   },
+  //   path,
+  //   permalink,
+  //   publishTime: new Date(),
+  //   updateTime: new Date(),
+  //   status,
+  //   template
+  // };
 
-  return new Promise(async (resolve, reject) => {
-    let imgName;
+  // if (contentType !== 'pages') {
+  //   properties.tags = tags;
+  // }
 
-    if (featuredImage.dataUri) {
-      imgName = metadata.generateFeaturedImageName(permalink);
-      await uploadFeaturedImage(imgName, featuredImage.src);
-      properties.data.featuredImage = imgName;
-    } else if (featuredImage.src) {
-      properties.data.featuredImage = featuredImage.src;
-    }
+  // return new Promise(async (resolve, reject) => {
+  //   let imgName;
 
-    try {
-      let docRef;
-      if (postMode === 'edit') {
-        docRef = collectionRef(getters[POST_CONTENT_TYPE], false, payload);
-        await docRef.set(properties, { merge: true });
-      } else {
-        docRef = collectionRef(getters[POST_CONTENT_TYPE]);
-        await docRef.set(properties);
-      }
-      resolve();
-    } catch (error) {
-      reject(error);
-    }
-  });
+  //   if (featuredImage.dataUri) {
+  //     imgName = metadata.generateFeaturedImageName(permalink);
+  //     await uploadFeaturedImage(imgName, featuredImage.src);
+  //     properties.data.featuredImage = imgName;
+  //   } else if (featuredImage.src) {
+  //     properties.data.featuredImage = featuredImage.src;
+  //   }
+
+  //   try {
+  //     let docRef;
+  //     if (postMode === 'edit') {
+  //       docRef = collectionRef(getters[POST_CONTENT_TYPE], false, payload);
+  //       await docRef.set(properties, { merge: true });
+  //     } else {
+  //       docRef = collectionRef(getters[POST_CONTENT_TYPE]);
+  //       await docRef.set(properties);
+  //     }
+  //     resolve();
+  //   } catch (error) {
+  //     reject(error);
+  //   }
+  // });
 };
 
 const deletePost = async ({ getters }, payload) => {

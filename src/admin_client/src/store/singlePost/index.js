@@ -27,6 +27,7 @@ import getters from './getters';
 import actions from './actions';
 
 const initialState = () => ({
+  uploadPost: false,
   title: null,
   place: null,
   datetimeStart: {
@@ -77,7 +78,8 @@ export default {
     [POST_FIELD_FEATURED_IMAGE]: getters.featuredImage,
     [POST_FIELD_PERMALINK]: getters.permalink,
     [POST_FIELD_BODY]: getters.body,
-    [POST_VALIDATE_TITLE]: getters.validTitle
+    [POST_VALIDATE_TITLE]: getters.validTitle,
+    [POST_ACTION_UPLOAD]: getters.uploadPost
   },
   mutations: {
     [POST_RESET_STATE]: state => {
@@ -101,7 +103,8 @@ export default {
     [POST_FIELD_BODY]: mutations.body,
     [POST_FIELD_STATUS]: mutations.status,
     [POST_SET_POSTS]: mutations.post,
-    [POST_VALIDATE_TITLE]: mutations.validateTitle
+    [POST_VALIDATE_TITLE]: mutations.validateTitle,
+    [POST_ACTION_UPLOAD]: mutations.uploadPost
   },
   actions: {
     [POST_ACTION_UPLOAD]: actions.uploadPost,

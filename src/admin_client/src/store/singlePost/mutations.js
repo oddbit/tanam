@@ -68,7 +68,13 @@ const post = (state, payload) => {
   validateTitle(state);
 };
 
+const uploadPost = (state, payload) => {
+  state.uploadPost = payload;
+  console.log('mutation');
+};
+
 export default {
+  uploadPost,
   title,
   place,
   dateStart,
