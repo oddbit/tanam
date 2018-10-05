@@ -4,7 +4,7 @@ import { MANAGE_CT_CONTENT_TYPES } from '@/store/types';
 export const setContentType = ({ state }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (state.editedItem.icon === '') {
+      if (state.editedItem.icon === '' || !state.editedItem.icon) {
         state.editedItem.icon = 'insert_drive_file';
       }
       await rtdb.ref(`contentTypes/${state.editedItem.name}`).set({
