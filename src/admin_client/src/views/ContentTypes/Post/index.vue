@@ -84,7 +84,8 @@ export default {
     }
   },
   data: () => ({
-    post: {}
+    post: {},
+    imageFile: {}
   }),
   methods: {
     addPost() {
@@ -92,7 +93,8 @@ export default {
       console.log(this.link);
       this.$store.dispatch(CONTENT_TYPES_POST_ADD, {
         contentType: this.link,
-        post: this.post
+        post: this.post,
+        imageFile: this.imageFile
       });
     },
     wysiwyg(content, prop) {
@@ -143,7 +145,7 @@ export default {
     },
     image(image, prop) {
       console.log(image);
-      this.post[prop.toLowerCase()] = 'static/image/link';
+      this.imageFile[prop.toLowerCase()] = image;
     }
   },
   computed: {
