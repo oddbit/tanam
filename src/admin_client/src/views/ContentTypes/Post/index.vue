@@ -53,7 +53,6 @@
           </v-flex>
         </div>
       </div>
-      <v-btn @click="addPost">POST</v-btn>
     </v-layout>
   </v-container>
 </template>
