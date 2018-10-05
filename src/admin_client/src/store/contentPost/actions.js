@@ -4,7 +4,7 @@ import { CONTENTTYPE_POST, CONTENTTYPE_DRAFT } from '../types';
 
 const addPost = async ({ commit }, payload) => {
   var request = 0;
-  var imageUrl = {};
+  var imageObj = {};
   for (var key in payload.imageFile) {
     const imageName = `${payload.contentType}-${new Date().valueOf()}`;
     const imgRef = storage.ref('/content/images/').child(imageName);
@@ -13,22 +13,25 @@ const addPost = async ({ commit }, payload) => {
       await imgRef.put(payload.imageFile[key]).then(res => {
         console.log('uploaded');
         console.log(key);
-        imageUrl[key] = request;
+        imageObj[key] = request;
       });
       await imgRef.getDownloadURL().then(url => {
-        imageUrl[key] = url;
+        imageObj[key] = {
+          url: url,
+          path: `/content/images/${imageName}`
+        };
         console.log(url);
       });
       request++;
       if (request === Object.keys(payload.imageFile).length) {
-        console.log(imageUrl);
+        console.log(imageObj);
         console.log('Add post');
         firestore
           .collection(payload.contentType)
           .add({
             data: {
               ...payload.post,
-              imageUrl: imageUrl
+              imageObj: imageObj
             },
             path: ['/staticpath', '/staticpath2'],
             permalink: 'staticpermalink',
