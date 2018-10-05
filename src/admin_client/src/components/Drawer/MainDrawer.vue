@@ -54,7 +54,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { navDrawerLists } from '@/config/navDrawerLists';
-import { CONTENT_TYPES_GET } from '@/store/types';
+import { CONTENT_TYPES_GET, MANAGE_CT_CONTENT_TYPES } from '@/store/types';
 
 export default {
   data: () => ({
@@ -72,7 +72,7 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      contentTypes: [CONTENT_TYPES_GET]
+      contentTypes: [MANAGE_CT_CONTENT_TYPES]
     })
   },
   methods: {
