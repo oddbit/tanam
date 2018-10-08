@@ -1,48 +1,48 @@
 export const mainDrawerList = [
   {
-    name: 'dashboard',
+    key: 'dashboard',
     permalink: '/',
-    title: 'Dashboard',
+    name: 'Dashboard',
     icon: 'dashboard'
   },
   {
-    name: 'contentTypeList',
+    key: 'contentTypeList',
     subheader: 'CONTENT TYPE',
     permalink: '/content-type'
   },
   {
-    name: 'manage',
+    key: 'manage',
     subheader: 'MANAGE',
     permalink: '/manage',
     lists: [
       {
-        name: 'contentType',
-        title: 'Content Type',
+        key: 'contentType',
+        name: 'Content Type',
         permalink: '/content-type',
         icon: 'insert_drive_file'
       },
       {
-        name: 'pages',
-        title: 'Pages',
+        key: 'pages',
+        name: 'Pages',
         permalink: '/pages',
         icon: 'pages'
       },
       {
-        name: 'images',
-        title: 'Images',
+        key: 'images',
+        name: 'Images',
         permalink: '/images',
         icon: 'photo'
       }
     ]
   },
   {
-    name: 'configure',
+    key: 'configure',
     subheader: 'CONFIGURE',
     permalink: '/configure',
     lists: [
       {
-        name: 'theme',
-        title: 'Theme',
+        key: 'theme',
+        name: 'Theme',
         permalink: '/theme',
         icon: 'bubble_chart'
       }

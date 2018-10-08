@@ -1,15 +1,33 @@
 import { rtdb } from '@/utils/firebase';
 import { MANAGE_CT_CONTENT_TYPES } from '@/store/types';
 
+const modifyContentTypeBeforeSave = async (ct, fields) => {
+  if (ct.icon === '' || !ct.icon) {
+    ct.icon = 'insert_drive_file';
+    ct._v = true;
+  }
+
+  const newFields = Object.keys(fields).map(key => {
+    return {
+      ...fields[key],
+      _v: true,
+      key: fields[key].key.charAt(0).toLowerCase() + fields[key].key.substr(1)
+    };
+  });
+
+  return { ct, newFields };
+};
+
 export const setContentType = ({ state }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (state.editedItem.icon === '' || !state.editedItem.icon) {
-        state.editedItem.icon = 'insert_drive_file';
-      }
-      await rtdb.ref(`contentTypes/${state.editedItem.name}`).set({
-        fields: state.fieldsItem,
-        meta: state.editedItem
+      const ct = await modifyContentTypeBeforeSave(
+        state.editedItem,
+        state.fieldsItem
+      );
+      await rtdb.ref(`contentTypes/${state.editedItem.key}`).set({
+        fields: ct.newFields,
+        meta: ct.ct
       });
       resolve();
     } catch (error) {

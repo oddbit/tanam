@@ -3,35 +3,35 @@
     <template slot="drawer">
       <v-list
         v-for="mainList in mainDrawerList"
-        :key="`mainList-${mainList.name}`">
+        :key="`mainList-${mainList.key}`">
         <div v-if="!mainList.subheader">
           <v-list-tile
             ripple
             :to="mainList.permalink">
             <v-list-tile-action><v-icon>{{ mainList.icon }}</v-icon></v-list-tile-action>
-            <v-list-tile-title>{{ mainList.title }}</v-list-tile-title>
+            <v-list-tile-title>{{ mainList.name }}</v-list-tile-title>
           </v-list-tile>
         </div>
         <div v-else>
           <v-subheader>{{ mainList.subheader }}</v-subheader>
-          <div v-if="mainList.name === 'contentTypeList'">
+          <div v-if="mainList.key === 'contentTypeList'">
             <v-list-tile
               ripple
               v-for="list in contentTypes"
-              :key="`navDrawerItem-${list.meta.name}`"
-              :to="`${mainList.permalink}/${list.meta.name}`">
+              :key="`navDrawerItem-${list.meta.key}`"
+              :to="`${mainList.permalink}/${list.meta.key}`">
               <v-list-tile-action><v-icon>{{ list.meta.icon }}</v-icon></v-list-tile-action>
-              <v-list-tile-title>{{ list.meta.title }}</v-list-tile-title>
+              <v-list-tile-title>{{ list.meta.name }}</v-list-tile-title>
             </v-list-tile>
           </div>
           <div v-else>
             <v-list-tile
               ripple
               v-for="list in mainList.lists"
-              :key="`navDrawerItem-${list.name}`"
+              :key="`navDrawerItem-${list.key}`"
               :to="`${mainList.permalink}${list.permalink}`">
               <v-list-tile-action><v-icon>{{ list.icon }}</v-icon></v-list-tile-action>
-              <v-list-tile-title>{{ list.title }}</v-list-tile-title>
+              <v-list-tile-title>{{ list.name }}</v-list-tile-title>
             </v-list-tile>
           </div>
         </div>

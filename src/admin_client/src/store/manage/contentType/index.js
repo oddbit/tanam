@@ -23,23 +23,26 @@ const state = {
   dialog: false,
   editedIndex: -1,
   editedItem: {
+    key: '',
     name: '',
-    title: '',
     icon: ''
   },
   defaultItem: {
+    key: '',
     name: '',
-    title: '',
     icon: ''
   },
   headers: [
-    { text: 'Name', sortable: false, value: 'name', align: 'center' },
-    { text: 'Title', value: 'title', sortable: false, align: 'center' },
+    { text: 'Key', sortable: false, value: 'key', align: 'center' },
+    { text: 'Name', value: 'name', sortable: false, align: 'center' },
     { text: 'Icon', value: 'icon', sortable: false, align: 'center' },
     { text: 'Fields', value: 'fields', sortable: false, align: 'center' },
-    { text: 'Actions', value: 'name', sortable: false, align: 'center' }
+    { text: 'Actions', value: 'key', sortable: false, align: 'center' }
   ],
-  fieldsItem: [{ name: '', title: '', type: '' }],
+  fieldsItem: [
+    { key: 'title', name: 'Title', type: 'text', pk: true },
+    { key: '', name: '', type: '' }
+  ],
   fieldTypeItems: [
     { text: 'Text', value: 'text' },
     { text: 'Textarea', value: 'textarea' },

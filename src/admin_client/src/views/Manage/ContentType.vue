@@ -2,6 +2,7 @@
   <v-container>
     <DialogForm
       :edited-index="editedIndex"
+      :content-types="contentTypes"
       @close="close" 
       @save="save" 
       ref="createDialogRef" />
@@ -28,6 +29,7 @@ import {
 } from '@/store/types';
 import DialogForm from '@/components/Manage/ContentType/DialogForm';
 import Table from '@/components/Manage/ContentType/Table';
+import { setTimeout } from 'timers';
 
 export default {
   components: {
@@ -87,15 +89,17 @@ export default {
     },
     deleteItem(item) {
       confirm('Are you sure you want to delete this item?') &&
-        this.$store.dispatch(MANAGE_CT_REMOVE_CONTENT_TYPE, item.meta.name);
+        this.$store.dispatch(MANAGE_CT_REMOVE_CONTENT_TYPE, item.meta.key);
     },
     close() {
       this.dialog = false;
       setTimeout(() => {
         this.$refs.createDialogRef.reset();
-        this.$store.commit(MANAGE_CT_EDITED_ITEM_DEFAULT);
-        this.$store.commit(MANAGE_CT_FIELDS_ITEM_DEFAULT);
         this.editedIndex = -1;
+        setTimeout(() => {
+          this.$store.commit(MANAGE_CT_EDITED_ITEM_DEFAULT);
+          this.$store.commit(MANAGE_CT_FIELDS_ITEM_DEFAULT);
+        }, 0);
       }, 300);
     },
     async save() {

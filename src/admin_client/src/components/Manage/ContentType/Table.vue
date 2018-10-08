@@ -6,11 +6,11 @@
     class="elevation-1"
   >
     <template slot="items" slot-scope="props">
+      <td class="text-xs-center">{{ props.item.meta.key }}</td>
       <td class="text-xs-center">{{ props.item.meta.name }}</td>
-      <td class="text-xs-center">{{ props.item.meta.title }}</td>
       <td class="text-xs-center"><v-icon>{{ props.item.meta.icon }}</v-icon></td>
       <td class="text-xs-center">
-        <span v-for="(field, i) in props.item.fields" :key="i">{{ field.title | fieldComma(i) }}</span>
+        <span v-for="(field, i) in props.item.fields" :key="i">{{ field.name | fieldComma(i) }}</span>
       </td>
       <td class="justify-center layout px-0">
         <v-icon
