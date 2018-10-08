@@ -54,6 +54,35 @@
                 </h4>
               </v-flex>
             </v-layout>
+            <v-layout>
+              <v-flex lg11>
+                <v-layout>
+                  <v-flex lg4>
+                    <v-select
+                      :items="fieldTypeItems"
+                      :rules="[v => !!v || 'Field type is required']"
+                      label="Select Field Type"
+                      value="text"
+                    />
+                  </v-flex>
+                  <v-flex lg4>
+                    <v-text-field 
+                      value="title"
+                      :rules="[v => !!v || 'Field name is required', v => /^([a-zA-Z0-9])+$/.test(v) || 'Field name cannot contain spaces']"
+                      label="Field Name" 
+                      :readonly="readOnly(index)"
+                      hint="Can't edit later" 
+                      persistent-hint />
+                  </v-flex>
+                  <v-flex lg4>
+                    <v-text-field 
+                      value="Title" 
+                      :rules="[v => !!v || 'Field title is required']" 
+                      label="Field Title" />
+                  </v-flex>
+                </v-layout>
+              </v-flex>
+            </v-layout>
             <v-layout v-for="(field, index) in fieldsItem" :key="`field-${index}`">
               <v-flex lg11>
                 <v-layout>

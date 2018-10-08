@@ -10,10 +10,12 @@ import { LAYOUT } from '@/store/types';
 import DefaultLayout from '@/layouts/Default';
 import SimpleLayout from '@/layouts/Simple';
 import SinglePostLayout from '@/layouts/SinglePost';
+import ProfileLayout from '@/layouts/Profile';
 
 export default {
   components: {
     DefaultLayout,
+    ProfileLayout,
     SimpleLayout,
     SinglePostLayout
   },

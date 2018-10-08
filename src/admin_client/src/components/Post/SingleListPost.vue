@@ -18,7 +18,6 @@
 
 <script>
 import { POST_CONTENT_TYPE } from '@/store/types';
-import { blog, event } from '@/config/post';
 
 export default {
   props: {
@@ -33,10 +32,6 @@ export default {
     },
     pushLink() {
       switch (this.contentType) {
-        case 'event':
-          return event.createLink;
-        case 'blog':
-          return blog.createLink;
         default:
           return '/templates/pages/post';
       }

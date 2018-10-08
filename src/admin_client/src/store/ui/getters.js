@@ -1,7 +1,7 @@
-const getBtnSubmitSinglePost = state => state.btnSubmitSinglePost;
-const getBtnDeleteSinglePost = state => state.btnDeleteSinglePost;
+const status = state => state.status;
+const statusPost = state => state.statusPost;
 
 export default {
-  getBtnSubmitSinglePost,
-  getBtnDeleteSinglePost
+  status,
+  statusPost
 };

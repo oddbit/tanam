@@ -18,7 +18,6 @@ import {
   POST_CONTENT_TYPE,
   POST_FIELD_FEATURED_IMAGE
 } from '@/store/types';
-import { blog, event } from '@/config/post';
 
 export default {
   props: {
@@ -46,11 +45,6 @@ export default {
     handleClickActionItem(name) {
       switch (name) {
         case 'edit':
-          this.$router.push(
-            `${
-              this.contentType === 'event' ? event.createLink : blog.createLink
-            }/` + this.postId
-          );
           break;
         case 'delete':
           this.$store.commit(POST_ID, this.postId);

@@ -1,53 +1,59 @@
 <template>
-  <div>
+  <Drawer>
+    <template slot="drawer">
+      <div>
+        <v-layout 
+          justify-center 
+          align-center 
+          column 
+          class="my-4">
+          <span class="img-wrapper">
+            <img src="@/assets/images/gravatar.jpg">
+          </span>
+          <h2 class="mt-2">Ananda Widiprabawa</h2>
+          <h4>@anandaprabawa</h4>
+          <v-btn
+            @click="handleLogout"
+            color="primary"
+            dark
+            class="mt-3">Logout</v-btn>
+        </v-layout>
 
-    <v-layout 
-      justify-center 
-      align-center 
-      column 
-      class="my-4">
-      <span class="img-wrapper">
-        <img src="@/assets/images/gravatar.jpg">
-      </span>
-      <h2 class="mt-2">Ananda Widiprabawa</h2>
-      <h4>@anandaprabawa</h4>
-      <v-btn
-        @click="handleLogout"
-        color="primary"
-        dark
-        class="mt-3">Logout</v-btn>
-    </v-layout>
-
-    <v-list subheader>
-      <v-subheader>PROFILE</v-subheader>
-      <v-list-tile
-        to="/profile"
-        exact
-        ripple
-        active-class="primary--text"
-        @click="() => null">
-        <v-list-tile-action><v-icon>person</v-icon></v-list-tile-action>
-        <v-list-tile-title>My Profile</v-list-tile-title>
-      </v-list-tile>
-      <v-list-tile
-        to="/profile/account-settings"
-        exact
-        ripple
-        active-class="primary--text"
-        @click="() => null">
-        <v-list-tile-action><v-icon>settings</v-icon></v-list-tile-action>
-        <v-list-tile-title>Account Settings</v-list-tile-title>
-      </v-list-tile>
-    </v-list>
-
-  </div>
+        <v-list subheader>
+          <v-subheader>PROFILE</v-subheader>
+          <v-list-tile
+            to="/profile"
+            exact
+            ripple
+            active-class="primary--text"
+            @click="() => null">
+            <v-list-tile-action><v-icon>person</v-icon></v-list-tile-action>
+            <v-list-tile-title>My Profile</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile
+            to="/profile/account-settings"
+            exact
+            ripple
+            active-class="primary--text"
+            @click="() => null">
+            <v-list-tile-action><v-icon>settings</v-icon></v-list-tile-action>
+            <v-list-tile-title>Account Settings</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </div>
+    </template>
+  </Drawer>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
 import { LOGOUT } from '@/store/types';
+import Drawer from './Drawer';
 
 export default {
+  components: {
+    Drawer
+  },
   methods: {
     ...mapActions({
       handleLogout: LOGOUT

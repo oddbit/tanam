@@ -9,9 +9,11 @@ export default {
   components: {
     ContentTypesIndex
   },
-  props: ['link'],
-  data() {
-    return {};
+  props: {
+    link: {
+      type: String,
+      default: '/'
+    }
   }
 };
 </script>

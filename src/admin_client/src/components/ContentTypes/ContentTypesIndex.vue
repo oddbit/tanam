@@ -6,7 +6,7 @@
           <v-flex xs12 md8>
             <v-btn class="ma-0" color="white" :to="{name: 'contentTypeNew', params: {link: `${link}`}}">
               <v-icon left>create</v-icon>
-              Create {{link}}
+              Create {{ link }}
             </v-btn>
           </v-flex>
         </v-layout>
@@ -32,18 +32,18 @@
                   v-for="(post, index) in published"
                   :key="index"
                   :link="post.data.link"
-                  :ContentTitle="post.data.title"
+                  :content-title="post.data.title"
                   :time="post.updateTime"
-                  :status="post.status"/>
+                  :status="post.status" />
               </v-tab-item>
               <v-tab-item id="unpublished">
                 <List
                   v-for="(post, index) in unpublished"
                   :key="index"
                   :link="post.data.link"
-                  :ContentTitle="post.data.title"
+                  :content-title="post.data.title"
                   :time="post.updateTime"
-                  :status="post.status"/>
+                  :status="post.status" />
               </v-tab-item>
             </v-tabs-items>
           </v-flex>
@@ -57,36 +57,34 @@
 
 <script>
 import List from '@/components/ContentTypes/ContentTypesList';
-import { CONTENTTYPE_POST, CONTENTTYPE_DRAFT } from '@/store/types'
+import { CONTENTTYPE_POST, CONTENTTYPE_DRAFT } from '@/store/types';
 
 export default {
-  props: [
-    'link'
-  ],
+  props: ['link'],
   components: {
     List
   },
   computed: {
-    published () {
-      return this.$store.getters[CONTENTTYPE_POST]
+    published() {
+      return this.$store.getters[CONTENTTYPE_POST];
     },
-    unpublished () {
-      return this.$store.getters[CONTENTTYPE_DRAFT]
+    unpublished() {
+      return this.$store.getters[CONTENTTYPE_DRAFT];
     }
   },
   mounted() {
-    this.$store.dispatch(CONTENTTYPE_POST, this.link)
-    this.$store.dispatch(CONTENTTYPE_DRAFT, this.link)
+    this.$store.dispatch(CONTENTTYPE_POST, this.link);
+    this.$store.dispatch(CONTENTTYPE_DRAFT, this.link);
   },
   watch: {
     link() {
-      this.$store.dispatch(CONTENTTYPE_POST, this.link)
-      this.$store.dispatch(CONTENTTYPE_DRAFT, this.link)
+      this.$store.dispatch(CONTENTTYPE_POST, this.link);
+      this.$store.dispatch(CONTENTTYPE_DRAFT, this.link);
     }
   },
   data: () => ({
     tabItems: ['published', 'unpublished'],
     tabsModel: 'published'
   })
-}
+};
 </script>

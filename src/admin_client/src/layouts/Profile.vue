@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import Drawer from '@/components/Drawer/MainDrawer';
+import Drawer from '@/components/Drawer/ProfileDrawer';
 import Toolbar from '@/components/Toolbar/MainToolbar';
 
 export default {
