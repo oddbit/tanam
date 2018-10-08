@@ -53,13 +53,12 @@
           </v-flex>
         </div>
       </div>
-      <v-btn @click="addPost">POST</v-btn>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-import { CONTENT_TYPES_GET, CONTENT_TYPES_POST_ADD } from '@/store/types';
+import { POST_ACTION_UPLOAD, POST_MODE, CONTENT_TYPES_GET, CONTENT_TYPES_POST_ADD } from '@/store/types';
 
 export default {
   components: {
@@ -84,7 +83,8 @@ export default {
     }
   },
   data: () => ({
-    post: {}
+    post: {},
+    imageFile: {}
   }),
   methods: {
     addPost() {
@@ -92,7 +92,8 @@ export default {
       console.log(this.link);
       this.$store.dispatch(CONTENT_TYPES_POST_ADD, {
         contentType: this.link,
-        post: this.post
+        post: this.post,
+        imageFile: this.imageFile
       });
     },
     wysiwyg(content, prop) {
@@ -143,16 +144,33 @@ export default {
     },
     image(image, prop) {
       console.log(image);
-      this.post[prop.toLowerCase()] = 'static/image/link';
+      this.imageFile[prop.toLowerCase()] = image;
     }
   },
   computed: {
+    uploadPost() {
+      const status = this.$store.getters[POST_ACTION_UPLOAD];
+      console.log(status);
+      return status;
+    },
     fields() {
       const fields = this.$store.getters[CONTENT_TYPES_GET][this.link];
       if (fields && fields.fields) {
         return fields.fields;
       }
       return fields;
+    }
+  },
+  mounted() {
+    this.$store.commit(POST_MODE, 'new');
+  },
+  watch: {
+    uploadPost() {
+      if (this.uploadPost === true) {
+        console.log('Upload post');
+        this.$store.commit(POST_ACTION_UPLOAD, false);
+        this.addPost();
+      }
     }
   }
 };

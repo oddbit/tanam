@@ -19,8 +19,11 @@ const firebaseUI = new firebaseui.auth.AuthUI(firebase.auth());
 const firestore = firebase.firestore();
 const rtdb = firebase.database();
 const storageRef = firebase.storage().ref();
+const storage = firebase.storage();
 
-firestore.settings({ timestampsInSnapshots: true });
+firestore.settings({
+  timestampsInSnapshots: true
+});
 
 const contentImages = rtdb
   .ref('/contentFiles/')
@@ -30,4 +33,12 @@ const contentImages = rtdb
 
 const contentTypes = rtdb.ref('/contentTypes/names').once('value');
 
-export { firebaseUI, firestore, contentImages, storageRef, contentTypes, rtdb };
+export {
+  firebaseUI,
+  firestore,
+  contentImages,
+  storageRef,
+  contentTypes,
+  rtdb,
+  storage
+};
