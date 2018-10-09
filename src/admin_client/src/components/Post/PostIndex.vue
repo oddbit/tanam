@@ -4,7 +4,10 @@
       <div>
         <v-layout justify-center class="my-4">
           <v-flex xs12 md8>
-            <slot name="button-create" />
+            <v-btn :to="{name: 'postNew', params: {link: `${ctKey}`}}" class="ma-0" color="white">
+              <v-icon left>create</v-icon>
+              Create {{ ctKey }}
+            </v-btn>
           </v-flex>
         </v-layout>
         <v-layout justify-center class="my-4">
@@ -41,6 +44,12 @@
 
 <script>
 export default {
+  props: {
+    ctKey: {
+      type: String,
+      default: 'key'
+    }
+  },
   data: () => ({
     tabItems: ['published', 'unpublished'],
     tabsModel: 'published'

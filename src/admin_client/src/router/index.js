@@ -28,13 +28,13 @@ const routerOptions = [
   },
   {
     path: '/manage/pages/post',
-    name: 'page-posts',
+    name: 'pagePosts',
     component: 'Manage/Pages/Post/index',
     meta: { layout: 'SinglePostLayout' }
   },
   {
     path: `/manage/pages/post/:slug`,
-    name: `page-posts-slug`,
+    name: `pagePostsSlug`,
     component: 'Manage/Pages/Post/_slug',
     meta: { layout: 'SinglePostLayout' }
   },
@@ -51,20 +51,20 @@ const routerOptions = [
   },
   {
     path: '/profile/account-settings',
-    name: 'account-settings',
+    name: 'accountSettings',
     component: 'Profile/AccountSettings',
     meta: { layout: 'ProfileLayout' }
   },
   {
-    path: '/content-type/:link/new',
-    name: 'contentTypeNew',
+    path: '/content-type/:ctKey/new',
+    name: 'postNew',
     component: 'ContentType/Post/index',
     props: true,
     meta: { layout: 'SinglePostLayout' }
   },
   {
-    path: '/content-type/:link',
-    name: 'contentTypeList',
+    path: '/content-type/:ctKey',
+    name: 'postList',
     component: 'ContentType/index',
     props: true
   },

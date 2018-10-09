@@ -6,8 +6,8 @@
         :key="`mainList-${mainList.key}`">
         <div v-if="!mainList.subheader">
           <v-list-tile
-            ripple
-            :to="mainList.permalink">
+            :to="mainList.permalink"
+            ripple>
             <v-list-tile-action><v-icon>{{ mainList.icon }}</v-icon></v-list-tile-action>
             <v-list-tile-title>{{ mainList.name }}</v-list-tile-title>
           </v-list-tile>
@@ -16,20 +16,20 @@
           <v-subheader>{{ mainList.subheader }}</v-subheader>
           <div v-if="mainList.key === 'contentTypeList'">
             <v-list-tile
-              ripple
               v-for="list in contentTypes"
               :key="`navDrawerItem-${list.meta.key}`"
-              :to="`${mainList.permalink}/${list.meta.key}`">
+              :to="`${mainList.permalink}/${list.meta.key}`"
+              ripple>
               <v-list-tile-action><v-icon>{{ list.meta.icon }}</v-icon></v-list-tile-action>
               <v-list-tile-title>{{ list.meta.name }}</v-list-tile-title>
             </v-list-tile>
           </div>
           <div v-else>
             <v-list-tile
-              ripple
               v-for="list in mainList.lists"
               :key="`navDrawerItem-${list.key}`"
-              :to="`${mainList.permalink}${list.permalink}`">
+              :to="`${mainList.permalink}${list.permalink}`"
+              ripple>
               <v-list-tile-action><v-icon>{{ list.icon }}</v-icon></v-list-tile-action>
               <v-list-tile-title>{{ list.name }}</v-list-tile-title>
             </v-list-tile>
