@@ -9,7 +9,7 @@ export const setContentTypes = (state, payload) => {
 export const setEditedItem = (state, payload) => (state.editedItem = payload);
 
 export const setEditedItemDefault = state =>
-  (state.editedItem = [{ key: '', name: '', icon: '' }]);
+  (state.editedItem = state.defaultItem);
 
 export const addMoreField = state =>
   state.fieldsItem.push({ key: '', name: '', type: '' });
@@ -18,10 +18,7 @@ export const removeField = (state, index) => state.fieldsItem.splice(index, 1);
 export const setFieldsItem = (state, payload) => (state.fieldsItem = payload);
 
 export const setFieldsItemDefault = state =>
-  (state.fieldsItem = [
-    { key: 'title', name: 'Title', type: 'text', pk: true },
-    { key: '', name: '', type: '' }
-  ]);
+  (state.fieldsItem = state.fieldsItemDefault);
 
 export const setDialogForm = (state, payload) => {
   state.editedItem = payload.editedItem;

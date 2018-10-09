@@ -43,6 +43,10 @@ const state = {
     { key: 'title', name: 'Title', type: 'text', pk: true },
     { key: '', name: '', type: '' }
   ],
+  fieldsItemDefault: [
+    { key: 'title', name: 'Title', type: 'text', pk: true },
+    { key: '', name: '', type: '' }
+  ],
   fieldTypeItems: [
     { text: 'Text', value: 'text' },
     { text: 'Textarea', value: 'textarea' },
