@@ -19,11 +19,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { store } from '@/store';
-import {
-  AUTO_LOGIN,
-  CURRENT_USER,
-  MANAGE_CT_CONTENT_TYPES
-} from '@/store/types';
+import { AUTO_LOGIN, CURRENT_USER, CONTENT_TYPE_GET } from '@/store/types';
 import firebase from 'firebase/app';
 import { firebaseUI } from '@/utils/firebase';
 
@@ -34,7 +30,7 @@ const uiConfig = {
   callbacks: {
     signInSuccessWithAuthResult: function(authResult) {
       store.dispatch(AUTO_LOGIN, authResult.user);
-      store.dispatch(MANAGE_CT_CONTENT_TYPES);
+      store.dispatch(CONTENT_TYPE_GET);
       return false;
     }
   }

@@ -1,17 +1,7 @@
-const getContentType = state => state.contentType;
-
-const getPostId = state => state.postId;
-
-const getPublishedPosts = state => state.publishedPosts;
-
-const getDraftPosts = state => state.draftPosts;
-
-const getDialogDelete = state => state.dialogDelete;
-
-export default {
-  getContentType,
-  getPostId,
-  getPublishedPosts,
-  getDraftPosts,
-  getDialogDelete
-};
+export const getIsEditedMode = state => state.isEditedMode;
+export const getIsShowDrawer = state => state.isShowDrawer;
+export const getIsSubmitting = state => state.isSubmitting;
+export const getPostsPublished = state => state.postsPublished;
+export const getPostsUnpublished = state => state.postsUnpublished;
+export const getPostTitle = state => state.postTitle;
+export const getPostPermalink = state => state.postPermalink;

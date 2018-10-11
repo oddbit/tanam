@@ -42,7 +42,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { MANAGE_CT_CONTENT_TYPES } from '@/store/types';
+import { CONTENT_TYPE_GET } from '@/store/types';
 import { mainDrawerList } from '@/config/drawer';
 import Drawer from './Drawer';
 
@@ -53,7 +53,7 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      contentTypes: [MANAGE_CT_CONTENT_TYPES]
+      contentTypes: [CONTENT_TYPE_GET]
     })
   }
 };

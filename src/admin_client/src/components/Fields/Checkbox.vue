@@ -6,7 +6,7 @@
       :label="item"
       v-model="valueCheckbox[item.toLowerCase()]"
       @change="change"
-    ></v-checkbox>
+    />
   </div>
 </template>
 

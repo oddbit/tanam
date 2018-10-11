@@ -1,6 +1,5 @@
 <template>
   <v-textarea
-    box
     :label="label"
     :value="value"
     @input="$emit('input', $event)"

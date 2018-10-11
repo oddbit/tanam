@@ -9,39 +9,46 @@
     dark>
     <v-btn icon @click="$router.back()"><v-icon>close</v-icon></v-btn>
     <v-spacer />
-    <v-btn icon @click="handleToggleEventPostSettings">
+    <v-btn flat icon @click="handleToggleDrawer">
       <v-icon>settings</v-icon>
     </v-btn>
-    <PagesToolbar />
+    <v-btn 
+      :disabled="postTitle === '' || !postTitle"
+      :loading="isSubmitting"
+      light 
+      @click="handleClickSubmit">
+      {{ isEditedMode ? 'Update' : 'Publish' }}
+    </v-btn>
   </v-toolbar>
 </template>
 
 <script>
-import { TOGGLE_DRAWER_POST, POST_CONTENT_TYPE } from '@/store/types';
-import PagesToolbar from '@/components/Pages/Toolbar';
+import {
+  POST_IS_EDITED_MODE,
+  POST_IS_SHOW_DRAWER,
+  POST_IS_SUBMITTING,
+  POST_FIELD_TITLE
+} from '@/store/types';
 
 export default {
-  components: {
-    PagesToolbar
-  },
   computed: {
-    contentType() {
-      return this.$store.getters[POST_CONTENT_TYPE];
+    isEditedMode() {
+      return this.$store.getters[POST_IS_EDITED_MODE];
+    },
+    isSubmitting() {
+      return this.$store.getters[POST_IS_SUBMITTING];
+    },
+    postTitle() {
+      return this.$store.getters[POST_FIELD_TITLE];
     }
   },
   methods: {
-    handleToggleEventPostSettings() {
-      this.$store.commit(TOGGLE_DRAWER_POST);
+    handleToggleDrawer() {
+      this.$store.commit(POST_IS_SHOW_DRAWER);
+    },
+    handleClickSubmit() {
+      this.$store.commit(POST_IS_SUBMITTING, true);
     }
   }
 };
 </script>
-
-
-<style lang="scss" scoped>
-.toolbar-title {
-  color: #fff;
-  text-decoration: none;
-  font-weight: 600;
-}
-</style>

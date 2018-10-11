@@ -1,10 +1,9 @@
 <template>
   <v-text-field
     :label="label"
-    box
     :value="value"
-    @input="$emit('input', $event)"
     type="email"
+    @input="$emit('input', $event)"
   />
 </template>
 

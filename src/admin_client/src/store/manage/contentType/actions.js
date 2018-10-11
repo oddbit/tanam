@@ -1,5 +1,5 @@
 import { rtdb } from '@/utils/firebase';
-import { MANAGE_CT_CONTENT_TYPES } from '@/store/types';
+import { CONTENT_TYPE_GET } from '@/store/types';
 
 const modifyContentTypeBeforeSave = async (ct, fields) => {
   if (ct.icon === '' || !ct.icon) {
@@ -38,9 +38,7 @@ export const setContentType = ({ state }) => {
 
 export const getContentType = ({ commit }) => {
   rtdb.ref('contentTypes/').on('value', snapshot => {
-    const docs = snapshot.val();
-    const newDocs = Object.keys(docs).map(key => docs[key]);
-    commit(MANAGE_CT_CONTENT_TYPES, newDocs);
+    commit(CONTENT_TYPE_GET, snapshot.val());
   });
 };
 

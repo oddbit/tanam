@@ -16,12 +16,12 @@
             <v-layout wrap>
               <v-flex xs12 sm6 md4>
                 <v-text-field 
+                  :rules="[v => !!v || 'Key is required', v => /^([a-zA-Z0-9])+$/.test(v) || 'Key cannot contain spaces']"
+                  :disabled="readOnly(editedItem)"
                   v-model="editedItem.key" 
                   label="Key" 
-                  :rules="[v => !!v || 'Key is required', v => /^([a-zA-Z0-9])+$/.test(v) || 'Key cannot contain spaces']"
                   placeholder="Ex. event" 
                   hint="Can't edit later" 
-                  :readonly="readOnly(editedItem)"
                   persistent-hint />
               </v-flex>
               <v-flex xs12 sm6 md4>
@@ -49,8 +49,10 @@
                   <v-btn 
                     flat 
                     icon 
-                    @click="addMoreField" 
-                    color="primary"><v-icon>add_circle</v-icon></v-btn>
+                    color="primary" 
+                    @click="addMoreField">
+                    <v-icon>add_circle</v-icon>
+                  </v-btn>
                 </h4>
               </v-flex>
             </v-layout>
@@ -61,18 +63,18 @@
                     <v-select
                       :items="fieldTypeItems"
                       :rules="[v => !!v || 'Field type is required']"
-                      label="Select Field Type"
                       v-model="fieldsItem[index].type"
-                      :readonly="configureField(field).readOnly"
+                      :disabled="configureField(field, 'type').readOnly"
+                      label="Select Field Type"
                     />
                   </v-flex>
                   <v-flex lg4>
                     <v-text-field 
                       v-model="fieldsItem[index].key"
                       :rules="[v => !!v || 'Field key is required', v => /^([a-zA-Z0-9])+$/.test(v) || 'Field key cannot contain spaces']"
+                      :disabled="configureField(field).readOnly" 
+                      :hint="configureField(field).fieldKeyHint"
                       label="Field Key" 
-                      :readonly="configureField(field).readOnly"
-                      :hint="configureField(field).fieldKeyHint" 
                       persistent-hint />
                   </v-flex>
                   <v-flex lg4>
@@ -93,8 +95,8 @@
                   flat 
                   icon 
                   small 
-                  @click="removeField(index)" 
-                  color="error"><v-icon>remove_circle</v-icon></v-btn>
+                  color="error" 
+                  @click="removeField(index)"><v-icon>remove_circle</v-icon></v-btn>
               </v-flex>
             </v-layout>
           </v-form>
@@ -112,12 +114,12 @@
 
 <script>
 import {
-  MANAGE_CT_DIALOG,
-  MANAGE_CT_EDITED_ITEM,
-  MANAGE_CT_ADD_FIELD,
-  MANAGE_CT_FIELDS_ITEM,
-  MANAGE_CT_FIELD_TYPE_ITEMS,
-  MANAGE_CT_REMOVE_FIELD
+  CONTENT_TYPE_DIALOG,
+  CONTENT_TYPE_EDITED_ITEM,
+  CONTENT_TYPE_ADD_FIELD,
+  CONTENT_TYPE_FIELDS_ITEM,
+  CONTENT_TYPE_FIELD_TYPE_ITEMS,
+  CONTENT_TYPE_REMOVE_FIELD
 } from '@/store/types';
 
 export default {
@@ -133,33 +135,33 @@ export default {
     },
     dialog: {
       get() {
-        return this.$store.getters[MANAGE_CT_DIALOG];
+        return this.$store.getters[CONTENT_TYPE_DIALOG];
       },
       set(val) {
-        this.$store.commit(MANAGE_CT_DIALOG, val);
+        this.$store.commit(CONTENT_TYPE_DIALOG, val);
       }
     },
     editedItem: {
       get() {
-        return this.$store.getters[MANAGE_CT_EDITED_ITEM];
+        return this.$store.getters[CONTENT_TYPE_EDITED_ITEM];
       },
       set(val) {
-        this.$store.commit(MANAGE_CT_EDITED_ITEM, val);
+        this.$store.commit(CONTENT_TYPE_EDITED_ITEM, val);
       }
     },
     fieldsItem() {
-      return this.$store.getters[MANAGE_CT_FIELDS_ITEM];
+      return this.$store.getters[CONTENT_TYPE_FIELDS_ITEM];
     },
     fieldTypeItems() {
-      return this.$store.getters[MANAGE_CT_FIELD_TYPE_ITEMS];
+      return this.$store.getters[CONTENT_TYPE_FIELD_TYPE_ITEMS];
     }
   },
   methods: {
     addMoreField() {
-      this.$store.commit(MANAGE_CT_ADD_FIELD);
+      this.$store.commit(CONTENT_TYPE_ADD_FIELD);
     },
     removeField(index) {
-      this.$store.commit(MANAGE_CT_REMOVE_FIELD, index);
+      this.$store.commit(CONTENT_TYPE_REMOVE_FIELD, index);
     },
     reset() {
       this.$refs.contentTypeForm.reset();
@@ -167,17 +169,19 @@ export default {
     validate() {
       return this.$refs.contentTypeForm.validate();
     },
-    readOnly(field) {
-      if ((field && field.pk) || (field && field._v)) {
+    readOnly(field, type) {
+      if (field && !field.pk && type === 'type') {
+        return false;
+      } else if ((field && field.pk) || (field && field._v)) {
         return true;
       } else {
         return false;
       }
     },
-    configureField(field) {
+    configureField(field, type = null) {
       return {
         disableRemove: field.pk || false,
-        readOnly: this.readOnly(field),
+        readOnly: this.readOnly(field, type),
         fieldKeyHint: field.pk
           ? 'Unique identifier field'
           : "Can't edited later"

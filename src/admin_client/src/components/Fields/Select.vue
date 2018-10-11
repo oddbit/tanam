@@ -3,9 +3,8 @@
     <v-select
       v-model="selected"
       :items="itemsLocal"
-      box
       :label="label"
-    ></v-select>
+    />
   </div>
 </template>
 
@@ -29,13 +28,13 @@ export default {
     itemsLocal: [],
     selected: null
   }),
-  mounted() {
-    this.itemsLocal = this.items.split(',');
-  },
   watch: {
     selected: function() {
       this.$emit('changeSelected', this.selected);
     }
-  }
+  },
+  mounted() {
+    this.itemsLocal = this.items.split(',');
+  },
 };
 </script>

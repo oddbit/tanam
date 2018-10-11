@@ -4,8 +4,6 @@ import users from './users';
 import templates from './templates';
 import layout from './layout';
 import ui from './ui';
-import contentType from './contentType';
-import contentPost from './contentPost';
 import manageContentType from './manage/contentType';
 import posts from './posts';
 
@@ -17,8 +15,6 @@ export const store = new Vuex.Store({
     templates,
     layout,
     ui,
-    contentType,
-    contentPost,
     manageContentType,
     posts
   }

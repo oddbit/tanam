@@ -2,7 +2,7 @@ import format from 'date-fns/format';
 
 const parseTitle = str => str.replace(/\s+/g, '-').toLowerCase();
 
-const generatePermalink = title => {
+export const generatePermalink = title => {
   return `${format(new Date(), 'YYMMDD')}-${parseTitle(title)}`;
 };
 

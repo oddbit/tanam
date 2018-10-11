@@ -1,5 +1,6 @@
 <template>
   <div class="wrap">
+    <span class="label">{{ label }}</span>
     <div id="editor-toolbar">
       <span class="ql-formats">
         <select class="ql-header">
@@ -123,7 +124,8 @@
         <button class="ql-clean" />
       </span>
     </div>
-    <div id="editor"
+    <div 
+      id="editor"
       :content="content"
       class="editor-content"
     />
@@ -161,15 +163,22 @@ export default {
 
     editor.on('editor-change', () => {
       this.content = editor.root.innerHTML;
-      this.$emit('changeContent', this.content)
+      this.$emit('changeContent', this.content);
     });
   }
-}
+};
 </script>
 
-<style scoped>
-  .wrap {
-    margin-bottom: 20px;
-  }
-</style>
+<style lang="scss" scoped>
+.wrap {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
 
+.label {
+  font-size: 16px;
+  margin-bottom: 4px;
+  color: rgba(0, 0, 0, 0.54);
+}
+</style>

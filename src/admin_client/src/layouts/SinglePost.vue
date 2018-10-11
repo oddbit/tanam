@@ -1,6 +1,7 @@
 <template>
   <v-app>
-    <Toolbar />
+    <drawer />
+    <toolbar />
     <v-content>
       <router-view />
     </v-content>
@@ -9,10 +10,12 @@
 
 <script>
 import Toolbar from '@/components/Toolbar/SinglePostToolbar';
+import Drawer from '@/components/Post/Drawer';
 
 export default {
   components: {
-    Toolbar
+    Toolbar,
+    Drawer
   }
 };
 </script>

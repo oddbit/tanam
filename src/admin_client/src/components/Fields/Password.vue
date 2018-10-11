@@ -1,13 +1,12 @@
 <template>
   <div>
     <v-text-field
-      box
       v-model="password"
       :append-icon="show1 ? 'visibility_off' : 'visibility'"
       :rules="[rules.min]"
       :type="show1 ? 'text' : 'password'"
-      name="input-10-1"
       :label="label"
+      name="input-10-1"
       hint="At least 8 characters"
       counter
       @click:append="show1 = !show1"

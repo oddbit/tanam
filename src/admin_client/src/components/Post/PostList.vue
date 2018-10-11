@@ -39,18 +39,12 @@
 </template>
 
 <script>
+import dateFormat from 'date-fns/format';
+
 export default {
   filters: {
     formatDate(timestamp) {
-      const date = timestamp.toDate();
-      const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      };
-      return date.toLocaleDateString('en-US', options);
+      return dateFormat(timestamp.toDate(), 'MMMM DD, YYYY - HH:mm');
     }
   },
   props: {

@@ -1,14 +1,13 @@
 <template>
   <v-container>
     <DialogForm
+      ref="createDialogRef" 
       :edited-index="editedIndex"
-      :content-types="contentTypes"
       @close="close" 
-      @save="save" 
-      ref="createDialogRef" />
+      @save="save" />
     <Table 
       :headers="headers" 
-      :items="contentTypes" 
+      :items="contentType" 
       @editContentType="editItem" 
       @deleteContentType="deleteItem" />
   </v-container>
@@ -16,16 +15,16 @@
 
 <script>
 import {
-  MANAGE_CT_DIALOG,
-  MANAGE_CT_EDITED_INDEX,
-  MANAGE_CT_CONTENT_TYPES,
-  MANAGE_CT_FIELDS_ITEM_DEFAULT,
-  MANAGE_CT_EDITED_ITEM,
-  MANAGE_CT_EDITED_ITEM_DEFAULT,
-  MANAGE_CT_HEADERS_TABLE,
-  MANAGE_CT_DIALOG_FORM,
-  MANAGE_CT_SET_CONTENT_TYPE,
-  MANAGE_CT_REMOVE_CONTENT_TYPE
+  CONTENT_TYPE_DIALOG,
+  CONTENT_TYPE_EDITED_INDEX,
+  CONTENT_TYPE_GET_ARRAY,
+  CONTENT_TYPE_FIELDS_ITEM_DEFAULT,
+  CONTENT_TYPE_EDITED_ITEM,
+  CONTENT_TYPE_EDITED_ITEM_DEFAULT,
+  CONTENT_TYPE_HEADERS_TABLE,
+  CONTENT_TYPE_DIALOG_FORM,
+  CONTENT_TYPE_SET_CONTENT_TYPE,
+  CONTENT_TYPE_REMOVE_CONTENT_TYPE
 } from '@/store/types';
 import DialogForm from '@/components/Manage/ContentType/DialogForm';
 import Table from '@/components/Manage/ContentType/Table';
@@ -39,32 +38,32 @@ export default {
   computed: {
     dialog: {
       get() {
-        return this.$store.getters[MANAGE_CT_DIALOG];
+        return this.$store.getters[CONTENT_TYPE_DIALOG];
       },
       set(val) {
-        this.$store.commit(MANAGE_CT_DIALOG, val);
+        this.$store.commit(CONTENT_TYPE_DIALOG, val);
       }
     },
     editedIndex: {
       get() {
-        return this.$store.getters[MANAGE_CT_EDITED_INDEX];
+        return this.$store.getters[CONTENT_TYPE_EDITED_INDEX];
       },
       set(val) {
-        this.$store.commit(MANAGE_CT_EDITED_INDEX, val);
+        this.$store.commit(CONTENT_TYPE_EDITED_INDEX, val);
       }
     },
-    contentTypes() {
-      return this.$store.getters[MANAGE_CT_CONTENT_TYPES];
+    contentType() {
+      return this.$store.getters[CONTENT_TYPE_GET_ARRAY];
     },
     headers() {
-      return this.$store.getters[MANAGE_CT_HEADERS_TABLE];
+      return this.$store.getters[CONTENT_TYPE_HEADERS_TABLE];
     },
     editedItem: {
       get() {
-        return this.$store.getters[MANAGE_CT_EDITED_ITEM];
+        return this.$store.getters[CONTENT_TYPE_EDITED_ITEM];
       },
       set(val) {
-        this.$store.commit(MANAGE_CT_EDITED_ITEM, val);
+        this.$store.commit(CONTENT_TYPE_EDITED_ITEM, val);
       }
     }
   },
@@ -75,13 +74,13 @@ export default {
   },
   methods: {
     editItem(item) {
-      const editedIndex = this.contentTypes.indexOf(item);
+      const editedIndex = this.contentType.indexOf(item);
       this.editedIndex = editedIndex;
-      const content = this.contentTypes[editedIndex];
+      const content = this.contentType[editedIndex];
       const fieldsItem = Object.keys(content.fields).map(key => ({
         ...content.fields[key]
       }));
-      this.$store.commit(MANAGE_CT_DIALOG_FORM, {
+      this.$store.commit(CONTENT_TYPE_DIALOG_FORM, {
         editedItem: { ...content.meta },
         fieldsItem: fieldsItem
       });
@@ -89,7 +88,7 @@ export default {
     },
     deleteItem(item) {
       confirm('Are you sure you want to delete this item?') &&
-        this.$store.dispatch(MANAGE_CT_REMOVE_CONTENT_TYPE, item.meta.key);
+        this.$store.dispatch(CONTENT_TYPE_REMOVE_CONTENT_TYPE, item.meta.key);
     },
     close() {
       this.dialog = false;
@@ -97,15 +96,15 @@ export default {
         this.$refs.createDialogRef.reset();
         this.editedIndex = -1;
         setTimeout(() => {
-          this.$store.commit(MANAGE_CT_EDITED_ITEM_DEFAULT);
-          this.$store.commit(MANAGE_CT_FIELDS_ITEM_DEFAULT);
+          this.$store.commit(CONTENT_TYPE_EDITED_ITEM_DEFAULT);
+          this.$store.commit(CONTENT_TYPE_FIELDS_ITEM_DEFAULT);
         }, 0);
       }, 300);
     },
     async save() {
       if (this.$refs.createDialogRef.validate()) {
         try {
-          await this.$store.dispatch(MANAGE_CT_SET_CONTENT_TYPE);
+          await this.$store.dispatch(CONTENT_TYPE_SET_CONTENT_TYPE);
           this.close();
         } catch (error) {
           return;

@@ -10,7 +10,6 @@
       width="290px"
     >
       <v-text-field
-        box
         slot="activator"
         v-model="time"
         :label="label"        
@@ -18,9 +17,9 @@
         readonly
       />
       <v-time-picker
-        format="24hr"
         v-if="modal"
         v-model="time"
+        format="24hr"
         full-width
       >
         <v-spacer />

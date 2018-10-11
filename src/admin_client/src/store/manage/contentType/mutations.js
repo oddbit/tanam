@@ -3,7 +3,7 @@ export const setDialog = (state, payload) => (state.dialog = payload);
 export const setEditedIndex = (state, payload) => (state.editedIndex = payload);
 
 export const setContentTypes = (state, payload) => {
-  state.contentTypes = payload;
+  state.contentType = payload;
 };
 
 export const setEditedItem = (state, payload) => (state.editedItem = payload);

@@ -42,7 +42,7 @@
         v-model="time"
         full-width
       >
-        <v-spacer/>
+        <v-spacer />
         <v-btn flat color="primary" @click="modal2 = false">Cancel</v-btn>
         <v-btn flat color="primary" @click="$refs.dialog.save(time)">OK</v-btn>
       </v-time-picker>

@@ -24,7 +24,7 @@
 <script>
 import PostIndex from '@/components/Post/PostIndex';
 import PostList from '@/components/Post/PostList';
-import { CONTENTTYPE_POST, CONTENTTYPE_DRAFT } from '@/store/types';
+import { POST_PUBLISHED, POST_UNPUBLISHED } from '@/store/types';
 
 export default {
   components: {
@@ -39,21 +39,21 @@ export default {
   },
   computed: {
     published() {
-      return this.$store.getters[CONTENTTYPE_POST];
+      return this.$store.getters[POST_PUBLISHED];
     },
     unpublished() {
-      return this.$store.getters[CONTENTTYPE_DRAFT];
+      return this.$store.getters[POST_UNPUBLISHED];
     }
   },
   watch: {
     ctKey() {
-      this.$store.dispatch(CONTENTTYPE_POST, this.ctKey);
-      this.$store.dispatch(CONTENTTYPE_DRAFT, this.ctKey);
+      this.$store.dispatch(POST_PUBLISHED, this.ctKey);
+      this.$store.dispatch(POST_UNPUBLISHED, this.ctKey);
     }
   },
   mounted() {
-    this.$store.dispatch(CONTENTTYPE_POST, this.ctKey);
-    this.$store.dispatch(CONTENTTYPE_DRAFT, this.ctKey);
+    this.$store.dispatch(POST_PUBLISHED, this.ctKey);
+    this.$store.dispatch(POST_UNPUBLISHED, this.ctKey);
   }
 };
 </script>

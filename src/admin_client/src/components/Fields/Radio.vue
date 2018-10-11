@@ -6,7 +6,7 @@
       :label="item"
       :value="item"
       @change="$emit('change', $event)"
-    ></v-radio>
+    />
   </v-radio-group>
 </template>
 

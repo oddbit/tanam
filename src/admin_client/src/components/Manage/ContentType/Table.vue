@@ -36,6 +36,15 @@
 
 <script>
 export default {
+  filters: {
+    fieldComma(val, index) {
+      if (index > 0) {
+        return `, ${val}`;
+      } else {
+        return val;
+      }
+    }
+  },
   props: {
     headers: {
       type: Array,
@@ -44,15 +53,6 @@ export default {
     items: {
       type: Array,
       default: () => []
-    }
-  },
-  filters: {
-    fieldComma(val, index) {
-      if (index > 0) {
-        return `, ${val}`;
-      } else {
-        return val;
-      }
     }
   }
 };

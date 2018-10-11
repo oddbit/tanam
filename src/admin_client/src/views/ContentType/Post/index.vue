@@ -1,64 +1,77 @@
 <template>
   <v-container>
-    <v-layout row wrap>
-      <div v-if="fields" style="width:100%">
-        <div v-for="(field,index) in fields" :key="index">
+    <v-layout v-if="fields" wrap justify-center>
+      <v-flex xs12 md8>
+        <v-layout wrap>
+          <v-flex 
+            v-for="(field,index) in fields" 
+            :key="index" 
+            xs12 
+            class="my-2">
 
-          <v-flex v-if="field.type === 'text'">
-            <text-field @input="textField($event, field.title)" :label="field.title" />
-          </v-flex>
+            <text-field v-if="field.type === 'text'" :label="field.name" @input="textField($event, field.key)" />
 
-          <v-flex v-if="field.type === 'image'">
-            <image-field v-on:changeImage="image($event, field.title)" :label="field.title" :name="field.title" />
-          </v-flex>
+            <image-field 
+              v-if="field.type === 'image'" 
+              :label="field.name" 
+              :name="field.key" 
+              @changeImage="image($event, field.key)" />
 
-          <v-flex v-if="field.type === 'date'">
-            <date v-on:changeDate="date($event, field.title)" :label="field.title" :name="field.title" />
-          </v-flex>
+            <date 
+              v-if="field.type === 'date'" 
+              :label="field.name" 
+              :name="field.key" 
+              @changeDate="date($event, field.key)" />
 
-          <v-flex v-if="field.type === 'time'">
-            <Time v-if="field.type === 'time'" v-on:changeTime="time($event, field.title)" :label="field.title" :name="field.title"/>
-          </v-flex>
+            <Time 
+              v-if="field.type === 'time'" 
+              :label="field.name" 
+              :name="field.key" 
+              @changeTime="time($event, field.key)" />
 
-          <v-flex v-if="field.type ==='wysiwyg'">
-            <WYSIWYG v-if="field.type ==='wysiwyg'" v-on:changeContent="wysiwyg($event, field.title)"/>
-          </v-flex>
+            <WYSIWYG v-if="field.type ==='wysiwyg'" :label="field.name" @changeContent="wysiwyg($event, field.key)" />
 
-          <v-flex v-if="field.type === 'select'">
-            <select-field v-if="field.type === 'select'" v-on:changeSelected="selected($event, field.title)" :label="field.title" :items="field.items"/>
-          </v-flex>
+            <select-field 
+              v-if="field.type === 'select'" 
+              :label="field.name" 
+              :items="field.items" 
+              @changeSelected="selected($event, field.key)" />
 
-          <v-flex v-if="field.type === 'radio'">
-            <radio-field v-if="field.type === 'radio'" @change="radio($event, field.title)" :label="field.title" :items="field.items"/>
-          </v-flex>
+            <radio-field 
+              v-if="field.type === 'radio'" 
+              :label="field.name" 
+              :items="field.items" 
+              @change="radio($event, field.key)" />
 
-          <v-flex v-if="field.type === 'checkbox'">
-            <checkbox-field v-if="field.type === 'checkbox'" v-on:changeCheckbox="checkbox($event, field.title)" :label="field.title" :items="field.items" />
-          </v-flex>
+            <checkbox-field 
+              v-if="field.type === 'checkbox'" 
+              :label="field.name" 
+              :items="field.items" 
+              @changeCheckbox="checkbox($event, field.key)" />
 
-          <v-flex v-if="field.type === 'password'">
-            <password-field @input="password($event, field.title)" :label="field.title"/>
-          </v-flex>
+            <password-field v-if="field.type === 'password'" :label="field.name" @input="password($event, field.key)" />
 
-          <v-flex v-if="field.type === 'email'">
-            <email-field @input="email($event, field.title)" :label="field.title"/>
-          </v-flex>
+            <email-field v-if="field.type === 'email'" :label="field.name" @input="email($event, field.key)" />
 
-          <v-flex v-if="field.type === 'number'">
-            <number @input="number($event, field.title)" :label="field.title"/>
-          </v-flex>
+            <number v-if="field.type === 'number'" :label="field.name" @input="number($event, field.key)" />
 
-          <v-flex v-if="field.type === 'textarea'">
-            <textarea-field @input="textarea($event, field.title)" :label="field.title"/>
+            <textarea-field v-if="field.type === 'textarea'" :label="field.name" @input="textarea($event, field.key)" />
+
           </v-flex>
-        </div>
-      </div>
+        </v-layout>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-import { POST_ACTION_UPLOAD, POST_MODE, CONTENT_TYPES_GET, CONTENT_TYPES_POST_ADD } from '@/store/types';
+import {
+  CONTENT_TYPE_GET,
+  POST_PUBLISH,
+  POST_IS_SUBMITTING,
+  POST_FIELD_TITLE,
+  POST_FIELD_PERMALINK
+} from '@/store/types';
 
 export default {
   components: {
@@ -77,108 +90,91 @@ export default {
     WYSIWYG: () => import('@/components/Fields/WYSIWYG')
   },
   props: {
-    link: {
+    ctKey: {
       type: String,
-      default: 'name'
+      default: 'key'
     }
   },
   data: () => ({
-    post: {},
-    imageFile: {}
+    postFields: {},
+    imageFiles: {}
   }),
-  methods: {
-    addPost() {
-      console.log(this.post);
-      console.log(this.link);
-      this.$store.dispatch(CONTENT_TYPES_POST_ADD, {
-        contentType: this.link,
-        post: this.post,
-        imageFile: this.imageFile
-      });
+  computed: {
+    fields() {
+      const ct = this.$store.getters[CONTENT_TYPE_GET];
+      if (ct && ct[this.ctKey]) {
+        return ct[this.ctKey].fields;
+      }
+      return null;
     },
-    wysiwyg(content, prop) {
-      console.log('quil content:');
-      console.log(content);
-      this.post[prop.toLowerCase()] = content;
-    },
-    textField(value, prop) {
-      console.log(value);
-      console.log(prop);
-      this.post[prop.toLowerCase()] = value;
-    },
-    date(date, prop) {
-      console.log(date);
-      this.post[prop.toLowerCase()] = date;
-    },
-    time(time, prop) {
-      console.log(time);
-      this.post[prop.toLowerCase()] = time;
-    },
-    selected(select, prop) {
-      console.log(select);
-      this.post[prop.toLowerCase()] = select;
-    },
-    password(password, prop) {
-      console.log(password);
-      this.post[prop.toLowerCase()] = password;
-    },
-    email(email, prop) {
-      console.log(email);
-      this.post[prop.toLowerCase()] = email;
-    },
-    number(number, prop) {
-      console.log(number);
-      this.post[prop.toLowerCase()] = number;
-    },
-    textarea(textarea, prop) {
-      console.log(textarea);
-      this.post[prop.toLowerCase()] = textarea;
-    },
-    radio(radio, prop) {
-      console.log(radio);
-      this.post[prop.toLowerCase()] = radio;
-    },
-    checkbox(checbox, prop) {
-      console.log(checbox);
-      this.post[prop.toLowerCase()] = checbox;
-    },
-    image(image, prop) {
-      console.log(image);
-      this.imageFile[prop.toLowerCase()] = image;
+    isSubmitting() {
+      return this.$store.getters[POST_IS_SUBMITTING];
     }
   },
-  computed: {
-    uploadPost() {
-      const status = this.$store.getters[POST_ACTION_UPLOAD];
-      console.log(status);
-      return status;
-    },
-    fields() {
-      const fields = this.$store.getters[CONTENT_TYPES_GET][this.link];
-      if (fields && fields.fields) {
-        return fields.fields;
+  watch: {
+    isSubmitting(val) {
+      if (val) {
+        this.publishPost();
       }
-      return fields;
     }
   },
   mounted() {
-    this.$store.commit(POST_MODE, 'new');
+    // this.$store.commit(POST_MODE, 'new');
   },
-  watch: {
-    uploadPost() {
-      if (this.uploadPost === true) {
-        console.log('Upload post');
-        this.$store.commit(POST_ACTION_UPLOAD, false);
-        this.addPost();
+  methods: {
+    async publishPost() {
+      try {
+        await this.$store.dispatch(POST_PUBLISH, {
+          contentType: this.ctKey,
+          postFields: this.postFields,
+          imageFiles: this.imageFiles
+        });
+        this.$store.commit(POST_IS_SUBMITTING, false);
+        this.$router.push(`/content-type/${this.ctKey}`);
+      } catch (error) {
+        this.$store.commit(POST_IS_SUBMITTING, false);
       }
+    },
+    wysiwyg(content, key) {
+      this.postFields[key] = content;
+    },
+    textField(value, key) {
+      if (key === 'title') {
+        this.$store.commit(POST_FIELD_TITLE, value);
+        this.$store.commit(POST_FIELD_PERMALINK, value);
+      }
+      this.postFields[key] = value;
+    },
+    date(date, key) {
+      this.postFields[key] = date;
+    },
+    time(time, key) {
+      this.postFields[key] = time;
+    },
+    selected(select, key) {
+      this.postFields[key] = select;
+    },
+    password(password, key) {
+      this.postFields[key] = password;
+    },
+    email(email, key) {
+      this.postFields[key] = email;
+    },
+    number(number, key) {
+      this.postFields[key] = number;
+    },
+    textarea(textarea, key) {
+      this.postFields[key] = textarea;
+    },
+    radio(radio, key) {
+      this.postFields[key] = radio;
+    },
+    checkbox(checbox, key) {
+      this.postFields[key] = checbox;
+    },
+    image(image, key) {
+      this.imageFiles[key] = image;
     }
   }
 };
 </script>
-
-<style scoped>
-.tes {
-  width: 100%;
-}
-</style>
-

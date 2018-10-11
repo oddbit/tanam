@@ -1,19 +1,29 @@
 <template>
-  <div>
-    <div class="container">
-      <img v-if="imageSrc" :src="imageSrc" >
-      <img v-else src="@/assets/images/img-placeholder.png">
-      <v-btn color="blue-grey darken-1" v-if="imageSrc" class="btn btn-delete" @click="deleteImage">X</v-btn>
-      <v-btn color="blue-grey darken-1" v-else class="btn btn-upload" @click="handleClickUpload">UPLOAD IMAGE</v-btn>
-    </div>
-    <div>
+  <div class="wrapper">
+    <span class="label mb-2">{{ label }}</span>
+    <div :class="{'margin-auto': imageSrc}" class="image-container">
+      <img v-if="imageSrc" :src="imageSrc">
+      <img v-else src="@/assets/images/img-placeholder.png" class="placeholder-img">
+      <v-btn 
+        v-if="imageSrc" 
+        color="white" 
+        class="btn btn-delete elevation-5" 
+        icon
+        @click="deleteImage">
+        <v-icon>close</v-icon>
+      </v-btn>
+      <v-btn 
+        v-else 
+        color="primary" 
+        class="btn btn-upload" 
+        @click="handleClickUpload">UPLOAD IMAGE</v-btn>
       <input 
         :ref="`${name}Ref`"
-        type="file" 
         :name="name" 
         :id="name" 
+        :multiple="multiple" 
+        type="file"
         accept="image/*"
-        :multiple="multiple"
         class="input-image-field"
         @change="handleChangeImage">
     </div>
@@ -22,9 +32,6 @@
 
 <script>
 export default {
-  data: () => ({
-    imageSrc: null
-  }),
   props: {
     name: {
       type: String,
@@ -33,8 +40,15 @@ export default {
     multiple: {
       type: Boolean,
       default: false
+    },
+    label: {
+      type: String,
+      default: 'Label'
     }
   },
+  data: () => ({
+    imageSrc: null
+  }),
   methods: {
     handleClickUpload() {
       this.$refs[`${this.name}Ref`].click();
@@ -57,42 +71,53 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.54);
+}
+
 .input-image-field {
   display: none;
 }
 
-img {
-  height: 100%;
-  width: 100%;
-  max-height: 400px;
-  max-width: 400px;
+.margin-auto {
+  margin: 0 auto;
 }
 
-.container {
+.image-container {
   position: relative;
-  width: 100%;
-  max-width: 400px;
-}
+  max-width: 100%;
 
-.container .btn {
-  position: absolute;
-  color: white;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  text-align: center;
+  img {
+    max-height: 500px;
+    max-width: 100%;
+  }
+
+  .btn {
+    position: absolute;
+  }
+
+  .placeholder-img {
+    min-width: 100%;
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+  }
 }
 
 .btn-delete {
-  top: 20px;
-  right: 20px;
+  top: 0;
+  right: 0;
 }
 
 .btn-upload {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
 }
 </style>
