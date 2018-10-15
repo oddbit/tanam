@@ -9,27 +9,38 @@
             xs12 
             class="my-2">
 
-            <text-field v-if="field.type === 'text'" :label="field.name" @input="textField($event, field.key)" />
+            <text-field 
+              v-if="field.type === 'text'" 
+              :label="field.name" 
+              :value="postFields[field.key]" 
+              @input="textField($event, field.key)" />
 
             <image-field 
               v-if="field.type === 'image'" 
               :label="field.name" 
               :name="field.key" 
+              :value="postFields[field.key]"
               @changeImage="image($event, field.key)" />
 
             <date 
               v-if="field.type === 'date'" 
               :label="field.name" 
               :name="field.key" 
+              :value="postFields[field.key]"
               @changeDate="date($event, field.key)" />
 
             <Time 
               v-if="field.type === 'time'" 
               :label="field.name" 
-              :name="field.key" 
+              :name="field.key"
+              :value="postFields[field.key]"
               @changeTime="time($event, field.key)" />
 
-            <WYSIWYG v-if="field.type ==='wysiwyg'" :label="field.name" @changeContent="wysiwyg($event, field.key)" />
+            <WYSIWYG 
+              v-if="field.type ==='wysiwyg'" 
+              :label="field.name" 
+              :value="postFields[field.key]" 
+              @changeContent="wysiwyg($event, field.key)" />
 
             <select-field 
               v-if="field.type === 'select'" 
@@ -55,7 +66,11 @@
 
             <number v-if="field.type === 'number'" :label="field.name" @input="number($event, field.key)" />
 
-            <textarea-field v-if="field.type === 'textarea'" :label="field.name" @input="textarea($event, field.key)" />
+            <textarea-field 
+              v-if="field.type === 'textarea'" 
+              :label="field.name" 
+              :value="postFields[field.key]" 
+              @input="textarea($event, field.key)" />
 
           </v-flex>
         </v-layout>
@@ -67,10 +82,14 @@
 <script>
 import {
   CONTENT_TYPE_GET,
-  POST_PUBLISH,
   POST_IS_SUBMITTING,
+  POST_IS_EDITED_MODE,
+  POST_PUBLISH,
   POST_FIELD_TITLE,
-  POST_FIELD_PERMALINK
+  POST_FIELD_PERMALINK,
+  POST_FIELD_PERMALINK_EDIT,
+  POST_FIELD_STATUS,
+  POST_SINGLE
 } from '@/store/types';
 
 export default {
@@ -93,6 +112,10 @@ export default {
     ctKey: {
       type: String,
       default: 'key'
+    },
+    postID: {
+      type: String,
+      default: ''
     }
   },
   data: () => ({
@@ -109,6 +132,9 @@ export default {
     },
     isSubmitting() {
       return this.$store.getters[POST_IS_SUBMITTING];
+    },
+    isEditedMode() {
+      return this.$store.getters[POST_IS_EDITED_MODE];
     }
   },
   watch: {
@@ -118,8 +144,19 @@ export default {
       }
     }
   },
-  mounted() {
-    // this.$store.commit(POST_MODE, 'new');
+  created() {
+    if (this.postID !== '') {
+      this.$store.commit(POST_IS_EDITED_MODE, true);
+      this.$store
+        .dispatch(POST_SINGLE, { ctKey: this.ctKey, postID: this.postID })
+        .then(doc => {
+          this.$store.commit(POST_FIELD_STATUS, doc.status);
+          this.$store.commit(POST_FIELD_PERMALINK_EDIT, doc.permalink);
+          this.postFields = doc.data;
+          this.$store.commit(POST_FIELD_TITLE, doc.data.title);
+        })
+        .catch(() => console.log('error'));
+    }
   },
   methods: {
     async publishPost() {
@@ -127,12 +164,15 @@ export default {
         await this.$store.dispatch(POST_PUBLISH, {
           contentType: this.ctKey,
           postFields: this.postFields,
-          imageFiles: this.imageFiles
+          imageFiles: this.imageFiles,
+          ...(POST_IS_EDITED_MODE ? { uid: this.postID } : null)
         });
         this.$store.commit(POST_IS_SUBMITTING, false);
+        this.$store.commit(POST_IS_EDITED_MODE, false);
         this.$router.push(`/content-type/${this.ctKey}`);
       } catch (error) {
         this.$store.commit(POST_IS_SUBMITTING, false);
+        this.$store.commit(POST_IS_EDITED_MODE, false);
       }
     },
     wysiwyg(content, key) {
@@ -174,6 +214,8 @@ export default {
     },
     image(image, key) {
       this.imageFiles[key] = image;
+      if (this.postFields && this.postFields[key] && image === null)
+        this.postFields[key] = image;
     }
   }
 };

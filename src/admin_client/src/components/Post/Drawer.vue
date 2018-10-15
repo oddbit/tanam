@@ -8,7 +8,8 @@
     <div class="pa-4">
       <v-switch
         v-if="isEditedMode"
-        :label="true ? 'Published' : 'Unpublished'"
+        :label="postStatus ? 'Published' : 'Unpublished'"
+        v-model="postStatus"
         hide-details
         color="primary"
         class="my-3"
@@ -28,7 +29,8 @@
 import {
   POST_IS_SHOW_DRAWER,
   POST_IS_EDITED_MODE,
-  POST_FIELD_PERMALINK
+  POST_FIELD_PERMALINK,
+  POST_FIELD_STATUS
 } from '@/store/types';
 
 export default {
@@ -41,6 +43,18 @@ export default {
     },
     postPermalink() {
       return this.$store.getters[POST_FIELD_PERMALINK];
+    },
+    postStatus: {
+      get() {
+        const status = this.$store.getters[POST_FIELD_STATUS];
+        return status === 'published' ? true : false;
+      },
+      set(val) {
+        this.$store.commit(
+          POST_FIELD_STATUS,
+          val ? 'published' : 'unpublished'
+        );
+      }
     }
   },
   destroyed() {

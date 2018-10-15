@@ -126,13 +126,14 @@
     </div>
     <div 
       id="editor"
-      :content="content"
+      :content="value"
       class="editor-content"
     />
   </div>
 </template>
 
 <script>
+import { POST_IS_EDITED_MODE } from '@/store/types';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 export default {
@@ -151,6 +152,19 @@ export default {
     quillContentOnce: false,
     content: ''
   }),
+  computed: {
+    isEditedMode() {
+      return this.$store.getters[POST_IS_EDITED_MODE];
+    }
+  },
+  watch: {
+    value(val) {
+      if (!this.quillContentOnce && this.isEditedMode) {
+        this.quillContentOnce = true;
+        this.quill.clipboard.dangerouslyPasteHTML(0, val);
+      }
+    }
+  },
   mounted() {
     const quillSettings = {
       theme: 'snow',
@@ -159,11 +173,10 @@ export default {
       },
       placeholder: 'Write here...'
     };
-    const editor = new Quill('#editor', quillSettings);
+    this.quill = new Quill('#editor', quillSettings);
 
-    editor.on('editor-change', () => {
-      this.content = editor.root.innerHTML;
-      this.$emit('changeContent', this.content);
+    this.quill.on('editor-change', () => {
+      this.$emit('changeContent', this.quill.root.innerHTML);
     });
   }
 };

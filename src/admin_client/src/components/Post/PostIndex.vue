@@ -30,8 +30,8 @@
               <v-tab-item id="published">
                 <slot name="published" />
               </v-tab-item>
-              <v-tab-item id="draft">
-                <slot name="draft" />
+              <v-tab-item id="unpublished">
+                <slot name="unpublished" />
               </v-tab-item>
             </v-tabs-items>
           </v-flex>

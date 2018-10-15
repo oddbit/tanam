@@ -3,22 +3,22 @@
     <v-dialog
       :ref="`${name}Ref`"
       v-model="modal"
-      :return-value.sync="date"
+      :return-value.sync="modDate"
       lazy
       full-width
       width="290px"
     >
       <v-text-field
         slot="activator"
-        v-model="date"
+        v-model="modDate"
         :label="label"
         prepend-icon="event"
         readonly
       />
-      <v-date-picker v-model="date">
+      <v-date-picker v-model="modDate">
         <v-spacer />
         <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
-        <v-btn flat color="primary" @click="$refs[`${name}Ref`].save(date)">OK</v-btn>
+        <v-btn flat color="primary" @click="$refs[`${name}Ref`].save(modDate)">OK</v-btn>
       </v-date-picker>
     </v-dialog>
   </div>
@@ -34,15 +34,29 @@ export default {
     name: {
       type: String,
       default: 'Date'
+    },
+    value: {
+      type: String,
+      default: null
     }
   },
   data: () => ({
     date: null,
     modal: false
   }),
+  computed: {
+    modDate: {
+      get() {
+        return this.value;
+      },
+      set(val) {
+        this.date = val;
+      }
+    }
+  },
   watch: {
-    date: function() {
-      this.$emit('changeDate', this.date);
+    date(val) {
+      this.$emit('changeDate', val);
     }
   }
 };

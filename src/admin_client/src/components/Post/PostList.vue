@@ -2,8 +2,7 @@
   <div class="wrapper">
     <v-layout>
       <v-layout column align-start justify-center>
-        <!-- <router-link :to="`${pushLink}/${linkTo}`"><h3><slot name="title" /></h3></router-link> -->
-        <router-link to="#"><h3>{{ contentTitle }}</h3></router-link>
+        <router-link :to="{name: 'postEdit', params: {ctKey: ctKey, postID: postId}}"><h3>{{ contentTitle }}</h3></router-link>
         <p class="mb-0">{{ time | formatDate }}</p>
       </v-layout>
       <v-spacer />
@@ -48,6 +47,14 @@ export default {
     }
   },
   props: {
+    ctKey: {
+      type: String,
+      default: ''
+    },
+    postId: {
+      type: String,
+      default: ''
+    },
     contentTitle: {
       type: String,
       default: 'Title'

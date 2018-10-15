@@ -3,9 +3,10 @@
     <span class="label mb-2">{{ label }}</span>
     <div :class="{'margin-auto': imageSrc}" class="image-container">
       <img v-if="imageSrc" :src="imageSrc">
+      <img v-else-if="value && value.url" :src="value.url">
       <img v-else src="@/assets/images/img-placeholder.png" class="placeholder-img">
       <v-btn 
-        v-if="imageSrc" 
+        v-if="imageSrc || (value && value.url)" 
         color="white" 
         class="btn btn-delete elevation-5" 
         icon
@@ -44,6 +45,10 @@ export default {
     label: {
       type: String,
       default: 'Label'
+    },
+    value: {
+      type: Object,
+      default: () => ({})
     }
   },
   data: () => ({

@@ -14,17 +14,21 @@ const handleImageFiles = (imageFiles, postID) => {
     } else {
       let imageObj = {};
       for (const key in imageFiles) {
-        const imageName = `${postID}-${imageFiles[key].name}`;
-        const imgRef = storage.ref('/content/postImages/').child(imageName);
-        try {
-          await imgRef.put(imageFiles[key]);
-          const url = await imgRef.getDownloadURL();
-          imageObj[key] = {
-            url: url,
-            path: `/content/postImages/${imageName}`
-          };
-        } catch (error) {
-          reject(error);
+        if (!imageFiles[key]) {
+          imageObj[key] = null;
+        } else {
+          const imageName = `${postID}-${imageFiles[key].name}`;
+          const imgRef = storage.ref('/content/postImages/').child(imageName);
+          try {
+            await imgRef.put(imageFiles[key]);
+            const url = await imgRef.getDownloadURL();
+            imageObj[key] = {
+              url: url,
+              path: `/content/postImages/${imageName}`
+            };
+          } catch (error) {
+            reject(error);
+          }
         }
       }
       resolve(imageObj);
@@ -106,4 +110,22 @@ export const getUnpublishedPost = ({ commit }, payload) => {
       });
       commit(POST_UNPUBLISHED, arr);
     });
+};
+
+export const getSinglePost = (ctx, { ctKey, postID }) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const doc = await firestore
+        .collection(`ct-${ctKey}`)
+        .doc(postID)
+        .get();
+      if (doc.exists) {
+        resolve(doc.data());
+      } else {
+        reject();
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
 };

@@ -27,3 +27,11 @@ export const setPostTitle = (state, payload) => {
 export const setPostPermalink = (state, payload) => {
   state.postPermalink = generatePermalink(payload);
 };
+
+export const setPostPermalinkEdit = (state, payload) => {
+  state.postPermalink = payload;
+};
+
+export const setPostStatus = (state, payload) => {
+  state.postStatus = payload;
+};

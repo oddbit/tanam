@@ -2,18 +2,20 @@
   <post-index :ct-key="ctKey">
     <template slot="published">
       <post-list
-        v-for="(post, index) in published"
-        :key="index"
-        :link="post.data.link"
+        v-for="post in published"
+        :key="post.key"
+        :ct-key="ctKey"
+        :post-id="post.key"
         :content-title="post.data.title"
         :time="post.updateTime"
         :status="post.status" />
     </template>
-    <template slot="draft">
+    <template slot="unpublished">
       <post-list
-        v-for="(post, index) in unpublished"
-        :key="index"
-        :link="post.data.link"
+        v-for="post in unpublished"
+        :key="post.key"
+        :ct-key="ctKey"
+        :post-id="post.key"
         :content-title="post.data.title"
         :time="post.updateTime"
         :status="post.status" />

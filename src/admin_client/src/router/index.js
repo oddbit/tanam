@@ -56,17 +56,24 @@ const routerOptions = [
     meta: { layout: 'ProfileLayout' }
   },
   {
-    path: '/content-type/:ctKey/new',
-    name: 'postNew',
-    component: 'ContentType/Post/index',
-    props: true,
-    meta: { layout: 'SinglePostLayout' }
-  },
-  {
     path: '/content-type/:ctKey',
     name: 'postList',
     component: 'ContentType/index',
     props: true
+  },
+  {
+    path: '/content-type/:ctKey/new',
+    name: 'postNew',
+    component: 'ContentType/Single',
+    props: true,
+    meta: { layout: 'SinglePostLayout' }
+  },
+  {
+    path: '/content-type/:ctKey/:postID',
+    name: 'postEdit',
+    component: 'ContentType/Single',
+    props: true,
+    meta: { layout: 'SinglePostLayout' }
   },
   {
     path: '/configure/theme',

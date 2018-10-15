@@ -3,7 +3,7 @@
     <v-dialog
       :ref="`${name}Ref`"      
       v-model="modal"
-      :return-value.sync="time"
+      :return-value.sync="modTime"
       persistent
       lazy
       full-width
@@ -11,20 +11,20 @@
     >
       <v-text-field
         slot="activator"
-        v-model="time"
+        v-model="modTime"
         :label="label"        
         prepend-icon="access_time"
         readonly
       />
       <v-time-picker
         v-if="modal"
-        v-model="time"
+        v-model="modTime"
         format="24hr"
         full-width
       >
         <v-spacer />
         <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
-        <v-btn flat color="primary" @click="$refs[`${name}Ref`].save(time)">OK</v-btn>
+        <v-btn flat color="primary" @click="$refs[`${name}Ref`].save(modTime)">OK</v-btn>
       </v-time-picker>
     </v-dialog>
   </div>
@@ -40,6 +40,10 @@ export default {
     name: {
       type: String,
       default: 'Time'
+    },
+    value: {
+      type: String,
+      default: null
     }
   },
   data() {
@@ -48,9 +52,19 @@ export default {
       modal: false
     };
   },
+  computed: {
+    modTime: {
+      get() {
+        return this.value;
+      },
+      set(val) {
+        this.time = val;
+      }
+    }
+  },
   watch: {
-    time: function() {
-      this.$emit('changeTime', this.time);
+    time(val) {
+      this.$emit('changeTime', val);
     }
   }
 };

@@ -2,6 +2,8 @@
   <v-textarea
     :label="label"
     :value="value"
+    rows="1"
+    auto-grow
     @input="$emit('input', $event)"
   />
 </template>
