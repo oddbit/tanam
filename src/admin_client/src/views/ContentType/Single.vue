@@ -9,6 +9,12 @@
             xs12 
             class="my-2">
 
+            <list 
+              v-if="field.type === 'list'" 
+              :label="field.name"
+              :value="postFields[field.key]"
+              @changeList="list($event, field.key)"/>
+
             <text-field 
               v-if="field.type === 'text'" 
               :label="field.name" 
@@ -94,6 +100,7 @@ import {
 
 export default {
   components: {
+    List: () => import('@/components/Fields/List'),
     CheckboxField: () => import('@/components/Fields/Checkbox'),
     Date: () => import('@/components/Fields/Date'),
     DateTime: () => import('@/components/Fields/DateTime'),
@@ -174,6 +181,9 @@ export default {
         this.$store.commit(POST_IS_SUBMITTING, false);
         this.$store.commit(POST_IS_EDITED_MODE, false);
       }
+    },
+    list(content, key) {
+      this.postFields[key] = content;
     },
     wysiwyg(content, key) {
       this.postFields[key] = content;
