@@ -6,7 +6,7 @@
           <v-flex xs12 md8>
             <v-btn :to="{name: 'postNew', params: {link: `${ctKey}`}}" class="ma-0" color="white">
               <v-icon left>create</v-icon>
-              Create {{ ctKey }}
+              Create {{ ctKey | toText }}
             </v-btn>
           </v-flex>
         </v-layout>
@@ -53,6 +53,11 @@ export default {
   data: () => ({
     tabItems: ['published', 'unpublished'],
     tabsModel: 'published'
-  })
+  }),
+  filters: {
+    toText(val) {
+      return val.replace(/([a-zA-Z])(?=[A-Z])/g, '$1 ').toUpperCase();
+    }
+  }
 };
 </script>
