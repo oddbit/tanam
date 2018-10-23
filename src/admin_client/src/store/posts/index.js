@@ -2,6 +2,7 @@ import {
   POST_IS_EDITED_MODE,
   POST_IS_SHOW_DRAWER,
   POST_PUBLISH,
+  POST_DELETED,
   POST_IS_SUBMITTING,
   POST_PUBLISHED,
   POST_UNPUBLISHED,
@@ -52,6 +53,7 @@ export default {
   actions: {
     [POST_PUBLISH]: actions.publishPost,
     [POST_PUBLISHED]: actions.getPublishedPost,
+    [POST_DELETED]: actions.deletePost,
     [POST_UNPUBLISHED]: actions.getUnpublishedPost,
     [POST_SINGLE]: actions.getSinglePost
   }

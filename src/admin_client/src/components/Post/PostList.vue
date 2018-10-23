@@ -34,16 +34,65 @@
         </v-list>
       </v-menu>
     </v-layout>
+    <!-- Dialog Delete -->
+     <v-dialog
+      v-model="dialogDelete"
+      max-width="290">
+      <v-card>
+        <v-card-title class="title">
+          Warning!
+        </v-card-title>
+        <v-card-text>
+          This process will delete post permanently<br>
+          Delete "{{ contentTitle }}" ?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="dialogDelete = false">
+            Cancel
+          </v-btn>
+          <v-btn
+            color="red darken-1"
+            flat="flat"
+            @click="deletePost">
+            Delete
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Delete -->
   </div>
 </template>
 
 <script>
 import dateFormat from 'date-fns/format';
+import { POST_DELETED } from '@/store/types';
 
 export default {
   filters: {
     formatDate(timestamp) {
       return dateFormat(timestamp.toDate(), 'MMMM DD, YYYY - HH:mm');
+    }
+  },
+  methods: {
+    handleClickActionItem(name) {
+      if (name == 'delete') {
+        this.dialogDelete = true;
+      } else if (name == 'edit') {
+        this.$router.push({
+          name: 'postEdit',
+          params: { ctKey: this.ctKey, postID: this.postId }
+        });
+      }
+    },
+    deletePost() {
+      this.$store.dispatch(POST_DELETED, {
+        postId: this.postId,
+        ctKey: this.ctKey
+      });
     }
   },
   props: {
@@ -69,6 +118,7 @@ export default {
     }
   },
   data: () => ({
+    dialogDelete: false,
     listAction: [
       { name: 'edit', text: 'Edit', icon: 'edit' },
       { name: 'delete', text: 'Delete', icon: 'delete' }

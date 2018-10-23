@@ -1,5 +1,5 @@
 import { firestore, storage } from '@/utils/firebase';
-import { POST_PUBLISHED, POST_UNPUBLISHED } from '../types';
+import { POST_PUBLISHED, POST_DELETED, POST_UNPUBLISHED } from '../types';
 import metadata from '@/helpers/metadata';
 
 const collectionRef = (collectionName, newPost = true, uid = null) => {
@@ -46,10 +46,17 @@ const handleProperties = (
   const path = metadata.generatePaths(postPermalink, null);
 
   return {
-    data: { ...postFields, ...imgObj },
+    data: {
+      ...postFields,
+      ...imgObj
+    },
     path: path,
     permalink: postPermalink,
-    ...(!isEditedMode ? { publishTime: new Date() } : null),
+    ...(!isEditedMode
+      ? {
+          publishTime: new Date()
+        }
+      : null),
     updateTime: new Date(),
     status: isEditedMode ? postStatus : 'published',
     template: null
@@ -76,12 +83,49 @@ export const publishPost = (
         postFields,
         imgObj
       );
-      await docRef.set(props, { merge: true });
+      await docRef.set(props, {
+        merge: true
+      });
       resolve();
     } catch (error) {
       reject(error);
     }
   });
+};
+
+export const deletePost = ({ commit, state }, payload) => {
+  let publishedPost = state.postsPublished;
+
+  // Get object to delete
+  let result = publishedPost.filter(obj => {
+    return obj.key === payload.postId;
+  });
+  let data = result[0].data; // Object to delete
+
+  // Delete from firestore
+  firestore
+    .collection(`ct-${payload.ctKey}`)
+    .doc(payload.postId)
+    .delete();
+
+  // Get all image path
+  var imagesPath = []; // Path image to delete
+  for (var key in data) {
+    if (data[key].hasOwnProperty('path')) {
+      imagesPath.push(data[key].path);
+    }
+  }
+
+  // Delete all image
+  if (imagesPath.length != 0) deleteImages(imagesPath);
+  async function deleteImages(array) {
+    for (const path of array) {
+      await storage
+        .ref()
+        .child(path)
+        .delete();
+    }
+  }
 };
 
 export const getPublishedPost = ({ commit }, payload) => {
@@ -92,7 +136,10 @@ export const getPublishedPost = ({ commit }, payload) => {
       const arr = [];
       commit(POST_PUBLISHED, []);
       snapshot.forEach(doc => {
-        arr.push({ ...doc.data(), key: doc.id });
+        arr.push({
+          ...doc.data(),
+          key: doc.id
+        });
       });
       commit(POST_PUBLISHED, arr);
     });
@@ -106,7 +153,10 @@ export const getUnpublishedPost = ({ commit }, payload) => {
       const arr = [];
       commit(POST_UNPUBLISHED, []);
       snapshot.forEach(doc => {
-        arr.push({ ...doc.data(), key: doc.id });
+        arr.push({
+          ...doc.data(),
+          key: doc.id
+        });
       });
       commit(POST_UNPUBLISHED, arr);
     });
