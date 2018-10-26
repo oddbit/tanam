@@ -70,11 +70,10 @@ editor.
 Building a Tanam site is as simple as creating a static HTML website. Actually, you can serve a
 completely static site with Tanam.
 
-But the real power comes when you create templates for your content types. Tanam's template
-engine will parse and replace variable placeholder and references in your template to create
-dynamic content that is server side rendered.
-
-You can even make arbitrary content lookups and queries from within your template.
+But the real power comes when you create templates for your content types. Tanam is using
+[DustJS](https://github.com/linkedin/dustjs) template engine to parse and replace variables,
+which allows you to create dynamic content that is server side rendered. You can even make
+arbitrary content lookups and queries from within your template.
 
 For example, the code below would create a bullet list of three upcoming events.
 
@@ -91,6 +90,21 @@ For example, the code below would create a bullet list of three upcoming events.
 ## Technical details
 This section below is purely for technical understanding of Tanam and intended for you who
 would like to tweak your setup or to contribute to the platform.
+
+### Template engine
+Tanam is currently using [DustJS](https://github.com/linkedin/dustjs) template engine.
+The choice is made from the absolute requirement that helper functions/values support `Promise` values.
+
+What that means is that the following snipped will make a Firebase query, which returns a promise
+in an `async` function.
+
+```html
+<h1>
+{@document path="/blog/IH1XAaBYJcBtgRY0VYOj"}{data.title}{/document}
+</h1>
+```
+
+At the time of writing, we only know DustJS that provides this functionality.
 
 ### Cache
 One of the unique features with Tanam is the way that we manage the CDN cache for performance
