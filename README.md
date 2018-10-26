@@ -7,6 +7,19 @@
 ![Login screen](/doc/images/login.png)
 
 
+```
+DISCLAIMER
+
+Tanam is currently in a very early development stage. It is NOT production ready.
+
+Get involved if something isn't working. We are happily receiving pull requests.
+
+Create an issue if you find a bug. But no feature requests please.
+
+Use at your own risk.
+```
+
+
 ## About
 The word *tanam* means "to plant" in Indonesian language. The name comes from the seed of thought that
 this project was for about a year before inception. Also because the leading design guidelines for
