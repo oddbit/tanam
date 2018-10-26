@@ -1,38 +1,70 @@
-# Tanam 🌱
+# Tanam 🌱 A pluggable CMS for Firebase.
 ![License](https://img.shields.io/npm/l/tanam.svg)
 ![NPM version](https://img.shields.io/npm/v/tanam.svg)
 ![Total NPM downloads](https://img.shields.io/npm/dt/tanam.svg)
 [![Travis build status](https://img.shields.io/travis/oddbit/tanam.svg)](https://travis-ci.org/oddbit/nexudus-js)
 
-A pluggable web based CMS for Firebase.
+![Login screen](/doc/images/login.png)
 
-## Configuration
+
+## History
+The word *tanam* means "to plant" in Indonesian language. The name comes from the seed of thought that this project was for
+about a year before inception. Also because the leading design guidelines for building Tanam is: beauty and simplicity on
+surface and power from within.
+
+For anyone exposed to use Tanam, either as a developer that is building a site or a content creator who is sharing creative works,
+we want to provide an easy to use platform that allows you to simply create a platform for sharing your thoughts.
+
+It should be as easy as planting a seed and then nurture your site to watch it grow.
+
+We want to remove the need of understanding the technical complexity on which Tanam is fuelling its power.
+
+## Getting started
+Setting up Tanam is as easy as just adding a few lines of code to your index.js file in the project's cloud functions folder.
+The CMS administration dashboard will immediately and automatically be accessible to manage your site, add and edit content.
 
 ### Your first user
-The first user that logs in to your newly setup CMS will become the owner of the website. So make sure that you follow the full setup process in order to make yourself the owner.
-
-
 Before logging in with your first user, you want to make sure that it's only you who get access to your site.
 
-Configure yourself as the owner of the site by running this command in your project root
+## Configure your site
 
-```bash
-firebase functions:config:set tanam.owner=john.doe@example.com
-```
+### Managing content types
+Content types are content structures of your site such as blog posts, events or articles.
+You can create any type of content type and associate it with a URL pattern of your own choosing.
 
-Exchange the email `john.doe@example.com` with the email that you will login as the "site owner". Don't worry,
-you can add more admin users later. This is just to enable you to login directly after deploying the site.
+![List content types](/doc/images/content-types-list.png)
+
+Each content type is composed by "fields" that describe the inner structure of a content type.
+For example, a blog post often has at least a title and a body.
+
+The field types are ranging from simple text fields such as a page title to rich content editor input
+where you can compose with custom HTML, image uploads, dates and much more. By specifying a type
+properly you help to guide the content creator to be consistent in the writing.
+
+![Edit content type](/doc/images/content-types-edit.png)
+
+## Technical details
+This section below is purely for technical understanding of Tanam and intended for you who
+would like to tweak your setup or to contribute to the platform.
 
 ### Cache
 The default values for client/browser cache and server/CDN cache are set in
-[`src/cache.ts`](src/utils/cache.ts)
+[`src/cache.ts`](src/cache.ts)
 
-Configure alternative caching values with cloud functions config.
+Configure alternative caching values with cloud functions config. The user provided config
+from functions config below will overwrite the system defaults.
 
 ```bash
-firebase functions:config:set cache.server_age=12345
-firebase functions:config:set cache.client_age=123
+firebase functions:config:set cache.s_max_age=12345
+firebase functions:config:set cache.max_age=123
 ```
+
+See [official documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
+for cache headers and their behaviour to understand how your settings will affect the system.
+Tanam itself is using the configuration as below
+
+ * `s_max_age` - Sets the `s-maxage` cache header
+ * `max_age` - Sets the `max-age` cache header
 
 
 ## License
