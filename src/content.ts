@@ -1,8 +1,8 @@
+import { SHA256 } from 'crypto-js';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import * as url from 'url';
 import * as site from './site';
-import { SHA256 } from 'crypto-js';
 
 export type ContentState = 'published' | 'unpublished';
 export type TemplateType = 'dust';
@@ -128,13 +128,27 @@ export class PageContext {
   }
 }
 
+/**
+ * Get all documents in all collections.
+ *
+ * Returns an array of Firestore `DocumentSnapshot`
+ */
 export function getAllDocuments() {
   return getDocumentsByUrl();
 }
 
+/**
+ * Find all documents that matches a certain URL.
+ * A document with the URL `/blogs/2013/06/14/a-new-beginning.html` will match `/blogs/2013/06/` together with any
+ * other document that has a URL starting with that URL, e.g. `/blogs/2013/06/24/yet-another-one.html`
+ *
+ * Returns an array of Firestore `DocumentSnapshot`
+ *
+ * @param requestUrl Optional URL to match documents by.
+ */
 export async function getDocumentsByUrl(requestUrl?: string) {
   const urlPath = !!requestUrl ? url.parse(requestUrl).pathname : '';
-  console.log(!!requestUrl ? `Find document matching URL: ${requestUrl}` : 'Get ALL documents n ALL collections');
+  console.log(!!requestUrl ? `Find document matching URL: ${requestUrl}` : 'Get ALL documents in ALL collections');
 
   const documents: admin.firestore.DocumentSnapshot[] = [];
   const collections = await admin.firestore().getCollections();
@@ -154,6 +168,12 @@ export async function getDocumentsByUrl(requestUrl?: string) {
   return documents.filter(doc => (doc.data() as ContentDocument).status === 'published');
 }
 
+/**
+ * Get a specific document by its collection name and document id.
+ * E.g. `blogposts/00EbMmZ1SaePruNgosmZ`
+ *
+ * @param documentPath A fully qualified colletion and document id
+ */
 export async function getDocumentByPath(documentPath: string) {
   console.log(`[getDocumentByPath] Fetch document: ${documentPath}`);
   const doc = await admin.firestore().doc(documentPath).get();
@@ -165,6 +185,15 @@ export async function getDocumentByPath(documentPath: string) {
   return new DocumentContext(doc);
 }
 
+/**
+ * Get documents in a collection based on query criteria.
+ * This method will only get documents with status `published` as it is an interface for usage in template and API calls.
+ *
+ * @param collection Name of the collection
+ * @param orderBy Attribute name to order by
+ * @param sortOrder Sort order: `asc` or `desc`
+ * @param limit Number of documents to limit to
+ */
 export async function getDocumentsInCollection(collection: string, orderBy = 'publishTime', sortOrder: FirebaseFirestore.OrderByDirection = 'desc', limit = 10) {
   console.log(`[getDocumentsInCollection] collection=${collection}, orderBy=${orderBy}, sortOrder=${sortOrder}, limit=${limit}`);
 
@@ -186,6 +215,14 @@ export async function getDocumentsInCollection(collection: string, orderBy = 'pu
   }
 }
 
+/**
+ * Get all the template files in the current theme.
+ *
+ * Returns an array of template files of the current theme.
+ *
+ * @param theme Name of the current active theme
+ * @param templateType Type of template files to look for
+ */
 export async function getTemplateFiles(theme: string, templateType: TemplateType = 'dust') {
   console.log(`[getTemplateFiles] Get template files for theme '${theme}'`);
 
@@ -207,6 +244,18 @@ export async function getThemeFiles(theme: string) {
   return files;
 }
 
+/**
+ * Get a file from cloud storage as requested from the public reference.
+ *
+ * A reference to a file in a specific theme will start with `/theme/`, for example `/theme/stylesheet.css`
+ * and that will reference the `stylesheet.css` in the current theme. And if the theme is changed, it will
+ * look for a CSS file with the same name in the new theme folder.
+ *
+ * User content files such as image uploads etc should be located in the cloud storage path `/content/`,
+ * e.g. `/content/images/myimage.png`.
+ *
+ * @param requestUrl The URL of the requested file
+ */
 export async function getCloudStorageFile(requestUrl: string) {
   let assetFilePath = url.parse(requestUrl).pathname;
 
@@ -222,6 +271,13 @@ export async function getCloudStorageFile(requestUrl: string) {
   return admin.storage().bucket().file(assetFilePath);
 }
 
+/**
+ * Get a public usable file path for a cloud storage file.
+ * The path that is returned to a template or used from a client perspective must always be normalized
+ * by this function in order to later be able to reverse the lookup with `getCloudStorageFile()` above.
+ *
+ * @param storageFilePath Absolute path to a cloud storage file
+ */
 export function getPublicPathToStorageFile(storageFilePath: string) {
   console.log(`[getPublicPathToStorageFile] storageFilePath=${storageFilePath}`);
   if (storageFilePath.startsWith('/themes/') || storageFilePath.startsWith('themes/')) {
@@ -234,6 +290,11 @@ export function getPublicPathToStorageFile(storageFilePath: string) {
   return storageFilePath.startsWith('/') ? storageFilePath : `/${storageFilePath}`;
 }
 
+/**
+ * Cloud function that triggers on each user content file upload.
+ * For each file upload, update metadata registry "lookup table". The metadata registry is used to reverse
+ * lookup files of certain content type or date.
+ */
 export const tanam_onFileFinalizedUpdateRegistry = functions.storage.object().onFinalize((object) => {
   if (!object.name.startsWith('content/')) {
     console.log(`File is not a user content file. Ignoring it.`);
@@ -254,6 +315,10 @@ export const tanam_onFileFinalizedUpdateRegistry = functions.storage.object().on
   return admin.database().ref(ContentFirebasePath.fileMetaData).child(id).set(data);
 });
 
+/**
+ * Cloud function that triggers on each user content file upload.
+ * For each user content file that is deleted, remove its entry in metadata registry.
+ */
 export const tanam_onFileDeleteUpdateRegistry = functions.storage.object().onDelete(async (object) => {
   if (!object.name.startsWith('content/')) {
     console.log(`File is not a user content file. Ignoring it.`);
