@@ -93,8 +93,23 @@ This section below is purely for technical understanding of Tanam and intended f
 would like to tweak your setup or to contribute to the platform.
 
 ### Cache
+One of the unique features with Tanam is the way that we manage the CDN cache for performance
+of dynamic content. The server cache lifetime (CDN) is effectively not very important because
+we will purge and renew cache manually when the content is updated.
+
+Every document change will trigger a request for cache removal from CDN followed by a request
+to store the new data in CDN. That allows content to always be present on an end node close
+to the visitor, wherever in the world they are accessing the website from.
+
+The caching strategy will ensure that there is next to no delay between updating content to
+when the change is visible.
+
+#### Cache life time
 The default values for client/browser cache and server/CDN cache are set in
-[`src/cache.ts`](src/cache.ts)
+[`src/cache.ts`](src/cache.ts). As mentioned above, this should not be neccessary to make
+changes to, unless you are experiencing any troubles with the default setup. Another use case
+might be that you want to try something experimental and prefer to not have several months of
+cache as default, in case something should go wrong with removing cache entries.
 
 Configure alternative caching values with cloud functions config. The user provided config
 from functions config below will overwrite the system defaults.
@@ -111,6 +126,13 @@ Tanam itself is using the configuration as below
  * `s_max_age` - Sets the `s-maxage` cache header
  * `max_age` - Sets the `max-age` cache header
 
+
+#### When cache is refreshed
+The cache will be refreshed as follows
+
+ * Document change will refresh cache for that URL only
+ * Theme changed will refresh cache for **all** site URLs and **all** theme files
+ * Template file changed will refresh cache for **all** site URLs using that template
 
 ## License
 This project is under [Apache License 2.0](LICENSE)
