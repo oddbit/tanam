@@ -27,18 +27,21 @@ straight out of the box. It's a auto-scaling platform that will work just as wel
 sites as it will also be able to serve heavy load without breaking a sweat.
 
 Tanam is leveraging Google's global CDN to deliver pre-built versions of your dynamic content.
-All cached content is immediately replaced as you update your articles. Since we are pre-building
+All cached content is immediately replaced as you update it. Since we are pre-building
 the content, all your URLs will serve instantly as a static website would. Performance only depends
-on the size of your website.
+on the size of your page.
 
-Hosting Tanam can cost you as little as nothing. Firebase has a very generous pricing model with
+Hosting Tanam can cost you as little as nothing. Firebase has a very generous
+[pricing model](https://firebase.google.com/pricing/) with
 a free tier that most likely will be all you need. The platform automatically supports custom
 domain linking and serves all content over secure HTTPS connection. You can have a publishing
 platform to the cost of only your yearly domain name renewal.
 
 ## Getting started
-Setting up Tanam is as easy as just adding a few lines of code to your index.js file in the project's cloud functions folder.
-The CMS administration dashboard will immediately and automatically be accessible to manage your site, add and edit content.
+Setting up Tanam is as easy as just adding a few lines of code to your `index.js` file in the
+project's cloud functions folder.
+The CMS administration dashboard will immediately and automatically be accessible to manage your
+site, add and edit content.
 
 ### Your first user
 Before logging in with your first user, you want to make sure that it's only you who get access to your site.
