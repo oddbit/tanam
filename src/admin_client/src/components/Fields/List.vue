@@ -1,24 +1,28 @@
 <template>
+<div>
+  <h3 class="font-weight-light">{{label}}</h3>
   <div class="border">
-    <h2>{{label}}</h2>
     <v-text-field
       v-for="(item, index) in value"
       :key="index"
-      label="item"
-      prepend-icon="fiber_manual_record"
+      :label="`Item ${index + 1}`"
+      prepend-icon="close"
+      @click:prepend="deleteItemList(item)"
       v-model="value[index]"
-      solo
     ></v-text-field>
     <v-text-field
       label="Add item"
-      v-model="another"></v-text-field>
-    <v-btn @click="addItem">Add Item</v-btn>
+      v-model="another"
+      @keyup.enter="addItem"
+      :error-messages="errMsg"
+      hint="Enter to add item"></v-text-field>
   </div>
+</div>
 </template>
 
 <style scoped>
   .border {
-    border: 1px solid #c6c6c6;
+    border: 3px solid #c6c6c6;
     padding: 10px;
   }
 </style>
@@ -37,16 +41,28 @@ export default {
     },
   },
   data: () => ({
-    another: ''
+    another: '',
+    errMsg: ''
   }),
   methods: {
+    deleteItemList(item) {
+      this.value = this.value.filter(el => {
+        return el != item
+      })
+    },
     addItem () {
+      if (this.value.includes(this.another)) {
+        return this.errMsg = 'Item already exist';
+      }
       this.value.push(this.another)
       this.another = ''
     }
   },
   watch: {
-    value: function() {
+    another() {
+      this.errMsg = '';
+    },
+    value() {
       this.$emit('changeList', this.value);
     }
   },
