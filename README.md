@@ -1,4 +1,4 @@
-# Tanam 🌱 A pluggable CMS for Firebase.
+# Tanam 🌱 A pluggable CMS for Firebase
 ![License](https://img.shields.io/npm/l/tanam.svg)
 ![NPM version](https://img.shields.io/npm/v/tanam.svg)
 ![Total NPM downloads](https://img.shields.io/npm/dt/tanam.svg)
@@ -7,15 +7,16 @@
 ![Login screen](/doc/images/login.png)
 
 
-## History
-The word *tanam* means "to plant" in Indonesian language. The name comes from the seed of thought that this project was for
-about a year before inception. Also because the leading design guidelines for building Tanam is: beauty and simplicity on
-surface and power from within.
+## About
+The word *tanam* means "to plant" in Indonesian language. The name comes from the seed of thought that
+this project was for about a year before inception. Also because the leading design guidelines for
+building Tanam is: using the CMS should be as easy as planting a seed and then nurture your site
+with good content and just watch it grow and scale by itself.
 
 For anyone exposed to use Tanam, either as a developer that is building a site or a content creator who is sharing creative works,
 we want to provide an easy to use platform that allows you to simply create a platform for sharing your thoughts.
 
-It should be as easy as planting a seed and then nurture your site to watch it grow.
+
 
 We want to remove the need of understanding the technical complexity on which Tanam is fuelling its power.
 
