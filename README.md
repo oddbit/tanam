@@ -16,9 +16,25 @@ with good content and just watch it grow and scale by itself.
 For anyone exposed to use Tanam, either as a developer that is building a site or a content creator who is sharing creative works,
 we want to provide an easy to use platform that allows you to simply create a platform for sharing your thoughts.
 
-
-
 We want to remove the need of understanding the technical complexity on which Tanam is fuelling its power.
+
+### What makes Tanam special
+Tanam is build and fully powered by Firebase. It allows you to host your own CMS completely free
+both free as in FOSS and as in free ice cream 🍦
+
+Tanam is providing a platform with dynamic content (server side rendered) with static site performance
+straight out of the box. It's a auto-scaling platform that will work just as well for small personal
+sites as it will also be able to serve heavy load without breaking a sweat.
+
+Tanam is leveraging Google's global CDN to deliver pre-built versions of your dynamic content.
+All cached content is immediately replaced as you update your articles. Since we are pre-building
+the content, all your URLs will serve instantly as a static website would. Performance only depends
+on the size of your website.
+
+Hosting Tanam can cost you as little as nothing. Firebase has a very generous pricing model with
+a free tier that most likely will be all you need. The platform automatically supports custom
+domain linking and serves all content over secure HTTPS connection. You can have a publishing
+platform to the cost of only your yearly domain name renewal.
 
 ## Getting started
 Setting up Tanam is as easy as just adding a few lines of code to your index.js file in the project's cloud functions folder.
@@ -43,6 +59,34 @@ where you can compose with custom HTML, image uploads, dates and much more. By s
 properly you help to guide the content creator to be consistent in the writing.
 
 ![Edit content type](/doc/images/content-types-edit.png)
+
+### Creating content
+The content editor is simple and distraction free and allows you to create rich content with a WYSIWYG
+editor.
+
+![Edit blog post](/doc/images/blog-edit.png)
+
+## Building templates
+Building a Tanam site is as simple as creating a static HTML website. Actually, you can serve a
+completely static site with Tanam.
+
+But the real power comes when you create templates for your content types. Tanam's template
+engine will parse and replace variable placeholder and references in your template to create
+dynamic content that is server side rendered.
+
+You can even make arbitrary content lookups and queries from within your template.
+
+For example, the code below would create a bullet list of three upcoming events.
+
+```html
+ <ul>
+    {@documents collection="event" limit=3 sortOrder="asc" orderBy="eventData"}
+    <li>
+        <a href="{url}">{data.title}</a>
+    </li>
+    {/documents}
+</ul>
+```
 
 ## Technical details
 This section below is purely for technical understanding of Tanam and intended for you who
