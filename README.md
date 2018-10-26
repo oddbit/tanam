@@ -9,6 +9,9 @@ A pluggable web based CMS for Firebase.
 ## Configuration
 
 ### Your first user
+The first user that logs in to your newly setup CMS will become the owner of the website. So make sure that you follow the full setup process in order to make yourself the owner.
+
+
 Before logging in with your first user, you want to make sure that it's only you who get access to your site.
 
 Configure yourself as the owner of the site by running this command in your project root
@@ -21,8 +24,8 @@ Exchange the email `john.doe@example.com` with the email that you will login as 
 you can add more admin users later. This is just to enable you to login directly after deploying the site.
 
 ### Cache
-The default values for client/browser cache and server/CDN cache are set in 
-[`src/utils/cache.ts`](src/utils/cache.ts)
+The default values for client/browser cache and server/CDN cache are set in
+[`src/cache.ts`](src/utils/cache.ts)
 
 Configure alternative caching values with cloud functions config.
 
