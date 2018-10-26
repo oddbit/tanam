@@ -115,6 +115,12 @@ Every document change will trigger a request for cache removal from CDN followed
 to store the new data in CDN. That allows content to always be present on an end node close
 to the visitor, wherever in the world they are accessing the website from.
 
+In the illustration below you can see content created and updated in Tanam, symbolized to the
+left. Over time (downwards) the content is updated and the old revision is deleted from cache
+before new version is created. Clients will see old revision until new is cached.
+
+![Cache visual](/doc/images/cache-visual.png)
+
 The caching strategy will ensure that there is next to no delay between updating content to
 when the change is visible.
 
