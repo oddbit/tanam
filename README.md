@@ -32,7 +32,7 @@ we want to provide an easy to use platform that allows you to simply create a pl
 We want to remove the need of understanding the technical complexity on which Tanam is fuelling its power.
 
 ### What makes Tanam special
-Tanam is build and fully powered by Firebase. It allows you to host your own CMS completely free
+Tanam is built and fully powered by Firebase. It allows you to host your own CMS completely free
 both free as in FOSS and as in free ice cream 🍦
 
 Tanam is providing a platform with dynamic content (server side rendered) with static site performance
@@ -131,14 +131,32 @@ Every document change will trigger a request for cache removal from CDN followed
 to store the new data in CDN. That allows content to always be present on an end node close
 to the visitor, wherever in the world they are accessing the website from.
 
-In the illustration below you can see content created and updated in Tanam, symbolized to the
-left. Over time (downwards) the content is updated and the old revision is deleted from cache
-before new version is created. Clients will see old revision until new is cached.
+The illustration below is a simple illustration of how CDN caching basically works. With the
+difference of that we're *purging* the cache upon changes, instead of letting it expire by itself.
+The CDN cache is set to a really long lifetime, like a year.
 
 ![Cache visual](/doc/images/cache-visual.png)
 
-The caching strategy will ensure that there is next to no delay between updating content to
-when the change is visible.
+##### Best case scenario
+A closer look at the flow show a breakdown of how a document change is triggering its own rendering
+by making a request to its own URL. For a new document it will cause a cache miss, which is passed
+through to the https cloud function that tells Tanam to render and send back the response.
+
+The total process from a document change to when the result is ready on the CDN can take a few seconds
+so that's why we preemptively build and send the content to the CDN cache.
+
+![Cache visual](/doc/images/cache-visual-best-case.png)
+
+##### Worst case scenario
+The worst case scenario is that a client is requesting a URL just after we've purged the CDN cache,
+causing a cache miss and the client itself will experience the slow process of server side rendering.
+
+This is a corner case that is most likely for high traffic sites and might cause a small number of
+clients to experience occasional "seconds delay" to get a web page, if the content is updated
+just before a client request.
+
+![Cache visual](/doc/images/cache-visual-worst-case.png)
+
 
 #### Cache life time
 The default values for client/browser cache and server/CDN cache are set in
