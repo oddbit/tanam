@@ -42,18 +42,18 @@ const state = {
   ],
   fieldsItem: [
     { key: 'title', name: 'Title', type: 'text', pk: true },
-    { key: '', name: '', type: '' }
+    { key: '', name: '', type: '', item: [] }
   ],
   fieldsItemDefault: [
     { key: 'title', name: 'Title', type: 'text', pk: true },
-    { key: '', name: '', type: '' }
+    { key: '', name: '', type: '', item: [] }
   ],
   fieldTypeItems: [
     { text: 'Text', value: 'text' },
     { text: 'Textarea', value: 'textarea' },
     { text: 'Number', value: 'number' },
     { text: 'List', value: 'list' },
-    { text: 'Select', value: 'select' },
+    { text: 'Select', value: 'select', item: [] },
     { text: 'Radio', value: 'radio' },
     { text: 'Checkbox', value: 'checkbox' },
     { text: 'Date', value: 'date' },

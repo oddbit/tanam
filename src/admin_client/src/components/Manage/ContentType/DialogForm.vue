@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="600px">
+  <v-dialog v-model="dialog" max-width="650px">
     <v-btn 
       slot="activator" 
       color="primary" 
@@ -90,13 +90,36 @@
                 d-flex 
                 align-center
                 class="pa-0">
-                <v-btn 
-                  v-if="!configureField(field).disableRemove"
-                  flat 
-                  icon 
-                  small 
-                  color="error" 
-                  @click="removeField(index)"><v-icon>remove_circle</v-icon></v-btn>
+                <v-tooltip top>
+                  <v-btn
+                    class="primary white--text"
+                    slot="activator"
+                    fab
+                    flat
+                    small
+                    v-if="fieldsItem[index].type == 'select'"
+                    @click="manageItem(fieldsItem[index], index)">
+                    <v-icon>format_list_bulleted</v-icon>
+                  </v-btn>
+                  <span>Manage Item</span>
+                </v-tooltip>
+              </v-flex>
+              <v-flex 
+                lg1 
+                d-flex 
+                align-center
+                class="pa-0">
+                <v-tooltip top>
+                  <v-btn
+                    slot="activator"
+                    v-if="!configureField(field).disableRemove"
+                    flat 
+                    icon 
+                    small 
+                    color="error" 
+                    @click="removeField(index)"><v-icon>remove_circle</v-icon></v-btn>
+                    <span>Delete</span>
+                </v-tooltip>
               </v-flex>
             </v-layout>
           </v-form>
@@ -109,6 +132,38 @@
         <v-btn color="blue darken-1" flat @click.native="$emit('save')">Save</v-btn>
       </v-card-actions>
     </v-card>
+
+     <v-dialog
+        v-model="dialogItem"
+        max-width="290">
+        <v-card>
+          <v-card-title class="headline">Manage Item</v-card-title>
+
+          <v-card-text>
+            <v-combobox
+              ref="itemField"
+              v-model="tmpItem.item"
+              hint="Enter to add item"
+              label="Item"
+              multiple 
+              chips
+            ></v-combobox>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn
+              color="green darken-1"
+              flat="flat"
+              @click="updateItem"
+            >
+              Save
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
   </v-dialog>
 </template>
 
@@ -129,6 +184,12 @@ export default {
       default: -1
     }
   },
+  data: () => ({
+    dialogItem: false,
+    tmpItem: {
+      item: []
+    }
+  }),
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? 'New Content Type' : 'Edit Content Type';
@@ -157,6 +218,20 @@ export default {
     }
   },
   methods: {
+    updateItem () {
+      this.fieldsItem[this.tmpItem.index].item = this.tmpItem.item
+      this.dialogItem = false
+    },
+    manageItem (item, index) {
+      this.tmpItem = {
+        ...item,
+        index: index
+      }
+      this.dialogItem = true;
+      this.$nextTick(() => {
+        this.$refs.itemField.focus()
+      });
+    },
     addMoreField() {
       this.$store.commit(CONTENT_TYPE_ADD_FIELD);
     },

@@ -12,7 +12,8 @@ export const setEditedItemDefault = state =>
   (state.editedItem = state.defaultItem);
 
 export const addMoreField = state =>
-  state.fieldsItem.push({ key: '', name: '', type: '' });
+  state.fieldsItem.push({ key: '', name: '', type: '', item: [] });
+
 export const removeField = (state, index) => state.fieldsItem.splice(index, 1);
 
 export const setFieldsItem = (state, payload) => (state.fieldsItem = payload);

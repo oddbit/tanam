@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-select
-      v-model="selected"
-      :items="itemsLocal"
+      v-model="val"
+      :items="items"
       :label="label"
     />
   </div>
@@ -20,21 +20,27 @@ export default {
       default: null
     },
     items: {
-      type: String,
-      default: 'item1,item2'
+      type: Array,
+      default: function () { return ['item1'] }
     }
   },
   data: () => ({
-    itemsLocal: [],
-    selected: null
+    selected: ''
   }),
-  watch: {
-    selected: function() {
-      this.$emit('changeSelected', this.selected);
+  computed: {
+    val: {
+      get () {
+        return this.value
+      },
+      set (val) {
+        this.selected = val
+      }
     }
   },
-  mounted() {
-    this.itemsLocal = this.items.split(',');
-  },
+  watch: {
+    selected () {
+      this.$emit('changeSelected', this.selected);
+    }
+  }
 };
 </script>

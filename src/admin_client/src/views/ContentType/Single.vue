@@ -51,7 +51,8 @@
             <select-field 
               v-if="field.type === 'select'" 
               :label="field.name" 
-              :items="field.items" 
+              :items="field.item"
+              :value="postFields[field.key]"
               @changeSelected="selected($event, field.key)" />
 
             <radio-field 
