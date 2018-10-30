@@ -1,13 +1,16 @@
 <template>
-  <v-radio-group>
-    <v-radio
-      v-for="(item, index) in itemsLocal"
-      :key="index"
-      :label="item"
-      :value="item"
-      @change="$emit('change', $event)"
-    />
-  </v-radio-group>
+  <div>
+    <h3 class="font-weight-light">{{label}}</h3>
+    <v-radio-group v-model="val">
+      <v-radio
+        v-for="(item, index) in items"
+        :key="index"
+        :label="item"
+        :value="item"
+        @change="$emit('change', $event)"
+      />
+    </v-radio-group>
+  </div>
 </template>
 
 <script>
@@ -22,15 +25,27 @@ export default {
       default: null
     },
     items: {
-      type: String,
-      default: 'item1,item2'
+      type: Array,
+      default: []
     }
   },
   data: () => ({
-    itemsLocal: []
+    selected: ''
   }),
-  mounted() {
-    this.itemsLocal = this.items.split(',');
+  computed: {
+    val: {
+      get () {
+        return this.value
+      },
+      set (val) {
+        this.selected = val
+      }
+    }
+  },
+  watch: {
+    selected () {
+      this.$emit('radio', this.selected);
+    }
   }
 };
 </script>

@@ -58,7 +58,8 @@
             <radio-field 
               v-if="field.type === 'radio'" 
               :label="field.name" 
-              :items="field.items" 
+              :items="field.item" 
+              :value="postFields[field.key]"
               @change="radio($event, field.key)" />
 
             <checkbox-field 
