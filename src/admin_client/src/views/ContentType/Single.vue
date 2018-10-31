@@ -65,7 +65,8 @@
             <checkbox-field 
               v-if="field.type === 'checkbox'" 
               :label="field.name" 
-              :items="field.items" 
+              :items="field.item"
+              :value="postFields[field.key]"
               @changeCheckbox="checkbox($event, field.key)" />
 
             <password-field v-if="field.type === 'password'" :label="field.name" @input="password($event, field.key)" />
@@ -221,8 +222,8 @@ export default {
     radio(radio, key) {
       this.postFields[key] = radio;
     },
-    checkbox(checbox, key) {
-      this.postFields[key] = checbox;
+    checkbox(checkbox, key) {
+      this.postFields[key] = checkbox;
     },
     image(image, key) {
       this.imageFiles[key] = image;

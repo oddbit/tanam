@@ -1,11 +1,12 @@
 <template>
   <div>
+    <h3 class="font-weight-light">{{label}}</h3>    
     <v-checkbox
-      v-for="(item, index) in itemsLocal"
+      v-for="(item, index) in items"
+      :value="item"
       :key="index"
       :label="item"
-      v-model="valueCheckbox[item.toLowerCase()]"
-      @change="change"
+      v-model="val"
     />
   </div>
 </template>
@@ -17,24 +18,31 @@ export default {
       type: String,
       default: 'Checkbox'
     },
+    value: {
+      type: Array,
+      default: function () { return [] }      
+    },
     items: {
-      type: String,
-      default: null
+      type: Array,
+      default: function () { return ['item1'] }
     }
   },
   data: () => ({
-    itemsLocal: [],
-    valueCheckbox: {}
+    selected: []
   }),
-  mounted() {
-    this.itemsLocal = this.items.split(',');
-    this.itemsLocal.forEach(item => {
-      this.valueCheckbox[item.toLowerCase()] = false;
-    });
+  computed: {
+    val: {
+      get () {
+        return this.value
+      },
+      set (value) {
+        this.selected = value
+      }
+    }
   },
-  methods: {
-    change: function() {
-      this.$emit('changeCheckbox', this.valueCheckbox);
+  watch: {
+    selected() {
+      this.$emit('changeCheckbox', this.selected)
     }
   }
 };

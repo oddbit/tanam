@@ -97,7 +97,7 @@
                     fab
                     flat
                     small
-                    v-if="fieldsItem[index].type == 'select' || fieldsItem[index].type == 'radio'"
+                    v-if="fieldsItem[index].type == 'select' || fieldsItem[index].type == 'radio' || fieldsItem[index].type == 'checkbox'"
                     @click="manageItem(fieldsItem[index], index)">
                     <v-icon>format_list_bulleted</v-icon>
                   </v-btn>

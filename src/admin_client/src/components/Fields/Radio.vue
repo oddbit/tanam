@@ -41,11 +41,6 @@ export default {
         this.selected = val
       }
     }
-  },
-  watch: {
-    selected () {
-      this.$emit('radio', this.selected);
-    }
   }
 };
 </script>
