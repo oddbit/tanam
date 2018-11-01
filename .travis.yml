@@ -7,8 +7,9 @@ branches:
   only:
     - master
 before_script:
-    - npm --prefix src/admin_client install
-    - npm --prefix src/admin_client run build
+    - cd src/admin_client
+    - npm install
+    - npm run build
 deploy:
   provider: npm
   email: contact@oddbit.id
