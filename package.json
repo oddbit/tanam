@@ -9,8 +9,7 @@
   },
   "scripts": {
     "watch": "tsc -w -p .",
-    "build": "tsc -p .",
-    "test": "mocha --reporter spec dist/test/**/*.spec.js"
+    "build": "tsc -p ."
   },
   "repository": {
     "type": "git",
