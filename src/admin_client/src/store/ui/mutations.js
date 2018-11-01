@@ -1,12 +1,10 @@
-const setBtnSubmitSinglePost = (state, payload) => {
-  state.btnSubmitSinglePost = payload;
-};
+const toggleDrawer = (state, payload) => (state.status = payload);
 
-const setBtnDeleteSinglePost = (state, payload) => {
-  state.btnDeleteSinglePost = payload;
+const toggleDrawerPost = (state, payload) => {
+  state.statusPost = payload !== undefined ? payload : !state.statusPost;
 };
 
 export default {
-  setBtnSubmitSinglePost,
-  setBtnDeleteSinglePost
+  toggleDrawer,
+  toggleDrawerPost
 };

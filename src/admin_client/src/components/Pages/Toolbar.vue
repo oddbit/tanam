@@ -3,11 +3,10 @@
     <v-btn 
       v-if="$mq === 'desktop'" 
       light 
-      @click="handleClickSubmit" 
-      :disabled="isDisableBtnSubmit">
+      @click="handleClickSubmit">
       {{ postMode === 'new' ? 'Publish' : 'Update' }}
     </v-btn>
-    <v-btn v-if="$mq === 'mobile'" icon :disabled="isDisableBtnSubmit">
+    <v-btn @click="handleClickSubmit" v-if="$mq === 'mobile'" icon>
       <v-icon>send</v-icon>
     </v-btn>
   </div>
@@ -32,22 +31,28 @@ export default {
   },
   methods: {
     async handleClickSubmit() {
-      try {
-        if (this.postMode === 'new') {
-          await this.$store.dispatch(POST_ACTION_UPLOAD);
-        } else {
-          await this.$store.dispatch(
-            POST_ACTION_UPLOAD,
-            this.$store.getters[POST_ID]
-          );
-          this.$store.commit(POST_ID, null);
-        }
-        this.$router.push('/templates/pages');
-      } catch (error) {
-        const alertText = this.postMode === 'new' ? 'publish' : 'update';
-        alert(`Failed to ${alertText}`);
-      }
+      console.log('toolbar click submit');
+      this.$store.dispatch(POST_ACTION_UPLOAD);
+      const status = this.$store.getters[POST_ACTION_UPLOAD];
+      console.log(status);
     }
+    // async handleClickSubmit() {
+    //   try {
+    //     if (this.postMode === 'new') {
+    //       await this.$store.dispatch(POST_ACTION_UPLOAD);
+    //     } else {
+    //       await this.$store.dispatch(
+    //         POST_ACTION_UPLOAD,
+    //         this.$store.getters[POST_ID]
+    //       );
+    //       this.$store.commit(POST_ID, null);
+    //     }
+    //     this.$router.push('/templates/pages');
+    //   } catch (error) {
+    //     const alertText = this.postMode === 'new' ? 'publish' : 'update';
+    //     alert(`Failed to ${alertText}`);
+    //   }
+    // }
   }
 };
 </script>

@@ -5,35 +5,24 @@
     fixed
     app
     @input="inputDrawer">
-
-    <ProfileDrawer v-if="isProfileRoute" />
-    <MainDrawer v-else />
-
+    <slot name="drawer" />
   </v-navigation-drawer>
 </template>
 
 <script>
-import MainDrawer from '@/components/Drawer/MainDrawer';
-import ProfileDrawer from '@/components/Drawer/ProfileDrawer';
 import { TOGGLE_DRAWER } from '@/store/types';
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
-  components: {
-    MainDrawer,
-    ProfileDrawer
-  },
   computed: {
-    ...mapState({
-      drawerStatus(state) {
-        if (this.$mq === 'desktop') {
-          return true;
-        }
-        return state.drawer.status;
-      }
+    ...mapGetters({
+      drawer: [TOGGLE_DRAWER]
     }),
-    isProfileRoute() {
-      return /\/profile/gi.test(this.$route.path);
+    drawerStatus() {
+      if (this.$mq === 'desktop') {
+        return true;
+      }
+      return this.drawer;
     }
   },
   methods: {

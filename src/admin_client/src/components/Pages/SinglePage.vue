@@ -1,9 +1,10 @@
 <template>
-  <SinglePost />
+  <!-- <SinglePost /> -->
+  <h1>Pages</h1>
 </template>
 
 <script>
-import SinglePost from '@/components/Post/SinglePost';
+// import SinglePost from '@/components/Post/SinglePost';
 import {
   POST_MODE,
   POST_RESET_STATE,
@@ -13,14 +14,14 @@ import {
 } from '@/store/types';
 
 export default {
+  components: {
+    // SinglePost
+  },
   props: {
     postMode: {
       type: String,
       default: 'new'
     }
-  },
-  components: {
-    SinglePost
   },
   mounted() {
     this.$store.commit(POST_MODE, this.postMode);
