@@ -1,42 +1,60 @@
 import {
-  POST_CONTENT_TYPE,
-  POST_BY,
-  POST_ID,
+  POST_IS_EDITED_MODE,
+  POST_IS_SHOW_DRAWER,
+  POST_PUBLISH,
+  POST_DELETED,
+  POST_IS_SUBMITTING,
   POST_PUBLISHED,
-  POST_DRAFT,
-  POST_DIALOG_DELETE
-} from '../types';
-import actions from './actions';
-import mutations from './mutations';
-import getters from './getters';
+  POST_UNPUBLISHED,
+  POST_FIELD_TITLE,
+  POST_FIELD_PERMALINK,
+  POST_SINGLE,
+  POST_FIELD_STATUS,
+  POST_FIELD_PERMALINK_EDIT
+} from '@/store/types';
+import * as actions from './actions';
+import * as mutations from './mutations';
+import * as getters from './getters';
 
 const state = {
-  contentType: null,
-  postId: null,
-  publishedPosts: [],
-  draftPosts: [],
-  dialogDelete: false
+  isEditedMode: false,
+  isShowDrawer: true,
+  isSubmitting: false,
+  postsPublished: [],
+  postsUnpublished: [],
+  postTitle: '',
+  postPermalink: '',
+  postStatus: null
 };
 
 export default {
   state,
   mutations: {
-    [POST_CONTENT_TYPE]: mutations.setContentType,
-    [POST_ID]: mutations.setPostId,
-    [POST_PUBLISHED]: mutations.setPublishedPosts,
-    [POST_DRAFT]: mutations.setDraftPosts,
-    [POST_DIALOG_DELETE]: mutations.setDialogDelete
+    [POST_IS_EDITED_MODE]: mutations.setIsEditedMode,
+    [POST_IS_SHOW_DRAWER]: mutations.setIsShowDrawer,
+    [POST_IS_SUBMITTING]: mutations.setIsSubmitting,
+    [POST_PUBLISHED]: mutations.setPostsPublished,
+    [POST_UNPUBLISHED]: mutations.setPostsUnpublished,
+    [POST_FIELD_TITLE]: mutations.setPostTitle,
+    [POST_FIELD_PERMALINK]: mutations.setPostPermalink,
+    [POST_FIELD_PERMALINK_EDIT]: mutations.setPostPermalinkEdit,
+    [POST_FIELD_STATUS]: mutations.setPostStatus
   },
   getters: {
-    [POST_CONTENT_TYPE]: getters.getContentType,
-    [POST_ID]: getters.getPostId,
-    [POST_PUBLISHED]: getters.getPublishedPosts,
-    [POST_DRAFT]: getters.getDraftPosts,
-    [POST_DIALOG_DELETE]: getters.getDialogDelete
+    [POST_IS_EDITED_MODE]: getters.getIsEditedMode,
+    [POST_IS_SHOW_DRAWER]: getters.getIsShowDrawer,
+    [POST_IS_SUBMITTING]: getters.getIsSubmitting,
+    [POST_PUBLISHED]: getters.getPostsPublished,
+    [POST_UNPUBLISHED]: getters.getPostsUnpublished,
+    [POST_FIELD_TITLE]: getters.getPostTitle,
+    [POST_FIELD_PERMALINK]: getters.getPostPermalink,
+    [POST_FIELD_STATUS]: getters.getPostStatus
   },
   actions: {
-    [POST_BY]: actions.getPostBy,
-    [POST_PUBLISHED]: actions.getPublishedPosts,
-    [POST_DRAFT]: actions.getDraftPosts
+    [POST_PUBLISH]: actions.publishPost,
+    [POST_PUBLISHED]: actions.getPublishedPost,
+    [POST_DELETED]: actions.deletePost,
+    [POST_UNPUBLISHED]: actions.getUnpublishedPost,
+    [POST_SINGLE]: actions.getSinglePost
   }
 };

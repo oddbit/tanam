@@ -1,47 +1,60 @@
 <template>
-  <div>
-    <v-list>
-      <v-list-tile
-        to="/"
-        ripple>
-        <v-list-tile-action><v-icon>dashboard</v-icon></v-list-tile-action>
-        <v-list-tile-title>Dashboard</v-list-tile-title>
-      </v-list-tile>
-    </v-list>
-
-    <v-list
-      subheader
-      v-for="mainList in mainLists"
-      :key="`mainList-${mainList.subheader}`">
-      <v-subheader>{{ mainList.subheader }}</v-subheader>
-      <v-list-tile
-        ripple
-        v-for="navDrawerItem in navDrawerLists[mainList.types]"
-        :key="`navDrawerItem-${navDrawerItem.title}`"
-        :to="navDrawerItem.link">
-        <v-list-tile-action><v-icon>{{ navDrawerItem.icon }}</v-icon></v-list-tile-action>
-        <v-list-tile-title>{{ navDrawerItem.title }}</v-list-tile-title>
-      </v-list-tile>
-    </v-list>
-  </div>
+  <Drawer>
+    <template slot="drawer">
+      <v-list
+        v-for="mainList in mainDrawerList"
+        :key="`mainList-${mainList.key}`">
+        <div v-if="!mainList.subheader">
+          <v-list-tile
+            :to="mainList.permalink"
+            ripple>
+            <v-list-tile-action><v-icon>{{ mainList.icon }}</v-icon></v-list-tile-action>
+            <v-list-tile-title>{{ mainList.name }}</v-list-tile-title>
+          </v-list-tile>
+        </div>
+        <div v-else>
+          <v-subheader>{{ mainList.subheader }}</v-subheader>
+          <div v-if="mainList.key === 'contentTypeList'">
+            <v-list-tile
+              v-for="list in contentTypes"
+              :key="`navDrawerItem-${list.meta.key}`"
+              :to="`${mainList.permalink}/${list.meta.key}`"
+              ripple>
+              <v-list-tile-action><v-icon>{{ list.meta.icon }}</v-icon></v-list-tile-action>
+              <v-list-tile-title>{{ list.meta.name }}</v-list-tile-title>
+            </v-list-tile>
+          </div>
+          <div v-else>
+            <v-list-tile
+              v-for="list in mainList.lists"
+              :key="`navDrawerItem-${list.key}`"
+              :to="`${mainList.permalink}${list.permalink}`"
+              ripple>
+              <v-list-tile-action><v-icon>{{ list.icon }}</v-icon></v-list-tile-action>
+              <v-list-tile-title>{{ list.name }}</v-list-tile-title>
+            </v-list-tile>
+          </div>
+        </div>
+      </v-list>
+    </template>
+  </Drawer>
 </template>
 
 <script>
-import { navDrawerLists } from '@/config/navDrawerLists';
+import { mapGetters } from 'vuex';
+import { CONTENT_TYPE_GET } from '@/store/types';
+import { mainDrawerList } from '@/config/drawer';
+import Drawer from './Drawer';
 
 export default {
+  components: { Drawer },
   data: () => ({
-    mainLists: [
-      {
-        subheader: 'TEMPLATE',
-        types: 'templates'
-      },
-      {
-        subheader: 'POST TYPE',
-        types: 'postTypes'
-      }
-    ],
-    navDrawerLists
-  })
+    mainDrawerList
+  }),
+  computed: {
+    ...mapGetters({
+      contentTypes: [CONTENT_TYPE_GET]
+    })
+  }
 };
 </script>

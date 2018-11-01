@@ -20,7 +20,6 @@ import {
   POST_ACTION_DELETE,
   POST_CONTENT_TYPE
 } from '@/store/types';
-import { blog, event } from '@/config/post';
 
 export default {
   computed: {
@@ -37,10 +36,6 @@ export default {
     },
     routerPush() {
       switch (this.contentType) {
-        case 'event':
-          return event.indexLink;
-        case 'blog':
-          return blog.indexLink;
         default:
           return '/templates/pages';
       }

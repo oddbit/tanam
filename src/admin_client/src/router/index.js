@@ -3,18 +3,12 @@ import Router from 'vue-router';
 import firebase from 'firebase/app';
 import { LAYOUT } from '@/store/types';
 import { store } from '@/store';
-import { event, blog } from '@/config/post';
 
 const routerOptions = [
   {
     path: '/',
-    name: 'home',
-    component: 'Home'
-  },
-  {
-    path: '/authenticate',
-    name: 'home',
-    component: 'Authenticate'
+    name: 'dashboard',
+    component: 'Dashboard'
   },
   {
     path: '/login',
@@ -23,70 +17,68 @@ const routerOptions = [
     meta: { layout: 'SimpleLayout' }
   },
   {
-    path: '/templates/images',
+    path: '/manage/images',
     name: 'templateImages',
-    component: 'Templates/Images'
+    component: 'Manage/Images'
   },
   {
-    path: '/templates/pages',
+    path: '/manage/pages',
     name: 'templatePages',
-    component: 'Templates/Pages/index'
+    component: 'Manage/Pages/index'
   },
   {
-    path: '/templates/pages/post',
-    name: 'page-posts',
-    component: 'Templates/Pages/Post/index',
+    path: '/manage/pages/post',
+    name: 'pagePosts',
+    component: 'Manage/Pages/Post/index',
     meta: { layout: 'SinglePostLayout' }
   },
   {
-    path: `/templates/pages/post/:slug`,
-    name: `page-posts-slug`,
-    component: 'Templates/Pages/Post/_slug',
+    path: `/manage/pages/post/:slug`,
+    name: `pagePostsSlug`,
+    component: 'Manage/Pages/Post/_slug',
     meta: { layout: 'SinglePostLayout' }
   },
   {
-    path: event.indexLink,
-    name: event.indexName,
-    component: 'Events/index'
-  },
-  {
-    path: event.createLink,
-    name: event.createName,
-    component: 'Events/Post/index',
-    meta: { layout: 'SinglePostLayout' }
-  },
-  {
-    path: `${event.createLink}/:slug`,
-    name: `${event.createName}-slug`,
-    component: 'Events/Post/_slug',
-    meta: { layout: 'SinglePostLayout' }
+    path: '/manage/content-type',
+    name: 'manageContentType',
+    component: 'Manage/ContentType'
   },
   {
     path: '/profile',
     name: 'profile',
-    component: 'Profile/MyProfile'
+    component: 'Profile/MyProfile',
+    meta: { layout: 'ProfileLayout' }
   },
   {
     path: '/profile/account-settings',
-    name: 'account-settings',
-    component: 'Profile/AccountSettings'
+    name: 'accountSettings',
+    component: 'Profile/AccountSettings',
+    meta: { layout: 'ProfileLayout' }
   },
   {
-    path: blog.indexLink,
-    name: blog.indexName,
-    component: 'Blogs/index'
+    path: '/content-type/:ctKey',
+    name: 'postList',
+    component: 'ContentType/index',
+    props: true
   },
   {
-    path: blog.createLink,
-    name: blog.createName,
-    component: 'Blogs/Post/index',
+    path: '/content-type/:ctKey/new',
+    name: 'postNew',
+    component: 'ContentType/Single',
+    props: true,
     meta: { layout: 'SinglePostLayout' }
   },
   {
-    path: `${blog.createLink}/:slug`,
-    name: `${blog.createName}-slug`,
-    component: 'Blogs/Post/_slug',
+    path: '/content-type/:ctKey/:postID',
+    name: 'postEdit',
+    component: 'ContentType/Single',
+    props: true,
     meta: { layout: 'SinglePostLayout' }
+  },
+  {
+    path: '/configure/theme',
+    name: 'configureTheme',
+    component: 'Configure/Theme'
   }
 ];
 
