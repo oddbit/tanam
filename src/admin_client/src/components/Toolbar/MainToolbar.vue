@@ -1,51 +1,46 @@
 <template>
-  <v-toolbar
-    :dense="$mq === 'desktop'"
-    app
-    fixed
-    clipped-left
-    clipped-right
-    color="primary"
+  <v-toolbar 
+    :dense="$mq === 'desktop'" 
+    app 
+    fixed 
+    clipped-left 
+    clipped-right 
+    color="primary" 
     dark>
-    <v-toolbar-side-icon
-      v-if="$mq === 'mobile'"
-      @click="handleClickMenu" />
-    <v-toolbar-title v-if="$mq === 'desktop'"><router-link
-      to="/"
-      class="toolbar-title">TANAM</router-link></v-toolbar-title>
+    <v-toolbar-side-icon v-if="$mq === 'mobile'" @click="handleClickMenu" />
+    <v-toolbar-title v-if="$mq === 'desktop'">
+      <router-link to="/" class="toolbar-title">TANAM</router-link>
+    </v-toolbar-title>
     <v-spacer />
-    <v-btn
-      v-if="isProfileRoute"
-      icon
-      to="/">
+    <v-btn v-if="isProfileRoute" icon to="/">
       <v-icon>dashboard</v-icon>
     </v-btn>
     <v-btn icon>
       <v-icon>notifications</v-icon>
     </v-btn>
     <v-menu 
-      class="ml-2 mr-4"
+      class="ml-2 mr-4" 
       left 
-      bottom
-      offset-y
-      nudge-top="-10"
-      max-width="85%"
+      bottom 
+      offset-y 
+      nudge-top="-10" 
+      max-width="85%" 
       light>
-      <span
-        slot="activator"
-        class="toolbar-avatar">
+      <span slot="activator" class="toolbar-avatar">
         <img src="@/assets/images/gravatar.jpg">
       </span>
       <v-layout class="menu-layout-wrapper" column>
         <v-layout class="pa-3">
-          <span class="img-wrapper"><img src="@/assets/images/gravatar.jpg"></span>
+          <span class="img-wrapper">
+            <img src="@/assets/images/gravatar.jpg">
+          </span>
           <div class="ml-3 text-xs-left user">
             <h4>{{ currentUser.displayName }}</h4>
             <p>{{ currentUser.email }}</p>
           </div>
         </v-layout>
         <v-layout class="px-2 py-1 grey lighten-3" justify-space-between>
-          <v-btn @click="$router.push('/profile')" color="primary">My Profile</v-btn>
+          <v-btn color="primary" @click="$router.push('/profile')">My Profile</v-btn>
           <v-btn @click="handleLogout">Logout</v-btn>
         </v-layout>
       </v-layout>

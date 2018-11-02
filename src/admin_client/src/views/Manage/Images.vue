@@ -26,13 +26,13 @@ import { mapState } from 'vuex';
 import { TEMPLATE_IMAGES } from '@/store/types';
 
 export default {
-  mounted() {
-    this.$store.dispatch(TEMPLATE_IMAGES);
-  },
   computed: {
     ...mapState({
       images: state => state.templates.images
     })
+  },
+  mounted() {
+    this.$store.dispatch(TEMPLATE_IMAGES);
   }
 };
 </script>

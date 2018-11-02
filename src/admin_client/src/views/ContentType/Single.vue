@@ -13,7 +13,7 @@
               v-if="field.type === 'list'" 
               :label="field.name"
               :value="postFields[field.key]"
-              @changeList="list($event, field.key)"/>
+              @changeList="list($event, field.key)" />
 
             <text-field 
               v-if="field.type === 'text'" 
@@ -165,7 +165,7 @@ export default {
           this.postFields = doc.data;
           this.$store.commit(POST_FIELD_TITLE, doc.data.title);
         })
-        .catch(() => console.log('error'));
+        .catch();
     }
   },
   methods: {

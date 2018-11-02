@@ -7,9 +7,11 @@
             <div class="logo-wrapper pa-1 mb-2">
               <img src="@/assets/images/tanam-circle.png">
             </div>
-            <h2 class="white--text head-title">Welcome to Tanam<span>CMS</span></h2>
+            <h2 class="white--text head-title">Welcome to Tanam
+              <span>CMS</span>
+            </h2>
           </div>
-          <div class="text-xs-center" id="firebaseui-container" />
+          <div id="firebaseui-container" class="text-xs-center" />
         </v-card>
       </v-flex>
     </v-layout>
@@ -37,9 +39,6 @@ const uiConfig = {
 };
 
 export default {
-  mounted() {
-    firebaseUI.start('#firebaseui-container', uiConfig);
-  },
   computed: {
     ...mapGetters({
       currentUser: CURRENT_USER
@@ -51,6 +50,9 @@ export default {
         this.$router.push('/authenticate');
       }
     }
+  },
+  mounted() {
+    firebaseUI.start('#firebaseui-container', uiConfig);
   }
 };
 </script>

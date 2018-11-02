@@ -12,22 +12,23 @@
           </span>
           <h2 class="mt-2">Ananda Widiprabawa</h2>
           <h4>@anandaprabawa</h4>
-          <v-btn
-            @click="handleLogout"
-            color="primary"
-            dark
-            class="mt-3">Logout</v-btn>
+          <v-btn 
+            color="primary" 
+            dark 
+            class="mt-3" 
+            @click="handleLogout">Logout</v-btn>
         </v-layout>
-
         <v-list subheader>
           <v-subheader>PROFILE</v-subheader>
-          <v-list-tile
-            to="/profile"
-            exact
-            ripple
-            active-class="primary--text"
+          <v-list-tile 
+            to="/profile" 
+            exact 
+            ripple 
+            active-class="primary--text" 
             @click="() => null">
-            <v-list-tile-action><v-icon>person</v-icon></v-list-tile-action>
+            <v-list-tile-action>
+              <v-icon>person</v-icon>
+            </v-list-tile-action>
             <v-list-tile-title>My Profile</v-list-tile-title>
           </v-list-tile>
           <v-list-tile
@@ -35,8 +36,11 @@
             exact
             ripple
             active-class="primary--text"
-            @click="() => null">
-            <v-list-tile-action><v-icon>settings</v-icon></v-list-tile-action>
+            @click="() => null"
+          >
+            <v-list-tile-action>
+              <v-icon>settings</v-icon>
+            </v-list-tile-action>
             <v-list-tile-title>Account Settings</v-list-tile-title>
           </v-list-tile>
         </v-list>

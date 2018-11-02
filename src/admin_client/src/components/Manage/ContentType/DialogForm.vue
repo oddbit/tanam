@@ -4,42 +4,46 @@
       slot="activator" 
       color="primary" 
       dark 
-      class="ma-0 mb-4"><v-icon left>create</v-icon>New Content Type</v-btn>
+      class="ma-0 mb-4">
+      <v-icon left>create</v-icon>New Content Type
+    </v-btn>
     <v-card>
       <v-card-title>
         <span class="headline">{{ formTitle }}</span>
       </v-card-title>
-
       <v-card-text>
         <v-container grid-list-lg>
           <v-form ref="contentTypeForm">
-            <v-layout wrap>
+            <v-layout wrap="">
               <v-flex xs12 sm6 md4>
-                <v-text-field 
+                <v-text-field
                   :rules="[v => !!v || 'Key is required', v => /^([a-zA-Z0-9])+$/.test(v) || 'Key cannot contain spaces']"
                   :disabled="readOnly(editedItem)"
-                  v-model="editedItem.key" 
-                  label="Key" 
-                  placeholder="Ex. event" 
-                  hint="Can't edit later" 
-                  persistent-hint />
+                  v-model="editedItem.key"
+                  label="Key"
+                  placeholder="Ex. event"
+                  hint="Can't edit later"
+                  persistent-hint
+                />
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field 
-                  v-model="editedItem.name" 
+                <v-text-field
+                  v-model="editedItem.name"
                   :rules="[v => !!v || 'Name is required']"
-                  label="Name" 
-                  placeholder="Ex. Event" 
+                  label="Name"
+                  placeholder="Ex. Event"
                   hint="Displayed in drawer menu"
-                  persistent-hint />
+                  persistent-hint
+                />
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field 
-                  v-model="editedItem.icon" 
-                  label="Icon" 
-                  placeholder="Ex. event" 
-                  hint="See icon list in <a href='https://material.io/tools/icons' target='_blank'>material icons</a>" 
-                  persistent-hint />
+                <v-text-field
+                  v-model="editedItem.icon"
+                  label="Icon"
+                  placeholder="Ex. event"
+                  hint="See icon list in <a href='https://material.io/tools/icons' target='_blank'>material icons</a>"
+                  persistent-hint
+                />
               </v-flex>
             </v-layout>
             <v-layout class="mt-3">
@@ -69,36 +73,39 @@
                     />
                   </v-flex>
                   <v-flex lg4>
-                    <v-text-field 
+                    <v-text-field
                       v-model="fieldsItem[index].key"
                       :rules="[v => !!v || 'Field key is required', v => /^([a-zA-Z0-9])+$/.test(v) || 'Field key cannot contain spaces']"
-                      :disabled="configureField(field).readOnly" 
+                      :disabled="configureField(field).readOnly"
                       :hint="configureField(field).fieldKeyHint"
-                      label="Field Key" 
-                      persistent-hint />
+                      label="Field Key"
+                      persistent-hint
+                    />
                   </v-flex>
                   <v-flex lg4>
-                    <v-text-field 
-                      v-model="fieldsItem[index].name" 
-                      :rules="[v => !!v || 'Field name is required']" 
-                      label="Field Name" />
+                    <v-text-field
+                      v-model="fieldsItem[index].name"
+                      :rules="[v => !!v || 'Field name is required']"
+                      label="Field Name"
+                    />
                   </v-flex>
                 </v-layout>
               </v-flex>
               <v-flex 
                 lg1 
                 d-flex 
-                align-center
+                align-center 
                 class="pa-0">
                 <v-tooltip top>
                   <v-btn
-                    class="primary white--text"
+                    v-if="fieldsItem[index].type == 'select' || fieldsItem[index].type == 'radio' || fieldsItem[index].type == 'checkbox'"
                     slot="activator"
+                    class="primary white--text"
                     fab
                     flat
                     small
-                    v-if="fieldsItem[index].type == 'select' || fieldsItem[index].type == 'radio' || fieldsItem[index].type == 'checkbox'"
-                    @click="manageItem(fieldsItem[index], index)">
+                    @click="manageItem(fieldsItem[index], index)"
+                  >
                     <v-icon>format_list_bulleted</v-icon>
                   </v-btn>
                   <span>Manage Item</span>
@@ -107,63 +114,52 @@
               <v-flex 
                 lg1 
                 d-flex 
-                align-center
+                align-center 
                 class="pa-0">
                 <v-tooltip top>
                   <v-btn
-                    slot="activator"
                     v-if="!configureField(field).disableRemove"
-                    flat 
-                    icon 
-                    small 
-                    color="error" 
-                    @click="removeField(index)"><v-icon>remove_circle</v-icon></v-btn>
-                    <span>Delete</span>
+                    slot="activator"
+                    flat
+                    icon
+                    small
+                    color="error"
+                    @click="removeField(index)"
+                  >
+                    <v-icon>remove_circle</v-icon>
+                  </v-btn>
+                  <span>Delete</span>
                 </v-tooltip>
               </v-flex>
             </v-layout>
           </v-form>
         </v-container>
       </v-card-text>
-
       <v-card-actions>
         <v-spacer />
         <v-btn color="blue darken-1" flat @click.native="$emit('close')">Cancel</v-btn>
         <v-btn color="blue darken-1" flat @click.native="$emit('save')">Save</v-btn>
       </v-card-actions>
     </v-card>
-
-     <v-dialog
-        v-model="dialogItem"
-        max-width="290">
-        <v-card>
-          <v-card-title class="headline">Manage Item</v-card-title>
-
-          <v-card-text>
-            <v-combobox
-              ref="itemField"
-              v-model="tmpItem.item"
-              hint="Enter to add item"
-              label="Item"
-              multiple 
-              chips
-            ></v-combobox>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-
-            <v-btn
-              color="green darken-1"
-              flat="flat"
-              @click="updateItem"
-            >
-              Save
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-
+    <v-dialog v-model="dialogItem" max-width="290">
+      <v-card>
+        <v-card-title class="headline">Manage Item</v-card-title>
+        <v-card-text>
+          <v-combobox
+            ref="itemField"
+            v-model="tmpItem.item"
+            hint="Enter to add item"
+            label="Item"
+            multiple
+            chips
+          />
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn color="green darken-1" flat="flat" @click="updateItem">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-dialog>
 </template>
 
@@ -218,18 +214,18 @@ export default {
     }
   },
   methods: {
-    updateItem () {
-      this.fieldsItem[this.tmpItem.index].item = this.tmpItem.item
-      this.dialogItem = false
+    updateItem() {
+      this.fieldsItem[this.tmpItem.index].item = this.tmpItem.item;
+      this.dialogItem = false;
     },
-    manageItem (item, index) {
+    manageItem(item, index) {
       this.tmpItem = {
         ...item,
         index: index
-      }
+      };
       this.dialogItem = true;
       this.$nextTick(() => {
-        this.$refs.itemField.focus()
+        this.$refs.itemField.focus();
       });
     },
     addMoreField() {

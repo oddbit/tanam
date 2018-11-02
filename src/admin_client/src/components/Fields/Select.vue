@@ -21,7 +21,9 @@ export default {
     },
     items: {
       type: Array,
-      default: function () { return ['item1'] }
+      default: function() {
+        return ['item1'];
+      }
     }
   },
   data: () => ({
@@ -29,16 +31,16 @@ export default {
   }),
   computed: {
     val: {
-      get () {
-        return this.value
+      get() {
+        return this.value;
       },
-      set (val) {
-        this.selected = val
+      set(val) {
+        this.selected = val;
       }
     }
   },
   watch: {
-    selected () {
+    selected() {
       this.$emit('changeSelected', this.selected);
     }
   }
