@@ -44,6 +44,11 @@
 
 <script>
 export default {
+  filters: {
+    toText(val) {
+      return val.replace(/([a-zA-Z])(?=[A-Z])/g, '$1 ').toUpperCase();
+    }
+  },
   props: {
     ctKey: {
       type: String,
@@ -53,11 +58,6 @@ export default {
   data: () => ({
     tabItems: ['published', 'unpublished'],
     tabsModel: 'published'
-  }),
-  filters: {
-    toText(val) {
-      return val.replace(/([a-zA-Z])(?=[A-Z])/g, '$1 ').toUpperCase();
-    }
-  }
+  })
 };
 </script>
