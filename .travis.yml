@@ -9,7 +9,7 @@ branches:
 before_script:
     - npm --prefix src/admin_client install
     - npm --prefix src/admin_client run build
-script: echo "npm test temporarily disabled"
+script: echo "npm test is temporarily disabled"
 deploy:
   provider: npm
   email: contact@oddbit.id
