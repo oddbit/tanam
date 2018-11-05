@@ -7,9 +7,11 @@
             <div class="logo-wrapper pa-1 mb-2">
               <img src="@/assets/images/tanam-circle.png">
             </div>
-            <h2 class="white--text head-title">Welcome to Tanam<span>CMS</span></h2>
+            <h2 class="white--text head-title">Welcome to Tanam
+              <span>CMS</span>
+            </h2>
           </div>
-          <div class="text-xs-center" id="firebaseui-container" />
+          <div id="firebaseui-container" class="text-xs-center" />
         </v-card>
       </v-flex>
     </v-layout>
@@ -19,7 +21,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { store } from '@/store';
-import { AUTO_LOGIN, CURRENT_USER } from '@/store/types';
+import { AUTO_LOGIN, CURRENT_USER, CONTENT_TYPE_GET } from '@/store/types';
 import firebase from 'firebase/app';
 import { firebaseUI } from '@/utils/firebase';
 
@@ -30,15 +32,13 @@ const uiConfig = {
   callbacks: {
     signInSuccessWithAuthResult: function(authResult) {
       store.dispatch(AUTO_LOGIN, authResult.user);
+      store.dispatch(CONTENT_TYPE_GET);
       return false;
     }
   }
 };
 
 export default {
-  mounted() {
-    firebaseUI.start('#firebaseui-container', uiConfig);
-  },
   computed: {
     ...mapGetters({
       currentUser: CURRENT_USER
@@ -50,6 +50,9 @@ export default {
         this.$router.push('/authenticate');
       }
     }
+  },
+  mounted() {
+    firebaseUI.start('#firebaseui-container', uiConfig);
   }
 };
 </script>

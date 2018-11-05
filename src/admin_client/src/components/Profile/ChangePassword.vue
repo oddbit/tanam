@@ -10,28 +10,28 @@
         
           <v-form>
             <v-text-field
-              name="currentPassword"
-              label="Current Password"
               v-model="currentPassword"
               :type="controlCurrent ? 'password' : 'text'"
               :append-icon="controlCurrent ? 'visibility_off' : 'visibility'"
               :append-icon-cb="() => (controlCurrent = !controlCurrent)"
+              name="currentPassword"
+              label="Current Password"
             />
             <v-text-field
-              name="newPassword"
-              label="New Password"
               v-model="newPassword"
               :type="controlNew ? 'password' : 'text'"
               :append-icon="controlNew ? 'visibility_off' : 'visibility'"
               :append-icon-cb="() => (controlNew = !controlNew)"
+              name="newPassword"
+              label="New Password"
             />
             <v-text-field
-              name="confirmPassword"
-              label="Confirm Password"
               v-model="confirmPassword"
               :type="controlConfirm ? 'password' : 'text'"
               :append-icon="controlConfirm ? 'visibility_off' : 'visibility'"
               :append-icon-cb="() => (controlConfirm = !controlConfirm)"
+              name="confirmPassword"
+              label="Confirm Password"
             />
           
             <v-layout>

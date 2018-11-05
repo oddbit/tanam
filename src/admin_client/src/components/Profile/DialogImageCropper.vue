@@ -1,18 +1,19 @@
 <template>
   <v-dialog 
     :value="dialog" 
-    @input="handleInputDialog" 
-    max-width="500px"
-    lazy
-    persistent>
+    max-width="500px" 
+    lazy 
+    persistent 
+    @input="handleInputDialog">
     <v-card>
       <div class="img-wrapper">
         <vue-cropper
-          ref='cropper'
+          ref="cropper"
           :view-mode="2"
           :src="image"
           :aspect-ratio="1/1"
-          :background="false" />
+          :background="false"
+        />
       </div>
       <v-card-actions class="btn-action-wrapper">
         <v-btn color="primary" @click="handleClickSave">Save</v-btn>

@@ -5,8 +5,10 @@ cache:
   - node_modules
 branches:
   only:
-    - develop
     - master
+before_script:
+    - npm --prefix src/admin_client install
+    - npm --prefix src/admin_client run build
 deploy:
   provider: npm
   email: contact@oddbit.id

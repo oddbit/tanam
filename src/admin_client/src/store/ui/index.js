@@ -1,20 +1,20 @@
-import { BTN_SUBMIT_SINGLE_POST, BTN_DELETE_SINGLE_POST } from '../types';
+import { TOGGLE_DRAWER, TOGGLE_DRAWER_POST } from '../types';
 import mutations from './mutations';
 import getters from './getters';
 
 const state = {
-  btnSubmitSinglePost: false,
-  btnDeleteSinglePost: false
+  status: false,
+  statusPost: true
 };
 
 export default {
   state,
   getters: {
-    [BTN_DELETE_SINGLE_POST]: getters.getBtnDeleteSinglePost,
-    [BTN_SUBMIT_SINGLE_POST]: getters.getBtnSubmitSinglePost
+    [TOGGLE_DRAWER]: getters.status,
+    [TOGGLE_DRAWER_POST]: getters.statusPost
   },
   mutations: {
-    [BTN_SUBMIT_SINGLE_POST]: mutations.setBtnSubmitSinglePost,
-    [BTN_DELETE_SINGLE_POST]: mutations.setBtnDeleteSinglePost
+    [TOGGLE_DRAWER]: mutations.toggleDrawer,
+    [TOGGLE_DRAWER_POST]: mutations.toggleDrawerPost
   }
 };

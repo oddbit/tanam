@@ -1,6 +1,7 @@
 import * as dust from 'dustjs-helpers';
 import * as site from './site';
 import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 import * as fs from 'fs';
 import * as content from './content';
 
@@ -16,6 +17,30 @@ dust.helpers.documents = (chunk, context, bodies, params) =>
     params.sortOrder || 'desc',
     parseInt(params.limit) || 10);
 
+
+/**
+ * This method is same as the template helper method `document` that allows web developer to fetch
+ * an arbitrary (published) document by its id. This can be used to create javascript pop-ups with
+ * document content, etc.
+ */
+export const tanamDocument = functions.https.onCall((data, context) => {
+  console.log(`[tanamDocument] data=${JSON.stringify(data)}`);
+  return content.getDocumentByPath(data.path);
+});
+
+/**
+ * This method is same as the template helper method `documents` that allows web developer to fetch
+ * arbitrary (published) documents based on critera. It is an API for making client side pagination
+ * to expand list results etc.
+ */
+export const tanamDocuments = functions.https.onCall((data, context) => {
+  console.log(`[tanamDocuments] data=${JSON.stringify(data)}`);
+  return content.getDocumentsInCollection(
+    data.collection,
+    data.orderBy || 'publishTime',
+    data.sortOrder || 'desc',
+    parseInt(data.limit) || 10);
+});
 
 /**
  * Renders a HTML page from a given Firestore document that contains Tanam content data.
