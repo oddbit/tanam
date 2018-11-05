@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 class="font-weight-light">{{label}}</h3>    
+    <h3 class="font-weight-light">{{ label }}</h3>    
     <v-checkbox
       v-for="(item, index) in items"
       :value="item"
@@ -20,11 +20,15 @@ export default {
     },
     value: {
       type: Array,
-      default: function () { return [] }      
+      default: function() {
+        return [];
+      }
     },
     items: {
       type: Array,
-      default: function () { return ['item1'] }
+      default: function() {
+        return ['item1'];
+      }
     }
   },
   data: () => ({
@@ -32,17 +36,17 @@ export default {
   }),
   computed: {
     val: {
-      get () {
-        return this.value
+      get() {
+        return this.value;
       },
-      set (value) {
-        this.selected = value
+      set(value) {
+        this.selected = value;
       }
     }
   },
   watch: {
     selected() {
-      this.$emit('changeCheckbox', this.selected)
+      this.$emit('changeCheckbox', this.selected);
     }
   }
 };

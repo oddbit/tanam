@@ -1,5 +1,5 @@
 import { firestore, storage } from '@/utils/firebase';
-import { POST_PUBLISHED, POST_DELETED, POST_UNPUBLISHED } from '../types';
+import { POST_PUBLISHED, POST_UNPUBLISHED } from '../types';
 import metadata from '@/helpers/metadata';
 
 const collectionRef = (collectionName, newPost = true, uid = null) => {
@@ -93,7 +93,7 @@ export const publishPost = (
   });
 };
 
-export const deletePost = ({ commit, state }, payload) => {
+export const deletePost = ({ state }, payload) => {
   let publishedPost = state.postsPublished;
 
   // Get object to delete

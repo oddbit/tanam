@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 class="font-weight-light">{{label}}</h3>
+    <h3 class="font-weight-light">{{ label }}</h3>
     <v-radio-group v-model="val">
       <v-radio
         v-for="(item, index) in items"
@@ -26,7 +26,7 @@ export default {
     },
     items: {
       type: Array,
-      default: []
+      default: () => []
     }
   },
   data: () => ({
@@ -34,11 +34,11 @@ export default {
   }),
   computed: {
     val: {
-      get () {
-        return this.value
+      get() {
+        return this.value;
       },
-      set (val) {
-        this.selected = val
+      set(val) {
+        this.selected = val;
       }
     }
   }

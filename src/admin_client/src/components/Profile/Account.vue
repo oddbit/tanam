@@ -6,11 +6,11 @@
       <v-layout>
         <v-flex>
           <v-form>
-            <v-text-field name="username" label="Username" v-model="username" />
+            <v-text-field v-model="username" name="username" label="Username" />
             <v-text-field 
+              :value="email" 
               name="email" 
               label="Email" 
-              :value="email" 
               disabled />
 
             <v-layout>

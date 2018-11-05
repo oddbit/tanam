@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <v-card>
@@ -26,8 +27,8 @@
                 </div>
               </v-flex>
               <v-flex xs12 md8>
-                <v-text-field name="firstName" label="First Name" v-model="firstName" />
-                <v-text-field name="lastName" label="Last Name" v-model="lastName" />
+                <v-text-field v-model="firstName" name="firstName" label="First Name" />
+                <v-text-field v-model="lastName" name="lastName" label="Last Name" />
               </v-flex>
             </v-layout>
           </div>
@@ -35,11 +36,11 @@
           <div>
             <v-layout>
               <v-flex xs12>
-                <v-text-field name="publicDisplay" label="Public Display Name" v-model="publicDisplay" />
+                <v-text-field v-model="publicDisplay" name="publicDisplay" label="Public Display Name" />
                 <v-text-field 
+                  v-model="about" 
                   name="about" 
-                  label="About Me" 
-                  v-model="about"
+                  label="About Me"
                   multi-line />
               </v-flex>
             </v-layout>

@@ -35,7 +35,7 @@
       </v-menu>
     </v-layout>
     <!-- Dialog Delete -->
-     <v-dialog
+    <v-dialog
       v-model="dialogDelete"
       max-width="290">
       <v-card>
@@ -47,7 +47,7 @@
           Delete "{{ contentTitle }}" ?
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn
             color="green darken-1"
             flat="flat"
@@ -75,24 +75,6 @@ export default {
   filters: {
     formatDate(timestamp) {
       return dateFormat(timestamp.toDate(), 'MMMM DD, YYYY - HH:mm');
-    }
-  },
-  methods: {
-    handleClickActionItem(name) {
-      if (name == 'delete') {
-        this.dialogDelete = true;
-      } else if (name == 'edit') {
-        this.$router.push({
-          name: 'postEdit',
-          params: { ctKey: this.ctKey, postID: this.postId }
-        });
-      }
-    },
-    deletePost() {
-      this.$store.dispatch(POST_DELETED, {
-        postId: this.postId,
-        ctKey: this.ctKey
-      });
     }
   },
   props: {
@@ -128,7 +110,25 @@ export default {
       { name: 'publish', text: 'Publish', icon: 'publish' },
       { name: 'delete', text: 'Delete', icon: 'delete' }
     ]
-  })
+  }),
+  methods: {
+    handleClickActionItem(name) {
+      if (name == 'delete') {
+        this.dialogDelete = true;
+      } else if (name == 'edit') {
+        this.$router.push({
+          name: 'postEdit',
+          params: { ctKey: this.ctKey, postID: this.postId }
+        });
+      }
+    },
+    deletePost() {
+      this.$store.dispatch(POST_DELETED, {
+        postId: this.postId,
+        ctKey: this.ctKey
+      });
+    }
+  }
 };
 </script>
 
