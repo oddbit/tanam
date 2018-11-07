@@ -43,12 +43,11 @@ export default {
     },
     value: {
       type: String,
-      default: null
+      default: new Date().getHours() + ':' + new Date().getMinutes()
     }
   },
   data() {
     return {
-      time: null,
       modal: false
     };
   },
@@ -58,7 +57,7 @@ export default {
         return this.value;
       },
       set(val) {
-        this.time = val;
+        this.value = val;
       }
     }
   },

@@ -37,11 +37,10 @@ export default {
     },
     value: {
       type: String,
-      default: null
+      default: new Date().toISOString().substr(0, 10)
     }
   },
   data: () => ({
-    date: null,
     modal: false
   }),
   computed: {
@@ -50,7 +49,7 @@ export default {
         return this.value;
       },
       set(val) {
-        this.date = val;
+        this.value = val;
       }
     }
   },
