@@ -43,21 +43,22 @@ export default {
     },
     value: {
       type: String,
-      default: new Date().getHours() + ':' + new Date().getMinutes()
+      default: null
     }
   },
   data() {
     return {
-      modal: false
+      modal: false,
+      time: ''
     };
   },
   computed: {
     modTime: {
       get() {
-        return this.value;
+        return this.value || this.time;
       },
       set(val) {
-        this.value = val;
+        this.time = val;
       }
     }
   },

@@ -37,19 +37,20 @@ export default {
     },
     value: {
       type: String,
-      default: new Date().toISOString().substr(0, 10)
+      default: null
     }
   },
   data: () => ({
-    modal: false
+    modal: false,
+    date: ''
   }),
   computed: {
     modDate: {
       get() {
-        return this.value;
+        return this.value || this.date;
       },
       set(val) {
-        this.value = val;
+        this.date = val;
       }
     }
   },
