@@ -27,10 +27,10 @@
               </v-tab>
             </v-tabs>
             <v-tabs-items v-model="tabsModel" class="mt-3 elevation-1">
-              <v-tab-item id="published">
+              <v-tab-item value="published">
                 <slot name="published" />
               </v-tab-item>
-              <v-tab-item id="unpublished">
+              <v-tab-item value="unpublished">
                 <slot name="unpublished" />
               </v-tab-item>
             </v-tabs-items>
