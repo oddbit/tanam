@@ -141,29 +141,18 @@
         <v-btn color="blue darken-1" flat @click.native="$emit('save')">Save</v-btn>
       </v-card-actions>
     </v-card>
-    <v-dialog v-model="dialogItem" max-width="290">
-      <v-card>
-        <v-card-title class="headline">Manage Item</v-card-title>
-        <v-card-text>
-          <v-combobox
-            ref="itemField"
-            v-model="tmpItem.item"
-            hint="Enter to add item"
-            label="Item"
-            multiple
-            chips
-          />
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="green darken-1" flat="flat" @click="updateItem">Save</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-dialog>
-</template>
+
+    <dialog-item 
+      :obj-item="tmpItem.item" 
+      :dialog="dialogManageItem" 
+      @closeDialogItem="closeDialogItem" 
+      @updateItem="updateItem($event)" />
+
+</v-dialog></template>
 
 <script>
+import DialogItem from '@/components/Manage/ContentType/DialogItem';
+
 import {
   CONTENT_TYPE_DIALOG,
   CONTENT_TYPE_EDITED_ITEM,
@@ -174,6 +163,9 @@ import {
 } from '@/store/types';
 
 export default {
+  components: {
+    DialogItem
+  },
   props: {
     editedIndex: {
       type: Number,
@@ -181,7 +173,7 @@ export default {
     }
   },
   data: () => ({
-    dialogItem: false,
+    dialogManageItem: false,
     tmpItem: {
       item: []
     }
@@ -214,19 +206,21 @@ export default {
     }
   },
   methods: {
-    updateItem() {
-      this.fieldsItem[this.tmpItem.index].item = this.tmpItem.item;
-      this.dialogItem = false;
+    closeDialogItem() {
+      this.dialogManageItem = false;
+      this.tmpItem = { item: [] };
+    },
+    updateItem(content) {
+      this.fieldsItem[this.tmpItem.index].item = content;
+      this.dialogManageItem = false;
+      this.tmpItem = { item: [] };
     },
     manageItem(item, index) {
       this.tmpItem = {
         ...item,
         index: index
       };
-      this.dialogItem = true;
-      this.$nextTick(() => {
-        this.$refs.itemField.focus();
-      });
+      this.dialogManageItem = true;
     },
     addMoreField() {
       this.$store.commit(CONTENT_TYPE_ADD_FIELD);
