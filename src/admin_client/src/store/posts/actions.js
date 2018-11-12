@@ -179,3 +179,12 @@ export const getSinglePost = (ctx, { ctKey, postID }) => {
     }
   });
 };
+
+export const updatePostToPublish = (ctx, payload) => {
+  firestore
+    .collection(`ct-${payload.ctKey}`)
+    .doc(payload.postId)
+    .update({
+      status: 'published'
+    });
+};

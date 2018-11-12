@@ -37,3 +37,4 @@ export const POST_UNPUBLISHED = 'post/status/unpublished';
 export const POST_DELETED = 'post/deleted';
 export const POST_SINGLE = 'post/singlePost';
 export const POST_PUBLISH = 'post/publish';
+export const POST_UPDATE_TO_PUBLISH = 'post/updatePostToPublish';

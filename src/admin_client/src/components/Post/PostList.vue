@@ -69,7 +69,7 @@
 
 <script>
 import dateFormat from 'date-fns/format';
-import { POST_DELETED } from '@/store/types';
+import { POST_DELETED, POST_UPDATE_TO_PUBLISH } from '@/store/types';
 
 export default {
   filters: {
@@ -119,6 +119,11 @@ export default {
         this.$router.push({
           name: 'postEdit',
           params: { ctKey: this.ctKey, postID: this.postId }
+        });
+      } else if (name == 'publish') {
+        this.$store.dispatch(POST_UPDATE_TO_PUBLISH, {
+          postId: this.postId,
+          ctKey: this.ctKey
         });
       }
     },
