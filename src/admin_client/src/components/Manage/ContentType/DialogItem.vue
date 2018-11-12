@@ -6,6 +6,8 @@
         <v-combobox
           ref="itemField"
           v-model="item"
+          deletable-chips
+          append-icon=""
           hint="Enter to add item"
           label="Item"
           multiple
