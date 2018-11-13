@@ -3,16 +3,17 @@ export const mainDrawerList = [
     key: 'dashboard',
     permalink: '/',
     name: 'Dashboard',
-    icon: 'dashboard'
+    icon: 'home',
+    class: 'dashboard'
   },
   {
     key: 'contentTypeList',
-    subheader: 'CONTENT TYPE',
+    subheader: 'Content Type',
     permalink: '/content-type'
   },
   {
     key: 'manage',
-    subheader: 'MANAGE',
+    subheader: 'Manage',
     permalink: '/manage',
     lists: [
       {
@@ -37,7 +38,7 @@ export const mainDrawerList = [
   },
   {
     key: 'configure',
-    subheader: 'CONFIGURE',
+    subheader: 'Configure',
     permalink: '/configure',
     lists: [
       {

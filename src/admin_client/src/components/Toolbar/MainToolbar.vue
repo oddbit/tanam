@@ -1,16 +1,11 @@
 <template>
   <v-toolbar 
-    :dense="$mq === 'desktop'" 
+    height="56"
     app 
     fixed 
-    clipped-left 
-    clipped-right 
     color="primary" 
     dark>
     <v-toolbar-side-icon v-if="$mq === 'mobile'" @click="handleClickMenu" />
-    <v-toolbar-title v-if="$mq === 'desktop'">
-      <router-link to="/" class="toolbar-title">TANAM</router-link>
-    </v-toolbar-title>
     <v-spacer />
     <v-btn v-if="isProfileRoute" icon to="/">
       <v-icon>dashboard</v-icon>

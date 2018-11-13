@@ -1,9 +1,11 @@
 <template>
   <v-navigation-drawer
     :value="drawerStatus"
-    :clipped="$mq === 'desktop'"
     fixed
     app
+    floating
+    width="260"
+    class="wrapper"
     @input="inputDrawer">
     <slot name="drawer" />
   </v-navigation-drawer>
@@ -34,3 +36,12 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.wrapper {
+  overflow-y: hidden !important;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+</style>
