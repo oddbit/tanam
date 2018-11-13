@@ -1,17 +1,10 @@
 <template>
-  <div>
-    <v-text-field
-      id="test"
-      :label="label"
-      type="number"
-      name="input-1"
-      min="0"
-      max="100"
-      step="0.1"
-      maxlength="3"
-      @input="$emit('input', $event)"
-    />
-  </div>
+  <v-text-field
+    :label="label"
+    :value="value"
+    type="number"
+    @input="$emit('input', $event)"
+  />
 </template>
 
 <script>

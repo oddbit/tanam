@@ -73,7 +73,11 @@
 
             <email-field v-if="field.type === 'email'" :label="field.name" @input="email($event, field.key)" />
 
-            <number v-if="field.type === 'number'" :label="field.name" @input="number($event, field.key)" />
+            <number 
+              v-if="field.type === 'number'" 
+              :label="field.name" 
+              :value="postFields[field.key]" 
+              @input="number($event, field.key)" />
 
             <textarea-field 
               v-if="field.type === 'textarea'" 
