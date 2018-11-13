@@ -1,7 +1,7 @@
 <template>
-  <v-dialog v-model="dialog" max-width="650px">
+  <v-dialog v-model="dialog" max-width="650px" scrollable>
     <v-btn 
-      slot="activator" 
+      slot="activator"
       color="primary" 
       dark 
       class="ma-0 mb-4">
