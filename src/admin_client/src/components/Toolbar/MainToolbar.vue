@@ -1,9 +1,10 @@
 <template>
   <v-toolbar 
-    height="56"
+    height="48"
     app 
     fixed 
     color="primary" 
+    class="elevation-2"
     dark>
     <v-toolbar-side-icon v-if="$mq === 'mobile'" @click="handleClickMenu" />
     <v-spacer />

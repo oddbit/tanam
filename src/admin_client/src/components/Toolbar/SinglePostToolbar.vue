@@ -1,11 +1,12 @@
 <template>
   <v-toolbar
-    :dense="$mq === 'desktop'"
+    height="48"
     app
     fixed
     clipped-left
     clipped-right
     color="primary"
+    class="elevation-2"
     dark>
     <v-btn icon @click="$router.back()"><v-icon>close</v-icon></v-btn>
     <v-spacer />

@@ -81,7 +81,7 @@ export default {
   display: flex;
   align-items: center;
   padding: 0 24px;
-  height: 56px;
+  height: 48px;
   background: #333;
   border-bottom: 1px solid #444;
   .title-logo {
