@@ -11,7 +11,8 @@ import {
   POST_FIELD_PERMALINK,
   POST_SINGLE,
   POST_FIELD_STATUS,
-  POST_FIELD_PERMALINK_EDIT
+  POST_FIELD_PERMALINK_EDIT,
+  POST_FIELD_TEMPLATE
 } from '@/store/types';
 import * as actions from './actions';
 import * as mutations from './mutations';
@@ -25,7 +26,8 @@ const state = {
   postsUnpublished: [],
   postTitle: '',
   postPermalink: '',
-  postStatus: null
+  postStatus: null,
+  postTemplate: null
 };
 
 export default {
@@ -39,7 +41,8 @@ export default {
     [POST_FIELD_TITLE]: mutations.setPostTitle,
     [POST_FIELD_PERMALINK]: mutations.setPostPermalink,
     [POST_FIELD_PERMALINK_EDIT]: mutations.setPostPermalinkEdit,
-    [POST_FIELD_STATUS]: mutations.setPostStatus
+    [POST_FIELD_STATUS]: mutations.setPostStatus,
+    [POST_FIELD_TEMPLATE]: mutations.setPostTemplate
   },
   getters: {
     [POST_IS_EDITED_MODE]: getters.getIsEditedMode,
@@ -49,7 +52,8 @@ export default {
     [POST_UNPUBLISHED]: getters.getPostsUnpublished,
     [POST_FIELD_TITLE]: getters.getPostTitle,
     [POST_FIELD_PERMALINK]: getters.getPostPermalink,
-    [POST_FIELD_STATUS]: getters.getPostStatus
+    [POST_FIELD_STATUS]: getters.getPostStatus,
+    [POST_FIELD_TEMPLATE]: getters.getPostTemplate
   },
   actions: {
     [POST_PUBLISH]: actions.publishPost,

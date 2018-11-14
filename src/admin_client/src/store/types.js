@@ -32,6 +32,7 @@ export const POST_FIELD_TITLE = 'post/field/title';
 export const POST_FIELD_PERMALINK = 'post/field/permalink';
 export const POST_FIELD_PERMALINK_EDIT = 'post/field/permalink/edit';
 export const POST_FIELD_STATUS = 'post/field/status';
+export const POST_FIELD_TEMPLATE = 'post/field/template';
 export const POST_PUBLISHED = 'post/status/published';
 export const POST_UNPUBLISHED = 'post/status/unpublished';
 export const POST_DELETED = 'post/deleted';

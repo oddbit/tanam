@@ -41,9 +41,12 @@ const handleProperties = (
   postPermalink,
   postStatus,
   postFields,
-  imgObj
+  imgObj,
+  postTemplate,
+  contentType
 ) => {
-  const path = metadata.generatePaths(postPermalink, null);
+  const pathName = postTemplate ? contentType : null;
+  const path = metadata.generatePaths(postPermalink, pathName);
 
   return {
     data: {
@@ -59,7 +62,7 @@ const handleProperties = (
       : null),
     updateTime: new Date(),
     status: isEditedMode ? postStatus : 'published',
-    template: null
+    template: postTemplate || null
   };
 };
 
@@ -81,7 +84,9 @@ export const publishPost = (
         state.postPermalink,
         state.postStatus,
         postFields,
-        imgObj
+        imgObj,
+        state.postTemplate,
+        contentType
       );
       await docRef.set(props, {
         merge: true

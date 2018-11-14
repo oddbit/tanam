@@ -35,3 +35,7 @@ export const setPostPermalinkEdit = (state, payload) => {
 export const setPostStatus = (state, payload) => {
   state.postStatus = payload;
 };
+
+export const setPostTemplate = (state, payload) => {
+  state.postTemplate = payload;
+};

@@ -102,7 +102,8 @@ import {
   POST_FIELD_PERMALINK,
   POST_FIELD_PERMALINK_EDIT,
   POST_FIELD_STATUS,
-  POST_SINGLE
+  POST_SINGLE,
+  POST_FIELD_TEMPLATE
 } from '@/store/types';
 
 export default {
@@ -166,11 +167,17 @@ export default {
         .then(doc => {
           this.$store.commit(POST_FIELD_STATUS, doc.status);
           this.$store.commit(POST_FIELD_PERMALINK_EDIT, doc.permalink);
+          this.$store.commit(POST_FIELD_TEMPLATE, doc.template);
           this.postFields = doc.data;
           this.$store.commit(POST_FIELD_TITLE, doc.data.title);
         })
         .catch();
     }
+  },
+  destroyed() {
+    this.$store.commit(POST_FIELD_STATUS, null);
+    this.$store.commit(POST_FIELD_PERMALINK_EDIT, null);
+    this.$store.commit(POST_FIELD_TEMPLATE, null);
   },
   methods: {
     async publishPost() {

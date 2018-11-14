@@ -21,6 +21,12 @@
         label="Permalink"
         disabled
         class="my-3" />
+      <v-text-field
+        v-model="postTemplate"
+        label="Template"
+        hint="Template name refer to dustJS view name. Ex: single_blog"
+        persistent-hint
+        class="my-3" />
     </div>
   </v-navigation-drawer>
 </template>
@@ -30,7 +36,8 @@ import {
   POST_IS_SHOW_DRAWER,
   POST_IS_EDITED_MODE,
   POST_FIELD_PERMALINK,
-  POST_FIELD_STATUS
+  POST_FIELD_STATUS,
+  POST_FIELD_TEMPLATE
 } from '@/store/types';
 
 export default {
@@ -43,6 +50,14 @@ export default {
     },
     postPermalink() {
       return this.$store.getters[POST_FIELD_PERMALINK];
+    },
+    postTemplate: {
+      get() {
+        return this.$store.getters[POST_FIELD_TEMPLATE];
+      },
+      set(val) {
+        this.$store.commit(POST_FIELD_TEMPLATE, val);
+      }
     },
     postStatus: {
       get() {
