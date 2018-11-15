@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <post-index :ct-key="ctKey" />
     <HeaderSection :title="ctKey | toText">
       <template slot="actions">
         <v-btn :to="{ name: 'postNew', params:{ctkey: ctkey} }" color="primary">
