@@ -12,7 +12,7 @@ import HeaderSection from '@/components/Shared/HeaderSection';
 export default {
   filters: {
     toText(val) {
-      return val.replace(/([a-zA-Z])(?=[A-Z])/g, '$1 ').toUpperCase();
+      return val.replace(/([a-zA-Z])(?=[A-Z])/g, '$1 ');
     }
   },
   components: {
