@@ -156,7 +156,7 @@ export default {
   methods: {
     publishPost(item) {
       this.$store.dispatch(POST_UPDATE_TO_PUBLISH, {
-        postId: this.postId,
+        postId: item.key,
         ctKey: this.ctKey
       });
     },
