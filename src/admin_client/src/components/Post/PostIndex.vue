@@ -2,7 +2,7 @@
   <HeaderSection :title="ctKey | toText">
     <template slot="actions">
       <v-btn :to="{ name: 'postNew', params:{ctKey: ctKey} }" color="primary">
-      <v-icon left>create</v-icon>New Post</v-btn>
+      <v-icon left>create</v-icon>Add New {{ ctKey | toText }}</v-btn>
     </template>
   </HeaderSection>
 </template>
