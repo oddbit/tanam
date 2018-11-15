@@ -1,7 +1,7 @@
 <template>
   <HeaderSection :title="ctKey | toText">
     <template slot="actions">
-      <v-btn :to="{ name: 'postNew', params:{ctkey: ctkey} }" color="primary">
+      <v-btn :to="{ name: 'postNew', params:{ctKey: ctKey} }" color="primary">
       <v-icon left>create</v-icon>New Post</v-btn>
     </template>
   </HeaderSection>
@@ -23,10 +23,6 @@ export default {
       type: String,
       default: 'key'
     }
-  },
-  data: () => ({
-    tabItems: ['published', 'unpublished'],
-    tabsModel: 'published'
-  })
+  }
 };
 </script>
