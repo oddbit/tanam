@@ -1,53 +1,22 @@
 <template>
-  <v-container fluid>
-    <v-slide-y-transition mode="out-in">
-      <div>
-        <v-layout justify-center class="my-4">
-          <v-flex xs12 md8>
-            <v-btn :to="{name: 'postNew', params: {link: `${ctKey}`}}" class="ma-0" color="white">
-              <v-icon left>create</v-icon>
-              Create {{ ctKey | toText }}
-            </v-btn>
-          </v-flex>
-        </v-layout>
-        <v-layout justify-center class="my-4">
-          <v-flex xs12 md8>
-            <v-tabs
-              v-model="tabsModel"
-              slider-color="primary"
-              class="elevation-1"
-            >
-              <v-tab
-                v-for="item in tabItems"
-                :key="item"
-                :href="`#${item}`"
-                ripple
-              >
-                {{ item }}
-              </v-tab>
-            </v-tabs>
-            <v-tabs-items v-model="tabsModel" class="mt-3 elevation-1">
-              <v-tab-item value="published">
-                <slot name="published" />
-              </v-tab-item>
-              <v-tab-item value="unpublished">
-                <slot name="unpublished" />
-              </v-tab-item>
-            </v-tabs-items>
-          </v-flex>
-        </v-layout>
-      </div>
-    </v-slide-y-transition>
-    <slot name="dialog-delete" />
-  </v-container>
+  <HeaderSection :title="ctKey | toText">
+    <template slot="actions">
+      <v-btn :to="{ name: 'postNew', params:{ctkey: ctkey} }" color="primary">
+      <v-icon left>create</v-icon>New Post</v-btn>
+    </template>
+  </HeaderSection>
 </template>
 
 <script>
+import HeaderSection from '@/components/Shared/HeaderSection';
 export default {
   filters: {
     toText(val) {
       return val.replace(/([a-zA-Z])(?=[A-Z])/g, '$1 ').toUpperCase();
     }
+  },
+  components: {
+    HeaderSection
   },
   props: {
     ctKey: {
