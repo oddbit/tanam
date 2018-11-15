@@ -3,7 +3,7 @@
     <slot slot="activator" name="openBtn" />
     <v-card class="pa-4 card-wrapper">
       <v-layout align-center justify-space-between class="mb-5">
-        <h2 class="title">{{ pageType }}</h2>
+        <h2 class="title">{{ pageTitle }}</h2>
         <div>
           <v-btn 
             :disabled="isSubmitting" 
