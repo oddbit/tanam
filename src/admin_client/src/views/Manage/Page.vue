@@ -16,8 +16,8 @@
 
 <script>
 import HeaderSection from '@/components/Shared/HeaderSection';
-import PageDialog from '@/components/Page/Dialog';
-import PageTable from '@/components/Page/Table';
+import PageDialog from '@/components/Manage/Page/Dialog';
+import PageTable from '@/components/Manage/Page/Table';
 
 export default {
   components: {
