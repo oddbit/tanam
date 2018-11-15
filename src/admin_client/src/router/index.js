@@ -22,20 +22,20 @@ const routerOptions = [
     component: 'Manage/Images'
   },
   {
-    path: '/manage/pages',
-    name: 'templatePages',
-    component: 'Manage/Pages/index'
+    path: '/manage/page',
+    name: 'templatePage',
+    component: 'Manage/Page/index'
   },
   {
-    path: '/manage/pages/post',
-    name: 'pagePosts',
-    component: 'Manage/Pages/Post/index',
+    path: '/manage/page/post',
+    name: 'pagePost',
+    component: 'Manage/Page/Post/index',
     meta: { layout: 'SinglePostLayout' }
   },
   {
-    path: `/manage/pages/post/:slug`,
+    path: `/manage/page/post/:slug`,
     name: `pagePostsSlug`,
-    component: 'Manage/Pages/Post/_slug',
+    component: 'Manage/Page/Post/_slug',
     meta: { layout: 'SinglePostLayout' }
   },
   {

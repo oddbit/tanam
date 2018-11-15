@@ -6,6 +6,7 @@ import layout from './layout';
 import ui from './ui';
 import manageContentType from './manage/contentType';
 import posts from './posts';
+import managePage from './manage/page';
 
 Vue.use(Vuex);
 
@@ -16,6 +17,7 @@ export const store = new Vuex.Store({
     layout,
     ui,
     manageContentType,
-    posts
+    posts,
+    managePage
   }
 });

@@ -23,9 +23,9 @@ export const mainDrawerList = [
         icon: 'insert_drive_file'
       },
       {
-        key: 'pages',
-        name: 'Pages',
-        permalink: '/pages',
+        key: 'page',
+        name: 'Page',
+        permalink: '/page',
         icon: 'pages'
       },
       {
