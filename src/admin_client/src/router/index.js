@@ -23,20 +23,8 @@ const routerOptions = [
   },
   {
     path: '/manage/page',
-    name: 'templatePage',
-    component: 'Manage/Page/index'
-  },
-  {
-    path: '/manage/page/post',
-    name: 'pagePost',
-    component: 'Manage/Page/Post/index',
-    meta: { layout: 'SinglePostLayout' }
-  },
-  {
-    path: `/manage/page/post/:slug`,
-    name: `pagePostsSlug`,
-    component: 'Manage/Page/Post/_slug',
-    meta: { layout: 'SinglePostLayout' }
+    name: 'managePage',
+    component: 'Manage/Page'
   },
   {
     path: '/manage/content-type',
