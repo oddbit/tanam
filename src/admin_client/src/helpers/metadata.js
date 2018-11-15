@@ -12,7 +12,7 @@ const generateFeaturedImageName = title => {
 
 const generatePaths = (title, template) =>
   template === 'page'
-    ? [`/${title}.html`]
+    ? [`${title}.html`]
     : [`/${template}/${title}.html`, `/${template}`];
 
 export default { generatePermalink, generateFeaturedImageName, generatePaths };

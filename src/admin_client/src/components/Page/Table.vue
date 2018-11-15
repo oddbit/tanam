@@ -12,16 +12,24 @@
       <td>{{ props.item.template }}</td>
       <td>{{ props.item.permalink }}</td>
       <td class="text-xs-right">
-        <v-btn 
-          icon 
-          flat 
-          small 
-          class="ma-0"><v-icon small color="#555">edit</v-icon></v-btn>
-        <v-btn 
-          icon 
-          flat 
-          small 
-          class="ma-0"><v-icon small color="#555">delete</v-icon></v-btn>
+        <dialog-edit :item="props.item" page-title="Edit Page" page-type="edit">
+          <template slot="openBtn">
+            <v-btn 
+              icon 
+              flat 
+              small 
+              class="ma-0"><v-icon small color="#555">edit</v-icon></v-btn>
+          </template>
+        </dialog-edit>
+        <dialog-delete :title="props.item.data.title" :id="props.item.key">
+          <template slot="openBtn">
+            <v-btn 
+              icon 
+              flat 
+              small 
+              class="ma-0"><v-icon small color="#555">delete</v-icon></v-btn>
+          </template>
+        </dialog-delete>
       </td>
     </template>
   </v-data-table>
@@ -29,8 +37,11 @@
 
 <script>
 import { PAGE_FIELDS, PAGE_GET } from '@/store/types';
+import DialogEdit from './Dialog';
+import DialogDelete from './DialogDelete';
 
 export default {
+  components: { DialogEdit, DialogDelete },
   data: () => ({
     headers: [
       {

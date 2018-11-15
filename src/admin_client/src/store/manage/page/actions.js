@@ -16,7 +16,6 @@ const handleProperties = ({
   status = 'published'
 }) => {
   const path = metadata.generatePaths(pathName || templateName, 'page');
-  console.log(status);
 
   return {
     data: {
@@ -24,23 +23,30 @@ const handleProperties = ({
       description
     },
     path: path,
-    permalink: `/${pathName}`,
+    permalink: pathName,
     ...(!isEditedMode
       ? {
           publishTime: new Date()
         }
       : null),
     updateTime: new Date(),
-    status: status ? 'published' : 'unpublished',
+    status: status,
     template: templateName
   };
 };
 
-export const createPage = (ctx, payload) => {
+export const savePage = (ctx, payload) => {
   return new Promise(async (resolve, reject) => {
+    let docRef;
+    if (payload.isEditedMode) {
+      docRef = collectionRef('pages', false, payload.id);
+    } else {
+      docRef = collectionRef('pages');
+    }
+
     try {
       const pageProps = handleProperties(payload);
-      await collectionRef('pages').set(pageProps, { merge: true });
+      await docRef.set(pageProps, { merge: true });
       resolve();
     } catch (error) {
       reject(error);
@@ -62,14 +68,14 @@ export const getPages = ({ commit }) => {
   });
 };
 
-export const getPage = (ctx, payload) => {
+export const deletePage = (ctx, payload) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const snapshot = await firestore
+      await firestore
         .collection('pages')
         .doc(payload)
-        .get();
-      resolve(snapshot.data());
+        .delete();
+      resolve();
     } catch (error) {
       reject(error);
     }
