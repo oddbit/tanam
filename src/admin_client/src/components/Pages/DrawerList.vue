@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="pa-3" v-if="editMode">
+    <div v-if="editMode" class="pa-3">
       <v-switch
         :label="postStatus ? 'Published' : 'Unpublished'"
         v-model="postStatus"
@@ -12,9 +12,9 @@
       <DrawerSettings>
         <template slot="title">URL Path</template>
         <v-text-field
+          v-model="postPermalink"
           hint="e.g. / or /about or /contact"
-          persistent-hint
-          v-model="postPermalink" />
+          persistent-hint />
       </DrawerSettings>
     </v-list>
   </div>
