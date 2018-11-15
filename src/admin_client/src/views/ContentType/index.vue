@@ -39,20 +39,44 @@
             </v-icon>
             <v-icon
               small
-              @click="deleteItem(props.item)">
+              @click="openDeleteDialog(props.item)">
               delete
             </v-icon>
           </td>
         </template>
-        <v-alert 
-          slot="no-results" 
-          :value="true" 
-          color="error" 
-          icon="warning">
-          Your search for "{{ search }}" found no results.
-        </v-alert>
+        Your search for "{{ search }}" found no results.
       </v-data-table>
     </v-card>
+    <!-- Dialog Delete -->
+    <v-dialog
+      v-model="dialogDelete"
+      max-width="290">
+      <v-card>
+        <v-card-title class="title">
+          Warning!
+        </v-card-title>
+        <v-card-text>
+          This process will delete post permanently<br>
+          Delete "{{ tmpData.data.title }}" ?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="dialogDelete = false">
+            Cancel
+          </v-btn>
+          <v-btn
+            color="red darken-1"
+            flat="flat"
+            @click="deletePost">
+            Delete
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Delete -->
   </v-container>
 </template>
 
@@ -60,7 +84,7 @@
 import dateFormat from 'date-fns/format';
 import PostIndex from '@/components/Post/PostIndex';
 import PostList from '@/components/Post/PostList';
-import { POST_PUBLISHED, POST_UNPUBLISHED } from '@/store/types';
+import { POST_PUBLISHED, POST_UNPUBLISHED, POST_DELETED } from '@/store/types';
 
 export default {
   components: {
@@ -83,6 +107,12 @@ export default {
   },
   data: () => ({
     search: '',
+    dialogDelete: false,
+    tmpData: {
+      data: {
+        title: ''
+      }
+    },
     status: 'published',
     headers: [
       { text: 'ID', value: 'key', sortable: false },
@@ -116,6 +146,25 @@ export default {
   mounted() {
     this.$store.dispatch(POST_PUBLISHED, this.ctKey);
     this.$store.dispatch(POST_UNPUBLISHED, this.ctKey);
+  },
+  methods: {
+    deletePost() {
+      this.$store.dispatch(POST_DELETED, {
+        postId: this.tmpData.key,
+        ctKey: this.ctKey
+      });
+      this.dialogDelete = false;
+    },
+    openDeleteDialog(item) {
+      this.dialogDelete = true;
+      this.tmpData = item;
+    },
+    editItem(item) {
+      this.$router.push({
+        name: 'postEdit',
+        params: { ctKey: this.ctKey, postID: item.key }
+      });
+    }
   }
 };
 </script>
