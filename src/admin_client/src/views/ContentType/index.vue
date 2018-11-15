@@ -1,5 +1,11 @@
 <template>
   <v-container>
+    <HeaderSection :title="ctKey | toText">
+      <template slot="actions">
+        <v-btn :to="{ name: 'postNew', params:{ctkey: ctkey} }" color="primary">
+        <v-icon left>create</v-icon>New Post</v-btn>
+      </template>
+    </HeaderSection>
     <v-card>
       <v-card-actions>
         <v-layout row>
@@ -84,12 +90,14 @@
 import dateFormat from 'date-fns/format';
 import PostIndex from '@/components/Post/PostIndex';
 import PostList from '@/components/Post/PostList';
+import HeaderSection from '@/components/Shared/HeaderSection';
 import { POST_PUBLISHED, POST_UNPUBLISHED, POST_DELETED } from '@/store/types';
 
 export default {
   components: {
     PostIndex,
-    PostList
+    PostList,
+    HeaderSection
   },
   filters: {
     formatDate(timestamp) {
@@ -118,7 +126,7 @@ export default {
       { text: 'ID', value: 'key', sortable: false },
       { text: 'Title Post', value: 'data.title' },
       { text: 'Date', value: 'updateTime' },
-      { text: 'Actions', sortable: false }
+      { text: 'Actions', sortable: false, width: '50px' }
     ]
   }),
   computed: {
