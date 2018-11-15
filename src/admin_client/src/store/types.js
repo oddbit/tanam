@@ -25,8 +25,9 @@ export const CONTENT_TYPE_DIALOG_FORM = 'contentType/dialogForm';
 export const CONTENT_TYPE_SET_CONTENT_TYPE = 'contentType/set';
 export const CONTENT_TYPE_REMOVE_CONTENT_TYPE = 'contentType/remove';
 
-export const PAGE_CREATE = 'page/create';
+export const PAGE_SAVE = 'page/save';
 export const PAGE_GET = 'page/get';
+export const PAGE_DELETE = 'page/delete';
 export const PAGE_FIELDS = 'page/fields';
 
 export const POST_IS_EDITED_MODE = 'post/isEditedMode';

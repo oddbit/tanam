@@ -1,4 +1,4 @@
-import { PAGE_CREATE, PAGE_GET, PAGE_FIELDS } from '@/store/types';
+import { PAGE_SAVE, PAGE_GET, PAGE_FIELDS, PAGE_DELETE } from '@/store/types';
 import * as actions from './actions';
 import * as mutations from './mutations';
 import * as getters from './getters';
@@ -16,7 +16,8 @@ export default {
     [PAGE_FIELDS]: mutations.setFields
   },
   actions: {
-    [PAGE_CREATE]: actions.createPage,
-    [PAGE_GET]: actions.getPages
+    [PAGE_SAVE]: actions.savePage,
+    [PAGE_GET]: actions.getPages,
+    [PAGE_DELETE]: actions.deletePage
   }
 };
