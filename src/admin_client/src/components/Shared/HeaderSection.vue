@@ -2,7 +2,8 @@
   <v-layout 
     row 
     justify-space-between 
-    align-center>
+    align-center
+    class="mt-3 mb-2">
     <div class="wrapper">
       <h1>{{ title }}</h1>
       <p>{{ description }}</p>
