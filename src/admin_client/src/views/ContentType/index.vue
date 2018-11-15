@@ -5,7 +5,7 @@
         <v-layout row>
           <v-flex xs2 mr-4>
             <v-select
-              :items="['published', 'unpublished']"
+              :items="['Published', 'Unpublished']"
               v-model="status"
               label="Status"
               single-line
@@ -113,7 +113,7 @@ export default {
         title: ''
       }
     },
-    status: 'published',
+    status: 'Published',
     headers: [
       { text: 'ID', value: 'key', sortable: false },
       { text: 'Title Post', value: 'data.title' },
@@ -129,7 +129,7 @@ export default {
       return this.$store.getters[POST_UNPUBLISHED];
     },
     filteredItems() {
-      if (this.status == 'published') {
+      if (this.status == 'Published') {
         return this.published;
       } else {
         return this.unpublished;
@@ -138,7 +138,7 @@ export default {
   },
   watch: {
     ctKey() {
-      this.status = 'published';
+      this.status = 'Published';
       this.$store.dispatch(POST_PUBLISHED, this.ctKey);
       this.$store.dispatch(POST_UNPUBLISHED, this.ctKey);
     }
