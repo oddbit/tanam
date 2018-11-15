@@ -1,39 +1,52 @@
 <template>
-  <div class="wrapper">
-    <v-layout>
-      <v-layout column align-start justify-center>
-        <router-link :to="{name: 'postEdit', params: {ctKey: ctKey, postID: postId}}"><h3>{{ contentTitle }}</h3></router-link>
-        <p class="mb-0">{{ time | formatDate }}</p>
-      </v-layout>
-      <v-spacer />
-      <v-menu offset-y left min-width="150">
-        <v-btn slot="activator" icon class="btn-more">
-          <v-icon>more_vert</v-icon>
-        </v-btn>
-        <v-list>
-          <div v-if="status == 'unpublished'">
-            <v-list-tile 
-              v-for="item in listActionUnpublished"
-              :key="item.name"
-              ripple
-              @click="handleClickActionItem(item.name)">
-              <v-icon class="action-icon">{{ item.icon }}</v-icon>
-              <v-list-tile-title>{{ item.text }}</v-list-tile-title>
-            </v-list-tile>
-          </div>
-          <div v-if="status == 'published'">
-            <v-list-tile 
-              v-for="item in listAction"
-              :key="item.name"
-              ripple
-              @click="handleClickActionItem(item.name)">
-              <v-icon class="action-icon">{{ item.icon }}</v-icon>
-              <v-list-tile-title>{{ item.text }}</v-list-tile-title>
-            </v-list-tile>
-          </div>
-        </v-list>
-      </v-menu>
-    </v-layout>
+  <div>
+    <v-card>
+      <v-card-actions>
+        <v-layout row>
+          <v-flex xs2 mr-4>
+            <v-select
+              :items="['Published', 'Unpublished']"
+              v-model="status"
+              label="Status"
+              single-line
+              hide-details />
+          </v-flex>
+          <v-flex xs3>
+            <v-text-field
+              v-model="search"
+              append-icon="search"
+              label="Search"
+              single-line
+              hide-details
+            />
+          </v-flex>
+        </v-layout>
+      </v-card-actions>
+      <v-data-table
+        :headers="headers"
+        :items="filteredItems"
+        :search="search">
+        <template slot="items" slot-scope="props">
+          <td>{{ props.item.key }}</td>
+          <td>{{ props.item.data.title }}</td>
+          <td>{{ props.item.updateTime | formatDate }}</td>
+          <td>
+            <v-icon
+              small
+              class="mr-2"
+              @click="editItem(props.item)">
+              edit
+            </v-icon>
+            <v-icon
+              small
+              @click="openDeleteDialog(props.item)">
+              delete
+            </v-icon>
+          </td>
+        </template>
+        Your search for "{{ search }}" found no results.
+      </v-data-table>
+    </v-card>
     <!-- Dialog Delete -->
     <v-dialog
       v-model="dialogDelete"
@@ -44,7 +57,7 @@
         </v-card-title>
         <v-card-text>
           This process will delete post permanently<br>
-          Delete "{{ contentTitle }}" ?
+          Delete "{{ tmpData.data.title }}" ?
         </v-card-text>
         <v-card-actions>
           <v-spacer />
@@ -69,109 +82,83 @@
 
 <script>
 import dateFormat from 'date-fns/format';
-import { POST_DELETED, POST_UPDATE_TO_PUBLISH } from '@/store/types';
+import { POST_PUBLISHED, POST_UNPUBLISHED, POST_DELETED } from '@/store/types';
 
 export default {
   filters: {
     formatDate(timestamp) {
       return dateFormat(timestamp.toDate(), 'MMMM DD, YYYY - HH:mm');
+    },
+    toText(val) {
+      return val.replace(/([a-zA-Z])(?=[A-Z])/g, '$1 ').toUpperCase();
     }
   },
   props: {
     ctKey: {
       type: String,
-      default: ''
-    },
-    postId: {
-      type: String,
-      default: ''
-    },
-    contentTitle: {
-      type: String,
-      default: 'Title'
-    },
-    time: {
-      type: Object,
-      default: () => {}
-    },
-    status: {
-      type: String,
-      default: 'unpublished'
+      default: 'name'
     }
   },
   data: () => ({
+    search: '',
     dialogDelete: false,
-    listAction: [
-      { name: 'edit', text: 'Edit', icon: 'edit' },
-      { name: 'delete', text: 'Delete', icon: 'delete' }
-    ],
-    listActionUnpublished: [
-      { name: 'edit', text: 'Edit', icon: 'edit' },
-      { name: 'publish', text: 'Publish', icon: 'publish' },
-      { name: 'delete', text: 'Delete', icon: 'delete' }
-    ]
-  }),
-  methods: {
-    handleClickActionItem(name) {
-      if (name == 'delete') {
-        this.dialogDelete = true;
-      } else if (name == 'edit') {
-        this.$router.push({
-          name: 'postEdit',
-          params: { ctKey: this.ctKey, postID: this.postId }
-        });
-      } else if (name == 'publish') {
-        this.$store.dispatch(POST_UPDATE_TO_PUBLISH, {
-          postId: this.postId,
-          ctKey: this.ctKey
-        });
+    tmpData: {
+      data: {
+        title: ''
       }
     },
+    status: 'Published',
+    headers: [
+      { text: 'ID', value: 'key', sortable: false },
+      { text: 'Title Post', value: 'data.title' },
+      { text: 'Date', value: 'updateTime' },
+      { text: 'Actions', sortable: false, width: '50px' }
+    ]
+  }),
+  computed: {
+    published() {
+      return this.$store.getters[POST_PUBLISHED];
+    },
+    unpublished() {
+      return this.$store.getters[POST_UNPUBLISHED];
+    },
+    filteredItems() {
+      if (this.status == 'Published') {
+        return this.published;
+      } else {
+        return this.unpublished;
+      }
+    }
+  },
+  watch: {
+    ctKey() {
+      this.status = 'Published';
+      this.$store.dispatch(POST_PUBLISHED, this.ctKey);
+      this.$store.dispatch(POST_UNPUBLISHED, this.ctKey);
+    }
+  },
+  mounted() {
+    this.$store.dispatch(POST_PUBLISHED, this.ctKey);
+    this.$store.dispatch(POST_UNPUBLISHED, this.ctKey);
+  },
+  methods: {
     deletePost() {
       this.$store.dispatch(POST_DELETED, {
-        postId: this.postId,
+        postId: this.tmpData.key,
         ctKey: this.ctKey
+      });
+      this.dialogDelete = false;
+    },
+    openDeleteDialog(item) {
+      this.dialogDelete = true;
+      this.tmpData = item;
+    },
+    editItem(item) {
+      this.$router.push({
+        name: 'postEdit',
+        params: { ctKey: this.ctKey, postID: item.key }
       });
     }
   }
 };
 </script>
-
-
-<style lang="scss" scoped>
-.wrapper {
-  background: #fff;
-  padding: 16px 0 16px 16px;
-
-  .img-wrapper {
-    width: 60px;
-    height: 60px;
-
-    img {
-      max-width: 100%;
-      object-fit: cover;
-    }
-  }
-
-  a {
-    text-decoration: none;
-    text-align: left;
-
-    :hover {
-      color: #555;
-    }
-  }
-
-  h3 {
-    color: #333;
-  }
-
-  p {
-    color: #777;
-  }
-}
-
-.action-icon {
-  margin-right: 8px;
-}
-</style>
