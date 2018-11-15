@@ -33,6 +33,7 @@ export default {
     font-weight: 600;
     font-size: 2rem;
     color: #444;
+    text-transform: capitalize;
   }
   p {
     color: #555;
