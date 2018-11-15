@@ -38,6 +38,13 @@
               edit
             </v-icon>
             <v-icon
+              v-if="status == 'Unpublished'"
+              small
+              class="mr-2"
+              @click="publishPost(props.item)">
+              cloud_upload
+            </v-icon>
+            <v-icon
               small
               @click="openDeleteDialog(props.item)">
               delete
@@ -82,7 +89,12 @@
 
 <script>
 import dateFormat from 'date-fns/format';
-import { POST_PUBLISHED, POST_UNPUBLISHED, POST_DELETED } from '@/store/types';
+import {
+  POST_PUBLISHED,
+  POST_UNPUBLISHED,
+  POST_DELETED,
+  POST_UPDATE_TO_PUBLISH
+} from '@/store/types';
 
 export default {
   filters: {
@@ -112,7 +124,7 @@ export default {
       { text: 'ID', value: 'key', sortable: false },
       { text: 'Title Post', value: 'data.title' },
       { text: 'Date', value: 'updateTime' },
-      { text: 'Actions', sortable: false, width: '50px' }
+      { text: 'Actions', sortable: false, width: '140px' }
     ]
   }),
   computed: {
@@ -142,6 +154,12 @@ export default {
     this.$store.dispatch(POST_UNPUBLISHED, this.ctKey);
   },
   methods: {
+    publishPost(item) {
+      this.$store.dispatch(POST_UPDATE_TO_PUBLISH, {
+        postId: this.postId,
+        ctKey: this.ctKey
+      });
+    },
     deletePost() {
       this.$store.dispatch(POST_DELETED, {
         postId: this.tmpData.key,
