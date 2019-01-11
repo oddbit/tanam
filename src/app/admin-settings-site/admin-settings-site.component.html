@@ -1,0 +1,15 @@
+<h2>Site settings</h2>
+<div *ngIf="isLoading">Loading domain settings ...</div>
+<div class="settings-section setting-domain" *ngIf="!isLoading">
+  <form [formGroup]="settingsForm">
+    <mat-form-field>
+      <input matInput placeholder="Title of the site" (change)="saveChanges()" formControlName="title">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select formControlName="theme" placeholder="Theme" (selectionChange)="saveChanges()">
+        <mat-option *ngFor="let theme of themes | async" value="{{theme.id}}">{{theme.title}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>

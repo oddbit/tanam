@@ -1,0 +1,28 @@
+<h1>{{(contentType$ | async)?.title}}</h1>
+<h2>Here is some interesting info about the type</h2>
+<ul>
+  <li>Content type slug: {{(contentType$ | async)?.slug || 0 }}</li>
+  <li>Number of total entries: {{(contentType$ | async)?.numEntries.total || 0 }}</li>
+  <li>Number of published entries: {{(contentType$ | async)?.numEntries.published || 0 }}</li>
+  <li>Number of unpublished entries: {{(contentType$ | async)?.numEntries.unpublished || 0}}</li>
+  <li>Number of drafts: {{(contentType$ | async)?.numEntries.draft || 0 }}</li>
+</ul>
+<button mat-raised-button color="primary" (click)="editContentType()">Edit content type</button>
+<hr />
+<h1>Here are all your entries</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Created</th>
+      <th>URL</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tr *ngFor="let contentEntry of contentTypeEntries$ | async">
+    <td>{{ contentEntry.title }}</td>
+    <td>{{ contentEntry.updateTime.toDate() | date:'medium' }}</td>
+    <td>{{ contentEntry.url }}</td>
+    <td>{{ contentEntry.status }}</td>
+  </tr>
+</table>
