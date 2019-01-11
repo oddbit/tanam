@@ -1,3 +1,5 @@
 src/
-examples/
-dist/test/
+doc/
+README*
+.travis.yml
+.gitignore
