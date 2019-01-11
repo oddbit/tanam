@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { ContentType, ContentTypeEntry } from '../app.definitions';
+import { ContentTypeEntry } from '../app.definitions';
 import { Observable } from 'rxjs';
+import { ContentType } from '@angular/http/src/enums';
 
 @Component({
   selector: 'app-content-type-details',
@@ -33,7 +34,7 @@ export class ContentTypeDetailsComponent implements OnInit {
   ngOnInit() {
   }
 
-  exitDetails() {
+  navigateToContentTypeOverview() {
     this.router.navigateByUrl(`/admin/content/${this.contentTypeId}`);
   }
 }

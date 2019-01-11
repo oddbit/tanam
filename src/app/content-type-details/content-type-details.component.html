@@ -1,9 +1,9 @@
 <h1>{{(contentType$ | async)?.title}}</h1>
 <h2>Here is the full information on type</h2>
 
-<button mat-raised-button color="primary" (click)="exitDetails()">Close details</button>
+<button mat-raised-button color="primary" (click)="navigateToContentTypeOverview()">Close details</button>
 
-<hr/>
+<hr />
 <h1>Data field types in this content type</h1>
 <div *ngFor="let contentField of contentTypeFields$ | async">
   <ul>
