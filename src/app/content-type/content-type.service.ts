@@ -1,6 +1,8 @@
+import * as firebase from 'firebase/app';
 import { Injectable } from '@angular/core';
-import { AngularFirestore, DocumentSnapshot, QueryDocumentSnapshot } from '@angular/fire/firestore';
+import { AngularFirestore, QueryDocumentSnapshot, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
+import { FirebaseApp } from '@angular/fire';
 
 export type ContentTypeFieldFormElements = 'text-line' | 'text-area' | 'number' | 'datepicker' | 'slide-toggle';
 export interface ContentTypeField {
@@ -15,6 +17,8 @@ export interface ContentType {
   slug: string;
   fields: ContentTypeField[];
   numEntries: { [key: string]: number };
+  updatedAt: Date | firebase.firestore.FieldValue;
+  createdAt: Date | firebase.firestore.FieldValue;
 }
 
 @Injectable({
@@ -22,7 +26,29 @@ export interface ContentType {
 })
 export class ContentTypeService {
 
-  constructor(private readonly firestore: AngularFirestore) { }
+  constructor(
+    private readonly firestore: AngularFirestore,
+    private readonly fbApp: FirebaseApp,
+  ) { }
+
+  async createContentEntry(contentTypeId: string) {
+    const contentTypeDocument = this.firestore.collection('tanam-content').doc(contentTypeId);
+    return this.fbApp.firestore()
+      .runTransaction<AngularFirestoreDocument>(async (trx) => {
+        const doc = await trx.get(contentTypeDocument.ref);
+        if (!doc.exists) {
+          trx.set(contentTypeDocument.ref, {
+            title: contentTypeId,
+            slug: contentTypeId,
+            fields: [],
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          } as ContentType);
+        }
+
+        return contentTypeDocument;
+      });
+  }
 
   getContentTypes() {
     return this.firestore
