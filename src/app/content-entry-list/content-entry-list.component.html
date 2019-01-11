@@ -1,16 +1,35 @@
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Created</th>
-      <th>URL</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tr *ngFor="let entry of entries$ | async">
-    <td><a routerLink="/admin/content/{{ contentTypeId }}/edit/{{ entry.id }}">{{ entry.title }}</a></td>
-    <td>{{ entry.updatedAt.toDate() | date:'medium' }}</td>
-    <td>{{ entry.url }}</td>
-    <td>{{ entry.status }}</td>
-  </tr>
-</table>
+<div>
+  <div *ngIf="isLoadingResults">
+    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+  </div>
+
+  <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <!-- Position Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="created">
+      <mat-header-cell *matHeaderCellDef>
+        Created
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.createdAt.toDate() | date:'medium' }}</mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="title">
+      <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>

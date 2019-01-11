@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ContentEntryService, ContentEntry } from '../content-entry/content-entry.service';
 import { Observable } from 'rxjs';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-content-entry-list',
@@ -12,6 +13,8 @@ export class ContentEntryListComponent implements OnInit {
   @Input() contentTypeId: string;
 
   entries$: Observable<ContentEntry[]>;
+  dataSource = new MatTableDataSource<ContentEntry>();
+  displayedColumns: string[] = ['id', 'created', 'status', 'title'];
 
   constructor(private readonly ctes: ContentEntryService) { }
 
@@ -22,6 +25,10 @@ export class ContentEntryListComponent implements OnInit {
         field: 'updateTime',
         sortOrder: 'desc',
       },
+    });
+
+    this.entries$.subscribe(entries => {
+      this.dataSource.data = entries;
     });
   }
 }

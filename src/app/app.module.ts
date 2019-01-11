@@ -31,6 +31,8 @@ import {
   MatRadioModule,
   MatSelectModule,
   MatCardModule,
+  MatTableModule,
+  MatProgressSpinnerModule,
 } from '@angular/material';
 import { ContentTypeListComponent } from './content-type-list/content-type-list.component';
 
@@ -76,6 +78,8 @@ import { ContentTypeListComponent } from './content-type-list/content-type-list.
     MatRadioModule,
     MatSelectModule,
     MatCardModule,
+    MatTableModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     AppConfigService,
