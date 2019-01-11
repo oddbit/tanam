@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ContentTypeEntry } from '../app.definitions';
 import { ContentTypeService, ContentType } from '../content-type.service';
+import { ContentTypeEntryService, ContentTypeEntry } from '../content-type-entry.service';
 
 @Component({
   selector: 'app-content-type',
@@ -20,14 +20,17 @@ export class ContentTypeComponent implements OnInit {
     readonly firestore: AngularFirestore,
     readonly route: ActivatedRoute,
     readonly cts: ContentTypeService,
+    readonly ctes: ContentTypeEntryService,
   ) {
     this.contentTypeId = route.snapshot.paramMap.get('type');
     this.contentType$ = cts.getContentType(this.contentTypeId);
-
-    this.contentTypeEntries$ = firestore
-      .collection('tanam-content').doc(this.contentTypeId)
-      .collection<ContentTypeEntry>('entries', ref => ref.orderBy('updateTime').limit(20))
-      .valueChanges();
+    this.contentTypeEntries$ = ctes.getContentTypeFields(this.contentTypeId, {
+      limit: 20,
+      orderBy: {
+        field: 'updateTime',
+        sortOrder: 'desc',
+      },
+    });
   }
 
   ngOnInit() {
