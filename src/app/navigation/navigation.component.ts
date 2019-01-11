@@ -3,7 +3,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { ContentTypeService } from '../content-type.service';
+import { ContentTypeService } from '../content-type/content-type.service';
 
 @Component({
   selector: 'app-navigation',

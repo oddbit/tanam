@@ -26,9 +26,9 @@ import { SettingsSiteComponent } from './settings-site/settings-site.component';
 import { AngularFireModule, FirebaseOptionsToken } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
-import { ContentTypeComponent } from './content-type/content-type.component';
 import { ContentTypeDetailsComponent } from './content-type-details/content-type-details.component';
 import { AppConfigService } from './app-config.service';
+import { ContentTypeOverviewComponent } from './content-type-overview/content-type.-overviewcomponent';
 
 @NgModule({
   declarations: [
@@ -39,7 +39,7 @@ import { AppConfigService } from './app-config.service';
     NavigationComponent,
     SettingsDomainComponent,
     SettingsSiteComponent,
-    ContentTypeComponent,
+    ContentTypeOverviewComponent,
     ContentTypeDetailsComponent,
   ],
   imports: [

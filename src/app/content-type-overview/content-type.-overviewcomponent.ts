@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ContentTypeService, ContentType } from '../content-type.service';
+import { ContentTypeService, ContentType } from '../content-type/content-type.service';
 import { ContentTypeEntryService, ContentTypeEntry } from '../content-type-entry.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { ContentTypeEntryService, ContentTypeEntry } from '../content-type-entry
   templateUrl: './content-type.component.html',
   styleUrls: ['./content-type.component.scss']
 })
-export class ContentTypeComponent implements OnInit {
+export class ContentTypeOverviewComponent implements OnInit {
   readonly contentTypeId;
   contentType$: Observable<ContentType>;
   contentTypeEntries$: Observable<ContentTypeEntry[]>;

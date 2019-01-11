@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { ContentTypeService } from '../content-type.service';
+import { ContentTypeService } from '../content-type/content-type.service';
 import { ContentTypeFieldService } from '../content-type-field.service';
 
 @Component({
