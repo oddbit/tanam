@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ContentTypeEntryService, ContentTypeEntry } from '../content-type-entry.service';
+import { ContentTypeEntryService, ContentTypeEntry } from '../content-type-entry/content-type-entry.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -17,7 +17,7 @@ export class ContentTypeEntryListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.entries$ = this.ctes.getContentTypeFields(this.contentTypeId, {
+    this.entries$ = this.ctes.getContentTypeEntries(this.contentTypeId, {
       limit: this.limit,
       orderBy: {
         field: 'updateTime',
