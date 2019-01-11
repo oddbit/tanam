@@ -13,8 +13,8 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { ContentTypeDetailsComponent } from './content-type-details/content-type-details.component';
 import { AppConfigService } from './app-config.service';
 import { ContentTypeOverviewComponent } from './content-type-overview/content-type-overview.component';
-import { ContentTypeEntryListComponent } from './content-type-entry-list/content-type-entry-list.component';
-import { ContentTypeEntryEditComponent } from './content-type-entry-edit/content-type-entry-edit.component';
+import { ContentEntryListComponent } from './content-entry-list/content-entry-list.component';
+import { ContentEntryEditComponent } from './content-entry-edit/content-entry-edit.component';
 import { SettingsDomainComponent } from './settings-domain/settings-domain.component';
 import { SettingsSiteComponent } from './settings-site/settings-site.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -43,8 +43,8 @@ import {
     SettingsSiteComponent,
     ContentTypeOverviewComponent,
     ContentTypeDetailsComponent,
-    ContentTypeEntryListComponent,
-    ContentTypeEntryEditComponent,
+    ContentEntryListComponent,
+    ContentEntryEditComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'tanam' }),

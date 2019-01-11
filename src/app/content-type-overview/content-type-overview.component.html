@@ -11,4 +11,4 @@
 <button mat-raised-button color="primary" (click)="createNewEntry()">Create new {{(contentType$ | async)?.title}}</button>
 <hr />
 <h1>Here are all your entries</h1>
-<app-content-type-entry-list [contentTypeId]="contentTypeId"></app-content-type-entry-list>
+<app-content-entry-list [contentTypeId]="contentTypeId"></app-content-entry-list>

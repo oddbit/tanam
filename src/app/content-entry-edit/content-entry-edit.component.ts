@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ContentTypeEntryService, ContentTypeEntry } from '../content-type-entry/content-type-entry.service';
+import { ContentEntryService, ContentEntry } from '../content-entry/content-entry.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, combineLatest } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
@@ -7,11 +7,11 @@ import { environment } from 'src/environments/environment';
 import { ContentTypeService, ContentType } from '../content-type/content-type.service';
 
 @Component({
-  selector: 'app-content-type-entry-edit',
-  templateUrl: './content-type-entry-edit.component.html',
-  styleUrls: ['./content-type-entry-edit.component.scss']
+  selector: 'app-content-entry-edit',
+  templateUrl: './content-entry-edit.component.html',
+  styleUrls: ['./content-entry-edit.component.scss']
 })
-export class ContentTypeEntryEditComponent implements OnInit {
+export class ContentEntryEditComponent implements OnInit {
   readonly contentTypeId: string;
   readonly entryId: string;
   readonly isDevelopment = !environment.production;
@@ -19,14 +19,14 @@ export class ContentTypeEntryEditComponent implements OnInit {
   readonly dataForm: FormGroup;
 
   contentType: ContentType;
-  entry: ContentTypeEntry;
+  entry: ContentEntry;
   isFormFieldDataLoaded = false;
 
 
   constructor(
     private readonly router: Router,
     private readonly formBuilder: FormBuilder,
-    private readonly ctes: ContentTypeEntryService,
+    private readonly ctes: ContentEntryService,
     private readonly cts: ContentTypeService,
     readonly route: ActivatedRoute,
   ) {
@@ -42,7 +42,7 @@ export class ContentTypeEntryEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    const entry$ = this.ctes.getContentTypeEntry(this.contentTypeId, this.entryId);
+    const entry$ = this.ctes.getContentEntry(this.contentTypeId, this.entryId);
     const contentType$ = this.cts.getContentType(this.contentTypeId);
 
     combineLatest(entry$, contentType$)
@@ -73,6 +73,6 @@ export class ContentTypeEntryEditComponent implements OnInit {
 
   saveEntry() {
     const formData = this.entryForm.value;
-    console.log(`[ContentTypeEntryEditComponent:saveEntry] ${JSON.stringify(formData)}`);
+    console.log(`[ContentEntryEditComponent:saveEntry] ${JSON.stringify(formData)}`);
   }
 }

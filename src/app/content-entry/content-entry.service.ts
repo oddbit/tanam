@@ -3,14 +3,14 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference, QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 
-export type ContentTypeEntryStatus = 'published' | 'unpublished';
+export type ContentEntryStatus = 'published' | 'unpublished';
 
-export interface ContentTypeEntry {
+export interface ContentEntry {
   id?: string;
   title: string;
   slug: string;
   revision: number;
-  status: ContentTypeEntryStatus;
+  status: ContentEntryStatus;
   tags: string[];
   publishTime?: Date | firebase.firestore.FieldValue;
   updatedAt: Date | firebase.firestore.FieldValue;
@@ -29,15 +29,15 @@ export interface ContentTypeQueryOptions {
 @Injectable({
   providedIn: 'root'
 })
-export class ContentTypeEntryService {
+export class ContentEntryService {
 
   constructor(private readonly firestore: AngularFirestore) { }
 
-  async createContentTypeEntry(contentTypeId: string) {
+  async createContentEntry(contentTypeId: string) {
     const entryId = this.firestore.createId();
     const docRef = this.firestore
       .collection('tanam-content').doc(contentTypeId)
-      .collection<ContentTypeEntry>('entries').doc(entryId);
+      .collection<ContentEntry>('entries').doc(entryId);
 
     await docRef.set({
       data: {},
@@ -48,15 +48,15 @@ export class ContentTypeEntryService {
       status: 'unpublished',
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    } as ContentTypeEntry);
+    } as ContentEntry);
 
     return docRef;
   }
 
-  saveContentTypeEntry(contentTypeId: string, entry: ContentTypeEntry) {
+  saveContentEntry(contentTypeId: string, entry: ContentEntry) {
     const docRef = this.firestore
       .collection('tanam-content').doc(contentTypeId)
-      .collection<ContentTypeEntry>('entries').doc(entry.id);
+      .collection<ContentEntry>('entries').doc(entry.id);
 
     entry.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
     entry.revision += 1;
@@ -64,10 +64,10 @@ export class ContentTypeEntryService {
     return docRef.set(entry);
   }
 
-  getContentTypeEntry(contentTypeId: string, entryId: string) {
+  getContentEntry(contentTypeId: string, entryId: string) {
     return this.firestore
       .collection('tanam-content').doc(contentTypeId)
-      .collection('entries').doc<ContentTypeEntry>(entryId)
+      .collection('entries').doc<ContentEntry>(entryId)
       .snapshotChanges()
       .pipe(map(action => {
         return this.mergeDataWithId(action.payload);
@@ -75,10 +75,10 @@ export class ContentTypeEntryService {
   }
 
   getContentTypeEntries(contentTypeId: string, queryOpts?: ContentTypeQueryOptions) {
-    console.log(`[ContentTypeEntryService:getContentTypeFields] ${contentTypeId}: ${JSON.stringify(queryOpts)}`);
+    console.log(`[ContentEntryService:getContentTypeFields] ${contentTypeId}: ${JSON.stringify(queryOpts)}`);
     return this.firestore
       .collection('tanam-content').doc(contentTypeId)
-      .collection<ContentTypeEntry>('entries', ref => this.applyQueryOpts(ref, queryOpts))
+      .collection<ContentEntry>('entries', ref => this.applyQueryOpts(ref, queryOpts))
       .snapshotChanges()
       .pipe(map(actions => {
         return actions.map(action => {
@@ -100,9 +100,9 @@ export class ContentTypeEntryService {
   }
 
 
-  private mergeDataWithId(doc: QueryDocumentSnapshot<ContentTypeEntry>) {
+  private mergeDataWithId(doc: QueryDocumentSnapshot<ContentEntry>) {
     const data = doc.data();
     const id = doc.id;
-    return { id, ...data } as ContentTypeEntry;
+    return { id, ...data } as ContentEntry;
   }
 }
