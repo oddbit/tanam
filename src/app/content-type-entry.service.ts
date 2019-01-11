@@ -23,6 +23,7 @@ export class ContentTypeEntryService {
   constructor(private readonly firestore: AngularFirestore) { }
 
   getContentTypeFields(contentTypeId: string, queryOpts?: ContentTypeQueryOptions) {
+    console.log(`[ContentTypeEntryService:getContentTypeFields] ${contentTypeId}: ${JSON.stringify(queryOpts)}`);
     return this.firestore
       .collection('tanam-content').doc(contentTypeId)
       .collection<ContentTypeEntry>('entries', ref => this.applyQueryOpts(ref, queryOpts))

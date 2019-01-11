@@ -10,19 +10,4 @@
 <button mat-raised-button color="primary" (click)="navigateToContentTypeDetails()">Edit content type</button>
 <hr />
 <h1>Here are all your entries</h1>
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Created</th>
-      <th>URL</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tr *ngFor="let contentEntry of contentTypeEntries$ | async">
-    <td>{{ contentEntry.title }}</td>
-    <td>{{ contentEntry.updateTime.toDate() | date:'medium' }}</td>
-    <td>{{ contentEntry.url }}</td>
-    <td>{{ contentEntry.status }}</td>
-  </tr>
-</table>
+<app-content-type-entry-list [contentTypeId]="contentTypeId"></app-content-type-entry-list>
