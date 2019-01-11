@@ -10,7 +10,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { AngularFireModule, FirebaseOptionsToken } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
-import { ContentTypeDetailsComponent } from './content-type-details/content-type-details.component';
+import { ContentTypeEditComponent } from './content-type-edit/content-type-edit.component';
 import { AppConfigService } from './app-config.service';
 import { ContentTypeOverviewComponent } from './content-type-overview/content-type-overview.component';
 import { ContentEntryListComponent } from './content-entry-list/content-entry-list.component';
@@ -44,7 +44,7 @@ import { ContentTypeListComponent } from './content-type-list/content-type-list.
     SettingsDomainComponent,
     SettingsSiteComponent,
     ContentTypeOverviewComponent,
-    ContentTypeDetailsComponent,
+    ContentTypeEditComponent,
     ContentEntryListComponent,
     ContentEntryEditComponent,
     ContentTypeListComponent,

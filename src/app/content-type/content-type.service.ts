@@ -16,6 +16,7 @@ export interface ContentType {
   title: string;
   slug: string;
   description?: string;
+  icon: string;
   fields: ContentTypeField[];
   numEntries: { [key: string]: number };
   updatedAt: Date | firebase.firestore.FieldValue;
@@ -41,6 +42,7 @@ export class ContentTypeService {
           trx.set(contentTypeDocument.ref, {
             title: contentTypeId,
             slug: contentTypeId,
+            icon: 'cloud',
             fields: [],
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),

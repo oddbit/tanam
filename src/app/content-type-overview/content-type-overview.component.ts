@@ -29,11 +29,11 @@ export class ContentTypeOverviewComponent implements OnInit {
   }
 
   navigateToContentTypeDetails() {
-    this.router.navigateByUrl(`/admin/content/${this.contentTypeId}/details`);
+    this.router.navigateByUrl(`/admin/content/type/${this.contentTypeId}/edit`);
   }
 
   async createNewEntry() {
     const doc = await this.ctes.createContentEntry(this.contentTypeId);
-    this.router.navigateByUrl(`/admin/content/${this.contentTypeId}/edit/${doc.ref.id}`);
+    this.router.navigateByUrl(`/admin/content/entry/${this.contentTypeId}/${doc.ref.id}/edit`);
   }
 }

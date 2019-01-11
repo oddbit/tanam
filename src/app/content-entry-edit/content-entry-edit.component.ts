@@ -28,7 +28,7 @@ export class ContentEntryEditComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly ctes: ContentEntryService,
     private readonly cts: ContentTypeService,
-    readonly route: ActivatedRoute,
+    private readonly route: ActivatedRoute,
   ) {
     this.contentTypeId = route.snapshot.paramMap.get('typeId');
     this.entryId = route.snapshot.paramMap.get('entryId');

@@ -1,0 +1,45 @@
+<form [formGroup]="contentTypeForm">
+  <mat-form-field>
+    <input matInput placeholder="Title" formControlName="title">
+  </mat-form-field>
+  <br /><br />
+  <mat-form-field>
+    <input matInput placeholder="Slug" formControlName="slug">
+  </mat-form-field>
+  <br /><br />
+  <mat-form-field>
+    <input matInput placeholder="Icon" formControlName="icon">
+  </mat-form-field>
+  <br /><br />
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+      cdkAutosizeMinRows="3">
+        </textarea>
+  </mat-form-field>
+
+  <br /><br />
+  <h3>Content type fields</h3>
+  <div formArrayName="fields">
+    <div *ngFor="let field of fieldForms.controls; let i=index" [formGroupName]="i">
+      <mat-form-field class="xs">
+        <input matInput placeholder="Key" formControlName="key">
+      </mat-form-field>
+
+      <mat-form-field class="xs">
+        <input matInput placeholder="Title" formControlName="title">
+      </mat-form-field>
+
+      <mat-form-field class="sm">
+        <input matInput placeholder="Type" formControlName="type">
+      </mat-form-field>
+
+      <button mat-raised-button color="warn" (click)="deleteField()">Delete</button>
+    </div>
+  </div>
+  <button mat-raised-button color="primary" (click)="addField()">Add Field</button>
+
+  <hr /><br /><br />
+  <button mat-raised-button color="warning" (click)="cancelEditing()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="saveEntry()" [disabled]="contentTypeForm.pristine">Save</button>
+</form>
