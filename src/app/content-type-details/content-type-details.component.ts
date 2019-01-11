@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { ContentTypeEntry } from '../app.definitions';
 import { Observable } from 'rxjs';
 import { ContentType } from '@angular/http/src/enums';
+import { ContentTypeService } from '../content-type.service';
 
 @Component({
   selector: 'app-content-type-details',
@@ -19,11 +20,10 @@ export class ContentTypeDetailsComponent implements OnInit {
     private readonly router: Router,
     readonly firestore: AngularFirestore,
     readonly route: ActivatedRoute,
+    readonly cts: ContentTypeService,
   ) {
     this.contentTypeId = route.snapshot.paramMap.get('type');
-    this.contentType$ = firestore
-      .collection('tanam-content').doc<ContentType>(this.contentTypeId)
-      .valueChanges();
+    this.contentType$ = cts.getContentType(this.contentTypeId);
 
     this.contentTypeFields$ = firestore
       .collection('tanam-content').doc(this.contentTypeId)
