@@ -28,7 +28,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { ContentTypeDetailsComponent } from './content-type-details/content-type-details.component';
 import { AppConfigService } from './app-config.service';
-import { ContentTypeOverviewComponent } from './content-type-overview/content-type.-overviewcomponent';
+import { ContentTypeOverviewComponent } from './content-type-overview/content-type-overview.component';
 import { ContentTypeEntryListComponent } from './content-type-entry-list/content-type-entry-list.component';
 
 @NgModule({
