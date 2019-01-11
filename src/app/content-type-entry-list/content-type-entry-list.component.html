@@ -1,0 +1,16 @@
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Created</th>
+      <th>URL</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tr *ngFor="let entry of entries$ | async">
+    <td>{{ entry.title }}</td>
+    <td>{{ entry.updateTime.toDate() | date:'medium' }}</td>
+    <td>{{ entry.url }}</td>
+    <td>{{ entry.status }}</td>
+  </tr>
+</table>

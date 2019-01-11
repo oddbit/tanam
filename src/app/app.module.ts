@@ -29,6 +29,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { ContentTypeDetailsComponent } from './content-type-details/content-type-details.component';
 import { AppConfigService } from './app-config.service';
 import { ContentTypeOverviewComponent } from './content-type-overview/content-type.-overviewcomponent';
+import { ContentTypeEntryListComponent } from './content-type-entry-list/content-type-entry-list.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { ContentTypeOverviewComponent } from './content-type-overview/content-ty
     SettingsSiteComponent,
     ContentTypeOverviewComponent,
     ContentTypeDetailsComponent,
+    ContentTypeEntryListComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'tanam' }),
