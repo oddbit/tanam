@@ -5,6 +5,7 @@ import { ContentTypeEntry } from '../app.definitions';
 import { Observable } from 'rxjs';
 import { ContentType } from '@angular/http/src/enums';
 import { ContentTypeService } from '../content-type.service';
+import { ContentTypeFieldService } from '../content-type-field.service';
 
 @Component({
   selector: 'app-content-type-details',
@@ -21,14 +22,11 @@ export class ContentTypeDetailsComponent implements OnInit {
     readonly firestore: AngularFirestore,
     readonly route: ActivatedRoute,
     readonly cts: ContentTypeService,
+    readonly ctfs: ContentTypeFieldService,
   ) {
     this.contentTypeId = route.snapshot.paramMap.get('type');
     this.contentType$ = cts.getContentType(this.contentTypeId);
-
-    this.contentTypeFields$ = firestore
-      .collection('tanam-content').doc(this.contentTypeId)
-      .collection<ContentTypeEntry>('fields', ref => ref.orderBy('order', 'asc'))
-      .valueChanges();
+    this.contentTypeFields$ = ctfs.getContentTypeFields(this.contentTypeId);
   }
 
   ngOnInit() {
