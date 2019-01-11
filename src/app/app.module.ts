@@ -1,13 +1,24 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
+import { AngularFireModule, FirebaseOptionsToken } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { ContentTypeDetailsComponent } from './content-type-details/content-type-details.component';
+import { AppConfigService } from './app-config.service';
+import { ContentTypeOverviewComponent } from './content-type-overview/content-type-overview.component';
+import { ContentTypeEntryListComponent } from './content-type-entry-list/content-type-entry-list.component';
+import { ContentTypeEntryEditComponent } from './content-type-entry-edit/content-type-entry-edit.component';
+import { SettingsDomainComponent } from './settings-domain/settings-domain.component';
+import { SettingsSiteComponent } from './settings-site/settings-site.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
   MatIconModule,
@@ -20,25 +31,14 @@ import {
   MatRadioModule,
   MatSelectModule,
 } from '@angular/material';
-import { ReactiveFormsModule } from '@angular/forms';
-import { SettingsDomainComponent } from './settings-domain/settings-domain.component';
-import { SettingsSiteComponent } from './settings-site/settings-site.component';
-import { AngularFireModule, FirebaseOptionsToken } from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireStorageModule } from '@angular/fire/storage';
-import { ContentTypeDetailsComponent } from './content-type-details/content-type-details.component';
-import { AppConfigService } from './app-config.service';
-import { ContentTypeOverviewComponent } from './content-type-overview/content-type-overview.component';
-import { ContentTypeEntryListComponent } from './content-type-entry-list/content-type-entry-list.component';
-import { ContentTypeEntryEditComponent } from './content-type-entry-edit/content-type-entry-edit.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavigationComponent,
     DashboardComponent,
-    SettingsComponent,
     NavigationComponent,
+    SettingsComponent,
     SettingsDomainComponent,
     SettingsSiteComponent,
     ContentTypeOverviewComponent,
@@ -86,7 +86,6 @@ import { ContentTypeEntryEditComponent } from './content-type-entry-edit/content
       deps: [AppConfigService],
       useFactory: (acs: AppConfigService) => acs.appConfig.firebaseApp,
     },
-
   ],
   bootstrap: [AppComponent],
 })
