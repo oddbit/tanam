@@ -33,7 +33,7 @@ export class ContentTypeComponent implements OnInit {
   ngOnInit() {
   }
 
-  editContentType() {
+  navigateToContentTypeDetails() {
     this.router.navigateByUrl(`/admin/content/${this.contentTypeId}/details`);
   }
 }

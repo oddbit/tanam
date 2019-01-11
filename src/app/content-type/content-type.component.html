@@ -7,7 +7,7 @@
   <li>Number of unpublished entries: {{(contentType$ | async)?.numEntries.unpublished || 0}}</li>
   <li>Number of drafts: {{(contentType$ | async)?.numEntries.draft || 0 }}</li>
 </ul>
-<button mat-raised-button color="primary" (click)="editContentType()">Edit content type</button>
+<button mat-raised-button color="primary" (click)="navigateToContentTypeDetails()">Edit content type</button>
 <hr />
 <h1>Here are all your entries</h1>
 <table>
