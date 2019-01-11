@@ -1,0 +1,19 @@
+<mat-card class="content-type-card" *ngFor="let contentType of contentTypes$ | async">
+  <mat-card-title-group>
+    <mat-card-title>{{ contentType.title }}</mat-card-title>
+    <mat-card-subtitle>{{ contentType.slug }}</mat-card-subtitle>
+  </mat-card-title-group>
+  <mat-card-content>
+    <p>{{ contentType.description }}</p>
+    <p>
+      <strong>Fields</strong>
+    </p>
+    <ul>
+      <li *ngFor="let field of contentType.fields">{{ field.title }}</li>
+    </ul>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button routerLink="/admin/content/{{ contentType.id }}/details">EDIT</button>
+    <button mat-button routerLink="/admin/content/{{ contentType.id }}">VIEW ENTRIES</button>
+  </mat-card-actions>
+</mat-card>

@@ -15,6 +15,7 @@ export interface ContentType {
   id: string;
   title: string;
   slug: string;
+  description?: string;
   fields: ContentTypeField[];
   numEntries: { [key: string]: number };
   updatedAt: Date | firebase.firestore.FieldValue;

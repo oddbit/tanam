@@ -30,7 +30,9 @@ import {
   MatInputModule,
   MatRadioModule,
   MatSelectModule,
+  MatCardModule,
 } from '@angular/material';
+import { ContentTypeListComponent } from './content-type-list/content-type-list.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,7 @@ import {
     ContentTypeDetailsComponent,
     ContentEntryListComponent,
     ContentEntryEditComponent,
+    ContentTypeListComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'tanam' }),
@@ -72,6 +75,7 @@ import {
     MatInputModule,
     MatRadioModule,
     MatSelectModule,
+    MatCardModule,
   ],
   providers: [
     AppConfigService,
