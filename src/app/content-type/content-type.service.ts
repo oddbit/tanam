@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentSnapshot, QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 
 export interface ContentType {
@@ -18,21 +18,27 @@ export class ContentTypeService {
 
   getContentTypes() {
     return this.firestore
-      .collection('tanam-content')
+      .collection<ContentType>('tanam-content')
       .snapshotChanges()
-      .pipe(map(actions => actions.map(this.mergeDataWithId)));
+      .pipe(map(actions => {
+        return actions.map(action => {
+          return this.mergeDataWithId(action.payload.doc);
+        });
+      }));
   }
 
   getContentType(contentTypeId: string) {
     return this.firestore
       .collection('tanam-content').doc<ContentType>(contentTypeId)
       .snapshotChanges()
-      .pipe(map(this.mergeDataWithId));
+      .pipe(map(action => {
+        return this.mergeDataWithId(action.payload);
+      }));
   }
 
-  private mergeDataWithId(value) {
-    const data = value.payload.doc.data();
-    const id = value.payload.doc.id;
+  private mergeDataWithId(doc: QueryDocumentSnapshot<ContentType>) {
+    const data = doc.data();
+    const id = doc.id;
     return { id, ...data } as ContentType;
   }
 }
