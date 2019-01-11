@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { ContentTypeService } from '../content-type/content-type.service';
-import { ContentTypeFieldService } from '../content-type-field.service';
+import { ContentTypeFieldService } from '../content-type-field/content-type-field.service';
 
 @Component({
   selector: 'app-content-type-details',

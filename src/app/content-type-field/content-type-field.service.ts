@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { first } from 'rxjs/operators';
 
+export type ContentTypeFieldFormElements = 'text-line' | 'text-area' | 'number' | 'datepicker' | 'slide-toggle';
 export interface ContentTypeField {
   key: string;
   title: string;
   order: string;
-  type: string;
+  type: ContentTypeFieldFormElements;
 }
 
 @Injectable({
@@ -17,6 +18,7 @@ export class ContentTypeFieldService {
   constructor(private readonly firestore: AngularFirestore) { }
 
   getContentTypeFields(contentTypeId: string) {
+    console.log(`[ContentTypeFieldService:getContentTypeFields] ${contentTypeId}`);
     return this.firestore
       .collection('tanam-content').doc(contentTypeId)
       .collection<ContentTypeField>('fields', ref => ref.orderBy('order', 'asc'))

@@ -1,3 +1,32 @@
-<pre>
+<div *ngIf="entryFields.length > 0; else loading">
+  <h1>The form</h1>
+  <form [formGroup]="entryForm">
+    <div *ngFor="let field of entryFields">
+      <div [ngSwitch]="field.type">
+        <mat-form-field *ngSwitchCase="'text-line'">
+          <input matInput placeholder="{{field.title}}" formControlName="{{field.key}}">
+        </mat-form-field>
+
+        <mat-form-field *ngSwitchCase="'text-area'">
+          <input matInput placeholder="{{field.title}}" formControlName="{{field.key}}">
+        </mat-form-field>
+
+        <div *ngSwitchDefault>
+          <div *ngIf="isDevelopment">
+            <h3>Unsupported field type</h3>
+            <pre>{{ field | json }}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<ng-template #loading>
+  Loading form fields...
+</ng-template>
+
+<div class='some-expandable-area' *ngIf="isDevelopment">
+  <pre>
   {{ entry$ | async | json }}
 </pre>
+</div>
