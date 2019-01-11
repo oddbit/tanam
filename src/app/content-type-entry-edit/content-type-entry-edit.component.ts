@@ -1,11 +1,10 @@
-import { Component, OnInit, isDevMode } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ContentTypeEntryService, ContentTypeEntry } from '../content-type-entry/content-type-entry.service';
-import { ContentTypeFieldService, ContentTypeField } from '../content-type-field/content-type-field.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, combineLatest } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { map, withLatestFrom } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { ContentTypeService, ContentType } from '../content-type/content-type.service';
 
 @Component({
   selector: 'app-content-type-entry-edit',
@@ -15,51 +14,65 @@ import { environment } from 'src/environments/environment';
 export class ContentTypeEntryEditComponent implements OnInit {
   readonly contentTypeId: string;
   readonly entryId: string;
-
-  readonly entry$: Observable<ContentTypeEntry>;
-  readonly fields$: Observable<ContentTypeField[]>;
-
-  // Use this one for the template form iteration,
-  // just because I couldn't come up with a good way to check both
-  // observables ready before trying to iterate the form
-  entryFields: ContentTypeField[] = [];
-
   readonly isDevelopment = !environment.production;
+  readonly entryForm: FormGroup;
+  readonly dataForm: FormGroup;
 
-  private _entryForm: FormGroup;
+  contentType: ContentType;
+  entry: ContentTypeEntry;
+  isFormFieldDataLoaded = false;
+
 
   constructor(
+    private readonly router: Router,
     private readonly formBuilder: FormBuilder,
+    private readonly ctes: ContentTypeEntryService,
+    private readonly cts: ContentTypeService,
     readonly route: ActivatedRoute,
-    readonly ctes: ContentTypeEntryService,
-    private readonly ctfs: ContentTypeFieldService,
   ) {
     this.contentTypeId = route.snapshot.paramMap.get('typeId');
     this.entryId = route.snapshot.paramMap.get('entryId');
-    this._entryForm = this.formBuilder.group({});
-
-    this.entry$ = ctes.getContentTypeEntry(this.contentTypeId, this.entryId);
-    this.fields$ = this.ctfs.getContentTypeFields(this.contentTypeId);
-
-    combineLatest(this.entry$, this.fields$).subscribe(([entry, fields]) => {
-      console.log(`[ContentTypeEntryEditComponent] fields: ${JSON.stringify(fields)}`);
-      console.log(`[ContentTypeEntryEditComponent] entry: ${JSON.stringify(entry)}`);
-      for (const field of fields) {
-        if (this._entryForm.contains(field.key)) {
-          this._entryForm.removeControl(field.key);
-        }
-
-        this._entryForm.addControl(field.key, new FormControl(entry.data[field.key]));
-      }
-
-      this.entryFields = fields.slice();
+    this.dataForm = this.formBuilder.group({});
+    this.entryForm = this.formBuilder.group({
+      slug: [null, [Validators.required]],
+      status: [null, [Validators.required]],
+      data: this.dataForm,
     });
+
   }
 
   ngOnInit() {
+    const entry$ = this.ctes.getContentTypeEntry(this.contentTypeId, this.entryId);
+    const contentType$ = this.cts.getContentType(this.contentTypeId);
+
+    combineLatest(entry$, contentType$)
+      .subscribe(([entry, contentType]) => {
+        this.isFormFieldDataLoaded = false;
+        this.contentType = contentType;
+        this.entry = entry;
+
+        for (const field of contentType.fields) {
+          if (this.dataForm.contains(field.key)) {
+            this.dataForm.setControl(field.key, new FormControl(entry.data[field.key]));
+          } else {
+            this.dataForm.addControl(field.key, new FormControl(entry.data[field.key]));
+          }
+        }
+
+        this.entryForm.patchValue({
+          slug: entry.slug,
+          status: entry.status,
+        });
+        this.isFormFieldDataLoaded = true;
+      });
   }
 
-  get entryForm() {
-    return this._entryForm;
+  cancelEditing() {
+    this.router.navigateByUrl(`/admin/content/${this.contentTypeId}`);
+  }
+
+  saveEntry() {
+    const formData = this.entryForm.value;
+    console.log(`[ContentTypeEntryEditComponent:saveEntry] ${JSON.stringify(formData)}`);
   }
 }

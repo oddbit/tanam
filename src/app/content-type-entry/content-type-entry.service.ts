@@ -53,10 +53,10 @@ export class ContentTypeEntryService {
     return docRef;
   }
 
-  saveContentTypeEntry(contentTypeId: string, entryId: string, entry: ContentTypeEntry) {
+  saveContentTypeEntry(contentTypeId: string, entry: ContentTypeEntry) {
     const docRef = this.firestore
       .collection('tanam-content').doc(contentTypeId)
-      .collection<ContentTypeEntry>('entries').doc(entryId);
+      .collection<ContentTypeEntry>('entries').doc(entry.id);
 
     entry.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
     entry.revision += 1;

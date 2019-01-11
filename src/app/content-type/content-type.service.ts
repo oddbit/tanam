@@ -2,10 +2,18 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentSnapshot, QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 
+export type ContentTypeFieldFormElements = 'text-line' | 'text-area' | 'number' | 'datepicker' | 'slide-toggle';
+export interface ContentTypeField {
+  key: string;
+  title: string;
+  type: ContentTypeFieldFormElements;
+}
+
 export interface ContentType {
   id: string;
   title: string;
   slug: string;
+  fields: ContentTypeField[];
   numEntries: { [key: string]: number };
 }
 

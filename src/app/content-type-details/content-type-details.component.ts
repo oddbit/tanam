@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { ContentTypeService } from '../content-type/content-type.service';
-import { ContentTypeFieldService } from '../content-type-field/content-type-field.service';
 
 @Component({
   selector: 'app-content-type-details',
@@ -20,11 +19,9 @@ export class ContentTypeDetailsComponent implements OnInit {
     readonly firestore: AngularFirestore,
     readonly route: ActivatedRoute,
     readonly cts: ContentTypeService,
-    readonly ctfs: ContentTypeFieldService,
   ) {
     this.contentTypeId = route.snapshot.paramMap.get('typeId');
     this.contentType$ = cts.getContentType(this.contentTypeId);
-    this.contentTypeFields$ = ctfs.getContentTypeFields(this.contentTypeId);
   }
 
   ngOnInit() {

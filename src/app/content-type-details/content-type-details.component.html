@@ -5,11 +5,10 @@
 
 <hr />
 <h1>Data field types in this content type</h1>
-<div *ngFor="let contentField of contentTypeFields$ | async">
+<div *ngFor="let contentField of (contentType$ | async)?.fields">
   <ul>
     <li>Key: {{ contentField.key }}</li>
     <li>Title: {{ contentField.title }}</li>
-    <li>Order: {{ contentField.order }}</li>
     <li>Type: {{ contentField.type }}</li>
   </ul>
 </div>
