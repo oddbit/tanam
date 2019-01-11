@@ -5,11 +5,11 @@ import { map } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
-  selector: 'app-admin-navigation',
-  templateUrl: './admin-navigation.component.html',
-  styleUrls: ['./admin-navigation.component.scss']
+  selector: 'app-navigation',
+  templateUrl: './navigation.component.html',
+  styleUrls: ['./navigation.component.scss']
 })
-export class AdminNavigationComponent {
+export class NavigationComponent {
   contentTypes$: Observable<any[]>;
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(

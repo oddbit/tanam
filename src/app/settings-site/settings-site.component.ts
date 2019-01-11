@@ -10,11 +10,11 @@ export interface SiteSettings {
 }
 
 @Component({
-  selector: 'app-admin-settings-site',
-  templateUrl: './admin-settings-site.component.html',
-  styleUrls: ['./admin-settings-site.component.scss']
+  selector: 'app-settings-site',
+  templateUrl: './settings-site.component.html',
+  styleUrls: ['./settings-site.component.scss']
 })
-export class AdminSettingsSiteComponent implements OnInit {
+export class SettingsSiteComponent implements OnInit {
   private _isLoading: boolean;
   private _settingsForm: FormGroup;
   private _settingsDocumentRef: AngularFirestoreDocument;
@@ -24,7 +24,7 @@ export class AdminSettingsSiteComponent implements OnInit {
     this._isLoading = true;
     this._settingsDocumentRef = firestore.collection('tanam-settings').doc<SiteSettings>('site');
     this._settingsDocumentRef.valueChanges().subscribe((data: SiteSettings) => {
-      console.log(`[AdminSettingsSiteComponent] site settings: ${JSON.stringify(data)}`);
+      console.log(`[SettingsSiteComponent] site settings: ${JSON.stringify(data)}`);
       this._settingsForm.setValue({
         title: data.title,
         theme: data.theme,
@@ -34,7 +34,7 @@ export class AdminSettingsSiteComponent implements OnInit {
 
     this.themes = firestore.collection('tanam-themes')
       .snapshotChanges().pipe(map(actions => actions.map(x => {
-        console.log(`[AdminSettingsSiteComponent] theme: ${JSON.stringify(x.payload.doc.id)}`);
+        console.log(`[SettingsSiteComponent] theme: ${JSON.stringify(x.payload.doc.id)}`);
         return { id: x.payload.doc.id, ...x.payload.doc.data() };
       })));
   }
@@ -62,7 +62,7 @@ export class AdminSettingsSiteComponent implements OnInit {
       theme: formData.theme,
     };
 
-    console.log(`[AdminSettingsSiteComponent:saveChanges] ${JSON.stringify(formSettingsData)}`);
+    console.log(`[SettingsSiteComponent:saveChanges] ${JSON.stringify(formSettingsData)}`);
     this._isLoading = true;
     try {
       await this._settingsDocumentRef.update(formSettingsData);

@@ -9,11 +9,11 @@ export interface DomainSettings {
 }
 
 @Component({
-  selector: 'app-admin-settings-domain',
-  templateUrl: './admin-settings-domain.component.html',
-  styleUrls: ['./admin-settings-domain.component.scss']
+  selector: 'app-settings-domain',
+  templateUrl: './settings-domain.component.html',
+  styleUrls: ['./settings-domain.component.scss']
 })
-export class AdminSettingsDomainComponent implements OnInit {
+export class SettingsDomainComponent implements OnInit {
   readonly defaultHostingDomain: string;
   private _settingsDocumentRef: AngularFirestoreDocument;
   private _isLoading: boolean;
@@ -25,7 +25,7 @@ export class AdminSettingsDomainComponent implements OnInit {
     this._settingsDocumentRef = afs.collection('tanam-settings').doc<DomainSettings>('domain');
 
     this._settingsDocumentRef.valueChanges().subscribe((data: DomainSettings) => {
-      console.log(`[AdminSettingsDomainComponent] firestore doc: ${JSON.stringify(data)}`);
+      console.log(`[SettingsDomainComponent] firestore doc: ${JSON.stringify(data)}`);
       const sortedDomains = this.sortDomains(data.domains.map(this.sanitizeDomain));
       this.selectedDomainForm.setValue(sortedDomains.indexOf(data.primaryDomain));
       while (this.domainsFormArray.length > 0) {
@@ -67,7 +67,7 @@ export class AdminSettingsDomainComponent implements OnInit {
   }
 
   addDomain(domain?: string) {
-    console.log(`[AdminSettingsDomainComponent:addDomain] ${JSON.stringify(domain)}`);
+    console.log(`[SettingsDomainComponent:addDomain] ${JSON.stringify(domain)}`);
     const newDomainLine = this.formBuilder.group({
       name: [domain, [Validators.required]],
     });
@@ -85,7 +85,7 @@ export class AdminSettingsDomainComponent implements OnInit {
   async saveChanges() {
     const formData = this.settingsForm.value;
     if (this.settingsForm.invalid) {
-      console.log('[AdminSettingsDomainComponent:saveChanges] Form is not valid. Can not save data.');
+      console.log('[SettingsDomainComponent:saveChanges] Form is not valid. Can not save data.');
       return;
     }
 
@@ -97,7 +97,7 @@ export class AdminSettingsDomainComponent implements OnInit {
       domains: this.sortDomains(domains.map(this.sanitizeDomain)),
     };
 
-    console.log(`[AdminSettingsDomainComponent:saveChanges] ${JSON.stringify(formSettingsData)}`);
+    console.log(`[SettingsDomainComponent:saveChanges] ${JSON.stringify(formSettingsData)}`);
     this._isLoading = true;
     try {
       await this._settingsDocumentRef.update(formSettingsData);

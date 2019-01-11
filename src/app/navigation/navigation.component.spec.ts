@@ -9,15 +9,15 @@ import {
   MatToolbarModule,
 } from '@angular/material';
 
-import { AdminNavigationComponent } from './admin-navigation.component';
+import { NavigationComponent } from './navigation.component';
 
-describe('AdminNavigationComponent', () => {
-  let component: AdminNavigationComponent;
-  let fixture: ComponentFixture<AdminNavigationComponent>;
+describe('NavigationComponent', () => {
+  let component: NavigationComponent;
+  let fixture: ComponentFixture<NavigationComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AdminNavigationComponent],
+      declarations: [NavigationComponent],
       imports: [
         NoopAnimationsModule,
         LayoutModule,
@@ -31,7 +31,7 @@ describe('AdminNavigationComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AdminNavigationComponent);
+    fixture = TestBed.createComponent(NavigationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

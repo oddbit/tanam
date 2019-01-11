@@ -1,25 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AppConfigService {
-    private _appConfig;
+  private _appConfig;
 
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-    loadAppConfig() {
-        return this.http.get('/assets/tanamConfig.json')
-            .toPromise()
-            .then(data => {
-                console.log(`[AppConfigService:loadAppConfig] ${JSON.stringify(data)}`);
-                this._appConfig = data;
-                return data;
-            });
-    }
+  async loadAppConfig() {
+    const data = await this.http.get('/assets/tanamConfig.json')
+      .toPromise();
+    console.log(`[AppConfigService:loadAppConfig] ${JSON.stringify(data)}`);
+    this._appConfig = data;
+    return data;
+  }
 
-    get appConfig() {
-        return this._appConfig;
-    }
+  get appConfig() {
+    return this._appConfig;
+  }
 }
