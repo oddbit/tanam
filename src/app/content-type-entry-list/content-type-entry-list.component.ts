@@ -13,8 +13,7 @@ export class ContentTypeEntryListComponent implements OnInit {
 
   entries$: Observable<ContentTypeEntry[]>;
 
-  constructor(private readonly ctes: ContentTypeEntryService) {
-  }
+  constructor(private readonly ctes: ContentTypeEntryService) { }
 
   ngOnInit() {
     this.entries$ = this.ctes.getContentTypeEntries(this.contentTypeId, {

@@ -8,8 +8,8 @@
     </tr>
   </thead>
   <tr *ngFor="let entry of entries$ | async">
-    <td>{{ entry.title }}</td>
-    <td>{{ entry.updateTime.toDate() | date:'medium' }}</td>
+    <td><a routerLink="/admin/content/{{ contentTypeId }}/edit/{{ entry.id }}">{{ entry.title }}</a></td>
+    <td>{{ entry.updatedAt.toDate() | date:'medium' }}</td>
     <td>{{ entry.url }}</td>
     <td>{{ entry.status }}</td>
   </tr>

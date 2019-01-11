@@ -30,6 +30,7 @@ import { ContentTypeDetailsComponent } from './content-type-details/content-type
 import { AppConfigService } from './app-config.service';
 import { ContentTypeOverviewComponent } from './content-type-overview/content-type-overview.component';
 import { ContentTypeEntryListComponent } from './content-type-entry-list/content-type-entry-list.component';
+import { ContentTypeEntryEditComponent } from './content-type-entry-edit/content-type-entry-edit.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { ContentTypeEntryListComponent } from './content-type-entry-list/content
     ContentTypeOverviewComponent,
     ContentTypeDetailsComponent,
     ContentTypeEntryListComponent,
+    ContentTypeEntryEditComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'tanam' }),

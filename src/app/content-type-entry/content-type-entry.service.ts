@@ -1,10 +1,12 @@
 import * as firebase from 'firebase/app';
 import { Injectable } from '@angular/core';
-import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
+import { AngularFirestore, CollectionReference, QueryDocumentSnapshot } from '@angular/fire/firestore';
+import { map } from 'rxjs/operators';
 
 export type ContentTypeEntryStatus = 'published' | 'unpublished';
 
 export interface ContentTypeEntry {
+  id?: string;
   title: string;
   slug: string;
   revision: number;
@@ -12,7 +14,7 @@ export interface ContentTypeEntry {
   tags: string[];
   publishTime?: Date | firebase.firestore.FieldValue;
   updatedAt: Date | firebase.firestore.FieldValue;
-  careatedAt: Date | firebase.firestore.FieldValue;
+  createdAt: Date | firebase.firestore.FieldValue;
   data: any;
 }
 
@@ -45,7 +47,7 @@ export class ContentTypeEntryService {
       revision: 0,
       status: 'unpublished',
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      careatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     } as ContentTypeEntry);
 
     return docRef;
@@ -65,8 +67,11 @@ export class ContentTypeEntryService {
   getContentTypeEntry(contentTypeId: string, entryId: string) {
     return this.firestore
       .collection('tanam-content').doc(contentTypeId)
-      .collection<ContentTypeEntry>('entries').doc(entryId)
-      .valueChanges();
+      .collection('entries').doc<ContentTypeEntry>(entryId)
+      .snapshotChanges()
+      .pipe(map(action => {
+        return this.mergeDataWithId(action.payload);
+      }));
   }
 
   getContentTypeEntries(contentTypeId: string, queryOpts?: ContentTypeQueryOptions) {
@@ -74,7 +79,12 @@ export class ContentTypeEntryService {
     return this.firestore
       .collection('tanam-content').doc(contentTypeId)
       .collection<ContentTypeEntry>('entries', ref => this.applyQueryOpts(ref, queryOpts))
-      .valueChanges();
+      .snapshotChanges()
+      .pipe(map(actions => {
+        return actions.map(action => {
+          return this.mergeDataWithId(action.payload.doc);
+        });
+      }));
   }
 
   private applyQueryOpts(ref: CollectionReference, queryOpts?: ContentTypeQueryOptions) {
@@ -87,5 +97,12 @@ export class ContentTypeEntryService {
     }
 
     return ref;
+  }
+
+
+  private mergeDataWithId(doc: QueryDocumentSnapshot<ContentTypeEntry>) {
+    const data = doc.data();
+    const id = doc.id;
+    return { id, ...data } as ContentTypeEntry;
   }
 }

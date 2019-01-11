@@ -22,7 +22,7 @@ export class ContentTypeDetailsComponent implements OnInit {
     readonly cts: ContentTypeService,
     readonly ctfs: ContentTypeFieldService,
   ) {
-    this.contentTypeId = route.snapshot.paramMap.get('type');
+    this.contentTypeId = route.snapshot.paramMap.get('typeId');
     this.contentType$ = cts.getContentType(this.contentTypeId);
     this.contentTypeFields$ = ctfs.getContentTypeFields(this.contentTypeId);
   }
