@@ -10,14 +10,14 @@ import { ContentTypeService } from '../content-type/content-type.service';
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent {
-  readonly contentTypes$: Observable<any[]>;
-  readonly isHandset$: Observable<boolean>;
+
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(Breakpoints.Handset)
+    .pipe(map(result => result.matches));
+  contentTypes$ = this.cts.getContentTypes();
 
   constructor(
-    readonly breakpointObserver: BreakpointObserver,
-    readonly cts: ContentTypeService,
-  ) {
-    this.isHandset$ = breakpointObserver.observe(Breakpoints.Handset).pipe(map(result => result.matches));
-    this.contentTypes$ = cts.getContentTypes();
-  }
+    private readonly breakpointObserver: BreakpointObserver,
+    private readonly cts: ContentTypeService,
+  ) { }
 }

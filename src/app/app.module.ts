@@ -4,8 +4,8 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
-import { HttpClientModule } from '@angular/common/http';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { HttpClientModule } from '@angular/common/http';
 import { SettingsComponent } from './settings/settings.component';
 import { AngularFireModule, FirebaseOptionsToken } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -34,13 +34,14 @@ import {
   MatSelectModule,
   MatCardModule,
   MatTableModule,
+  MatGridListModule,
   MatProgressSpinnerModule,
+  MatMenuModule,
 } from '@angular/material';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavigationComponent,
     DashboardComponent,
     NavigationComponent,
     SettingsComponent,
@@ -82,6 +83,8 @@ import {
     MatCardModule,
     MatTableModule,
     MatProgressSpinnerModule,
+    MatGridListModule,
+    MatMenuModule,
   ],
   providers: [
     AppConfigService,

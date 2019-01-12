@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ContentTypeEditComponent } from './content-type-edit/content-type-edit.component';
 import { ContentTypeOverviewComponent } from './content-type-overview/content-type-overview.component';
 import { ContentEntryEditComponent } from './content-entry-edit/content-entry-edit.component';
 import { ContentTypeListComponent } from './content-type-list/content-type-list.component';
 import { TemplateRenderComponent } from './template-render/template-render.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
   { path: 'admin', redirectTo: 'admin/dashboard', pathMatch: 'full' },
