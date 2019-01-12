@@ -19,6 +19,7 @@ import { SettingsDomainComponent } from './settings-domain/settings-domain.compo
 import { SettingsSiteComponent } from './settings-site/settings-site.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TemplateRenderComponent } from './template-render/template-render.component';
 import {
   MatButtonModule,
   MatIconModule,
@@ -50,6 +51,7 @@ import { ContentTypeListComponent } from './content-type-list/content-type-list.
     ContentEntryListComponent,
     ContentEntryEditComponent,
     ContentTypeListComponent,
+    TemplateRenderComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'tanam' }),

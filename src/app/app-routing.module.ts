@@ -6,9 +6,9 @@ import { ContentTypeEditComponent } from './content-type-edit/content-type-edit.
 import { ContentTypeOverviewComponent } from './content-type-overview/content-type-overview.component';
 import { ContentEntryEditComponent } from './content-entry-edit/content-entry-edit.component';
 import { ContentTypeListComponent } from './content-type-list/content-type-list.component';
+import { TemplateRenderComponent } from './template-render/template-render.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'admin/dashboard', pathMatch: 'full' },
   { path: 'admin', redirectTo: 'admin/dashboard', pathMatch: 'full' },
   { path: 'admin/dashboard', component: DashboardComponent },
   { path: 'admin/settings', component: SettingsComponent },
@@ -20,6 +20,7 @@ const routes: Routes = [
   { path: 'admin/content/entry/:typeId/:entryId', redirectTo: 'admin/content/entry/:typeId/:entryId/edit', pathMatch: 'full' },
   { path: 'admin/content/entry/:typeId/:entryId/edit', component: ContentEntryEditComponent },
 
+  { path: '', component: TemplateRenderComponent },
 ];
 
 @NgModule({
