@@ -20,6 +20,7 @@ import { SettingsSiteComponent } from './settings-site/settings-site.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TemplateRenderComponent } from './template-render/template-render.component';
+import { ContentTypeListComponent } from './content-type-list/content-type-list.component';
 import {
   MatButtonModule,
   MatIconModule,
@@ -35,7 +36,6 @@ import {
   MatTableModule,
   MatProgressSpinnerModule,
 } from '@angular/material';
-import { ContentTypeListComponent } from './content-type-list/content-type-list.component';
 
 @NgModule({
   declarations: [
