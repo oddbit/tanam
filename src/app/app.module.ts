@@ -3,88 +3,32 @@ import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavigationComponent } from './navigation/navigation.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
-import { SettingsComponent } from './settings/settings.component';
-import { AngularFireModule, FirebaseOptionsToken } from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireStorageModule } from '@angular/fire/storage';
-import { ContentTypeEditComponent } from './content-type-edit/content-type-edit.component';
 import { AppConfigService } from './app-config.service';
-import { ContentTypeOverviewComponent } from './content-type-overview/content-type-overview.component';
-import { ContentEntryListComponent } from './content-entry-list/content-entry-list.component';
-import { ContentEntryEditComponent } from './content-entry-edit/content-entry-edit.component';
-import { SettingsDomainComponent } from './settings-domain/settings-domain.component';
-import { SettingsSiteComponent } from './settings-site/settings-site.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule } from '@angular/forms';
-import { TemplateRenderComponent } from './template-render/template-render.component';
-import { ContentTypeListComponent } from './content-type-list/content-type-list.component';
-import {
-  MatButtonModule,
-  MatIconModule,
-  MatListModule,
-  MatSidenavModule,
-  MatToolbarModule,
-  MatCheckboxModule,
-  MatChipsModule,
-  MatInputModule,
-  MatRadioModule,
-  MatSelectModule,
-  MatCardModule,
-  MatTableModule,
-  MatGridListModule,
-  MatProgressSpinnerModule,
-  MatMenuModule,
-} from '@angular/material';
+import { AdminModule } from './admin/admin.module';
+import { AppMaterialModule } from './app-material.module';
+import { AppFirebaseModule } from './app-firebase.module';
+import { RenderTemplateComponent } from './render-template/render-template.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
-    NavigationComponent,
-    SettingsComponent,
-    SettingsDomainComponent,
-    SettingsSiteComponent,
-    ContentTypeOverviewComponent,
-    ContentTypeEditComponent,
-    ContentEntryListComponent,
-    ContentEntryEditComponent,
-    ContentTypeListComponent,
-    TemplateRenderComponent,
+    RenderTemplateComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'tanam' }),
+    AdminModule,
+
+    // Important that AppRoutingModule is loaded *after* all other modules that define routing
+    // since it declares the catch all wildcard route
     AppRoutingModule,
+
     // AppFirebaseModule,
     BrowserTransferStateModule,
     HttpClientModule,
     LayoutModule,
-
-    // Firebase
-    AngularFireModule,
-    AngularFirestoreModule,
-    AngularFireStorageModule,
-
-    // Material design modules
-    BrowserAnimationsModule,
-    ReactiveFormsModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatInputModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatCardModule,
-    MatTableModule,
-    MatProgressSpinnerModule,
-    MatGridListModule,
-    MatMenuModule,
+    AppMaterialModule,
+    AppFirebaseModule,
   ],
   providers: [
     AppConfigService,
@@ -93,11 +37,6 @@ import {
       useFactory: (appConfig: AppConfigService) => () => appConfig.loadAppConfig(),
       multi: true,
       deps: [AppConfigService]
-    },
-    {
-      provide: FirebaseOptionsToken,
-      deps: [AppConfigService],
-      useFactory: (acs: AppConfigService) => acs.appConfig.firebaseApp,
     },
   ],
   bootstrap: [AppComponent],

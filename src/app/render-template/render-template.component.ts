@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild, ViewContainerRef, Compiler, AfterViewInit
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-template-render',
+  selector: 'app-render-template',
   template: `<ng-container #viewContainer></ng-container>`,
+  styles: []
 })
-export class TemplateRenderComponent implements OnInit, AfterViewInit {
+export class RenderTemplateComponent implements OnInit, AfterViewInit {
 
   @ViewChild('viewContainer', { read: ViewContainerRef }) viewContainer: ViewContainerRef;
-  interval: NodeJS.Timer;
 
   constructor(private compiler: Compiler) {
   }
@@ -37,10 +37,7 @@ export class TemplateRenderComponent implements OnInit, AfterViewInit {
         const factory = factories.componentFactories[0];
         const componentRef = this.viewContainer.createComponent(factory);
         componentRef.instance.superlative = 'Awesome!';
-
-        this.interval = setInterval(() => {
-          componentRef.instance.flag = !componentRef.instance.flag;
-        }, 1000);
+        componentRef.instance.flag = true;
       });
   }
 }

@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { ContentTypeService } from '../content-type/content-type.service';
 
 @Component({
-  selector: 'app-navigation',
+  selector: 'app-admin-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })

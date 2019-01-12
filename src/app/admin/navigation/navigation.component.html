@@ -3,26 +3,26 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="!(isHandset$ | async)">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/admin/dashboard">
+      <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active">
         <mat-icon mat-list-icon>dashboard</mat-icon>
         Dashboard
       </a>
 
       <h3 mat-subheader>Content</h3>
 
-      <a mat-list-item *ngFor="let contentType of contentTypes$ | async" routerLink="admin/content/type/{{ contentType.id }}">
+      <a mat-list-item *ngFor="let contentType of contentTypes$ | async" routerLink="/admin/content/type/{{ contentType.id }}">
         <mat-icon mat-list-icon>{{ contentType.icon }}</mat-icon>
         {{ contentType.title }}
       </a>
 
       <h3 mat-subheader>Manage</h3>
 
-      <a mat-list-item routerLink="admin/content/types">
+      <a mat-list-item routerLink="/admin/content/types" routerLinkActive="active">
         <mat-icon mat-list-icon>list</mat-icon>
         Content types
       </a>
 
-      <a mat-list-item routerLink="/admin/settings">
+      <a mat-list-item routerLink="/admin/settings" routerLinkActive="active">
         <mat-icon mat-list-icon>settings</mat-icon>
         Settings
       </a>
