@@ -2,20 +2,22 @@ import * as firebase from 'firebase/app';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference, QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
+import { SHA256 } from 'crypto-js/sha256';
 
-export type ContentEntryStatus = 'published' | 'unpublished';
+export type ContentEntryStatus = 'published' | 'unpublished' | 'deleted';
 
 export interface ContentEntry {
-  id?: string;
-  title: string;
-  slug: string;
-  revision: number;
+  id?: string; // Document id
+  title: string; // Presentation title for *internal use only* (such as content listing etc)
+  slug: string; // The slug part of URL
+  key: string; // A unique random string for the URL (similar to Medium articles)
+  revision: number; // Constantly increasing
   status: ContentEntryStatus;
   tags: string[];
   publishTime?: Date | firebase.firestore.FieldValue;
   updatedAt: Date | firebase.firestore.FieldValue;
   createdAt: Date | firebase.firestore.FieldValue;
-  data: any;
+  data: { [key: string]: any }; // The actual content of the document
 }
 
 export interface ContentTypeQueryOptions {
@@ -40,12 +42,13 @@ export class ContentEntryService {
       .collection<ContentEntry>('entries').doc(entryId);
 
     await docRef.set({
-      data: {},
-      tags: [],
       title: entryId,
       slug: entryId,
+      key: SHA256(entryId).toString().substr(0, 8),
       revision: 0,
       status: 'unpublished',
+      data: {},
+      tags: [],
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     } as ContentEntry);
