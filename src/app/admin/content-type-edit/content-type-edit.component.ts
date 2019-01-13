@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ContentTypeService, ContentType, ContentTypeField } from '../content-type/content-type.service';
+import { ContentTypeService, ContentType, ContentTypeField } from '../../services/content-type.service';
 import { FormBuilder, FormArray, FormGroup } from '@angular/forms';
 
 @Component({
@@ -10,26 +10,22 @@ import { FormBuilder, FormArray, FormGroup } from '@angular/forms';
   styleUrls: ['./content-type-edit.component.scss']
 })
 export class ContentTypeEditComponent implements OnInit {
-  readonly contentTypeId: string;
-  readonly contentType$: Observable<ContentType>;
-  readonly contentTypeForm: FormGroup;
+  private readonly contentTypeId = this.route.snapshot.paramMap.get('typeId');
+  readonly contentType$ = this.cts.getContentType(this.contentTypeId);
+  readonly contentTypeForm = this.formBuilder.group({
+    title: [],
+    slug: [],
+    icon: [],
+    description: [],
+    fields: this.formBuilder.array([]),
+  });
 
   constructor(
     private readonly router: Router,
     private readonly formBuilder: FormBuilder,
-    readonly route: ActivatedRoute,
-    readonly cts: ContentTypeService,
-  ) {
-    this.contentTypeId = route.snapshot.paramMap.get('typeId');
-    this.contentType$ = cts.getContentType(this.contentTypeId);
-    this.contentTypeForm = this.formBuilder.group({
-      title: [],
-      slug: [],
-      icon: [],
-      description: [],
-      fields: this.formBuilder.array([]),
-    });
-  }
+    private readonly route: ActivatedRoute,
+    private readonly cts: ContentTypeService,
+  ) { }
 
   ngOnInit() {
     this.contentType$.subscribe(contentType => {

@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { ContentTypeService, ContentType } from '../content-type/content-type.service';
-import { ContentEntryService } from '../content-entry/content-entry.service';
+import { ContentTypeService, ContentType } from '../../services/content-type.service';
+import { ContentEntryService } from '../../services/content-entry.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-content-type-overview',
@@ -11,19 +10,15 @@ import { ContentEntryService } from '../content-entry/content-entry.service';
   styleUrls: ['./content-type-overview.component.scss']
 })
 export class ContentTypeOverviewComponent implements OnInit {
-  readonly contentTypeId;
-  contentType$: Observable<ContentType>;
+  private readonly contentTypeId = this.route.snapshot.paramMap.get('typeId');
+  contentType$ = this.cts.getContentType(this.contentTypeId);
 
   constructor(
     private readonly router: Router,
-    readonly firestore: AngularFirestore,
-    readonly route: ActivatedRoute,
-    readonly cts: ContentTypeService,
-    readonly ctes: ContentEntryService,
-  ) {
-    this.contentTypeId = route.snapshot.paramMap.get('typeId');
-    this.contentType$ = cts.getContentType(this.contentTypeId);
-  }
+    private readonly route: ActivatedRoute,
+    private readonly cts: ContentTypeService,
+    private readonly ces: ContentEntryService,
+  ) { }
 
   ngOnInit() {
   }
@@ -33,7 +28,9 @@ export class ContentTypeOverviewComponent implements OnInit {
   }
 
   async createNewEntry() {
-    const doc = await this.ctes.createContentEntry(this.contentTypeId);
-    this.router.navigateByUrl(`/admin/content/entry/${this.contentTypeId}/${doc.ref.id}/edit`);
+    console.log('createNewEntry');
+    const contentType = await this.contentType$.pipe(take(1)).toPromise();
+    const newEntryDocument = await this.ces.createContentEntry(contentType);
+    this.router.navigateByUrl(`/admin/content/entry/${contentType.id}/${newEntryDocument.ref.id}/edit`);
   }
 }

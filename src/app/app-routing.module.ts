@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { environment } from 'src/environments/environment';
+import { environment } from '../environments/environment';
 import { RenderTemplateComponent } from './render-template/render-template.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
   // Other modules must declare their routes first, because our base case is to try and render everything
+  { path: ':typePrefix/:entryPath', component: RenderTemplateComponent },
   { path: '**', component: RenderTemplateComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(
     routes,
-    { enableTracing: !environment.production },
+    { enableTracing: environment.debugRouting },
   )],
   exports: [RouterModule]
 })

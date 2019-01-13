@@ -1,5 +1,5 @@
 <div>
-  <div *ngIf="isLoadingResults">
+  <div *ngIf="(entries$ | async)">
     <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
   </div>
 

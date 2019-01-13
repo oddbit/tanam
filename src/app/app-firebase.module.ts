@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AngularFireModule, FirebaseOptionsToken } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
-import { AppConfigService } from './app-config.service';
+import { AppConfigService } from './services/app-config.service';
 
 @NgModule({
   declarations: [],

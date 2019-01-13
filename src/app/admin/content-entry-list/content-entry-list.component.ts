@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ContentEntryService, ContentEntry } from '../content-entry/content-entry.service';
+import { ContentEntryService, ContentEntry } from '../../services/content-entry.service';
 import { Observable } from 'rxjs';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 

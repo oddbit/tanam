@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ContentTypeService, ContentType } from '../content-type/content-type.service';
+import { ContentTypeService, ContentType } from '../../services/content-type.service';
 import { Observable } from 'rxjs';
 
 @Component({

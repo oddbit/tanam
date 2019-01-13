@@ -4,16 +4,18 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { AppConfigService } from './app-config.service';
+import { AppConfigService } from './services/app-config.service';
 import { AdminModule } from './admin/admin.module';
 import { AppMaterialModule } from './app-material.module';
 import { AppFirebaseModule } from './app-firebase.module';
 import { RenderTemplateComponent } from './render-template/render-template.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RenderTemplateComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'tanam' }),

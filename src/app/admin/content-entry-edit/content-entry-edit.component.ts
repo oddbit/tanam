@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ContentEntryService, ContentEntry } from '../content-entry/content-entry.service';
+import { ContentEntryService, ContentEntry } from '../../services/content-entry.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, combineLatest } from 'rxjs';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { environment } from 'src/environments/environment';
-import { ContentTypeService, ContentType } from '../content-type/content-type.service';
+import { combineLatest } from 'rxjs';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
+import { environment } from '../../../environments/environment';
+import { ContentTypeService, ContentType } from '../../services/content-type.service';
 
 @Component({
   selector: 'app-content-entry-edit',
@@ -12,37 +12,30 @@ import { ContentTypeService, ContentType } from '../content-type/content-type.se
   styleUrls: ['./content-entry-edit.component.scss']
 })
 export class ContentEntryEditComponent implements OnInit {
-  readonly contentTypeId: string;
-  readonly entryId: string;
+  readonly contentTypeId = this.route.snapshot.paramMap.get('typeId');
+  readonly entryId = this.route.snapshot.paramMap.get('entryId');
   readonly isDevelopment = !environment.production;
-  readonly entryForm: FormGroup;
-  readonly dataForm: FormGroup;
+  readonly dataForm = this.formBuilder.group({});
+  readonly entryForm = this.formBuilder.group({
+    path: [null, [Validators.required]],
+    status: [null, [Validators.required]],
+    data: this.dataForm,
+  });
 
   contentType: ContentType;
   entry: ContentEntry;
   isFormFieldDataLoaded = false;
 
-
   constructor(
     private readonly router: Router,
     private readonly formBuilder: FormBuilder,
-    private readonly ctes: ContentEntryService,
+    private readonly ces: ContentEntryService,
     private readonly cts: ContentTypeService,
     private readonly route: ActivatedRoute,
-  ) {
-    this.contentTypeId = route.snapshot.paramMap.get('typeId');
-    this.entryId = route.snapshot.paramMap.get('entryId');
-    this.dataForm = this.formBuilder.group({});
-    this.entryForm = this.formBuilder.group({
-      slug: [null, [Validators.required]],
-      status: [null, [Validators.required]],
-      data: this.dataForm,
-    });
-
-  }
+  ) { }
 
   ngOnInit() {
-    const entry$ = this.ctes.getContentEntry(this.contentTypeId, this.entryId);
+    const entry$ = this.ces.getContentEntry(this.contentTypeId, this.entryId);
     const contentType$ = this.cts.getContentType(this.contentTypeId);
 
     combineLatest(entry$, contentType$)
@@ -60,7 +53,7 @@ export class ContentEntryEditComponent implements OnInit {
         }
 
         this.entryForm.patchValue({
-          slug: entry.slug,
+          path: entry.url.path,
           status: entry.status,
         });
         this.isFormFieldDataLoaded = true;
@@ -68,11 +61,21 @@ export class ContentEntryEditComponent implements OnInit {
   }
 
   cancelEditing() {
-    this.router.navigateByUrl(`/admin/content/${this.contentTypeId}`);
+    this.router.navigateByUrl(`/admin/content/type/${this.contentTypeId}`);
   }
 
   saveEntry() {
     const formData = this.entryForm.value;
     console.log(`[ContentEntryEditComponent:saveEntry] ${JSON.stringify(formData)}`);
+
+    this.ces.saveContentEntry({
+      id: this.entryId,
+      contentType: this.contentTypeId,
+      url: {
+        path: formData.path,
+      },
+      status: formData.status,
+      data: this.dataForm.value
+    } as ContentEntry);
   }
 }
