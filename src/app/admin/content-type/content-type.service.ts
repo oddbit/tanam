@@ -4,7 +4,7 @@ import { AngularFirestore, QueryDocumentSnapshot, AngularFirestoreDocument } fro
 import { map } from 'rxjs/operators';
 import { FirebaseApp } from '@angular/fire';
 
-export type ContentTypeFieldFormElements = 'text-line' | 'text-area' | 'number' | 'datepicker' | 'slide-toggle';
+export type ContentTypeFieldFormElements = 'text-line' | 'text-area' | 'html' | 'number' | 'date' | 'slide-toggle';
 export interface ContentTypeField {
   key: string;
   title: string;
@@ -12,11 +12,11 @@ export interface ContentTypeField {
 }
 
 export interface ContentType {
-  id: string;
-  title: string;
-  slug: string;
+  id?: string; // Document id
+  title: string; // Presentation name
+  slug: string; // Root slug to group entries by
   description?: string;
-  icon: string;
+  icon: string; // Icon for menus etc
   fields: ContentTypeField[];
   numEntries: { [key: string]: number };
   updatedAt: Date | firebase.firestore.FieldValue;
