@@ -8,9 +8,11 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:ssr": "ng build --prod && ng run tanam:server && npm run webpack:ssr",
+    "build:ssr": "ng build && npm run build:functions",
+    "build:ssr:prod": "ng build --prod && npm run build:functions",
     "webpack:ssr": "webpack --config webpack.server.config.js",
-    "serve:ssr": "node dist/tanam/server.js"
+    "build:functions": "ng run tanam:server && npm run webpack:ssr && npm run --prefix functions build",
+    "serve:ssr": "node dist/tanam-webpack/server.js"
   },
   "private": true,
   "dependencies": {

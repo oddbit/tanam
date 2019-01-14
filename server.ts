@@ -10,14 +10,14 @@ import * as express from 'express';
 import { join } from 'path';
 import { readFileSync } from 'fs';
 
-// Polyfills required for Firebase
+// Required for Firebase
 (global as any).WebSocket = require('ws');
 (global as any).XMLHttpRequest = require('xhr2');
 
 // Faster renders in prod mode
 enableProdMode();
 
-// Export our express server
+// Express server
 export const app = express();
 
 const DIST_FOLDER = join(process.cwd(), 'dist');

@@ -5,20 +5,22 @@ const APP_NAME = 'tanam';
 
 module.exports = {
   entry: { server: './server.ts' },
-  resolve: { extensions: ['.js', '.ts'] },
+  resolve: {
+    extensions: ['.js', '.json', '.ts', '.tsx'],
+    mainFields: ["main", "module"],
+    mainFiles: ['index.node', 'index']
+  },
   mode: 'development',
   target: 'node',
   externals: [
-    /* Firebase has some troubles being webpacked when in
-       in the Node environment, let's skip it.
-       Note: you may need to exclude other dependencies depending
-       on your project. */
+    /* There are a bunch of issues if we webpack firebase:
+        A) the CJS versions of things like firebase/firestore aren't registering on the app
+        B) grpc has native components, it is very unhappy when webpacked
+        C) @firebaes/firestore can't find it's protos, presumably since they aren't in extensions */
     /^firebase/
   ],
   output: {
-    // Export a UMD of the webpacked server.ts & deps, for
-    // rendering in Cloud Functions
-    path: path.join(__dirname, `dist/${APP_NAME}`),
+    path: path.join(__dirname, `dist/${APP_NAME}-webpack`),
     library: 'app',
     libraryTarget: 'umd',
     filename: '[name].js'
