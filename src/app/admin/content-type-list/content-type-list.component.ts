@@ -8,12 +8,9 @@ import { Observable } from 'rxjs';
   styleUrls: ['./content-type-list.component.scss']
 })
 export class ContentTypeListComponent implements OnInit {
-  contentTypes$: Observable<ContentType[]>;
+  readonly contentTypes$ = this.cts.getContentTypes();
 
-  constructor(private readonly cts: ContentTypeService) {
-    this.contentTypes$ = this.cts.getContentTypes();
-  }
+  constructor(private readonly cts: ContentTypeService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 }

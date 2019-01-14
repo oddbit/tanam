@@ -94,10 +94,7 @@ export class ContentEntryService {
   getContentEntry(contentTypeId: string, entryId: string) {
     return this.firestore
       .collection('tanam-content-entries').doc<ContentEntry>(entryId)
-      .snapshotChanges()
-      .pipe(map(action => {
-        return this.mergeDataWithId(action.payload);
-      }));
+      .valueChanges();
   }
 
   getContentTypeEntries(contentTypeId: string, queryOpts?: ContentTypeQueryOptions) {
@@ -119,17 +116,6 @@ export class ContentEntryService {
 
     return this.firestore
       .collection<ContentEntry>('tanam-content-entries', queryFn)
-      .snapshotChanges()
-      .pipe(map(actions => {
-        return actions.map(action => {
-          return this.mergeDataWithId(action.payload.doc);
-        });
-      }));
-  }
-
-  private mergeDataWithId(doc: QueryDocumentSnapshot<any>) {
-    const data = doc.data();
-    const id = doc.id;
-    return { id, ...data } as ContentEntry;
+      .valueChanges();
   }
 }

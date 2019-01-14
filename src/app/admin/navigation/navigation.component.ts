@@ -10,11 +10,10 @@ import { ContentTypeService } from '../../services/content-type.service';
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent {
-
+  contentTypes$ = this.cts.getContentTypes();
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(map(result => result.matches));
-  contentTypes$ = this.cts.getContentTypes();
 
   constructor(
     private readonly breakpointObserver: BreakpointObserver,

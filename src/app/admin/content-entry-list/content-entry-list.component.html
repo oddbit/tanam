@@ -1,37 +1,31 @@
-<div>
-  <div *ngIf="(entries$ | async)">
-    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-  </div>
+<mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <!-- Position Column -->
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <a routerLink="/admin/content/entry/{{ contentTypeId }}/{{ element.id}}/edit">{{element.id}}</a>
+    </mat-cell>
+  </ng-container>
 
-  <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-    <!-- Position Column -->
-    <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <a routerLink="/admin/content/entry/{{ contentTypeId }}/{{ element.id}}/edit">{{element.id}}</a>
-      </mat-cell>
-    </ng-container>
+  <ng-container matColumnDef="created">
+    <mat-header-cell *matHeaderCellDef>
+      Created
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.createdAt.toDate() | date:'medium' }}</mat-cell>
+  </ng-container>
 
-    <ng-container matColumnDef="created">
-      <mat-header-cell *matHeaderCellDef>
-        Created
-      </mat-header-cell>
-      <mat-cell *matCellDef="let element">{{ element.createdAt.toDate() | date:'medium' }}</mat-cell>
-    </ng-container>
+  <!-- Name Column -->
+  <ng-container matColumnDef="title">
+    <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
+  </ng-container>
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="title">
-      <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
-    </ng-container>
+  <!-- Weight Column -->
+  <ng-container matColumnDef="status">
+    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+  </ng-container>
 
-    <!-- Weight Column -->
-    <ng-container matColumnDef="status">
-      <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-</div>
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

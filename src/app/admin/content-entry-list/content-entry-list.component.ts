@@ -28,7 +28,7 @@ export class ContentEntryListComponent implements OnInit {
     });
 
     this.entries$.subscribe(entries => {
-      this.dataSource.data = entries;
+      this.dataSource = new MatTableDataSource<ContentEntry>(entries.slice());
     });
   }
 }
