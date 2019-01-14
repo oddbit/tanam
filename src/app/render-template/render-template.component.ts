@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ContentEntryService } from '../services/content-entry.service';
 import { ActivatedRoute } from '@angular/router';
 import { ContentTypeService } from '../services/content-type.service';
-import { TemplateService } from '../services/template.service';
 import { take } from 'rxjs/operators';
+import { DynamicComponentService } from '../services/dynamic-component.service';
 
 @Component({
   selector: 'app-render-template',
@@ -23,7 +23,7 @@ export class RenderTemplateComponent implements OnInit, AfterViewInit {
     private readonly compiler: Compiler,
     private readonly cts: ContentTypeService,
     private readonly ces: ContentEntryService,
-    private readonly ts: TemplateService,
+    private readonly dcs: DynamicComponentService,
   ) { }
 
   ngOnInit() {
@@ -44,24 +44,30 @@ export class RenderTemplateComponent implements OnInit, AfterViewInit {
     }
 
     const contentType = await this.cts.getContentType(contentEntry.contentType).pipe(take(1)).toPromise();
-    const dynamicTemplate = await this.ts.getTemplate(contentType.template).pipe(take(1)).toPromise();
 
-    const dynamicComponent = Component({ template: dynamicTemplate.html })(class { });
-    const dynamicModule = NgModule({
+    const components = await this.generateComponents();
+    for (const component of components) {
+      component.instance.page = {
+        context: {
+          headline: 'WOoooo',
+          content: 'Yep',
+        }
+      };
+    }
+  }
+
+  private async generateComponents() {
+    const components = await this.dcs.getComponents().pipe(take(1)).toPromise();
+
+    const module = NgModule({
       imports: [CommonModule],
-      declarations: [dynamicComponent]
+      declarations: components.map(component => Component({
+        template: component.template,
+        styles: component.styles,
+      })(class { })),
     })(class { });
 
-    this.compiler.compileModuleAndAllComponentsAsync(dynamicModule)
-      .then((factories) => {
-        const factory = factories.componentFactories[0];
-        const componentRef = this.viewContainer.createComponent(factory);
-        componentRef.instance.page = {
-          context: {
-            headline: 'Awesome!',
-            content: 'Truly',
-          }
-        };
-      });
+    const factories = await this.compiler.compileModuleAndAllComponentsAsync(module);
+    return factories.componentFactories.map(factory => this.viewContainer.createComponent(factory));
   }
 }
