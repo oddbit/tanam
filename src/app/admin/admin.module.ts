@@ -17,8 +17,6 @@ import { ContentTemplateFormComponent } from './content-template-form/content-te
 import { ContentTemplateListComponent } from './content-template-list/content-template-list.component';
 import { NavigationListItemComponent } from './navigation-list-item/navigation-list-item.component';
 import { ContentEntryFormComponent } from './content-entry-form/content-entry-form.component';
-import { MatInputModule, MatButtonModule, MatSelectModule, MatRadioModule, MatCardModule } from '@angular/material';
-import { ReactiveFormsModule } from '@angular/forms';
 import { ContentEntryOverviewComponent } from './content-entry-overview/content-entry-overview.component';
 
 @NgModule({
@@ -44,12 +42,6 @@ import { ContentEntryOverviewComponent } from './content-entry-overview/content-
     AdminRoutingModule,
     AppMaterialModule,
     AppFirebaseModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatRadioModule,
-    MatCardModule,
-    ReactiveFormsModule,
   ]
 })
 export class AdminModule { }

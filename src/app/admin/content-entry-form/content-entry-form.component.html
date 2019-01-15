@@ -1,10 +1,10 @@
 <form [formGroup]="entryForm"
       novalidate
-      (ngSubmit)="onSubmit()">
+      (ngSubmit)="saveEntry()">
   <mat-card class="shipping-card">
     <mat-card-header>
       <mat-card-title>
-        Editing {{ (contentType$ | async)?.title | lowercase }}: {{ (entry$ | async)?.title
+        Editing {{ (contentType)?.title }}
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
@@ -14,62 +14,9 @@
             <input matInput
                    placeholder="Title"
                    formControlName="title">
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <input matInput
-                   placeholder="Status"
-                   formControlName="status">
-            <mat-error *ngIf="entryForm.controls['status'].hasError('required')">
-              Status is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col">
-          <mat-form-field class="full-width">
-            <input matInput
-                   placeholder="URL"
-                   formControlName="urlPath">
             <mat-error *ngIf="entryForm.controls['urlPath'].hasError('required')">
-              URL is <strong>required</strong>
+              Title is <strong>required</strong>
             </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-
-<!--
-      <div class="row">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <textarea matInput
-                      placeholder="Address"
-                      formControlName="address"></textarea>
-            <mat-error *ngIf="entryForm.controls['address'].hasError('required')">
-              Address is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row"
-           *ngIf="!hasUnitNumber">
-        <div class="col">
-          <button mat-button
-                  type="button"
-                  (click)="hasUnitNumber = !hasUnitNumber">
-            + Add C/O, Apt, Suite, Unit
-          </button>
-        </div>
-      </div>
-      <div class="row"
-           *ngIf="hasUnitNumber">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <textarea matInput
-                      placeholder="Address 2"
-                      formControlName="address2"></textarea>
           </mat-form-field>
         </div>
       </div>
@@ -77,50 +24,70 @@
         <div class="col">
           <mat-form-field class="full-width">
             <input matInput
-                   placeholder="City"
-                   formControlName="city">
-            <mat-error *ngIf="entryForm.controls['city'].hasError('required')">
-              City is <strong>required</strong>
+                   placeholder="Slug"
+                   formControlName="urlPath">
+            <mat-hint>https://{{ domain$ | async }}/{{ (contentType$ | async)?.slug }}/{{ entryForm.value.urlPath }}</mat-hint>
+            <mat-error *ngIf="entryForm.controls['urlPath'].hasError('required')">
+              URL slug is <strong>required</strong>
             </mat-error>
           </mat-form-field>
         </div>
         <div class="col">
           <mat-form-field class="full-width">
-            <mat-select placeholder="State"
-                        formControlName="state">
-              <mat-option *ngFor="let state of states"
-                          [value]="state.abbreviation">
-                {{ state.name }}
-              </mat-option>
+            <mat-select formControlName="status"
+                        placeholder="Status">
+              <mat-option *ngFor="let statusOption of statusOptions"
+                          value="{{statusOption.value}}">{{statusOption.title}}</mat-option>
             </mat-select>
-            <mat-error *ngIf="entryForm.controls['state'].hasError('required')">
-              State is <strong>required</strong>
-            </mat-error>
           </mat-form-field>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <input matInput
-                   #postalCode
-                   maxlength="5"
-                   placeholder="Postal Code"
-                   type="number"
-                   formControlName="postalCode">
-            <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
-          </mat-form-field>
+    </mat-card-content>
+
+    <mat-card-header>
+      <mat-card-title>
+        {{ (contentType)?.title }} content
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content *ngIf="isFormFieldDataLoaded">
+      <div formGroupName="dataForm">
+        <div class="row"
+             *ngFor="let field of contentType.fields">
+          <div class="col"
+               [ngSwitch]="field.type">
+
+            <!-- If input type is just simple line of text -->
+            <mat-form-field class="full-width"
+                            *ngSwitchCase="'text-line'">
+              <input matInput
+                     placeholder="{{field.title}}"
+                     formControlName="{{field.key}}">
+              <mat-error *ngIf="dataForm.controls[field.key].hasError('required')">
+                {{ field.title }} is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+
+            <!-- If input type is larger amount of text: paragraph -->
+            <mat-form-field class="full-width"
+                            *ngSwitchCase="'text-area'">
+              <textarea matInput
+                        placeholder="{{field.title}}"
+                        formControlName="{{field.key}}"></textarea>
+
+              <mat-error *ngIf="dataForm.controls[field.key].hasError('required')">
+                {{ field.title }} is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Use radio button selection -->
+            <mat-radio-group *ngSwitchCase="'radio-buttons'"
+                             formControlName="{{field.key}}">
+              <mat-radio-button *ngFor="let opt of field.options"
+                                value="{{option.key}}">{{option.value}}</mat-radio-button>
+            </mat-radio-group>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <mat-radio-group formControlName="shipping">
-            <mat-radio-button value="free">Free Shipping</mat-radio-button>
-            <mat-radio-button value="priority">Priority Shipping</mat-radio-button>
-            <mat-radio-button value="nextday">Next Day Shipping</mat-radio-button>
-          </mat-radio-group>
-        </div>
-      </div> -->
     </mat-card-content>
 
     <mat-card-actions>
@@ -130,7 +97,6 @@
       <button mat-raised-button
               color="primary"
               type="submit"
-              (click)="saveEntry()"
               [disabled]="entryForm.pristine">Save</button>
 
     </mat-card-actions>

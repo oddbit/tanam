@@ -5,7 +5,15 @@ import { map } from 'rxjs/operators';
 import { FirebaseApp } from '@angular/fire';
 import { UrlSegment } from '@angular/router';
 
-export type ContentTypeFieldFormElements = 'text-line' | 'text-area' | 'html' | 'number' | 'date' | 'slide-toggle';
+export type ContentTypeFieldFormElements = 'text-line'
+  | 'text-area'
+  | 'html'
+  | 'number'
+  | 'date'
+  | 'slide-toggle'
+  | 'radio-buttons'
+  | 'select';
+
 export interface ContentTypeField {
   key: string;
   title: string;

@@ -1,3 +1,4 @@
+import * as firebase from 'firebase/app';
 import { Injectable, ViewContainerRef, Compiler, NgModule, Component } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ContentEntry } from '../../services/content-entry.service';
@@ -60,7 +61,6 @@ export interface DocumentContext {
 export class DynamicComponentService {
   constructor(
     private readonly compiler: Compiler,
-    private readonly firestore: AngularFirestore,
     private readonly cts: ContentTypeService,
     private readonly dhs: DocumentHeaderService,
     private readonly contentTemplateService: ContentTemplateService,
@@ -88,13 +88,17 @@ export class DynamicComponentService {
       contentType: contentEntry.contentType,
       data: contentEntry.data,
       title: contentEntry.title,
-      url: contentType.standalone ? [contentEntry.url.root, contentEntry.url.path].join('/') : null,
+      url: contentType.standalone
+        ? [contentEntry.url.root, contentEntry.url.path].join('/')
+        : null,
       revision: contentEntry.revision,
       status: contentEntry.status,
       tags: contentEntry.tags,
-      created: contentEntry.createdAt,
-      updated: contentEntry.updatedAt,
-      published: contentEntry.publishTime || null,
+      created: (contentEntry.createdAt as firebase.firestore.Timestamp).toDate(),
+      updated: (contentEntry.updatedAt as firebase.firestore.Timestamp).toDate(),
+      published: !!contentEntry.publishTime
+        ? (contentEntry.publishTime as firebase.firestore.Timestamp).toDate()
+        : null,
     } as DocumentContext;
   }
 

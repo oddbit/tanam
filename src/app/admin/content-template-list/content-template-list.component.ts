@@ -18,6 +18,7 @@ export class ContentTemplateListComponent implements OnInit {
     private readonly router: Router,
     private readonly contentTemplateService: ContentTemplateService,
   ) { }
+
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['selector', 'title', 'updatedAt'];
 

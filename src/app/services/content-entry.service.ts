@@ -91,13 +91,13 @@ export class ContentEntryService {
       .pipe(map(entry => entry[0]));
   }
 
-  getContentEntry(contentTypeId: string, entryId: string) {
+  getContentEntry(entryId: string) {
     return this.firestore
       .collection('tanam-content-entries').doc<ContentEntry>(entryId)
       .valueChanges();
   }
 
-  getContentTypeEntries(contentTypeId: string, queryOpts?: ContentTypeQueryOptions) {
+  getContentEntries(contentTypeId: string, queryOpts: ContentTypeQueryOptions = {}) {
     console.log(`[ContentEntryService:getContentTypeFields] ${contentTypeId}: ${JSON.stringify(queryOpts)}`);
 
     const queryFn = (ref: CollectionReference) => {
