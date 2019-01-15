@@ -27,4 +27,8 @@ export class ContentTemplateService {
   getTemplates() {
     return this.firestore.collection<ContentTemplate>('tanam-templates').valueChanges();
   }
+
+  saveTemplate(template: ContentTemplate) {
+    return this.firestore.collection('tanam-templates').doc<ContentTemplate>(template.id).update(template);
+  }
 }

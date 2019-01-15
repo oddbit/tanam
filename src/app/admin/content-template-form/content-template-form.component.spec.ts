@@ -9,15 +9,15 @@ import {
   MatSelectModule,
 } from '@angular/material';
 
-import { ContentTemplateEditComponent } from './content-template-edit.component';
+import { ContentTemplateFormComponent } from './content-template-form.component';
 
-describe('ContentTemplateEditComponent', () => {
-  let component: ContentTemplateEditComponent;
-  let fixture: ComponentFixture<ContentTemplateEditComponent>;
+describe('ContentTemplateFormComponent', () => {
+  let component: ContentTemplateFormComponent;
+  let fixture: ComponentFixture<ContentTemplateFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContentTemplateEditComponent ],
+      declarations: [ContentTemplateFormComponent],
       imports: [
         NoopAnimationsModule,
         ReactiveFormsModule,
@@ -31,7 +31,7 @@ describe('ContentTemplateEditComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContentTemplateEditComponent);
+    fixture = TestBed.createComponent(ContentTemplateFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

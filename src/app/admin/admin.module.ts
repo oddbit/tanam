@@ -14,7 +14,7 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { AppMaterialModule } from '../app-material.module';
 import { AppFirebaseModule } from '../app-firebase.module';
 import { AdminComponent } from './admin.component';
-import { ContentTemplateEditComponent } from './content-template-edit/content-template-edit.component';
+import { ContentTemplateFormComponent } from './content-template-form/content-template-form.component';
 import { ContentTemplateListComponent } from './content-template-list/content-template-list.component';
 import { NavigationListItemComponent } from './navigation-list-item/navigation-list-item.component';
 
@@ -31,7 +31,7 @@ import { NavigationListItemComponent } from './navigation-list-item/navigation-l
     ContentEntryEditComponent,
     ContentTypeListComponent,
     AdminComponent,
-    ContentTemplateEditComponent,
+    ContentTemplateFormComponent,
     ContentTemplateListComponent,
     NavigationListItemComponent,
   ],
