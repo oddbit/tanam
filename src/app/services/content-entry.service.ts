@@ -19,9 +19,9 @@ export interface ContentEntry {
   revision: number; // Constantly increasing
   status: ContentEntryStatus;
   tags: string[];
-  publishTime?: Date | firebase.firestore.FieldValue;
-  updatedAt: Date | firebase.firestore.FieldValue;
-  createdAt: Date | firebase.firestore.FieldValue;
+  publishTime?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
+  updatedAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
+  createdAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
 }
 
 export interface ContentTypeQueryOptions {

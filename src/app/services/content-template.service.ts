@@ -7,6 +7,8 @@ export interface ContentTemplate {
   selector: string;
   template: string;
   styles: string[];
+  createdAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
+  updatedAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
 }
 
 @Injectable({

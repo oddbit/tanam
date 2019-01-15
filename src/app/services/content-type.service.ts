@@ -22,8 +22,8 @@ export interface ContentType {
   icon: string; // Icon for menus etc
   fields: ContentTypeField[];
   numEntries: { [key: string]: number };
-  updatedAt: Date | firebase.firestore.FieldValue;
-  createdAt: Date | firebase.firestore.FieldValue;
+  updatedAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
+  createdAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
 }
 
 @Injectable({

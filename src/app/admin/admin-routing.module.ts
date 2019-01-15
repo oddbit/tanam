@@ -28,7 +28,8 @@ const routes: Routes = [
       { path: 'content/type/:typeId/edit', component: ContentTypeEditComponent },
 
       { path: 'content/templates', component: ContentTemplateListComponent },
-      { path: 'content/template/:templateId', component: ContentTemplateEditComponent },
+      { path: 'content/template/:templateId', redirectTo: 'edit', pathMatch: 'full' },
+      { path: 'content/template/:templateId/edit', component: ContentTemplateEditComponent },
     ],
   },
 ];

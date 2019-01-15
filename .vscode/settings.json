@@ -6,5 +6,7 @@
         "editor.tabSize": 2,
     },
     "javascript.preferences.quoteStyle": "single",
-    "typescript.preferences.quoteStyle": "single"
+    "typescript.preferences.quoteStyle": "single",
+    "html.format.indentInnerHtml": true,
+    "html.format.wrapAttributes": "force-aligned"
 }
