@@ -5,6 +5,7 @@ import { ContentTypeService, ContentType } from '../../services/content-type.ser
 import { take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { DocumentHeaderService } from './document-header.service';
+import { ContentTemplateService, ContentTemplate } from 'src/app/services/content-template.service';
 
 /**
  * Document context is the object that is passed into the template and can be accessed via the `document` attribute.
@@ -53,14 +54,6 @@ export interface DocumentContext {
   updated: Date;
   published?: Date;
 }
-
-export interface DynamicComponent {
-  title: string;
-  selector: string;
-  template: string;
-  styles: string[];
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -70,6 +63,7 @@ export class DynamicComponentService {
     private readonly firestore: AngularFirestore,
     private readonly cts: ContentTypeService,
     private readonly dhs: DocumentHeaderService,
+    private readonly contentTemplateService: ContentTemplateService,
   ) { }
 
   async render(viewContainer: ViewContainerRef, contentEntry: ContentEntry) {
@@ -78,16 +72,11 @@ export class DynamicComponentService {
       throw new Error(`Template misconfiguration. No such template for '${contentEntry.contentType}'`);
     }
 
-    const templateComponentDefinition = await this.firestore
-      .collection('tanam-components').doc<DynamicComponent>(contentType.template)
-      .valueChanges()
-      .pipe(take(1))
-      .toPromise();
-
+    const template = await this.contentTemplateService.getTemplate(contentType.template).pipe(take(1)).toPromise();
     const documentContextData = this.generateDocumentContext(contentType, contentEntry);
     const module = await this.createModule(documentContextData);
     const factories = await this.compiler.compileModuleAndAllComponentsAsync(module);
-    const factory = factories.componentFactories.filter(cf => cf.selector === templateComponentDefinition.selector)[0];
+    const factory = factories.componentFactories.filter(cf => cf.selector === template.selector)[0];
 
     this.dhs.setTitle(contentEntry.title);
     return viewContainer.createComponent(factory);
@@ -110,27 +99,22 @@ export class DynamicComponentService {
   }
 
   private async createModule(documentContext: DocumentContext) {
-    const components = await this.firestore
-      .collection<DynamicComponent>('tanam-components')
-      .valueChanges()
-      .pipe(take(1))
-      .toPromise();
-
+    const components = await this.contentTemplateService.getTemplates().pipe(take(1)).toPromise();
     return NgModule({
       imports: [CommonModule],
       declarations: components.map(c => this.createComponent(c, documentContext)),
     })(class { });
   }
 
-  private createComponent(componentDefinition: DynamicComponent, documentContext: DocumentContext) {
+  private createComponent(template: ContentTemplate, documentContext: DocumentContext) {
     const dynamicClass = class {
       document = documentContext;
     };
 
     return Component({
-      selector: componentDefinition.selector,
-      template: componentDefinition.template,
-      styles: componentDefinition.styles,
+      selector: template.selector,
+      template: template.template,
+      styles: template.styles,
     })(dynamicClass);
   }
 }
