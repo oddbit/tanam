@@ -1,39 +1,49 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ContentTemplateService, ContentTemplate } from 'src/app/services/content-template.service';
-import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-content-template-form',
   templateUrl: './content-template-form.component.html',
   styleUrls: ['./content-template-form.component.scss']
 })
-export class ContentTemplateFormComponent implements OnInit {
-  templateId = this.route.snapshot.paramMap.get('templateId');
-  readonly template$ = this.contentTemplateservice.getTemplate(this.templateId);
+export class ContentTemplateFormComponent implements OnInit, OnDestroy {
+  @Input() templateId: string;
+
+  template: ContentTemplate;
   readonly templateForm = this.fb.group({
     title: [null, Validators.required],
     selector: [null, Validators.required],
     templateHtml: [null, Validators.required],
   });
+  templateSubscription: Subscription;
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly route: ActivatedRoute,
     private readonly contentTemplateservice: ContentTemplateService,
   ) { }
 
   ngOnInit() {
-    this.template$.subscribe(template => {
-      this.templateForm.patchValue({
-        title: template.title,
-        selector: template.selector,
-        templateHtml: template.template,
+
+    this.templateSubscription = this.contentTemplateservice.getTemplate(this.templateId)
+      .subscribe(template => {
+        this.template = template;
+        this.templateForm.patchValue({
+          title: template.title,
+          selector: template.selector,
+          templateHtml: template.template,
+        });
       });
-    });
   }
 
-  onSubmit() {
+  ngOnDestroy() {
+    if (this.templateSubscription && !this.templateSubscription.closed) {
+      this.templateSubscription.unsubscribe();
+    }
+  }
+
+  onSave() {
     const formData = this.templateForm.value;
     this.contentTemplateservice.saveTemplate({
       id: this.templateId,

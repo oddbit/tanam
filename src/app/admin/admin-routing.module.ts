@@ -7,8 +7,8 @@ import { ContentTypeListComponent } from './content-type-list/content-type-list.
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AdminComponent } from './admin.component';
 import { ContentTemplateListComponent } from './content-template-list/content-template-list.component';
-import { ContentTemplateFormComponent } from './content-template-form/content-template-form.component';
 import { ContentEntryOverviewComponent } from './content-entry-overview/content-entry-overview.component';
+import { ContentTemplateEditComponent } from './content-template-edit/content-template-edit.component';
 
 const routes: Routes = [
   {
@@ -28,7 +28,7 @@ const routes: Routes = [
 
       { path: 'content/templates', component: ContentTemplateListComponent },
       { path: 'content/template/:templateId', redirectTo: 'edit', pathMatch: 'full' },
-      { path: 'content/template/:templateId/edit', component: ContentTemplateFormComponent },
+      { path: 'content/template/:templateId/edit', component: ContentTemplateEditComponent },
     ],
   },
 ];

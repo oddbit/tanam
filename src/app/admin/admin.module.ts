@@ -18,6 +18,7 @@ import { ContentTemplateListComponent } from './content-template-list/content-te
 import { NavigationListItemComponent } from './navigation-list-item/navigation-list-item.component';
 import { ContentEntryFormComponent } from './content-entry-form/content-entry-form.component';
 import { ContentEntryOverviewComponent } from './content-entry-overview/content-entry-overview.component';
+import { ContentTemplateEditComponent } from './content-template-edit/content-template-edit.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { ContentEntryOverviewComponent } from './content-entry-overview/content-
     NavigationListItemComponent,
     ContentEntryFormComponent,
     ContentEntryOverviewComponent,
+    ContentTemplateEditComponent,
   ],
   imports: [
     CommonModule,
