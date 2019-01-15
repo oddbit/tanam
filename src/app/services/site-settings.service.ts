@@ -7,10 +7,21 @@ export const StringTemplates = {
   pageTitle: 'page_title',
 };
 
+const SettingsDocumentKeys = {
+  domain: 'domain',
+  site: 'site',
+  admin: 'admin',
+};
+
 export interface DomainSettings {
   isCustomDomain: boolean;
   primaryDomain: string;
   domains: string[];
+}
+
+export interface AdminSettings {
+  theme: string;
+  language: string;
 }
 
 @Injectable({
@@ -32,7 +43,7 @@ export class SiteSettingsService {
 
   getSiteDomain() {
     return this.firestore
-      .collection('tanam-settings').doc<DomainSettings>('domain')
+      .collection('tanam-settings').doc<DomainSettings>(SettingsDocumentKeys.domain)
       .valueChanges()
       .pipe(map(settings => settings.primaryDomain));
   }

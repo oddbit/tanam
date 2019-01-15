@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserConfigService } from '../services/user-config.service';
 
 @Component({
   selector: 'app-admin',
@@ -6,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
-
-  constructor() { }
+  theme$ = this.userConfig.getAdminTheme();
+  constructor(
+    private readonly userConfig: UserConfigService,
+  ) { }
 
   ngOnInit() {
   }
-
 }

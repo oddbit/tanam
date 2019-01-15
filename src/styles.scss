@@ -1,1 +1,21 @@
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+// Available theme colors
+// https://github.com/angular/material2/blob/master/src/lib/core/theming/_palette.scss
+
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$tanam-admin-primary: mat-palette($mat-light-green);
+$tanam-admin-accent:  mat-palette($mat-light-blue, A200, A100, A400);
+$tanam-admin-theme:   mat-light-theme($tanam-admin-primary, $tanam-admin-accent);
+
+@include angular-material-theme($tanam-admin-theme);
+
+$tanam-admin-dark-primary: mat-palette($mat-blue-grey);
+$tanam-admin-dark-accent:  mat-palette($mat-amber, A200, A100, A400);
+$tanam-admin-dark-warn:    mat-palette($mat-deep-orange);
+$tanam-admin-dark-theme:   mat-dark-theme($tanam-admin-dark-primary, $tanam-admin-dark-accent, $tanam-admin-dark-warn);
+
+.tanam-dark-theme {
+  @include angular-material-theme($tanam-admin-dark-theme);
+}
