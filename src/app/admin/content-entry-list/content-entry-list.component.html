@@ -3,7 +3,7 @@
   <ng-container matColumnDef="id">
     <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
     <mat-cell *matCellDef="let element">
-      <a routerLink="/admin/content/entry/{{ contentTypeId }}/{{ element.id}}/edit">{{element.id}}</a>
+      <a routerLink="/admin/content/type/{{ contentTypeId }}/entry/{{ element.id}}/edit">{{element.id}}</a>
     </mat-cell>
   </ng-container>
 

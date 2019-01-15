@@ -1,23 +1,41 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport="true" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="!(isHandset$ | async)">
+  <mat-sidenav #drawer
+               class="sidenav"
+               fixedInViewport="true"
+               [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+               [mode]="(isHandset$ | async) ? 'over' : 'side'"
+               [opened]="!(isHandset$ | async)">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <app-navigation-list-item routerLink="/admin/dashboard" icon="dashboard" title="Dashboard"></app-navigation-list-item>
+      <app-navigation-list-item routerLink="/admin/dashboard"
+                                icon="dashboard"
+                                title="Dashboard"></app-navigation-list-item>
 
       <h3 mat-subheader>Content</h3>
-      <app-navigation-list-item *ngFor="let contentType of contentTypes$ | async" routerLink="/admin/content/type/{{contentType.id}}"
-        icon="{{contentType.icon}}" title="{{contentType.title}}"></app-navigation-list-item>
+      <app-navigation-list-item *ngFor="let contentType of contentTypes$ | async"
+                                routerLink="/admin/content/type/{{contentType.id}}/entries"
+                                icon="{{contentType.icon}}"
+                                title="{{contentType.title}}"></app-navigation-list-item>
 
       <h3 mat-subheader>Manage</h3>
-      <app-navigation-list-item routerLink="/admin/content/types" icon="library_books" title="Content types"></app-navigation-list-item>
-      <app-navigation-list-item routerLink="/admin/content/templates" icon="web" title="Templates"></app-navigation-list-item>
-      <app-navigation-list-item routerLink="/admin/settings" icon="settings" title="Settings"></app-navigation-list-item>
+      <app-navigation-list-item routerLink="/admin/content/types"
+                                icon="library_books"
+                                title="Content types"></app-navigation-list-item>
+      <app-navigation-list-item routerLink="/admin/content/templates"
+                                icon="web"
+                                title="Templates"></app-navigation-list-item>
+      <app-navigation-list-item routerLink="/admin/settings"
+                                icon="settings"
+                                title="Settings"></app-navigation-list-item>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
+      <button type="button"
+              aria-label="Toggle sidenav"
+              mat-icon-button
+              (click)="drawer.toggle()"
+              *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span>tanam</span>
