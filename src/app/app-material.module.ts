@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
@@ -41,6 +43,8 @@ import {
     MatProgressSpinnerModule,
     MatGridListModule,
     MatMenuModule,
+    MatPaginatorModule,
+    MatSortModule,
   ],
   exports: [
     CommonModule,
@@ -61,6 +65,8 @@ import {
     MatProgressSpinnerModule,
     MatGridListModule,
     MatMenuModule,
+    MatPaginatorModule,
+    MatSortModule,
   ]
 })
 export class AppMaterialModule { }

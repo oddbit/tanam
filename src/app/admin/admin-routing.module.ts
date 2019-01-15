@@ -7,6 +7,8 @@ import { ContentEntryEditComponent } from './content-entry-edit/content-entry-ed
 import { ContentTypeListComponent } from './content-type-list/content-type-list.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AdminComponent } from './admin.component';
+import { ContentTemplateListComponent } from './content-template-list/content-template-list.component';
+import { ContentTemplateEditComponent } from './content-template-edit/content-template-edit.component';
 
 const routes: Routes = [
   {
@@ -18,12 +20,15 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'settings', component: SettingsComponent },
 
+      { path: 'content/entry/:typeId/:entryId', redirectTo: 'content/entry/:typeId/:entryId/edit', pathMatch: 'full' },
+      { path: 'content/entry/:typeId/:entryId/edit', component: ContentEntryEditComponent },
+
       { path: 'content/types', component: ContentTypeListComponent },
       { path: 'content/type/:typeId', component: ContentTypeOverviewComponent },
       { path: 'content/type/:typeId/edit', component: ContentTypeEditComponent },
 
-      { path: 'content/entry/:typeId/:entryId', redirectTo: 'content/entry/:typeId/:entryId/edit', pathMatch: 'full' },
-      { path: 'content/entry/:typeId/:entryId/edit', component: ContentEntryEditComponent },
+      { path: 'content/templates', component: ContentTemplateListComponent },
+      { path: 'content/template/:templateId', component: ContentTemplateEditComponent },
     ],
   },
 ];

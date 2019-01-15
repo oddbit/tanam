@@ -14,6 +14,9 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { AppMaterialModule } from '../app-material.module';
 import { AppFirebaseModule } from '../app-firebase.module';
 import { AdminComponent } from './admin.component';
+import { ContentTemplateEditComponent } from './content-template-edit/content-template-edit.component';
+import { ContentTemplateListComponent } from './content-template-list/content-template-list.component';
+import { NavigationListItemComponent } from './navigation-list-item/navigation-list-item.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +31,9 @@ import { AdminComponent } from './admin.component';
     ContentEntryEditComponent,
     ContentTypeListComponent,
     AdminComponent,
+    ContentTemplateEditComponent,
+    ContentTemplateListComponent,
+    NavigationListItemComponent,
   ],
   imports: [
     CommonModule,

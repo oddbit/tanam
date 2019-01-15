@@ -3,29 +3,16 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="!(isHandset$ | async)">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active">
-        <mat-icon mat-list-icon>dashboard</mat-icon>
-        Dashboard
-      </a>
+      <app-navigation-list-item routerLink="/admin/dashboard" icon="dashboard" title="Dashboard"></app-navigation-list-item>
 
       <h3 mat-subheader>Content</h3>
-
-      <a mat-list-item *ngFor="let contentType of contentTypes$ | async" routerLink="/admin/content/type/{{ contentType.id }}">
-        <mat-icon mat-list-icon>{{ contentType.icon }}</mat-icon>
-        {{ contentType.title }}
-      </a>
+      <app-navigation-list-item *ngFor="let contentType of contentTypes$ | async" routerLink="/admin/content/type/{{contentType.id}}"
+        icon="{{contentType.icon}}" title="{{contentType.title}}"></app-navigation-list-item>
 
       <h3 mat-subheader>Manage</h3>
-
-      <a mat-list-item routerLink="/admin/content/types" routerLinkActive="active">
-        <mat-icon mat-list-icon>list</mat-icon>
-        Content types
-      </a>
-
-      <a mat-list-item routerLink="/admin/settings" routerLinkActive="active">
-        <mat-icon mat-list-icon>settings</mat-icon>
-        Settings
-      </a>
+      <app-navigation-list-item routerLink="/admin/content/types" icon="library_books" title="Content types"></app-navigation-list-item>
+      <app-navigation-list-item routerLink="/admin/content/templates" icon="web" title="Templates"></app-navigation-list-item>
+      <app-navigation-list-item routerLink="/admin/settings" icon="settings" title="Settings"></app-navigation-list-item>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
