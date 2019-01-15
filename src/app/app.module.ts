@@ -8,14 +8,11 @@ import { AppConfigService } from './services/app-config.service';
 import { AdminModule } from './admin/admin.module';
 import { AppMaterialModule } from './app-material.module';
 import { AppFirebaseModule } from './app-firebase.module';
-import { RenderTemplateComponent } from './render-template/render-template.component';
-import { NotFoundComponent } from './not-found/not-found.component';
+import { SiteModule } from './site/site.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    RenderTemplateComponent,
-    NotFoundComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'tanam' }),
@@ -31,6 +28,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     LayoutModule,
     AppMaterialModule,
     AppFirebaseModule,
+    SiteModule,
   ],
   providers: [
     AppConfigService,

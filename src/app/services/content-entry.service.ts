@@ -8,9 +8,10 @@ import { ContentType } from './content-type.service';
 export type ContentEntryStatus = 'published' | 'unpublished' | 'deleted';
 
 export interface ContentEntry {
-  id?: string; // Document id
+  id: string; // Document id
   contentType: string;
-  title: string; // Presentation title for *internal use only* (such as content listing etc)
+  data: { [key: string]: any }; // The content data to render into templates
+  title: string;  // Presentation title for browser window title and content listings
   url: {
     root: string, // The entry path root
     path: string, // The entry URL
@@ -21,7 +22,6 @@ export interface ContentEntry {
   publishTime?: Date | firebase.firestore.FieldValue;
   updatedAt: Date | firebase.firestore.FieldValue;
   createdAt: Date | firebase.firestore.FieldValue;
-  data: { [key: string]: any }; // The actual content of the document
 }
 
 export interface ContentTypeQueryOptions {

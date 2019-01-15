@@ -17,6 +17,7 @@ export interface ContentType {
   title: string; // Presentation name
   slug: string; // Root slug to group entries by
   template: string;
+  standalone: boolean; // True if the content can be presented on a page with URL of its own
   description?: string;
   icon: string; // Icon for menus etc
   fields: ContentTypeField[];
@@ -45,6 +46,8 @@ export class ContentTypeService {
             id: contentTypeId,
             title: contentTypeId,
             slug: contentTypeId,
+            template: null,
+            standalone: true,
             icon: 'cloud',
             fields: [],
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
