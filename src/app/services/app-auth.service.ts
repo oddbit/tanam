@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class AppAuthService {
   ) { }
 
   isLoggedIn() {
-    return of(true);
+    return this.ngFireAuth.user.pipe(map(user => !!user));
   }
 
   login() {
