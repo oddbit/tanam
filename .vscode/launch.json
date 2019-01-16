@@ -7,13 +7,6 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Chrome @ localhost:4000",
-            "url": "http://localhost:4000",
-            "webRoot": "${workspaceFolder}"
-        },
-        {
-            "type": "chrome",
-            "request": "launch",
             "name": "Chrome @ localhost:4200",
             "url": "http://localhost:4200",
             "webRoot": "${workspaceFolder}"

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { SiteSettings } from '../admin/settings-site/settings-site.component';
 
 export const StringTemplates = {
   siteName: 'site_name',
@@ -33,12 +35,15 @@ export class SiteSettingsService {
     private readonly firestore: AngularFirestore,
   ) { }
 
-  async getSiteName() {
-    return 'MyTanam Site';
+  getSiteName() {
+    return this.firestore
+      .collection('tanam-settings').doc<SiteSettings>(SettingsDocumentKeys.site)
+      .valueChanges()
+      .pipe(map(settings => settings.title));
   }
 
-  async getSiteTitleFormat() {
-    return `${StringTemplates.siteName} | ${StringTemplates.pageTitle}`;
+  getSiteTitleFormat() {
+    return of(`${StringTemplates.siteName} | ${StringTemplates.pageTitle}`);
   }
 
   getSiteDomain() {
