@@ -20,6 +20,7 @@ import {
   MatGridListModule,
   MatProgressSpinnerModule,
   MatMenuModule,
+  MatTabsModule
 } from '@angular/material';
 
 @NgModule({
@@ -45,6 +46,7 @@ import {
     MatMenuModule,
     MatPaginatorModule,
     MatSortModule,
+    MatTabsModule
   ],
   exports: [
     CommonModule,
@@ -67,6 +69,7 @@ import {
     MatMenuModule,
     MatPaginatorModule,
     MatSortModule,
+    MatTabsModule
   ]
 })
 export class AppMaterialModule { }
