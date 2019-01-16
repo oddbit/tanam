@@ -12,6 +12,10 @@ export class AppAuthService {
     private readonly ngFireAuth: AngularFireAuth,
   ) { }
 
+  getFirebaseUser() {
+    return this.ngFireAuth.auth.currentUser;
+  }
+
   isLoggedIn() {
     return this.ngFireAuth.user.pipe(map(user => !!user));
   }
