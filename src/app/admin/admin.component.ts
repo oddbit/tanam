@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserConfigService } from '../services/user-config.service';
+import { AppAuthService } from '../services/app-auth.service';
 
 @Component({
   selector: 'app-admin',
@@ -8,8 +9,11 @@ import { UserConfigService } from '../services/user-config.service';
 })
 export class AdminComponent implements OnInit {
   theme$ = this.userConfig.getAdminTheme();
+  isLoggedIn = this.appAuth.isLoggedIn();
+
   constructor(
     private readonly userConfig: UserConfigService,
+    private readonly appAuth: AppAuthService,
   ) { }
 
   ngOnInit() {

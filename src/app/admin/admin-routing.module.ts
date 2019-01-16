@@ -9,11 +9,20 @@ import { AdminComponent } from './admin.component';
 import { ContentTemplateListComponent } from './content-template-list/content-template-list.component';
 import { ContentEntryOverviewComponent } from './content-entry-overview/content-entry-overview.component';
 import { ContentTemplateEditComponent } from './content-template-edit/content-template-edit.component';
+import { AdminAuthGuard } from './admin-auth.guard';
+import { LoginComponent } from './login/login.component';
+import { LoginGuard } from './login/login.guard';
 
 const routes: Routes = [
   {
-    path: 'admin',
+    path: '_/login',
+    component: LoginComponent,
+    canActivate: [LoginGuard],
+  },
+  {
+    path: '_/admin',
     component: AdminComponent,
+    canActivate: [AdminAuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
