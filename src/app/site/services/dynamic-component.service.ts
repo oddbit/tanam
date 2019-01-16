@@ -1,6 +1,5 @@
 import * as firebase from 'firebase/app';
 import { Injectable, ViewContainerRef, Compiler, NgModule, Component } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { ContentEntry } from '../../services/content-entry.service';
 import { ContentTypeService, ContentType } from '../../services/content-type.service';
 import { take } from 'rxjs/operators';
