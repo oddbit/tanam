@@ -5,6 +5,7 @@ import { ContentTypeService, ContentType } from 'src/app/services/content-type.s
 import { ContentEntryService, ContentEntry, ContentEntryStatus } from 'src/app/services/content-entry.service';
 import { combineLatest, Subscription, Observable } from 'rxjs';
 import { SiteSettingsService } from 'src/app/services/site-settings.service';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
 interface StatusOption {
@@ -17,7 +18,9 @@ interface StatusOption {
   templateUrl: './content-entry-form.component.html',
   styleUrls: ['./content-entry-form.component.scss']
 })
+
 export class ContentEntryFormComponent implements OnInit, OnDestroy {
+  public Editor = ClassicEditor;
   @Input() contentTypeId: string;
   @Input() entryId: string;
   @Input() afterSaveRoute: string;
