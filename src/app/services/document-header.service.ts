@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { SiteSettingsService, StringTemplates } from '../../services/site-settings.service';
+import { SiteSettingsService, StringTemplates } from './site-settings.service';
 import { take } from 'rxjs/operators';
 
 @Injectable({

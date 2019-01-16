@@ -2,9 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Compiler, Component, Injectable, NgModule, ViewContainerRef } from '@angular/core';
 import * as firebase from 'firebase/app';
 import { take } from 'rxjs/operators';
-import { ContentEntry } from '../../services/content-entry.service';
-import { ContentTemplate, ContentTemplateService } from '../../services/content-template.service';
-import { ContentType, ContentTypeService } from '../../services/content-type.service';
+import { ContentEntry } from './content-entry.service';
+import { ContentTemplate, ContentTemplateService } from './content-template.service';
+import { ContentType, ContentTypeService } from './content-type.service';
 import { DocumentHeaderService } from './document-header.service';
 
 /**

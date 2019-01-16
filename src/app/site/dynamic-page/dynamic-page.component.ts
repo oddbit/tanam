@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild, ViewContainerRef } from '@
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { ContentEntryService } from '../../services/content-entry.service';
-import { DynamicComponentService } from '../services/dynamic-component.service';
+import { DynamicComponentService } from '../../services/dynamic-component.service';
 
 @Component({
   selector: 'app-dynamic-page',
