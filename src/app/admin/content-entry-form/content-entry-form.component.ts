@@ -21,6 +21,9 @@ interface StatusOption {
 
 export class ContentEntryFormComponent implements OnInit, OnDestroy {
   public Editor = ClassicEditor;
+  public model = {
+    editorData: '<p>Hello, world!</p>'
+  };
   @Input() contentTypeId: string;
   @Input() entryId: string;
   @Input() afterSaveRoute: string;

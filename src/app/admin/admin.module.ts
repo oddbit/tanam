@@ -21,6 +21,7 @@ import { ContentEntryOverviewComponent } from './content-entry-overview/content-
 import { ContentTemplateEditComponent } from './content-template-edit/content-template-edit.component';
 import { LoginComponent } from './login/login.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     AdminRoutingModule,
     AppMaterialModule,
     AppFirebaseModule,
-    CKEditorModule
+    CKEditorModule,
+    FormsModule
   ]
 })
 export class AdminModule { }

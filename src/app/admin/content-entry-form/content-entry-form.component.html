@@ -88,7 +88,7 @@
           </div>
         </div>
       </div>
-      <ckeditor [editor]="Editor" data="<p>Hello, world!</p>"></ckeditor>
+      <ckeditor [(ngModel)]="model.editorData" [editor]="Editor" [ngModelOptions]="{standalone: true}"></ckeditor>
     </mat-card-content>
 
     <mat-card-actions>
