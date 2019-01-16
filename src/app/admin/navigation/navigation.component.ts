@@ -3,6 +3,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ContentTypeService } from '../../services/content-type.service';
+import { AppAuthService } from 'src/app/services/app-auth.service';
+import { SiteSettingsService } from 'src/app/services/site-settings.service';
 
 interface SideMenuItem {
   name: string;
@@ -15,37 +17,22 @@ interface SideMenuItem {
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent {
-  contentTypes$ = this.cts.getContentTypes();
+  siteName$ = this.siteSettingsService.getSiteName();
+  contentTypes$ = this.contentTypeService.getContentTypes();
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(map(result => result.matches));
 
-  // sideMenuItems: SideMenuItem[] = [
-  //   {
-  //     name: 'Main',
-  //     subMenuItems: [
-  //       {
-  //         name: 'Dashboard',
-  //         icon: 'dashboard',
-  //         link: '/admin/dashboard',
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     name: 'Content',
-  //     subMenuItems: [
-  //       {
-  //         name: 'Dashboard',
-  //         icon: 'dashboard',
-  //         link: '/admin/dashboard',
-  //       },
-  //     ],
-  //   },
-  // ];
-
   constructor(
     private readonly breakpointObserver: BreakpointObserver,
-    private readonly cts: ContentTypeService,
+    private readonly contentTypeService: ContentTypeService,
+    private readonly appAuthService: AppAuthService,
+    private readonly siteSettingsService: SiteSettingsService,
   ) { }
+
+  logout() {
+    console.log(`[NavigationComponent:logout]`);
+    this.appAuthService.logOut();
+  }
 }

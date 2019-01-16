@@ -1,26 +1,35 @@
 <div *ngIf="(contentType$ |async) as contentType">
-  <mat-card class="full-width">
+  <mat-card>
     <mat-card-title-group>
-      <mat-card-title>{{ contentType.title }}</mat-card-title>
+      <mat-card-title>
+        {{ contentType.title }}
+        <button mat-flat-button color="accent" (click)="createNewEntry()">+ Add New</button>
+      </mat-card-title>
       <mat-card-subtitle>
-        https://{{ domain$ | async }}/{{ contentType.slug }}
+        https://{{ domain$ | async }}/{{ contentType.slug }} <br>
+        slug: {{ contentType.slug }}
       </mat-card-subtitle>
     </mat-card-title-group>
     <mat-card-content>
       <p *ngIf="contentType.description">{{ contentType.description }}</p>
-      <ul>
-        <li>Content type slug: {{ contentType.slug }}</li>
-        <li>Number of total entries: {{ contentType.numEntries.published + contentType.numEntries.unpublished }}</li>
-        <li>Number of published entries: {{ contentType.numEntries.published || 0 }}</li>
-        <li>Number of unpublished entries: {{ contentType.numEntries.unpublished || 0}}</li>
-      </ul>
-
     </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button
-              color="accent"
-              (click)="createNewEntry()">CREATE NEW</button>
-    </mat-card-actions>
   </mat-card>
-  <app-content-entry-list [contentTypeId]="contentType.id"></app-content-entry-list>
+
+  <mat-tab-group>
+    <mat-tab label="All [{{ contentType.numEntries.published + contentType.numEntries.unpublished }}]">
+      <ng-template matTabContent>
+        <app-content-entry-list [contentTypeId]="contentType.id"></app-content-entry-list>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Published [{{ contentType.numEntries.published || 0 }}]">
+      <ng-template matTabContent>
+        <app-content-entry-list [contentTypeId]="contentType.id"></app-content-entry-list>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Unpublished [{{ contentType.numEntries.unpublished || 0}}]">
+      <ng-template matTabContent>
+        <app-content-entry-list [contentTypeId]="contentType.id"></app-content-entry-list>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
 </div>

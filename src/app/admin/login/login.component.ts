@@ -1,30 +1,25 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UserConfigService } from '../services/user-config.service';
-import { AppAuthService } from '../services/app-auth.service';
+import { AppAuthService } from 'src/app/services/app-auth.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-
 @Component({
-  selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.scss']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
-export class AdminComponent implements OnInit, OnDestroy {
-  readonly theme$ = this.userConfig.getAdminTheme();
-
+export class LoginComponent implements OnInit, OnDestroy {
   private authSubscription: Subscription;
 
   constructor(
     private readonly router: Router,
-    private readonly userConfig: UserConfigService,
     private readonly appAuthService: AppAuthService,
   ) { }
 
   ngOnInit() {
     this.authSubscription = this.appAuthService.isLoggedIn().subscribe(isLoggedIn => {
-      console.log(`[AdminComponent:isLoggedIn] ${isLoggedIn}`);
-      if (!isLoggedIn) {
-        this.router.navigateByUrl(`/_/login`);
+      console.log(`[LoginComponent:isLoggedIn] ${isLoggedIn}`);
+      if (isLoggedIn) {
+        this.router.navigateByUrl(`/_/admin`);
       }
     });
   }
@@ -33,5 +28,9 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.authSubscription && !this.authSubscription.closed) {
       this.authSubscription.unsubscribe();
     }
+  }
+
+  login() {
+    this.appAuthService.login();
   }
 }

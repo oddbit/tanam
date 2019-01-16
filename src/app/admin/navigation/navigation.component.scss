@@ -16,6 +16,10 @@
   z-index: 1;
 }
 
-.container {
+.admin-container {
   margin: 4%;
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
 }
