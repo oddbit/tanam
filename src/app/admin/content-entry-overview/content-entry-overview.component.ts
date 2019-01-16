@@ -29,6 +29,6 @@ export class ContentEntryOverviewComponent implements OnInit {
   async createNewEntry() {
     const contentType = await this.cts.getContentType(this.contentTypeId).pipe(take(1)).toPromise();
     const newEntryDocument = await this.ces.createContentEntry(contentType);
-    this.router.navigateByUrl(`/admin/content/type/${contentType.id}/entry/${newEntryDocument.ref.id}/edit`);
+    this.router.navigateByUrl(`/_/admin/content/type/${contentType.id}/entry/${newEntryDocument.ref.id}/edit`);
   }
 }

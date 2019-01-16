@@ -9,24 +9,24 @@
       Menu
     </mat-toolbar>
     <mat-nav-list>
-      <app-navigation-list-item routerLink="/admin/dashboard"
+      <app-navigation-list-item routerLink="/_/admin/dashboard"
                                 icon="dashboard"
                                 title="Dashboard"></app-navigation-list-item>
 
       <h3 mat-subheader>Content</h3>
       <app-navigation-list-item *ngFor="let contentType of contentTypes$ | async"
-                                routerLink="/admin/content/type/{{contentType.id}}/entries"
+                                routerLink="/_/admin/content/type/{{contentType.id}}/entries"
                                 icon="{{contentType.icon}}"
                                 title="{{contentType.title}}"></app-navigation-list-item>
 
       <h3 mat-subheader>Manage</h3>
-      <app-navigation-list-item routerLink="/admin/content/types"
+      <app-navigation-list-item routerLink="/_/admin/content/types"
                                 icon="library_books"
                                 title="Content types"></app-navigation-list-item>
-      <app-navigation-list-item routerLink="/admin/content/templates"
+      <app-navigation-list-item routerLink="/_/admin/content/templates"
                                 icon="web"
                                 title="Templates"></app-navigation-list-item>
-      <app-navigation-list-item routerLink="/admin/settings"
+      <app-navigation-list-item routerLink="/_/admin/settings"
                                 icon="settings"
                                 title="Settings"></app-navigation-list-item>
     </mat-nav-list>

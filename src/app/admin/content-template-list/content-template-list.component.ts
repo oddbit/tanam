@@ -27,6 +27,6 @@ export class ContentTemplateListComponent implements OnInit {
   }
 
   editTemplate(templateId: string) {
-    this.router.navigateByUrl(`/admin/content/template/${templateId}/edit`);
+    this.router.navigateByUrl(`/_/admin/content/template/${templateId}/edit`);
   }
 }

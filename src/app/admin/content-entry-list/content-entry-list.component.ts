@@ -28,6 +28,6 @@ export class ContentEntryListComponent implements OnInit {
   }
 
   editEntry(entryId: string) {
-    this.router.navigateByUrl(`/admin/content/type/${this.contentTypeId}/entry/${entryId}/edit`);
+    this.router.navigateByUrl(`/_/admin/content/type/${this.contentTypeId}/entry/${entryId}/edit`);
   }
 }

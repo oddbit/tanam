@@ -62,7 +62,7 @@ export class ContentTypeEditComponent implements OnInit {
   }
 
   cancelEditing() {
-    this.router.navigateByUrl(`/admin/content/type/${this.contentTypeId}`);
+    this.router.navigateByUrl(`/_/admin/content/type/${this.contentTypeId}`);
   }
 
   saveEntry() {
