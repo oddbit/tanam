@@ -19,3 +19,8 @@ $tanam-admin-dark-theme:   mat-dark-theme($tanam-admin-dark-primary, $tanam-admi
 .tanam-dark-theme {
   @include angular-material-theme($tanam-admin-dark-theme);
 }
+
+// Replace user agent stylesheet margin
+body {
+  margin: 0;
+}
