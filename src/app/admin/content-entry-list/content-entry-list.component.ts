@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { ContentEntryListDataSource } from './content-entry-list-datasource';
 import { Router } from '@angular/router';
-import { ContentEntryService } from 'src/app/services/content-entry.service';
+import { ContentEntryService } from '../../services/content-entry.service';
 
 @Component({
   selector: 'app-content-entry-list',
@@ -28,6 +28,6 @@ export class ContentEntryListComponent implements OnInit {
   }
 
   editEntry(entryId: string) {
-    this.router.navigateByUrl(`/admin/content/type/${this.contentTypeId}/entry/${entryId}/edit`);
+    this.router.navigateByUrl(`/_/admin/content/type/${this.contentTypeId}/entry/${entryId}/edit`);
   }
 }

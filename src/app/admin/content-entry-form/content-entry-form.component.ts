@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { FormBuilder, Validators, FormControl } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ContentTypeService, ContentType } from 'src/app/services/content-type.service';
-import { ContentEntryService, ContentEntry, ContentEntryStatus } from 'src/app/services/content-entry.service';
-import { combineLatest, Subscription, Observable } from 'rxjs';
-import { SiteSettingsService } from 'src/app/services/site-settings.service';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { combineLatest, Subscription } from 'rxjs';
+import { ContentEntry, ContentEntryService, ContentEntryStatus } from 'src/app/services/content-entry.service';
+import { ContentType, ContentTypeService } from 'src/app/services/content-type.service';
+import { SiteSettingsService } from 'src/app/services/site-settings.service';
 
 
 interface StatusOption {

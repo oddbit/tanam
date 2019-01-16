@@ -22,7 +22,6 @@ import { SiteModule } from './site/site.module';
     // since it declares the catch all wildcard route
     AppRoutingModule,
 
-    // AppFirebaseModule,
     BrowserTransferStateModule,
     HttpClientModule,
     LayoutModule,

@@ -19,3 +19,11 @@ $tanam-admin-dark-theme:   mat-dark-theme($tanam-admin-dark-primary, $tanam-admi
 .tanam-dark-theme {
   @include angular-material-theme($tanam-admin-dark-theme);
 }
+
+body, html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}

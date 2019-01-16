@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AppAuthService } from '../../services/app-auth.service';
 import { ContentTypeService } from '../../services/content-type.service';
-import { AppAuthService } from 'src/app/services/app-auth.service';
-import { SiteSettingsService } from 'src/app/services/site-settings.service';
+import { SiteSettingsService } from '../../services/site-settings.service';
 
 interface SideMenuItem {
   name: string;
