@@ -8,5 +8,7 @@
     "javascript.preferences.quoteStyle": "single",
     "typescript.preferences.quoteStyle": "single",
     "html.format.indentInnerHtml": true,
-    "html.format.wrapAttributes": "force-aligned"
+    "html.format.wrapAttributes": "force-aligned",
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "javascript.preferences.importModuleSpecifier": "relative"
 }

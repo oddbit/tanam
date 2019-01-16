@@ -1,11 +1,11 @@
-import * as firebase from 'firebase/app';
-import { Injectable, ViewContainerRef, Compiler, NgModule, Component } from '@angular/core';
-import { ContentEntry } from '../../services/content-entry.service';
-import { ContentTypeService, ContentType } from '../../services/content-type.service';
-import { take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+import { Compiler, Component, Injectable, NgModule, ViewContainerRef } from '@angular/core';
+import * as firebase from 'firebase/app';
+import { take } from 'rxjs/operators';
+import { ContentEntry } from '../../services/content-entry.service';
+import { ContentTemplate, ContentTemplateService } from '../../services/content-template.service';
+import { ContentType, ContentTypeService } from '../../services/content-type.service';
 import { DocumentHeaderService } from './document-header.service';
-import { ContentTemplateService, ContentTemplate } from 'src/app/services/content-template.service';
 
 /**
  * Document context is the object that is passed into the template and can be accessed via the `document` attribute.

@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ContentTypeService, ContentType } from 'src/app/services/content-type.service';
-import { ContentEntryService, ContentEntry, ContentEntryStatus } from 'src/app/services/content-entry.service';
 import { combineLatest, Subscription } from 'rxjs';
-import { SiteSettingsService } from 'src/app/services/site-settings.service';
+import { ContentEntryStatus, ContentEntry, ContentEntryService } from '../../services/content-entry.service';
+import { ContentTypeService, ContentType } from '../../services/content-type.service';
+import { SiteSettingsService } from '../../services/site-settings.service';
 
 
 interface StatusOption {

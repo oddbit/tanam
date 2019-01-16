@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { ContentEntryListDataSource } from './content-entry-list-datasource';
 import { Router } from '@angular/router';
-import { ContentEntryService } from 'src/app/services/content-entry.service';
+import { ContentEntryService } from '../../services/content-entry.service';
 
 @Component({
   selector: 'app-content-entry-list',

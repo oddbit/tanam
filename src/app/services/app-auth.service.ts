@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
 import { map } from 'rxjs/operators';

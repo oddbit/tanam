@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AppAuthService } from 'src/app/services/app-auth.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AppAuthService } from '../../services/app-auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

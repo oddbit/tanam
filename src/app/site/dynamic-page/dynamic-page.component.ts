@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, ViewContainerRef, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs/operators';
+import { ContentEntryService } from '../../services/content-entry.service';
 import { DynamicComponentService } from '../services/dynamic-component.service';
-import { ContentEntryService } from 'src/app/services/content-entry.service';
 
 @Component({
   selector: 'app-dynamic-page',

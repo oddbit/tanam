@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { ContentTemplateListDataSource } from './content-template-list-datasource';
-import { ContentTemplateService } from 'src/app/services/content-template.service';
 import { Router } from '@angular/router';
+import { ContentTemplateService } from '../../services/content-template.service';
 
 @Component({
   selector: 'app-content-template-list',
