@@ -3,7 +3,7 @@ import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ContentTypeService, ContentType } from 'src/app/services/content-type.service';
 import { ContentEntryService, ContentEntry, ContentEntryStatus } from 'src/app/services/content-entry.service';
-import { combineLatest, Subscription, Observable } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { SiteSettingsService } from 'src/app/services/site-settings.service';
 
 
