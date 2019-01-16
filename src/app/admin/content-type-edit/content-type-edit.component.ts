@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { ContentTypeService, ContentType, ContentTypeField } from '../../services/content-type.service';
-import { FormBuilder, FormArray, FormGroup } from '@angular/forms';
+import { ContentTypeField, ContentTypeService } from '../../services/content-type.service';
 
 @Component({
   selector: 'app-content-type-edit',
@@ -47,7 +46,7 @@ export class ContentTypeEditComponent implements OnInit {
   }
 
   addField(field?: ContentTypeField) {
-    const val = field ? field : { type: 'text-line' } as ContentTypeField;
+    const val = field ? field : { type: 'input-text' } as ContentTypeField;
     const formField = this.formBuilder.group({
       type: [val.type],
       title: [val.title],

@@ -1,13 +1,11 @@
-import * as firebase from 'firebase/app';
 import { Injectable } from '@angular/core';
-import { AngularFirestore, QueryDocumentSnapshot, AngularFirestoreDocument, CollectionReference } from '@angular/fire/firestore';
-import { map } from 'rxjs/operators';
 import { FirebaseApp } from '@angular/fire';
-import { UrlSegment } from '@angular/router';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import * as firebase from 'firebase/app';
 
-export type ContentTypeFieldFormElements = 'text-line'
-  | 'text-area'
-  | 'html'
+export type ContentTypeFieldFormElements = 'input-text'
+  | 'textbox-plain'
+  | 'textbox-rich'
   | 'number'
   | 'date'
   | 'slide-toggle'
