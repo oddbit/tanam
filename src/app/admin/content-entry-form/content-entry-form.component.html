@@ -80,20 +80,6 @@
               </mat-error>
             </mat-form-field>
 
-            <!-- Input rich formatted text in WYSIWYG editor -->
-            <mat-form-field class="full-width"
-                            *ngSwitchCase="'textbox-rich'">
-
-              <app-mat-form-ckeditor matInput
-                                     placeholder="{{field.title}}"
-                                     formControlName="{{field.key}}"></app-mat-form-ckeditor>
-
-              <mat-error *ngIf="dataForm.controls[field.key].hasError('required')">
-                {{ field.title }} is <strong>required</strong>
-              </mat-error>
-            </mat-form-field>
-
-
             <!-- Use radio button selection -->
             <mat-radio-group *ngSwitchCase="'radio-buttons'"
                              formControlName="{{field.key}}">
@@ -103,7 +89,9 @@
           </div>
         </div>
       </div>
-      <ckeditor [(ngModel)]="model.editorData" [editor]="Editor" [ngModelOptions]="{standalone: true}"></ckeditor>
+      <ckeditor [(ngModel)]="model.editorData"
+                [editor]="Editor"
+                [ngModelOptions]="{standalone: true}"></ckeditor>
     </mat-card-content>
 
     <mat-card-actions>
