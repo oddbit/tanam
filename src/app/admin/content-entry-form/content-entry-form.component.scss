@@ -25,3 +25,7 @@
 .col:last-child {
   margin-right: 0;
 }
+
+:host ::ng-deep .ck-editor__editable {
+  min-height: 500px;
+}
