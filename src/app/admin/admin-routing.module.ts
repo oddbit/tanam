@@ -15,6 +15,7 @@ import { LoginGuard } from './login/login.guard';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { SettingsComponent } from './settings/settings.component';
 import { PublisherGuard } from './publisher.guard';
+import { MediaComponent } from './media/media.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,11 @@ const routes: Routes = [
             path: 'settings',
             component: SettingsComponent,
             canActivate: [AdminGuard]
+          },
+          {
+            path: 'media',
+            component: MediaComponent,
+            canActivate: [PublisherGuard]
           },
           {
             path: 'content/types',

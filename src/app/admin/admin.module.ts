@@ -20,6 +20,9 @@ import { NavigationListItemComponent } from './navigation-list-item/navigation-l
 import { NavigationComponent } from './navigation/navigation.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { SettingsModule } from './settings/settings.module';
+import { MediaComponent } from './media/media.component';
+import { MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
+import { LayoutModule } from '@angular/cdk/layout';
 
 @NgModule({
   declarations: [
@@ -39,6 +42,7 @@ import { SettingsModule } from './settings/settings.module';
     LoginComponent,
     NotFoundComponent,
     ContentTypeFormComponent,
+    MediaComponent,
   ],
   imports: [
     CommonModule,
@@ -46,6 +50,12 @@ import { SettingsModule } from './settings/settings.module';
     AppMaterialModule,
     AppFirebaseModule,
     SettingsModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    LayoutModule,
   ]
 })
 export class AdminModule { }
