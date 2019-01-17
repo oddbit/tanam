@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { FirebaseApp } from '@angular/fire';
-import { AppAuthService } from './app-auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { map, tap } from 'rxjs/operators';
+import { AppAuthService } from './app-auth.service';
 
 export type UserRole = 'owner' | 'admin' | 'publisher' | 'designer' | 'reviewer';
 
@@ -18,7 +18,6 @@ export class UserService {
 
   constructor(
     private readonly appAuthService: AppAuthService,
-    private readonly fbApp: FirebaseApp,
     private readonly firestore: AngularFirestore,
   ) { }
 
@@ -33,5 +32,17 @@ export class UserService {
     return this.firestore
       .collection('tanam-users').doc<TanamUser>(uid)
       .valueChanges();
+  }
+
+  hasSomeRole() {
+    return this.getCurrentUser()
+      .pipe(map(user => user.roles.length > 0))
+      .pipe(tap(result => console.log(`[UserService:hasSomeRole] ${result}`)));
+  }
+
+  hasRole(role: UserRole) {
+    return this.getCurrentUser()
+      .pipe(map(user => user.roles.indexOf(role) !== -1))
+      .pipe(tap(result => console.log(`[UserService:hasRole] ${role}: ${result}`)));
   }
 }
