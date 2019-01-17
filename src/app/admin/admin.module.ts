@@ -21,6 +21,9 @@ import { ContentEntryOverviewComponent } from './content-entry-overview/content-
 import { ContentTemplateEditComponent } from './content-template-edit/content-template-edit.component';
 import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { ContentTypeFormComponent } from './content-type-form/content-type-form.component';
+import { MatInputModule, MatButtonModule, MatSelectModule, MatRadioModule, MatCardModule } from '@angular/material';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -42,12 +45,19 @@ import { NotFoundComponent } from './not-found/not-found.component';
     ContentTemplateEditComponent,
     LoginComponent,
     NotFoundComponent,
+    ContentTypeFormComponent,
   ],
   imports: [
     CommonModule,
     AdminRoutingModule,
     AppMaterialModule,
     AppFirebaseModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatCardModule,
+    ReactiveFormsModule,
   ]
 })
 export class AdminModule { }

@@ -1,18 +1,16 @@
-import * as firebase from 'firebase/app';
 import { Injectable } from '@angular/core';
-import { AngularFirestore, QueryDocumentSnapshot, AngularFirestoreDocument, CollectionReference } from '@angular/fire/firestore';
-import { map } from 'rxjs/operators';
 import { FirebaseApp } from '@angular/fire';
-import { UrlSegment } from '@angular/router';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import * as firebase from 'firebase/app';
 
-export type ContentTypeFieldFormElements = 'text-line'
-  | 'text-area'
-  | 'html'
-  | 'number'
+export type ContentTypeFieldFormElements = 'input-text'
+  | 'input-number'
+  | 'textbox-plain'
+  | 'textbox-rich'
   | 'date'
-  | 'slide-toggle'
-  | 'radio-buttons'
-  | 'select';
+  | 'time'
+  | 'date-time'
+  | 'slide-toggle';
 
 export interface ContentTypeField {
   key: string;
@@ -74,6 +72,8 @@ export class ContentTypeService {
   }
 
   getContentType(contentTypeId: string) {
+    console.log(`getContentType contentType: ${contentTypeId}`);
+
     return this.firestore
       .collection('tanam-content-types').doc<ContentType>(contentTypeId)
       .valueChanges();
