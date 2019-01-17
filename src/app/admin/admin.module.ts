@@ -20,6 +20,7 @@ import { ContentEntryFormComponent } from './content-entry-form/content-entry-fo
 import { ContentEntryOverviewComponent } from './content-entry-overview/content-entry-overview.component';
 import { ContentTemplateEditComponent } from './content-template-edit/content-template-edit.component';
 import { LoginComponent } from './login/login.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { LoginComponent } from './login/login.component';
     ContentEntryOverviewComponent,
     ContentTemplateEditComponent,
     LoginComponent,
+    NotFoundComponent,
   ],
   imports: [
     CommonModule,

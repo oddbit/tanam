@@ -12,34 +12,43 @@ import { ContentTemplateEditComponent } from './content-template-edit/content-te
 import { AdminAuthGuard } from './admin-auth.guard';
 import { LoginComponent } from './login/login.component';
 import { LoginGuard } from './login/login.guard';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
   {
-    path: '_/login',
-    component: LoginComponent,
-    canActivate: [LoginGuard],
-  },
-  {
-    path: '_/admin',
-    component: AdminComponent,
-    canActivate: [AdminAuthGuard],
+    path: '_',
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: DashboardComponent },
-      { path: 'settings', component: SettingsComponent },
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
+      {
+        path: 'login',
+        component: LoginComponent,
+        canActivate: [LoginGuard],
+      },
+      {
+        path: 'admin',
+        component: AdminComponent,
+        canActivate: [AdminAuthGuard],
+        children: [
+          { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+          { path: 'dashboard', component: DashboardComponent },
+          { path: 'settings', component: SettingsComponent },
 
-      { path: 'content/types', component: ContentTypeListComponent },
-      { path: 'content/type/:typeId', redirectTo: 'edit', pathMatch: 'full' },
-      { path: 'content/type/:typeId/edit', component: ContentTypeEditComponent },
-      { path: 'content/type/:typeId/entries', component: ContentEntryOverviewComponent },
-      { path: 'content/type/:typeId/entry/:entryId', redirectTo: 'edit', pathMatch: 'full' },
-      { path: 'content/type/:typeId/entry/:entryId/edit', component: ContentEntryEditComponent },
+          { path: 'content/types', component: ContentTypeListComponent },
+          { path: 'content/type/:typeId', redirectTo: 'edit', pathMatch: 'full' },
+          { path: 'content/type/:typeId/edit', component: ContentTypeEditComponent },
+          { path: 'content/type/:typeId/entries', component: ContentEntryOverviewComponent },
+          { path: 'content/type/:typeId/entry/:entryId', redirectTo: 'edit', pathMatch: 'full' },
+          { path: 'content/type/:typeId/entry/:entryId/edit', component: ContentEntryEditComponent },
 
-      { path: 'content/templates', component: ContentTemplateListComponent },
-      { path: 'content/template/:templateId', redirectTo: 'edit', pathMatch: 'full' },
-      { path: 'content/template/:templateId/edit', component: ContentTemplateEditComponent },
+          { path: 'content/templates', component: ContentTemplateListComponent },
+          { path: 'content/template/:templateId', redirectTo: 'edit', pathMatch: 'full' },
+          { path: 'content/template/:templateId/edit', component: ContentTemplateEditComponent },
+          { path: '**', component: NotFoundComponent },
+        ],
+      },
+      { path: '**', redirectTo: 'login', pathMatch: 'full' },
     ],
-  },
+  }
 ];
 
 @NgModule({
