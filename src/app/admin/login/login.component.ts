@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AppAuthService } from '../../services/app-auth.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -12,16 +13,18 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly router: Router,
-    private readonly appAuthService: AppAuthService,
-  ) { }
+    private readonly appAuthService: AppAuthService
+  ) {}
 
   ngOnInit() {
-    this.authSubscription = this.appAuthService.isLoggedIn().subscribe(isLoggedIn => {
-      console.log(`[LoginComponent:isLoggedIn] ${isLoggedIn}`);
-      if (isLoggedIn) {
-        this.router.navigateByUrl(`/_/admin`);
-      }
-    });
+    this.authSubscription = this.appAuthService
+      .isLoggedIn()
+      .subscribe(isLoggedIn => {
+        console.log(`[LoginComponent:isLoggedIn] ${isLoggedIn}`);
+        if (isLoggedIn) {
+          this.router.navigateByUrl(`/_/admin`);
+        }
+      });
   }
 
   ngOnDestroy() {
