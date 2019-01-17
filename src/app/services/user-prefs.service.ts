@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirebaseApp } from '@angular/fire';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { map } from 'rxjs/operators';
+import { map, distinct } from 'rxjs/operators';
 import { AppAuthService } from './app-auth.service';
 import { TanamUser } from './user.service';
 
@@ -25,11 +25,13 @@ export class UserPrefsService {
   ) { }
 
   getAdminTheme() {
-    const user = this.appAuthService.getFirebaseUser();
+    const firebaseUser = this.appAuthService.getFirebaseUser();
     return this.firestore
-      .collection('tanam-users').doc<TanamUser>(user.uid)
+      .collection('tanam-users').doc<TanamUser>(firebaseUser.uid)
       .valueChanges()
-      .pipe(map(u => THEMES[u.prefs.theme] || THEMES['default']));
+      .pipe(map(tanamUser => !!tanamUser.prefs ? tanamUser.prefs : { theme: 'default' }))
+      .pipe(map((prefs: { theme: AdminTheme }) => THEMES[prefs.theme] || THEMES['default']))
+      .pipe(distinct());
   }
 
   setAdminTheme(theme: AdminTheme) {
