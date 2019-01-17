@@ -1,0 +1,13 @@
+@import '~@angular/material/theming';
+
+$tanam-admin-primary: mat-palette($mat-light-green);
+$tanam-admin-accent: mat-palette($mat-light-blue, A200, A100, A400);
+$tanam-admin-dark-primary: mat-palette($mat-blue-grey);
+$tanam-admin-dark-accent: mat-palette($mat-amber, A200, A100, A400);
+$tanam-admin-dark-warn: mat-palette($mat-deep-orange);
+
+$primary-color: mat-color($tanam-admin-primary);
+$accent-color: mat-color($tanam-admin-accent);
+$dark-primary-color: mat-color($tanam-admin-dark-primary);
+$dark-accent-color: mat-color($tanam-admin-dark-accent);
+$dark-warn-color: mat-color($tanam-admin-dark-warn);
