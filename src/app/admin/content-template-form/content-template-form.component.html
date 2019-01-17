@@ -32,7 +32,10 @@
         <div class="col">
           <mat-form-field class="full-width">
             <textarea matInput
-                      rows="10"
+                      cdkTextareaAutosize
+                      #autosize="cdkTextareaAutosize"
+                      cdkAutosizeMinRows="15"
+                      cdkAutosizeMaxRows="40"
                       placeholder="HTML template code"
                       formControlName="templateHtml"></textarea>
             <mat-error *ngIf="templateForm.controls['templateHtml'].hasError('required')">
@@ -42,7 +45,7 @@
         </div>
       </div>
     </mat-card-content>
-    <mat-card-actions>
+    <mat-card-actions align="end">
       <button mat-raised-button
               color="primary"
               type="submit">Submit</button>
