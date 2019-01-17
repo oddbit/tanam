@@ -50,5 +50,5 @@ export const tanamOnUserUpdate: functions.CloudFunction<functions.Change<Firebas
 
 function setUserRoleToAuth({ uid, roles }: { uid: string, roles: string[] }) {
     console.log(`[setUserRoleToAuth] Setting roles: ${JSON.stringify({ uid, roles })}`);
-    return admin.auth().setCustomUserClaims(uid, { roles });
+    return admin.auth().setCustomUserClaims(uid, { tanam: roles });
 }

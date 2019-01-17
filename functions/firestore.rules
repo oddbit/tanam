@@ -51,16 +51,16 @@ service cloud.firestore {
     return hasUserRole("owner");
   }
 
-  function isAtLeastManager() {
-    return isOwner() || hasUserRole("manager");
+  function isAtLeastAdmin() {
+    return isOwner() || hasUserRole("admin");
   }
 
   function isAtLeastPublisher() {
-    return isAtLeastManager() || hasUserRole("publisher");
+    return isAtLeastAdmin() || hasUserRole("publisher");
   }
 
   function isAtLeastDesigner() {
-    return isAtLeastManager() || hasUserRole("designer");
+    return isAtLeastAdmin() || hasUserRole("designer");
   }
 
   function isAtLeastReviewer() {
