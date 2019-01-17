@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { ContentTypeService, ContentType } from '../../services/content-type.service';
-import { Observable } from 'rxjs';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { MatPaginator, MatSort } from '@angular/material';
+import { ContentTypeListDataSource } from './content-type-list-datasource';
+import { Router } from '@angular/router';
+import { ContentTypeService } from '../../services/content-type.service';
 
 @Component({
   selector: 'app-content-type-list',
@@ -8,9 +10,23 @@ import { Observable } from 'rxjs';
   styleUrls: ['./content-type-list.component.scss']
 })
 export class ContentTypeListComponent implements OnInit {
-  readonly contentTypes$ = this.cts.getContentTypes();
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  dataSource: ContentTypeListDataSource;
 
-  constructor(private readonly cts: ContentTypeService) { }
+  constructor(
+    private readonly router: Router,
+    private readonly contentTypeService: ContentTypeService,
+  ) { }
 
-  ngOnInit() { }
+  displayedColumns = ['title', 'updatedAt'];
+
+  ngOnInit() {
+    this.dataSource = new ContentTypeListDataSource(this.contentTypeService, this.paginator, this.sort);
+  }
+
+  editContentType(contentTypeId: string) {
+    const url = `/_/admin/content/type/${contentTypeId}/edit`;
+    this.router.navigateByUrl(url);
+  }
 }
