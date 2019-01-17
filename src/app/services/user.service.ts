@@ -3,7 +3,7 @@ import { FirebaseApp } from '@angular/fire';
 import { AppAuthService } from './app-auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 
-export type UserRole = 'owner' | 'admin' | 'editor' | 'viewer';
+export type UserRole = 'owner' | 'admin' | 'publisher' | 'designer' | 'reviewer';
 
 export interface TanamUser {
   name: string;
