@@ -1,55 +1,80 @@
 import { Injectable } from '@angular/core';
+import { FirebaseApp } from '@angular/fire';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
-import { of } from 'rxjs';
-import { SiteSettings } from '../admin/settings-site/settings-site.component';
 
-export const StringTemplates = {
-  siteName: 'site_name',
-  pageTitle: 'page_title',
-};
+export interface SiteInfoSettings {
+  title: string;
+  pageTitleFormat: string;
+  theme: string;
+  defaultLanguage: string;
+  languages: string[];
+}
 
-const SettingsDocumentKeys = {
-  domain: 'domain',
-  site: 'site',
-  admin: 'admin',
-};
-
-export interface DomainSettings {
+export interface SiteDomainSettings {
   isCustomDomain: boolean;
   primaryDomain: string;
   domains: string[];
 }
 
-export interface AdminSettings {
-  theme: string;
-  language: string;
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class SiteSettingsService {
+  private readonly projectId = this.firestore.firestore.app.options['projectId'];
+
+  private readonly settingsCollection = this.firestore.collection('tanam-settings');
+  private readonly siteInfoSettingsDoc = this.settingsCollection.doc<SiteInfoSettings>('site');
+  private readonly domainSettingsDoc = this.settingsCollection.doc<SiteDomainSettings>('domain');
 
   constructor(
+    private readonly fbApp: FirebaseApp,
     private readonly firestore: AngularFirestore,
   ) { }
 
+  getSiteSettings() {
+    return this.siteInfoSettingsDoc.valueChanges();
+  }
+
   getSiteName() {
-    return this.firestore
-      .collection('tanam-settings').doc<SiteSettings>(SettingsDocumentKeys.site)
-      .valueChanges()
-      .pipe(map(settings => settings.title));
+    return this.getSiteSettings().pipe(map(settings => settings.title));
   }
 
   getSiteTitleFormat() {
-    return of(`${StringTemplates.siteName} | ${StringTemplates.pageTitle}`);
+    return this.getSiteSettings().pipe(map(settings => settings.pageTitleFormat));
+  }
+
+  saveSiteSettings(settings: SiteInfoSettings) {
+    console.log(`[SettingsDomainComponent:saveSiteSettings] ${JSON.stringify(settings, null, 2)}`);
+    return this.fbApp.firestore().runTransaction<void>(async (trx) => {
+      trx.update(this.siteInfoSettingsDoc.ref, settings);
+    });
+  }
+
+  getDomainSettings() {
+    return this.domainSettingsDoc.valueChanges();
+  }
+
+  saveDomainSettings(settings: SiteDomainSettings) {
+    // Remove any occurance of .firebaseapp.com domain and manually put the
+    // project's default Firebase hosting domain as the first element
+    settings.domains = settings.domains
+      .filter(domain => domain.indexOf('.firebaseapp.com') === -1);
+    settings.domains.splice(0, 0, `${this.projectId}.firebaseapp.com`);
+
+    // Custom domain is flagged if the primary domain isn't the default hosting
+    if (settings.primaryDomain) {
+      settings.isCustomDomain = settings.primaryDomain.indexOf('.firebaseapp.com') === -1;
+    }
+
+    console.log(`[SettingsDomainComponent:saveDomainSettings] ${JSON.stringify(settings, null, 2)}`);
+    return this.fbApp.firestore().runTransaction<void>(async (trx) => {
+      trx.update(this.domainSettingsDoc.ref, settings);
+    });
   }
 
   getSiteDomain() {
-    return this.firestore
-      .collection('tanam-settings').doc<DomainSettings>(SettingsDocumentKeys.domain)
-      .valueChanges()
-      .pipe(map(settings => settings.primaryDomain));
+    return this.getDomainSettings().pipe(map(settings => settings.primaryDomain));
   }
 }

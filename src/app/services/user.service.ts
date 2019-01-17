@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map, tap } from 'rxjs/operators';
 import { AppAuthService } from './app-auth.service';
+import { UserPrefs } from './user-prefs.service';
 
 export type UserRole = 'owner' | 'admin' | 'publisher' | 'designer' | 'reviewer';
 
 export interface TanamUser {
   name: string;
   roles: UserRole[];
-  prefs: { [key: string]: any };
+  prefs: UserPrefs;
 }
 
 @Injectable({

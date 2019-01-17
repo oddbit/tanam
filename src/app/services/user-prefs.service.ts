@@ -12,6 +12,10 @@ const THEMES = {
   'light': 'tanam-light-theme',
   'dark': 'tanam-dark-theme',
 };
+export interface UserPrefs {
+  theme: string;
+  language: string;
+}
 
 @Injectable({
   providedIn: 'root'

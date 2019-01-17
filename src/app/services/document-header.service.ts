@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { SiteSettingsService, StringTemplates } from './site-settings.service';
+import { SiteSettingsService } from './site-settings.service';
 import { take } from 'rxjs/operators';
+
+export const StringTemplates = {
+  siteName: 'site_name',
+  pageTitle: 'page_title',
+};
 
 @Injectable({
   providedIn: 'root'
