@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { FileService } from '../../services/file.service';
 
 @Component({
   selector: 'app-media',
@@ -6,10 +9,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./media.component.scss']
 })
 export class MediaComponent implements OnInit {
+  readonly uploadTasks: { [key: string]: Observable<number> } = {};
 
-  constructor() { }
+  constructor(
+    private readonly fileService: FileService,
+  ) { }
 
   ngOnInit() {
   }
 
+  uploadSingleFile(event) {
+    const file: File = event.target.files[0];
+    const uploadTaskProgress = this.fileService.upload(file);
+    this.uploadTasks[file.name] = uploadTaskProgress.pipe(tap(progress => {
+      if (progress === 100) {
+        delete this.uploadTasks[file.name];
+      }
+    }));
+  }
 }

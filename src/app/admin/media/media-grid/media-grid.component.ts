@@ -10,10 +10,9 @@ import { FileService } from '../../../services/file.service';
   styleUrls: ['./media-grid.component.scss']
 })
 export class MediaGridComponent {
-  numCols$ = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
+  readonly numCols$ = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map(({ matches }) => matches ? 2 : 4));
-
-  files$ = this.fileService.getFiles('image').pipe(tap(file => console.log(JSON.stringify(file, null, 2))));
+  readonly files$ = this.fileService.getFiles('image');
 
   constructor(
     private readonly breakpointObserver: BreakpointObserver,
