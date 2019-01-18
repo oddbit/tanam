@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private readonly router: Router,
     private readonly appAuthService: AppAuthService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.authSubscription = this.appAuthService
