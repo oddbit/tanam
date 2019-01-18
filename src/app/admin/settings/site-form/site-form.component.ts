@@ -11,6 +11,8 @@ import { Subscription } from 'rxjs';
 })
 export class SiteFormComponent implements OnInit, OnDestroy {
 
+  languages: String[] = [];
+
   readonly themes$ = this.themeService.getThemes();
   readonly settingsForm = this.formBuilder.group({
     title: [null, [Validators.required]],
@@ -35,6 +37,7 @@ export class SiteFormComponent implements OnInit, OnDestroy {
         pageTitleFormat: settings.pageTitleFormat,
         theme: settings.theme,
       });
+      this.languages = settings.languages;
     });
   }
 
