@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ContentTypeField, ContentTypeService } from '../../services/content-type.service';
 import { SiteSettingsService } from '../../services/site-settings.service';
+import { contentTypeMaterialIcons } from './icons';
 
 @Component({
   selector: 'app-content-type-form',
@@ -28,28 +29,7 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
   }
 
   readonly domain$ = this.siteSettingsService.getSiteDomain();
-  readonly icons = [
-    '3d_rotation',
-    'accessibility',
-    'accessibility_new',
-    'accessible',
-    'accessible_forward',
-    'account_balance',
-    'account_balance_wallet',
-    'account_box',
-    'account_circle',
-    'add_shopping_cart',
-    'alarm',
-    'alarm_add',
-    'alarm_on',
-    'alarm_off',
-    'all_inbox',
-    'all_out',
-    'android',
-    'announcement',
-    'arrow_right_alt',
-    'aspect_ratio',
-  ];
+  readonly icons = contentTypeMaterialIcons;
 
   readonly fieldTypes = [
     { type: 'input-text', title: 'Single line of text' },
