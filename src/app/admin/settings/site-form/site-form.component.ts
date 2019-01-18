@@ -11,6 +11,8 @@ import { Subscription } from 'rxjs';
 })
 export class SiteFormComponent implements OnInit, OnDestroy {
 
+  pageTitleFormatOptions: string[] = [];
+  readonly siteName$ = this.siteSettingsService.getSiteName();
   readonly themes$ = this.themeService.getThemes();
   readonly settingsForm = this.formBuilder.group({
     title: [null, [Validators.required]],
@@ -35,6 +37,12 @@ export class SiteFormComponent implements OnInit, OnDestroy {
         pageTitleFormat: settings.pageTitleFormat,
         theme: settings.theme,
       });
+
+      this.pageTitleFormatOptions = [
+        settings.title + ' | My Blog Post',
+        settings.title + ' • My Blog Post',
+        settings.title
+      ];
     });
   }
 

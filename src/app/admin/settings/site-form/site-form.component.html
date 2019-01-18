@@ -16,12 +16,12 @@
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width">
-        <input matInput
-               placeholder="Title format"
-               formControlName="pageTitleFormat">
-        <mat-error *ngIf="settingsForm.controls['pageTitleFormat'].hasError('required')">
-          Page title format is <strong>required</strong>
-        </mat-error>
+        <mat-select [(value)]="settingsForm.title"
+                    formControlName="pageTitleFormat"
+                    placeholder="Title format">
+          <mat-option *ngFor="let pageTitleFormat of pageTitleFormatOptions"
+                      value="{{pageTitleFormat}}">{{pageTitleFormat}}</mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
     <div class="col">
