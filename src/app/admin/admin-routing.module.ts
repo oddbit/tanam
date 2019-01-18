@@ -1,45 +1,89 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { SettingsComponent } from './settings/settings.component';
-import { ContentTypeEditComponent } from './content-type-edit/content-type-edit.component';
-import { ContentEntryEditComponent } from './content-entry-edit/content-entry-edit.component';
-import { ContentTypeListComponent } from './content-type-list/content-type-list.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { RouterModule, Routes } from '@angular/router';
+import { AdminAuthGuard } from './admin-auth.guard';
 import { AdminComponent } from './admin.component';
-import { ContentTemplateListComponent } from './content-template-list/content-template-list.component';
+import { AdminGuard } from './admin.guard';
+import { ContentEntryEditComponent } from './content-entry-edit/content-entry-edit.component';
 import { ContentEntryOverviewComponent } from './content-entry-overview/content-entry-overview.component';
 import { ContentTemplateEditComponent } from './content-template-edit/content-template-edit.component';
-import { AdminAuthGuard } from './admin-auth.guard';
+import { ContentTemplateListComponent } from './content-template-list/content-template-list.component';
+import { ContentTypeEditComponent } from './content-type-edit/content-type-edit.component';
+import { ContentTypeOverviewComponent } from './content-type-overview/content-type-overview.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { LoginGuard } from './login/login.guard';
+import { MediaComponent } from './media/media.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { PublisherGuard } from './publisher.guard';
+import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   {
-    path: '_/login',
-    component: LoginComponent,
-    canActivate: [LoginGuard],
-  },
-  {
-    path: '_/admin',
-    component: AdminComponent,
-    canActivate: [AdminAuthGuard],
+    path: '_',
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: DashboardComponent },
-      { path: 'settings', component: SettingsComponent },
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
+      {
+        path: 'login',
+        component: LoginComponent,
+        canActivate: [LoginGuard],
+      },
+      {
+        path: 'admin',
+        component: AdminComponent,
+        canActivate: [AdminAuthGuard],
+        children: [
+          { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+          { path: 'dashboard', component: DashboardComponent },
+          {
+            path: 'settings',
+            component: SettingsComponent,
+            canActivate: [AdminGuard]
+          },
+          {
+            path: 'media',
+            component: MediaComponent,
+            canActivate: [PublisherGuard]
+          },
+          {
+            path: 'content/types',
+            component: ContentTypeOverviewComponent,
+            canActivate: [AdminGuard]
+          },
+          { path: 'content/type/:typeId', redirectTo: 'edit', pathMatch: 'full' },
+          {
+            path: 'content/type/:typeId/edit',
+            component: ContentTypeEditComponent,
+            canActivate: [AdminGuard]
+          },
+          {
+            path: 'content/type/:typeId/entries',
+            component: ContentEntryOverviewComponent,
+            canActivate: [PublisherGuard]
+          },
+          { path: 'content/type/:typeId/entry/:entryId', redirectTo: 'edit', pathMatch: 'full' },
+          {
+            path: 'content/type/:typeId/entry/:entryId/edit',
+            component: ContentEntryEditComponent,
+            canActivate: [PublisherGuard]
+          },
 
-      { path: 'content/types', component: ContentTypeListComponent },
-      { path: 'content/type/:typeId', redirectTo: 'edit', pathMatch: 'full' },
-      { path: 'content/type/:typeId/edit', component: ContentTypeEditComponent },
-      { path: 'content/type/:typeId/entries', component: ContentEntryOverviewComponent },
-      { path: 'content/type/:typeId/entry/:entryId', redirectTo: 'edit', pathMatch: 'full' },
-      { path: 'content/type/:typeId/entry/:entryId/edit', component: ContentEntryEditComponent },
-
-      { path: 'content/templates', component: ContentTemplateListComponent },
-      { path: 'content/template/:templateId', redirectTo: 'edit', pathMatch: 'full' },
-      { path: 'content/template/:templateId/edit', component: ContentTemplateEditComponent },
+          {
+            path: 'content/templates',
+            component: ContentTemplateListComponent,
+            canActivate: [AdminGuard]
+          },
+          { path: 'content/template/:templateId', redirectTo: 'edit', pathMatch: 'full' },
+          {
+            path: 'content/template/:templateId/edit',
+            component: ContentTemplateEditComponent,
+            canActivate: [AdminGuard]
+          },
+          { path: '**', component: NotFoundComponent },
+        ],
+      },
+      { path: '**', redirectTo: 'login', pathMatch: 'full' },
     ],
-  },
+  }
 ];
 
 @NgModule({

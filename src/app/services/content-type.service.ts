@@ -1,18 +1,16 @@
-import * as firebase from 'firebase/app';
 import { Injectable } from '@angular/core';
-import { AngularFirestore, QueryDocumentSnapshot, AngularFirestoreDocument, CollectionReference } from '@angular/fire/firestore';
-import { map } from 'rxjs/operators';
 import { FirebaseApp } from '@angular/fire';
-import { UrlSegment } from '@angular/router';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import * as firebase from 'firebase/app';
 
-export type ContentTypeFieldFormElements = 'text-line'
-  | 'text-area'
-  | 'html'
-  | 'number'
+export type ContentTypeFieldFormElements = 'input-text'
+  | 'input-number'
+  | 'textbox-plain'
+  | 'textbox-rich'
   | 'date'
-  | 'slide-toggle'
-  | 'radio-buttons'
-  | 'select';
+  | 'time'
+  | 'date-time'
+  | 'slide-toggle';
 
 export interface ContentTypeField {
   key: string;
@@ -44,38 +42,54 @@ export class ContentTypeService {
     private readonly fbApp: FirebaseApp,
   ) { }
 
-  async createContentType(contentTypeId: string) {
-    const contentTypeDocument = this.firestore.collection('tanam-content-types').doc(contentTypeId);
-    return this.fbApp.firestore()
-      .runTransaction<AngularFirestoreDocument>(async (trx) => {
-        const doc = await trx.get(contentTypeDocument.ref);
-        if (!doc.exists) {
-          trx.set(contentTypeDocument.ref, {
-            id: contentTypeId,
-            title: contentTypeId,
-            slug: contentTypeId,
-            template: null,
-            standalone: true,
-            icon: 'cloud',
-            fields: [],
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          } as ContentType);
-        }
-
-        return contentTypeDocument;
-      });
-  }
 
   getContentTypes() {
     return this.firestore
-      .collection<ContentType>('tanam-content-types')
+      .collection<ContentType>('tanam-types')
       .valueChanges();
   }
 
   getContentType(contentTypeId: string) {
+    console.log(`getContentType contentType: ${contentTypeId}`);
+
     return this.firestore
-      .collection('tanam-content-types').doc<ContentType>(contentTypeId)
+      .collection('tanam-types').doc<ContentType>(contentTypeId)
       .valueChanges();
+  }
+
+  async createContentType(contentTypeName: string) {
+    const typeId = contentTypeName.toLocaleLowerCase();
+    const doc = this.firestore.collection('tanam-types').doc(typeId);
+    return this.fbApp.firestore().runTransaction<AngularFirestoreDocument>(async (trx) => {
+      const trxDoc = await trx.get(doc.ref);
+      if (!trxDoc.exists) {
+        trx.set(doc.ref, {
+          id: typeId,
+          title: typeId.charAt(0).toUpperCase() + typeId.substr(1),
+          slug: typeId,
+          template: null,
+          standalone: true,
+          icon: 'cloud',
+          fields: [],
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        } as ContentType);
+      }
+
+      return doc;
+    });
+  }
+
+  saveContentType(contentType: ContentType) {
+    const doc = this.firestore.collection('tanam-types').doc(contentType.id);
+    contentType = {
+      ...contentType,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+
+    console.log(`[ContentTypeService:saveContentType] ${JSON.stringify(contentType, null, 2)}`);
+    return this.fbApp.firestore().runTransaction<void>(async (trx) => {
+      trx.update(doc.ref, contentType);
+    });
   }
 }

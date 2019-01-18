@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UserConfigService } from '../services/user-config.service';
-import { AppAuthService } from '../services/app-auth.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AppAuthService } from '../services/app-auth.service';
+import { UserPrefsService } from '../services/user-prefs.service';
 
 @Component({
   selector: 'app-admin',
@@ -10,13 +10,13 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit, OnDestroy {
-  readonly theme$ = this.userConfig.getAdminTheme();
+  readonly theme$ = this.userPrefs.getAdminTheme();
 
   private authSubscription: Subscription;
 
   constructor(
     private readonly router: Router,
-    private readonly userConfig: UserConfigService,
+    private readonly userPrefs: UserPrefsService,
     private readonly appAuthService: AppAuthService,
   ) { }
 

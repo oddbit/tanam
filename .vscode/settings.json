@@ -1,14 +1,26 @@
 {
-    "editor.codeActionsOnSave": {
-        "source.organizeImports": false,
-    },
-    "[scss]": {
-        "editor.tabSize": 2,
-    },
-    "javascript.preferences.quoteStyle": "single",
-    "typescript.preferences.quoteStyle": "single",
-    "html.format.indentInnerHtml": true,
-    "html.format.wrapAttributes": "force-aligned",
-    "typescript.preferences.importModuleSpecifier": "relative",
-    "javascript.preferences.importModuleSpecifier": "relative"
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": false,
+  },
+  "javascript.preferences.quoteStyle": "single",
+  "typescript.preferences.quoteStyle": "single",
+  "html.format.indentInnerHtml": true,
+  "html.format.wrapAttributes": "force-aligned",
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "json.format.enable": true,
+  "[scss]": {
+    "editor.tabSize": 2,
+  },
+  "[json]": {
+    "editor.tabSize": 2,
+  },
+  "[jsonc]": {
+    "editor.tabSize": 2,
+  },
+  "[firerules]": {
+    "editor.tabSize": 2,
+  }
 }
