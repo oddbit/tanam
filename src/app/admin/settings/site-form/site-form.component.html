@@ -16,11 +16,10 @@
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width">
-        <mat-select [(value)]="settingsForm.title"
-                    formControlName="pageTitleFormat"
+        <mat-select formControlName="pageTitleFormat"
                     placeholder="Title format">
           <mat-option *ngFor="let pageTitleFormat of pageTitleFormatOptions"
-                      value="{{pageTitleFormat}}">{{pageTitleFormat}}</mat-option>
+                      [value]="pageTitleFormat.value">{{pageTitleFormat.text}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
