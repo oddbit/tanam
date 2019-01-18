@@ -4,13 +4,18 @@ import { ThemeService } from '../../../services/theme.service';
 import { SiteSettingsService, SiteInfoSettings } from '../../../services/site-settings.service';
 import { Subscription } from 'rxjs';
 
+interface PageTitleFormat {
+  value: string;
+  text: string;
+}
+
 @Component({
   selector: 'app-site-form',
   templateUrl: './site-form.component.html',
   styleUrls: ['./site-form.component.scss']
 })
 export class SiteFormComponent implements OnInit, OnDestroy {
-  pageTitleFormatOptions: String[];
+  pageTitleFormatOptions: PageTitleFormat[];
 
   readonly siteName$ = this.siteSettingsService.getSiteName();
   readonly themes$ = this.themeService.getThemes();
@@ -46,9 +51,9 @@ export class SiteFormComponent implements OnInit, OnDestroy {
     this.settingsForm.valueChanges.subscribe(value => {
       const { title } = value;
       this.pageTitleFormatOptions = [
-        title + ' | My Blog Post',
-        title + ' • My Blog Post',
-        title
+        { value: 'pipe', text: title + ' | My Blog Post' },
+        { value: 'dot', text: title + ' • My Blog Post' },
+        { value: 'text', text: title }
       ];
     });
   }
