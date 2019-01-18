@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ContentTypeField, ContentTypeService } from '../../services/content-type.service';
 import { SiteSettingsService } from '../../services/site-settings.service';
-import { contentTypeMaterialIcons } from './icons';
+import { contentTypeMaterialIcons } from './content-type-form.icons';
 
 @Component({
   selector: 'app-content-type-form',
