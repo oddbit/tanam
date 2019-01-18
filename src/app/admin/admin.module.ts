@@ -23,6 +23,7 @@ import { SettingsModule } from './settings/settings.module';
 import { MediaComponent } from './media/media.component';
 import { MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
+import { ContentTypeOverviewComponent } from './content-type-overview/content-type-overview.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { LayoutModule } from '@angular/cdk/layout';
     NotFoundComponent,
     ContentTypeFormComponent,
     MediaComponent,
+    ContentTypeOverviewComponent,
   ],
   imports: [
     CommonModule,

@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, Validators, FormArray } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ContentTypeField, ContentTypeService } from '../../services/content-type.service';
 import { Subscription } from 'rxjs';
+import { ContentTypeField, ContentTypeService } from '../../services/content-type.service';
 import { SiteSettingsService } from '../../services/site-settings.service';
 
 @Component({
@@ -113,9 +113,12 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(this.onCancelRoute);
   }
 
-  saveEntry() {
-    const formData = {};
-    console.log(`[ContentTypeFormComponent:saveEntry] ${JSON.stringify(formData)}`);
+  async saveEntry() {
+    const formData = this.contentTypeForm.value;
+    await this.contentTypeService.saveContentType({ ...formData,
+      id: this.contentTypeId,
+    });
+
     if (this.afterSaveRoute) {
       this.router.navigateByUrl(this.afterSaveRoute);
     }

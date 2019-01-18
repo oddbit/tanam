@@ -8,14 +8,14 @@ import { ContentEntryOverviewComponent } from './content-entry-overview/content-
 import { ContentTemplateEditComponent } from './content-template-edit/content-template-edit.component';
 import { ContentTemplateListComponent } from './content-template-list/content-template-list.component';
 import { ContentTypeEditComponent } from './content-type-edit/content-type-edit.component';
-import { ContentTypeListComponent } from './content-type-list/content-type-list.component';
+import { ContentTypeOverviewComponent } from './content-type-overview/content-type-overview.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { LoginGuard } from './login/login.guard';
-import { NotFoundComponent } from './not-found/not-found.component';
-import { SettingsComponent } from './settings/settings.component';
-import { PublisherGuard } from './publisher.guard';
 import { MediaComponent } from './media/media.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { PublisherGuard } from './publisher.guard';
+import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   {
@@ -46,7 +46,7 @@ const routes: Routes = [
           },
           {
             path: 'content/types',
-            component: ContentTypeListComponent,
+            component: ContentTypeOverviewComponent,
             canActivate: [AdminGuard]
           },
           { path: 'content/type/:typeId', redirectTo: 'edit', pathMatch: 'full' },
