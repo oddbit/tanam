@@ -34,9 +34,9 @@
           <mat-form-field class="full-width">
             <mat-select placeholder="Icon"
                         formControlName="icon">
-              <mat-option *ngFor="let icon of icons"
-                          [value]="icon">
-                <mat-icon mat-list-icon>{{icon}}</mat-icon>
+              <mat-option *ngFor="let iconOption of icons"
+                          [value]="iconOption">
+                <mat-icon mat-list-icon>{{iconOption}}</mat-icon> {{iconOption}}
               </mat-option>
             </mat-select>
             <mat-error *ngIf="contentTypeForm.controls['icon'].hasError('required')">
