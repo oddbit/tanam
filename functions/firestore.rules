@@ -1,15 +1,19 @@
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    match /tanam-content-entries/{id} {
+    match /tanam-entries/{id} {
       allow read: if isAtLeastReviewer();
       allow create, update: if isAtLeastPublisher();
       allow delete: if isAtLeastAdmin();
     }
 
-    match /tanam-content-types/{id} {
+    match /tanam-files/{id} {
       allow read: if isAtLeastReviewer();
       allow write: if isAtLeastAdmin();
+    }
+
+    match /tanam-types/{id} {
+      allow read: if isAtLeastReviewer();
+      allow write: if isAtLeastReviewer();
     }
 
     match /tanam-settings/{id} {

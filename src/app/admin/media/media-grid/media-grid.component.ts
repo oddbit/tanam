@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import { BehaviorSubject } from 'rxjs';
+import { FileService } from '../../../services/file.service';
 
 @Component({
   selector: 'app-media-grid',
@@ -8,26 +10,13 @@ import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
   styleUrls: ['./media-grid.component.scss']
 })
 export class MediaGridComponent {
-  /** Based on the screen size, switch from standard to one column per row */
-  cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
-    map(({ matches }) => {
-      if (matches) {
-        return [
-          { title: 'Card 1', cols: 1, rows: 1 },
-          { title: 'Card 2', cols: 1, rows: 1 },
-          { title: 'Card 3', cols: 1, rows: 1 },
-          { title: 'Card 4', cols: 1, rows: 1 }
-        ];
-      }
+  numCols$ = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
+    map(({ matches }) => matches ? 2 : 4));
 
-      return [
-        { title: 'Card 1', cols: 2, rows: 1 },
-        { title: 'Card 2', cols: 1, rows: 1 },
-        { title: 'Card 3', cols: 1, rows: 2 },
-        { title: 'Card 4', cols: 1, rows: 1 }
-      ];
-    })
-  );
+  files$ = this.fileService.getFiles('image').pipe(tap(file => console.log(JSON.stringify(file, null, 2))));
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(
+    private readonly breakpointObserver: BreakpointObserver,
+    private readonly fileService: FileService,
+  ) { }
 }

@@ -1,4 +1,4 @@
-.dashboard-card {
+.file-card {
   position: absolute;
   top: 15px;
   left: 15px;
@@ -12,6 +12,12 @@
   right: 10px;
 }
 
-.dashboard-card-content {
-  text-align: center;
+.file-card-content {
+  width: 100%;
+  height: auto;
 }
+
+// .file-card img {
+//   width: 100%;
+//   height: auto;
+// }
