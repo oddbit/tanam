@@ -19,7 +19,7 @@
         <mat-select formControlName="pageTitleFormat"
                     placeholder="Title format">
           <mat-option *ngFor="let pageTitleFormat of pageTitleFormatOptions"
-                      [value]="pageTitleFormat.value">{{pageTitleFormat.text}}</mat-option>
+                      [value]="pageTitleFormat">{{pageTitleFormat}}</mat-option>
         </mat-select>
         <mat-error *ngIf="settingsForm.controls['pageTitleFormat'].hasError('required')">
           Page title format is <strong>required</strong>
