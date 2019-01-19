@@ -44,7 +44,7 @@ export class ContentEntryService {
 
   async createContentEntry(contentType: ContentType) {
     const entryId = this.firestore.createId();
-    const docRef = this.firestore.collection<ContentEntry>('tanam-content-entries').doc(entryId);
+    const docRef = this.firestore.collection<ContentEntry>('tanam-entries').doc(entryId);
 
     await docRef.set({
       id: entryId,
@@ -66,7 +66,7 @@ export class ContentEntryService {
   }
 
   saveContentEntry(entry: ContentEntry) {
-    const docRef = this.firestore.collection<ContentEntry>('tanam-content-entries').doc(entry.id);
+    const docRef = this.firestore.collection<ContentEntry>('tanam-entries').doc(entry.id);
     entry.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
 
     return this.fbApp.firestore().runTransaction<void>(async (trx) => {
@@ -86,14 +86,14 @@ export class ContentEntryService {
       ref.where('url.root', '==', root).where('url.path', '==', path).limit(1);
 
     return this.firestore
-      .collection<ContentEntry>('tanam-content-entries', queryFn)
+      .collection<ContentEntry>('tanam-entries', queryFn)
       .valueChanges()
       .pipe(map(entry => entry[0]));
   }
 
   getContentEntry(entryId: string) {
     return this.firestore
-      .collection('tanam-content-entries').doc<ContentEntry>(entryId)
+      .collection('tanam-entries').doc<ContentEntry>(entryId)
       .valueChanges();
   }
 
@@ -115,7 +115,7 @@ export class ContentEntryService {
     };
 
     return this.firestore
-      .collection<ContentEntry>('tanam-content-entries', queryFn)
+      .collection<ContentEntry>('tanam-entries', queryFn)
       .valueChanges();
   }
 }
