@@ -51,9 +51,9 @@ export class SiteFormComponent implements OnInit, OnDestroy {
     this.settingsForm.valueChanges.subscribe(value => {
       const { title } = value;
       this.pageTitleFormatOptions = [
-        { value: 'pipe', text: title + ' | My Blog Post' },
-        { value: 'dot', text: title + ' • My Blog Post' },
-        { value: 'text', text: title }
+        { value: '{{siteNname}} | {{pageTitle}}', text: title + ' | My Blog Post' },
+        { value: '{{siteNname}} • {{pageTitle}}', text: title + ' • My Blog Post' },
+        { value: '{{pageTitle}}', text: title }
       ];
     });
   }
