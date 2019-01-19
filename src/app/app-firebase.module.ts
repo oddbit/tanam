@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { AngularFireModule, FirebaseOptionsToken } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AppConfigService } from './services/app-config.service';
-import { AngularFireAuthModule } from '@angular/fire/auth';
 
 @NgModule({
   declarations: [],
@@ -26,7 +26,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
     {
       provide: FirebaseOptionsToken,
       deps: [AppConfigService],
-      useFactory: (acs: AppConfigService) => acs.appConfig.firebaseApp,
+      useFactory: (appConfigService: AppConfigService) =>  appConfigService.appConfig.firebaseApp,
     },
   ],
 })

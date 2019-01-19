@@ -1,14 +1,15 @@
 // These are important and needed before anything else
-import 'zone.js/dist/zone-node';
 import 'reflect-metadata';
+import 'zone.js/dist/zone-node';
 
+// Below here is ok to import in any order.
 import { enableProdMode } from '@angular/core';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
-
 import * as express from 'express';
-import { join } from 'path';
 import { readFileSync } from 'fs';
+import { join } from 'path';
+import { TanamConfig } from './src/app/services/app-config.service';
 
 // Required for Firebase
 (global as any).WebSocket = require('ws');
@@ -25,34 +26,41 @@ const APP_NAME = 'tanam';
 
 const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require(`./dist/${APP_NAME}-server/main`);
 
-export interface TanamConfig {
-    adminUrl?: string;
-    firebaseApp: any;
-}
 export function initializeApp(tanamConfig: TanamConfig) {
     console.log(`[initializeApp] ${JSON.stringify(tanamConfig, null, 2)}`);
-    // Make client's runtime configuraiton available to the Angular app
-    app.get('/assets/tanamConfig.json', (req, res) => {
-        console.log('Express JS handle: GET /assets/tanamConfig.json');
-        res.json(tanamConfig);
-    });
+
+    app.engine('html', ngExpressEngine({
+        bootstrap: AppServerModuleNgFactory,
+        providers: [
+            provideModuleMap(LAZY_MODULE_MAP),
+            {
+                provide: 'TanamConfig',
+                useValue: {
+                    adminUrl: 'fromDI',
+                    firebaseApp: {
+                        apiKey: 'AIzaSyAgQPU7GskiBovZeBGzhwQtbC6gXuxie-U',
+                        authDomain: 'tanam-e8e7d.firebaseapp.com',
+                        databaseURL: 'https://tanam-e8e7d.firebaseio.com',
+                        projectId: 'tanam-e8e7d',
+                        storageBucket: 'tanam-e8e7d.appspot.com',
+                        messagingSenderId: '572947425338',
+                    },
+                },
+                // useValue: tanamConfig,
+            },
+        ],
+    }));
+
+    app.set('view engine', 'html');
+    app.set('views', join(DIST_FOLDER, APP_NAME));
+
+    // Serve static files
+    app.get('*.*', express.static(join(DIST_FOLDER, APP_NAME)));
+
+    // All regular routes use the Universal engine
+    app.get('*', (req, res) => res.render(join(DIST_FOLDER, APP_NAME, 'index.html'), { req }));
 }
 
-app.engine('html', ngExpressEngine({
-    bootstrap: AppServerModuleNgFactory,
-    providers: [
-        provideModuleMap(LAZY_MODULE_MAP)
-    ]
-}));
-
-app.set('view engine', 'html');
-app.set('views', join(DIST_FOLDER, APP_NAME));
-
-// Serve static files
-app.get('*.*', express.static(join(DIST_FOLDER, APP_NAME)));
-
-// All regular routes use the Universal engine
-app.get('*', (req, res) => res.render(join(DIST_FOLDER, APP_NAME, 'index.html'), { req }));
 
 // If we're not in the Cloud Functions environment, spin up a Node server
 if (!process.env.FUNCTION_NAME) {

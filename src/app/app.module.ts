@@ -33,7 +33,7 @@ import { SiteModule } from './site/site.module';
     AppConfigService,
     {
       provide: APP_INITIALIZER, // Asynchrounously load client's App Configuration
-      useFactory: (appConfig: AppConfigService) => () => appConfig.loadAppConfig(),
+      useFactory: (appConfig: AppConfigService) => () => appConfig.loadConfig(),
       multi: true,
       deps: [AppConfigService]
     },
