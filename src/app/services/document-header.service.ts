@@ -4,8 +4,8 @@ import { SiteSettingsService } from './site-settings.service';
 import { take } from 'rxjs/operators';
 
 export const StringTemplates = {
-  siteName: 'site_name',
-  pageTitle: 'page_title',
+  siteName: '{{siteNname}}',
+  pageTitle: '{{pageTitle}}',
 };
 
 @Injectable({

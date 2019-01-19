@@ -4,13 +4,20 @@ import { ThemeService } from '../../../services/theme.service';
 import { SiteSettingsService, SiteInfoSettings } from '../../../services/site-settings.service';
 import { Subscription } from 'rxjs';
 
+interface PageTitleFormat {
+  value: string;
+  text: string;
+}
+
 @Component({
   selector: 'app-site-form',
   templateUrl: './site-form.component.html',
   styleUrls: ['./site-form.component.scss']
 })
 export class SiteFormComponent implements OnInit, OnDestroy {
+  pageTitleFormatOptions: PageTitleFormat[];
 
+  readonly siteName$ = this.siteSettingsService.getSiteName();
   readonly themes$ = this.themeService.getThemes();
   readonly settingsForm = this.formBuilder.group({
     title: [null, [Validators.required]],
@@ -35,6 +42,19 @@ export class SiteFormComponent implements OnInit, OnDestroy {
         pageTitleFormat: settings.pageTitleFormat,
         theme: settings.theme,
       });
+    });
+
+    this.onTitleChanges();
+  }
+
+  onTitleChanges(): void {
+    this.settingsForm.valueChanges.subscribe(value => {
+      const { title } = value;
+      this.pageTitleFormatOptions = [
+        { value: '{{siteNname}} | {{pageTitle}}', text: title + ' | My Blog Post' },
+        { value: '{{siteNname}} • {{pageTitle}}', text: title + ' • My Blog Post' },
+        { value: '{{pageTitle}}', text: title }
+      ];
     });
   }
 
