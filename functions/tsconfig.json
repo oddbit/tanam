@@ -5,7 +5,8 @@
     ],
     "module": "commonjs",
     "noImplicitReturns": true,
-    "outDir": "dist",
+    "outDir": "../dist",
+    "declaration": true,
     "sourceMap": true,
     "target": "es2017"
   },

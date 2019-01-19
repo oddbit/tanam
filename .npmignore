@@ -1,5 +1,14 @@
 src/
 doc/
+node_modules/
+functions/
+e2e/
+example/
+.vscode/
 README*
 .travis.yml
 .gitignore
+tsconfig.json
+tslint.json
+webpack.*
+*.ts
