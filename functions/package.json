@@ -9,7 +9,6 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
-  "main": "dist/index.js",
   "engines": {
     "node": "8"
   },
