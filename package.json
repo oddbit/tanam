@@ -2,8 +2,6 @@
   "name": "tanam",
   "version": "0.1.0",
   "description": "Pluggable CMS for Firebase",
-  "main": "dist/firebase/index.js",
-  "typings": "dist/firebase/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/oddbit/tanam.git"
@@ -34,8 +32,8 @@
     "build:server": "ng build && ng run tanam:server",
     "build:functions": "npm run --prefix functions build",
     "build:mod": "npm run build:server && npm run build:functions && cp -r dist/* functions",
-    "build:ssr": "npm run build:server && npm run webpack:ssr && npm run build:functions",
-    "build:ssr:prod": "ng build --prod && ng run tanam:server && npm run webpack:ssr && npm run build:functions",
+    "build:ssr": "npm run build:server && npm run webpack:ssr",
+    "build:ssr:prod": "ng build --prod && ng run tanam:server && npm run webpack:ssr",
     "webpack:ssr": "webpack --config webpack.server.config.js",
     "start:ssr": "node dist/tanam-webpack/server.js"
   },

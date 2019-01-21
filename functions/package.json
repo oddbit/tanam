@@ -1,5 +1,6 @@
 {
-  "name": "functions",
+  "name": "tanam-functions",
+  "license": "Apache-2.0",
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "build": "tsc",
