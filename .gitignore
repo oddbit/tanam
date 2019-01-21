@@ -43,3 +43,12 @@ testem.log
 Thumbs.db
 
 tanamConfig.json
+
+# Ignore Firebase configuration for local testing
+.firebase
+.firebaserc
+firebase.json
+firestore.indexes.json
+firestore.rules
+database.rules.json
+storage.rules
