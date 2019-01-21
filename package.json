@@ -23,17 +23,18 @@
     "ssr"
   ],
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "firebase serve",
+    "build": "npm run build:mod:prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build:functions": "tsc -p tsconfig.functions.json && cp -f package* dist",
-    "build:client-and-server-bundles": "ng build --prod && ng run tanam:server:production",
-    "build:prerender": "npm run build:client-and-server-bundles && npm run compile:server && npm run generate:prerender",
-    "build:ssr": "npm run build:client-and-server-bundles && npm run compile:server",
-    "compile:server": "tsc -p tsconfig.functions.json"
+    "build:browser-server:prod": "ng build --prod && ng run tanam:server:production",
+    "build:browser-server:dev": "ng build && ng run tanam:server",
+    "build:ssr:prod": "npm run build:browser-server:prod && npm run build:functions",
+    "build:ssr:dev": "npm run build:browser-server:dev && npm run build:functions",
+    "build:prod": "npm run build:browser-server:prod && npm run build:functions",
+    "build:dev": "npm run build:browser-server:dev && npm run build:functions"
   },
   "engines": {
     "node": "8"

@@ -15,30 +15,29 @@ import { join } from 'path';
 
 enableProdMode();
 
+const DIST_FOLDER = __dirname;
+
+// * NOTE :: leave this as require() since this file is built Dynamically from webpack
+const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./server/main');
+
 const expressApp = express();
 
 if (admin.apps.length === 0) {
     admin.initializeApp();
 }
 
-export const app = functions.https.onRequest(expressApp);
 export * from './firebase/users';
 export * from './firebase/cache';
+export const app = functions.https.onRequest(expressApp);
 
-const DIST_FOLDER = __dirname;
-
-// * NOTE :: leave this as require() since this file is built Dynamically from webpack
-const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./server/main');
-
-const appConfig = process.env.FIREBASE_CONFIG || {
-    adminUrl: 'FROM HARD CODED',
+const tanamConfig = {
     firebaseApp: {
-        apiKey: 'AIzaSyAgQPU7GskiBovZeBGzhwQtbC6gXuxie-U',
-        authDomain: 'tanam-e8e7d.firebaseapp.com',
-        databaseURL: 'https://tanam-e8e7d.firebaseio.com',
-        projectId: 'tanam-e8e7d',
-        storageBucket: 'tanam-e8e7d.appspot.com',
-        messagingSenderId: '572947425338',
+        apiKey: process.env.FIREBASE_API_KEY,
+        authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+        databaseURL: process.env.FIREBASE_DB_URL,
+        projectId: process.env.PROJECT_ID,
+        storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: process.env.FIREBASE_SENDER_ID,
     },
 };
 
@@ -48,7 +47,7 @@ expressApp.engine('html', ngExpressEngine({
         provideModuleMap(LAZY_MODULE_MAP),
         {
             provide: 'TanamConfig',
-            useValue: appConfig,
+            useValue: tanamConfig,
         },
     ]
 }));
@@ -56,22 +55,17 @@ expressApp.engine('html', ngExpressEngine({
 expressApp.set('view engine', 'html');
 expressApp.set('views', join(DIST_FOLDER, 'browser'));
 
-// Cache the auto-generated scripts
-expressApp.get(/^(\/)?main|polyfills|runtime|styles{1}\\.[\w\d]{20}\\.js|css{1}\/?$/i,
-    express.static(join(DIST_FOLDER, 'browser'), {
-        maxAge: '1d', // TODO: Set this one to very long time since it will be unique per deploy
-    }));
+// Match the Angular generated files either with or without the unique hash
+// Serve them with fairly long cache lifetime since they'll be unique for each deploy
+expressApp.get(/^(\/)?(main|polyfills|runtime|styles|vendor){1}(\.[\w\d]{20})?\.(js|css|js\.map|d\.ts){1}\/?$/i,
+    express.static(join(DIST_FOLDER, 'browser'), { maxAge: '1y' }));
 
+// Match any file in the assets folder.
 expressApp.get(/^(\/)?assets\/(.*)\/?$/i,
-    express.static(join(DIST_FOLDER, 'browser'), {
-        maxAge: '12h',
-    }));
+    express.static(join(DIST_FOLDER, 'browser'), { maxAge: '12h' }));
 
+// Match anything else and render it with the universal rendering engine
 expressApp.get('**', (req, res) => {
-    // TODO: Make caching policy dynamic and user configurable
-    console.log('In universal rendering.');
-    const cacheControl = `public, max-age=300, s-maxage=300, stale-while-revalidate=120`;
-    res.set('Cache-Control', cacheControl);
-    // Render with universal engine
+    res.set('Cache-Control', `public, max-age=300, s-maxage=300, stale-while-revalidate=120`);
     res.render('index', { req });
 });

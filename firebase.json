@@ -9,7 +9,7 @@
   "functions": {
     "source": "dist",
     "predeploy": [
-      "npm run build:functions"
+      "npm run build:dev"
     ]
   },
   "hosting": {
