@@ -1,5 +1,6 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 export interface TanamConfig {
   firebaseApp: any;
@@ -19,18 +20,11 @@ export class AppConfigService {
     @Optional() @Inject('TanamConfig') readonly tanamConfig: any, // TODO change me into TanamConfig
   ) {
     // Will be injected if served with SSR configuration
-    this._appConfig = tanamConfig;
+    this._appConfig = tanamConfig || environment.tanamConfig;
   }
 
-  async loadConfig() {
-    if (!!this._appConfig) {
-      return this._appConfig;
-    }
-
-    console.log('Returning app config from file system');
-    const config = await this.http.get('/assets/tanamConfig.json').toPromise();
-    console.log(`[AppConfigService:loadConfig] ${JSON.stringify(config, null, 2)}`);
-    this._appConfig = config as TanamConfig;
+  loadConfig() {
+    console.log(`[AppConfigService:loadConfig] ${JSON.stringify(this._appConfig, null, 2)}`);
     return this._appConfig;
   }
 }
