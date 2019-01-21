@@ -1,0 +1,39 @@
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /tanam/{allPaths=**} {
+      allow read, write: if isAtLeastManager();
+    }
+  }
+
+  function isSignedIn() {
+    return request.auth.uid != null;
+  }
+
+  function isSignedInAs(uid) {
+    return request.auth.uid == uid;
+  }
+
+  function hasUserRole(role) {
+    return role in request.auth.token.tanam;
+  }
+
+  function isOwner() {
+    return hasUserRole("owner");
+  }
+
+  function isAtLeastManager() {
+    return isOwner() || hasUserRole("manager");
+  }
+
+  function isAtLeastPublisher() {
+    return isAtLeastManager() || hasUserRole("publisher");
+  }
+
+  function isAtLeastDesigner() {
+    return isAtLeastManager() || hasUserRole("designer");
+  }
+
+  function isAtLeastReviewer() {
+    return isAtLeastPublisher() || isAtLeastDesigner() || hasUserRole("reviewer");
+  }
+}

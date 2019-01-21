@@ -3,11 +3,12 @@
   "compilerOptions": {
     "outDir": "./dist",
     "sourceMap": true,
-    "declaration": false,
+    "declaration": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es5",
+    "module": "commonjs",
+    "target": "es2015",
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -17,6 +18,6 @@
     ]
   },
   "include": [
-    "server.ts"
+    "index.ts"
   ]
 }

@@ -1,0 +1,73 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /tanam-entries/{id} {
+      allow read: if isAtLeastReviewer();
+      allow create, update: if isAtLeastPublisher();
+      allow delete: if isAtLeastAdmin();
+    }
+
+    match /tanam-files/{id} {
+      allow read: if isAtLeastReviewer();
+      allow write: if isAtLeastAdmin();
+    }
+
+    match /tanam-types/{id} {
+      allow read: if isAtLeastReviewer();
+      allow write: if isAtLeastReviewer();
+    }
+
+    match /tanam-settings/{id} {
+      allow read: if isAtLeastAdmin();
+      allow write: if isAtLeastAdmin();
+    }
+
+    match /tanam-templates/{id} {
+      allow read: if isAtLeastReviewer();
+      allow write: if isAtLeastDesigner();
+    }
+
+    match /tanam-themes/{id} {
+      allow read: if isAtLeastReviewer();
+      allow write: if isAtLeastDesigner();
+    }
+
+    match /tanam-users/{uid} {
+      allow read: if isSignedInAs(uid);
+      allow write: if isSignedInAs(uid)
+        // User can't change the roles
+        && request.resource.data.roles == resource.data.roles;
+    }
+  }
+
+  function isSignedIn() {
+    return request.auth.uid != null;
+  }
+
+  function isSignedInAs(uid) {
+    return request.auth.uid == uid;
+  }
+
+  function hasUserRole(role) {
+    return role in request.auth.token.tanam;
+  }
+
+  function isOwner() {
+    return hasUserRole("owner");
+  }
+
+  function isAtLeastAdmin() {
+    return isOwner() || hasUserRole("admin");
+  }
+
+  function isAtLeastPublisher() {
+    return isAtLeastAdmin() || hasUserRole("publisher");
+  }
+
+  function isAtLeastDesigner() {
+    return isAtLeastAdmin() || hasUserRole("designer");
+  }
+
+  function isAtLeastReviewer() {
+    return isAtLeastPublisher() || isAtLeastDesigner() || hasUserRole("reviewer");
+  }
+}

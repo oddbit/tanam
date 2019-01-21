@@ -42,13 +42,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
-tanamConfig.json
+**/tanamConfig.json
+*.log
 
 # Ignore Firebase configuration for local testing
 .firebase
 .firebaserc
-firebase.json
-firestore.indexes.json
-firestore.rules
-database.rules.json
-storage.rules

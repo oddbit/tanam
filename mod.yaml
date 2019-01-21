@@ -1,0 +1,83 @@
+specVersion: v1beta1
+name: tanam
+version: 0.1.0
+
+description: >
+  This mode turns your Firebase project into a fully fledged CMS, batteries included.
+  After initial setup, you will be able to develop and manage your website content
+  completely through the Tanam's easy to use content management.
+
+apis:
+  - firebasehosting.googleapis.com
+  - storage-component.googleapis.com
+
+roles:
+- firebase.developAdmin
+- storage.admin
+
+env:
+- var: TANAM_OWNER
+  label: Owner email
+  description: >
+    The email address of the user that will take ownership of the site upon login.
+    This is the only user that will be able to set up Tanam CMS.
+  default: dennis.alund@gmail.com
+  required: true
+
+- var: LOCATION
+  label: Deployment Location
+  description: >
+    Where should the mod be deployed?
+    (us-central1, us-east1, europe-west1,  asia-northeast1)
+  default: us-central1
+  required: true
+
+resources:
+  - name: app
+    type: firebasemods.v1beta1.function
+    properties:
+      runtime: nodejs8
+      sourceDirectory: dist
+      location: ${LOCATION}
+      httpsTrigger: {}
+
+  - name: createUser
+    type: firebasemods.v1beta1.function
+    properties:
+      runtime: nodejs8
+      sourceDirectory: dist
+      location: ${LOCATION}
+      eventTrigger:
+        eventType: providers/firebase.auth/eventTypes/user.create
+        resource: projects/${PROJECT_ID}
+
+
+  - name: deleteUser
+    type: firebasemods.v1beta1.function
+    properties:
+      runtime: nodejs8
+      sourceDirectory: dist
+      location: ${LOCATION}
+      eventTrigger:
+        eventType: providers/firebase.auth/eventTypes/user.delete
+        resource: projects/${PROJECT_ID}
+
+
+  - name: updateAuthRoles
+    type: firebasemods.v1beta1.function
+    properties:
+      runtime: nodejs8
+      sourceDirectory: dist
+      location: ${LOCATION}
+      eventTrigger:
+        eventType: providers/cloud.firestore/eventTypes/document.update
+        resource: projects/${PROJECT_ID}/databases/(default)/documents/tanam-users/{uid}
+
+  # - name: handleEventQueueTask
+  #   type: firebasemods.v1beta1.function
+  #   properties:
+  #     sourceDirectory: functions
+  #     location: ${LOCATION}
+  #     eventTrigger:
+  #       eventType: providers/google.firebase.database/eventTypes/ref.create
+  #       resource: projects/_/instances/${DATABASE_INSTANCE}/refs/tanam_tasks/{taskId}
