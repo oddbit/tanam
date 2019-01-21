@@ -1,32 +1,21 @@
-// These are important and needed before anything else
-import 'reflect-metadata';
 import 'zone.js/dist/zone-node';
-
-// Below here is ok to import in any order.
 import { enableProdMode } from '@angular/core';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 import * as express from 'express';
-import { readFileSync } from 'fs';
 import { join } from 'path';
-import { TanamConfig } from './src/app/services/app-config.service';
 
-// Required for Firebase
-(global as any).WebSocket = require('ws');
-(global as any).XMLHttpRequest = require('xhr2');
-
-// Faster renders in prod mode
 enableProdMode();
 
-// Express server
-export const app = express();
-
+const app = express();
+const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist');
 
-const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require(`./tanam/main`);
+// * NOTE :: leave this as require() since this file is built Dynamically from webpack
+const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./server/main');
 
 const appConfig = process.env.FIREBASE_CONFIG || {
-    adminUrl: 'fromDI',
+    adminUrl: 'FROM HARD CODED',
     firebaseApp: {
         apiKey: 'AIzaSyAgQPU7GskiBovZeBGzhwQtbC6gXuxie-U',
         authDomain: 'tanam-e8e7d.firebaseapp.com',
@@ -37,8 +26,6 @@ const appConfig = process.env.FIREBASE_CONFIG || {
     },
 };
 
-console.log(`[initializeApp] ${JSON.stringify(appConfig, null, 2)}`);
-
 app.engine('html', ngExpressEngine({
     bootstrap: AppServerModuleNgFactory,
     providers: [
@@ -47,14 +34,20 @@ app.engine('html', ngExpressEngine({
             provide: 'TanamConfig',
             useValue: appConfig,
         },
-    ],
+    ]
 }));
 
 app.set('view engine', 'html');
-app.set('views', join(DIST_FOLDER, APP_NAME));
+app.set('views', join(DIST_FOLDER, 'browser'));
 
-// Serve static files
-app.get('*.*', express.static(join(DIST_FOLDER, APP_NAME)));
+// Server static files from /browser
+app.get('*.*', express.static(join(DIST_FOLDER, 'browser')));
 
 // All regular routes use the Universal engine
-app.get('*', (req, res) => res.render(join(DIST_FOLDER, APP_NAME, 'index.html'), { req }));
+app.get('*', (req, res) => {
+    res.render('index', { req });
+});
+
+app.listen(PORT, () => {
+    console.log(`Node Express server listening on http://localhost:${PORT}`);
+});
