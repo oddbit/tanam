@@ -30,7 +30,44 @@ env:
     Where should the mod be deployed?
     (us-central1, us-east1, europe-west1,  asia-northeast1)
   default: us-central1
+  required: false
+
+- var: FIREBASE_API_KEY
+  label: Firebase API key
+  description: >
+    The value of `apiKey` in your project's web configuration.
+
+    Read more about the web setup here
+    https://firebase.google.com/docs/web/setup?authuser=0#add_firebase_to_your_app
   required: true
+
+- var: FIREBASE_SENDER_ID
+  label: Firebase messaging sender ID
+  description: >-
+    The value of `messagingSenderId` in your project's web configuration.
+  required: true
+
+- var: FIREBASE_AUTH_DOMAIN
+  label: Firebase Auth domain
+  description: >-
+    Please provide the Firebase auth domain.
+  default: ${PROJECT_ID}.firebaseapp.com
+  required: false
+
+- var: FIREBASE_DB_URL
+  label: Firebase RTDB url
+  description: >
+    Please provide the Firebase database URL
+  default: https://${PROJECT_ID}.firebaseio.com
+  required: false
+
+- var: FIREBASE_STORAGE_BUCKET
+  label: Cloud storage bucket
+  description: >
+    Please provide the storage bucket that should be used.
+  default: ${PROJECT_ID}.appspot.com
+  required: false
+
 
 resources:
   - name: app
@@ -76,7 +113,7 @@ resources:
   - name: cacheTask
     type: firebasemods.v1beta1.function
     properties:
-      sourceDirectory: functions
+      sourceDirectory: dist
       location: ${LOCATION}
       eventTrigger:
         eventType: providers/google.firebase.database/eventTypes/ref.create
