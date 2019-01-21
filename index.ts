@@ -1,4 +1,6 @@
+// Zone is required for Angular to work properly and *must* be imported first of all
 import 'zone.js/dist/zone-node';
+
 import { enableProdMode } from '@angular/core';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
@@ -20,8 +22,10 @@ if (admin.apps.length === 0) {
 }
 
 export const app = functions.https.onRequest(expressApp);
+export * from './firebase/users';
+export * from './firebase/cache';
 
-const DIST_FOLDER = process.env.FUNCTION_NAME ? __dirname : join(__dirname, 'dist');
+const DIST_FOLDER = __dirname;
 
 // * NOTE :: leave this as require() since this file is built Dynamically from webpack
 const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./server/main');
@@ -51,8 +55,23 @@ expressApp.engine('html', ngExpressEngine({
 
 expressApp.set('view engine', 'html');
 expressApp.set('views', join(DIST_FOLDER, 'browser'));
-expressApp.get('*.*', express.static(join(DIST_FOLDER, 'browser')));
-expressApp.get('*', (req, res) => {
+
+// Cache the auto-generated scripts
+expressApp.get(/^(\/)?main|polyfills|runtime|styles{1}\\.[\w\d]{20}\\.js|css{1}\/?$/i,
+    express.static(join(DIST_FOLDER, 'browser'), {
+        maxAge: '1d', // TODO: Set this one to very long time since it will be unique per deploy
+    }));
+
+expressApp.get(/^(\/)?assets\/(.*)\/?$/i,
+    express.static(join(DIST_FOLDER, 'browser'), {
+        maxAge: '12h',
+    }));
+
+expressApp.get('**', (req, res) => {
+    // TODO: Make caching policy dynamic and user configurable
+    console.log('In universal rendering.');
+    const cacheControl = `public, max-age=300, s-maxage=300, stale-while-revalidate=120`;
+    res.set('Cache-Control', cacheControl);
     // Render with universal engine
     res.render('index', { req });
 });

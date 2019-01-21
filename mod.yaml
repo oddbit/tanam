@@ -73,11 +73,11 @@ resources:
         eventType: providers/cloud.firestore/eventTypes/document.update
         resource: projects/${PROJECT_ID}/databases/(default)/documents/tanam-users/{uid}
 
-  # - name: handleEventQueueTask
-  #   type: firebasemods.v1beta1.function
-  #   properties:
-  #     sourceDirectory: functions
-  #     location: ${LOCATION}
-  #     eventTrigger:
-  #       eventType: providers/google.firebase.database/eventTypes/ref.create
-  #       resource: projects/_/instances/${DATABASE_INSTANCE}/refs/tanam_tasks/{taskId}
+  - name: cacheTask
+    type: firebasemods.v1beta1.function
+    properties:
+      sourceDirectory: functions
+      location: ${LOCATION}
+      eventTrigger:
+        eventType: providers/google.firebase.database/eventTypes/ref.create
+        resource: projects/_/instances/${DATABASE_INSTANCE}/refs/tanam/tasks/{taskId}
