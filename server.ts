@@ -22,50 +22,39 @@ enableProdMode();
 export const app = express();
 
 const DIST_FOLDER = join(process.cwd(), 'dist');
-const APP_NAME = 'tanam';
 
-const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require(`./dist/${APP_NAME}-server/main`);
+const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require(`./tanam/main`);
 
-export function initializeApp(tanamConfig: TanamConfig) {
-    console.log(`[initializeApp] ${JSON.stringify(tanamConfig, null, 2)}`);
+const appConfig = process.env.FIREBASE_CONFIG || {
+    adminUrl: 'fromDI',
+    firebaseApp: {
+        apiKey: 'AIzaSyAgQPU7GskiBovZeBGzhwQtbC6gXuxie-U',
+        authDomain: 'tanam-e8e7d.firebaseapp.com',
+        databaseURL: 'https://tanam-e8e7d.firebaseio.com',
+        projectId: 'tanam-e8e7d',
+        storageBucket: 'tanam-e8e7d.appspot.com',
+        messagingSenderId: '572947425338',
+    },
+};
 
-    app.engine('html', ngExpressEngine({
-        bootstrap: AppServerModuleNgFactory,
-        providers: [
-            provideModuleMap(LAZY_MODULE_MAP),
-            {
-                provide: 'TanamConfig',
-                useValue: {
-                    adminUrl: 'fromDI',
-                    firebaseApp: {
-                        apiKey: 'AIzaSyAgQPU7GskiBovZeBGzhwQtbC6gXuxie-U',
-                        authDomain: 'tanam-e8e7d.firebaseapp.com',
-                        databaseURL: 'https://tanam-e8e7d.firebaseio.com',
-                        projectId: 'tanam-e8e7d',
-                        storageBucket: 'tanam-e8e7d.appspot.com',
-                        messagingSenderId: '572947425338',
-                    },
-                },
-                // useValue: tanamConfig,
-            },
-        ],
-    }));
+console.log(`[initializeApp] ${JSON.stringify(appConfig, null, 2)}`);
 
-    app.set('view engine', 'html');
-    app.set('views', join(DIST_FOLDER, APP_NAME));
+app.engine('html', ngExpressEngine({
+    bootstrap: AppServerModuleNgFactory,
+    providers: [
+        provideModuleMap(LAZY_MODULE_MAP),
+        {
+            provide: 'TanamConfig',
+            useValue: appConfig,
+        },
+    ],
+}));
 
-    // Serve static files
-    app.get('*.*', express.static(join(DIST_FOLDER, APP_NAME)));
+app.set('view engine', 'html');
+app.set('views', join(DIST_FOLDER, APP_NAME));
 
-    // All regular routes use the Universal engine
-    app.get('*', (req, res) => res.render(join(DIST_FOLDER, APP_NAME, 'index.html'), { req }));
-}
+// Serve static files
+app.get('*.*', express.static(join(DIST_FOLDER, APP_NAME)));
 
-
-// If we're not in the Cloud Functions environment, spin up a Node server
-if (!process.env.FUNCTION_NAME) {
-    const PORT = process.env.PORT || 4000;
-    const configFile = readFileSync(join(DIST_FOLDER, APP_NAME, 'assets/tanamConfig.json'), 'utf8');
-    initializeApp(JSON.parse(configFile));
-    app.listen(PORT, () => console.log(`Node server listening on http://localhost:${PORT}`));
-}
+// All regular routes use the Universal engine
+app.get('*', (req, res) => res.render(join(DIST_FOLDER, APP_NAME, 'index.html'), { req }));
