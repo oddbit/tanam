@@ -2,6 +2,9 @@ const tanamConfig = require(`./tanamConfig`);
 
 export const environment = {
   production: false,
-  debugRouting: false,
+  logging: {
+    cache: true,
+    routing: false,
+  },
   tanamConfig: tanamConfig.tanamConfig,
 };

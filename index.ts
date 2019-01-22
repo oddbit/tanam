@@ -8,6 +8,7 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as express from 'express';
 import { join } from 'path';
+import { environment } from './src/environments/environment';
 
 // Required for Firebase
 (global as any).WebSocket = require('ws');
@@ -55,17 +56,47 @@ expressApp.engine('html', ngExpressEngine({
 expressApp.set('view engine', 'html');
 expressApp.set('views', join(DIST_FOLDER, 'browser'));
 
-// Match the Angular generated files either with or without the unique hash
+
+// Match the Angular generated files without the unique hash
+// No cache since they'll change for each deploy
+expressApp.get(/^(\/)?(main|polyfills|runtime|styles|vendor){1}\.(js|css|js\.map|d\.ts){1}\/?$/i,
+    express.static(join(DIST_FOLDER, 'browser'), {
+        setHeaders: (res, path) => {
+            const cacheControl = 'public, max-age=0, s-maxage=300';
+            if (environment.logging.cache) {
+                console.log(`Cache ${path}: ${cacheControl}`);
+            }
+            res.setHeader('Cache-Control', cacheControl);
+        },
+    }));
+
+// Match the Angular generated files with the unique hash
 // Serve them with fairly long cache lifetime since they'll be unique for each deploy
-expressApp.get(/^(\/)?(main|polyfills|runtime|styles|vendor){1}(\.[\w\d]{20})?\.(js|css|js\.map|d\.ts){1}\/?$/i,
-    express.static(join(DIST_FOLDER, 'browser'), { maxAge: '1y' }));
+expressApp.get(/^(\/)?(main|polyfills|runtime|styles|vendor){1}\.[\w\d]{20}\.(js|css){1}\/?$/i,
+    express.static(join(DIST_FOLDER, 'browser'), {
+        setHeaders: (res, path) => {
+            const cacheControl = 'public, max-age=300, s-maxage=300, stale-while-revalidate=120';
+            if (environment.logging.cache) {
+                console.log(`Cache ${path}: ${cacheControl}`);
+            }
+            res.setHeader('Cache-Control', cacheControl);
+        },
+    }));
 
 // Match any file in the assets folder.
 expressApp.get(/^(\/)?assets\/(.*)\/?$/i,
-    express.static(join(DIST_FOLDER, 'browser'), { maxAge: '12h' }));
+    express.static(join(DIST_FOLDER, 'browser'), {
+        setHeaders: (res, path) => {
+            const cacheControl = 'public, max-age=300, s-maxage=300, stale-while-revalidate=120';
+            if (environment.logging.cache) {
+                console.log(`Cache ${path}: ${cacheControl}`);
+            }
+            res.setHeader('Cache-Control', cacheControl);
+        },
+     }));
 
 // Match anything else and render it with the universal rendering engine
 expressApp.get('**', (req, res) => {
-    res.set('Cache-Control', `public, max-age=300, s-maxage=300, stale-while-revalidate=120`);
     res.render('index', { req });
+    res.set('Cache-Control', `public, max-age=300, s-maxage=300, stale-while-revalidate=120`);
 });

@@ -1,5 +1,8 @@
 export const environment = {
   production: true,
-  debugRouting: false,
   tanamConfig: null,
+  logging: {
+    cache: false,
+    routing: false,
+  },
 };
