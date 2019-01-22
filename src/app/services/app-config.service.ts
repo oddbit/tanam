@@ -24,6 +24,10 @@ export class AppConfigService {
   }
 
   loadConfig() {
+    if (!this._appConfig) {
+      throw new Error(`Missing proper Tanam configuration: ${JSON.stringify(this._appConfig, null, 2)}`);
+    }
+
     console.log(`[AppConfigService:loadConfig] ${JSON.stringify(this._appConfig, null, 2)}`);
     return this._appConfig;
   }
