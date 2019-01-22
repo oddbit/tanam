@@ -1,7 +1,7 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Observable } from 'rxjs';
-import { ContentTemplateService, ContentTemplate } from '../../services/content-template.service';
+import { ContentTemplate, ContentTemplateService } from '../../../services/content-template.service';
 
 export class ContentTemplateListDataSource extends DataSource<ContentTemplate> {
   data: ContentTemplate[];

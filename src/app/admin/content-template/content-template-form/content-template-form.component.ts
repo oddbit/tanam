@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { ContentTemplate, ContentTemplateService } from '../../services/content-template.service';
+import { ContentTemplate, ContentTemplateService } from '../../../services/content-template.service';
 
 @Component({
   selector: 'app-content-template-form',
