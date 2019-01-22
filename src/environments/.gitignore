@@ -1,0 +1,15 @@
+# Create a local file named tanamConfig.ts that exports an object as default
+# Enter your Firebase config for the project:
+#
+# export default {
+#  firebaseApp: {
+#    apiKey: '',
+#    authDomain: '',
+#    databaseURL: '',
+#    projectId: '',
+#    storageBucket: '',
+#    messagingSenderId: ''
+#  }
+#};
+#
+tanamConfig.ts

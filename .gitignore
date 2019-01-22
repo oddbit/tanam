@@ -50,6 +50,3 @@ Thumbs.db
 
 # Environment variables for testing mod
 mod.env
-
-# For Tanam dev app configuraion
-src/environments/tanamConfig.ts
