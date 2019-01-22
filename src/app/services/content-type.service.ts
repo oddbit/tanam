@@ -30,7 +30,7 @@ export interface ContentType {
   slug: string; // Root slug to group entries by
   template: string;
   standalone: boolean; // True if the content can be presented on a page with URL of its own
-  description?: string;
+  description: string;
   icon: string; // Icon for menus etc
   fields: ContentTypeField[];
   numEntries: ContentTypeEntryCount;

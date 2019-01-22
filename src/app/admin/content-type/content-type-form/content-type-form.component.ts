@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ContentTypeField, ContentTypeService } from '../../../services/content-type.service';
+import { ContentType, ContentTypeField, ContentTypeService } from '../../../services/content-type.service';
 import { SiteSettingsService } from '../../../services/site-settings.service';
 import { contentTypeMaterialIcons } from './content-type-form.icons';
 
@@ -55,6 +55,7 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
     console.log(`ngOnInit contentTypeId: ${this.contentTypeId}`);
     const contentType$ = this.contentTypeService.getContentType(this.contentTypeId);
     this.contentTypeSubscription = contentType$.subscribe(contentType => {
+      this.clearFields();
       for (const field of contentType.fields) {
         this.addField(field);
       }
@@ -86,18 +87,34 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
   }
 
   deleteField(index: number) {
+    console.log(`Removing field ${index}: ${JSON.stringify(this.fieldForms.at(index).value)}`);
     this.fieldForms.removeAt(index);
+  }
+
+  clearFields() {
+    while (this.fieldForms.length > 0) {
+      this.deleteField(0);
+    }
   }
 
   cancelEditing() {
     this.router.navigateByUrl(this.onCancelRoute);
   }
 
-  async saveEntry() {
+  async save() {
     const formData = this.contentTypeForm.value;
-    await this.contentTypeService.saveContentType({ ...formData,
+    if (this.contentTypeForm.errors) {
+      return;
+    }
+
+    await this.contentTypeService.saveContentType({
       id: this.contentTypeId,
-    });
+      title: formData.title,
+      slug: formData.slug || '',
+      icon: formData.icon,
+      description: formData.description,
+      fields: this.fieldForms.value,
+    } as ContentType);
 
     if (this.afterSaveRoute) {
       this.router.navigateByUrl(this.afterSaveRoute);
