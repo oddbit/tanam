@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { ContentEntryService } from '../../services/content-entry.service';
-import { ContentTypeService } from '../../services/content-type.service';
-import { SiteSettingsService } from '../../services/site-settings.service';
+import { ContentEntryService } from '../../../services/content-entry.service';
+import { ContentTypeService } from '../../../services/content-type.service';
+import { SiteSettingsService } from '../../../services/site-settings.service';
 
 @Component({
   selector: 'app-content-entry-overview',

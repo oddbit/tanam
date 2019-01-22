@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { ContentEntryListDataSource } from './content-entry-list-datasource';
 import { Router } from '@angular/router';
-import { ContentEntryService } from '../../services/content-entry.service';
+import { ContentEntryService } from '../../../services/content-entry.service';
 
 @Component({
   selector: 'app-content-entry-list',
@@ -24,6 +24,7 @@ export class ContentEntryListComponent implements OnInit {
   displayedColumns = ['title', 'updatedAt'];
 
   ngOnInit() {
+    console.log(`[ContentEntryListComponent:ngOnInit] ${this.contentTypeId}`);
     this.dataSource = new ContentEntryListDataSource(this.contentTypeId, this.contentEntryService, this.paginator, this.sort);
   }
 

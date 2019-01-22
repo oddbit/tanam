@@ -3,8 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminAuthGuard } from './admin-auth.guard';
 import { AdminComponent } from './admin.component';
 import { AdminGuard } from './admin.guard';
-import { ContentEntryEditComponent } from './content-entry-edit/content-entry-edit.component';
-import { ContentEntryOverviewComponent } from './content-entry-overview/content-entry-overview.component';
 import { ContentTemplateEditComponent } from './content-template-edit/content-template-edit.component';
 import { ContentTemplateListComponent } from './content-template-list/content-template-list.component';
 import { ContentTypeEditComponent } from './content-type-edit/content-type-edit.component';
@@ -16,6 +14,9 @@ import { MediaComponent } from './media/media.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { PublisherGuard } from './publisher.guard';
 import { SettingsComponent } from './settings/settings.component';
+import { ContentEntryModule } from './content-entry/content-entry.module';
+import { ContentEntryEditComponent } from './content-entry/content-entry-edit/content-entry-edit.component';
+import { ContentEntryOverviewComponent } from './content-entry/content-entry-overview/content-entry-overview.component';
 
 const routes: Routes = [
   {
@@ -87,7 +88,9 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [
+    RouterModule.forChild(routes),
+  ],
   exports: [RouterModule]
 })
 export class AdminRoutingModule { }
