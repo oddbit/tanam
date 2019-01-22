@@ -4,5 +4,5 @@ export const environment = {
     cache: true,
     routing: false,
   },
-  tanamConfig: require(`./tanamConfig`),
+  tanamConfig: require(`./tanamConfig`).config,
 };
