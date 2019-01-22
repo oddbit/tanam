@@ -27,8 +27,8 @@ if (admin.apps.length === 0) {
     admin.initializeApp();
 }
 
-export * from './firebase/users';
-export * from './firebase/cache';
+export * from './firebase';
+admin.firestore().settings({ timestampsInSnapshots: true });
 export const app = functions.https.onRequest(expressApp);
 
 const tanamConfig = {
