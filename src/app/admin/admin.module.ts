@@ -10,10 +10,6 @@ import { ContentEntryModule } from './content-entry/content-entry.module';
 import { ContentTemplateEditComponent } from './content-template-edit/content-template-edit.component';
 import { ContentTemplateFormComponent } from './content-template-form/content-template-form.component';
 import { ContentTemplateListComponent } from './content-template-list/content-template-list.component';
-import { ContentTypeEditComponent } from './content-type-edit/content-type-edit.component';
-import { ContentTypeFormComponent } from './content-type-form/content-type-form.component';
-import { ContentTypeListComponent } from './content-type-list/content-type-list.component';
-import { ContentTypeOverviewComponent } from './content-type-overview/content-type-overview.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { MediaModule } from './media/media.module';
@@ -21,6 +17,8 @@ import { NavigationListItemComponent } from './navigation-list-item/navigation-l
 import { NavigationComponent } from './navigation/navigation.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { SettingsModule } from './settings/settings.module';
+import { ContentTemplateModule } from './content-template/content-template.module';
+import { ContentTypeModule } from './content-type/content-type.module';
 
 @NgModule({
   declarations: [
@@ -28,10 +26,6 @@ import { SettingsModule } from './settings/settings.module';
     ContentTemplateEditComponent,
     ContentTemplateFormComponent,
     ContentTemplateListComponent,
-    ContentTypeEditComponent,
-    ContentTypeFormComponent,
-    ContentTypeListComponent,
-    ContentTypeOverviewComponent,
     DashboardComponent,
     LoginComponent,
     NavigationComponent,
@@ -52,6 +46,8 @@ import { SettingsModule } from './settings/settings.module';
     LayoutModule,
     MediaModule,
     ContentEntryModule,
+    ContentTemplateModule,
+    ContentTypeModule,
   ]
 })
 export class AdminModule { }

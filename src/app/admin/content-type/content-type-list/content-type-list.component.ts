@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { ContentTypeListDataSource } from './content-type-list-datasource';
 import { Router } from '@angular/router';
-import { ContentTypeService } from '../../services/content-type.service';
+import { ContentTypeService } from '../../../services/content-type.service';
 
 @Component({
   selector: 'app-content-type-list',

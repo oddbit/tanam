@@ -5,8 +5,6 @@ import { AdminComponent } from './admin.component';
 import { AdminGuard } from './admin.guard';
 import { ContentTemplateEditComponent } from './content-template-edit/content-template-edit.component';
 import { ContentTemplateListComponent } from './content-template-list/content-template-list.component';
-import { ContentTypeEditComponent } from './content-type-edit/content-type-edit.component';
-import { ContentTypeOverviewComponent } from './content-type-overview/content-type-overview.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { LoginGuard } from './login/login.guard';
@@ -17,6 +15,8 @@ import { SettingsComponent } from './settings/settings.component';
 import { ContentEntryModule } from './content-entry/content-entry.module';
 import { ContentEntryEditComponent } from './content-entry/content-entry-edit/content-entry-edit.component';
 import { ContentEntryOverviewComponent } from './content-entry/content-entry-overview/content-entry-overview.component';
+import { ContentTypeOverviewComponent } from './content-type/content-type-overview/content-type-overview.component';
+import { ContentTypeEditComponent } from './content-type/content-type-edit/content-type-edit.component';
 
 const routes: Routes = [
   {

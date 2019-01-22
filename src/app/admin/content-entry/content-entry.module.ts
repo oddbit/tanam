@@ -16,7 +16,6 @@ import { ContentEntryListComponent } from './content-entry-list/content-entry-li
   ],
   imports: [
     CommonModule,
-    AppMaterialModule,
     AppFirebaseModule,
     AppMaterialModule,
   ],
