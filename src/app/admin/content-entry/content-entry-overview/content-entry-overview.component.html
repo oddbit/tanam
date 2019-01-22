@@ -5,7 +5,7 @@
         {{ contentType.title }}
         <button mat-flat-button
                 color="accent"
-                (click)="createNewEntry()">+ Add New</button>
+                (click)="createNewEntry(contentType)">+ Add New</button>
       </mat-card-title>
       <mat-card-subtitle>
         https://{{ domain$ | async }}/{{ contentType.slug }}
