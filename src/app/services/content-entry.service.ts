@@ -1,8 +1,8 @@
-import * as firebase from 'firebase/app';
 import { Injectable } from '@angular/core';
-import { AngularFirestore, CollectionReference, QueryDocumentSnapshot, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { map } from 'rxjs/operators';
 import { FirebaseApp } from '@angular/fire';
+import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
+import * as firebase from 'firebase/app';
+import { map } from 'rxjs/operators';
 import { ContentType } from './content-type.service';
 
 export type ContentEntryStatus = 'published' | 'unpublished' | 'deleted';
