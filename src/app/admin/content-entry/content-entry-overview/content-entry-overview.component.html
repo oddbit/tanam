@@ -3,11 +3,12 @@
     <mat-card-title-group>
       <mat-card-title>
         {{ contentType.title }}
-        <button mat-flat-button color="accent" (click)="createNewEntry()">+ Add New</button>
+        <button mat-flat-button
+                color="accent"
+                (click)="createNewEntry()">+ Add New</button>
       </mat-card-title>
       <mat-card-subtitle>
-        https://{{ domain$ | async }}/{{ contentType.slug }} <br>
-        slug: {{ contentType.slug }}
+        https://{{ domain$ | async }}/{{ contentType.slug }}
       </mat-card-subtitle>
     </mat-card-title-group>
     <mat-card-content>
