@@ -1,4 +1,4 @@
-import tanamConfig from './tanamConfig';
+const tanamConfig = require(`./tanamConfig`);
 
 export const environment = {
   production: false,
@@ -6,5 +6,5 @@ export const environment = {
     cache: true,
     routing: false,
   },
-  tanamConfig: tanamConfig,
+  tanamConfig: tanamConfig.tanamConfig,
 };
