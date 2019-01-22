@@ -1,7 +1,6 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatButtonModule, MatCardModule, MatGridListModule, MatIconModule, MatMenuModule } from '@angular/material';
 import { AppFirebaseModule } from '../app-firebase.module';
 import { AppMaterialModule } from '../app-material.module';
 import { AdminRoutingModule } from './admin-routing.module';
@@ -13,12 +12,11 @@ import { ContentTemplateListComponent } from './content-template-list/content-te
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { MediaModule } from './media/media.module';
-import { NavigationListItemComponent } from './navigation-list-item/navigation-list-item.component';
-import { NavigationComponent } from './navigation/navigation.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { SettingsModule } from './settings/settings.module';
 import { ContentTemplateModule } from './content-template/content-template.module';
 import { ContentTypeModule } from './content-type/content-type.module';
+import { NavigationModule } from './navigation/navigation.module';
 
 @NgModule({
   declarations: [
@@ -28,8 +26,6 @@ import { ContentTypeModule } from './content-type/content-type.module';
     ContentTemplateListComponent,
     DashboardComponent,
     LoginComponent,
-    NavigationComponent,
-    NavigationListItemComponent,
     NotFoundComponent,
   ],
   imports: [
@@ -38,16 +34,13 @@ import { ContentTypeModule } from './content-type/content-type.module';
     AppMaterialModule,
     AppFirebaseModule,
     SettingsModule,
-    MatGridListModule,
-    MatCardModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
+    NavigationModule,
     LayoutModule,
     MediaModule,
     ContentEntryModule,
     ContentTemplateModule,
     ContentTypeModule,
+    NavigationModule,
   ]
 })
 export class AdminModule { }
