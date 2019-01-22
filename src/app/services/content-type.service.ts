@@ -18,6 +18,12 @@ export interface ContentTypeField {
   type: ContentTypeFieldFormElements;
 }
 
+
+export interface ContentTypeEntryCount {
+  published: number;
+  unpublished: number;
+}
+
 export interface ContentType {
   id: string; // Document id
   title: string; // Presentation name
@@ -27,7 +33,7 @@ export interface ContentType {
   description?: string;
   icon: string; // Icon for menus etc
   fields: ContentTypeField[];
-  numEntries: { [key: string]: number };
+  numEntries: ContentTypeEntryCount;
   updatedAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
   createdAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
 }
@@ -71,6 +77,10 @@ export class ContentTypeService {
           standalone: true,
           icon: 'cloud',
           fields: [],
+          numEntries: {
+            published: 0,
+            unpublished: 0,
+          },
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         } as ContentType);
