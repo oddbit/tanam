@@ -1,28 +1,24 @@
-<div class="grid-container">
-  <mat-grid-list cols="{{ numCols$ | async }}"
-                 rowHeight="4:3">
-    <mat-grid-tile *ngFor="let file of files$ | async">
-      <mat-card class="file-card">
-        <mat-card-header>
-          <mat-card-title>
-            {{file.title}}
-            <button mat-icon-button
-                    class="more-button"
-                    [matMenuTriggerFor]="menu"
-                    aria-label="Toggle menu">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu"
-                      xPosition="before">
-              <button mat-menu-item>Expand</button>
-              <button mat-menu-item>Remove</button>
-            </mat-menu>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="file-card-content">
-          <img [src]="file.url" />
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
+<div class="flex">
+  <mat-card class="card"
+            *ngFor="let file of files$ | async">
+    <mat-card-title>
+      <button mat-icon-button
+              class="more-button"
+              [matMenuTriggerFor]="menu"
+              aria-label="Toggle menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu"
+                xPosition="before">
+        <button mat-menu-item>Expand</button>
+        <button mat-menu-item>Remove</button>
+      </mat-menu>
+    </mat-card-title>
+    <img mat-card-image
+         [src]="file.url"
+         alt="Photo of a Shiba Inu">
+    <mat-card-content>
+      <p>{{file.title}}</p>
+    </mat-card-content>
+  </mat-card>
 </div>
