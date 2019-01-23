@@ -19,6 +19,7 @@ export interface ContentEntry {
   revision: number; // Constantly increasing
   status: ContentEntryStatus;
   tags: string[];
+  standalone: boolean;
   publishTime?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
   updatedAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
   createdAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
@@ -42,7 +43,7 @@ export class ContentEntryService {
     private readonly firestore: AngularFirestore,
   ) { }
 
-  async createContentEntry(contentType: ContentType) {
+  async create(contentType: ContentType) {
     const entryId = this.firestore.createId();
     const docRef = this.firestore.collection<ContentEntry>('tanam-entries').doc(entryId);
 
@@ -55,6 +56,7 @@ export class ContentEntryService {
         path: entryId,
       },
       revision: 0,
+      standalone: contentType.standalone,
       status: 'unpublished',
       data: {},
       tags: [],
@@ -62,24 +64,21 @@ export class ContentEntryService {
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     } as ContentEntry);
 
-    return docRef;
+    return entryId;
   }
 
-  saveContentEntry(entry: ContentEntry) {
-    const docRef = this.firestore.collection<ContentEntry>('tanam-entries').doc(entry.id);
+  update(entry: ContentEntry) {
+    if (!entry.id) {
+      throw new Error('Document ID must be provided as an attribute when updating an entry.');
+    }
+
     entry.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
-
-    return this.fbApp.firestore().runTransaction<void>(async (trx) => {
-      const trxDoc = await trx.get(docRef.ref);
-      const trxEntry = trxDoc.data() as ContentEntry;
-
-      entry.revision = trxEntry.revision + 1;
-
-      trx.update(docRef.ref, entry);
-    });
+    return this.firestore
+      .collection<ContentEntry>('tanam-entries').doc(entry.id)
+      .update(entry);
   }
 
-  findContentEntryByUrl(root: string, path: string) {
+  findByUrl(root: string, path: string) {
     console.log(`[ContentEntryService:findContentEntryByUrl] ${JSON.stringify({ root, path })}`);
 
     const queryFn = (ref: CollectionReference) =>
@@ -91,13 +90,13 @@ export class ContentEntryService {
       .pipe(map(entry => entry[0]));
   }
 
-  getContentEntry(entryId: string) {
+  get(entryId: string) {
     return this.firestore
       .collection('tanam-entries').doc<ContentEntry>(entryId)
       .valueChanges();
   }
 
-  getContentEntries(contentTypeId: string, queryOpts: ContentTypeQueryOptions = {}) {
+  query(contentTypeId: string, queryOpts: ContentTypeQueryOptions = {}) {
     console.log(`[ContentEntryService:getContentTypeFields] ${contentTypeId}, query=${JSON.stringify(queryOpts)}`);
 
     const queryFn = (ref: CollectionReference) => {

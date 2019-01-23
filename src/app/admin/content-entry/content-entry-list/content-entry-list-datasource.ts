@@ -17,7 +17,7 @@ export class ContentEntryListDataSource extends DataSource<ContentEntry> {
   }
 
   connect(): Observable<ContentEntry[]> {
-    return this.contentEntryService.getContentEntries(this.contentType.id);
+    return this.contentEntryService.query(this.contentType.id);
   }
 
   disconnect() { }

@@ -4,7 +4,7 @@
   <mat-card class="shipping-card">
     <mat-card-header>
       <mat-card-title>
-        Editing {{ (contentType)?.title }}
+        Editing {{ (contentType$ | async)?.title }}
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
@@ -26,7 +26,7 @@
             <input matInput
                    placeholder="Slug"
                    formControlName="urlPath">
-            <mat-hint>https://{{ domain$ | async }}/{{ (contentType)?.slug }}/{{ entryForm.value.urlPath }}</mat-hint>
+            <mat-hint>https://{{ domain$ | async }}/{{ contentEntry.url.root }}/{{ entryForm.value.urlPath }}</mat-hint>
             <mat-error *ngIf="entryForm.controls['urlPath'].hasError('required')">
               URL slug is <strong>required</strong>
             </mat-error>
@@ -46,19 +46,18 @@
 
     <mat-card-header>
       <mat-card-title>
-        {{ (contentType)?.title }} content
+        {{ (contentType$ | async)?.title }} content
       </mat-card-title>
     </mat-card-header>
-    <mat-card-content *ngIf="isFormFieldDataLoaded">
+    <mat-card-content>
       <div formGroupName="dataForm">
         <div class="row"
-             *ngFor="let field of contentType.fields">
+             *ngFor="let field of (contentType$ | async)?.fields">
           <div class="col"
                [ngSwitch]="field.type">
-
             <!-- If input type is just simple line of text -->
             <mat-form-field class="full-width"
-                            *ngSwitchCase="'text-line'">
+                            *ngSwitchCase="'input-text'">
               <input matInput
                      placeholder="{{field.title}}"
                      formControlName="{{field.key}}">
@@ -69,7 +68,7 @@
 
             <!-- If input type is larger amount of text: paragraph -->
             <mat-form-field class="full-width"
-                            *ngSwitchCase="'text-area'">
+                            *ngSwitchCase="'textbox-plain'">
               <textarea matInput
                         placeholder="{{field.title}}"
                         formControlName="{{field.key}}"></textarea>

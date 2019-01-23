@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators, FormArray, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { combineLatest, Subscription } from 'rxjs';
+import { combineLatest, Subscription, of, Observable } from 'rxjs';
 import { ContentEntry, ContentEntryService, ContentEntryStatus } from '../../../services/content-entry.service';
 import { ContentType, ContentTypeService } from '../../../services/content-type.service';
 import { SiteSettingsService } from '../../../services/site-settings.service';
@@ -18,76 +18,64 @@ interface StatusOption {
   styleUrls: ['./content-entry-form.component.scss']
 })
 export class ContentEntryFormComponent implements OnInit, OnDestroy {
-  @Input() contentTypeId: string;
-  @Input() entryId: string;
+  @Input() contentEntry: ContentEntry;
   @Input() afterSaveRoute: string;
   @Input() onCancelRoute: string;
 
-  readonly dataForm = this.formBuilder.group({});
-  readonly entryForm = this.formBuilder.group({
+  domain$ = this.siteSettingsService.getSiteDomain();
+  contentType$: Observable<ContentType>;
+  entryForm = this.formBuilder.group({
     title: [null, Validators.required],
-    urlRoot: [null, Validators.required],
     urlPath: [null, Validators.required],
     status: [null, Validators.required],
-    dataForm: this.dataForm,
+    dataForm: this.formBuilder.group({}),
   });
+
+  get dataForm() {
+    return this.entryForm.get('dataForm') as FormGroup;
+  }
 
   readonly statusOptions: StatusOption[] = [
     { value: 'unpublished', title: 'Unpublished' },
     { value: 'published', title: 'Published' },
   ];
 
-  entry: ContentEntry;
-  contentType: ContentType;
-  isFormFieldDataLoaded = false;
-  domain$ = this.siteSettingsService.getSiteDomain();
-
-  private combinedDataSubscription: Subscription;
+  private _contentTypeSubscription: Subscription;
 
   constructor(
     private readonly router: Router,
     private readonly formBuilder: FormBuilder,
-    private readonly ces: ContentEntryService,
-    private readonly cts: ContentTypeService,
+    private readonly contentEntryService: ContentEntryService,
+    private readonly contentTypeService: ContentTypeService,
     private readonly siteSettingsService: SiteSettingsService,
-  ) {
-  }
+  ) { }
+
 
   ngOnInit() {
-    const entry$ = this.ces.getContentEntry(this.entryId);
-    const contentType$ = this.cts.getContentType(this.contentTypeId);
-    this.combinedDataSubscription = combineLatest(contentType$, entry$)
-      .subscribe(([contentType, entry]) => this.onCompleteDataUpdate(contentType, entry));
+    this.entryForm.patchValue({
+      title: this.contentEntry.title,
+      urlPath: this.contentEntry.url.path,
+      status: this.contentEntry.status,
+    });
+    this.contentType$ = this.contentTypeService.getContentType(this.contentEntry.contentType);
+    this._contentTypeSubscription = this.contentType$
+      .subscribe(contentType => {
+        for (const field of contentType.fields) {
+          if (this.dataForm.get(field.key)) {
+            this.dataForm.setValue(this.contentEntry.data[field.key]);
+          } else {
+            const formControl = new FormControl(this.contentEntry.data[field.key]);
+            this.dataForm.addControl(field.key, formControl);
+          }
+        }
+      });
   }
 
   ngOnDestroy() {
-    if (this.combinedDataSubscription && !this.combinedDataSubscription.closed) {
-      this.combinedDataSubscription.unsubscribe();
+    if (this._contentTypeSubscription && !this._contentTypeSubscription.closed) {
+      this._contentTypeSubscription.unsubscribe();
     }
   }
-
-  private onCompleteDataUpdate(contentType: ContentType, entry: ContentEntry) {
-    this.isFormFieldDataLoaded = false;
-    this.contentType = contentType;
-    this.entry = entry;
-    for (const field of contentType.fields) {
-      if (this.dataForm.contains(field.key)) {
-        this.dataForm.patchValue({ [field.key]: entry.data[field.key] });
-      } else {
-        this.dataForm.addControl(field.key, new FormControl(entry.data[field.key]));
-      }
-    }
-
-    this.entryForm.patchValue({
-      title: entry.title,
-      urlPath: entry.url.path,
-      urlRoot: entry.url.root,
-      status: entry.status,
-    });
-
-    this.isFormFieldDataLoaded = true;
-  }
-
   cancelEditing() {
     this.router.navigateByUrl(this.onCancelRoute);
   }
@@ -96,17 +84,19 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
     const formData = this.entryForm.value;
     console.log(`[ContentEntryEditComponent:saveEntry] ${JSON.stringify(formData)}`);
 
-    await this.ces.saveContentEntry({
-      id: this.entryId,
+
+    const updates = {
+      id: this.contentEntry.id,
       title: formData.title,
-      contentType: this.contentTypeId,
+      contentType: this.contentEntry.contentType,
+      status: formData.status,
+      data: this.dataForm.value,
       url: {
-        root: formData.urlRoot,
+        root: this.contentEntry.url.root,
         path: formData.urlPath,
       },
-      status: formData.status,
-      data: this.dataForm.value
-    } as ContentEntry);
+    } as ContentEntry;
+    await this.contentEntryService.update(updates);
 
 
     if (!!this.afterSaveRoute) {

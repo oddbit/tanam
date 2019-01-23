@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { ContentEntry, ContentEntryService } from '../../../services/content-entry.service';
 
 @Component({
   selector: 'app-content-entry-edit',
@@ -7,15 +10,17 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./content-entry-edit.component.scss']
 })
 export class ContentEntryEditComponent implements OnInit {
-  readonly contentTypeId = this.route.snapshot.paramMap.get('typeId');
-  readonly entryId = this.route.snapshot.paramMap.get('entryId');
-  readonly onCancelRoute = `/_/admin/types/${this.contentTypeId}`;
-  readonly afterSaveRoute = null;
+  contentEntry$: Observable<ContentEntry>;
 
   constructor(
     private readonly route: ActivatedRoute,
+    private readonly contentEntryService: ContentEntryService,
   ) { }
 
   ngOnInit() {
+    this.contentEntry$ = this.route.paramMap.pipe(switchMap(params => {
+      const contentTypeId = params.get('entryId');
+      return this.contentEntryService.get(contentTypeId);
+    }));
   }
 }

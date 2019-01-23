@@ -32,7 +32,7 @@ export class DynamicPageComponent implements OnInit, AfterViewInit {
   }
 
   private async renderContent() {
-    const contentEntry = await this.ces.findContentEntryByUrl(this.rootPath, this.entryPath).pipe(take(1)).toPromise();
+    const contentEntry = await this.ces.findByUrl(this.rootPath, this.entryPath).pipe(take(1)).toPromise();
     this.documentFound = !!contentEntry;
     if (this.documentFound) {
       this.dcs.render(this.viewContainer, contentEntry);
