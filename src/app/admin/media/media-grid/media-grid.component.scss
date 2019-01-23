@@ -1,23 +1,25 @@
-.file-card {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  right: 15px;
-  bottom: 15px;
-}
-
 .more-button {
   position: absolute;
   top: 5px;
   right: 10px;
 }
 
-.file-card-content {
-  width: 100%;
-  height: auto;
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  justify-content: space-around;
 }
 
-// .file-card img {
-//   width: 100%;
-//   height: auto;
-// }
+.card {
+  // flex: 0 1 15%;
+  width: 200px;
+  margin: 5px;
+}
+
+.mat-card-image {
+  width: 232px;
+  height: 200px;
+  object-fit: cover;
+  margin: 15px -16px 0px -16px;
+}
