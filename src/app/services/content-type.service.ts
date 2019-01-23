@@ -64,15 +64,15 @@ export class ContentTypeService {
   }
 
   async createContentType(contentTypeName: string) {
-    const typeId = contentTypeName.toLocaleLowerCase();
+    const typeId = this.firestore.createId();
     const doc = this.firestore.collection('tanam-types').doc(typeId);
     return this.fbApp.firestore().runTransaction<AngularFirestoreDocument>(async (trx) => {
       const trxDoc = await trx.get(doc.ref);
       if (!trxDoc.exists) {
         trx.set(doc.ref, {
           id: typeId,
-          title: typeId.charAt(0).toUpperCase() + typeId.substr(1),
-          slug: typeId,
+          title: contentTypeName,
+          slug: contentTypeName.toLowerCase().replace(' ', '-'),
           template: null,
           standalone: true,
           icon: 'cloud',

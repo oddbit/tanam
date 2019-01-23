@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { ContentTemplateListDataSource } from './content-template-list-datasource';
 import { Router } from '@angular/router';
@@ -10,6 +10,8 @@ import { ContentTemplateService } from '../../../services/content-template.servi
   styleUrls: ['./content-template-list.component.scss']
 })
 export class ContentTemplateListComponent implements OnInit {
+  @Input() themeId: string;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: ContentTemplateListDataSource;
@@ -23,7 +25,7 @@ export class ContentTemplateListComponent implements OnInit {
   displayedColumns = ['selector', 'title', 'updatedAt'];
 
   ngOnInit() {
-    this.dataSource = new ContentTemplateListDataSource(this.paginator, this.sort, this.contentTemplateService);
+    this.dataSource = new ContentTemplateListDataSource(this.themeId, this.paginator, this.sort, this.contentTemplateService);
   }
 
   editTemplate(templateId: string) {

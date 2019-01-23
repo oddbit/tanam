@@ -3,6 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminAuthGuard } from './admin-auth.guard';
 import { AdminComponent } from './admin.component';
 import { AdminGuard } from './admin.guard';
+import { ContentEntryEditComponent } from './content-entry/content-entry-edit/content-entry-edit.component';
+import { ContentEntryOverviewComponent } from './content-entry/content-entry-overview/content-entry-overview.component';
+import { ContentTemplateEditComponent } from './content-template/content-template-edit/content-template-edit.component';
+import { ContentTemplateListComponent } from './content-template/content-template-list/content-template-list.component';
+import { ContentTemplateOverviewComponent } from './content-template/content-template-overview/content-template-overview.component';
+import { ContentTypeEditComponent } from './content-type/content-type-edit/content-type-edit.component';
+import { ContentTypeOverviewComponent } from './content-type/content-type-overview/content-type-overview.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { LoginGuard } from './login/login.guard';
@@ -10,13 +17,8 @@ import { MediaComponent } from './media/media.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { PublisherGuard } from './publisher.guard';
 import { SettingsComponent } from './settings/settings.component';
-import { ContentEntryModule } from './content-entry/content-entry.module';
-import { ContentEntryEditComponent } from './content-entry/content-entry-edit/content-entry-edit.component';
-import { ContentEntryOverviewComponent } from './content-entry/content-entry-overview/content-entry-overview.component';
-import { ContentTypeOverviewComponent } from './content-type/content-type-overview/content-type-overview.component';
-import { ContentTypeEditComponent } from './content-type/content-type-edit/content-type-edit.component';
-import { ContentTemplateListComponent } from './content-template/content-template-list/content-template-list.component';
-import { ContentTemplateEditComponent } from './content-template/content-template-edit/content-template-edit.component';
+import { ThemeEditComponent } from './theme/theme-edit/theme-edit.component';
+import { ThemeOverviewComponent } from './theme/theme-overview/theme-overview.component';
 
 const routes: Routes = [
   {
@@ -78,6 +80,23 @@ const routes: Routes = [
             path: 'content/template/:templateId/edit',
             component: ContentTemplateEditComponent,
             canActivate: [AdminGuard]
+          },
+          {
+            path: 'themes',
+            canActivate: [AdminGuard],
+            children: [
+              {
+                path: '',
+                component: ThemeOverviewComponent,
+              },
+              {
+                path: ':themeId',
+                children: [
+                  { path: '', component: ContentTemplateOverviewComponent },
+                  { path: 'edit', component: ThemeEditComponent }
+                ],
+              },
+            ],
           },
           { path: '**', component: NotFoundComponent },
         ],

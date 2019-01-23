@@ -102,7 +102,7 @@ export class DynamicComponentService {
   }
 
   private async createModule(documentContext: DocumentContext) {
-    const components = await this.contentTemplateService.getTemplates().pipe(take(1)).toPromise();
+    const components = await this.contentTemplateService.getTemplates('').pipe(take(1)).toPromise();
     return NgModule({
       imports: [CommonModule],
       declarations: components.map(c => this.createComponent(c, documentContext)),
