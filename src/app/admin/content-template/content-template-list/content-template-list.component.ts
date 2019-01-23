@@ -41,7 +41,7 @@ export class ContentTemplateListComponent implements OnInit, OnDestroy {
   }
 
   editTemplate(templateId: string) {
-    const url = `/_/admin/templates/${templateId}/edit`;
+    const url = `/_/admin/templates/${templateId}`;
     this.router.navigateByUrl(url);
   }
 }
