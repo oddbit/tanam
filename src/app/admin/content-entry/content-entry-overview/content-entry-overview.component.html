@@ -19,17 +19,17 @@
   <mat-tab-group>
     <mat-tab label="All [{{ contentType.numEntries.published + contentType.numEntries.unpublished }}]">
       <ng-template matTabContent>
-        <app-content-entry-list [contentTypeId]="contentType.id"></app-content-entry-list>
+        <app-content-entry-list [contentType$]="contentType$"></app-content-entry-list>
       </ng-template>
     </mat-tab>
     <mat-tab label="Published [{{ contentType.numEntries.published || 0 }}]">
       <ng-template matTabContent>
-        <app-content-entry-list [contentTypeId]="contentType.id"></app-content-entry-list>
+        <app-content-entry-list [contentType$]="contentType$"></app-content-entry-list>
       </ng-template>
     </mat-tab>
     <mat-tab label="Unpublished [{{ contentType.numEntries.unpublished || 0}}]">
       <ng-template matTabContent>
-        <app-content-entry-list [contentTypeId]="contentType.id"></app-content-entry-list>
+        <app-content-entry-list [contentType$]="contentType$"></app-content-entry-list>
       </ng-template>
     </mat-tab>
   </mat-tab-group>

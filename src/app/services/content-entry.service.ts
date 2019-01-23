@@ -98,20 +98,20 @@ export class ContentEntryService {
   }
 
   getContentEntries(contentTypeId: string, queryOpts: ContentTypeQueryOptions = {}) {
-    console.log(`[ContentEntryService:getContentTypeFields] ${contentTypeId}: ${JSON.stringify(queryOpts)}`);
+    console.log(`[ContentEntryService:getContentTypeFields] ${contentTypeId}, query=${JSON.stringify(queryOpts)}`);
 
     const queryFn = (ref: CollectionReference) => {
-      ref.where('contentType', '==', contentTypeId);
+      let query = ref.where('contentType', '==', contentTypeId);
 
       if (queryOpts.orderBy) {
-        ref.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
+        query = query.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
       }
 
       if (queryOpts.limit) {
-        ref.limit(queryOpts.limit);
+        query = query.limit(queryOpts.limit);
       }
 
-      return ref;
+      return query;
     };
 
     return this.firestore

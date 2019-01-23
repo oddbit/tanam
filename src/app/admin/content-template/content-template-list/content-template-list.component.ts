@@ -1,20 +1,24 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, OnDestroy } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { ContentTemplateListDataSource } from './content-template-list-datasource';
 import { Router } from '@angular/router';
 import { ContentTemplateService } from '../../../services/content-template.service';
+import { TanamTheme } from '../../../services/theme.service';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-content-template-list',
   templateUrl: './content-template-list.component.html',
   styleUrls: ['./content-template-list.component.scss']
 })
-export class ContentTemplateListComponent implements OnInit {
-  @Input() themeId: string;
+export class ContentTemplateListComponent implements OnInit, OnDestroy {
+  @Input() theme$: Observable<TanamTheme>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+
   dataSource: ContentTemplateListDataSource;
+  private _themeSubscription: Subscription;
 
   constructor(
     private readonly router: Router,
@@ -25,7 +29,15 @@ export class ContentTemplateListComponent implements OnInit {
   displayedColumns = ['selector', 'title', 'updatedAt'];
 
   ngOnInit() {
-    this.dataSource = new ContentTemplateListDataSource(this.themeId, this.paginator, this.sort, this.contentTemplateService);
+    this._themeSubscription = this.theme$.subscribe(theme => {
+      this.dataSource = new ContentTemplateListDataSource(theme, this.paginator, this.sort, this.contentTemplateService);
+    });
+  }
+
+  ngOnDestroy() {
+    if (this._themeSubscription && !this._themeSubscription.closed) {
+      this._themeSubscription.unsubscribe();
+    }
   }
 
   editTemplate(templateId: string) {

@@ -1,13 +1,14 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { ContentEntry, ContentEntryService } from '../../../services/content-entry.service';
+import { ContentType } from '../../../services/content-type.service';
 
 export class ContentEntryListDataSource extends DataSource<ContentEntry> {
   data: ContentEntry[];
 
   constructor(
-    private readonly contentTypeId: string,
+    private readonly contentType: ContentType,
     private readonly contentEntryService: ContentEntryService,
     private readonly paginator: MatPaginator,
     private readonly sort: MatSort,
@@ -16,7 +17,7 @@ export class ContentEntryListDataSource extends DataSource<ContentEntry> {
   }
 
   connect(): Observable<ContentEntry[]> {
-    return this.contentEntryService.getContentEntries(this.contentTypeId);
+    return this.contentEntryService.getContentEntries(this.contentType.id);
   }
 
   disconnect() { }

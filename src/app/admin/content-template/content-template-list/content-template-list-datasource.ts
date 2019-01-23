@@ -2,12 +2,13 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Observable } from 'rxjs';
 import { ContentTemplate, ContentTemplateService } from '../../../services/content-template.service';
+import { TanamTheme } from '../../../services/theme.service';
 
 export class ContentTemplateListDataSource extends DataSource<ContentTemplate> {
   data: ContentTemplate[];
 
   constructor(
-    private readonly themeId: string,
+    private readonly theme: TanamTheme,
     private readonly paginator: MatPaginator,
     private readonly sort: MatSort,
     private readonly contentTemplateService: ContentTemplateService,
@@ -16,7 +17,7 @@ export class ContentTemplateListDataSource extends DataSource<ContentTemplate> {
   }
 
   connect(): Observable<ContentTemplate[]> {
-    return this.contentTemplateService.getTemplates(this.themeId);
+    return this.contentTemplateService.getTemplates(this.theme.id);
   }
 
   disconnect() { }

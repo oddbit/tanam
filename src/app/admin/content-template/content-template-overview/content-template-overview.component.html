@@ -12,6 +12,5 @@
       <p *ngIf="theme.description">{{ theme.description }}</p>
     </mat-card-content>
   </mat-card>
-
-  <app-content-template-list [themeId]="theme.id"></app-content-template-list>
 </div>
+<app-content-template-list [theme$]="theme$"></app-content-template-list>
