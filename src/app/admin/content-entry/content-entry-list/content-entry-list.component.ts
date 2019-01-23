@@ -29,7 +29,7 @@ export class ContentEntryListComponent implements OnInit {
   }
 
   editEntry(entryId: string) {
-    const url = `/_/admin/content/type/${this.contentTypeId}/entry/${entryId}/edit`;
+    const url = `/_/admin/entries/${entryId}`;
     this.router.navigateByUrl(url);
   }
 }

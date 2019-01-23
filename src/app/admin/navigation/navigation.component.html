@@ -15,7 +15,7 @@
 
       <h3 mat-subheader>Content</h3>
       <app-navigation-list-item *ngFor="let contentType of contentTypes$ | async"
-                                routerLink="/_/admin/content/type/{{contentType.id}}/entries"
+                                routerLink="/_/admin/types/{{contentType.id}}"
                                 icon="{{contentType.icon}}"
                                 title="{{contentType.title}}"></app-navigation-list-item>
 
@@ -23,7 +23,7 @@
       <app-navigation-list-item routerLink="/_/admin/media"
                                 icon="image"
                                 title="Media files"></app-navigation-list-item>
-      <app-navigation-list-item routerLink="/_/admin/content/types"
+      <app-navigation-list-item routerLink="/_/admin/types"
                                 icon="library_books"
                                 title="Content types"></app-navigation-list-item>
       <app-navigation-list-item routerLink="/_/admin/themes"

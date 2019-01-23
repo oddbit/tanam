@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ContentTypeEditComponent implements OnInit {
   readonly contentTypeId = this.route.snapshot.paramMap.get('typeId');
   readonly entryId = this.route.snapshot.paramMap.get('entryId');
-  readonly onCancelRoute = `/_/admin/content/type/${this.contentTypeId}`;
+  readonly onCancelRoute = `/_/admin/types/${this.contentTypeId}`;
   readonly afterSaveRoute = null;
 
   constructor(

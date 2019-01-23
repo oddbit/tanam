@@ -29,7 +29,7 @@ export class ContentTemplateListComponent implements OnInit {
   }
 
   editTemplate(templateId: string) {
-    const url = `/_/admin/content/template/${templateId}/edit`;
+    const url = `/_/admin/templates/${templateId}/edit`;
     this.router.navigateByUrl(url);
   }
 }

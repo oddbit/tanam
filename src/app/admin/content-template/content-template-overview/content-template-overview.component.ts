@@ -29,6 +29,6 @@ export class ContentTemplateOverviewComponent implements OnInit {
 
   async createNewTemplate(theme: TanamTheme) {
     const newId = await this.contentTemplateService.createTemplateInTheme(theme);
-    this.router.navigateByUrl(`/_/admin/template/${newId}`);
+    this.router.navigateByUrl(`/_/admin/templates/${newId}`);
   }
 }

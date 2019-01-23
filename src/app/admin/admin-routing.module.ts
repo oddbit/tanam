@@ -48,39 +48,46 @@ const routes: Routes = [
             canActivate: [PublisherGuard]
           },
           {
-            path: 'content/types',
-            component: ContentTypeOverviewComponent,
-            canActivate: [AdminGuard]
-          },
-          { path: 'content/type/:typeId', redirectTo: 'edit', pathMatch: 'full' },
-          {
-            path: 'content/type/:typeId/edit',
-            component: ContentTypeEditComponent,
-            canActivate: [AdminGuard]
-          },
-          {
-            path: 'content/type/:typeId/entries',
-            component: ContentEntryOverviewComponent,
-            canActivate: [PublisherGuard]
-          },
-          { path: 'content/type/:typeId/entry/:entryId', redirectTo: 'edit', pathMatch: 'full' },
-          {
-            path: 'content/type/:typeId/entry/:entryId/edit',
-            component: ContentEntryEditComponent,
-            canActivate: [PublisherGuard]
+            path: 'types',
+            children: [
+              {
+                path: '',
+                component: ContentTypeOverviewComponent,
+                canActivate: [AdminGuard],
+              },
+              {
+                path: ':typeId',
+                children: [
+                  {
+                    path: '',
+                    component: ContentEntryOverviewComponent,
+                    canActivate: [PublisherGuard],
+                  },
+                  {
+                    path: 'edit',
+                    component: ContentTypeEditComponent,
+                    canActivate: [AdminGuard]
+                  },
+                ],
+              },
+            ],
           },
 
           {
-            path: 'content/templates',
-            component: ContentTemplateListComponent,
-            canActivate: [AdminGuard]
+            path: 'entries',
+            children: [
+              {
+                path: '',
+                component: NotFoundComponent,
+              },
+              {
+                path: ':entryId',
+                component: ContentEntryEditComponent,
+                canActivate: [PublisherGuard],
+              },
+            ],
           },
-          { path: 'content/template/:templateId', redirectTo: 'edit', pathMatch: 'full' },
-          {
-            path: 'content/template/:templateId/edit',
-            component: ContentTemplateEditComponent,
-            canActivate: [AdminGuard]
-          },
+
           {
             path: 'themes',
             canActivate: [AdminGuard],
@@ -98,6 +105,22 @@ const routes: Routes = [
               },
             ],
           },
+
+          {
+            path: 'templates',
+            children: [
+              {
+                path: '',
+                component: NotFoundComponent,
+              },
+              {
+                path: ':templateId',
+                component: ContentTemplateEditComponent,
+                canActivate: [AdminGuard],
+              },
+            ],
+          },
+
           { path: '**', component: NotFoundComponent },
         ],
       },
