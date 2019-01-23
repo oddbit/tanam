@@ -82,8 +82,10 @@ const routes: Routes = [
               },
               {
                 path: ':entryId',
-                component: ContentEntryEditComponent,
-                canActivate: [PublisherGuard],
+                children: [
+                  { path: '', redirectTo: 'edit', pathMatch: 'full' },
+                  { path: 'edit', component: ContentEntryEditComponent, canActivate: [PublisherGuard] }
+                ],
               },
             ],
           },
