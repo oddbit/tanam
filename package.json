@@ -53,6 +53,8 @@
     "@angular/platform-browser-dynamic": "~7.2.1",
     "@angular/platform-server": "~7.2.1",
     "@angular/router": "~7.2.1",
+    "@ckeditor/ckeditor5-angular": "^1.0.1",
+    "@ckeditor/ckeditor5-build-classic": "^11.2.0",
     "@nguniversal/express-engine": "^7.0.2",
     "@nguniversal/module-map-ngfactory-loader": "^7.0.2",
     "core-js": "^2.5.4",

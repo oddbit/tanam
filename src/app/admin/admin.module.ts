@@ -9,6 +9,7 @@ import { ContentEntryModule } from './content-entry/content-entry.module';
 import { ContentTemplateModule } from './content-template/content-template.module';
 import { ContentTypeModule } from './content-type/content-type.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { FormModule } from './form/form.module';
 import { LoginComponent } from './login/login.component';
 import { MediaModule } from './media/media.module';
 import { NavigationModule } from './navigation/navigation.module';
@@ -37,6 +38,7 @@ import { ThemeModule } from './theme/theme.module';
     ContentTypeModule,
     NavigationModule,
     ThemeModule,
+    FormModule,
   ]
 })
 export class AdminModule { }
