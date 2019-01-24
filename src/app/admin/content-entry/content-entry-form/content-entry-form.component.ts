@@ -80,6 +80,11 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(this.onCancelRoute);
   }
 
+  async deleteEntry() {
+    await this.contentEntryService.delete(this.contentEntry.id);
+    this.router.navigateByUrl(this.onCancelRoute);
+  }
+
   async saveEntry() {
     const formData = this.entryForm.value;
     console.log(`[ContentEntryEditComponent:saveEntry] ${JSON.stringify(formData)}`);

@@ -1,6 +1,5 @@
 <form [formGroup]="entryForm"
-      novalidate
-      (ngSubmit)="saveEntry()">
+      novalidate>
   <mat-card class="shipping-card">
     <mat-card-header>
       <mat-card-title>
@@ -91,11 +90,14 @@
 
     <mat-card-actions>
       <button mat-raised-button
-              color="warning"
+              color="warn"
               (click)="cancelEditing()">Cancel</button>
       <button mat-raised-button
+              color="warn"
+              (click)="deleteEntry()"><mat-icon>delete</mat-icon>Delete</button>
+      <button mat-raised-button
               color="primary"
-              type="submit"
+              (click)="saveEntry()"
               [disabled]="entryForm.pristine">Save</button>
 
     </mat-card-actions>
