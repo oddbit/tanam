@@ -25,3 +25,14 @@
 .col:last-child {
   margin-right: 0;
 }
+
+.mat-select-trigger-icon {
+  .icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  span {
+    margin-left: 32px;
+  }
+}

@@ -33,6 +33,10 @@
           <mat-form-field class="full-width">
             <mat-select placeholder="Icon"
                         formControlName="icon">
+              <mat-select-trigger class="mat-select-trigger-icon">
+                <mat-icon class="icon">{{contentTypeForm.value.icon}}</mat-icon>
+                <span>{{contentTypeForm.value.icon}}</span>
+              </mat-select-trigger>
               <mat-option *ngFor="let iconOption of icons"
                           [value]="iconOption">
                 <mat-icon mat-list-icon>{{iconOption}}</mat-icon> {{iconOption}}
