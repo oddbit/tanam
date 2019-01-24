@@ -31,3 +31,9 @@ export const countEntryStatus = functions.firestore.document('tanam-entries/{doc
         trx.set(contentTypeRef, trxContentType);
     });
 });
+
+export const saveRevision = functions.firestore.document('tanam-entries/{documentId}').onUpdate((change) => {
+    const entryBefore = change.before.data() as ContentEntry;
+    console.log(`Save revision ${entryBefore.revision} of ${change.before.ref.path}`);
+    return change.before.ref.collection('revisions').doc(`${entryBefore.id}+${entryBefore.revision}`).set(entryBefore);
+});
