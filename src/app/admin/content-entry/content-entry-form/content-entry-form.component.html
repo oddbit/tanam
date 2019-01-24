@@ -79,6 +79,7 @@
               <app-textbox-rich matInput
                                 *ngSwitchCase="'textbox-rich'"
                                 placeholder="{{field.title}}"
+                                [editorConfig]="richTextEditorConfig"
                                 formControlName="{{field.key}}"></app-textbox-rich>
 
 

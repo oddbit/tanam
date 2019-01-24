@@ -3,12 +3,14 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatFormFieldControl } from '@angular/material/form-field';
-import { Subject, BehaviorSubject, Subscription } from 'rxjs';
-import Quill from 'quill';
+import { CKEditor5 } from '@ckeditor/ckeditor5-angular/ckeditor';
+import { ChangeEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-textbox-rich',
-  template: '<div id="editor"></div>',
+  templateUrl: './textbox-rich.component.html',
   styleUrls: ['./textbox-rich.component.scss'],
   providers: [
     {
@@ -24,20 +26,22 @@ export class TextboxRichComponent implements MatFormFieldControl<string>, Contro
   @HostBinding() id = `textbox-rich-${TextboxRichComponent._nextId++}`;
   @ViewChild('container', { read: ElementRef }) container: ElementRef;
 
+  @Input() editorConfig: any;
+
   stateChanges = new Subject<void>();
   controlType = 'textbox-rich';
   shouldLabelFloat = false;
 
   required: boolean;
-  errorState: boolean; // TODO: Fixme
+  errorState: boolean;
   autofilled?: boolean;
 
-  private _editor: any;
+  formEditor: CKEditor5.Editor = ClassicEditor;
+  editorData: string;
+
+  private _disabled = false;
+  private _focused = false;
   private _placeholder: string;
-  private _textContent$ = new BehaviorSubject<string>('');
-  private _focused$ = new BehaviorSubject<boolean>(false);
-  private _enabled$ = new BehaviorSubject<boolean>(true);
-  private _subscriptions: Subscription[] = [];
   private _onTouchedCallback: () => void;
   private _onChangeCallback: (value: string) => void;
 
@@ -66,71 +70,42 @@ export class TextboxRichComponent implements MatFormFieldControl<string>, Contro
   }
 
   get empty() {
-    return !this._editor.getText() || this._editor.getText().trim().length === 0;
+    return !this.editorData || this.editorData.trim().length === 0;
   }
 
   @Input()
   get disabled() {
-    return this._enabled$.value;
+    return this._disabled;
   }
   set disabled(flag) {
-    this._enabled$.next(flag);
+    this._disabled = flag;
     this.stateChanges.next();
   }
 
   @Input()
   get value(): string {
-    // tslint:disable-next-line:no-debugger
-    debugger;
-    return this._editor.getText();
+    return this.editorData;
   }
   set value(value: string) {
-    this._textContent$.next(value);
+    this.editorData = value;
+    this.stateChanges.next();
   }
 
   get focused() {
-    return this._editor.hasFocus();
+    return this._focused;
   }
 
   set focused(flag: boolean) {
-    this._focused$.next(coerceBooleanProperty(flag));
+    this._focused = coerceBooleanProperty(flag);
+    this._onTouchedCallback();
   }
 
   ngOnInit() {
-    const editorElementRef = this.elementRef.nativeElement.querySelector('#editor');
-    const editor = new Quill(editorElementRef, { theme: 'snow' });
-    this._editor = editor;
-
-    this._subscriptions.push(this._textContent$.subscribe(text => {
-      this._editor.setText(text);
-    }));
-
-    this._subscriptions.push(this._enabled$.subscribe(isEnabled => {
-      this._editor.enable(isEnabled);
-    }));
-
-    this._subscriptions.push(this._focused$.subscribe(isFocused => {
-      if (isFocused) {
-        this._editor.focus();
-      } else {
-        this._editor.blur();
-      }
-    }));
-
-    this._editor.on('text-change', () => {
-      this.stateChanges.next();
-      this._onChangeCallback(this._editor.getText().trim());
-    });
-
-    this._editor.on('editor-change', () => {
-      this._onTouchedCallback();
-    });
   }
 
   ngOnDestroy() {
     this.stateChanges.complete();
     this.focusMonitor.stopMonitoring(this.elementRef.nativeElement);
-    this._subscriptions.forEach(s => !s.closed && s.unsubscribe());
   }
 
   setDescribedByIds(ids: string[]) {
@@ -138,12 +113,11 @@ export class TextboxRichComponent implements MatFormFieldControl<string>, Contro
   }
 
   onContainerClick(event: MouseEvent): void {
-    this._editor.focus();
-    this._focused$.next(true);
+    this._onTouchedCallback();
   }
 
   writeValue(text: string): void {
-    this._textContent$.next(text);
+    this.editorData = text;
   }
 
   registerOnChange(callback: (val: any) => void): void {
@@ -155,6 +129,11 @@ export class TextboxRichComponent implements MatFormFieldControl<string>, Contro
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this._enabled$.next(!coerceBooleanProperty(isDisabled));
+    this.formEditor.isReadOnly = isDisabled;
+  }
+
+  onChange({ editor }: ChangeEvent) {
+    this._onChangeCallback(editor.getData());
+    this.stateChanges.next();
   }
 }

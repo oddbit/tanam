@@ -31,6 +31,10 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
     dataForm: this.formBuilder.group({}),
   });
 
+  readonly richTextEditorConfig = {
+    // toolbar: ['heading', '|', 'bold', 'italic', '|', 'bulletedList', 'numberedList'],
+  };
+
   get dataForm() {
     return this.entryForm.get('dataForm') as FormGroup;
   }
