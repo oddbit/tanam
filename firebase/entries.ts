@@ -34,6 +34,31 @@ export const countEntryStatus = functions.firestore.document('tanam-entries/{doc
 
 export const saveRevision = functions.firestore.document('tanam-entries/{documentId}').onUpdate((change) => {
     const entryBefore = change.before.data() as ContentEntry;
-    console.log(`Save revision ${entryBefore.revision} of ${change.before.ref.path}`);
+    console.log(`Saving revision ${entryBefore.revision} of ${change.before.ref.path}`);
     return change.before.ref.collection('revisions').doc(`${entryBefore.id}+${entryBefore.revision}`).set(entryBefore);
+});
+
+export const deleteRevisions = functions.firestore.document('tanam-entries/{documentId}').onDelete(async (snap) => {
+    console.log(`Deleting all revisions of ${snap.ref.path}`);
+    const revs = await snap.ref.collection('revisions').get();
+
+    const promises = [];
+    const batchDeletes = [];
+
+    for (let i = 0; i < revs.docs.length; i++) {
+        const doc = revs.docs[i];
+        if ((i % 500) === 0) {
+            batchDeletes.push(admin.firestore().batch());
+        }
+
+        const batchNum = batchDeletes.length - 1;
+        console.log(`Batch delete #${batchNum} (${i + 1}/500): ${doc.id}`);
+        batchDeletes[batchNum].delete(doc.ref);
+    }
+
+    batchDeletes.forEach((batchWrite) => {
+        promises.push(batchWrite.commit());
+    });
+
+    return Promise.all(promises);
 });
