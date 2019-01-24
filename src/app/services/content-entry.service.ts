@@ -78,6 +78,16 @@ export class ContentEntryService {
       .update(entry);
   }
 
+  delete(entryId: string) {
+    if (!entryId) {
+      throw new Error('Document ID must be provided as an attribute when deleting an entry.');
+    }
+    console.log(entryId);
+    return this.firestore
+    .collection<ContentEntry>('tanam-entries').doc(entryId)
+    .delete();
+  }
+
   findByUrl(root: string, path: string) {
     console.log(`[ContentEntryService:findContentEntryByUrl] ${JSON.stringify({ root, path })}`);
 
