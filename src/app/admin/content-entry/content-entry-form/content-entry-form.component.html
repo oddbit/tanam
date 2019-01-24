@@ -10,21 +10,6 @@
     <mat-card-content>
 
 
-
-
-      <div class="row">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <app-textbox-rich formControlName="title"></app-textbox-rich>
-          </mat-form-field>
-        </div>
-      </div>
-
-
-
-
-
-
       <div class="row">
         <div class="col">
           <mat-form-field class="full-width">
@@ -37,6 +22,7 @@
           </mat-form-field>
         </div>
       </div>
+
       <div class="row">
         <div class="col">
           <mat-form-field class="full-width">
@@ -49,6 +35,7 @@
             </mat-error>
           </mat-form-field>
         </div>
+
         <div class="col">
           <mat-form-field class="full-width">
             <mat-select formControlName="status"
@@ -72,35 +59,41 @@
              *ngFor="let field of (contentType$ | async)?.fields">
           <div class="col"
                [ngSwitch]="field.type">
-            <!-- If input type is just simple line of text -->
-            <mat-form-field class="full-width"
-                            *ngSwitchCase="'input-text'">
+
+
+            <mat-form-field class="full-width">
+
+              <!-- If input type is just simple line of text -->
               <input matInput
+                     *ngSwitchCase="'input-text'"
                      placeholder="{{field.title}}"
                      formControlName="{{field.key}}">
-              <mat-error *ngIf="dataForm.controls[field.key].hasError('required')">
-                {{ field.title }} is <strong>required</strong>
-              </mat-error>
-            </mat-form-field>
 
-            <!-- If input type is larger amount of text: paragraph -->
-            <mat-form-field class="full-width"
-                            *ngSwitchCase="'textbox-plain'">
+              <!-- If input type is larger amount of text: paragraph -->
               <textarea matInput
+                        *ngSwitchCase="'textbox-plain'"
                         placeholder="{{field.title}}"
                         formControlName="{{field.key}}"></textarea>
 
+
+              <app-textbox-rich matInput
+                                *ngSwitchCase="'textbox-rich'"
+                                placeholder="{{field.title}}"
+                                formControlName="{{field.key}}"></app-textbox-rich>
+
+
+              <!-- Use radio button selection -->
+              <mat-radio-group *ngSwitchCase="'radio-buttons'"
+                               formControlName="{{field.key}}">
+                <mat-radio-button *ngFor="let opt of field.options"
+                                  value="{{option.key}}">{{option.value}}</mat-radio-button>
+              </mat-radio-group>
+
               <mat-error *ngIf="dataForm.controls[field.key].hasError('required')">
                 {{ field.title }} is <strong>required</strong>
               </mat-error>
             </mat-form-field>
 
-            <!-- Use radio button selection -->
-            <mat-radio-group *ngSwitchCase="'radio-buttons'"
-                             formControlName="{{field.key}}">
-              <mat-radio-button *ngFor="let opt of field.options"
-                                value="{{option.key}}">{{option.value}}</mat-radio-button>
-            </mat-radio-group>
           </div>
         </div>
       </div>
