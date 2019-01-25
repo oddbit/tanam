@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ContentEntry, ContentEntryService } from '../../../services/content-entry.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-content-entry-new',
@@ -7,13 +8,12 @@ import { ContentEntry, ContentEntryService } from '../../../services/content-ent
   styleUrls: ['./content-entry-new.component.scss']
 })
 export class ContentEntryNewComponent implements OnInit {
-  contentEntry: ContentEntry;
+  contentEntry: ContentEntry; // TODO: get the content entry from the activated route
 
   constructor(
-    private readonly contentEntryService: ContentEntryService,
+    private readonly route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
-    this.contentEntry = this.contentEntryService.entryTemp;
   }
 }

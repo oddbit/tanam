@@ -64,6 +64,7 @@ const routes: Routes = [
                     component: ContentEntryOverviewComponent,
                     canActivate: [PublisherGuard],
                   },
+                  { path: 'new', component: ContentEntryNewComponent, canActivate: [PublisherGuard] },
                   {
                     path: 'edit',
                     component: ContentTypeEditComponent,
@@ -81,7 +82,6 @@ const routes: Routes = [
                 path: '',
                 component: NotFoundComponent,
               },
-              { path: 'new', component: ContentEntryNewComponent, canActivate: [PublisherGuard] },
               {
                 path: ':entryId',
                 children: [

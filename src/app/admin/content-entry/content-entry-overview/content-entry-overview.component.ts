@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { ContentEntryService } from '../../../services/content-entry.service';
 import { ContentType, ContentTypeService } from '../../../services/content-type.service';
 import { SiteSettingsService } from '../../../services/site-settings.service';
 
@@ -19,7 +18,6 @@ export class ContentEntryOverviewComponent implements OnInit {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly cts: ContentTypeService,
-    private readonly ces: ContentEntryService,
     private readonly siteSettingsService: SiteSettingsService,
   ) { }
 
@@ -30,8 +28,8 @@ export class ContentEntryOverviewComponent implements OnInit {
     }));
   }
 
+
   createNewEntry(contentType: ContentType) {
-    this.ces.createTemp(contentType);
-    this.router.navigateByUrl(`/_/admin/entries/new`);
+    this.router.navigate([`/_/admin/types/${contentType.id}/new`], { state: contentType });
   }
 }

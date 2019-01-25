@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { FirebaseApp } from '@angular/fire';
 import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { map } from 'rxjs/operators';
@@ -37,16 +36,13 @@ export interface ContentTypeQueryOptions {
   providedIn: 'root'
 })
 export class ContentEntryService {
-  entryTemp: ContentEntry;
-
   constructor(
-    private readonly fbApp: FirebaseApp,
     private readonly firestore: AngularFirestore,
   ) { }
 
-  createTemp(contentType: ContentType) {
-    const entry: ContentEntry = {
-      id: null,
+  buildEntryFromContentType(contentType: ContentType) {
+    return {
+      id: this.firestore.createId(),
       contentType: contentType.id,
       title: null,
       url: {
@@ -60,36 +56,10 @@ export class ContentEntryService {
       tags: [],
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    };
-
-    this.entryTemp = entry;
+    } as ContentEntry;
   }
 
-  async create(contentType: ContentType) {
-    const entryId = this.firestore.createId();
-    const docRef = this.firestore.collection<ContentEntry>('tanam-entries').doc(entryId);
-
-    await docRef.set({
-      id: entryId,
-      contentType: contentType.id,
-      title: entryId,
-      url: {
-        root: contentType.slug,
-        path: entryId,
-      },
-      revision: 0,
-      standalone: contentType.standalone,
-      status: 'unpublished',
-      data: {},
-      tags: [],
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    } as ContentEntry);
-
-    return entryId;
-  }
-
-  update(entry: ContentEntry) {
+  save(entry: ContentEntry) {
     if (!entry.id) {
       throw new Error('Document ID must be provided as an attribute when updating an entry.');
     }
@@ -97,7 +67,7 @@ export class ContentEntryService {
     entry.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
     return this.firestore
       .collection<ContentEntry>('tanam-entries').doc(entry.id)
-      .update(entry);
+      .set(entry, { merge: true });
   }
 
   delete(entryId: string) {

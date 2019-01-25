@@ -105,7 +105,7 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
         path: formData.urlPath,
       },
     } as ContentEntry;
-    await this.contentEntryService.update(updates);
+    await this.contentEntryService.save(updates);
 
 
     if (!!this.afterSaveRoute) {
