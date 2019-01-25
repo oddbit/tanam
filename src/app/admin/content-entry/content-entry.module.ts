@@ -7,6 +7,7 @@ import { ContentEntryEditComponent } from './content-entry-edit/content-entry-ed
 import { ContentEntryFormComponent } from './content-entry-form/content-entry-form.component';
 import { ContentEntryListComponent } from './content-entry-list/content-entry-list.component';
 import { ContentEntryOverviewComponent } from './content-entry-overview/content-entry-overview.component';
+import { ContentEntryNewComponent } from './content-entry-new/content-entry-new.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { ContentEntryOverviewComponent } from './content-entry-overview/content-
     ContentEntryFormComponent,
     ContentEntryListComponent,
     ContentEntryOverviewComponent,
+    ContentEntryNewComponent,
   ],
   imports: [
     CommonModule,
@@ -24,6 +26,7 @@ import { ContentEntryOverviewComponent } from './content-entry-overview/content-
   exports: [
     ContentEntryEditComponent,
     ContentEntryOverviewComponent,
+    ContentEntryNewComponent,
   ],
 })
 export class ContentEntryModule { }

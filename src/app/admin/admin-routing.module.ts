@@ -4,6 +4,7 @@ import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { AdminComponent } from './admin.component';
 import { AdminGuard } from './guards/admin.guard';
 import { ContentEntryEditComponent } from './content-entry/content-entry-edit/content-entry-edit.component';
+import { ContentEntryNewComponent } from './content-entry/content-entry-new/content-entry-new.component';
 import { ContentEntryOverviewComponent } from './content-entry/content-entry-overview/content-entry-overview.component';
 import { ContentTemplateEditComponent } from './content-template/content-template-edit/content-template-edit.component';
 import { ContentTemplateListComponent } from './content-template/content-template-list/content-template-list.component';
@@ -80,6 +81,7 @@ const routes: Routes = [
                 path: '',
                 component: NotFoundComponent,
               },
+              { path: 'new', component: ContentEntryNewComponent, canActivate: [PublisherGuard] },
               {
                 path: ':entryId',
                 children: [

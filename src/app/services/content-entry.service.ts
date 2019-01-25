@@ -37,11 +37,33 @@ export interface ContentTypeQueryOptions {
   providedIn: 'root'
 })
 export class ContentEntryService {
+  entryTemp: ContentEntry;
 
   constructor(
     private readonly fbApp: FirebaseApp,
     private readonly firestore: AngularFirestore,
   ) { }
+
+  createTemp(contentType: ContentType) {
+    const entry: ContentEntry = {
+      id: null,
+      contentType: contentType.id,
+      title: null,
+      url: {
+        root: contentType.slug,
+        path: null,
+      },
+      revision: 0,
+      standalone: contentType.standalone,
+      status: 'unpublished',
+      data: {},
+      tags: [],
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+
+    this.entryTemp = entry;
+  }
 
   async create(contentType: ContentType) {
     const entryId = this.firestore.createId();
@@ -84,8 +106,8 @@ export class ContentEntryService {
     }
     console.log(entryId);
     return this.firestore
-    .collection<ContentEntry>('tanam-entries').doc(entryId)
-    .delete();
+      .collection<ContentEntry>('tanam-entries').doc(entryId)
+      .delete();
   }
 
   findByUrl(root: string, path: string) {
