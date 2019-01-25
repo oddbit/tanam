@@ -1,37 +1,38 @@
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container class="sidenav-container" autosize>
   <mat-sidenav #drawer
-               class="sidenav"
+               [ngClass]="{'expanded-nav': isExpanded}"
                fixedInViewport="true"
                [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
                [mode]="(isHandset$ | async) ? 'over' : 'side'"
                [opened]="!(isHandset$ | async)">
     <mat-toolbar color="primary">
-      Menu
+      {{isExpanded? 'Tanam':''}}<mat-icon class="togglerMiniNav" (click)="toggleMiniNav()">{{isExpanded? 'chevron_left':'chevron_right'}}</mat-icon>
     </mat-toolbar>
     <mat-nav-list>
       <app-navigation-list-item routerLink="/_/admin/dashboard"
                                 icon="dashboard"
-                                title="Dashboard"></app-navigation-list-item>
-
-      <h3 mat-subheader>Content</h3>
+                                title="{{isExpanded? 'Dashboard':''}}"></app-navigation-list-item>
+      <h3 mat-subheader *ngIf="isExpanded">Content</h3>
+      <mat-divider *ngIf="!isExpanded"></mat-divider>
       <app-navigation-list-item *ngFor="let contentType of contentTypes$ | async"
                                 routerLink="/_/admin/types/{{contentType.id}}"
                                 icon="{{contentType.icon}}"
-                                title="{{contentType.title}}"></app-navigation-list-item>
+                                title="{{isExpanded? contentType.title:''}}"></app-navigation-list-item>
 
-      <h3 mat-subheader>Manage</h3>
+      <h3 mat-subheader *ngIf="isExpanded">Manage</h3>
+      <mat-divider *ngIf="!isExpanded"></mat-divider>
       <app-navigation-list-item routerLink="/_/admin/media"
                                 icon="image"
-                                title="Media files"></app-navigation-list-item>
+                                title="{{isExpanded? 'Media files':''}}"></app-navigation-list-item>
       <app-navigation-list-item routerLink="/_/admin/types"
                                 icon="library_books"
-                                title="Content types"></app-navigation-list-item>
+                                title="{{isExpanded? 'Content types':''}}"></app-navigation-list-item>
       <app-navigation-list-item routerLink="/_/admin/themes"
                                 icon="web"
-                                title="Themes"></app-navigation-list-item>
+                                title="{{isExpanded? 'Themes':''}}"></app-navigation-list-item>
       <app-navigation-list-item routerLink="/_/admin/settings"
                                 icon="settings"
-                                title="Settings"></app-navigation-list-item>
+                                title="{{isExpanded? 'Settings':''}}"></app-navigation-list-item>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

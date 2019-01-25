@@ -2,11 +2,11 @@
   height: 100%;
 }
 
-.sidenav {
+.expanded-nav {
   width: 200px;
 }
 
-.sidenav .mat-toolbar {
+.expanded-nav .mat-toolbar {
   background: inherit;
 }
 
@@ -22,4 +22,8 @@
 
 .fill-remaining-space {
   flex: 1 1 auto;
+}
+
+.togglerMiniNav {
+  cursor: pointer;
 }
