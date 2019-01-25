@@ -1,11 +1,10 @@
-import { Component, OnInit, ViewChild, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
-import { ContentEntryListDataSource } from './content-entry-list-datasource';
 import { Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 import { ContentEntryService } from '../../../services/content-entry.service';
 import { ContentType } from '../../../services/content-type.service';
-import { Observable, Subscription } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { ContentEntryListDataSource } from './content-entry-list-datasource';
 
 @Component({
   selector: 'app-content-entry-list',

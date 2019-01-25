@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import * as firebase from 'firebase/app';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
+import * as firebase from 'firebase/app';
 import { Subscription } from 'rxjs';
 
 export type FileType = 'image' | 'video' | 'document';

@@ -1,5 +1,5 @@
-import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { environment } from '../../environments/environment';
 
 export interface TanamConfig {

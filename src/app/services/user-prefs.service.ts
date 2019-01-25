@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirebaseApp } from '@angular/fire';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { map, distinct, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { AppAuthService } from './app-auth.service';
 import { TanamUser } from './user.service';
 

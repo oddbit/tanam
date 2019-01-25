@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators, FormArray, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { combineLatest, Subscription, of, Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ContentEntry, ContentEntryService, ContentEntryStatus } from '../../../services/content-entry.service';
 import { ContentType, ContentTypeService } from '../../../services/content-type.service';
 import { SiteSettingsService } from '../../../services/site-settings.service';
