@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { FirebaseApp } from '@angular/fire';
 import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { map } from 'rxjs/operators';
@@ -39,21 +38,23 @@ export interface ContentTypeQueryOptions {
 export class ContentEntryService {
 
   constructor(
-    private readonly fbApp: FirebaseApp,
     private readonly firestore: AngularFirestore,
   ) { }
 
-  async create(contentType: ContentType) {
-    const entryId = this.firestore.createId();
-    const docRef = this.firestore.collection<ContentEntry>('tanam-entries').doc(entryId);
+  getNewId() {
+    return this.firestore.createId();
+  }
 
-    await docRef.set({
-      id: entryId,
+  async create(contentType: ContentType, id: string = this.firestore.createId()) {
+    return this.firestore
+    .collection('tanam-entries').doc<ContentEntry>(id)
+    .set({
+      id: id,
       contentType: contentType.id,
-      title: entryId,
+      title: '',
       url: {
         root: contentType.slug,
-        path: entryId,
+        path: null,
       },
       revision: 0,
       standalone: contentType.standalone,
@@ -63,8 +64,6 @@ export class ContentEntryService {
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     } as ContentEntry);
-
-    return entryId;
   }
 
   update(entry: ContentEntry) {
@@ -84,8 +83,8 @@ export class ContentEntryService {
     }
     console.log(entryId);
     return this.firestore
-    .collection<ContentEntry>('tanam-entries').doc(entryId)
-    .delete();
+      .collection<ContentEntry>('tanam-entries').doc(entryId)
+      .delete();
   }
 
   findByUrl(root: string, path: string) {
