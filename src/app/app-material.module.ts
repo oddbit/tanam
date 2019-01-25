@@ -22,6 +22,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [],
@@ -49,6 +50,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatTabsModule,
     MatExpansionModule,
     MatProgressBarModule,
+    MatTooltipModule
   ],
   exports: [
     CommonModule,
@@ -74,6 +76,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatTabsModule,
     MatExpansionModule,
     MatProgressBarModule,
+    MatTooltipModule
   ]
 })
 export class AppMaterialModule { }
