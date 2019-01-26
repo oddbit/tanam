@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FirebaseApp } from '@angular/fire';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
+import { Observable } from 'rxjs';
 
 export type ContentTypeFieldFormElements = 'input-text'
   | 'input-number'
@@ -17,7 +18,6 @@ export interface ContentTypeField {
   title: string;
   type: ContentTypeFieldFormElements;
 }
-
 
 export interface ContentTypeEntryCount {
   published: number;
@@ -49,13 +49,13 @@ export class ContentTypeService {
   ) { }
 
 
-  getContentTypes() {
+  getContentTypes(): Observable<ContentType[]> {
     return this.firestore
       .collection<ContentType>('tanam-types')
       .valueChanges();
   }
 
-  getContentType(contentTypeId: string) {
+  getContentType(contentTypeId: string): Observable<ContentType> {
     console.log(`getContentType contentType: ${contentTypeId}`);
 
     return this.firestore
@@ -63,34 +63,27 @@ export class ContentTypeService {
       .valueChanges();
   }
 
-  async createContentType(contentTypeName: string) {
-    const typeId = this.firestore.createId();
-    const doc = this.firestore.collection('tanam-types').doc(typeId);
-    return this.fbApp.firestore().runTransaction<AngularFirestoreDocument>(async (trx) => {
-      const trxDoc = await trx.get(doc.ref);
-      if (!trxDoc.exists) {
-        trx.set(doc.ref, {
-          id: typeId,
-          title: contentTypeName,
-          slug: contentTypeName.toLowerCase().replace(' ', '-'),
-          template: null,
-          standalone: true,
-          icon: 'cloud',
-          fields: [],
-          numEntries: {
-            published: 0,
-            unpublished: 0,
-          },
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        } as ContentType);
-      }
 
-      return doc;
-    });
+  async create(id: string = this.firestore.createId()) {
+    const docRef = this.firestore.collection('tanam-types').doc(id);
+    return docRef.set({
+      id: id,
+      title: null,
+      slug: null,
+      template: null,
+      standalone: true,
+      icon: 'cloud',
+      fields: [],
+      numEntries: {
+        published: 0,
+        unpublished: 0,
+      },
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    } as ContentType);
   }
 
-  saveContentType(contentType: ContentType) {
+  save(contentType: ContentType) {
     const doc = this.firestore.collection('tanam-types').doc(contentType.id);
     contentType = {
       ...contentType,

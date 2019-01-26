@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import * as firebase from 'firebase/app';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 
 export type FileType = 'image' | 'video' | 'document';
 
@@ -43,12 +43,13 @@ export class FileService {
     private readonly fireStorage: AngularFireStorage,
   ) { }
 
-  getFiles(fileType: FileType) {
-    return this.firestore.collection<TanamFile>('tanam-files', ref => ref.where('fileType', '==', fileType))
+  getFiles(fileType: FileType): Observable<TanamFile[]> {
+    return this.firestore
+      .collection<TanamFile>('tanam-files', ref => ref.where('fileType', '==', fileType))
       .valueChanges();
   }
 
-  upload(file: File) {
+  upload(file: File): Observable<number> {
     const fileId = this.firestore.createId();
     const fileName = file.name;
     const fileType = this.fileTypeFrom(file);
@@ -76,7 +77,9 @@ export class FileService {
         url: downloadURL,
       };
 
-      this.firestore.collection<TanamFile>('tanam-files').doc(fileId).set(tanamFile);
+      this.firestore
+      .collection<TanamFile>('tanam-files').doc(fileId)
+      .set(tanamFile);
     });
 
     return uploadTask.percentageChanges();
@@ -91,23 +94,3 @@ export class FileService {
     }
   }
 }
-
-/*
-
-"{
-  "type": "file",
-  "bucket": "tanam-e8e7d.appspot.com",
-  "generation": "1547792003255346",
-  "metageneration": "1",
-  "fullPath": "tanam/image/5jo7Spt9w70svTZFPNTH.jpg",
-  "name": "5jo7Spt9w70svTZFPNTH.jpg",
-  "size": 688627,
-  "timeCreated": "2019-01-18T06:13:23.254Z",
-  "updated": "2019-01-18T06:13:23.254Z",
-  "md5Hash": "fFPLH+wZY+EfU5GvnzktVQ==",
-  "contentDisposition": "inline; filename*=utf-8''5jo7Spt9w70svTZFPNTH.jpg",
-  "contentEncoding": "identity",
-  "contentType": "image/jpeg"
-}"
-
-*/

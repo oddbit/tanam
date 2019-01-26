@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Compiler, Component, Injectable, NgModule, ViewContainerRef } from '@angular/core';
+import { Compiler, Component, ComponentRef, Injectable, NgModule, ViewContainerRef } from '@angular/core';
 import * as firebase from 'firebase/app';
 import { take } from 'rxjs/operators';
 import { ContentEntry } from './content-entry.service';
@@ -65,7 +65,7 @@ export class DynamicComponentService {
     private readonly contentTemplateService: ContentTemplateService,
   ) { }
 
-  async render(viewContainer: ViewContainerRef, contentEntry: ContentEntry) {
+  async render(viewContainer: ViewContainerRef, contentEntry: ContentEntry): Promise<ComponentRef<any>> {
     const contentType = await this.cts.getContentType(contentEntry.contentType).pipe(take(1)).toPromise();
     if (!contentType) {
       throw new Error(`Template misconfiguration. No such template for '${contentEntry.contentType}'`);

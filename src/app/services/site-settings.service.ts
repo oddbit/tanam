@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FirebaseApp } from '@angular/fire';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 export interface SiteInfoSettings {
   title: string;
@@ -33,15 +34,15 @@ export class SiteSettingsService {
     private readonly firestore: AngularFirestore,
   ) { }
 
-  getSiteSettings() {
+  getSiteSettings(): Observable<SiteInfoSettings> {
     return this.siteInfoSettingsDoc.valueChanges();
   }
 
-  getSiteName() {
+  getSiteName(): Observable<string> {
     return this.getSiteSettings().pipe(map(settings => settings.title));
   }
 
-  getSiteTitleFormat() {
+  getSiteTitleFormat(): Observable<string> {
     return this.getSiteSettings().pipe(map(settings => settings.pageTitleFormat));
   }
 
@@ -52,7 +53,7 @@ export class SiteSettingsService {
     });
   }
 
-  getDomainSettings() {
+  getDomainSettings(): Observable<SiteDomainSettings> {
     return this.domainSettingsDoc.valueChanges();
   }
 
@@ -74,7 +75,7 @@ export class SiteSettingsService {
     });
   }
 
-  getSiteDomain() {
+  getSiteDomain(): Observable<string> {
     return this.getDomainSettings().pipe(map(settings => settings.primaryDomain));
   }
 }

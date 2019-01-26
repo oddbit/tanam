@@ -24,17 +24,19 @@
   ],
   "scripts": {
     "start": "firebase serve",
-    "build": "npm run build:mod:prod",
+    "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:functions": "tsc -p tsconfig.functions.json && cp -f package* dist",
-    "build:browser-server:prod": "ng build --prod && ng run tanam:server:production",
-    "build:browser-server:dev": "ng build && ng run tanam:server",
+    "build:functions": "tsc -p tsconfig.functions.json && node bundle-firebase.js",
+    "build:browser-server:prod": "ng build --outputHashing=all --aot && ng run tanam:server:production",
+    "build:browser-server:dev": "ng build --outputHashing=all --aot && ng run tanam:server",
     "build:ssr:prod": "npm run build:browser-server:prod && npm run build:functions",
     "build:ssr:dev": "npm run build:browser-server:dev && npm run build:functions",
     "build:prod": "npm run build:browser-server:prod && npm run build:functions",
-    "build:dev": "npm run build:browser-server:dev && npm run build:functions"
+    "build:dev": "npm run build:browser-server:dev && npm run build:functions",
+    "serve:ssr:prod": "npm run build:prod && firebase serve",
+    "serve:ssr:dev": "npm run build:dev && firebase serve"
   },
   "engines": {
     "node": "8"
@@ -80,6 +82,7 @@
     "@types/node": "~8.9.4",
     "bufferutil": "^4.0.1",
     "codelyzer": "~4.5.0",
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",

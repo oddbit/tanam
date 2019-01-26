@@ -24,12 +24,19 @@ const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./server/main');
 const expressApp = express();
 
 if (admin.apps.length === 0) {
+    console.log('Initializing default Firebase app');
     admin.initializeApp();
 }
 
 export * from './firebase';
 admin.firestore().settings({ timestampsInSnapshots: true });
 export const app = functions.https.onRequest(expressApp);
+
+if (!process.env.FIREBASE_API_KEY) {
+    require('dotenv').config();
+    console.log('Loaded env conf');
+    console.log(JSON.stringify(process.env, null, 2));
+}
 
 const tanamConfig = {
     firebaseApp: {
@@ -57,22 +64,9 @@ expressApp.set('view engine', 'html');
 expressApp.set('views', join(DIST_FOLDER, 'browser'));
 
 
-// Match the Angular generated files without the unique hash
-// No cache since they'll change for each deploy
-expressApp.get(/^(\/)?(main|polyfills|runtime|styles|vendor){1}\.(js|css|js\.map|d\.ts){1}\/?$/i,
-    express.static(join(DIST_FOLDER, 'browser'), {
-        setHeaders: (res, path) => {
-            const cacheControl = 'public, max-age=0, s-maxage=300';
-            if (environment.logging.cache) {
-                console.log(`Cache ${path}: ${cacheControl}`);
-            }
-            res.setHeader('Cache-Control', cacheControl);
-        },
-    }));
-
 // Match the Angular generated files with the unique hash
 // Serve them with fairly long cache lifetime since they'll be unique for each deploy
-expressApp.get(/^(\/)?(main|polyfills|runtime|styles|vendor){1}\.[\w\d]{20}\.(js|css){1}\/?$/i,
+expressApp.get(/^\/?main|polyfills|runtime|styles|vendor\.[\w\d]{20}\.js|css\/?$/i,
     express.static(join(DIST_FOLDER, 'browser'), {
         setHeaders: (res, path) => {
             const cacheControl = 'public, max-age=300, s-maxage=300, stale-while-revalidate=120';
@@ -93,10 +87,24 @@ expressApp.get(/^(\/)?assets\/(.*)\/?$/i,
             }
             res.setHeader('Cache-Control', cacheControl);
         },
-     }));
+    }));
 
 // Match anything else and render it with the universal rendering engine
 expressApp.get('**', (req, res) => {
-    res.render('index', { req });
-    res.set('Cache-Control', `public, max-age=300, s-maxage=300, stale-while-revalidate=120`);
+    res.render('index', { req }, (err, html) => {
+        console.log('*********************************************************************************');
+        console.log('*********************************************************************************');
+        console.log('*********************************************************************************');
+        console.log(JSON.stringify(err, null, 2));
+        console.log('*********************************************************************************');
+        console.log('*********************************************************************************');
+        console.log('*********************************************************************************');
+        console.log(html);
+        console.log('*********************************************************************************');
+        console.log('*********************************************************************************');
+        console.log('*********************************************************************************');
+
+        res.set('Cache-Control', `public, max-age=300, s-maxage=300, stale-while-revalidate=120`);
+        res.send(html);
+    });
 });

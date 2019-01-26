@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { auth } from 'firebase/app';
+import { auth, User } from 'firebase/app';
 import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,22 +10,18 @@ import { map } from 'rxjs/operators';
 export class AppAuthService {
 
   constructor(
-    private readonly ngFireAuth: AngularFireAuth,
+    private readonly fireAuth: AngularFireAuth,
   ) { }
 
-  getFirebaseUser() {
-    return this.ngFireAuth.auth.currentUser;
-  }
-
-  isLoggedIn() {
-    return this.ngFireAuth.user.pipe(map(user => !!user));
+  isLoggedIn(): Observable<boolean> {
+    return this.fireAuth.authState.pipe(map(user => !!user));
   }
 
   login() {
-    this.ngFireAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+    this.fireAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
   }
 
   logOut() {
-    this.ngFireAuth.auth.signOut();
+    return this.fireAuth.auth.signOut();
   }
 }
