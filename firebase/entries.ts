@@ -12,7 +12,8 @@ export const countEntryStatus = functions.firestore.document('tanam-entries/{doc
         return null;
     }
 
-    const contentTypeRef = admin.firestore().collection('tanam-types').doc(entryBefore.contentType);
+    const contentType = !!entryBefore ? entryBefore.contentType : entryAfter.contentType;
+    const contentTypeRef = admin.firestore().collection('tanam-types').doc(contentType);
 
     return admin.firestore().runTransaction(async (trx) => {
         const trxDoc = await trx.get(contentTypeRef);
