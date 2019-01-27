@@ -1,46 +1,16 @@
 {
-  "name": "tanam",
-  "version": "0.1.0",
-  "description": "Pluggable CMS for Firebase",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/oddbit/tanam.git"
-  },
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/oddbit/tanam/issues"
-  },
-  "homepage": "https://github.com/oddbit/tanam#readme",
-  "keywords": [
-    "cms",
-    "firebase",
-    "angular",
-    "angular2",
-    "angularfire",
-    "angularfire2",
-    "serverless",
-    "server side rendering",
-    "ssr"
-  ],
+  "name": "tanam-admin",
+  "version": "0.0.0",
   "scripts": {
-    "start": "firebase serve",
+    "ng": "ng",
+    "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:functions": "tsc -p tsconfig.functions.json && node bundle-firebase.js",
-    "build:browser-server:prod": "ng build --outputHashing=all --aot && ng run tanam:server:production",
-    "build:browser-server:dev": "ng build --outputHashing=all --aot && ng run tanam:server",
-    "build:ssr:prod": "npm run build:browser-server:prod && npm run build:functions",
-    "build:ssr:dev": "npm run build:browser-server:dev && npm run build:functions",
-    "build:prod": "npm run build:browser-server:prod && npm run build:functions",
-    "build:dev": "npm run build:browser-server:dev && npm run build:functions",
-    "serve:ssr:prod": "npm run build:prod && firebase serve",
-    "serve:ssr:dev": "npm run build:dev && firebase serve"
+    "package": "ng build --prod --outputHashing=none --outputPath=public --deleteOutputPath=false"
   },
-  "engines": {
-    "node": "8"
-  },
+  "private": true,
   "dependencies": {
     "@angular/animations": "~7.2.1",
     "@angular/cdk": "^7.2.1",
@@ -57,33 +27,21 @@
     "@angular/router": "~7.2.1",
     "@ckeditor/ckeditor5-angular": "^1.0.1",
     "@ckeditor/ckeditor5-build-classic": "^11.2.0",
-    "@nguniversal/express-engine": "^7.0.2",
-    "@nguniversal/module-map-ngfactory-loader": "^7.0.2",
     "core-js": "^2.5.4",
-    "crypto-js": "^3.1.9-1",
     "firebase": "^5.8.0",
-    "firebase-admin": "^6.5.0",
-    "firebase-functions": "^2.1.0",
     "hammerjs": "^2.0.8",
     "rxjs": "~6.3.3",
-    "tslib": "^1.9.0",
-    "ws": "^6.1.2",
-    "xhr2": "^0.1.4",
-    "zone.js": "^0.8.28"
+    "zone.js": "~0.8.26"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.11.0",
     "@angular/cli": "~7.1.4",
-    "@angular/compiler-cli": "^7.2.1",
-    "@angular/language-service": "~7.2.0",
-    "@types/crypto-js": "^3.1.43",
+    "@angular/compiler-cli": "~7.1.0",
+    "@angular/language-service": "~7.1.0",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
-    "bufferutil": "^4.0.1",
     "codelyzer": "~4.5.0",
-    "dotenv": "^6.2.0",
-    "express": "^4.16.4",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.1.1",
@@ -92,13 +50,9 @@
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.4.0",
-    "ts-loader": "^5.3.3",
     "ts-node": "~7.0.0",
-    "tslint": "^5.11.0",
-    "typescript": "^3.1.6",
-    "utf-8-validate": "^5.0.2",
-    "webpack": "^4.28.1",
-    "webpack-cli": "^3.2.1",
-    "xmlhttprequest": "^1.8.0"
+    "tslib": "^1.9.3",
+    "tslint": "~5.11.0",
+    "typescript": "~3.1.6"
   }
 }

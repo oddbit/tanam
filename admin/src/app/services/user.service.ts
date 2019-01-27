@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { map, tap, filter, switchMap } from 'rxjs/operators';
-import { AppAuthService } from './app-auth.service';
+import { map, tap } from 'rxjs/operators';
 import { UserPrefs } from './user-prefs.service';
 import { Observable } from 'rxjs';
-import { AngularFireAuth } from '@angular/fire/auth';
 
 export type UserRole = 'owner' | 'admin' | 'publisher' | 'designer' | 'reviewer';
 
 export interface TanamUser {
-  uid: string;
   name: string;
   roles: UserRole[];
   prefs: UserPrefs;
@@ -26,9 +24,10 @@ export class UserService {
   ) { }
 
   getCurrentUser(): Observable<TanamUser> {
-    return this.fireAuth.user
-      .pipe(filter(user => !!user))
-      .pipe(switchMap(user => this.getUser(user.uid)));
+    const firebaseUser = this.fireAuth.auth.currentUser;
+    return this.firestore
+      .collection('tanam-users').doc<TanamUser>(firebaseUser.uid)
+      .valueChanges();
   }
 
   getUser(uid: string): Observable<TanamUser> {

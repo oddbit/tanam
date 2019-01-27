@@ -22,9 +22,10 @@ export class ThemeService {
     private readonly firestore: AngularFirestore,
   ) { }
 
-  async create(id: string = this.firestore.createId()) {
-    const docRef = this.firestore.collection('tanam-types').doc<TanamTheme>(id);
-    return docRef.set({
+  async createTheme(): Promise<string> {
+    const id = this.firestore.createId();
+    const doc = this.firestore.collection('tanam-types').doc<TanamTheme>(id);
+    await doc.set({
       id: id,
       title: '',
       description: '',
@@ -33,6 +34,8 @@ export class ThemeService {
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     } as TanamTheme);
+
+    return id;
   }
 
   getThemes(): Observable<TanamTheme[]> {

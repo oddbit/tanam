@@ -6,7 +6,7 @@
 /out-tsc
 
 # dependencies
-node_modules/
+/node_modules
 
 # profiling files
 chrome-profiler-events.json
@@ -42,11 +42,10 @@ testem.log
 .DS_Store
 Thumbs.db
 
-*.log
+# Tanam
+tanam.config.json
 
-# Ignore Firebase configuration for local testing
-.firebase
-.firebaserc
-
-# Environment variables for testing mod
-mod.env
+# Firebase
+.firebase/
+public/
+!public/.gitkeep

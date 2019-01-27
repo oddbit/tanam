@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "tanam": {
+    "tanam-admin": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/browser",
+            "outputPath": "dist/tanam-admin",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -61,18 +61,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "tanam:build"
+            "browserTarget": "tanam-admin:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "tanam:build:production"
+              "browserTarget": "tanam-admin:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "tanam:build"
+            "browserTarget": "tanam-admin:build"
           }
         },
         "test": {
@@ -103,28 +103,10 @@
               "**/node_modules/**"
             ]
           }
-        },
-        "server": {
-          "builder": "@angular-devkit/build-angular:server",
-          "options": {
-            "outputPath": "dist/server",
-            "main": "src/main.server.ts",
-            "tsConfig": "src/tsconfig.server.json"
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
         }
       }
     },
-    "tanam-e2e": {
+    "tanam-admin-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -133,11 +115,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "tanam:serve"
+            "devServerTarget": "tanam-admin:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "tanam:serve:production"
+              "devServerTarget": "tanam-admin:serve:production"
             }
           }
         },
@@ -153,5 +135,5 @@
       }
     }
   },
-  "defaultProject": "tanam"
+  "defaultProject": "tanam-admin"
 }

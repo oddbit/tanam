@@ -1,32 +1,11 @@
 {
-  "database": {
-    "rules": "database.rules.json"
-  },
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
-  },
-  "functions": {
-    "source": "dist",
-    "predeploy": [
-      "npm run build:dev"
-    ]
-  },
   "hosting": {
     "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "function": "app"
-      }
+      "**/node_modules/**",
+      "public/index.html"
     ]
-  },
-  "storage": {
-    "rules": "storage.rules"
   }
 }

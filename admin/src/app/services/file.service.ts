@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import * as firebase from 'firebase/app';
-import { Subscription, Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 export type FileType = 'image' | 'video' | 'document';
 
@@ -77,9 +77,7 @@ export class FileService {
         url: downloadURL,
       };
 
-      this.firestore
-      .collection<TanamFile>('tanam-files').doc(fileId)
-      .set(tanamFile);
+      this.firestore.collection<TanamFile>('tanam-files').doc(fileId).set(tanamFile);
     });
 
     return uploadTask.percentageChanges();

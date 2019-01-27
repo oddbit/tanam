@@ -19,6 +19,7 @@ export interface ContentTypeField {
   type: ContentTypeFieldFormElements;
 }
 
+
 export interface ContentTypeEntryCount {
   published: number;
   unpublished: number;
@@ -63,27 +64,34 @@ export class ContentTypeService {
       .valueChanges();
   }
 
+  async createContentType(contentTypeName: string) {
+    const typeId = this.firestore.createId();
+    const doc = this.firestore.collection('tanam-types').doc(typeId);
+    return this.fbApp.firestore().runTransaction<AngularFirestoreDocument>(async (trx) => {
+      const trxDoc = await trx.get(doc.ref);
+      if (!trxDoc.exists) {
+        trx.set(doc.ref, {
+          id: typeId,
+          title: contentTypeName,
+          slug: contentTypeName.toLowerCase().replace(' ', '-'),
+          template: null,
+          standalone: true,
+          icon: 'cloud',
+          fields: [],
+          numEntries: {
+            published: 0,
+            unpublished: 0,
+          },
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        } as ContentType);
+      }
 
-  async create(id: string = this.firestore.createId()) {
-    const docRef = this.firestore.collection('tanam-types').doc(id);
-    return docRef.set({
-      id: id,
-      title: null,
-      slug: null,
-      template: null,
-      standalone: true,
-      icon: 'cloud',
-      fields: [],
-      numEntries: {
-        published: 0,
-        unpublished: 0,
-      },
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    } as ContentType);
+      return doc;
+    });
   }
 
-  save(contentType: ContentType) {
+  saveContentType(contentType: ContentType) {
     const doc = this.firestore.collection('tanam-types').doc(contentType.id);
     contentType = {
       ...contentType,

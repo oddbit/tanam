@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Compiler, Component, ComponentRef, Injectable, NgModule, ViewContainerRef } from '@angular/core';
+import { Compiler, Component, Injectable, NgModule, ViewContainerRef, ComponentRef } from '@angular/core';
 import * as firebase from 'firebase/app';
 import { take } from 'rxjs/operators';
 import { ContentEntry } from './content-entry.service';
