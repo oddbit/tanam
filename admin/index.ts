@@ -78,7 +78,7 @@ expressApp.get(/^\/?main|polyfills|runtime|styles|vendor\.[\w\d]{20}\.js|css\/?$
     }));
 
 // Match any file in the assets folder.
-expressApp.get(/^(\/)?assets\/(.*)\/?$/i,
+expressApp.get(/^\/?assets\/(.*)\/?$/i,
     express.static(join(DIST_FOLDER, 'browser'), {
         setHeaders: (res, path) => {
             const cacheControl = 'public, max-age=300, s-maxage=300, stale-while-revalidate=120';
