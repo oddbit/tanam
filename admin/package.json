@@ -4,11 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --deployUrl=/ --aot --outputHashing=all --optimization=true",
+    "build:prod": "ng build --prod=true --deployUrl=/ --aot --outputHashing=all --optimization=true",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "package": "ng build --prod --outputHashing=none --outputPath=public --deleteOutputPath=false"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {

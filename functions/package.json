@@ -1,0 +1,38 @@
+{
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "main": "dist/index.js",
+  "engines": {
+    "node": "8"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w -p .",
+    "serve": "firebase serve --only functions",
+    "lint": "tslint --project tsconfig.json",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log",
+    "package": "node ./package-dist",
+    "build:admin": "npm --prefix ../admin run build:prod",
+    "build:render": "npm --prefix ../render run build:ssr",
+    "build:functions": "npm run lint && npm run build",
+    "build:all": "npm run build:admin && npm run build:render && npm run build:functions",
+    "build:dist": "npm run build:all && npm run package"
+  },
+  "dependencies": {
+    "crypto-js": "^3.1.9-1",
+    "firebase-admin": "^6.0.0",
+    "firebase-functions": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^3.1.43",
+    "@types/node": "^10.12.18",
+    "fs-extra": "^7.0.1",
+    "ts-loader": "^5.3.3",
+    "ts-node": "^8.0.2",
+    "tslint": "^5.12.1",
+    "typescript": "^3.2.4"
+  }
+}

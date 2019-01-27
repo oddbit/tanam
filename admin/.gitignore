@@ -44,8 +44,3 @@ Thumbs.db
 
 # Tanam
 tanam.config.json
-
-# Firebase
-.firebase/
-public/
-!public/.gitkeep

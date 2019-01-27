@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   logging: {
-    cache: true,
+    cache: false,
     routing: false,
   }
 };

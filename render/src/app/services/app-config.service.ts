@@ -28,7 +28,7 @@ export class AppConfigService {
       return this._appConfig;
     }
 
-    console.log('Returning app config from file system');
+    console.log('Requesting app config async from assets.');
     const config = await this.http.get('/assets/tanam.config.json').toPromise();
     console.log(`[AppConfigService:loadConfig] ${JSON.stringify(config, null, 2)}`);
     this._appConfig = config as TanamConfig;
