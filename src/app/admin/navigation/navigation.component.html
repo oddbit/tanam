@@ -1,4 +1,5 @@
-<mat-sidenav-container class="sidenav-container" autosize>
+<mat-sidenav-container class="sidenav-container"
+                       autosize>
   <mat-sidenav #drawer
                [ngClass]="{'expanded-nav': isExpanded}"
                fixedInViewport="true"
@@ -6,21 +7,26 @@
                [mode]="(isHandset$ | async) ? 'over' : 'side'"
                [opened]="!(isHandset$ | async)">
     <mat-toolbar class="header-side-nav">
-        <img class="logo" src="assets/icons/tanam-icon.svg" height="25" style="margin-right:10px"/> <b>{{isExpanded? 'Tanam':''}}</b>
+      <img class="logo"
+           src="assets/icons/tanam-icon.svg"
+           height="25"
+           style="margin-right:10px" /> <b>{{isExpanded? 'Tanam':''}}</b>
     </mat-toolbar>
     <mat-divider></mat-divider>
     <mat-nav-list>
       <app-navigation-list-item routerLink="/_/admin/dashboard"
                                 icon="dashboard"
                                 title="{{isExpanded? 'Dashboard':''}}"></app-navigation-list-item>
-      <h3 mat-subheader *ngIf="isExpanded">Content</h3>
+      <h3 mat-subheader
+          *ngIf="isExpanded">Content</h3>
       <mat-divider *ngIf="!isExpanded"></mat-divider>
       <app-navigation-list-item *ngFor="let contentType of contentTypes$ | async"
                                 routerLink="/_/admin/types/{{contentType.id}}"
                                 icon="{{contentType.icon}}"
                                 title="{{isExpanded? contentType.title:''}}"></app-navigation-list-item>
 
-      <h3 mat-subheader *ngIf="isExpanded">Manage</h3>
+      <h3 mat-subheader
+          *ngIf="isExpanded">Manage</h3>
       <mat-divider *ngIf="!isExpanded"></mat-divider>
       <app-navigation-list-item routerLink="/_/admin/media"
                                 icon="image"
@@ -37,8 +43,9 @@
     </mat-nav-list>
     <mat-divider></mat-divider>
     <mat-toolbar class="expand-toolbar">
-        <mat-icon class="togglerMiniNav" (click)="toggleMiniNav()">{{isExpanded? 'chevron_left':'chevron_right'}}</mat-icon>
-      </mat-toolbar>
+      <mat-icon class="togglerMiniNav"
+                (click)="toggleMiniNav()">{{isExpanded? 'chevron_left':'chevron_right'}}</mat-icon>
+    </mat-toolbar>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
