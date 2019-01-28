@@ -6,10 +6,10 @@
 
 @include mat-core();
 
-$tanam-brand-color: mat-palette($mat-light-green);
+$tanam-brand-color: mat-palette($mat-green);
 
-$tanam-admin-primary: mat-palette($mat-light-green);
-$tanam-admin-accent:  mat-palette($mat-light-blue, A200, A100, A400);
+$tanam-admin-primary: mat-palette($mat-green);
+$tanam-admin-accent:  mat-palette($mat-brown, A200, A100, A400);
 $tanam-admin-theme:   mat-light-theme($tanam-admin-primary, $tanam-admin-accent);
 
 @include angular-material-theme($tanam-admin-theme);
