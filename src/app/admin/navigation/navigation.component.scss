@@ -12,6 +12,26 @@
   overflow: auto;
 }
 
+/* width */
+:host ::ng-deep .sidenav-container .mat-list-base::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+:host ::ng-deep .sidenav-container .mat-list-base::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+:host ::ng-deep .sidenav-container .mat-list-base::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+:host ::ng-deep .sidenav-container .mat-list-base::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 .expanded-nav {
   width: 200px;
 }
