@@ -54,6 +54,8 @@
 
 .expand-toolbar {
   position: absolute;
+  display: flex;
+  justify-content: flex-end;
   bottom: 0;
 }
 
