@@ -5,7 +5,7 @@
                [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
                [mode]="(isHandset$ | async) ? 'over' : 'side'"
                [opened]="!(isHandset$ | async)">
-    <mat-toolbar color="primary">
+    <mat-toolbar class="header-side-nav">
         <img class="logo" src="assets/icons/tanam-icon.svg" height="25" style="margin-right:10px"/> <b>{{isExpanded? 'Tanam':''}}</b>
     </mat-toolbar>
     <mat-divider></mat-divider>

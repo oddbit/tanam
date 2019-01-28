@@ -8,7 +8,7 @@
 
 :host ::ng-deep .sidenav-container .mat-list-base {
   padding: 0;
-  height: calc(100% - (50px * 2));
+  height: calc(100% - (64px * 2));
   overflow: auto;
 }
 
@@ -36,27 +36,21 @@
 .expanded-nav {
   width: 200px;
 }
-.expanded-nav .mat-toolbar {
-  background: inherit;
-}
 
-.mat-toolbar.mat-primary {
+.header-side-nav , .mat-toolbar.mat-primary{
   position: sticky;
   top: 0;
-  height: 50px;
   z-index: 2;
 }
 
-.expand-toolbar, .mat-toolbar.mat-primary {
-  height: 50px;
-  z-index: 2;
-}
+
 
 .expand-toolbar {
   position: absolute;
   display: flex;
   justify-content: flex-end;
   bottom: 0;
+  z-index: 2;
 }
 
 .admin-container {
