@@ -16,6 +16,9 @@
   overflow: auto;
   background-color: #494949;
   color: white;
+  @media only screen and (max-width: 600px) {
+    height: calc(100% - (56px * 2));
+  }
 }
 
 /* width */
