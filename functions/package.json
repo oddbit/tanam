@@ -1,7 +1,18 @@
 {
   "name": "functions",
+  "version": "0.3.0",
   "description": "Cloud Functions for Firebase",
-  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oddbit/tanam.git"
+  },
+  "keywords": [
+    "cms",
+    "firebase",
+    "angular",
+    "angularfire",
+    "angularfire2"
+  ],
   "engines": {
     "node": "8"
   },
