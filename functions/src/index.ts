@@ -3,6 +3,8 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { join } from 'path';
 
+const expressServer = require(`./dynamic`);
+
 admin.initializeApp();
 admin.firestore().settings({ timestampsInSnapshots: true });
 
@@ -17,8 +19,6 @@ export const app = functions.https.onRequest((req, res) => {
     if (isAdminAppRequest) {
         res.sendFile(join(process.cwd(), 'browser/admin.html'));
     } else {
-        const expressServer = require(`./dynamic`);
-        console.log(`Express app: ${JSON.stringify(expressServer.app, null, 2)}`);
         expressServer.app(req, res);
     }
 });
