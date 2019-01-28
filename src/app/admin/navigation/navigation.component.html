@@ -8,6 +8,7 @@
     <mat-toolbar color="primary">
       {{isExpanded? 'Tanam':'T'}}
     </mat-toolbar>
+    <mat-divider></mat-divider>
     <mat-nav-list>
       <app-navigation-list-item routerLink="/_/admin/dashboard"
                                 icon="dashboard"
@@ -34,6 +35,7 @@
                                 icon="settings"
                                 title="{{isExpanded? 'Settings':''}}"></app-navigation-list-item>
     </mat-nav-list>
+    <mat-divider></mat-divider>
     <mat-toolbar class="expand-toolbar">
         <mat-icon class="togglerMiniNav" (click)="toggleMiniNav()">{{isExpanded? 'chevron_left':'chevron_right'}}</mat-icon>
       </mat-toolbar>
