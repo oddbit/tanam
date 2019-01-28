@@ -6,7 +6,7 @@
                [mode]="(isHandset$ | async) ? 'over' : 'side'"
                [opened]="!(isHandset$ | async)">
     <mat-toolbar color="primary">
-      {{isExpanded? 'Tanam':'T'}}
+        <img class="logo" src="assets/icons/tanam-icon.svg" height="25" style="margin-right:10px"/> <b>{{isExpanded? 'Tanam':''}}</b>
     </mat-toolbar>
     <mat-divider></mat-divider>
     <mat-nav-list>
