@@ -25,6 +25,7 @@
 /* Handle */
 :host ::ng-deep .sidenav-container .mat-list-base::-webkit-scrollbar-thumb {
   background: #888;
+  border-radius: 8px;
 }
 
 /* Handle on hover */
