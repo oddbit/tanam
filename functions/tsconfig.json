@@ -10,7 +10,14 @@
     "target": "es6"
   },
   "compileOnSave": true,
+  "typeRoots": [
+    "node_modules/@types",
+    "../models"
+  ],
   "include": [
     "src"
+  ],
+  "exclude": [
+    "../models"
   ]
 }

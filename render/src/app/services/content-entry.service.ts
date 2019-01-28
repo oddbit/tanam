@@ -3,27 +3,8 @@ import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ContentType } from './content-type.service';
-
-export type ContentEntryStatus = 'published' | 'unpublished' | 'deleted';
-
-export interface ContentEntry {
-  id: string; // Document id
-  contentType: string;
-  data: { [key: string]: any }; // The content data to render into templates
-  title: string;  // Presentation title for browser window title and content listings
-  url: {
-    root: string, // The entry path root
-    path: string, // The entry URL
-  };
-  revision: number; // Constantly increasing
-  status: ContentEntryStatus;
-  tags: string[];
-  standalone: boolean;
-  publishTime?: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
-  updatedAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
-  createdAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
-}
+import { ContentEntry } from '../../../../models/content-entry';
+import { ContentType } from '../../../../models/content-type';
 
 export interface ContentTypeQueryOptions {
   limit?: number;

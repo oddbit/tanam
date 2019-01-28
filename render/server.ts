@@ -52,8 +52,6 @@ app.engine('html', (_: any, options: any, callback: any) =>
     })(_, options, callback)
 );
 
-app.get(/^\/?assets\/tanam\.config\.json$/i, express.static(DIST_FOLDER));
-
 // Match the Angular generated files with the unique hash
 // Serve them with fairly long cache lifetime since they'll be unique for each deploy
 app.get(/^\/?main|polyfills|runtime|styles|vendor\.[\w\d]{20}\.js|css\/?$/i,
@@ -79,12 +77,14 @@ app.get(/^\/?assets\/(.*)\/?$/i,
 );
 
 app.get(/^\/?favicon\.ico$/i, (req, res) => {
-    // TODO: Fetch from cloud storage
-    res.status(404).send('Not found');
+    // TODO: Check if present in cloud storage. Else serve static asset.
+    res.sendFile(join(process.cwd(), 'browser/favicon.ico'));
 });
 
 // Match anything else and render it with the universal rendering engine
 app.get('*', (req, res) => {
-    console.log(`Render dynamic content`);
+    const cacheControl = 'public, max-age=300, s-maxage=30, stale-while-revalidate=120';
+    console.log(`Cache ${req.url}: ${cacheControl}`);
+    res.setHeader('Cache-Control', cacheControl);
     res.render('dynamic', { req });
 });

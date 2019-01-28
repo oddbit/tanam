@@ -3,16 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
-import { UserPrefs } from './user-prefs.service';
-
-export type UserRole = 'owner' | 'admin' | 'publisher' | 'designer' | 'reviewer';
-
-export interface TanamUser {
-  uid: string;
-  name: string;
-  roles: UserRole[];
-  prefs: UserPrefs;
-}
+import { TanamUser, UserRole } from '../../../../models/user';
 
 @Injectable({
   providedIn: 'root'

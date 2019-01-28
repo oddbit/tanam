@@ -14,7 +14,9 @@
     "build:ssr": "npm run build:client-and-server-bundles && npm run compile:server",
     "build:client-and-server-bundles": "npm run build:prod && ng run tanam-render:server:production"
   },
-  "private": true,
+  "engines": {
+    "node": "8"
+  },
   "dependencies": {
     "@angular/animations": "~7.2.1",
     "@angular/common": "~7.2.1",

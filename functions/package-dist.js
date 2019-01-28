@@ -8,7 +8,7 @@ fse.removeSync('../dist/tanam-render/');
 fse.removeSync('../dist/triggers/');
 
 console.log('Copying cloud functions dist bundle...');
-fse.copySync('./dist/', '../dist/');
+fse.copySync('./dist/functions/src', '../dist/');
 
 console.log('Copying admin app dist bundle...');
 fse.copySync('../admin/dist/tanam-admin/', '../dist/browser/');

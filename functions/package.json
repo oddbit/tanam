@@ -17,7 +17,7 @@
     "node": "8"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p .",
     "watch": "tsc -w -p .",
     "serve": "firebase serve --only functions",
     "lint": "tslint --project tsconfig.json",

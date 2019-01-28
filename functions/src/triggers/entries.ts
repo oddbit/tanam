@@ -1,9 +1,43 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { SiteDomainSettings } from '../../../models/settings';
+import { ContentEntry } from '../../../models/content-entry';
+import { CacheTask } from '../../../models/cache';
 
-export const countEntryStatus = functions.firestore.document('tanam-entries/{documentId}').onWrite((change, context) => {
-    const entryBefore = change.before.data();
-    const entryAfter = change.after.data();
+export const buildEntryCache = functions.firestore.document('tanam-entries/{documentId}').onWrite(async (change) => {
+    const entryBefore = change.before.data() as ContentEntry;
+    const entryAfter = change.after.data() as ContentEntry;
+
+    const settingsDoc = await admin.firestore().collection('tanam-settings').doc('domain').get();
+    const domainSettings = settingsDoc.data() as SiteDomainSettings;
+
+    const tasks = [];
+    for (const domain of domainSettings.domains) {
+        if (change.before.exists) {
+            tasks.push({
+                action: 'update',
+                domain: domain,
+                url: `${entryBefore.url.root}/${entryBefore.url.path}`,
+            } as CacheTask);
+        }
+
+        if (change.after.exists) {
+            tasks.push({
+                action: 'update',
+                domain: domain,
+                url: `${entryAfter.url.root}/${entryAfter.url.path}`,
+            } as CacheTask);
+        }
+    }
+
+    return Promise.all(
+        tasks.map(task => admin.database().ref('tanam/tasks/cache').push(task))
+    );
+});
+
+export const countEntryStatus = functions.firestore.document('tanam-entries/{documentId}').onWrite((change) => {
+    const entryBefore = change.before.data() as ContentEntry;
+    const entryAfter = change.after.data() as ContentEntry;
 
     if (change.before.exists && change.after.exists && entryAfter.status === entryBefore.status) {
         console.log(`Document status unchanged. No counters updated.`);
@@ -31,7 +65,7 @@ export const countEntryStatus = functions.firestore.document('tanam-entries/{doc
 });
 
 export const saveRevision = functions.firestore.document('tanam-entries/{documentId}').onUpdate((change) => {
-    const entryBefore = change.before.data();
+    const entryBefore = change.before.data() as ContentEntry;
     console.log(`Saving revision ${entryBefore.revision} of ${change.before.ref.path}`);
     return change.before.ref.collection('revisions').doc(`${entryBefore.id}+${entryBefore.revision}`).set(entryBefore);
 });

@@ -3,33 +3,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import * as firebase from 'firebase/app';
 import { Observable, Subscription } from 'rxjs';
+import { FileType, MIME_TYPE_ENDING_MAP, TanamFile } from '../../../../models/file';
 
-export type FileType = 'image' | 'video' | 'document';
-
-export interface TanamFile {
-  id: string;
-  title: string;
-  bucket: string;
-  filePath: string;
-  fileType: string;
-  mimeType: string;
-  bytes: number;
-  url: string;
-  createdAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
-  updatedAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
-}
-
-const fileEndings = {
-  'image/jpg': 'jpg',
-  'image/jpeg': 'jpg',
-  'image/gif': 'gif',
-  'image/png': 'png',
-  'image/tiff': 'tiff',
-  'image/bmp': 'bmp',
-  'image/ico': 'ico',
-  'image/svg+xml': 'svg',
-  'image/webp': 'webp',
-};
 
 @Injectable({
   providedIn: 'root'
@@ -53,7 +28,7 @@ export class FileService {
     const fileId = this.firestore.createId();
     const fileName = file.name;
     const fileType = this.fileTypeFrom(file);
-    const fileEnding = fileEndings[file.type] || file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase();
+    const fileEnding = MIME_TYPE_ENDING_MAP[file.type] || file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase();
     const storageRef = this.fireStorage.ref(`/tanam/${fileType}/${fileId}.${fileEnding}`);
     const uploadTask: AngularFireUploadTask = storageRef.put(file);
 

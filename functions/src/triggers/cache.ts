@@ -1,11 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as https from 'https';
+import { CacheTask } from '../../../models/cache';
 
-interface CacheTask {
-    action: 'create' | 'update' | 'delete';
-    domain: string;
-    url: string;
-}
 
 export const cacheTask = functions.database.ref('tanam/tasks/cache/{taskId}').onCreate(async (snap, context) => {
     const task = snap.val() as CacheTask;
@@ -35,7 +31,7 @@ export const cacheTask = functions.database.ref('tanam/tasks/cache/{taskId}').on
  * Send a request to CDN to purge one specific page
  */
 function purgeCacheFromCdn(host: string, path: string) {
-    console.log(`[purgeCacheFromCdn] ${host}${path}`);
+    console.log(`[purgeCacheFromCdn] ${host}/${path}`);
     const opts = {
         hostname: host,
         port: 443,
@@ -55,7 +51,7 @@ function purgeCacheFromCdn(host: string, path: string) {
  * Send a request to our selves for one specific page, that will in turn heat up the CDN cache
  */
 function createCacheOnCdn(host: string, path: string) {
-    console.log(`[createCacheOnCdn] ${host}${path}`);
+    console.log(`[createCacheOnCdn] ${host}/${path}`);
     const opts = {
         hostname: host,
         port: 443,

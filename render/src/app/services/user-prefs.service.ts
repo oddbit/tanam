@@ -2,19 +2,9 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, take, tap } from 'rxjs/operators';
-import { TanamUser, UserService } from './user.service';
-
-export type AdminTheme = 'default' | 'light' | 'dark';
-
-const THEMES = {
-  'default': 'tanam-light-theme',
-  'light': 'tanam-light-theme',
-  'dark': 'tanam-dark-theme',
-};
-export interface UserPrefs {
-  theme: string;
-  language: string;
-}
+import { AdminTheme, THEMES } from '../../../../models/theme';
+import { TanamUser } from '../../../../models/user';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'

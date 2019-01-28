@@ -3,20 +3,7 @@ import { FirebaseApp } from '@angular/fire';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-export interface SiteInfoSettings {
-  title: string;
-  pageTitleFormat: string;
-  theme: string;
-  defaultLanguage: string;
-  languages: string[];
-}
-
-export interface SiteDomainSettings {
-  isCustomDomain: boolean;
-  primaryDomain: string;
-  domains: string[];
-}
+import { SiteInfoSettings, SiteDomainSettings } from '../../../../models/settings';
 
 
 @Injectable({

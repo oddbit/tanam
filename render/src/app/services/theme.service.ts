@@ -2,16 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-
-export interface TanamTheme {
-  id: string;
-  title: string;
-  description: string;
-  images: string[];
-  styles: string[];
-  updatedAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
-  createdAt: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
-}
+import { TanamTheme } from '../../../../models/theme';
 
 @Injectable({
   providedIn: 'root'

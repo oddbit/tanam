@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Compiler, Component, ComponentRef, Injectable, NgModule, ViewContainerRef } from '@angular/core';
 import * as firebase from 'firebase/app';
 import { take } from 'rxjs/operators';
-import { ContentEntry } from './content-entry.service';
+import { ContentEntry } from '../../../../models/content-entry';
 import { ContentTemplate, ContentTemplateService } from './content-template.service';
 import { ContentType, ContentTypeService } from './content-type.service';
 import { DocumentHeaderService } from './document-header.service';
@@ -76,6 +76,9 @@ export class DynamicComponentService {
     const module = await this.createModule(documentContextData);
     const factories = await this.compiler.compileModuleAndAllComponentsAsync(module);
     const factory = factories.componentFactories.filter(cf => cf.selector === template.selector)[0];
+    if (!factory) {
+      throw new Error(`Could not find any template for <${template.selector}>`);
+    }
 
     this.dhs.setTitle(contentEntry.title);
     return viewContainer.createComponent(factory);
