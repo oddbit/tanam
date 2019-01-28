@@ -6,7 +6,7 @@
                [mode]="(isHandset$ | async) ? 'over' : 'side'"
                [opened]="!(isHandset$ | async)">
     <mat-toolbar color="primary">
-      {{isExpanded? 'Tanam':''}}<mat-icon class="togglerMiniNav" (click)="toggleMiniNav()">{{isExpanded? 'chevron_left':'chevron_right'}}</mat-icon>
+      {{isExpanded? 'Tanam':'T'}}
     </mat-toolbar>
     <mat-nav-list>
       <app-navigation-list-item routerLink="/_/admin/dashboard"
@@ -34,6 +34,9 @@
                                 icon="settings"
                                 title="{{isExpanded? 'Settings':''}}"></app-navigation-list-item>
     </mat-nav-list>
+    <mat-toolbar class="expand-toolbar">
+        <mat-icon class="togglerMiniNav" (click)="toggleMiniNav()">{{isExpanded? 'chevron_left':'chevron_right'}}</mat-icon>
+      </mat-toolbar>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
