@@ -5,13 +5,14 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --deployUrl=/ --outputHashing=all",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "compile:server": "webpack --config webpack.server.config.js --progress --colors",
     "serve:ssr": "node dist/server",
     "build:ssr": "npm run build:client-and-server-bundles && npm run compile:server",
-    "build:client-and-server-bundles": "ng build --prod --deployUrl=/ && ng run tanam-render:server:production"
+    "build:client-and-server-bundles": "npm run build:prod && ng run tanam-render:server:production"
   },
   "private": true,
   "dependencies": {
