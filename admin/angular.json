@@ -144,7 +144,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/dynamic-render",
+            "outputPath": "dist/browser",
             "index": "projects/dynamic-render/src/index.html",
             "main": "projects/dynamic-render/src/main.ts",
             "polyfills": "projects/dynamic-render/src/polyfills.ts",
@@ -229,6 +229,24 @@
             "exclude": [
               "**/node_modules/**"
             ]
+          }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/server",
+            "main": "projects/dynamic-render/src/main.server.ts",
+            "tsConfig": "projects/dynamic-render/tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            }
           }
         }
       }
