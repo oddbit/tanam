@@ -7,6 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class NavigationListItemComponent implements OnInit {
   @Input() icon: string;
+  @Input() isExpanded: string;
   @Input() title: string;
   @Input() routerLink: string;
 

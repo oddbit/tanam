@@ -15,6 +15,7 @@
     <mat-nav-list>
       <app-navigation-list-item routerLink="/_/admin/dashboard"
                                 icon="dashboard"
+                                isExpanded="{{isExpanded}}"
                                 title="{{isExpanded? 'Dashboard':''}}"></app-navigation-list-item>
       <h3 mat-subheader
           *ngIf="isExpanded">Content</h3>
@@ -22,23 +23,28 @@
       <app-navigation-list-item *ngFor="let contentType of contentTypes$ | async"
                                 routerLink="/_/admin/types/{{contentType.id}}"
                                 icon="{{contentType.icon}}"
-                                title="{{isExpanded? contentType.title:''}}"></app-navigation-list-item>
+                                isExpanded="{{isExpanded}}"
+                                title="{{contentType.title}}"></app-navigation-list-item>
 
       <h3 mat-subheader
           *ngIf="isExpanded">Manage</h3>
       <mat-divider *ngIf="!isExpanded"></mat-divider>
       <app-navigation-list-item routerLink="/_/admin/media"
                                 icon="image"
-                                title="{{isExpanded? 'Media files':''}}"></app-navigation-list-item>
+                                isExpanded="{{isExpanded}}"
+                                title="Media files"></app-navigation-list-item>
       <app-navigation-list-item routerLink="/_/admin/types"
                                 icon="library_books"
-                                title="{{isExpanded? 'Content types':''}}"></app-navigation-list-item>
+                                isExpanded="{{isExpanded}}"
+                                title="Content"></app-navigation-list-item>
       <app-navigation-list-item routerLink="/_/admin/themes"
                                 icon="web"
-                                title="{{isExpanded? 'Themes':''}}"></app-navigation-list-item>
+                                isExpanded="{{isExpanded}}"
+                                title="Themes"></app-navigation-list-item>
       <app-navigation-list-item routerLink="/_/admin/settings"
                                 icon="settings"
-                                title="{{isExpanded? 'Settings':''}}"></app-navigation-list-item>
+                                isExpanded="{{isExpanded}}"
+                                title="Settings"></app-navigation-list-item>
     </mat-nav-list>
     <mat-toolbar class="expand-toolbar">
       <mat-icon class="togglerMiniNav"
