@@ -38,7 +38,7 @@ app.engine('html', (_: any, options: any, callback: any) =>
       provideModuleMap(LAZY_MODULE_MAP),
       {
         provide: 'TanamConfig',
-        useValue: TANAM_CONFIG || require('./src/assets/tanam.config.json')
+        useValue: TANAM_CONFIG || require('./tanam.config.json')
       },
       {
         provide: REQUEST,

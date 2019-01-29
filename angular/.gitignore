@@ -41,6 +41,3 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-
-# Tanam
-tanam.config.json

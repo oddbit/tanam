@@ -3,31 +3,27 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "tanam-admin": {
-      "root": "",
-      "sourceRoot": "src",
+    "admin": {
+      "root": "projects/admin/",
+      "sourceRoot": "projects/admin/src",
       "projectType": "application",
       "prefix": "app",
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
-        }
-      },
+      "schematics": {},
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/tanam-admin",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.app.json",
+            "outputPath": "dist/admin",
+            "index": "projects/admin/src/index.html",
+            "main": "projects/admin/src/main.ts",
+            "polyfills": "projects/admin/src/polyfills.ts",
+            "tsConfig": "projects/admin/tsconfig.app.json",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "projects/admin/src/favicon.ico",
+              "projects/admin/src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "projects/admin/src/styles.scss"
             ],
             "scripts": []
           },
@@ -35,8 +31,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "projects/admin/src/environments/environment.ts",
+                  "with": "projects/admin/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -61,34 +57,34 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "tanam-admin:build"
+            "browserTarget": "admin:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "tanam-admin:build:production"
+              "browserTarget": "admin:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "tanam-admin:build"
+            "browserTarget": "admin:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "karmaConfig": "src/karma.conf.js",
+            "main": "projects/admin/src/test.ts",
+            "polyfills": "projects/admin/src/polyfills.ts",
+            "tsConfig": "projects/admin/tsconfig.spec.json",
+            "karmaConfig": "projects/admin/karma.conf.js",
             "styles": [
-              "src/styles.scss"
+              "projects/admin/src/styles.scss"
             ],
             "scripts": [],
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "projects/admin/src/favicon.ico",
+              "projects/admin/src/assets"
             ]
           }
         },
@@ -96,8 +92,8 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
+              "projects/admin/tsconfig.app.json",
+              "projects/admin/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -106,27 +102,27 @@
         }
       }
     },
-    "tanam-admin-e2e": {
-      "root": "e2e/",
+    "admin-e2e": {
+      "root": "projects/admin-e2e/",
       "projectType": "application",
       "prefix": "",
       "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "tanam-admin:serve"
+            "protractorConfig": "projects/admin-e2e/protractor.conf.js",
+            "devServerTarget": "admin:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "tanam-admin:serve:production"
+              "devServerTarget": "admin:serve:production"
             }
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": "e2e/tsconfig.e2e.json",
+            "tsConfig": "projects/admin-e2e/tsconfig.e2e.json",
             "exclude": [
               "**/node_modules/**"
             ]
@@ -242,8 +238,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "projects/dynamic-render/src/environments/environment.ts",
+                  "with": "projects/dynamic-render/src/environments/environment.prod.ts"
                 }
               ]
             }
@@ -315,5 +311,5 @@
       }
     }
   },
-  "defaultProject": "tanam-admin"
+  "defaultProject": "admin"
 }

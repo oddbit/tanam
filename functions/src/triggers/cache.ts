@@ -1,7 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as https from 'https';
-import { CacheTask } from '../../../models/cache';
-
+import { CacheTask } from 'tanam-models';
 
 export const cacheTask = functions.database.ref('tanam/tasks/cache/{taskId}').onCreate(async (snap, context) => {
     const task = snap.val() as CacheTask;

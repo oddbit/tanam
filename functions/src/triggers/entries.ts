@@ -1,8 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { SiteDomainSettings } from '../../../models/settings';
-import { ContentEntry } from '../../../models/content-entry';
-import { CacheTask } from '../../../models/cache';
+import { SiteDomainSettings, ContentEntry, CacheTask } from 'tanam-models';
 
 export const buildEntryCache = functions.firestore.document('tanam-entries/{documentId}').onWrite(async (change) => {
     const entryBefore = change.before.data() as ContentEntry;

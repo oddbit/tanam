@@ -1,14 +1,13 @@
 {
-  "name": "tanam-admin",
+  "name": "tanam-angular",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build --deployUrl=/ --aot --outputHashing=all --optimization=true",
-    "build:prod": "ng build --prod=true --deployUrl=/ --aot --outputHashing=all --optimization=true",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e",
+    "start:admin": "ng serve admin",
+    "build:admin": "ng build admin --deployUrl=/ --aot --outputHashing=all --optimization=true",
+    "build:admin:prod": "ng build admin --prod=true --deployUrl=/ --aot --outputHashing=all --optimization=true",
+    "test:admin": "ng test admin",
+    "lint:admin": "ng lint admin",
+    "e2e:admin": "ng e2e admin",
     "build:core": "ng build tanam-core",
     "start:dynamic": "ng serve dynamic-render --port 4444",
     "build:dynamic": "ng build dynamic-render",
@@ -16,18 +15,18 @@
     "test:dynamic": "ng test dynamic-render",
     "lint:dynamic": "ng lint dynamic-render",
     "e2e:dynamic": "ng e2e dynamic-render",
-    "compile:dynamic:server": "webpack --config webpack.server.config.js --progress --colors",
+    "webpack:dynamic": "webpack --config webpack.server.config.js --progress --colors",
     "serve:dynamic:ssr": "node dist/dynamic/server",
-    "build:dynamic:ssr": "npm run build:dynamic:bundle && npm run compile:dynamic:server",
+    "build:dynamic:ssr": "npm run build:dynamic:bundle && npm run webpack:dynamic",
     "build:dynamic:bundle": "npm run build:dynamic:prod && ng run dynamic-render:server:production",
-    "build:all": "npm run build:core && npm run build:prod && npm run build:dynamic:ssr"
+    "build:all": "npm run build:core && npm run build:admin:prod && npm run build:dynamic:ssr"
   },
   "engines": {
     "node": "8"
   },
   "dependencies": {
     "@angular/animations": "~7.2.1",
-    "@angular/cdk": "^7.2.1",
+    "@angular/cdk": "^7.2.2",
     "@angular/common": "~7.2.1",
     "@angular/compiler": "^7.2.1",
     "@angular/core": "~7.2.1",
@@ -56,7 +55,7 @@
     "@angular-devkit/build-angular": "~0.11.0",
     "@angular-devkit/build-ng-packagr": "~0.11.0",
     "@angular/cli": "~7.1.4",
-    "@angular/compiler-cli": "~7.1.0",
+    "@angular/compiler-cli": "^7.2.1",
     "@angular/language-service": "~7.1.0",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
