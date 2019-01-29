@@ -1,0 +1,35 @@
+.tanam-splash {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  .logo {
+    max-width: 100px;
+    padding: 4px;
+    border: 2px solid #fff;
+    border-radius: 100%;
+  }
+  .title {
+    color: #fff;
+    text-transform: uppercase;
+    margin-top: 8px;
+    letter-spacing: 1.5px;
+  }
+  button {
+    padding: 8px 16px;
+    line-height: 0;
+    margin-top: 16px;
+    img {
+      width: 18px;
+      height: 18px;
+    }
+    span {
+      color: #757575;
+      font-size: 14px;
+      font-weight: 500;
+      padding-left: 16px;
+      margin: 0;
+    }
+  }
+}

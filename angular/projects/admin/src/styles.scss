@@ -1,0 +1,40 @@
+// Available theme colors
+// https://github.com/angular/material2/blob/master/src/lib/core/theming/_palette.scss
+
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$tanam-brand-color: mat-palette($mat-green);
+
+$tanam-admin-primary: mat-palette($mat-green);
+$tanam-admin-accent:  mat-palette($mat-brown, A200, A100, A400);
+$tanam-admin-theme:   mat-light-theme($tanam-admin-primary, $tanam-admin-accent);
+
+@include angular-material-theme($tanam-admin-theme);
+
+$tanam-admin-dark-primary: mat-palette($mat-blue-grey);
+$tanam-admin-dark-accent:  mat-palette($mat-amber, A200, A100, A400);
+$tanam-admin-dark-warn:    mat-palette($mat-deep-orange);
+$tanam-admin-dark-theme:   mat-dark-theme($tanam-admin-dark-primary, $tanam-admin-dark-accent, $tanam-admin-dark-warn);
+
+.tanam-dark-theme {
+  @include angular-material-theme($tanam-admin-dark-theme);
+}
+
+.tanam-light-theme {
+  @include angular-material-theme($tanam-admin-theme);
+}
+
+.tanam-splash {
+  background-color: mat-color($tanam-brand-color);
+}
+
+body, html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}

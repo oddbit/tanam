@@ -1,0 +1,78 @@
+.sidenav-container {
+  height: 100%;
+}
+
+:host ::ng-deep .sidenav-container .mat-drawer-inner-container {
+  overflow: hidden;
+}
+
+:host ::ng-deep .sidenav-container .mat-list-item-content, .mat-subheader{
+  color: white !important;
+}
+
+:host ::ng-deep .sidenav-container .mat-list-base {
+  padding: 0;
+  height: calc(100% - (64px * 2));
+  overflow: auto;
+  background-color: #494949;
+  color: white;
+  @media only screen and (max-width: 600px) {
+    height: calc(100% - (56px * 2));
+  }
+}
+
+/* width */
+:host ::ng-deep .sidenav-container .mat-list-base::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+:host ::ng-deep .sidenav-container .mat-list-base::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+:host ::ng-deep .sidenav-container .mat-list-base::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 8px;
+}
+
+/* Handle on hover */
+:host ::ng-deep .sidenav-container .mat-list-base::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.expanded-nav {
+  width: 200px;
+}
+
+.header-side-nav , .mat-toolbar.mat-primary{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.header-side-nav, .expand-toolbar {
+  background-color: #212121;
+  color: white;
+}
+
+.expand-toolbar {
+  position: absolute;
+  display: flex;
+  justify-content: flex-end;
+  bottom: 0;
+  z-index: 2;
+}
+
+.admin-container {
+  margin: 4%;
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+.togglerMiniNav {
+  cursor: pointer;
+}

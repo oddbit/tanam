@@ -4,7 +4,7 @@
 ![Total NPM downloads](https://img.shields.io/npm/dt/tanam.svg)
 [![Travis build status](https://img.shields.io/travis/oddbit/tanam.svg)](https://travis-ci.org/oddbit/nexudus-js)
 
-![Login screen](/doc/images/login.png)
+![Login screen](/docs/images/login.png)
 
 
 ```
@@ -50,159 +50,20 @@ a free tier that most likely will be all you need. The platform automatically su
 domain linking and serves all content over secure HTTPS connection. You can have a publishing
 platform to the cost of only your yearly domain name renewal.
 
-## Getting started
-Setting up Tanam is as easy as just adding a few lines of code to your `index.js` file in the
-project's cloud functions folder.
-The CMS administration dashboard will immediately and automatically be accessible to manage your
-site, add and edit content.
+## How to build it
+The application is composed of three parts
+  1. Angular single page application for the admin backend
+  2. Angular server side rendered application for dynamic content
+  3. Cloud functions for serving the app and running background jobs
 
-### Your first user
-Before logging in with your first user, you want to make sure that it's only you who get access to your site.
-
-## Configure your site
-
-### Managing content types
-Content types are content structures of your site such as blog posts, events or articles.
-You can create any type of content type and associate it with a URL pattern of your own choosing.
-
-![List content types](/doc/images/content-types-list.png)
-
-Each content type is composed by "fields" that describe the inner structure of a content type.
-For example, a blog post often has at least a title and a body.
-
-The field types are ranging from simple text fields such as a page title to rich content editor input
-where you can compose with custom HTML, image uploads, dates and much more. By specifying a type
-properly you help to guide the content creator to be consistent in the writing.
-
-![Edit content type](/doc/images/content-types-edit.png)
-
-### Creating content
-The content editor is simple and distraction free and allows you to create rich content with a WYSIWYG
-editor.
-
-![Edit blog post](/doc/images/blog-edit.png)
-
-## Building templates
-Building a Tanam site is as simple as creating a static HTML website. Actually, you can serve a
-completely static site with Tanam.
-
-But the real power comes when you create templates for your content types. Tanam is using
-[DustJS](https://github.com/linkedin/dustjs) template engine to parse and replace variables,
-which allows you to create dynamic content that is server side rendered. You can even make
-arbitrary content lookups and queries from within your template.
-
-For example, the code below would create a bullet list of three upcoming events.
-
-```html
- <ul>
-    {@documents collection="event" limit=3 sortOrder="asc" orderBy="eventData"}
-    <li>
-        <a href="{url}">{data.title}</a>
-    </li>
-    {/documents}
-</ul>
-```
-
-## Technical details
-This section below is purely for technical understanding of Tanam and intended for you who
-would like to tweak your setup or to contribute to the platform.
-
-### Template engine
-Tanam is currently using [DustJS](https://github.com/linkedin/dustjs) template engine.
-The choice is made from the absolute requirement that helper functions/values support `Promise` values.
-
-What that means is that the following snipped will make a Firebase query, which returns a promise
-in an `async` function.
-
-```html
-<h1>
-{@document path="/blog/IH1XAaBYJcBtgRY0VYOj"}{data.title}{/document}
-</h1>
-```
-
-At the time of writing, we only know DustJS that provides this functionality.
-
-### Cache
-One of the unique features with Tanam is the way that we manage the CDN cache for performance
-of dynamic content. The server cache lifetime (CDN) is effectively not very important because
-we will purge and renew cache manually when the content is updated.
-
-Every document change will trigger a request for cache removal from CDN followed by a request
-to store the new data in CDN. That allows content to always be present on an end node close
-to the visitor, wherever in the world they are accessing the website from.
-
-The illustration below is a simple illustration of how CDN caching basically works. With the
-difference of that we're *purging* the cache upon changes, instead of letting it expire by itself.
-The CDN cache is set to a really long lifetime, like a year.
-
-![Cache visual](/doc/images/cache-visual.png)
-
-##### Best case scenario
-A closer look at the flow show a breakdown of how a document change is triggering its own rendering
-by making a request to its own URL. For a new document it will cause a cache miss, which is passed
-through to the https cloud function that tells Tanam to render and send back the response.
-
-The total process from a document change to when the result is ready on the CDN can take a few seconds
-so that's why we preemptively build and send the content to the CDN cache.
-
-![Cache visual](/doc/images/cache-visual-best-case.png)
-
-##### Worst case scenario
-The worst case scenario is that a client is requesting a URL just after we've purged the CDN cache,
-causing a cache miss and the client itself will experience the slow process of server side rendering.
-
-This is a corner case that is most likely for high traffic sites and might cause a small number of
-clients to experience occasional "seconds delay" to get a web page, if the content is updated
-just before a client request.
-
-![Cache visual](/doc/images/cache-visual-worst-case.png)
-
-
-#### Cache life time
-The default values for client/browser cache and server/CDN cache are set in
-[`src/cache.ts`](src/cache.ts). As mentioned above, this should not be neccessary to make
-changes to, unless you are experiencing any troubles with the default setup. Another use case
-might be that you want to try something experimental and prefer to not have several months of
-cache as default, in case something should go wrong with removing cache entries.
-
-Configure alternative caching values with cloud functions config. The user provided config
-from functions config below will overwrite the system defaults.
+Build and package the app from the `functions` folder.
 
 ```bash
-firebase functions:config:set cache.s_max_age=12345
-firebase functions:config:set cache.max_age=123
+$ cd functions
+$ npm run build:dist
+$ cd ../dist
+$ npm install
+$ firebase deploy
 ```
 
-See [official documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
-for cache headers and their behaviour to understand how your settings will affect the system.
-Tanam itself is using the configuration as below
-
- * `s_max_age` - Sets the `s-maxage` cache header
- * `max_age` - Sets the `max-age` cache header
-
-
-#### When cache is refreshed
-The cache will be refreshed as follows
-
- * Document change will refresh cache for that URL only
- * Theme changed will refresh cache for **all** site URLs and **all** theme files
- * Template file changed will refresh cache for **all** site URLs using that template
-
-## License
-This project is under [Apache License 2.0](LICENSE)
-
-```
-   Copyright 2018 oddbit
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-```
+It's important that you run npm install inside of the dist folder as the build script consolidates the different `package.json` files into a single one that represents all of the app's dependencies.

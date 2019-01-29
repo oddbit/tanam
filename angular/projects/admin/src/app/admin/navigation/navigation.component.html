@@ -1,0 +1,81 @@
+<mat-sidenav-container class="sidenav-container"
+                       autosize>
+  <mat-sidenav #drawer
+               [ngClass]="{'expanded-nav': isExpanded}"
+               fixedInViewport="true"
+               [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+               [mode]="(isHandset$ | async) ? 'over' : 'side'"
+               [opened]="!(isHandset$ | async)">
+    <mat-toolbar class="header-side-nav">
+      <img class="logo"
+           src="assets/icons/tanam-icon.svg"
+           height="25"
+           style="margin-right:10px" /> <b>{{isExpanded? 'Tanam':''}}</b>
+    </mat-toolbar>
+    <mat-nav-list>
+      <app-navigation-list-item routerLink="/_/admin/dashboard"
+                                icon="dashboard"
+                                [isExpanded]="isExpanded"
+                                title="Dashboard"></app-navigation-list-item>
+      <h3 mat-subheader
+          *ngIf="isExpanded">Content</h3>
+      <mat-divider *ngIf="!isExpanded"></mat-divider>
+      <app-navigation-list-item *ngFor="let contentType of contentTypes$ | async"
+                                routerLink="/_/admin/types/{{contentType.id}}"
+                                icon="{{contentType.icon}}"
+                                [isExpanded]="isExpanded"
+                                title="{{contentType.title}}"></app-navigation-list-item>
+
+      <h3 mat-subheader
+          *ngIf="isExpanded">Manage</h3>
+      <mat-divider *ngIf="!isExpanded"></mat-divider>
+      <app-navigation-list-item routerLink="/_/admin/media"
+                                icon="image"
+                                [isExpanded]="isExpanded"
+                                title="Media files"></app-navigation-list-item>
+      <app-navigation-list-item routerLink="/_/admin/types"
+                                icon="library_books"
+                                [isExpanded]="isExpanded"
+                                title="Content"></app-navigation-list-item>
+      <app-navigation-list-item routerLink="/_/admin/themes"
+                                icon="web"
+                                [isExpanded]="isExpanded"
+                                title="Themes"></app-navigation-list-item>
+      <app-navigation-list-item routerLink="/_/admin/settings"
+                                icon="settings"
+                                [isExpanded]="isExpanded"
+                                title="Settings"></app-navigation-list-item>
+    </mat-nav-list>
+    <mat-toolbar class="expand-toolbar">
+      <mat-icon class="togglerMiniNav"
+                (click)="toggleMiniNav()">{{isExpanded? 'chevron_left':'chevron_right'}}</mat-icon>
+    </mat-toolbar>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button type="button"
+              aria-label="Toggle sidenav"
+              mat-icon-button
+              (click)="drawer.toggle()"
+              *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span>
+        {{ siteName$ | async }}
+      </span>
+
+      <!-- This fills the remaining space of the current row -->
+      <span class="fill-remaining-space"></span>
+      <button type="button"
+              aria-label="Log out"
+              mat-icon-button
+              (click)="logout()">
+        <mat-icon aria-label="Logout icon">power_settings_new</mat-icon>
+      </button>
+    </mat-toolbar>
+    <!-- Add Content Here -->
+    <div class="admin-container">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

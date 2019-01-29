@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "outDir": "../../out-tsc/app-server",
+    "baseUrl": ".",
+    "paths": {
+      "tanam-core": [
+        "../../dist/tanam-core"
+      ],
+      "tanam-core/*": [
+        "../../dist/tanam-core/*"
+      ]
+    }
+  },
+  "angularCompilerOptions": {
+    "entryModule": "src/app/app.server.module#AppServerModule"
+  }
+}
