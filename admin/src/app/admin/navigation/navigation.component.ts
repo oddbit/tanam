@@ -17,6 +17,7 @@ interface SideMenuItem {
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent {
+  isExpanded = true;
   siteName$ = this.siteSettingsService.getSiteName();
   contentTypes$ = this.contentTypeService.getContentTypes();
 
@@ -30,6 +31,10 @@ export class NavigationComponent {
     private readonly appAuthService: AppAuthService,
     private readonly siteSettingsService: SiteSettingsService,
   ) { }
+
+  toggleMiniNav() {
+    this.isExpanded = !this.isExpanded;
+  }
 
   logout() {
     console.log(`[NavigationComponent:logout]`);
