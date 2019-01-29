@@ -1,9 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subscription, Observable } from 'rxjs';
-import { ContentType, ContentTypeField, ContentTypeService } from '../../../services/content-type.service';
-import { SiteSettingsService } from '../../../services/site-settings.service';
+import { Observable, Subscription } from 'rxjs';
+import { ContentType, ContentTypeField, ContentTypeService, SiteSettingsService } from 'tanam-core';
 import { contentTypeMaterialIcons } from './content-type-form.icons';
 
 @Component({
@@ -107,7 +106,7 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    await this.contentTypeService.saveContentType({
+    await this.contentTypeService.save({
       id: this.contentTypeId,
       title: formData.title,
       slug: formData.slug || '',

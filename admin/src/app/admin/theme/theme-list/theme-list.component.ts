@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
-import { ThemeListDataSource } from './theme-list-datasource';
 import { Router } from '@angular/router';
-import { ThemeService } from '../../../services/theme.service';
+import { SiteThemeService } from 'tanam-core';
+import { ThemeListDataSource } from './theme-list-datasource';
 
 @Component({
   selector: 'app-theme-list',
@@ -16,7 +16,7 @@ export class ThemeListComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly themeService: ThemeService,
+    private readonly themeService: SiteThemeService,
   ) { }
 
   displayedColumns = ['title', 'updatedAt'];

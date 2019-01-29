@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ThemeService } from '../../../services/theme.service';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { SiteThemeService } from 'tanam-core';
 
 @Component({
   selector: 'app-theme-overview',
@@ -16,14 +16,14 @@ export class ThemeOverviewComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly formBuilder: FormBuilder,
-    private readonly themeService: ThemeService,
+    private readonly themeService: SiteThemeService,
   ) { }
 
   ngOnInit() {
   }
 
   createNewType() {
-    this.themeService.createTheme().then(id => {
+    this.themeService.create().then(id => {
       this.router.navigateByUrl(`/_/admin/themes/${id}`);
     });
   }

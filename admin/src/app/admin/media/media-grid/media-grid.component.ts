@@ -1,8 +1,8 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
-import { map, tap } from 'rxjs/operators';
-import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { FileService, TanamFile } from '../../../services/file.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ContentFileService, TanamFile } from 'tanam-core';
 
 @Component({
   selector: 'app-media-grid',
@@ -16,6 +16,6 @@ export class MediaGridComponent {
 
   constructor(
     private readonly breakpointObserver: BreakpointObserver,
-    private readonly fileService: FileService,
+    private readonly fileService: ContentFileService,
   ) { }
 }

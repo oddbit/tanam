@@ -1,8 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { ThemeService, TanamTheme } from '../../../services/theme.service';
-import { SiteSettingsService, SiteInfoSettings } from '../../../services/site-settings.service';
-import { Subscription, Observable } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable, Subscription } from 'rxjs';
+import { SiteInfoSettings, SiteSettingsService, SiteThemeService, TanamTheme } from 'tanam-core';
 
 interface PageTitleFormat {
   value: string;
@@ -29,7 +28,7 @@ export class SiteFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly siteSettingsService: SiteSettingsService,
-    private readonly themeService: ThemeService,
+    private readonly themeService: SiteThemeService,
     private readonly formBuilder: FormBuilder,
   ) { }
 

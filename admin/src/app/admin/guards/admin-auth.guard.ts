@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AppAuthService } from '../../services/app-auth.service';
-import { map, take } from 'rxjs/operators';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { take } from 'rxjs/operators';
+import { AppAuthService } from 'tanam-core';
 
 @Injectable({
   providedIn: 'root'

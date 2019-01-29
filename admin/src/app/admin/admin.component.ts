@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription, Observable } from 'rxjs';
-import { AppAuthService } from '../services/app-auth.service';
-import { UserPrefsService } from '../services/user-prefs.service';
+import { Observable, Subscription } from 'rxjs';
+import { AppAuthService, UserPrefsService } from 'tanam-core';
 
 @Component({
   selector: 'app-admin',

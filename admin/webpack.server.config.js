@@ -4,20 +4,24 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  mode: 'none',
-  entry: {
-    // This is our Express server for Dynamic universal
-    server: './server.ts'
-  },
+  entry: { server: './server.ts' },
+  resolve: { extensions: ['.js', '.ts'] },
+  mode: 'development',
   target: 'node',
-  resolve: { extensions: ['.ts', '.js'] },
-  optimization: {
-    minimize: false
-  },
+  externals: [
+    /* Firebase has some troubles being webpacked when in
+       in the Node environment, let's skip it.
+       Note: you may need to exclude other dependencies depending
+       on your project. */
+    /^firebase/
+  ],
   output: {
-    // Puts the output at the root of the dist folder
-    path: path.join(__dirname, 'dist'),
-    filename: '[name].js'
+    // Export a UMD of the webpacked server.ts & deps, for
+    // rendering in Cloud Functions
+    path: path.join(__dirname, 'dist/dynamic'),
+    library: 'app',
+    libraryTarget: 'umd',
+    filename: 'index.js'
   },
   module: {
     rules: [

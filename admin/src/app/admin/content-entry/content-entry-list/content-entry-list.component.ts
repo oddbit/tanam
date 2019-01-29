@@ -2,8 +2,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { ContentEntryService } from '../../../services/content-entry.service';
-import { ContentType } from '../../../services/content-type.service';
+import { ContentEntryService, ContentType } from 'tanam-core';
 import { ContentEntryListDataSource } from './content-entry-list-datasource';
 
 @Component({

@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
-import { ContentTemplateListDataSource } from './content-template-list-datasource';
 import { Router } from '@angular/router';
-import { ContentTemplateService } from '../../../services/content-template.service';
-import { TanamTheme } from '../../../services/theme.service';
 import { Observable, Subscription } from 'rxjs';
+import { ContentTemplateService, TanamTheme } from 'tanam-core';
+import { ContentTemplateListDataSource } from './content-template-list-datasource';
 
 @Component({
   selector: 'app-content-template-list',

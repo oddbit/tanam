@@ -1,13 +1,13 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Observable } from 'rxjs';
-import { ThemeService, TanamTheme } from '../../../services/theme.service';
+import { SiteThemeService, TanamTheme } from 'tanam-core';
 
 export class ThemeListDataSource extends DataSource<TanamTheme> {
   data: TanamTheme[];
 
   constructor(
-    private readonly themeService: ThemeService,
+    private readonly themeService: SiteThemeService,
     private readonly paginator: MatPaginator,
     private readonly sort: MatSort,
   ) {

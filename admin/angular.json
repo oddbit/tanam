@@ -154,7 +154,7 @@
               "projects/dynamic-render/src/assets"
             ],
             "styles": [
-              "projects/dynamic-render/src/styles.css"
+              "projects/dynamic-render/src/styles.scss"
             ],
             "scripts": []
           },
@@ -210,7 +210,7 @@
             "tsConfig": "projects/dynamic-render/tsconfig.spec.json",
             "karmaConfig": "projects/dynamic-render/karma.conf.js",
             "styles": [
-              "projects/dynamic-render/src/styles.css"
+              "projects/dynamic-render/src/styles.scss"
             ],
             "scripts": [],
             "assets": [
@@ -234,7 +234,7 @@
         "server": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {
-            "outputPath": "dist/server",
+            "outputPath": "dist/dynamic/server",
             "main": "projects/dynamic-render/src/main.server.ts",
             "tsConfig": "projects/dynamic-render/tsconfig.server.json"
           },
@@ -279,33 +279,33 @@
         }
       }
     },
-    "core": {
-      "root": "projects/core",
-      "sourceRoot": "projects/core/src",
+    "tanam-core": {
+      "root": "projects/tanam-core",
+      "sourceRoot": "projects/tanam-core/src",
       "projectType": "library",
-      "prefix": "lib",
+      "prefix": "tanam",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/core/tsconfig.lib.json",
-            "project": "projects/core/ng-package.json"
+            "tsConfig": "projects/tanam-core/tsconfig.lib.json",
+            "project": "projects/tanam-core/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/core/src/test.ts",
-            "tsConfig": "projects/core/tsconfig.spec.json",
-            "karmaConfig": "projects/core/karma.conf.js"
+            "main": "projects/tanam-core/src/test.ts",
+            "tsConfig": "projects/tanam-core/tsconfig.spec.json",
+            "karmaConfig": "projects/tanam-core/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/core/tsconfig.lib.json",
-              "projects/core/tsconfig.spec.json"
+              "projects/tanam-core/tsconfig.lib.json",
+              "projects/tanam-core/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

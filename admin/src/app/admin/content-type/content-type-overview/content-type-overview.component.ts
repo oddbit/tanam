@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ContentTypeService } from '../../../services/content-type.service';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ContentTypeService } from 'tanam-core';
 
 @Component({
   selector: 'app-content-type-overview',
@@ -22,6 +22,6 @@ export class ContentTypeOverviewComponent implements OnInit {
 
   createNewType() {
     const formData = this.createTypeForm.value;
-    this.contentTypeService.createContentType(formData.title);
+    this.contentTypeService.create(formData.title);
   }
 }

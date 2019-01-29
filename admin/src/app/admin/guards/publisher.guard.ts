@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { UserService } from '../../services/user.service';
+import { UserService } from 'tanam-core';
 
 @Injectable({
   providedIn: 'root'

@@ -1,8 +1,7 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { ContentEntry, ContentEntryService } from '../../../services/content-entry.service';
-import { ContentType } from '../../../services/content-type.service';
+import { Observable } from 'rxjs';
+import { ContentEntry, ContentEntryService, ContentType } from 'tanam-core';
 
 export class ContentEntryListDataSource extends DataSource<ContentEntry> {
   data: ContentEntry[];
