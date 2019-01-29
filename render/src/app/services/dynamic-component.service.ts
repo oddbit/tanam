@@ -3,9 +3,12 @@ import { Compiler, Component, ComponentRef, Injectable, NgModule, ViewContainerR
 import * as firebase from 'firebase/app';
 import { take } from 'rxjs/operators';
 import { ContentEntry } from '../../../../models/content-entry';
-import { ContentTemplate, ContentTemplateService } from './content-template.service';
-import { ContentType, ContentTypeService } from './content-type.service';
+import { ContentTemplateService } from './content-template.service';
+import { ContentTypeService } from './content-type.service';
 import { DocumentHeaderService } from './document-header.service';
+import { SiteSettingsService } from './site-settings.service';
+import { ContentType } from '../../../../models/content-type';
+import { ContentTemplate } from '../../../../models/theme';
 
 /**
  * Document context is the object that is passed into the template and can be accessed via the `document` attribute.
@@ -60,13 +63,14 @@ export interface DocumentContext {
 export class DynamicComponentService {
   constructor(
     private readonly compiler: Compiler,
-    private readonly cts: ContentTypeService,
-    private readonly dhs: DocumentHeaderService,
+    private readonly contentTypeService: ContentTypeService,
+    private readonly documentHeaderService: DocumentHeaderService,
     private readonly contentTemplateService: ContentTemplateService,
+    private readonly siteSettingsService: SiteSettingsService,
   ) { }
 
   async render(viewContainer: ViewContainerRef, contentEntry: ContentEntry): Promise<ComponentRef<any>> {
-    const contentType = await this.cts.getContentType(contentEntry.contentType).pipe(take(1)).toPromise();
+    const contentType = await this.contentTypeService.getContentType(contentEntry.contentType).pipe(take(1)).toPromise();
     if (!contentType) {
       throw new Error(`Template misconfiguration. No such template for '${contentEntry.contentType}'`);
     }
@@ -80,7 +84,7 @@ export class DynamicComponentService {
       throw new Error(`Could not find any template for <${template.selector}>`);
     }
 
-    this.dhs.setTitle(contentEntry.title);
+    this.documentHeaderService.setTitle(contentEntry.title);
     return viewContainer.createComponent(factory);
   }
 
@@ -105,10 +109,15 @@ export class DynamicComponentService {
   }
 
   private async createModule(documentContext: DocumentContext) {
-    const components = await this.contentTemplateService.getTemplates('').pipe(take(1)).toPromise();
+    const themeId = await this.siteSettingsService.getSiteTheme().pipe(take(1)).toPromise();
+    const templates = await this.contentTemplateService.getTemplatesForTheme(themeId).pipe(take(1)).toPromise();
+    if (templates.length === 0) {
+      throw new Error(`No templates defined in theme: ${themeId}`);
+    }
+
     return NgModule({
       imports: [CommonModule],
-      declarations: components.map(c => this.createComponent(c, documentContext)),
+      declarations: templates.map(c => this.createComponent(c, documentContext)),
     })(class { });
   }
 

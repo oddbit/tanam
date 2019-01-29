@@ -19,9 +19,9 @@ export class ContentTemplateService {
       .valueChanges();
   }
 
-  getTemplates(theme: string) {
+  getTemplatesForTheme(themeId: string) {
     return this.firestore
-      .collection<ContentTemplate>('tanam-templates', ref => ref.where('theme', '==', theme))
+      .collection<ContentTemplate>('tanam-templates', ref => ref.where('theme', '==', themeId))
       .valueChanges();
   }
 

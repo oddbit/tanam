@@ -29,6 +29,10 @@ export class SiteSettingsService {
     return this.getSiteSettings().pipe(map(settings => settings.title));
   }
 
+  getSiteTheme(): Observable<string> {
+    return this.getSiteSettings().pipe(map(settings => settings.theme));
+  }
+
   getSiteTitleFormat(): Observable<string> {
     return this.getSiteSettings().pipe(map(settings => settings.pageTitleFormat));
   }
