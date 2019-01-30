@@ -33,7 +33,7 @@
  *  }
  * ```
  */
-export interface DocumentContext {
+export interface TanamDocumentContext {
   id: string;
   contentType: string;
   data: { [key: string]: any };

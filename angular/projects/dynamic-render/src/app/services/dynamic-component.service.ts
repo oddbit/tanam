@@ -2,14 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Compiler, Component, ComponentRef, Injectable, NgModule, ViewContainerRef } from '@angular/core';
 import * as firebase from 'firebase/app';
 import { take } from 'rxjs/operators';
-import { ContentEntry } from '../models/content-entry.models';
-import { ContentTemplateService } from './content-template.service';
-import { ContentTypeService } from './content-type.service';
-import { DocumentHeaderService } from './document-header.service';
-import { SiteSettingsService } from './site-settings.service';
-import { ContentType } from '../models/content-type.models';
-import { ContentTemplate } from '../models/theme.models';
-import { DocumentContext } from '../models/dynamic-page.models';
+import {
+  ContentEntry, ContentTemplate, ContentTemplateService,
+  ContentType, ContentTypeService, DocumentHeaderService, SiteSettingsService,
+  TanamDocumentContext
+} from 'tanam-core';
 
 @Injectable({
   providedIn: 'root'
@@ -59,10 +56,10 @@ export class DynamicComponentService {
       published: !!contentEntry.publishTime
         ? (contentEntry.publishTime as firebase.firestore.Timestamp).toDate()
         : null,
-    } as DocumentContext;
+    } as TanamDocumentContext;
   }
 
-  private async createModule(documentContext: DocumentContext) {
+  private async createModule(documentContext: TanamDocumentContext) {
     const themeId = await this.siteSettingsService.getSiteTheme().pipe(take(1)).toPromise();
     const templates = await this.contentTemplateService.getTemplatesForTheme(themeId).pipe(take(1)).toPromise();
     if (templates.length === 0) {
@@ -75,7 +72,7 @@ export class DynamicComponentService {
     })(class { });
   }
 
-  private createComponent(template: ContentTemplate, documentContext: DocumentContext) {
+  private createComponent(template: ContentTemplate, documentContext: TanamDocumentContext) {
     const dynamicClass = class {
       document = documentContext;
     };

@@ -6,7 +6,6 @@ import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 import * as express from 'express';
 import { join } from 'path';
-import { TanamConfig } from 'tanam-core';
 
 
 (global as any).WebSocket = require('ws');
@@ -23,9 +22,11 @@ export const app = express();
 app.set('view engine', 'html');
 app.set('views', DIST_FOLDER);
 
-export function initializeApp(config: TanamConfig) {
-  app.get('/^\/?assets\/tanam\.config\.json$/i', (req, res) => {
-    const cacheControl = 'public, max-age=300, s-maxage=300, stale-while-revalidate=120';
+export function initializeApp(config: any) {
+  console.log(`initializeApp: ${JSON.stringify(config)}`);
+
+  app.get(/^\/assets\/tanam\.config\.json\/?$/i, (req, res) => {
+    const cacheControl = 'public, max-age=10, s-maxage=15, stale-while-revalidate=1';
     res.setHeader('Cache-Control', cacheControl);
     res.json(config);
   });
@@ -37,8 +38,8 @@ export function initializeApp(config: TanamConfig) {
       providers: [
         provideModuleMap(LAZY_MODULE_MAP),
         {
-          provide: 'TanamRuntimeConfig',
-          useValue: config
+          provide: 'TANAM_CONFIG',
+          useValue: config,
         },
         {
           provide: REQUEST,
@@ -84,8 +85,8 @@ app.get(/^\/?favicon\.ico$/i, (req, res) => {
 
 // Match anything else and render it with the universal rendering engine
 app.get('*', (req, res) => {
-  const cacheControl = 'public, max-age=30, s-maxage=60, stale-while-revalidate=120';
-  console.log(`Cache ${req.url}: ${cacheControl}`);
-  res.setHeader('Cache-Control', cacheControl);
+  // const cacheControl = 'public, max-age=30, s-maxage=60, stale-while-revalidate=120';
+  // console.log(`Cache ${req.url}: ${cacheControl}`);
+  // res.setHeader('Cache-Control', cacheControl);
   res.render('dynamic', { req });
 });

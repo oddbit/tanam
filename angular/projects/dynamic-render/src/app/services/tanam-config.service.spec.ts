@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { AppConfigService } from './app-config.service';
 
+import { TanamConfigService } from './tanam-config.service';
 
-describe('AppConfigService', () => {
+describe('TanamConfigService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: AppConfigService = TestBed.get(AppConfigService);
+    const service: TanamConfigService = TestBed.get(TanamConfigService);
     expect(service).toBeTruthy();
   });
 });

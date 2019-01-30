@@ -1,7 +1,9 @@
 import { AfterViewInit, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { ContentEntryService, DynamicComponentService } from 'tanam-core';
+import { ContentEntryService } from 'tanam-core';
+import { DynamicComponentService } from '../services/dynamic-component.service';
+
 
 @Component({
   selector: 'app-dynamic-page',

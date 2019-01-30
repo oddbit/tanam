@@ -3,7 +3,10 @@
     "rules": "database.rules.json"
   },
   "functions": {
-    "predeploy": [],
+    "predeploy": [
+      "npm --prefix functions run build",
+      "npm --prefix functions run package"
+    ],
     "source": "dist"
   },
   "firestore": {

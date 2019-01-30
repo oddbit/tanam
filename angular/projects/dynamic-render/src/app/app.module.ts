@@ -1,12 +1,13 @@
 import { HttpClientModule } from '@angular/common/http';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { TransferHttpCacheModule } from '@nguniversal/common';
 import { AppFirebaseModule } from './app-firebase.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DynamicPageComponent } from './dynamic-page/dynamic-page.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { AppConfigService } from './services/app-config.service';
+import { TanamConfigService } from './services/tanam-config.service';
 
 @NgModule({
   declarations: [
@@ -15,18 +16,19 @@ import { AppConfigService } from './services/app-config.service';
     NotFoundComponent,
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'tanam-render' }),
+    BrowserModule.withServerTransition({ appId: 'tanam-dynamic-render' }),
+    TransferHttpCacheModule,
     AppRoutingModule,
     HttpClientModule,
     AppFirebaseModule,
   ],
   providers: [
-    AppConfigService,
+    TanamConfigService,
     {
-      provide: APP_INITIALIZER, 
-      useFactory: (afs: AppConfigService) => () => afs.loadConfig(),
+      provide: APP_INITIALIZER,
+      useFactory: (tanamConfigService: TanamConfigService) => () => tanamConfigService.loadConfig(),
       multi: true,
-      deps: [AppConfigService]
+      deps: [TanamConfigService]
     },
   ],
   bootstrap: [AppComponent],
