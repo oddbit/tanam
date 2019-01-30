@@ -30,18 +30,31 @@
       </div>
       <div class="row">
         <div class="col">
-          <mat-form-field class="full-width">
-            <textarea matInput
-                      cdkTextareaAutosize
-                      #autosize="cdkTextareaAutosize"
-                      cdkAutosizeMinRows="15"
-                      cdkAutosizeMaxRows="40"
-                      placeholder="HTML template code"
-                      formControlName="templateHtml"></textarea>
-            <mat-error *ngIf="templateForm.controls['templateHtml'].hasError('required')">
-              HTML template code is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
+          <mat-tab-group>
+            <mat-tab label="HTML">
+              <mat-form-field class="full-width">
+                <textarea matInput
+                          cdkTextareaAutosize
+                          #autosize="cdkTextareaAutosize"
+                          cdkAutosizeMinRows="15"
+                          cdkAutosizeMaxRows="40"
+                          formControlName="templateHtml"></textarea>
+                <mat-error *ngIf="templateForm.controls['templateHtml'].hasError('required')">
+                  HTML template code is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </mat-tab>
+            <mat-tab label="CSS">
+              <mat-form-field class="full-width">
+                <textarea matInput
+                          cdkTextareaAutosize
+                          #autosize="cdkTextareaAutosize"
+                          cdkAutosizeMinRows="15"
+                          cdkAutosizeMaxRows="40"
+                          formControlName="templateStyle"></textarea>
+              </mat-form-field>
+            </mat-tab>
+          </mat-tab-group>
         </div>
       </div>
     </mat-card-content>

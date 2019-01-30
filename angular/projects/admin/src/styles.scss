@@ -8,7 +8,7 @@
 
 $tanam-brand-color: mat-palette($mat-green);
 
-$tanam-admin-primary: mat-palette($mat-green);
+$tanam-admin-primary: mat-palette($mat-green, 600);
 $tanam-admin-accent:  mat-palette($mat-brown, A200, A100, A400);
 $tanam-admin-theme:   mat-light-theme($tanam-admin-primary, $tanam-admin-accent);
 
