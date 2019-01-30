@@ -6,7 +6,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DynamicPageComponent } from './dynamic-page/dynamic-page.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { AppConfigService } from 'tanam-core';
+import { AppConfigService } from './services/app-config.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,7 +23,7 @@ import { AppConfigService } from 'tanam-core';
   providers: [
     AppConfigService,
     {
-      provide: APP_INITIALIZER, // Asynchrounously load client's App Configuration
+      provide: APP_INITIALIZER, 
       useFactory: (afs: AppConfigService) => () => afs.loadConfig(),
       multi: true,
       deps: [AppConfigService]

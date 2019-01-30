@@ -1,5 +1,4 @@
 export * from './app-auth.service';
-export * from './app-config.service';
 export * from './content-entry.service';
 export * from './content-file.service';
 export * from './content-template.service';

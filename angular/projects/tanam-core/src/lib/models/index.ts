@@ -1,3 +1,4 @@
+export * from './app-config.models';
 export * from './cache.models';
 export * from './content-entry.models';
 export * from './content-type.models';

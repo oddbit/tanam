@@ -6,6 +6,8 @@ import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 import * as express from 'express';
 import { join } from 'path';
+import { TanamConfig } from 'tanam-core';
+
 
 (global as any).WebSocket = require('ws');
 (global as any).XMLHttpRequest = require('xhr2');
@@ -16,41 +18,40 @@ const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./dist/dynamic/se
 enableProdMode();
 
 const DIST_FOLDER = join(process.cwd(), 'browser');
-const TANAM_CONFIG = !process.env.FIREBASE_API_KEY ? null : {
-  firebaseApp: {
-    apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-    databaseURL: process.env.FIREBASE_DB_URL,
-    projectId: process.env.PROJECT_ID,
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.FIREBASE_SENDER_ID,
-  }
-};
 
 export const app = express();
 app.set('view engine', 'html');
 app.set('views', DIST_FOLDER);
 
-app.engine('html', (_: any, options: any, callback: any) =>
-  ngExpressEngine({
-    bootstrap: AppServerModuleNgFactory,
-    providers: [
-      provideModuleMap(LAZY_MODULE_MAP),
-      {
-        provide: 'TanamConfig',
-        useValue: TANAM_CONFIG || require('./tanam.config.json')
-      },
-      {
-        provide: REQUEST,
-        useValue: options.req,
-      },
-      {
-        provide: RESPONSE,
-        useValue: options.req.res,
-      },
-    ],
-  })(_, options, callback)
-);
+export function initializeApp(config: TanamConfig) {
+  app.get('/^\/?assets\/tanam\.config\.json$/i', (req, res) => {
+    const cacheControl = 'public, max-age=300, s-maxage=300, stale-while-revalidate=120';
+    res.setHeader('Cache-Control', cacheControl);
+    res.json(config);
+  });
+
+
+  app.engine('html', (_: any, options: any, callback: any) =>
+    ngExpressEngine({
+      bootstrap: AppServerModuleNgFactory,
+      providers: [
+        provideModuleMap(LAZY_MODULE_MAP),
+        {
+          provide: 'TanamRuntimeConfig',
+          useValue: config
+        },
+        {
+          provide: REQUEST,
+          useValue: options.req,
+        },
+        {
+          provide: RESPONSE,
+          useValue: options.req.res,
+        },
+      ],
+    })(_, options, callback)
+  );
+}
 
 // Match the Angular generated files with the unique hash
 // Serve them with fairly long cache lifetime since they'll be unique for each deploy
