@@ -16,6 +16,7 @@ export class ContentTemplateFormComponent implements OnInit, OnDestroy {
     title: [null, Validators.required],
     selector: [null, Validators.required],
     templateHtml: [null, Validators.required],
+    templateStyle: null,
   });
   templateSubscription: Subscription;
 
@@ -33,6 +34,7 @@ export class ContentTemplateFormComponent implements OnInit, OnDestroy {
           title: template.title,
           selector: template.selector,
           templateHtml: template.template,
+          templateStyle: template.styles[0]
         });
       });
   }
@@ -50,6 +52,7 @@ export class ContentTemplateFormComponent implements OnInit, OnDestroy {
       title: formData.title,
       selector: formData.selector,
       template: formData.templateHtml,
+      styles: [formData.templateStyle],
     } as ContentTemplate);
   }
 }
