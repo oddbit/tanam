@@ -58,7 +58,7 @@ export function initializeApp(config: TanamConfig) {
 app.get(/^\/?main|polyfills|runtime|styles|vendor\.[\w\d]{20}\.js|css\/?$/i,
   express.static(DIST_FOLDER, {
     setHeaders: (res, path) => {
-      const cacheControl = 'public, max-age=300, s-maxage=300, stale-while-revalidate=120';
+      const cacheControl = 'public, max-age=2592000, s-maxage=31104000, stale-while-revalidate=120';
       console.log(`Cache ${path}: ${cacheControl}`);
       res.setHeader('Cache-Control', cacheControl);
     },
@@ -70,7 +70,7 @@ app.get(/^\/?main|polyfills|runtime|styles|vendor\.[\w\d]{20}\.js|css\/?$/i,
 app.get(/^\/?assets\/(.*)\/?$/i,
   express.static(DIST_FOLDER, {
     setHeaders: (res, path) => {
-      const cacheControl = 'public, max-age=300, s-maxage=300, stale-while-revalidate=120';
+      const cacheControl = 'public, max-age=900, s-maxage=3600, stale-while-revalidate=120';
       console.log(`Cache ${path}: ${cacheControl}`);
       res.setHeader('Cache-Control', cacheControl);
     },
@@ -84,7 +84,7 @@ app.get(/^\/?favicon\.ico$/i, (req, res) => {
 
 // Match anything else and render it with the universal rendering engine
 app.get('*', (req, res) => {
-  const cacheControl = 'public, max-age=300, s-maxage=30, stale-while-revalidate=120';
+  const cacheControl = 'public, max-age=30, s-maxage=60, stale-while-revalidate=120';
   console.log(`Cache ${req.url}: ${cacheControl}`);
   res.setHeader('Cache-Control', cacheControl);
   res.render('dynamic', { req });
