@@ -135,7 +135,7 @@
       "root": "projects/dynamic-render/",
       "sourceRoot": "projects/dynamic-render/src",
       "projectType": "application",
-      "prefix": "app",
+      "prefix": "tanam",
       "schematics": {},
       "architect": {
         "build": {

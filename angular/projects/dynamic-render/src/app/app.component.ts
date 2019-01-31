@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
+  selector: 'tanam-root',
   template: '<router-outlet></router-outlet>',
   styles: []
 })

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RESPONSE } from '@nguniversal/express-engine/tokens';
 
 @Component({
-  selector: 'app-not-found',
+  selector: 'tanam-not-found',
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.scss']
 })

@@ -6,7 +6,7 @@ import { ContentEntryService, SiteThemeService } from 'tanam-core';
 import { DynamicPageService } from '../services/dynamic-page.service';
 
 @Component({
-  selector: 'app-dynamic-page',
+  selector: 'tanam-dynamic-page',
   templateUrl: './dynamic-page.component.html',
   styles: []
 })
