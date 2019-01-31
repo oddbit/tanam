@@ -26,6 +26,7 @@ export class DynamicPageService {
       const element = this.document.createElement('link');
       element.rel = 'preload';
       element.href = style;
+      element.as = 'style';
       element.setAttribute('onload', 'this.onload=null;this.rel="stylesheet"');
       this.document.head.appendChild(element);
     } else {
