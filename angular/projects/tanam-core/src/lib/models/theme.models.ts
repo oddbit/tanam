@@ -23,6 +23,7 @@ export interface TanamTheme {
     description: string;
     images: string[];
     styles: string[];
+    scripts: string[];
     updatedAt: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
     createdAt: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
 }

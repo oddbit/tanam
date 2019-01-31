@@ -8,7 +8,7 @@ import { DynamicComponentService } from '../services/dynamic-component.service';
 @Component({
   selector: 'app-dynamic-page',
   templateUrl: './dynamic-page.component.html',
-  styleUrls: ['./dynamic-page.component.scss']
+  styles: []
 })
 export class DynamicPageComponent implements OnInit, AfterViewInit {
   readonly rootPath = this.route.snapshot.paramMap.get('typePrefix') || '';
@@ -19,8 +19,8 @@ export class DynamicPageComponent implements OnInit, AfterViewInit {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly ces: ContentEntryService,
-    private readonly dcs: DynamicComponentService,
+    private readonly contentEntryService: ContentEntryService,
+    private readonly dynamicComponentService: DynamicComponentService,
   ) { }
 
   ngOnInit() {
@@ -33,10 +33,10 @@ export class DynamicPageComponent implements OnInit, AfterViewInit {
   }
 
   private async renderContent() {
-    const contentEntry = await this.ces.findByUrl(this.rootPath, this.entryPath).pipe(take(1)).toPromise();
+    const contentEntry = await this.contentEntryService.findByUrl(this.rootPath, this.entryPath).pipe(take(1)).toPromise();
     this.documentFound = !!contentEntry;
     if (this.documentFound) {
-      this.dcs.render(this.viewContainer, contentEntry);
+      this.dynamicComponentService.render(this.viewContainer, contentEntry);
     }
   }
 }

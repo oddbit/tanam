@@ -25,9 +25,7 @@ import { TanamConfigService } from './services/tanam-config.service';
     {
       provide: FirebaseOptionsToken,
       deps: [TanamConfigService],
-      useFactory: (fcs: TanamConfigService) => {
-        return fcs.firebaseWebConfig;
-      },
+      useFactory: (fcs: TanamConfigService) => fcs.firebaseWebConfig,
     },
   ],
 })

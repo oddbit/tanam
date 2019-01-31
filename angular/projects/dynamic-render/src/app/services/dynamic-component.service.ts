@@ -2,11 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Compiler, Component, ComponentRef, Injectable, NgModule, ViewContainerRef } from '@angular/core';
 import * as firebase from 'firebase/app';
 import { take } from 'rxjs/operators';
-import {
-  ContentEntry, ContentTemplate, ContentTemplateService,
-  ContentType, ContentTypeService, DocumentHeaderService, SiteSettingsService,
-  TanamDocumentContext
-} from 'tanam-core';
+import { ContentEntry, ContentTemplate, ContentTemplateService,
+  ContentType, ContentTypeService, DocumentHeaderService, SiteSettingsService } from 'tanam-core';
+import { TanamDocumentContext } from '../models/dynamic-page.models';
 
 @Injectable({
   providedIn: 'root'
