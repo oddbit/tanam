@@ -1,7 +1,6 @@
 
 export interface SiteInfoSettings {
     title: string;
-    pageTitleFormat: string;
     theme: string;
     defaultLanguage: string;
     languages: string[];

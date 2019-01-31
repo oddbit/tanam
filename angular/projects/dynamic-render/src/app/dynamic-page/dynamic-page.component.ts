@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, OnInit, ViewChild, ViewContainerRef, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, take, tap } from 'rxjs/operators';
-import { ContentEntryService, SiteThemeService, TanamTheme } from 'tanam-core';
-import { DynamicPageService } from '../services/dynamic-page.service';
 import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { ContentEntryService, SiteThemeService } from 'tanam-core';
+import { DynamicPageService } from '../services/dynamic-page.service';
 
 @Component({
   selector: 'app-dynamic-page',

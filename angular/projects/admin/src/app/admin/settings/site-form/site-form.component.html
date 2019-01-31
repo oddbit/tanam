@@ -16,18 +16,6 @@
   <div class="row">
     <div class="col">
       <mat-form-field class="full-width">
-        <mat-select formControlName="pageTitleFormat"
-                    placeholder="Title format">
-          <mat-option *ngFor="let pageTitleFormat of pageTitleFormatOptions"
-                      [value]="pageTitleFormat.value">{{pageTitleFormat.text}}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="settingsForm.controls['pageTitleFormat'].hasError('required')">
-          Page title format is <strong>required</strong>
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="col">
-      <mat-form-field class="full-width">
         <mat-select formControlName="theme"
                     placeholder="Theme">
           <mat-option *ngFor="let theme of themes$ | async"
@@ -41,5 +29,5 @@
   </div>
   <button mat-raised-button
           color="primary"
-          type="submit">Submit</button>
+          type="submit">Save</button>
 </form>

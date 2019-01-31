@@ -33,10 +33,6 @@ export class SiteSettingsService {
     return this.getSiteSettings().pipe(map(settings => settings.theme));
   }
 
-  getSiteTitleFormat(): Observable<string> {
-    return this.getSiteSettings().pipe(map(settings => settings.pageTitleFormat));
-  }
-
   saveSiteSettings(settings: SiteInfoSettings) {
     console.log(`[SettingsDomainComponent:saveSiteSettings] ${JSON.stringify(settings, null, 2)}`);
     return this.fbApp.firestore().runTransaction<void>(async (trx) => {

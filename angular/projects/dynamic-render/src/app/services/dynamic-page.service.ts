@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Compiler, Component, ComponentRef, Inject, Injectable, NgModule, Renderer2, ViewContainerRef } from '@angular/core';
-import { DOCUMENT } from '@angular/platform-browser';
+import { DOCUMENT, Title } from '@angular/platform-browser';
 import { take } from 'rxjs/operators';
 import { ContentEntry, ContentTemplate, ContentType } from 'tanam-core';
-import { ContentTemplateService, ContentTypeService, DocumentHeaderService, SiteSettingsService } from 'tanam-core';
+import { ContentTemplateService, ContentTypeService, SiteSettingsService } from 'tanam-core';
 import { TanamDocumentContext } from '../models/dynamic-page.models';
 
 @Injectable({
@@ -14,8 +14,8 @@ export class DynamicPageService {
   constructor(
     @Inject(DOCUMENT) private readonly document: Document,
     private readonly compiler: Compiler,
+    private readonly titleService: Title,
     private readonly contentTypeService: ContentTypeService,
-    private readonly documentHeaderService: DocumentHeaderService,
     private readonly contentTemplateService: ContentTemplateService,
     private readonly siteSettingsService: SiteSettingsService,
   ) { }
@@ -53,6 +53,11 @@ export class DynamicPageService {
     this.document.body.appendChild(element);
   }
 
+  async setTitle(title: string) {
+    const siteName = await this.siteSettingsService.getSiteName().pipe(take(1)).toPromise();
+    this.titleService.setTitle(`${title} | ${siteName}`);
+  }
+
   async render(viewContainer: ViewContainerRef, contentEntry: ContentEntry): Promise<ComponentRef<any>> {
     const contentType = await this.contentTypeService.getContentType(contentEntry.contentType).pipe(take(1)).toPromise();
     if (!contentType) {
@@ -68,7 +73,7 @@ export class DynamicPageService {
       throw new Error(`Could not find any template for <${template.selector}>`);
     }
 
-    this.documentHeaderService.setTitle(contentEntry.title);
+    this.setTitle(contentEntry.title);
     return viewContainer.createComponent(factory);
   }
 
