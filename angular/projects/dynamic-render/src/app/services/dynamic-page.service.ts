@@ -24,8 +24,9 @@ export class DynamicPageService {
   addStyle(style: string) {
     if (style.startsWith('/theme') || style.startsWith('http')) {
       const element = this.document.createElement('link');
-      element.rel = 'stylesheet';
+      element.rel = 'preload';
       element.href = style;
+      element.setAttribute('onload', 'this.onload=null;this.rel="stylesheet"');
       this.document.head.appendChild(element);
     } else {
       const element = this.document.createElement('style');
