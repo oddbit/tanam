@@ -1,22 +1,57 @@
 import { CommonModule } from '@angular/common';
-import { Compiler, Component, ComponentRef, Injectable, NgModule, ViewContainerRef } from '@angular/core';
-import * as firebase from 'firebase/app';
+import { Compiler, Component, ComponentRef, Inject, Injectable, NgModule, Renderer2, ViewContainerRef } from '@angular/core';
+import { DOCUMENT } from '@angular/platform-browser';
 import { take } from 'rxjs/operators';
-import { ContentEntry, ContentTemplate, ContentTemplateService,
-  ContentType, ContentTypeService, DocumentHeaderService, SiteSettingsService } from 'tanam-core';
+import { ContentEntry, ContentTemplate, ContentType } from 'tanam-core';
+import { ContentTemplateService, ContentTypeService, DocumentHeaderService, SiteSettingsService } from 'tanam-core';
 import { TanamDocumentContext } from '../models/dynamic-page.models';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DynamicComponentService {
+export class DynamicPageService {
+
   constructor(
+    @Inject(DOCUMENT) private readonly document: Document,
     private readonly compiler: Compiler,
     private readonly contentTypeService: ContentTypeService,
     private readonly documentHeaderService: DocumentHeaderService,
     private readonly contentTemplateService: ContentTemplateService,
     private readonly siteSettingsService: SiteSettingsService,
   ) { }
+
+
+  addStyle(style: string) {
+    if (style.startsWith('/theme') || style.startsWith('http')) {
+      const element = this.document.createElement('link');
+      element.rel = 'stylesheet';
+      element.href = style;
+      this.document.head.appendChild(element);
+    } else {
+      const element = this.document.createElement('style');
+      element.innerText = style;
+      this.document.head.appendChild(element);
+    }
+  }
+
+  addScriptToBody(script: string) {
+    script = script.trim();
+    const element = this.document.createElement('script');
+    element.type = `text/javascript`;
+    if (script.startsWith('/theme') || script.startsWith('http')) {
+      element.src = script;
+    } else {
+      element.innerText = script;
+    }
+    this.document.body.appendChild(element);
+  }
+
+  addJsonLd(json: any) {
+    const element = this.document.createElement('script');
+    element.type = `application/ld+json`;
+    element.text = JSON.stringify(json);
+    this.document.body.appendChild(element);
+  }
 
   async render(viewContainer: ViewContainerRef, contentEntry: ContentEntry): Promise<ComponentRef<any>> {
     const contentType = await this.contentTypeService.getContentType(contentEntry.contentType).pipe(take(1)).toPromise();
