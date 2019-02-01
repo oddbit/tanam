@@ -69,18 +69,6 @@ export class ContentEntryService {
       .delete();
   }
 
-  findByUrl(root: string, path: string): Observable<ContentEntry> {
-    console.log(`[ContentEntryService:findContentEntryByUrl] ${JSON.stringify({ root, path })}`);
-
-    const queryFn = (ref: CollectionReference) =>
-      ref.where('url.root', '==', root).where('url.path', '==', path).limit(1);
-
-    return this.firestore
-      .collection<ContentEntry>('tanam-entries', queryFn)
-      .valueChanges()
-      .pipe(map(entry => entry[0]));
-  }
-
   get(entryId: string): Observable<ContentEntry> {
     return this.firestore
       .collection('tanam-entries').doc<ContentEntry>(entryId)

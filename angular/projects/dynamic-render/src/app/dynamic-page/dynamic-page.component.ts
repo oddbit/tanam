@@ -2,7 +2,8 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewContainerRe
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { ContentEntryService, SiteThemeService } from 'tanam-core';
+import { SiteThemeService } from 'tanam-core';
+import { DocumentContextService } from '../services/document-context.service';
 import { DynamicPageService } from '../services/dynamic-page.service';
 
 @Component({
@@ -20,7 +21,7 @@ export class DynamicPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly contentEntryService: ContentEntryService,
+    private readonly documentContextService: DocumentContextService,
     private readonly dynamicPage: DynamicPageService,
     private readonly siteThemeservice: SiteThemeService,
   ) { }
@@ -47,10 +48,12 @@ export class DynamicPageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private async renderContent() {
-    const contentEntry = await this.contentEntryService.findByUrl(this.rootPath, this.entryPath).pipe(take(1)).toPromise();
+    const contentEntry = await this.documentContextService.getByUrl(this.rootPath, this.entryPath).pipe(take(1)).toPromise();
     this.documentFound = !!contentEntry;
-    if (this.documentFound) {
-      this.dynamicPage.render(this.viewContainer, contentEntry);
+    if (!this.documentFound) {
+      return;
     }
+
+    this.dynamicPage.render(this.viewContainer, contentEntry);
   }
 }

@@ -1,7 +1,7 @@
 import { Directive, Input, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TanamDocumentContext } from '../models/dynamic-page.models';
-import { PublishedDocumentService } from '../services/published-document.service';
+import { DocumentContextService } from '../services/document-context.service';
 
 @Directive({
   selector: '[tanamDocuments]'
@@ -18,7 +18,7 @@ export class DocumentsDirective implements OnInit {
   constructor(
     private templateRef: TemplateRef<any>,
     private viewContainer: ViewContainerRef,
-    private documentService: PublishedDocumentService,
+    private documentService: DocumentContextService,
   ) { }
 
   ngOnInit() {
