@@ -20,6 +20,10 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
   @Input() afterSaveRoute: string;
   @Input() onCancelRoute: string;
 
+  metaDataDialog = false;
+  publishedTime = '';
+  updatedTime = '';
+  createdTime = '';
   domain$ = this.siteSettingsService.getSiteDomain();
   contentType$: Observable<ContentType>;
   entryForm = this.formBuilder.group({
@@ -59,6 +63,9 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
       urlPath: this.contentEntry.url.path,
       status: this.contentEntry.status,
     });
+    this.publishedTime = this.contentEntry.published;
+    this.updatedTime = this.contentEntry.updated;
+    this.createdTime = this.contentEntry.created;
     this.contentType$ = this.contentTypeService.getContentType(this.contentEntry.contentType);
     this._contentTypeSubscription = this.contentType$
       .subscribe(contentType => {
@@ -80,6 +87,14 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
   }
   cancelEditing() {
     this.router.navigateByUrl(this.onCancelRoute);
+  }
+
+  closeDialog() {
+    this.metaDataDialog = false;
+  }
+
+  showDialog() {
+    this.metaDataDialog = true;
   }
 
   async deleteEntry() {
