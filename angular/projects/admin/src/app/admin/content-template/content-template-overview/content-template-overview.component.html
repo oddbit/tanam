@@ -5,7 +5,12 @@
         {{ theme.title }}
         <button mat-flat-button
                 color="accent"
-                (click)="createNewTemplate(theme)">+ Add New</button>
+                class="btn-margin"
+                (click)="createNewTemplate(theme)">+ Add Template</button>
+        <button mat-flat-button
+                color="accent"
+                class="btn-margin"
+                (click)="editTheme(theme)">Edit Theme</button>
       </mat-card-title>
     </mat-card-title-group>
     <mat-card-content>
