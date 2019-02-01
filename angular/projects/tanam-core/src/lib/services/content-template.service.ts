@@ -35,8 +35,8 @@ export class ContentTemplateService {
       selector: '',
       template: '<!-- Put your HTML template here -->',
       styles: ['// Put your CSS template here'],
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updated: firebase.firestore.FieldValue.serverTimestamp(),
+      created: firebase.firestore.FieldValue.serverTimestamp(),
     } as ContentTemplate);
 
     return id;

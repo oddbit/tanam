@@ -23,7 +23,7 @@ export class ContentEntryListComponent implements OnInit, OnDestroy {
     private readonly contentEntryService: ContentEntryService,
   ) { }
 
-  displayedColumns = ['title', 'updatedAt'];
+  displayedColumns = ['title', 'updated'];
 
   ngOnInit() {
     this._contentTypeSubscription = this.contentType$.subscribe(contentType => {

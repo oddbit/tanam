@@ -25,7 +25,7 @@ export class ContentTemplateListComponent implements OnInit, OnDestroy {
   ) { }
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['selector', 'title', 'updatedAt'];
+  displayedColumns = ['selector', 'title', 'updated'];
 
   ngOnInit() {
     this._themeSubscription = this.theme$.subscribe(theme => {

@@ -9,7 +9,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "publishTime",
+          "fieldPath": "published",
           "order": "DESCENDING"
         }
       ]

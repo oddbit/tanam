@@ -43,8 +43,8 @@ export class ContentEntryService {
         status: 'unpublished',
         data: {},
         tags: [],
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        created: firebase.firestore.FieldValue.serverTimestamp(),
       } as ContentEntry);
   }
 
@@ -53,7 +53,7 @@ export class ContentEntryService {
       throw new Error('Document ID must be provided as an attribute when updating an entry.');
     }
 
-    entry.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+    entry.updated = firebase.firestore.FieldValue.serverTimestamp();
     return this.firestore
       .collection<ContentEntry>('tanam-entries').doc(entry.id)
       .update(entry);

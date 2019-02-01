@@ -19,7 +19,7 @@ export class ContentTypeListComponent implements OnInit {
     private readonly contentTypeService: ContentTypeService,
   ) { }
 
-  displayedColumns = ['title', 'updatedAt'];
+  displayedColumns = ['title', 'updated'];
 
   ngOnInit() {
     this.dataSource = new ContentTypeListDataSource(this.contentTypeService, this.paginator, this.sort);

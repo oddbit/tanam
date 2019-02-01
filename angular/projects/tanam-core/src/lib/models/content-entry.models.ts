@@ -14,7 +14,7 @@ export interface ContentEntry {
     status: ContentEntryStatus;
     tags: string[];
     standalone: boolean;
-    publishTime?: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue;
-    updatedAt: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue;
-    createdAt: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue;
+    published?: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue;
+    updated: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue;
+    created: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue;
 }

@@ -29,6 +29,6 @@ export interface ContentType {
     icon: string; // Icon for menus etc
     fields: ContentTypeField[];
     numEntries: ContentTypeEntryCount;
-    updatedAt: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
-    createdAt: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
+    updated: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
+    created: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
 }

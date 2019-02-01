@@ -45,8 +45,8 @@ export class ContentTypeService {
         published: 0,
         unpublished: 0,
       },
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updated: firebase.firestore.FieldValue.serverTimestamp(),
+      created: firebase.firestore.FieldValue.serverTimestamp(),
     } as ContentType);
   }
 
@@ -54,7 +54,7 @@ export class ContentTypeService {
     const doc = this.firestore.collection('tanam-types').doc(contentType.id);
     contentType = {
       ...contentType,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updated: firebase.firestore.FieldValue.serverTimestamp(),
     };
 
     console.log(`[ContentTypeService:saveContentType] ${JSON.stringify(contentType, null, 2)}`);

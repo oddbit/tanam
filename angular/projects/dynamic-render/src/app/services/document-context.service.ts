@@ -93,8 +93,8 @@ export class DocumentContextService {
       revision: contentEntry.revision,
       status: contentEntry.status,
       tags: contentEntry.tags,
-      created: (contentEntry.createdAt as firebase.firestore.Timestamp).toDate(),
-      updated: (contentEntry.updatedAt as firebase.firestore.Timestamp).toDate(),
+      created: (contentEntry.created as firebase.firestore.Timestamp).toDate(),
+      updated: (contentEntry.updated as firebase.firestore.Timestamp).toDate(),
       published: !!contentEntry.published
         ? (contentEntry.published as firebase.firestore.Timestamp).toDate()
         : null,

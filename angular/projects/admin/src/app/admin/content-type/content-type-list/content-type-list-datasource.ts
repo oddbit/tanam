@@ -34,7 +34,7 @@ export class ContentTypeListDataSource extends DataSource<ContentType> {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
         case 'title': return compare(a.title, b.title, isAsc);
-        case 'updatedAt': return compare(+a.updatedAt, +b.updatedAt, isAsc);
+        case 'updated': return compare(+a.updated, +b.updated, isAsc);
         default: return 0;
       }
     });

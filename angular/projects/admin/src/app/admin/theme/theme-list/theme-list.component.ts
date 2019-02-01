@@ -19,7 +19,7 @@ export class ThemeListComponent implements OnInit {
     private readonly themeService: SiteThemeService,
   ) { }
 
-  displayedColumns = ['title', 'updatedAt'];
+  displayedColumns = ['title', 'updated'];
 
   ngOnInit() {
     this.dataSource = new ThemeListDataSource(this.themeService, this.paginator, this.sort);

@@ -13,8 +13,8 @@ export interface ContentTemplate {
     selector: string;
     template: string;
     styles: string[];
-    updatedAt: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
-    createdAt: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
+    updated: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
+    created: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
 }
 
 export interface TanamTheme {
@@ -24,6 +24,6 @@ export interface TanamTheme {
     images: string[];
     styles: string[];
     scripts: string[];
-    updatedAt: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
-    createdAt: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
+    updated: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
+    created: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
 }

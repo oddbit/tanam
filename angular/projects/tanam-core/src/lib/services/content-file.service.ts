@@ -42,8 +42,8 @@ export class ContentFileService {
         title: fileName,
         bucket: snapshot.metadata.bucket,
         filePath: snapshot.metadata.fullPath,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        created: firebase.firestore.FieldValue.serverTimestamp(),
         bytes: snapshot.totalBytes,
         mimeType: snapshot.metadata.contentType,
         fileType: fileType,
@@ -51,8 +51,8 @@ export class ContentFileService {
       };
 
       this.firestore
-      .collection<TanamFile>('tanam-files').doc(fileId)
-      .set(tanamFile);
+        .collection<TanamFile>('tanam-files').doc(fileId)
+        .set(tanamFile);
     });
 
     return uploadTask.percentageChanges();

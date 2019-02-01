@@ -10,8 +10,8 @@ export interface TanamFile {
     mimeType: string;
     bytes: number;
     url: string;
-    updatedAt: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
-    createdAt: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
+    updated: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
+    created: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
 }
 
 export const MIME_TYPE_ENDING_MAP = {
