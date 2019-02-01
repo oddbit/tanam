@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { TransferHttpCacheModule } from '@nguniversal/common';
 import { AppFirebaseModule } from './app-firebase.module';
@@ -17,10 +17,10 @@ import { TanamConfigService } from './services/tanam-config.service';
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'tanam-dynamic-render' }),
-    TransferHttpCacheModule,
     AppRoutingModule,
-    HttpClientModule,
     AppFirebaseModule,
+    HttpClientModule,
+    TransferHttpCacheModule,
   ],
   providers: [
     TanamConfigService,

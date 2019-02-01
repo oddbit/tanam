@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Compiler, Component, ComponentRef, Inject, Injectable, NgModule, Renderer2, ViewContainerRef } from '@angular/core';
+import { Compiler, Component, ComponentRef, Inject, Injectable, NgModule, ViewContainerRef } from '@angular/core';
 import { DOCUMENT, Title } from '@angular/platform-browser';
 import { take } from 'rxjs/operators';
-import { ContentEntry, ContentTemplate, ContentType } from 'tanam-core';
-import { ContentTemplateService, ContentTypeService, SiteSettingsService } from 'tanam-core';
+import { ContentEntry, ContentTemplate, ContentTemplateService, ContentType, ContentTypeService, SiteSettingsService } from 'tanam-core';
+import { DynamicTemplateModule } from '../dynamic-template/dynamic-template.module';
 import { TanamDocumentContext } from '../models/dynamic-page.models';
 
 @Injectable({
@@ -107,7 +107,10 @@ export class DynamicPageService {
     }
 
     return NgModule({
-      imports: [CommonModule],
+      imports: [
+        CommonModule,
+        DynamicTemplateModule,
+      ],
       declarations: templates.map(c => this.createComponent(c, documentContext)),
     })(class { });
   }

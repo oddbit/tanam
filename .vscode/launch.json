@@ -10,6 +10,13 @@
             "name": "Chrome @ localhost:4200",
             "url": "http://localhost:4200",
             "webRoot": "${workspaceFolder}"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Chrome @ localhost:4444",
+            "url": "http://localhost:4444",
+            "webRoot": "${workspaceFolder}"
         }
     ]
 }

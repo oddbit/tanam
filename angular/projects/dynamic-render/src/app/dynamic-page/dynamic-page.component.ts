@@ -23,7 +23,6 @@ export class DynamicPageComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly contentEntryService: ContentEntryService,
     private readonly dynamicPage: DynamicPageService,
     private readonly siteThemeservice: SiteThemeService,
-
   ) { }
 
   ngOnInit() {
