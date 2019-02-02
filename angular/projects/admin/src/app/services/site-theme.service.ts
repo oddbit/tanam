@@ -27,6 +27,14 @@ export class SiteThemeService {
     } as TanamTheme);
   }
 
+  update(theme: TanamTheme) {
+    return this.firestore.collection('tanam-themes').doc<TanamTheme>(theme.id)
+      .update({
+        ...theme,
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+  }
+
   getThemes(): Observable<TanamTheme[]> {
     return this.firestore.collection<TanamTheme>('tanam-themes').valueChanges();
   }
