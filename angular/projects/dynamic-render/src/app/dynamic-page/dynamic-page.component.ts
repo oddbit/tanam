@@ -2,9 +2,9 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewContainerRe
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { SiteThemeService } from 'tanam-core';
 import { DocumentContextService } from '../services/document-context.service';
 import { DynamicPageService } from '../services/dynamic-page.service';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'tanam-dynamic-page',
@@ -23,13 +23,13 @@ export class DynamicPageComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly documentContextService: DocumentContextService,
     private readonly dynamicPage: DynamicPageService,
-    private readonly siteThemeservice: SiteThemeService,
+    private readonly themeService: ThemeService,
   ) { }
 
   ngOnInit() {
     console.log(`[DynamicPageComponent:ngOnInit] prefix: '${this.rootPath}'`);
     console.log(`[DynamicPageComponent:ngOnInit] path: '${this.entryPath}'`);
-    this.subscriptions.push(this.siteThemeservice.getCurrentTheme().subscribe(theme => {
+    this.subscriptions.push(this.themeService.getCurrentTheme().subscribe(theme => {
       for (const script of theme.scripts) {
         this.dynamicPage.addScriptToBody(script);
       }

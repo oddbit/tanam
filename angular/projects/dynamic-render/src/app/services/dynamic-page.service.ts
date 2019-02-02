@@ -2,9 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Compiler, Component, ComponentRef, Inject, Injectable, NgModule, ViewContainerRef } from '@angular/core';
 import { DOCUMENT, Title } from '@angular/platform-browser';
 import { take } from 'rxjs/operators';
-import { ContentEntry, ContentTemplate, ContentTemplateService, ContentType, ContentTypeService, SiteSettingsService } from 'tanam-core';
+import { ContentTemplate } from 'tanam-core';
 import { DynamicTemplateModule } from '../dynamic-template/dynamic-template.module';
 import { TanamDocumentContext } from '../models/dynamic-page.models';
+import { SiteService } from './site.service';
+import { TemplateService } from './template.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +17,8 @@ export class DynamicPageService {
     @Inject(DOCUMENT) private readonly document: Document,
     private readonly compiler: Compiler,
     private readonly titleService: Title,
-    private readonly contentTypeService: ContentTypeService,
-    private readonly contentTemplateService: ContentTemplateService,
-    private readonly siteSettingsService: SiteSettingsService,
+    private readonly siteService: SiteService,
+    private readonly templateService: TemplateService,
   ) { }
 
 
@@ -56,32 +57,30 @@ export class DynamicPageService {
   }
 
   async setTitle(title: string) {
-    const siteName = await this.siteSettingsService.getSiteName().pipe(take(1)).toPromise();
+    const siteName = await this.siteService.getSiteName().pipe(take(1)).toPromise();
     this.titleService.setTitle(`${title} | ${siteName}`);
   }
 
   async render(viewContainer: ViewContainerRef, documentContext: TanamDocumentContext): Promise<ComponentRef<any>> {
-    const contentType = await this.contentTypeService.getContentType(documentContext.contentType).pipe(take(1)).toPromise();
-    if (!contentType) {
-      throw new Error(`Template misconfiguration. No such template for '${documentContext.contentType}'`);
+    const template = await this.templateService.getTemplate(documentContext.contentType).pipe(take(1)).toPromise();
+    if (!template) {
+      throw new Error(`Document type '${documentContext.contentType}' have a non-existing template: ${template}`);
     }
 
-    const template = await this.contentTemplateService.getTemplate(contentType.template).pipe(take(1)).toPromise();
     const module = await this.createModule(documentContext);
     const factories = await this.compiler.compileModuleAndAllComponentsAsync(module);
     const factory = factories.componentFactories.filter(cf => cf.selector === template.selector)[0];
     if (!factory) {
-      throw new Error(`Could not find any template for <${template.selector}>`);
+      throw new Error(`Could not find any component with selector <${template.selector}>`);
     }
 
     return viewContainer.createComponent(factory);
   }
 
   private async createModule(documentContext: TanamDocumentContext) {
-    const themeId = await this.siteSettingsService.getSiteTheme().pipe(take(1)).toPromise();
-    const templates = await this.contentTemplateService.getTemplatesForTheme(themeId).pipe(take(1)).toPromise();
+    const templates = await this.templateService.getTemplates().pipe(take(1)).toPromise();
     if (templates.length === 0) {
-      throw new Error(`No templates defined in theme: ${themeId}`);
+      throw new Error(`No templates defined in current theme!`);
     }
 
     return NgModule({

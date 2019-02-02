@@ -50,7 +50,7 @@ export class DocumentContextService {
     return this.firestore
       .collection<ContentEntry>('tanam-entries', queryFn)
       .valueChanges()
-      .pipe(map(docs => docs.map(doc => this.convert2DocumentContext(doc))));
+      .pipe(map(docs => docs.map(doc => this._toContext(doc))));
   }
 
   getById(entryId: string): Observable<TanamDocumentContext> {
@@ -65,7 +65,7 @@ export class DocumentContextService {
       .collection('tanam-entries', queryFn)
       .valueChanges()
       .pipe(map(docs => docs[0] as ContentEntry))
-      .pipe(map(doc => this.convert2DocumentContext(doc)));
+      .pipe(map(doc => this._toContext(doc)));
   }
 
   getByUrl(root: string, path: string): Observable<TanamDocumentContext> {
@@ -78,11 +78,11 @@ export class DocumentContextService {
       .collection<ContentEntry>('tanam-entries', queryFn)
       .valueChanges()
       .pipe(map(doc => doc[0]))
-      .pipe(map(doc => this.convert2DocumentContext(doc)));
+      .pipe(map(doc => this._toContext(doc)));
   }
 
-  private convert2DocumentContext(contentEntry: ContentEntry) {
-    return {
+  private _toContext(contentEntry: ContentEntry) {
+    return !contentEntry ? null : {
       id: contentEntry.id,
       contentType: contentEntry.contentType,
       data: contentEntry.data,
