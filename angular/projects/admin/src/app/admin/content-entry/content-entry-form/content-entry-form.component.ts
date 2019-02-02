@@ -2,7 +2,10 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { ContentEntry, ContentEntryService, ContentEntryStatus, ContentType, ContentTypeService, SiteSettingsService } from 'tanam-core';
+import { ContentEntry, ContentEntryStatus, ContentType } from 'tanam-models';
+import { ContentEntryService } from '../../../services/content-entry.service';
+import { ContentTypeService } from '../../../services/content-type.service';
+import { SiteSettingsService } from '../../../services/site-settings.service';
 
 
 interface StatusOption {

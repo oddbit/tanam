@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SiteInfoSettings } from 'tanam-core';
+import { SiteInfoSettings } from 'tanam-models';
 
 @Injectable({
   providedIn: 'root'

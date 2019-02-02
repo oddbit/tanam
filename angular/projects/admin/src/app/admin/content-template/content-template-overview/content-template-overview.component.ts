@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { ContentTemplateService, SiteThemeService, TanamTheme } from 'tanam-core';
+import { TanamTheme } from 'tanam-models';
+import { ContentTemplateService } from '../../../services/content-template.service';
+import { SiteThemeService } from '../../../services/site-theme.service';
 
 @Component({
   selector: 'app-content-template-overview',

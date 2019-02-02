@@ -1,7 +1,8 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Observable } from 'rxjs';
-import { ContentTemplate, ContentTemplateService, TanamTheme } from 'tanam-core';
+import { ContentTemplate, TanamTheme } from 'tanam-models';
+import { ContentTemplateService } from '../../../services/content-template.service';
 
 export class ContentTemplateListDataSource extends DataSource<ContentTemplate> {
   data: ContentTemplate[];

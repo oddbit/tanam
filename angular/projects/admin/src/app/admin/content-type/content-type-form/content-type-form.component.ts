@@ -2,7 +2,9 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { ContentType, ContentTypeField, ContentTypeService, SiteSettingsService } from 'tanam-core';
+import { ContentType, ContentTypeField } from 'tanam-models';
+import { ContentTypeService } from '../../../services/content-type.service';
+import { SiteSettingsService } from '../../../services/site-settings.service';
 import { contentTypeMaterialIcons } from './content-type-form.icons';
 
 @Component({

@@ -1,6 +1,6 @@
-import { Injectable, Optional, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { TanamConfig } from 'tanam-core';
+import { Inject, Injectable, Optional } from '@angular/core';
+import { TanamConfig } from 'tanam-models';
 
 @Injectable({
   providedIn: 'root'

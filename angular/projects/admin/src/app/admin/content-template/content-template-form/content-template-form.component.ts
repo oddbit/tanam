@@ -1,7 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { ContentTemplate, ContentTemplateService } from 'tanam-core';
+import { ContentTemplate } from 'tanam-models';
+import { ContentTemplateService } from '../../../services/content-template.service';
 
 @Component({
   selector: 'app-content-template-form',

@@ -2,7 +2,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ContentFileService, TanamFile } from 'tanam-core';
+import { TanamFile } from 'tanam-models';
+import { ContentFileService } from '../../../services/content-file.service';
 
 @Component({
   selector: 'app-media-grid',

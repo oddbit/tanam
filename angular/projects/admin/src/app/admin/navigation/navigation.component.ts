@@ -2,7 +2,9 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AppAuthService, ContentTypeService, SiteSettingsService } from 'tanam-core';
+import { AppAuthService } from '../../services/app-auth.service';
+import { ContentTypeService } from '../../services/content-type.service';
+import { SiteSettingsService } from '../../services/site-settings.service';
 
 interface SideMenuItem {
   name: string;

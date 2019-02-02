@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Router } from '@angular/router';
-import { ContentTypeService } from 'tanam-core';
+import { ContentTypeService } from '../../../services/content-type.service';
 import { ContentTypeListDataSource } from './content-type-list-datasource';
 
 @Component({

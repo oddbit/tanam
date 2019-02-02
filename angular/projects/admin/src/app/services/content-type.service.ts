@@ -3,7 +3,7 @@ import { FirebaseApp } from '@angular/fire';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { ContentType } from '../models/content-type.models';
+import { ContentType } from 'tanam-models';
 
 @Injectable({
   providedIn: 'root'

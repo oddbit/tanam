@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { ContentFileService } from 'tanam-core';
+import { ContentFileService } from '../../services/content-file.service';
 
 @Component({
   selector: 'app-media',

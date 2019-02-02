@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { ContentEntry } from '../models/content-entry.models';
-import { ContentType } from '../models/content-type.models';
+import { ContentEntry, ContentType } from 'tanam-models';
 
 export interface ContentTypeQueryOptions {
   limit?: number;

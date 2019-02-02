@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ContentTypeService } from 'tanam-core';
+import { ContentTypeService } from '../../../services/content-type.service';
 
 @Component({
   selector: 'app-content-type-overview',

@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
-import { SiteInfoSettings, SiteSettingsService, SiteThemeService, TanamTheme } from 'tanam-core';
+import { SiteInfoSettings, TanamTheme } from 'tanam-models';
+import { SiteSettingsService } from '../../../services/site-settings.service';
+import { SiteThemeService } from '../../../services/site-theme.service';
 
 @Component({
   selector: 'app-site-form',

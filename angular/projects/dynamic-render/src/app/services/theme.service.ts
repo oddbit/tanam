@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { SiteInfoSettings } from 'tanam-core';
-import { TanamTheme } from '../../../../tanam-core/src/lib/models';
+import { SiteInfoSettings, TanamTheme } from 'tanam-models';
 
 @Injectable({
   providedIn: 'root'

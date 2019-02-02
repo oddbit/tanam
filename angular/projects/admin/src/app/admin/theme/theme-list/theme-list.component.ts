@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Router } from '@angular/router';
-import { SiteThemeService } from 'tanam-core';
+import { SiteThemeService } from '../../../services/site-theme.service';
 import { ThemeListDataSource } from './theme-list-datasource';
 
 @Component({

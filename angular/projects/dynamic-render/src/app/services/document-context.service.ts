@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { ContentEntry } from 'tanam-core';
 import { map } from 'rxjs/operators';
+import { ContentEntry } from 'tanam-models';
 import { TanamDocumentContext } from '../models/dynamic-page.models';
 
 export interface DocumentQueryOptions {

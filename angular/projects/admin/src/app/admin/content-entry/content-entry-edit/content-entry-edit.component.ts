@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { ContentEntry, ContentEntryService } from 'tanam-core';
+import { ContentEntry } from 'tanam-models';
+import { ContentEntryService } from '../../../services/content-entry.service';
 @Component({
   selector: 'app-content-entry-edit',
   templateUrl: './content-entry-edit.component.html',

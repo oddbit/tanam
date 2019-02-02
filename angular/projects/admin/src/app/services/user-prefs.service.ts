@@ -4,8 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { AdminTheme, THEMES } from '../models/theme.models';
-import { TanamUser } from '../models/user.models';
+import { AdminTheme, TanamUser, THEMES } from 'tanam-models';
 
 
 @Injectable({

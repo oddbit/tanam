@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SiteThemeService } from 'tanam-core';
+import { SiteThemeService } from '../../../services/site-theme.service';
 
 @Component({
   selector: 'app-theme-overview',

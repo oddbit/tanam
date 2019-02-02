@@ -1,7 +1,8 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Observable } from 'rxjs';
-import { SiteThemeService, TanamTheme } from 'tanam-core';
+import { TanamTheme } from 'tanam-models';
+import { SiteThemeService } from '../../../services/site-theme.service';
 
 export class ThemeListDataSource extends DataSource<TanamTheme> {
   data: TanamTheme[];

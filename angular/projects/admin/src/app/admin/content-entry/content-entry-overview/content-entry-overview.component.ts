@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { ContentEntryService, ContentTypeService, SiteSettingsService } from 'tanam-core';
-import { ContentType } from 'tanam-core';
+import { ContentType } from 'tanam-models';
+import { ContentEntryService } from '../../../services/content-entry.service';
+import { ContentTypeService } from '../../../services/content-type.service';
+import { SiteSettingsService } from '../../../services/site-settings.service';
 
 @Component({
   selector: 'app-content-entry-overview',

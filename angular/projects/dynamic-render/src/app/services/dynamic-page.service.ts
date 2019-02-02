@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Compiler, Component, ComponentRef, Inject, Injectable, NgModule, ViewContainerRef } from '@angular/core';
 import { DOCUMENT, Title } from '@angular/platform-browser';
 import { take } from 'rxjs/operators';
-import { ContentTemplate } from 'tanam-core';
+import { ContentTemplate } from 'tanam-models';
 import { DynamicTemplateModule } from '../dynamic-template/dynamic-template.module';
 import { TanamDocumentContext } from '../models/dynamic-page.models';
 import { SiteService } from './site.service';

@@ -3,7 +3,7 @@ import { FirebaseApp } from '@angular/fire';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SiteDomainSettings, SiteInfoSettings } from '../models/settings.models';
+import { SiteDomainSettings, SiteInfoSettings } from 'tanam-models';
 
 
 @Injectable({

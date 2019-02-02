@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { ContentTemplate, TanamTheme } from '../models/theme.models';
+import { TanamTheme } from 'tanam-models';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class SiteThemeService {
     private readonly firestore: AngularFirestore,
   ) { }
 
-  async createTheme(id: string = this.firestore.createId()) {
+  async create(id: string = this.firestore.createId()) {
     const docRef = this.firestore.collection('tanam-types').doc<TanamTheme>(id);
     return docRef.set({
       id: id,

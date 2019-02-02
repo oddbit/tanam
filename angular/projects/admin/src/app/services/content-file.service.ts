@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { FileType, MIME_TYPE_ENDING_MAP, TanamFile } from '../models/file.models';
+import { FileType, MIME_TYPE_ENDING_MAP, TanamFile } from 'tanam-models';
 
 
 @Injectable({
