@@ -88,7 +88,7 @@ export class DocumentContextService {
       data: contentEntry.data,
       title: contentEntry.title,
       url: contentEntry.standalone
-        ? [contentEntry.url.root, contentEntry.url.path].join('/')
+        ? '/' + [contentEntry.url.root, contentEntry.url.path].filter(p => !!p).join('/')
         : null,
       revision: contentEntry.revision,
       status: contentEntry.status,
