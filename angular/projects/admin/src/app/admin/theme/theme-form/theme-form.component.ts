@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { TanamTheme, SiteThemeService } from 'tanam-core';
+import { TanamTheme } from 'tanam-models';
+import { SiteThemeService } from '../../../services/site-theme.service';
 
 @Component({
   selector: 'app-theme-form',
