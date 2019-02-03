@@ -26,8 +26,7 @@ deploy_firebase_production:
   only:
     - master
   script:
-    - firebase use $FIREBASE_PRODUCTION_PROJECT_ID
-    - firebase use production --token $FIREBASE_DEPLOY_KEY
+    - firebase use $FIREBASE_PRODUCTION_PROJECT_ID --token $FIREBASE_DEPLOY_KEY
 
 deploy_firebase_development:
   <<: *deploy_firebase_def
@@ -35,5 +34,4 @@ deploy_firebase_development:
   only:
     - develop
   script:
-    - firebase use $FIREBASE_DEVELOP_PROJECT_ID
-    - firebase use develop --token $FIREBASE_DEPLOY_KEY
+    - firebase use $FIREBASE_DEVELOP_PROJECT_ID --token $FIREBASE_DEPLOY_KEY
