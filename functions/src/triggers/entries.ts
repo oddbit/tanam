@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { SiteDomainSettings, ContentEntry, CacheTask } from 'tanam-models';
+import { SiteDomainSettings, ContentEntry, CacheTask, ContentType } from '../../../models';
 
 export const buildEntryCache = functions.firestore.document('tanam-entries/{documentId}').onWrite(async (change) => {
     const entryBefore = change.before.data() as ContentEntry;
@@ -43,21 +43,22 @@ export const countEntryStatus = functions.firestore.document('tanam-entries/{doc
     }
 
     const contentTypeRef = admin.firestore().collection('tanam-types').doc(entryBefore.contentType);
+    const contentType = entryAfter.contentType || entryBefore.contentType;
+    const docsQuery = admin.firestore().collection('tanam-entries').where('contentType', '==', contentType);
 
     return admin.firestore().runTransaction(async (trx) => {
         const trxDoc = await trx.get(contentTypeRef);
-        const trxContentType = trxDoc.data();
+        const trxContentType = trxDoc.data() as ContentType;
 
-        console.log(`Num ${entryBefore.contentType} entries before: ${JSON.stringify(trxContentType.numEntries)}`);
-        if (change.before.exists) {
-            trxContentType.numEntries[entryBefore.status] -= 1;
-        }
+        const promises = []
+        promises.push(docsQuery.where('status', '==', 'published').get().then((snap) => {
+            trxContentType.numEntries.published = snap.docs.length;
+        }));
+        promises.push(docsQuery.where('status', '==', 'unpublished').get().then((snap) => {
+            trxContentType.numEntries.unpublished = snap.docs.length;
+        }));
 
-        if (change.after.exists) {
-            trxContentType.numEntries[entryAfter.status] += 1;
-        }
-
-        console.log(`Num ${entryBefore.contentType} entries after: ${JSON.stringify(trxContentType.numEntries)}`);
+        await Promise.all(promises);
         trx.set(contentTypeRef, trxContentType);
     });
 });
