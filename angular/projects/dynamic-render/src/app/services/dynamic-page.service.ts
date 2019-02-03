@@ -5,8 +5,8 @@ import { take } from 'rxjs/operators';
 import { DocumentTemplate } from 'tanam-models';
 import { DynamicTemplateModule } from '../dynamic-template/dynamic-template.module';
 import { TanamDocumentContext } from '../models/dynamic-page.models';
-import { SiteService } from './site.service';
 import { TemplateService } from './template.service';
+import { SiteService } from './site.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +18,8 @@ export class DynamicPageService {
     @Inject(DOCUMENT) private readonly document: Document,
     private readonly compiler: Compiler,
     private readonly titleService: Title,
-    private readonly siteService: SiteService,
     private readonly templateService: TemplateService,
+    private readonly siteService: SiteService,
   ) { }
 
 
