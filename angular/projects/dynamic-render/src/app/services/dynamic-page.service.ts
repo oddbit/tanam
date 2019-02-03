@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Compiler, Component, ComponentRef, Inject, Injectable, NgModule, ViewContainerRef } from '@angular/core';
 import { DOCUMENT, Title } from '@angular/platform-browser';
 import { take } from 'rxjs/operators';
-import { ContentTemplate } from 'tanam-models';
+import { DocumentTemplate } from 'tanam-models';
 import { DynamicTemplateModule } from '../dynamic-template/dynamic-template.module';
 import { TanamDocumentContext } from '../models/dynamic-page.models';
 import { SiteService } from './site.service';
@@ -12,6 +12,7 @@ import { TemplateService } from './template.service';
   providedIn: 'root'
 })
 export class DynamicPageService {
+
 
   constructor(
     @Inject(DOCUMENT) private readonly document: Document,
@@ -62,9 +63,9 @@ export class DynamicPageService {
   }
 
   async render(viewContainer: ViewContainerRef, documentContext: TanamDocumentContext): Promise<ComponentRef<any>> {
-    const template = await this.templateService.getTemplate(documentContext.contentType).pipe(take(1)).toPromise();
+    const template = await this.templateService.getTemplate(documentContext.documentType).pipe(take(1)).toPromise();
     if (!template) {
-      throw new Error(`Document type '${documentContext.contentType}' have a non-existing template: ${template}`);
+      throw new Error(`Document type '${documentContext.documentType}' have a non-existing template: ${template}`);
     }
 
     const module = await this.createModule(documentContext);
@@ -92,7 +93,7 @@ export class DynamicPageService {
     })(class { });
   }
 
-  private createComponent(template: ContentTemplate, documentContext: TanamDocumentContext) {
+  private createComponent(template: DocumentTemplate, documentContext: TanamDocumentContext) {
     const dynamicClass = class {
       context = documentContext;
     };

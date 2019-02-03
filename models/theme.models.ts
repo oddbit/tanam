@@ -1,14 +1,13 @@
 export type AdminTheme = 'default' | 'light' | 'dark';
 
-export const THEMES = {
+export const ADMIN_THEMES = {
     'default': 'tanam-light-theme',
     'light': 'tanam-light-theme',
     'dark': 'tanam-dark-theme',
 };
 
-export interface ContentTemplate {
+export interface DocumentTemplate {
     id: string;
-    theme: string;
     title: string;
     selector: string;
     template: string;
@@ -17,7 +16,7 @@ export interface ContentTemplate {
     created: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
 }
 
-export interface TanamTheme {
+export interface SiteTheme {
     id: string;
     title: string;
     description: string;

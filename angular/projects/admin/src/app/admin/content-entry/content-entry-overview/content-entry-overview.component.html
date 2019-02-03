@@ -1,35 +1,35 @@
-<div *ngIf="(contentType$ |async) as contentType">
+<div *ngIf="(documentType$ |async) as documentType">
   <mat-card>
     <mat-card-title-group>
       <mat-card-title>
-        {{ contentType.title }}
+        {{ documentType.title }}
         <button mat-flat-button
                 color="accent"
-                (click)="createNewEntry(contentType)">+ Add New</button>
+                (click)="createNewEntry(documentType)">+ Add New</button>
       </mat-card-title>
       <mat-card-subtitle>
-        https://{{ domain$ | async }}/{{ contentType.slug }}
+        https://{{ domain$ | async }}/{{ documentType.slug }}
       </mat-card-subtitle>
     </mat-card-title-group>
     <mat-card-content>
-      <p *ngIf="contentType.description">{{ contentType.description }}</p>
+      <p *ngIf="documentType.description">{{ documentType.description }}</p>
     </mat-card-content>
   </mat-card>
 
   <mat-tab-group>
-    <mat-tab label="All [{{ contentType.numEntries.published + contentType.numEntries.unpublished }}]">
+    <mat-tab label="All [{{ documentType.numEntries.published + documentType.numEntries.unpublished }}]">
       <ng-template matTabContent>
-        <app-content-entry-list [contentType$]="contentType$"></app-content-entry-list>
+        <app-content-entry-list [documentType$]="documentType$"></app-content-entry-list>
       </ng-template>
     </mat-tab>
-    <mat-tab label="Published [{{ contentType.numEntries.published || 0 }}]">
+    <mat-tab label="Published [{{ documentType.numEntries.published || 0 }}]">
       <ng-template matTabContent>
-        <app-content-entry-list [contentType$]="contentType$"></app-content-entry-list>
+        <app-content-entry-list [documentType$]="documentType$"></app-content-entry-list>
       </ng-template>
     </mat-tab>
-    <mat-tab label="Unpublished [{{ contentType.numEntries.unpublished || 0}}]">
+    <mat-tab label="Unpublished [{{ documentType.numEntries.unpublished || 0}}]">
       <ng-template matTabContent>
-        <app-content-entry-list [contentType$]="contentType$"></app-content-entry-list>
+        <app-content-entry-list [documentType$]="documentType$"></app-content-entry-list>
       </ng-template>
     </mat-tab>
   </mat-tab-group>

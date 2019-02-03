@@ -1,32 +1,32 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Observable } from 'rxjs';
-import { ContentType } from 'tanam-models';
+import { DocumentType } from 'tanam-models';
 import { ContentTypeService } from '../../../services/content-type.service';
 
-export class ContentTypeListDataSource extends DataSource<ContentType> {
-  data: ContentType[];
+export class ContentTypeListDataSource extends DataSource<DocumentType> {
+  data: DocumentType[];
 
   constructor(
-    private readonly contentTypeService: ContentTypeService,
+    private readonly documentTypeService: ContentTypeService,
     private readonly paginator: MatPaginator,
     private readonly sort: MatSort,
   ) {
     super();
   }
 
-  connect(): Observable<ContentType[]> {
-    return this.contentTypeService.getContentTypes();
+  connect(): Observable<DocumentType[]> {
+    return this.documentTypeService.getContentTypes();
   }
 
   disconnect() { }
 
-  private getPagedData(data: ContentType[]) {
+  private getPagedData(data: DocumentType[]) {
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
     return data.splice(startIndex, this.paginator.pageSize);
   }
 
-  private getSortedData(data: ContentType[]) {
+  private getSortedData(data: DocumentType[]) {
     if (!this.sort.active || this.sort.direction === '') {
       return data;
     }

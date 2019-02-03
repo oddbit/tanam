@@ -2,47 +2,50 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { ContentTemplate, TanamTheme } from 'tanam-models';
+import { DocumentTemplate, SiteTheme, DocumentType } from 'tanam-models';
+import { AppConfigService } from './app-config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContentTemplateService {
+  readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
 
   constructor(
     private readonly firestore: AngularFirestore,
+    private readonly appConfig: AppConfigService,
   ) { }
 
-  getTemplate(templateId: string): Observable<ContentTemplate> {
-    return this.firestore
-      .collection('tanam-templates').doc<ContentTemplate>(templateId)
+  getTemplate(theme: string, template: string): Observable<DocumentTemplate> {
+    return this.siteCollection
+      .collection('themes').doc(theme)
+      .collection('templates').doc<DocumentTemplate>(template)
       .valueChanges();
   }
 
-  getTemplatesForTheme(themeId: string) {
-    return this.firestore
-      .collection<ContentTemplate>('tanam-templates', ref => ref.where('theme', '==', themeId))
+  getTemplatesForTheme(theme: string) {
+    return this.siteCollection
+      .collection('themes').doc(theme)
+      .collection<DocumentTemplate>('templates')
       .valueChanges();
   }
 
-  async createTemplateInTheme(theme: TanamTheme) {
-    const id = this.firestore.createId();
-    const doc = this.firestore.collection('tanam-templates').doc<ContentTemplate>(id);
-    doc.set({
-      id: id,
-      theme: theme.id,
-      title: '',
-      selector: '',
-      template: '<!-- Put your HTML template here -->',
-      styles: ['// Put your CSS template here'],
-      updated: firebase.firestore.FieldValue.serverTimestamp(),
-      created: firebase.firestore.FieldValue.serverTimestamp(),
-    } as ContentTemplate);
-
-    return id;
+  async createTemplateInTheme(theme: SiteTheme, documentType: DocumentType) {
+    return this.siteCollection
+      .collection('themes').doc(theme.id)
+      .collection('templates').doc<DocumentTemplate>(documentType.id)
+      .set({
+        id: documentType.id,
+        title: documentType.title,
+        selector: `<${documentType.id}>`,
+        template: '<!-- Put your HTML template here -->',
+        styles: ['// Put your CSS template here'],
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+      } as DocumentTemplate);
   }
 
-  saveTemplate(template: ContentTemplate) {
-    return this.firestore.collection('tanam-templates').doc<ContentTemplate>(template.id).update(template);
+  saveTemplate(template: DocumentTemplate) {
+    return this.firestore.collection('templates').doc<DocumentTemplate>(template.id).update(template);
   }
 }

@@ -1,38 +1,38 @@
 import { Injectable } from '@angular/core';
-import { FirebaseApp } from '@angular/fire';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { ContentType } from 'tanam-models';
+import { DocumentType, SiteInformation } from 'tanam-models';
+import { AppConfigService } from './app-config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContentTypeService {
+  readonly siteCollection = this.firestore.collection('tanam').doc<SiteInformation>(this.appConfig.siteId);
 
   constructor(
     private readonly firestore: AngularFirestore,
-    private readonly fbApp: FirebaseApp,
+    private readonly appConfig: AppConfigService,
   ) { }
 
 
-  getContentTypes(): Observable<ContentType[]> {
-    return this.firestore
-      .collection<ContentType>('tanam-types')
+  getContentTypes(): Observable<DocumentType[]> {
+    return this.siteCollection
+      .collection<DocumentType>('document-types')
       .valueChanges();
   }
 
-  getContentType(contentTypeId: string): Observable<ContentType> {
-    console.log(`getContentType contentType: ${contentTypeId}`);
+  getContentType(documentTypeId: string): Observable<DocumentType> {
+    console.log(`getContentType documentType: ${documentTypeId}`);
 
-    return this.firestore
-      .collection('tanam-types').doc<ContentType>(contentTypeId)
+    return this.siteCollection
+      .collection('document-types').doc<DocumentType>(documentTypeId)
       .valueChanges();
   }
-
 
   async create(id: string = this.firestore.createId()) {
-    const docRef = this.firestore.collection('tanam-types').doc(id);
+    const docRef = this.siteCollection.collection('document-types').doc(id);
     return docRef.set({
       id: id,
       title: null,
@@ -47,19 +47,17 @@ export class ContentTypeService {
       },
       updated: firebase.firestore.FieldValue.serverTimestamp(),
       created: firebase.firestore.FieldValue.serverTimestamp(),
-    } as ContentType);
+    } as DocumentType);
   }
 
-  save(contentType: ContentType) {
-    const doc = this.firestore.collection('tanam-types').doc(contentType.id);
-    contentType = {
-      ...contentType,
+  save(documentType: DocumentType) {
+    const doc = this.siteCollection.collection('document-types').doc(documentType.id);
+    documentType = {
+      ...documentType,
       updated: firebase.firestore.FieldValue.serverTimestamp(),
     };
 
-    console.log(`[ContentTypeService:saveContentType] ${JSON.stringify(contentType, null, 2)}`);
-    return this.fbApp.firestore().runTransaction<void>(async (trx) => {
-      trx.update(doc.ref, contentType);
-    });
+    console.log(`[ContentTypeService:saveContentType] ${JSON.stringify(documentType, null, 2)}`);
+    return doc.update(documentType);
   }
 }

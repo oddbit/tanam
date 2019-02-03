@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SiteSettingsService } from './site-settings.service';
+import { SiteService } from './site.service';
 
-describe('SiteSettingsService', () => {
+describe('SiteService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: SiteSettingsService = TestBed.get(SiteSettingsService);
+    const service: SiteService = TestBed.get(SiteService);
     expect(service).toBeTruthy();
   });
 });

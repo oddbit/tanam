@@ -13,7 +13,7 @@
  * ```
  *  {
  *    id: '0mIr2MFnDRt6JPgAMncj',
- *    contentType: 'blog',
+ *    documentType: 'blog',
  *    title: 'My blog post',
  *    url: "/blog/2018/my-blog-post",
  *    status: "published",
@@ -35,7 +35,7 @@
  */
 export interface TanamDocumentContext {
   id: string;
-  contentType: string;
+  documentType: string;
   data: { [key: string]: any };
   title: string;
   url?: string;

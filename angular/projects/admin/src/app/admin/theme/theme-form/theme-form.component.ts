@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { TanamTheme } from 'tanam-models';
+import { SiteTheme } from 'tanam-models';
 import { SiteThemeService } from '../../../services/site-theme.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class ThemeFormComponent implements OnInit, OnDestroy {
   @Input() afterSaveRoute: string;
   @Input() onCancelRoute: string;
 
-  theme: TanamTheme;
+  theme: SiteTheme;
   readonly themeForm: FormGroup = this.fb.group({
     title: [null, Validators.required],
     description: [null, Validators.required],
@@ -113,7 +113,7 @@ export class ThemeFormComponent implements OnInit, OnDestroy {
       description: formData.description,
       styles: formData.styles,
       scripts: formData.scripts,
-    } as TanamTheme);
+    } as SiteTheme);
 
     if (this.afterSaveRoute) {
       this.router.navigateByUrl(this.afterSaveRoute);

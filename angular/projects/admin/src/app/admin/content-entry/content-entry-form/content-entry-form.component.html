@@ -3,7 +3,7 @@
   <mat-card class="shipping-card">
     <mat-card-header>
       <mat-card-title>
-        Editing {{ (contentType$ | async)?.title }}
+        Editing {{ (documentType$ | async)?.title }}
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
@@ -49,13 +49,13 @@
 
     <mat-card-header>
       <mat-card-title>
-        {{ (contentType$ | async)?.title }} content
+        {{ (documentType$ | async)?.title }} content
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div formGroupName="dataForm">
         <div class="row"
-             *ngFor="let field of (contentType$ | async)?.fields">
+             *ngFor="let field of (documentType$ | async)?.fields">
           <div class="col"
                [ngSwitch]="field.type">
 
@@ -105,7 +105,9 @@
               (click)="cancelEditing()">Cancel</button>
       <button mat-raised-button
               color="warn"
-              (click)="deleteEntry()"><mat-icon>delete</mat-icon>Delete</button>
+              (click)="deleteEntry()">
+        <mat-icon>delete</mat-icon>Delete
+      </button>
       <button mat-raised-button
               color="primary"
               (click)="saveEntry()"

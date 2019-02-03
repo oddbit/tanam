@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { TanamTheme } from 'tanam-models';
+import { SiteTheme } from 'tanam-models';
 import { ContentTemplateService } from '../../../services/content-template.service';
 import { ContentTemplateListDataSource } from './content-template-list-datasource';
 
@@ -12,7 +12,7 @@ import { ContentTemplateListDataSource } from './content-template-list-datasourc
   styleUrls: ['./content-template-list.component.scss']
 })
 export class ContentTemplateListComponent implements OnInit, OnDestroy {
-  @Input() theme$: Observable<TanamTheme>;
+  @Input() theme$: Observable<SiteTheme>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

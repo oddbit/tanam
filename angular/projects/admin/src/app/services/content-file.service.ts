@@ -4,21 +4,24 @@ import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { FileType, MIME_TYPE_ENDING_MAP, TanamFile } from 'tanam-models';
+import { AppConfigService } from './app-config.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContentFileService {
+  readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
 
   constructor(
     private readonly firestore: AngularFirestore,
     private readonly fireStorage: AngularFireStorage,
+    private readonly appConfig: AppConfigService,
   ) { }
 
   getFiles(fileType: FileType): Observable<TanamFile[]> {
-    return this.firestore
-      .collection<TanamFile>('tanam-files', ref => ref.where('fileType', '==', fileType))
+    return this.siteCollection
+      .collection<TanamFile>('files', ref => ref.where('fileType', '==', fileType))
       .valueChanges();
   }
 
@@ -50,8 +53,8 @@ export class ContentFileService {
         url: downloadURL,
       };
 
-      this.firestore
-        .collection<TanamFile>('tanam-files').doc(fileId)
+      this.siteCollection
+        .collection<TanamFile>('files').doc(fileId)
         .set(tanamFile);
     });
 

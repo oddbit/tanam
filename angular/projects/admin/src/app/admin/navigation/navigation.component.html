@@ -20,11 +20,11 @@
       <h3 mat-subheader
           *ngIf="isExpanded">Content</h3>
       <mat-divider *ngIf="!isExpanded"></mat-divider>
-      <app-navigation-list-item *ngFor="let contentType of contentTypes$ | async"
-                                routerLink="/_/admin/types/{{contentType.id}}"
-                                icon="{{contentType.icon}}"
+      <app-navigation-list-item *ngFor="let documentType of documentTypes$ | async"
+                                routerLink="/_/admin/types/{{documentType.id}}"
+                                icon="{{documentType.icon}}"
                                 [isExpanded]="isExpanded"
-                                title="{{contentType.title}}"></app-navigation-list-item>
+                                title="{{documentType.title}}"></app-navigation-list-item>
 
       <h3 mat-subheader
           *ngIf="isExpanded">Manage</h3>

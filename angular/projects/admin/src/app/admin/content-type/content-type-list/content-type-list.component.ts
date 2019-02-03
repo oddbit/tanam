@@ -16,17 +16,17 @@ export class ContentTypeListComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly contentTypeService: ContentTypeService,
+    private readonly documentTypeService: ContentTypeService,
   ) { }
 
   displayedColumns = ['title', 'updated'];
 
   ngOnInit() {
-    this.dataSource = new ContentTypeListDataSource(this.contentTypeService, this.paginator, this.sort);
+    this.dataSource = new ContentTypeListDataSource(this.documentTypeService, this.paginator, this.sort);
   }
 
-  editContentType(contentTypeId: string) {
-    const url = `/_/admin/types/${contentTypeId}/edit`;
+  editContentType(documentTypeId: string) {
+    const url = `/_/admin/types/${documentTypeId}/edit`;
     this.router.navigateByUrl(url);
   }
 }

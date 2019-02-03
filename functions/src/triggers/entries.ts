@@ -1,10 +1,10 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { ContentEntry, CacheTask, ContentType, SiteInformation } from '../../../models';
+import { Document, CacheTask, DocumentType, SiteInformation } from '../../../models';
 
 export const buildEntryCache = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite(async (change) => {
-    const entryBefore = change.before.data() as ContentEntry;
-    const entryAfter = change.after.data() as ContentEntry;
+    const entryBefore = change.before.data() as Document;
+    const entryAfter = change.after.data() as Document;
 
     const siteInfoDoc = await admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT).get();
     const siteInfo = siteInfoDoc.data() as SiteInformation;
@@ -34,21 +34,21 @@ export const buildEntryCache = functions.firestore.document('tanam/{siteId}/docu
 });
 
 export const countEntryStatus = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite((change) => {
-    const entryBefore = change.before.data() as ContentEntry;
-    const entryAfter = change.after.data() as ContentEntry;
+    const entryBefore = change.before.data() as Document;
+    const entryAfter = change.after.data() as Document;
 
     if (change.before.exists && change.after.exists && entryAfter.status === entryBefore.status) {
         console.log(`Document status unchanged. No counters updated.`);
         return null;
     }
 
-    const contentTypeRef = admin.firestore().collection('tanam-types').doc(entryBefore.contentType);
-    const contentType = entryAfter.contentType || entryBefore.contentType;
-    const docsQuery = admin.firestore().collection('tanam-entries').where('contentType', '==', contentType);
+    const documentTypeRef = admin.firestore().collection('tanam-types').doc(entryBefore.documentType);
+    const documentType = entryAfter.documentType || entryBefore.documentType;
+    const docsQuery = admin.firestore().collection('tanam-entries').where('documentType', '==', documentType);
 
     return admin.firestore().runTransaction(async (trx) => {
-        const trxDoc = await trx.get(contentTypeRef);
-        const trxContentType = trxDoc.data() as ContentType;
+        const trxDoc = await trx.get(documentTypeRef);
+        const trxContentType = trxDoc.data() as DocumentType;
 
         const promises = []
         promises.push(docsQuery.where('status', '==', 'published').get().then((snap) => {
@@ -59,12 +59,12 @@ export const countEntryStatus = functions.firestore.document('tanam/{siteId}/doc
         }));
 
         await Promise.all(promises);
-        trx.set(contentTypeRef, trxContentType);
+        trx.set(documentTypeRef, trxContentType);
     });
 });
 
 export const saveRevision = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onUpdate((change) => {
-    const entryBefore = change.before.data() as ContentEntry;
+    const entryBefore = change.before.data() as Document;
     console.log(`Saving revision ${entryBefore.revision} of ${change.before.ref.path}`);
     return change.before.ref.collection('revisions').doc(`${entryBefore.id}+${entryBefore.revision}`).set(entryBefore);
 });

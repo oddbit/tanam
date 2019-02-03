@@ -1,9 +1,9 @@
 
-export type ContentEntryStatus = 'published' | 'unpublished' | 'deleted';
+export type DocumentStatus = 'published' | 'unpublished' | 'deleted';
 
-export interface ContentEntry {
+export interface Document {
     id: string; // Document id
-    contentType: string;
+    documentType: string;
     data: { [key: string]: any }; // The content data to render into templates
     title: string;  // Presentation title for browser window title and content listings
     url: {
@@ -11,7 +11,7 @@ export interface ContentEntry {
         path: string, // The entry URL
     };
     revision: number; // Constantly increasing
-    status: ContentEntryStatus;
+    status: DocumentStatus;
     tags: string[];
     standalone: boolean;
     published?: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue;

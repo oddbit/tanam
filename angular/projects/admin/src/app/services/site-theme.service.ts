@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { TanamTheme } from 'tanam-models';
+import { SiteTheme } from 'tanam-models';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class SiteThemeService {
   ) { }
 
   async create(id: string = this.firestore.createId()) {
-    const docRef = this.firestore.collection('tanam-types').doc<TanamTheme>(id);
+    const docRef = this.firestore.collection('tanam-types').doc<SiteTheme>(id);
     return docRef.set({
       id: id,
       title: '',
@@ -24,24 +24,24 @@ export class SiteThemeService {
       scripts: [],
       updated: firebase.firestore.FieldValue.serverTimestamp(),
       created: firebase.firestore.FieldValue.serverTimestamp(),
-    } as TanamTheme);
+    } as SiteTheme);
   }
 
-  update(theme: TanamTheme) {
-    return this.firestore.collection('tanam-themes').doc<TanamTheme>(theme.id)
+  update(theme: SiteTheme) {
+    return this.firestore.collection('tanam-themes').doc<SiteTheme>(theme.id)
       .update({
         ...theme,
         updated: firebase.firestore.FieldValue.serverTimestamp(),
       });
   }
 
-  getThemes(): Observable<TanamTheme[]> {
-    return this.firestore.collection<TanamTheme>('tanam-themes').valueChanges();
+  getThemes(): Observable<SiteTheme[]> {
+    return this.firestore.collection<SiteTheme>('tanam-themes').valueChanges();
   }
 
-  getTheme(themeId: string): Observable<TanamTheme> {
+  getTheme(themeId: string): Observable<SiteTheme> {
     return this.firestore
-      .collection('tanam-themes').doc<TanamTheme>(themeId)
+      .collection('tanam-themes').doc<SiteTheme>(themeId)
       .valueChanges();
   }
 }

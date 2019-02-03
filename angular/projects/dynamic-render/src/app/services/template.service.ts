@@ -2,34 +2,38 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { ContentTemplate, ContentType, SiteInfoSettings } from 'tanam-models';
+import { DocumentTemplate, DocumentType, SiteInformation } from 'tanam-models';
+import { AppConfigService } from './app-config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TemplateService {
+  readonly siteCollection = this.firestore.collection('tanam').doc<SiteInformation>(this.appConfig.siteId);
 
   constructor(
     private readonly firestore: AngularFirestore,
+    private readonly appConfig: AppConfigService,
   ) { }
 
-  getTemplate(contentTypeId: string) {
-    return this.firestore
-      .collection('tanam-types').doc<ContentType>(contentTypeId)
-      .valueChanges()
-      .pipe(switchMap(type =>
-        this.firestore
-          .collection('tanam-templates').doc<ContentTemplate>(type.template)
-          .valueChanges()));
+  getTemplate(documentType: string): Observable<DocumentTemplate> {
+    return this.siteCollection.
+      valueChanges()
+      .pipe(switchMap(siteInfo => {
+        return this.siteCollection
+          .collection('themes').doc(siteInfo.theme)
+          .collection('templates').doc<DocumentTemplate>(documentType)
+          .valueChanges();
+      }));
   }
 
-  getTemplates(): Observable<ContentTemplate[]> {
-    return this.firestore
-      .collection('tanam-settings').doc<SiteInfoSettings>('site')
+  getTemplates(): Observable<DocumentTemplate[]> {
+    return this.siteCollection
       .valueChanges()
       .pipe(switchMap(settings =>
-        this.firestore
-          .collection<ContentTemplate>('tanam-templates', ref => ref.where('theme', '==', settings.theme))
+        this.siteCollection
+          .collection('themes').doc(settings.theme)
+          .collection<DocumentTemplate>('templates')
           .valueChanges()));
   }
 }
