@@ -16,7 +16,7 @@
     - npm --prefix functions install
     - npm --prefix angular install
   after_script:
-    - npm --prefix functions run:package
+    - npm --prefix functions run build:dist
     - npm --prefix dist install
     - firebase deploy -m "Gitlab pipeline $CI_PIPELINE_ID, build $CI_JOB_ID" --non-interactive --force --token $FIREBASE_DEPLOY_KEY
 
