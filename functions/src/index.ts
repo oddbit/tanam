@@ -2,7 +2,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { join } from 'path';
-import {MD5} from 'crypto-js';
+import { MD5 } from 'crypto-js';
 
 const expressServer = require(`./dynamic`);
 
@@ -13,10 +13,15 @@ export * from './triggers/cache';
 export * from './triggers/entries';
 export * from './triggers/site';
 export * from './triggers/users';
+export * from './triggers/migrate';
 
 
 export const app = functions.https.onRequest((req, res) => {
-    admin.database().ref('tanam/known_hosts').child(MD5(req.hostname).toString()).set(req.hostname);
+    admin.database().ref('tanam')
+        .child(process.env.GCLOUD_PROJECT)
+        .child('domains')
+        .child(MD5(req.hostname).toString())
+        .set(req.hostname);
 
     const isAdminAppRequest = !!req.url.match(/^\/?_.*$/i);
     console.log(`GET ${req.url}`);
@@ -33,7 +38,7 @@ export const app = functions.https.onRequest((req, res) => {
                 apiKey: process.env.FIREBASE_API_KEY || FIREBASE_FN_CONFIG.apikey,
                 authDomain: process.env.FIREBASE_AUTH_DOMAIN || FIREBASE_FN_CONFIG.authdomain,
                 databaseURL: process.env.FIREBASE_DB_URL || FIREBASE_FN_CONFIG.databaseurl,
-                projectId: process.env.PROJECT_ID || FIREBASE_FN_CONFIG.projectid,
+                projectId: process.env.PROJECT_ID || process.env.GCLOUD_PROJECT || FIREBASE_FN_CONFIG.projectid,
                 storageBucket: process.env.FIREBASE_STORAGE_BUCKET || FIREBASE_FN_CONFIG.storagebucket,
                 messagingSenderId: process.env.FIREBASE_SENDER_ID || FIREBASE_FN_CONFIG.messagingsenderid,
             },

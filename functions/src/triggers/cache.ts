@@ -2,7 +2,7 @@ import * as functions from 'firebase-functions';
 import * as https from 'https';
 import { CacheTask } from '../../../models';
 
-export const cacheTask = functions.database.ref('tanam/tasks/cache/{taskId}').onCreate(async (snap) => {
+export const cacheTask = functions.database.ref('tanam/{siteId}/tasks/cache/{taskId}').onCreate(async (snap) => {
     const task = snap.val() as CacheTask;
 
     const promises: Promise<any>[] = [snap.ref.remove()];

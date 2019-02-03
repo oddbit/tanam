@@ -15,16 +15,22 @@ export const createUser = functions.auth.user().onCreate(async (firebaseUser) =>
     };
 
     return Promise.all([
-        admin.firestore().collection('tanam-users').doc(user.uid).set(user),
+        admin.firestore()
+            .collection('tanam').doc(process.env.GCLOUD_PROJECT)
+            .collection('users').doc(firebaseUser.uid)
+            .set(user),
         setUserRoleToAuth(user),
     ]);
 });
 
 export const deleteUser = functions.auth.user().onDelete(firebaseUser => {
-    return admin.firestore().collection('tanam-users').doc(firebaseUser.uid).delete();
+    return admin.firestore()
+        .collection('tanam').doc(process.env.GCLOUD_PROJECT)
+        .collection('users').doc(firebaseUser.uid)
+        .delete();
 });
 
-export const updateAuthRoles = functions.firestore.document('tanam-users/{uid}').onUpdate((change, context) => {
+export const updateAuthRoles = functions.firestore.document('tanam/{siteId}/users/{uid}').onUpdate((change, context) => {
     const uid = context.params.uid;
     const userBefore = change.before.data();
     const userAfter = change.after.data();

@@ -21,7 +21,7 @@ fse.moveSync('../dist/admin/', '../dist/browser');
 fse.moveSync('../dist/browser/index.html', '../dist/browser/admin.html');
 
 console.log('Copying cloud functions dist bundle...');
-fse.copySync('./dist/', '../dist/');
+fse.copySync('./dist/functions/src', '../dist/');
 
 console.log('Copying Tanam configuration...');
 try {

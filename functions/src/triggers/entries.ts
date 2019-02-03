@@ -1,16 +1,16 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { SiteDomainSettings, ContentEntry, CacheTask, ContentType } from '../../../models';
+import { ContentEntry, CacheTask, ContentType, SiteInformation } from '../../../models';
 
-export const buildEntryCache = functions.firestore.document('tanam-entries/{documentId}').onWrite(async (change) => {
+export const buildEntryCache = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite(async (change) => {
     const entryBefore = change.before.data() as ContentEntry;
     const entryAfter = change.after.data() as ContentEntry;
 
-    const settingsDoc = await admin.firestore().collection('tanam-settings').doc('domain').get();
-    const domainSettings = settingsDoc.data() as SiteDomainSettings;
+    const siteInfoDoc = await admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT).get();
+    const siteInfo = siteInfoDoc.data() as SiteInformation;
 
     const tasks = [];
-    for (const domain of domainSettings.domains) {
+    for (const domain of siteInfo.domains) {
         if (change.before.exists) {
             tasks.push({
                 action: 'update',
@@ -29,11 +29,11 @@ export const buildEntryCache = functions.firestore.document('tanam-entries/{docu
     }
 
     return Promise.all(
-        tasks.map(task => admin.database().ref('tanam/tasks/cache').push(task))
+        tasks.map(task => admin.database().ref('tanam/{siteId}/tasks/cache').push(task))
     );
 });
 
-export const countEntryStatus = functions.firestore.document('tanam-entries/{documentId}').onWrite((change) => {
+export const countEntryStatus = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite((change) => {
     const entryBefore = change.before.data() as ContentEntry;
     const entryAfter = change.after.data() as ContentEntry;
 
@@ -63,13 +63,13 @@ export const countEntryStatus = functions.firestore.document('tanam-entries/{doc
     });
 });
 
-export const saveRevision = functions.firestore.document('tanam-entries/{documentId}').onUpdate((change) => {
+export const saveRevision = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onUpdate((change) => {
     const entryBefore = change.before.data() as ContentEntry;
     console.log(`Saving revision ${entryBefore.revision} of ${change.before.ref.path}`);
     return change.before.ref.collection('revisions').doc(`${entryBefore.id}+${entryBefore.revision}`).set(entryBefore);
 });
 
-export const deleteRevisions = functions.firestore.document('tanam-entries/{documentId}').onDelete(async (snap) => {
+export const deleteRevisions = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onDelete(async (snap) => {
     console.log(`Deleting all revisions of ${snap.ref.path}`);
     const revs = await snap.ref.collection('revisions').get();
 
