@@ -14,7 +14,7 @@ export * from './triggers/entries';
 export * from './triggers/site';
 export * from './triggers/users';
 
-
+export const initializeApp = expressServer.initializeApp;
 export const app = functions.https.onRequest((req, res) => {
     admin.database().ref('tanam')
         .child(process.env.GCLOUD_PROJECT)
