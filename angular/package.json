@@ -40,6 +40,7 @@
     "@angular/router": "~7.2.2",
     "@ckeditor/ckeditor5-angular": "^1.0.1",
     "@ckeditor/ckeditor5-build-classic": "^11.2.0",
+    "@nguniversal/common": "^7.1.0",
     "@nguniversal/express-engine": "^7.1.0",
     "@nguniversal/module-map-ngfactory-loader": "7.1.0",
     "core-js": "^2.6.3",
