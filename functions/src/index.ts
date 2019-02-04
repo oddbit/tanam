@@ -20,6 +20,7 @@ let TANAM_CONFIG = {} as TanamConfig;
 export * from './triggers/cache';
 export * from './triggers/entries';
 export * from './triggers/site';
+export * from './triggers/theme';
 export * from './triggers/users';
 
 
