@@ -19,10 +19,14 @@ interface StatusOption {
   styleUrls: ['./content-entry-form.component.scss']
 })
 export class ContentEntryFormComponent implements OnInit, OnDestroy {
-  @Input() contentEntry: Document;
+  @Input() document: Document;
   @Input() afterSaveRoute: string;
   @Input() onCancelRoute: string;
 
+  metaDataDialog = false;
+  publishedTime = '';
+  updatedTime = '';
+  createdTime = '';
   domain$ = this.siteService.getPrimaryDomain();
   documentType$: Observable<DocumentType>;
   entryForm = this.formBuilder.group({
@@ -58,18 +62,21 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.entryForm.patchValue({
-      title: this.contentEntry.title,
-      urlPath: this.contentEntry.url.path,
-      status: this.contentEntry.status,
+      title: this.document.title,
+      urlPath: this.document.url.path,
+      status: this.document.status,
     });
-    this.documentType$ = this.documentTypeService.getContentType(this.contentEntry.documentType);
+    this.publishedTime = this.document.published;
+    this.updatedTime = this.document.updated;
+    this.createdTime = this.document.created;
+    this.documentType$ = this.documentTypeService.getContentType(this.document.documentType);
     this._documentTypeSubscription = this.documentType$
       .subscribe(documentType => {
         for (const field of documentType.fields) {
           if (this.dataForm.get(field.key)) {
-            this.dataForm.setValue(this.contentEntry.data[field.key]);
+            this.dataForm.setValue(this.document.data[field.key]);
           } else {
-            const formControl = new FormControl(this.contentEntry.data[field.key]);
+            const formControl = new FormControl(this.document.data[field.key]);
             this.dataForm.addControl(field.key, formControl);
           }
         }
@@ -85,8 +92,16 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(this.onCancelRoute);
   }
 
+  closeDialog() {
+    this.metaDataDialog = false;
+  }
+
+  showDialog() {
+    this.metaDataDialog = true;
+  }
+
   async deleteEntry() {
-    await this.contentEntryService.delete(this.contentEntry.id);
+    await this.contentEntryService.delete(this.document.id);
     this.router.navigateByUrl(this.onCancelRoute);
   }
 
@@ -96,13 +111,13 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
 
 
     const updates = {
-      id: this.contentEntry.id,
+      id: this.document.id,
       title: formData.title,
-      documentType: this.contentEntry.documentType,
+      documentType: this.document.documentType,
       status: formData.status,
       data: this.dataForm.value,
       url: {
-        root: this.contentEntry.url.root,
+        root: this.document.url.root,
         path: formData.urlPath,
       },
     } as Document;

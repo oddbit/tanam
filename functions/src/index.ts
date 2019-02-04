@@ -13,9 +13,8 @@ export * from './triggers/cache';
 export * from './triggers/entries';
 export * from './triggers/site';
 export * from './triggers/users';
-export * from './triggers/migrate';
 
-
+export const initializeApp = expressServer.initializeApp;
 export const app = functions.https.onRequest((req, res) => {
     admin.database().ref('tanam')
         .child(process.env.GCLOUD_PROJECT)
@@ -32,7 +31,7 @@ export const app = functions.https.onRequest((req, res) => {
         res.setHeader('Cache-Control', cacheControl);
         res.sendFile(join(process.cwd(), 'browser/admin.html'));
     } else {
-        const FIREBASE_FN_CONFIG = functions.config().app;  
+        const FIREBASE_FN_CONFIG = functions.config().app;
         const TANAM_CONFIG = {
             firebaseApp: {
                 apiKey: process.env.FIREBASE_API_KEY || FIREBASE_FN_CONFIG.apikey,
