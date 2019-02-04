@@ -19,8 +19,9 @@ fse.moveSync('../dist/browser/index.html', '../dist/browser/dynamic.html', { ove
 
 // Putting all files in same public dir for simplicity of static file serving later
 fse.moveSync('../dist/admin/index.html', '../dist/browser/admin.html', { overwrite: true });
-copy('../dist/admin/**', '../dist/browser/', () => { });
-fse.removeSync('../dist/admin/');
+copy('../dist/admin/**', '../dist/browser/', () => {
+    fse.removeSync('../dist/admin/');
+});
 
 console.log('Copying cloud functions dist bundle...');
 fse.copySync('./dist/functions/src', '../dist/');
