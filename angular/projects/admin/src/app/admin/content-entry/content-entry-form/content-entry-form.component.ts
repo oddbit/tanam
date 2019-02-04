@@ -88,6 +88,21 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
       this._documentTypeSubscription.unsubscribe();
     }
   }
+
+  onTitleChange(title) {
+    if (this.publishedTime) {
+      return;
+    } else {
+      const newSlug = ( title.toString().toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, ''));
+      this.entryForm.controls['urlPath'].setValue(newSlug);
+    }
+  }
+
   cancelEditing() {
     this.router.navigateByUrl(this.onCancelRoute);
   }
