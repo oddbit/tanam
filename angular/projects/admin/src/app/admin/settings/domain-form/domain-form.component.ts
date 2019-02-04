@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { SiteDomainSettings, SiteSettingsService } from 'tanam-core';
+import { SiteInformation } from 'tanam-models';
+import { SiteService } from '../../../services/site.service';
 
 // https://stackoverflow.com/a/26987741/7967164
 const REGEX_DOMAIN = '^(((?!-))(xn--|_{1,1})?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$';
@@ -23,13 +24,13 @@ export class DomainFormComponent implements OnInit, OnDestroy {
   private settingsSubscription: Subscription;
 
   constructor(
-    private readonly siteSettingsService: SiteSettingsService,
+    private readonly siteService: SiteService,
     private readonly formBuilder: FormBuilder,
   ) { }
 
   ngOnInit() {
-    const domainSettings$ = this.siteSettingsService.getDomainSettings();
-    this.settingsSubscription = domainSettings$.subscribe((data: SiteDomainSettings) => {
+    const domainSettings$ = this.siteService.getSiteInfo();
+    this.settingsSubscription = domainSettings$.subscribe((data: SiteInformation) => {
       console.log(`[SettingsDomainComponent] firestore doc: ${JSON.stringify(data)}`);
 
       this.settingsForm.get('primaryDomain').setValue(data.primaryDomain);
@@ -89,10 +90,11 @@ export class DomainFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    return this.siteSettingsService.saveDomainSettings({
+
+    return this.siteService.save({
       primaryDomain: formData.primaryDomain,
       domains: formData.domains.map((domain: any) => domain['name']),
-    } as SiteDomainSettings);
+    } as SiteInformation);
   }
 
   private getDomainNameAt(index: number) {

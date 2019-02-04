@@ -1,4 +1,4 @@
-export const contentTypeMaterialIcons = [
+export const documentTypeMaterialIcons = [
     '3d_rotation',
     'ac_unit',
     'access_alarm',

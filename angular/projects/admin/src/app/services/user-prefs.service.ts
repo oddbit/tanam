@@ -4,8 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { AdminTheme, THEMES } from '../models/theme.models';
-import { TanamUser } from '../models/user.models';
+import { AdminTheme, TanamUser, ADMIN_THEMES } from 'tanam-models';
 
 
 @Injectable({
@@ -25,7 +24,7 @@ export class UserPrefsService {
       .collection('tanam-users').doc<TanamUser>(firebaseUser.uid)
       .valueChanges()
       .pipe(map(tanamUser => !!tanamUser.prefs ? tanamUser.prefs : { theme: 'default' }))
-      .pipe(map((prefs: { theme: AdminTheme }) => THEMES[prefs.theme] || THEMES['default']))
+      .pipe(map((prefs: { theme: AdminTheme }) => ADMIN_THEMES[prefs.theme] || ADMIN_THEMES['default']))
       .pipe(tap(theme => console.log(`[UserPrefsService:getAdminTheme] theme: ${theme}`)));
   }
 

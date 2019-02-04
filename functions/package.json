@@ -1,6 +1,6 @@
 {
   "name": "tanam",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Pluggable CMS for Firebase",
   "license": "Apache-2.0",
   "repository": {
@@ -44,6 +44,7 @@
   "devDependencies": {
     "@types/crypto-js": "^3.1.43",
     "@types/node": "^10.12.19",
+    "copy": "^0.3.2",
     "fs-extra": "^7.0.1",
     "ts-loader": "^5.3.3",
     "ts-node": "^8.0.2",

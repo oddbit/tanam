@@ -2,8 +2,10 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { ContentType, ContentTypeField, ContentTypeService, SiteSettingsService } from 'tanam-core';
-import { contentTypeMaterialIcons } from './content-type-form.icons';
+import { DocumentType, DocumentField } from 'tanam-models';
+import { ContentTypeService } from '../../../services/content-type.service';
+import { SiteService } from '../../../services/site.service';
+import { documentTypeMaterialIcons } from './content-type-form.icons';
 
 @Component({
   selector: 'app-content-type-form',
@@ -11,11 +13,11 @@ import { contentTypeMaterialIcons } from './content-type-form.icons';
   styleUrls: ['./content-type-form.component.scss']
 })
 export class ContentTypeFormComponent implements OnInit, OnDestroy {
-  @Input() contentTypeId: string;
+  @Input() documentTypeId: string;
   @Input() afterSaveRoute: string;
   @Input() onCancelRoute: string;
 
-  readonly contentTypeForm: FormGroup = this.formBuilder.group({
+  readonly documentTypeForm: FormGroup = this.formBuilder.group({
     title: [null, Validators.required],
     slug: [null, Validators.required],
     icon: [null, Validators.required],
@@ -24,11 +26,11 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
   });
 
   get fieldForms() {
-    return this.contentTypeForm.get('fields') as FormArray;
+    return this.documentTypeForm.get('fields') as FormArray;
   }
 
-  readonly domain$: Observable<string> = this.siteSettingsService.getSiteDomain();
-  readonly icons = contentTypeMaterialIcons;
+  readonly domain$: Observable<string> = this.siteSettingsService.getPrimaryDomain();
+  readonly icons = documentTypeMaterialIcons;
 
   readonly fieldTypes = [
     { type: 'input-text', title: 'Single line of text' },
@@ -41,41 +43,41 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
     { type: 'slide-toggle', title: 'Slide toggle value for yes/no' },
   ];
 
-  private contentTypeSubscription: Subscription;
+  private documentTypeSubscription: Subscription;
 
   constructor(
     private readonly router: Router,
     private readonly formBuilder: FormBuilder,
-    private readonly contentTypeService: ContentTypeService,
-    private readonly siteSettingsService: SiteSettingsService,
+    private readonly documentTypeService: ContentTypeService,
+    private readonly siteSettingsService: SiteService,
   ) { }
 
   ngOnInit() {
-    console.log(`ngOnInit contentTypeId: ${this.contentTypeId}`);
-    const contentType$ = this.contentTypeService.getContentType(this.contentTypeId);
-    this.contentTypeSubscription = contentType$.subscribe(contentType => {
+    console.log(`ngOnInit documentTypeId: ${this.documentTypeId}`);
+    const documentType$ = this.documentTypeService.getContentType(this.documentTypeId);
+    this.documentTypeSubscription = documentType$.subscribe(documentType => {
       this.clearFields();
-      for (const field of contentType.fields) {
+      for (const field of documentType.fields) {
         this.addField(field);
       }
 
-      this.contentTypeForm.patchValue({
-        title: contentType.title,
-        slug: contentType.slug,
-        icon: contentType.icon,
-        description: contentType.description,
+      this.documentTypeForm.patchValue({
+        title: documentType.title,
+        slug: documentType.slug,
+        icon: documentType.icon,
+        description: documentType.description,
       });
     });
   }
 
   ngOnDestroy(): void {
-    if (this.contentTypeSubscription && !this.contentTypeSubscription.closed) {
-      this.contentTypeSubscription.unsubscribe();
+    if (this.documentTypeSubscription && !this.documentTypeSubscription.closed) {
+      this.documentTypeSubscription.unsubscribe();
     }
   }
 
-  addField(field?: ContentTypeField) {
-    const val = field ? field : { type: 'input-text' } as ContentTypeField;
+  addField(field?: DocumentField) {
+    const val = field ? field : { type: 'input-text' } as DocumentField;
     const formField = this.formBuilder.group({
       type: [val.type, Validators.required],
       title: [val.title, Validators.required],
@@ -101,19 +103,19 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
   }
 
   async save() {
-    const formData = this.contentTypeForm.value;
-    if (this.contentTypeForm.errors) {
+    const formData = this.documentTypeForm.value;
+    if (this.documentTypeForm.errors) {
       return;
     }
 
-    await this.contentTypeService.save({
-      id: this.contentTypeId,
+    await this.documentTypeService.save({
+      id: this.documentTypeId,
       title: formData.title,
       slug: formData.slug || '',
       icon: formData.icon,
       description: formData.description,
       fields: this.fieldForms.value,
-    } as ContentType);
+    } as DocumentType);
 
     if (this.afterSaveRoute) {
       this.router.navigateByUrl(this.afterSaveRoute);

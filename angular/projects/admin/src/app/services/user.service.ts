@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { TanamUser, UserRole } from '../models/user.models';
+import { map, tap } from 'rxjs/operators';
+import { TanamUser, UserRole } from 'tanam-models';
 
 
 @Injectable({

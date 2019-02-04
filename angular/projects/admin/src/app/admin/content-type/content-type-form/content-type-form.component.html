@@ -1,4 +1,4 @@
-<form [formGroup]="contentTypeForm"
+<form [formGroup]="documentTypeForm"
       novalidate>
   <mat-card class="content-type-static-card">
     <mat-card-header>
@@ -11,7 +11,7 @@
             <input matInput
                    placeholder="Title"
                    formControlName="title">
-            <mat-error *ngIf="contentTypeForm.controls['slug'].hasError('required')">
+            <mat-error *ngIf="documentTypeForm.controls['slug'].hasError('required')">
               Title is <strong>required</strong>
             </mat-error>
           </mat-form-field>
@@ -23,8 +23,8 @@
             <input matInput
                    placeholder="Slug"
                    formControlName="slug">
-            <mat-hint>https://{{ domain$ | async }}/{{ contentTypeForm.value.slug }}</mat-hint>
-            <mat-error *ngIf="contentTypeForm.controls['slug'].hasError('required')">
+            <mat-hint>https://{{ domain$ | async }}/{{ documentTypeForm.value.slug }}</mat-hint>
+            <mat-error *ngIf="documentTypeForm.controls['slug'].hasError('required')">
               Slug is <strong>required</strong>
             </mat-error>
           </mat-form-field>
@@ -34,15 +34,15 @@
             <mat-select placeholder="Icon"
                         formControlName="icon">
               <mat-select-trigger class="mat-select-trigger-icon">
-                <mat-icon class="icon">{{contentTypeForm.value.icon}}</mat-icon>
-                <span>{{contentTypeForm.value.icon}}</span>
+                <mat-icon class="icon">{{documentTypeForm.value.icon}}</mat-icon>
+                <span>{{documentTypeForm.value.icon}}</span>
               </mat-select-trigger>
               <mat-option *ngFor="let iconOption of icons"
                           [value]="iconOption">
                 <mat-icon mat-list-icon>{{iconOption}}</mat-icon> {{iconOption}}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="contentTypeForm.controls['icon'].hasError('required')">
+            <mat-error *ngIf="documentTypeForm.controls['icon'].hasError('required')">
               Icon is <strong>required</strong>
             </mat-error>
           </mat-form-field>
@@ -61,7 +61,7 @@
                       cdkAutosizeMaxRows="10"
                       placeholder="Description"
                       formControlName="description"></textarea>
-            <mat-error *ngIf="contentTypeForm.controls['description'].hasError('required')">
+            <mat-error *ngIf="documentTypeForm.controls['description'].hasError('required')">
               Description is <strong>required</strong>
             </mat-error>
           </mat-form-field>

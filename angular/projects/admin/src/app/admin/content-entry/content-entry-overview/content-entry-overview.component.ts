@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { ContentEntryService, ContentTypeService, SiteSettingsService } from 'tanam-core';
-import { ContentType } from 'tanam-core';
+import { DocumentType } from 'tanam-models';
+import { ContentEntryService } from '../../../services/content-entry.service';
+import { ContentTypeService } from '../../../services/content-type.service';
+import { SiteService } from '../../../services/site.service';
 
 @Component({
   selector: 'app-content-entry-overview',
@@ -11,27 +13,27 @@ import { ContentType } from 'tanam-core';
   styleUrls: ['./content-entry-overview.component.scss']
 })
 export class ContentEntryOverviewComponent implements OnInit {
-  readonly domain$ = this.siteSettingsService.getSiteDomain();
-  contentType$: Observable<ContentType>;
+  readonly domain$ = this.siteSettingsService.getPrimaryDomain();
+  documentType$: Observable<DocumentType>;
 
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly cts: ContentTypeService,
     private readonly ces: ContentEntryService,
-    private readonly siteSettingsService: SiteSettingsService,
+    private readonly siteSettingsService: SiteService,
   ) { }
 
   ngOnInit() {
-    this.contentType$ = this.route.paramMap.pipe(switchMap(params => {
-      const contentTypeId = params.get('typeId');
-      return this.cts.getContentType(contentTypeId);
+    this.documentType$ = this.route.paramMap.pipe(switchMap(params => {
+      const documentTypeId = params.get('typeId');
+      return this.cts.getContentType(documentTypeId);
     }));
   }
 
-  async createNewEntry(contentType: ContentType) {
+  async createNewEntry(documentType: DocumentType) {
     const entryId = this.ces.getNewId();
-    this.ces.create(contentType, entryId);
+    this.ces.create(documentType, entryId);
     this.router.navigateByUrl(`/_/admin/entries/${entryId}/edit`);
   }
 }

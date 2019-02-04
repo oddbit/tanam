@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
-import { SiteInfoSettings, SiteSettingsService, SiteThemeService, TanamTheme } from 'tanam-core';
+import { SiteInformation, SiteTheme } from 'tanam-models';
+import { SiteService } from '../../../services/site.service';
+import { SiteThemeService } from '../../../services/site-theme.service';
 
 @Component({
   selector: 'app-site-form',
@@ -10,7 +12,7 @@ import { SiteInfoSettings, SiteSettingsService, SiteThemeService, TanamTheme } f
 })
 export class SiteFormComponent implements OnInit, OnDestroy {
   readonly siteName$: Observable<string> = this.siteSettingsService.getSiteName();
-  readonly themes$: Observable<TanamTheme[]> = this.themeService.getThemes();
+  readonly themes$: Observable<SiteTheme[]> = this.themeService.getThemes();
   readonly settingsForm: FormGroup = this.formBuilder.group({
     title: [null, [Validators.required]],
     theme: [null, [Validators.required]],
@@ -19,14 +21,14 @@ export class SiteFormComponent implements OnInit, OnDestroy {
   private settingsSubscription: Subscription;
 
   constructor(
-    private readonly siteSettingsService: SiteSettingsService,
+    private readonly siteSettingsService: SiteService,
     private readonly themeService: SiteThemeService,
     private readonly formBuilder: FormBuilder,
   ) { }
 
 
   ngOnInit() {
-    this.settingsSubscription = this.siteSettingsService.getSiteSettings().subscribe(settings => {
+    this.settingsSubscription = this.siteSettingsService.getSiteInfo().subscribe(settings => {
       console.log(`[SettingsSiteComponent] site settings: ${JSON.stringify(settings)}`);
       this.settingsForm.setValue({
         title: settings.title,
@@ -43,6 +45,6 @@ export class SiteFormComponent implements OnInit, OnDestroy {
 
   saveSettings() {
     const formData = this.settingsForm.value;
-    return this.siteSettingsService.saveSiteSettings(formData as SiteInfoSettings);
+    return this.siteSettingsService.save(formData as SiteInformation);
   }
 }

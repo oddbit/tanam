@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { ContentEntry } from 'tanam-core';
 import { map } from 'rxjs/operators';
+import { Document } from 'tanam-models';
 import { TanamDocumentContext } from '../models/dynamic-page.models';
 
 export interface DocumentQueryOptions {
@@ -23,12 +23,12 @@ export class DocumentContextService {
   ) { }
 
 
-  query(contentTypeId: string, queryOpts: DocumentQueryOptions = {}): Observable<TanamDocumentContext[]> {
-    console.log(`[ContentEntryService:getContentTypeFields] ${contentTypeId}, query=${JSON.stringify(queryOpts)}`);
+  query(documentTypeId: string, queryOpts: DocumentQueryOptions = {}): Observable<TanamDocumentContext[]> {
+    console.log(`[ContentEntryService:getContentTypeFields] ${documentTypeId}, query=${JSON.stringify(queryOpts)}`);
 
     const queryFn = (ref: CollectionReference) => {
       let query = ref
-        .where('contentType', '==', contentTypeId)
+        .where('documentType', '==', documentTypeId)
         .where('status', '==', 'published');
 
       if (queryOpts.orderBy) {
@@ -48,9 +48,9 @@ export class DocumentContextService {
     };
 
     return this.firestore
-      .collection<ContentEntry>('tanam-entries', queryFn)
+      .collection<Document>('tanam-entries', queryFn)
       .valueChanges()
-      .pipe(map(docs => docs.map(doc => this.convert2DocumentContext(doc))));
+      .pipe(map(docs => docs.map(doc => this._toContext(doc))));
   }
 
   getById(entryId: string): Observable<TanamDocumentContext> {
@@ -64,8 +64,8 @@ export class DocumentContextService {
     return this.firestore
       .collection('tanam-entries', queryFn)
       .valueChanges()
-      .pipe(map(docs => docs[0] as ContentEntry))
-      .pipe(map(doc => this.convert2DocumentContext(doc)));
+      .pipe(map(docs => docs[0] as Document))
+      .pipe(map(doc => this._toContext(doc)));
   }
 
   getByUrl(root: string, path: string): Observable<TanamDocumentContext> {
@@ -75,20 +75,20 @@ export class DocumentContextService {
       ref.where('url.root', '==', root).where('url.path', '==', path).limit(1);
 
     return this.firestore
-      .collection<ContentEntry>('tanam-entries', queryFn)
+      .collection<Document>('tanam-entries', queryFn)
       .valueChanges()
       .pipe(map(doc => doc[0]))
-      .pipe(map(doc => this.convert2DocumentContext(doc)));
+      .pipe(map(doc => this._toContext(doc)));
   }
 
-  private convert2DocumentContext(contentEntry: ContentEntry) {
-    return {
+  private _toContext(contentEntry: Document) {
+    return !contentEntry ? null : {
       id: contentEntry.id,
-      contentType: contentEntry.contentType,
+      documentType: contentEntry.documentType,
       data: contentEntry.data,
       title: contentEntry.title,
       url: contentEntry.standalone
-        ? [contentEntry.url.root, contentEntry.url.path].join('/')
+        ? '/' + [contentEntry.url.root, contentEntry.url.path].filter(p => !!p).join('/')
         : null,
       revision: contentEntry.revision,
       status: contentEntry.status,

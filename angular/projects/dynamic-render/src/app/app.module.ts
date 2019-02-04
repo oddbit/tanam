@@ -7,7 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DynamicPageComponent } from './dynamic-page/dynamic-page.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { TanamConfigService } from './services/tanam-config.service';
+import { AppConfigService } from './services/app-config.service';
 
 @NgModule({
   declarations: [
@@ -23,12 +23,12 @@ import { TanamConfigService } from './services/tanam-config.service';
     TransferHttpCacheModule,
   ],
   providers: [
-    TanamConfigService,
+    AppConfigService,
     {
       provide: APP_INITIALIZER,
-      useFactory: (tanamConfigService: TanamConfigService) => () => tanamConfigService.loadConfig(),
+      useFactory: (tanamConfigService: AppConfigService) => () => tanamConfigService.loadConfig(),
       multi: true,
-      deps: [TanamConfigService]
+      deps: [AppConfigService]
     },
   ],
   bootstrap: [AppComponent],

@@ -11,10 +11,10 @@
     "baseUrl": "./",
     "paths": {
       "tanam-models": [
-        "../angular/dist/tanam-core/lib/models"
+        "../models"
       ],
       "tanam-models/*": [
-        "../angular/dist/tanam-core/lib/models/*"
+        "../models/*"
       ]
     }
   },

@@ -1,7 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { ContentTemplate, ContentTemplateService } from 'tanam-core';
+import { DocumentTemplate } from 'tanam-models';
+import { ContentTemplateService } from '../../../services/content-template.service';
 
 @Component({
   selector: 'app-content-template-form',
@@ -9,9 +10,10 @@ import { ContentTemplate, ContentTemplateService } from 'tanam-core';
   styleUrls: ['./content-template-form.component.scss']
 })
 export class ContentTemplateFormComponent implements OnInit, OnDestroy {
+  @Input() themeId: string;
   @Input() templateId: string;
 
-  template: ContentTemplate;
+  template: DocumentTemplate;
   readonly templateForm: FormGroup = this.fb.group({
     title: [null, Validators.required],
     selector: [null, Validators.required],
@@ -26,8 +28,8 @@ export class ContentTemplateFormComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-
-    this.templateSubscription = this.contentTemplateservice.getTemplate(this.templateId)
+    this.templateSubscription = this.contentTemplateservice
+      .getTemplate(this.themeId, this.templateId)
       .subscribe(template => {
         this.template = template;
         this.templateForm.patchValue({
@@ -53,6 +55,6 @@ export class ContentTemplateFormComponent implements OnInit, OnDestroy {
       selector: formData.selector,
       template: formData.templateHtml,
       styles: [formData.templateStyle],
-    } as ContentTemplate);
+    } as DocumentTemplate);
   }
 }

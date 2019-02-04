@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AppAuthService } from 'tanam-core';
+import { AppAuthService } from '../../services/app-auth.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

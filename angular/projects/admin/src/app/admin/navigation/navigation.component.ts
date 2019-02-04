@@ -2,7 +2,9 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AppAuthService, ContentTypeService, SiteSettingsService } from 'tanam-core';
+import { AppAuthService } from '../../services/app-auth.service';
+import { ContentTypeService } from '../../services/content-type.service';
+import { SiteService } from '../../services/site.service';
 
 interface SideMenuItem {
   name: string;
@@ -17,7 +19,7 @@ interface SideMenuItem {
 export class NavigationComponent {
   isExpanded = true;
   siteName$ = this.siteSettingsService.getSiteName();
-  contentTypes$ = this.contentTypeService.getContentTypes();
+  documentTypes$ = this.documentTypeService.getContentTypes();
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
@@ -25,9 +27,9 @@ export class NavigationComponent {
 
   constructor(
     private readonly breakpointObserver: BreakpointObserver,
-    private readonly contentTypeService: ContentTypeService,
+    private readonly documentTypeService: ContentTypeService,
     private readonly appAuthService: AppAuthService,
-    private readonly siteSettingsService: SiteSettingsService,
+    private readonly siteSettingsService: SiteService,
   ) { }
 
   toggleMiniNav() {

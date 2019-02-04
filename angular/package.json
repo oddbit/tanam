@@ -9,7 +9,6 @@
     "test:admin": "ng test admin",
     "lint:admin": "ng lint admin",
     "e2e:admin": "ng e2e admin",
-    "build:core": "ng build tanam-core",
     "start:dynamic": "ng serve dynamic-render --port 4444",
     "build:dynamic": "ng build dynamic-render --outputHashing=all --deployUrl=/",
     "build:dynamic:prod": "ng build dynamic-render --outputHashing=all --aot=false --optimization=true --deployUrl=/",
@@ -20,7 +19,7 @@
     "serve:dynamic:ssr": "node dist/dynamic/server",
     "build:dynamic:ssr": "npm run build:dynamic:bundle && npm run webpack:dynamic",
     "build:dynamic:bundle": "npm run build:dynamic:prod && ng run dynamic-render:server:production",
-    "build:all": "npm run build:core && npm run build:admin:prod && npm run build:dynamic:ssr"
+    "build:all": "npm run build:admin:prod && npm run build:dynamic:ssr"
   },
   "engines": {
     "node": "8"
@@ -41,6 +40,7 @@
     "@angular/router": "~7.2.2",
     "@ckeditor/ckeditor5-angular": "^1.0.1",
     "@ckeditor/ckeditor5-build-classic": "^11.2.0",
+    "@nguniversal/common": "^7.1.0",
     "@nguniversal/express-engine": "^7.1.0",
     "@nguniversal/module-map-ngfactory-loader": "7.1.0",
     "core-js": "^2.6.3",

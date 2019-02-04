@@ -4,7 +4,7 @@ import { AngularFireModule, FirebaseOptionsToken } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
-import { TanamConfigService } from './services/tanam-config.service';
+import { AppConfigService } from './services/app-config.service';
 
 @NgModule({
   declarations: [],
@@ -24,8 +24,8 @@ import { TanamConfigService } from './services/tanam-config.service';
   providers: [
     {
       provide: FirebaseOptionsToken,
-      deps: [TanamConfigService],
-      useFactory: (fcs: TanamConfigService) => fcs.firebaseWebConfig,
+      deps: [AppConfigService],
+      useFactory: (fcs: AppConfigService) => fcs.firebaseWebConfig,
     },
   ],
 })

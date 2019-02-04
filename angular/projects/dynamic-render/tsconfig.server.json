@@ -4,11 +4,11 @@
     "outDir": "../../out-tsc/app-server",
     "baseUrl": ".",
     "paths": {
-      "tanam-core": [
-        "../../dist/tanam-core"
+      "tanam-models": [
+        "../../../models"
       ],
-      "tanam-core/*": [
-        "../../dist/tanam-core/*"
+      "tanam-models/*": [
+        "../../../models/*"
       ]
     }
   },

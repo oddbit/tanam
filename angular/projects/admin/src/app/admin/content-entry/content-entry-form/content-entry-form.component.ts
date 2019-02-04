@@ -2,12 +2,15 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { ContentEntry, ContentEntryService, ContentEntryStatus, ContentType, ContentTypeService, SiteSettingsService } from 'tanam-core';
+import { Document, DocumentStatus, DocumentType } from 'tanam-models';
+import { ContentEntryService } from '../../../services/content-entry.service';
+import { ContentTypeService } from '../../../services/content-type.service';
+import { SiteService } from '../../../services/site.service';
 
 
 interface StatusOption {
   title: string;
-  value: ContentEntryStatus;
+  value: DocumentStatus;
 }
 
 @Component({
@@ -16,7 +19,7 @@ interface StatusOption {
   styleUrls: ['./content-entry-form.component.scss']
 })
 export class ContentEntryFormComponent implements OnInit, OnDestroy {
-  @Input() contentEntry: ContentEntry;
+  @Input() document: Document;
   @Input() afterSaveRoute: string;
   @Input() onCancelRoute: string;
 
@@ -24,8 +27,8 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
   publishedTime = '';
   updatedTime = '';
   createdTime = '';
-  domain$ = this.siteSettingsService.getSiteDomain();
-  contentType$: Observable<ContentType>;
+  domain$ = this.siteService.getPrimaryDomain();
+  documentType$: Observable<DocumentType>;
   entryForm = this.formBuilder.group({
     title: [null, Validators.required],
     urlPath: [null, Validators.required],
@@ -46,34 +49,34 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
     { value: 'published', title: 'Published' },
   ];
 
-  private _contentTypeSubscription: Subscription;
+  private _documentTypeSubscription: Subscription;
 
   constructor(
     private readonly router: Router,
     private readonly formBuilder: FormBuilder,
     private readonly contentEntryService: ContentEntryService,
-    private readonly contentTypeService: ContentTypeService,
-    private readonly siteSettingsService: SiteSettingsService,
+    private readonly documentTypeService: ContentTypeService,
+    private readonly siteService: SiteService,
   ) { }
 
 
   ngOnInit() {
     this.entryForm.patchValue({
-      title: this.contentEntry.title,
-      urlPath: this.contentEntry.url.path,
-      status: this.contentEntry.status,
+      title: this.document.title,
+      urlPath: this.document.url.path,
+      status: this.document.status,
     });
-    this.publishedTime = this.contentEntry.published;
-    this.updatedTime = this.contentEntry.updated;
-    this.createdTime = this.contentEntry.created;
-    this.contentType$ = this.contentTypeService.getContentType(this.contentEntry.contentType);
-    this._contentTypeSubscription = this.contentType$
-      .subscribe(contentType => {
-        for (const field of contentType.fields) {
+    this.publishedTime = this.document.published;
+    this.updatedTime = this.document.updated;
+    this.createdTime = this.document.created;
+    this.documentType$ = this.documentTypeService.getContentType(this.document.documentType);
+    this._documentTypeSubscription = this.documentType$
+      .subscribe(documentType => {
+        for (const field of documentType.fields) {
           if (this.dataForm.get(field.key)) {
-            this.dataForm.setValue(this.contentEntry.data[field.key]);
+            this.dataForm.setValue(this.document.data[field.key]);
           } else {
-            const formControl = new FormControl(this.contentEntry.data[field.key]);
+            const formControl = new FormControl(this.document.data[field.key]);
             this.dataForm.addControl(field.key, formControl);
           }
         }
@@ -81,8 +84,8 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this._contentTypeSubscription && !this._contentTypeSubscription.closed) {
-      this._contentTypeSubscription.unsubscribe();
+    if (this._documentTypeSubscription && !this._documentTypeSubscription.closed) {
+      this._documentTypeSubscription.unsubscribe();
     }
   }
   cancelEditing() {
@@ -98,7 +101,7 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
   }
 
   async deleteEntry() {
-    await this.contentEntryService.delete(this.contentEntry.id);
+    await this.contentEntryService.delete(this.document.id);
     this.router.navigateByUrl(this.onCancelRoute);
   }
 
@@ -108,16 +111,16 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
 
 
     const updates = {
-      id: this.contentEntry.id,
+      id: this.document.id,
       title: formData.title,
-      contentType: this.contentEntry.contentType,
+      documentType: this.document.documentType,
       status: formData.status,
       data: this.dataForm.value,
       url: {
-        root: this.contentEntry.url.root,
+        root: this.document.url.root,
         path: formData.urlPath,
       },
-    } as ContentEntry;
+    } as Document;
     await this.contentEntryService.update(updates);
 
 

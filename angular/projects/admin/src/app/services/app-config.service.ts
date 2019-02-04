@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TanamConfig } from 'tanam-core';
+import { TanamConfig } from 'tanam-models';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +15,10 @@ export class AppConfigService {
 
   get appConfig() {
     return this._appConfig;
+  }
+
+  get siteId() {
+    return this._appConfig.firebaseApp.projectId;
   }
 
   async loadConfig() {
