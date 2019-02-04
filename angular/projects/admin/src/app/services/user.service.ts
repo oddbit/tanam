@@ -4,28 +4,31 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { TanamUser, UserRole } from 'tanam-models';
+import { AppConfigService } from './app-config.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
 
   constructor(
     private readonly fireAuth: AngularFireAuth,
     private readonly firestore: AngularFirestore,
+    private readonly appConfig: AppConfigService,
   ) { }
 
   getCurrentUser(): Observable<TanamUser> {
     const firebaseUser = this.fireAuth.auth.currentUser;
-    return this.firestore
-      .collection('tanam-users').doc<TanamUser>(firebaseUser.uid)
+    return this.siteCollection
+      .collection('users').doc<TanamUser>(firebaseUser.uid)
       .valueChanges();
   }
 
   getUser(uid: string): Observable<TanamUser> {
-    return this.firestore
-      .collection('tanam-users').doc<TanamUser>(uid)
+    return this.siteCollection
+      .collection('users').doc<TanamUser>(uid)
       .valueChanges();
   }
 

@@ -5,23 +5,26 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { AdminTheme, TanamUser, ADMIN_THEMES } from 'tanam-models';
+import { AppConfigService } from './app-config.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserPrefsService {
+  readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
 
   constructor(
     private readonly fireAuth: AngularFireAuth,
     private readonly fbApp: FirebaseApp,
     private readonly firestore: AngularFirestore,
+    private readonly appConfig: AppConfigService,
   ) { }
 
   getAdminTheme(): Observable<string> {
     const firebaseUser = this.fireAuth.auth.currentUser;
-    return this.firestore
-      .collection('tanam-users').doc<TanamUser>(firebaseUser.uid)
+    return this.siteCollection
+      .collection('users').doc<TanamUser>(firebaseUser.uid)
       .valueChanges()
       .pipe(map(tanamUser => !!tanamUser.prefs ? tanamUser.prefs : { theme: 'default' }))
       .pipe(map((prefs: { theme: AdminTheme }) => ADMIN_THEMES[prefs.theme] || ADMIN_THEMES['default']))
@@ -30,7 +33,7 @@ export class UserPrefsService {
 
   setAdminTheme(theme: AdminTheme) {
     const firebaseUser = this.fireAuth.auth.currentUser;
-    const docRef = this.firestore.collection('tanam-users').doc<TanamUser>(firebaseUser.uid);
+    const docRef = this.siteCollection.collection('users').doc<TanamUser>(firebaseUser.uid);
     return this.fbApp.firestore().runTransaction<void>(async (trx) => {
       const trxDoc = await trx.get(docRef.ref);
       const trxUser = trxDoc.data() as TanamUser;
