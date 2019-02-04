@@ -101,7 +101,7 @@
           <mat-form-field class="full-width">
             <input matInput
                    placeholder="Publish Date"
-                   value="{{ publishedTime? (publishedTime.seconds * 1000 | date:'yyyy-MM-dd') : '' }}"
+                   value="{{ publishedTime?.toDate() (publishedTime.seconds * 1000 | date:'yyyy-MM-dd') : '' }}"
                    disabled>
           </mat-form-field>
           <mat-form-field class="full-width">
@@ -113,13 +113,13 @@
           <mat-form-field class="full-width">
             <input matInput
                    placeholder="Created"
-                   value="{{ createdTime? (createdTime.seconds * 1000 | date:'yyyy-MM-dd') : '' }}"
+                   value="{{ createdTime?.toDate() (createdTime.seconds * 1000 | date:'yyyy-MM-dd') : '' }}"
                    disabled>
           </mat-form-field>
           <mat-form-field class="full-width">
             <input matInput
                    placeholder="Updated"
-                   value="{{ updatedTime? (updatedTime.seconds * 1000 | date:'yyyy-MM-dd') : '' }}"
+                   value="{{ updatedTime?.toDate() (updatedTime.seconds * 1000 | date:'yyyy-MM-dd') : '' }}"
                    disabled>
           </mat-form-field>
         </mat-card-content>
