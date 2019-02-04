@@ -22,6 +22,7 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
     slug: [null, Validators.required],
     icon: [null, Validators.required],
     description: [null, Validators.required],
+    jsonLd: null,
     fields: this.formBuilder.array([]),
   });
 
@@ -65,6 +66,7 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
         title: documentType.title,
         slug: documentType.slug,
         icon: documentType.icon,
+        jsonLd: documentType.jsonLd,
         description: documentType.description,
       });
     });
@@ -114,6 +116,7 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
       slug: formData.slug || '',
       icon: formData.icon,
       description: formData.description,
+      jsonLd: formData.jsonLd || null,
       fields: this.fieldForms.value,
     } as DocumentType);
 
