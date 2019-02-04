@@ -24,9 +24,9 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
   @Input() onCancelRoute: string;
 
   metaDataDialog = false;
-  publishedTime = '';
-  updatedTime = '';
-  createdTime = '';
+  publishedTime: Date;
+  updatedTime: Date;
+  createdTime: Date;
   domain$ = this.siteService.getPrimaryDomain();
   documentType$: Observable<DocumentType>;
   entryForm = this.formBuilder.group({
@@ -66,9 +66,9 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
       urlPath: this.document.url.path,
       status: this.document.status,
     });
-    this.publishedTime = this.document.published;
-    this.updatedTime = this.document.updated;
-    this.createdTime = this.document.created;
+    this.publishedTime = this.document.published && this.document.published.toDate();
+    this.updatedTime = this.document.updated.toDate();
+    this.createdTime = this.document.created.toDate();
     this.documentType$ = this.documentTypeService.getContentType(this.document.documentType);
     this._documentTypeSubscription = this.documentType$
       .subscribe(documentType => {
@@ -89,17 +89,10 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  onTitleChange(title) {
-    if (this.publishedTime) {
-      return;
-    } else {
-      const newSlug = ( title.toString().toLowerCase()
-        .replace(/\s+/g, '-')
-        .replace(/[^\w\-]+/g, '')
-        .replace(/\-\-+/g, '-')
-        .replace(/^-+/, '')
-        .replace(/-+$/, ''));
-      this.entryForm.controls['urlPath'].setValue(newSlug);
+  onTitleChange(title: string) {
+    if (!this.publishedTime) {
+      // Only auto slugify title if document has't been published before
+      this.entryForm.controls['urlPath'].setValue(this._slugify(title));
     }
   }
 
@@ -142,5 +135,14 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
     if (!!this.afterSaveRoute) {
       this.router.navigateByUrl(this.afterSaveRoute);
     }
+  }
+
+  private _slugify(text: string) {
+    return text.toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w\-]+/g, '')
+      .replace(/\-\-+/g, '-')
+      .replace(/^-+/, '')
+      .replace(/-+$/, '');
   }
 }
