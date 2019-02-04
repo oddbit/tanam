@@ -23,7 +23,7 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "app"
+        "function": "app"
       }
     ]
   },
