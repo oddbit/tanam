@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { SiteInformation } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
 
@@ -18,6 +18,7 @@ export class SiteService {
 
 
   getSiteName(): Observable<string> {
-    return this.siteCollection.valueChanges().pipe(map(settings => settings.title));
+    return this.siteCollection.valueChanges()
+      .pipe(map(settings => settings.title));
   }
 }

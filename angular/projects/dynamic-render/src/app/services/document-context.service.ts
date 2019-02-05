@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Document } from 'tanam-models';
+import { combineLatest, Observable } from 'rxjs';
+import { Document, SiteInformation } from 'tanam-models';
 import { TanamDocumentContext } from '../models/dynamic-page.models';
+import { AppConfigService } from './app-config.service';
+import { SiteService } from './site.service';
 
 export interface DocumentQueryOptions {
   limit?: number;
@@ -17,14 +18,16 @@ export interface DocumentQueryOptions {
   providedIn: 'root'
 })
 export class DocumentContextService {
+  readonly siteCollection = this.firestore.collection('tanam').doc<SiteInformation>(this.appConfig.siteId);
 
   constructor(
     private readonly firestore: AngularFirestore,
+    private readonly appConfig: AppConfigService,
   ) { }
 
 
   query(documentTypeId: string, queryOpts: DocumentQueryOptions = {}): Observable<TanamDocumentContext[]> {
-    console.log(`[ContentEntryService:getContentTypeFields] ${documentTypeId}, query=${JSON.stringify(queryOpts)}`);
+    console.log(`[DocumentContextService:query] ${documentTypeId}, query=${JSON.stringify(queryOpts)}`);
 
     const queryFn = (ref: CollectionReference) => {
       let query = ref
@@ -47,10 +50,10 @@ export class DocumentContextService {
       return query;
     };
 
-    return this.firestore
-      .collection<Document>('tanam-entries', queryFn)
-      .valueChanges()
-      .pipe(map(docs => docs.map(doc => this._toContext(doc))));
+    return combineLatest(
+      this.siteCollection.valueChanges(),
+      this.siteCollection.collection<Document>('documents', queryFn).valueChanges(),
+      (siteInfo, docs) => docs.map(doc => this._toContext(siteInfo, doc)));
   }
 
   getById(entryId: string): Observable<TanamDocumentContext> {
@@ -61,43 +64,54 @@ export class DocumentContextService {
         .limit(1);
     };
 
-    return this.firestore
-      .collection('tanam-entries', queryFn)
-      .valueChanges()
-      .pipe(map(docs => docs[0] as Document))
-      .pipe(map(doc => this._toContext(doc)));
+    return combineLatest(
+      this.siteCollection.valueChanges(),
+      this.siteCollection.collection<Document>('documents', queryFn).valueChanges(),
+      (siteInfo, docs) => this._toContext(siteInfo, docs[0]));
+
   }
 
   getByUrl(root: string, path: string): Observable<TanamDocumentContext> {
-    console.log(`[ContentEntryService:findContentEntryByUrl] ${JSON.stringify({ root, path })}`);
-
+    console.log(`[DocumentContextService:getByUrl] ${JSON.stringify({ root, path })}`);
     const queryFn = (ref: CollectionReference) =>
       ref.where('url.root', '==', root).where('url.path', '==', path).limit(1);
 
-    return this.firestore
-      .collection<Document>('tanam-entries', queryFn)
-      .valueChanges()
-      .pipe(map(doc => doc[0]))
-      .pipe(map(doc => this._toContext(doc)));
+
+    return combineLatest(
+      this.siteCollection.valueChanges(),
+      this.siteCollection.collection<Document>('documents', queryFn).valueChanges(),
+      (siteInfo, docs) => this._toContext(siteInfo, docs[0]));
   }
 
-  private _toContext(contentEntry: Document) {
-    return !contentEntry ? null : {
-      id: contentEntry.id,
-      documentType: contentEntry.documentType,
-      data: contentEntry.data,
-      title: contentEntry.title,
-      url: contentEntry.standalone
-        ? '/' + [contentEntry.url.root, contentEntry.url.path].filter(p => !!p).join('/')
-        : null,
-      revision: contentEntry.revision,
-      status: contentEntry.status,
-      tags: contentEntry.tags,
-      created: (contentEntry.created as firebase.firestore.Timestamp).toDate(),
-      updated: (contentEntry.updated as firebase.firestore.Timestamp).toDate(),
-      published: !!contentEntry.published
-        ? (contentEntry.published as firebase.firestore.Timestamp).toDate()
+  private _toContext(siteInfo: SiteInformation, document: Document) {
+    if (!document) {
+      return null;
+    }
+
+    const context = {
+      id: document.id,
+      documentType: document.documentType,
+      data: document.data,
+      title: document.title,
+      url: null,
+      hostDomain: siteInfo.primaryDomain,
+      hostUrl: `https://${siteInfo.primaryDomain}`,
+      permalink: null,
+      revision: document.revision,
+      status: document.status,
+      tags: document.tags,
+      created: (document.created as firebase.firestore.Timestamp).toDate(),
+      updated: (document.updated as firebase.firestore.Timestamp).toDate(),
+      published: !!document.published
+        ? (document.published as firebase.firestore.Timestamp).toDate()
         : null,
     } as TanamDocumentContext;
+
+    if (document.standalone) {
+      context.url = '/' + [document.url.root, document.url.path].filter(p => !!p).join('/');
+      context.permalink = `${context.hostUrl}${context.url}`;
+    }
+
+    return context;
   }
 }

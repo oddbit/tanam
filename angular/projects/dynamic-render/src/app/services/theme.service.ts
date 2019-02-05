@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { SiteInformation, SiteTheme } from 'tanam-models';
-import { AppConfigService } from '../../../../admin/src/app/services/app-config.service';
+import { AppConfigService } from './app-config.service';
 
 @Injectable({
   providedIn: 'root'

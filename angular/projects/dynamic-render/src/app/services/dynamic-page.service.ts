@@ -63,7 +63,7 @@ export class DynamicPageService {
   }
 
   async render(viewContainer: ViewContainerRef, documentContext: TanamDocumentContext): Promise<ComponentRef<any>> {
-    const template = await this.templateService.getTemplate(documentContext.documentType).pipe(take(1)).toPromise();
+    const template = await this.templateService.getTemplate(documentContext).pipe(take(1)).toPromise();
     if (!template) {
       throw new Error(`Document type '${documentContext.documentType}' have a non-existing template: ${template}`);
     }

@@ -16,6 +16,9 @@
  *    documentType: 'blog',
  *    title: 'My blog post',
  *    url: "/blog/2018/my-blog-post",
+ *    hostDomain: "www.example.com",
+ *    hostUrl: "https://www.example.com",
+ *    permalink: "https://www.example.com/blog/2018/my-blog-post",
  *    status: "published",
  *    revision: 123,
  *    tags: ["fun", "profit"],
@@ -39,6 +42,9 @@ export interface TanamDocumentContext {
   data: { [key: string]: any };
   title: string;
   url?: string;
+  hostUrl: string;
+  hostDomain: string;
+  permalink: string;
   revision: number;
   status: string;
   tags: string[];

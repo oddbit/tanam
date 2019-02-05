@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { DocumentTemplate, DocumentType, SiteInformation } from 'tanam-models';
+import { DocumentTemplate, SiteInformation } from 'tanam-models';
+import { TanamDocumentContext } from '../models/dynamic-page.models';
 import { AppConfigService } from './app-config.service';
 
 @Injectable({
@@ -16,18 +17,20 @@ export class TemplateService {
     private readonly appConfig: AppConfigService,
   ) { }
 
-  getTemplate(documentType: string): Observable<DocumentTemplate> {
+  getTemplate(documentContext: TanamDocumentContext): Observable<DocumentTemplate> {
     return this.siteCollection.
       valueChanges()
       .pipe(switchMap(siteInfo => {
         return this.siteCollection
           .collection('themes').doc(siteInfo.theme)
-          .collection('templates').doc<DocumentTemplate>(documentType)
+          .collection('templates').doc<DocumentTemplate>(documentContext.documentType)
           .valueChanges();
       }));
   }
 
   getTemplates(): Observable<DocumentTemplate[]> {
+
+
     return this.siteCollection
       .valueChanges()
       .pipe(switchMap(settings =>
@@ -35,5 +38,6 @@ export class TemplateService {
           .collection('themes').doc(settings.theme)
           .collection<DocumentTemplate>('templates')
           .valueChanges()));
+
   }
 }
