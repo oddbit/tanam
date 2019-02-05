@@ -1,5 +1,14 @@
 # About
-Templates are written in Angular template language.
+Templates are regular [Angular templates](https://angular.io/guide/template-syntax) and
+follow the same syntax and concept. The only limitation to the template implementation is
+that you will only have access one data property, the "document context".
+
+```html
+<div *ngIf="context.revision > 100">
+  <strong>Hey, this document has received a lot of love!</strong>
+</div>
+
+```
 
 ## Document context
 Each template will have a locally scoped document context that contains information
@@ -117,13 +126,16 @@ list iteration with the [documents query directive that was mentioned above](#do
 ```
 
 ### Example of using custom template with document query directive
+This is an example of how you would implement a grid display of the three most recent
+blog posts.
 
 ```html
 <ng-template tanamDocuments
              [context]="context"
              type="blog"
              limit=3
-             orderBy="title"
+             orderBy="published"
+             sortOrder="desc"
              let-posts>
     <div *ngFor="let blogPost of posts | async">
         <my-blog-grid-card [context]="blogPost"></my-blog-grid-card>
