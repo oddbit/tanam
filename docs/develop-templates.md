@@ -20,9 +20,9 @@ about the site and the currently rendered document.
   },
   "title": "Women Will",
   "url": "/event/women-will",
-  "hostDomain": "tanam-e8e7d.firebaseapp.com",
-  "hostUrl": "https://tanam-e8e7d.firebaseapp.com",
-  "permalink": "https://tanam-e8e7d.firebaseapp.com/event/women-will",
+  "hostDomain": "kumpul.id",
+  "hostUrl": "https://kumpul.id",
+  "permalink": "https://kumpul.id/event/women-will",
   "revision": 0,
   "status": "published",
   "tags": [
