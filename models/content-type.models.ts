@@ -28,7 +28,6 @@ export interface DocumentType {
     description: string;
     icon: string; // Icon for menus etc
     fields: DocumentField[];
-    jsonLd: string; // JSON-LD data (see schema.org and https://en.wikipedia.org/wiki/JSON-LD)
     numEntries: DocumentCount;
     updated: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
     created: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
