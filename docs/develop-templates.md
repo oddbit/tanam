@@ -21,8 +21,8 @@ about the site and the currently rendered document.
   "data": {
     "address": "Kembali Innovation Hub,Jl. Sunset Road No.28, Seminyak, Kuta, Kabupaten Badung, Bali 80361",
     "body": "<p>Full HTML supported content</p>",
-    "startDate": "2019-01-31T04:00:00.000Z",
-    "endDate": "2019-01-31T06:00:00.000Z",
+    "startDate": "2019-01-31T04:00:00.000Z",  // Javascript Date
+    "endDate": "2019-01-31T06:00:00.000Z",    // Javascript Date
     "image": "/content/images/women-will-2019.jpg",
     "registerLink": "bit.ly/AIForBusiness",
     "title": "Women Will"
@@ -39,9 +39,9 @@ about the site and the currently rendered document.
     "entrepreneurship",
     "gbg"
   ],
-  "created": "2019-01-23T16:00:00.000Z",
-  "updated": "2019-01-31T16:00:00.000Z",
-  "published": "2019-01-31T16:00:00.000Z"
+  "created": "2019-01-23T16:00:00.000Z",      // Javascript Date
+  "updated": "2019-01-31T16:00:00.000Z",      // Javascript Date
+  "published": "2019-01-31T16:00:00.000Z"     // Javascript Date
 }
 ```
 
@@ -50,7 +50,9 @@ fields are consistent and present for all documen types.
 
 ### Standalone document types
 If a document type is "standalone" it means that it has a public URL for which the document can
-be accessed and rendered. This is for example pages, blog posts etc. But you can also declare
+be accessed and rendered. This is for example pages, blog posts etc.
+
+You can also declare
 document types such as "venue" or something that you might not want to create a standalone
 webpage for. The document types can still be used in the same way as any other document type,
 it will just not have any public URL and the attributes `url` and `permalink` will be set to
@@ -69,7 +71,7 @@ You can fetch a single document by its ID like the example below, and access the
 ```html
 <ng-template tanamDocument
              [context]="context"
-             documentId="blog"
+             documentId="Xyc0bpTaRrdoJy9Syzqs"
              let-blogPost>
     <a href="{{ blogPost.url }}">{{ blogPost.title }}</a>
 </ng-template>
