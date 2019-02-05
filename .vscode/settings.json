@@ -22,5 +22,8 @@
   },
   "[firerules]": {
     "editor.tabSize": 2,
-  }
+  },
+  "[markdown]": {
+    "editor.tabSize": 2,
+  },
 }
