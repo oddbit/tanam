@@ -6,6 +6,7 @@ import { DocumentType, DocumentField } from 'tanam-models';
 import { ContentTypeService } from '../../../services/content-type.service';
 import { SiteService } from '../../../services/site.service';
 import { documentTypeMaterialIcons } from './content-type-form.icons';
+import { SiteThemeService } from '../../../services/site-theme.service';
 
 @Component({
   selector: 'app-content-type-form',
@@ -16,6 +17,8 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
   @Input() documentTypeId: string;
   @Input() afterSaveRoute: string;
   @Input() onCancelRoute: string;
+
+  themeId: string;
 
   readonly documentTypeForm: FormGroup = this.formBuilder.group({
     title: [null, Validators.required],
@@ -54,6 +57,11 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     console.log(`ngOnInit documentTypeId: ${this.documentTypeId}`);
+
+    this.siteSettingsService.getSiteInfo().subscribe(settings => {
+      this.themeId = settings.theme;
+    });
+
     const documentType$ = this.documentTypeService.getContentType(this.documentTypeId);
     this.documentTypeSubscription = documentType$.subscribe(documentType => {
       this.clearFields();
@@ -74,6 +82,10 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
     if (this.documentTypeSubscription && !this.documentTypeSubscription.closed) {
       this.documentTypeSubscription.unsubscribe();
     }
+  }
+
+  editTemplate() {
+    this.router.navigateByUrl(`/_/admin/themes/${this.themeId}/templates/${this.documentTypeForm.controls['slug'].value}`);
   }
 
   addField(field?: DocumentField) {
