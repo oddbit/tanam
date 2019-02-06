@@ -89,10 +89,13 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  onTitleChange(title: string) {
-    if (!this.publishedTime) {
+  onTitleChange(title: string, isTitle: boolean) {
+    if (!this.publishedTime && isTitle) {
       // Only auto slugify title if document has't been published before
       this.entryForm.controls['urlPath'].setValue(this._slugify(title));
+      this.entryForm.controls['title'].setValue(title);
+    } else if (isTitle) {
+      this.entryForm.controls['title'].setValue(title);
     }
   }
 
