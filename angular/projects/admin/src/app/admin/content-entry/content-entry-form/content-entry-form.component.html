@@ -9,29 +9,6 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-
-
-          <div class="row">
-            <div class="col">
-              <mat-form-field class="full-width">
-                <input matInput
-                       placeholder="Title"
-                       formControlName="title"
-                       (input)="onTitleChange($event.target.value)">
-                <mat-error *ngIf="entryForm.controls['urlPath'].hasError('required')">
-                  Title is <strong>required</strong>
-                </mat-error>
-              </mat-form-field>
-            </div>
-          </div>
-        </mat-card-content>
-
-        <mat-card-header>
-          <mat-card-title>
-            {{ (documentType$ | async)?.title }} content
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
           <div formGroupName="dataForm">
             <div class="row"
                  *ngFor="let field of (documentType$ | async)?.fields">
@@ -44,6 +21,7 @@
                   <!-- If input type is just simple line of text -->
                   <input matInput
                          *ngSwitchCase="'input-text'"
+                         (input)="onTitleChange($event.target.value, field.isTitle)"
                          placeholder="{{field.title}}"
                          formControlName="{{field.key}}">
 
