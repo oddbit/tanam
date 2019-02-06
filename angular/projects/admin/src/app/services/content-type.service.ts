@@ -31,7 +31,7 @@ export class ContentTypeService {
       .valueChanges();
   }
 
-  async create(id: string = this.firestore.createId()) {
+  async create(id: string) {
     const docRef = this.siteCollection.collection('document-types').doc(id);
     return docRef.set({
       id: id,

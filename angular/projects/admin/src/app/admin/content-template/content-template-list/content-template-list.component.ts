@@ -5,6 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { SiteTheme } from 'tanam-models';
 import { ContentTemplateService } from '../../../services/content-template.service';
 import { ContentTemplateListDataSource } from './content-template-list-datasource';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-content-template-list',
@@ -18,7 +19,7 @@ export class ContentTemplateListComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
 
   dataSource: ContentTemplateListDataSource;
-  private _themeSubscription: Subscription;
+  private _subscriptions: Subscription[] = [];
 
   constructor(
     private readonly router: Router,
@@ -29,19 +30,18 @@ export class ContentTemplateListComponent implements OnInit, OnDestroy {
   displayedColumns = ['selector', 'title', 'updated'];
 
   ngOnInit() {
-    this._themeSubscription = this.theme$.subscribe(theme => {
+    this._subscriptions.push(this.theme$.subscribe(theme => {
       this.dataSource = new ContentTemplateListDataSource(theme, this.paginator, this.sort, this.contentTemplateService);
-    });
+    }));
   }
 
   ngOnDestroy() {
-    if (this._themeSubscription && !this._themeSubscription.closed) {
-      this._themeSubscription.unsubscribe();
-    }
+    this._subscriptions.filter(s => !!s && !s.closed).forEach(s => s.unsubscribe());
   }
 
-  editTemplate(templateId: string) {
-    const url = `/_/admin/templates/${templateId}`;
+  async editTemplate(templateId: string) {
+    const theme = await this.theme$.pipe(take(1)).toPromise();
+    const url = `/_/admin/themes/${theme.id}/templates/${templateId}`;
     this.router.navigateByUrl(url);
   }
 }

@@ -8,6 +8,8 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ContentTemplateEditComponent implements OnInit {
   readonly templateId = this.route.snapshot.paramMap.get('templateId');
+  readonly themeId = this.route.snapshot.paramMap.get('themeId');
+
   constructor(
     private readonly route: ActivatedRoute,
   ) { }

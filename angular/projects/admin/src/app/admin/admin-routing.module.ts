@@ -101,23 +101,16 @@ const routes: Routes = [
                 path: ':themeId',
                 children: [
                   { path: '', component: ContentTemplateOverviewComponent },
+                  {
+                    path: 'templates',
+                    children: [
+                      { path: '', component: NotFoundComponent },
+                      { path: ':templateId', component: ContentTemplateEditComponent },
+                      { path: ':templateId/edit', component: ContentTemplateEditComponent },
+                    ],
+                  },
                   { path: 'edit', component: ThemeEditComponent }
                 ],
-              },
-            ],
-          },
-
-          {
-            path: 'templates',
-            children: [
-              {
-                path: '',
-                component: NotFoundComponent,
-              },
-              {
-                path: ':templateId',
-                component: ContentTemplateEditComponent,
-                canActivate: [AdminGuard],
               },
             ],
           },
