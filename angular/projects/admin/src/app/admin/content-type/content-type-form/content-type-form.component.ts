@@ -59,8 +59,6 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
     console.log(`ngOnInit documentTypeId: ${this.documentTypeId}`);
 
     this.siteSettingsService.getSiteInfo().subscribe(settings => {
-      console.log(`[SettingsSiteComponent] site settings: ${JSON.stringify(settings)}`);
-      console.log(settings);
       this.themeId = settings.theme;
     });
 
