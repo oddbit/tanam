@@ -1,6 +1,6 @@
 import { Directive, Input, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TanamDocumentContext } from '../models/dynamic-page.models';
+import { TanamDocumentContext } from 'tanam-models';
 import { DocumentContextService } from '../services/document-context.service';
 
 @Directive({

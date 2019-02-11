@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { DocumentTemplate, SiteInformation } from 'tanam-models';
-import { TanamDocumentContext } from '../models/dynamic-page.models';
+import { DocumentTemplate, SiteInformation, TanamDocumentContext } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
 
 @Injectable({

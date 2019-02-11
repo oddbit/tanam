@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
 import { combineLatest, Observable } from 'rxjs';
-import { Document, SiteInformation } from 'tanam-models';
-import { TanamDocumentContext } from '../models/dynamic-page.models';
+import { Document, SiteInformation, TanamDocumentContext } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
-import { SiteService } from './site.service';
 
 export interface DocumentQueryOptions {
   limit?: number;

@@ -2,6 +2,7 @@ export * from './app-config.models';
 export * from './cache.models';
 export * from './content-entry.models';
 export * from './content-type.models';
+export * from './dynamic-page.models';
 export * from './file.models';
 export * from './settings.models';
 export * from './theme.models';

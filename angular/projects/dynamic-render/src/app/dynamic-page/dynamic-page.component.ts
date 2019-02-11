@@ -29,6 +29,10 @@ export class DynamicPageComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     console.log(`[DynamicPageComponent:ngOnInit] prefix: '${this.rootPath}'`);
     console.log(`[DynamicPageComponent:ngOnInit] path: '${this.entryPath}'`);
+  }
+
+  ngAfterViewInit() {
+    this.renderContent();
     this.subscriptions.push(this.themeService.getCurrentTheme().subscribe(theme => {
       for (const script of theme.scripts) {
         this.dynamicPage.addScriptToBody(script);
@@ -37,10 +41,6 @@ export class DynamicPageComponent implements OnInit, AfterViewInit, OnDestroy {
         this.dynamicPage.addStyle(style);
       }
     }));
-  }
-
-  ngAfterViewInit() {
-    this.renderContent();
   }
 
   ngOnDestroy() {

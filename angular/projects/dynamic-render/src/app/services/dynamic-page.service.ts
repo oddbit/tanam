@@ -1,12 +1,11 @@
-import { CommonModule } from '@angular/common';
-import { Compiler, Component, ComponentRef, Inject, Injectable, NgModule, ViewContainerRef } from '@angular/core';
-import { DOCUMENT, Title } from '@angular/platform-browser';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { Compiler, Component, Inject, Injectable, NgModule, ViewContainerRef } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { take } from 'rxjs/operators';
-import { DocumentTemplate } from 'tanam-models';
+import { DocumentTemplate, TanamDocumentContext } from 'tanam-models';
 import { DynamicTemplateModule } from '../dynamic-template/dynamic-template.module';
-import { TanamDocumentContext } from '../models/dynamic-page.models';
-import { TemplateService } from './template.service';
 import { SiteService } from './site.service';
+import { TemplateService } from './template.service';
 
 @Injectable({
   providedIn: 'root'
@@ -62,23 +61,24 @@ export class DynamicPageService {
     this.titleService.setTitle(`${title} | ${siteName}`);
   }
 
-  async render(viewContainer: ViewContainerRef, documentContext: TanamDocumentContext): Promise<ComponentRef<any>> {
+  async render(viewContainer: ViewContainerRef, documentContext: TanamDocumentContext) {
     const template = await this.templateService.getTemplate(documentContext).pipe(take(1)).toPromise();
     if (!template) {
       throw new Error(`Document type '${documentContext.documentType}' have a non-existing template: ${template}`);
     }
 
-    const module = await this.createModule(documentContext);
-    const factories = await this.compiler.compileModuleAndAllComponentsAsync(module);
+    const module = await this.createModule();
+    const factories = this.compiler.compileModuleAndAllComponentsSync(module);
     const factory = factories.componentFactories.filter(cf => cf.selector === template.selector)[0];
     if (!factory) {
       throw new Error(`Could not find any component with selector <${template.selector}>`);
     }
 
-    return viewContainer.createComponent(factory);
+    const componentRef = viewContainer.createComponent(factory);
+    componentRef.instance.context = documentContext;
   }
 
-  private async createModule(documentContext: TanamDocumentContext) {
+  private async createModule() {
     const templates = await this.templateService.getTemplates().pipe(take(1)).toPromise();
     if (templates.length === 0) {
       throw new Error(`No templates defined in current theme!`);
@@ -89,19 +89,18 @@ export class DynamicPageService {
         CommonModule,
         DynamicTemplateModule,
       ],
-      declarations: templates.map(c => this.createComponent(c, documentContext)),
+      declarations: templates.map(c => this.createComponent(c)),
     })(class { });
   }
 
-  private createComponent(template: DocumentTemplate, documentContext: TanamDocumentContext) {
-    const dynamicClass = class {
-      context = documentContext;
-    };
-
+  private createComponent(template: DocumentTemplate) {
     return Component({
       selector: template.selector,
       template: template.template,
       styles: template.styles,
-    })(dynamicClass);
+      inputs: ['context'],
+    })(class {
+      context: TanamDocumentContext;
+    });
   }
 }
