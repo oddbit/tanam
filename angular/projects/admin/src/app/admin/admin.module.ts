@@ -16,7 +16,7 @@ import { NavigationModule } from './navigation/navigation.module';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { SettingsModule } from './settings/settings.module';
 import { ThemeModule } from './theme/theme.module';
-
+import { SharedModule } from './shared.module';
 @NgModule({
   declarations: [
     AdminComponent,
@@ -39,6 +39,7 @@ import { ThemeModule } from './theme/theme.module';
     NavigationModule,
     ThemeModule,
     FormModule,
+    SharedModule
   ]
 })
 export class AdminModule { }
