@@ -45,12 +45,11 @@ export async function getDocumentContextById(docId: string) {
     return _toContext(siteInfo, querySnap.docs[0].data() as Document);
 }
 
-export async function getDocumentContextByUrl(root: string, path: string) {
+export async function getDocumentContextByUrl(url: string) {
     const querySnap = await siteCollection()
         .collection('documents')
         .where('status', '==', 'published')
-        .where('url.root', '==', root || '')
-        .where('url.path', '==', path)
+        .where('url.path', '==', url)
         .limit(1)
         .get();
 
@@ -87,7 +86,7 @@ function _toContext(siteInfo: SiteInformation, document: Document) {
     } as DocumentContext;
 
     if (document.standalone) {
-        context.url = '/' + [document.url.root, document.url.path].filter(p => !!p).join('/');
+        context.url = `/${document.url}`;
         context.permalink = `${context.hostUrl}${context.url}`;
     }
 

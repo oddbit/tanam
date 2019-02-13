@@ -127,14 +127,8 @@ app.get('/favicon.ico', async (request, response) => {
 app.get('*', async (request, response) => {
     console.log(`GET ${request.url}`);
     const url = request.url.replace(/^\//, ''); // Remove leading slash
-    const urlParts = url.split('/');
 
-    // URLs are split into an optional root and a path
-    let context = await getDocumentContextByUrl('', url);
-    if (!context && urlParts.length > 1) {
-        context = await getDocumentContextByUrl(urlParts[0], urlParts.splice(1).join('/'));
-    }
-
+    const context = await getDocumentContextByUrl(url);
     if (!context) {
         console.log(`[HTTP 404] page not found for: ${request.url}`);
         response.status(404).send(`Not found: ${request.url}`);

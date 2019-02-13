@@ -35,10 +35,7 @@ export class ContentEntryService {
         id: id,
         documentType: documentType.id,
         title: '',
-        url: {
-          root: documentType.slug,
-          path: '',
-        },
+        url: `${documentType.slug}/${id}`,
         revision: 0,
         standalone: documentType.standalone,
         status: 'unpublished',

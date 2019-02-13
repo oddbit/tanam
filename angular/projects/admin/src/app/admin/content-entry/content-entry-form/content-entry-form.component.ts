@@ -23,6 +23,7 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
   @Input() afterSaveRoute: string;
   @Input() onCancelRoute: string;
 
+  private _rootSlug: string;
   metaDataDialog = false;
   publishedTime: Date;
   updatedTime: Date;
@@ -31,7 +32,7 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
   documentType$: Observable<DocumentType>;
   entryForm = this.formBuilder.group({
     title: [null, Validators.required],
-    urlPath: [null, Validators.required],
+    url: [null, Validators.required],
     status: [null, Validators.required],
     dataForm: this.formBuilder.group({}),
   });
@@ -63,7 +64,7 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.entryForm.patchValue({
       title: this.document.title,
-      urlPath: this.document.url.path,
+      url: this.document.url,
       status: this.document.status,
     });
     this.publishedTime = this.document.published && this.document.published.toDate();
@@ -72,6 +73,7 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
     this.documentType$ = this.documentTypeService.getContentType(this.document.documentType);
     this._documentTypeSubscription = this.documentType$
       .subscribe(documentType => {
+        this._rootSlug = documentType.slug;
         for (const field of documentType.fields) {
           if (this.dataForm.get(field.key)) {
             this.dataForm.setValue(this.document.data[field.key]);
@@ -92,7 +94,7 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
   onTitleChange(title: string, isTitle: boolean) {
     if (!this.publishedTime && isTitle) {
       // Only auto slugify title if document has't been published before
-      this.entryForm.controls['urlPath'].setValue(this._slugify(title));
+      this.entryForm.controls['url'].setValue(`${this._rootSlug}/${this._slugify(title)}`);
       this.entryForm.controls['title'].setValue(title);
     } else if (isTitle) {
       this.entryForm.controls['title'].setValue(title);
@@ -127,10 +129,7 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
       documentType: this.document.documentType,
       status: formData.status,
       data: this.dataForm.value,
-      url: {
-        root: this.document.url.root,
-        path: formData.urlPath,
-      },
+      url: formData.url,
     } as Document;
     await this.contentEntryService.update(updates);
 
