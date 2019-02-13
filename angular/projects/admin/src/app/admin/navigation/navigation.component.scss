@@ -1,5 +1,6 @@
 .sub-toolbar {
-  position: fixed;
+  position: sticky;
+  top: 64px;
   z-index: 1;
   font-size: 1em;
   height: 40px;
