@@ -6,6 +6,7 @@ import { ContentTemplateEditComponent } from './content-template-edit/content-te
 import { ContentTemplateFormComponent } from './content-template-form/content-template-form.component';
 import { ContentTemplateListComponent } from './content-template-list/content-template-list.component';
 import { ContentTemplateOverviewComponent } from './content-template-overview/content-template-overview.component';
+import { SharedModule } from '../shared.module';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { ContentTemplateOverviewComponent } from './content-template-overview/co
     CommonModule,
     AppFirebaseModule,
     AppMaterialModule,
+    SharedModule
   ],
   exports: [
     ContentTemplateEditComponent,

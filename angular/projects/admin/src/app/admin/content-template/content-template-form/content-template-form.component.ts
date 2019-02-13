@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { DocumentTemplate } from 'tanam-models';
 import { ContentTemplateService } from '../../../services/content-template.service';
+import { SiteThemeService } from '../../../services/site-theme.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-content-template-form',
@@ -12,6 +14,7 @@ import { ContentTemplateService } from '../../../services/content-template.servi
 export class ContentTemplateFormComponent implements OnInit, OnDestroy {
   @Input() themeId: string;
   @Input() templateId: string;
+  theme: string;
 
   template: DocumentTemplate;
   readonly templateForm: FormGroup = this.fb.group({
@@ -24,10 +27,15 @@ export class ContentTemplateFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly fb: FormBuilder,
+    private readonly router: Router,
     private readonly contentTemplateservice: ContentTemplateService,
+    private readonly siteThemeservice: SiteThemeService,
   ) { }
 
   ngOnInit() {
+    this.siteThemeservice.getTheme(this.themeId)
+      .subscribe(theme => this.theme = theme.title);
+
     this.templateSubscription = this.contentTemplateservice
       .getTemplate(this.themeId, this.templateId)
       .subscribe(template => {
@@ -45,6 +53,10 @@ export class ContentTemplateFormComponent implements OnInit, OnDestroy {
     if (this.templateSubscription && !this.templateSubscription.closed) {
       this.templateSubscription.unsubscribe();
     }
+  }
+
+  backToTheme() {
+    this.router.navigateByUrl(`/_/admin/themes/${this.themeId}`);
   }
 
   onSave() {

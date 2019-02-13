@@ -1,6 +1,27 @@
 <form [formGroup]="templateForm"
       novalidate
       (ngSubmit)="onSave()">
+  <app-sub-toolbar>
+    Themes
+    <mat-icon class="icon-sub-toolbar">
+      keyboard_arrow_right
+    </mat-icon>
+    <span (click)="backToTheme()" style="cursor:pointer">{{ theme }}</span>
+    <mat-icon class="icon-sub-toolbar">keyboard_arrow_right</mat-icon>
+    {{ template?.title }}
+    <span class="sub-toolbar-spacer"></span>
+    <button mat-button
+            type="submit"
+            color="primary">
+      <mat-icon>save</mat-icon>
+      Save
+    </button>
+    <button mat-button
+            color="warn">
+      <mat-icon>delete</mat-icon>
+      Delete
+    </button>
+  </app-sub-toolbar>
   <mat-card class="shipping-card">
     <mat-card-header>
       <mat-card-title>{{ template?.title }} template definition</mat-card-title>
@@ -58,10 +79,5 @@
         </div>
       </div>
     </mat-card-content>
-    <mat-card-actions align="end">
-      <button mat-raised-button
-              color="primary"
-              type="submit">Submit</button>
-    </mat-card-actions>
   </mat-card>
 </form>
