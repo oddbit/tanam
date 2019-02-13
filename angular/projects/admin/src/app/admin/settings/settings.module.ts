@@ -5,6 +5,7 @@ import { AppMaterialModule } from '../../app-material.module';
 import { DomainFormComponent } from './domain-form/domain-form.component';
 import { SettingsComponent } from './settings.component';
 import { SiteFormComponent } from './site-form/site-form.component';
+import { SharedModule } from '../shared.module';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { SiteFormComponent } from './site-form/site-form.component';
     AppMaterialModule,
     AppFirebaseModule,
     AppMaterialModule,
+    SharedModule
   ],
   exports: [
     SettingsComponent,
