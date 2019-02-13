@@ -23,7 +23,7 @@
     "rewrites": [
       {
         "source": "**",
-        "function": "app"
+        "function": "tanam"
       }
     ]
   },
