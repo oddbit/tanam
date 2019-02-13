@@ -36,7 +36,7 @@
  *  }
  * ```
  */
-export interface TanamDocumentContext {
+export interface DocumentContext {
   id: string;
   documentType: string;
   data: { [key: string]: any };

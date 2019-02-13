@@ -24,7 +24,7 @@
   "scripts": {
     "build": "tsc -p .",
     "watch": "tsc -w -p .",
-    "serve": "firebase serve --only functions",
+    "serve": "npm run build && npm run package && firebase serve",
     "lint": "tslint --project tsconfig.json",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
@@ -38,6 +38,8 @@
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
+    "dustjs-helpers": "^1.7.4",
+    "dustjs-linkedin": "^2.7.5",
     "firebase-admin": "^6.5.1",
     "firebase-functions": "^2.1.0"
   },
