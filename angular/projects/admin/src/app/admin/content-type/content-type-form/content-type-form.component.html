@@ -1,5 +1,31 @@
 <form [formGroup]="documentTypeForm"
       novalidate>
+  <app-sub-toolbar>
+    Content Type <mat-icon class="icon-sub-toolbar">keyboard_arrow_right</mat-icon> {{documentTypeForm.controls['title'].value}}
+    <span class="sub-toolbar-spacer"></span>
+    <button mat-button
+            class="sub-toolbar-icon"
+            color="warn"
+            (click)="cancelEditing()">
+      <mat-icon>keyboard_backspace</mat-icon> Cancel
+    </button>
+    <button mat-button
+            class="sub-toolbar-icon"
+            (click)="editTemplate()">
+      <mat-icon>mode_edit</mat-icon> Edit Template
+    </button>
+    <button mat-button
+            class="sub-toolbar-icon"
+            color="primary"
+            (click)="save()">
+      <mat-icon>save</mat-icon> Save
+    </button>
+    <button mat-button
+            class="sub-toolbar-icon"
+            color="warn">
+      <mat-icon>delete</mat-icon> Delete
+    </button>
+  </app-sub-toolbar>
   <mat-card class="content-type-static-card">
     <mat-card-header>
       <mat-card-title>Content type information</mat-card-title>
@@ -65,8 +91,6 @@
               Description is <strong>required</strong>
             </mat-error>
           </mat-form-field>
-          <button mat-raised-button
-                  (click)="editTemplate()">Edit Template</button>
         </div>
       </div>
     </mat-card-content>
@@ -121,19 +145,5 @@
               (click)="addField()">Add Field</button>
 
     </mat-card-content>
-  </mat-card>
-
-
-  <mat-card class="content-type-static-card">
-
-    <mat-card-actions align="end">
-      <button mat-raised-button
-              color="warn"
-              (click)="cancelEditing()">Cancel</button>
-      <button mat-raised-button
-              color="primary"
-              type="submit"
-              (click)="save()">Submit</button>
-    </mat-card-actions>
   </mat-card>
 </form>
