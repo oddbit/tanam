@@ -48,6 +48,7 @@ export class ContentFileService {
         updated: firebase.firestore.FieldValue.serverTimestamp(),
         created: firebase.firestore.FieldValue.serverTimestamp(),
         bytes: snapshot.totalBytes,
+        variants: {},
         mimeType: snapshot.metadata.contentType,
         fileType: fileType,
         url: downloadURL,
