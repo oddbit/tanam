@@ -19,7 +19,7 @@
     "serve:dynamic:ssr": "node dist/dynamic/server",
     "build:dynamic:ssr": "npm run build:dynamic:bundle && npm run webpack:dynamic",
     "build:dynamic:bundle": "npm run build:dynamic:prod && ng run dynamic-render:server:production",
-    "build:all": "npm run build:admin:prod && npm run build:dynamic:ssr"
+    "build:all": "npm run build:admin:prod"
   },
   "engines": {
     "node": "8"
