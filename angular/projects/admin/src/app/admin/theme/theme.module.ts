@@ -7,6 +7,7 @@ import { ThemeFormComponent } from './theme-form/theme-form.component';
 import { AdminRoutingModule } from '../admin-routing.module';
 import { AppMaterialModule } from '../../app-material.module';
 import { AppFirebaseModule } from '../../app-firebase.module';
+import { SharedModule } from '../shared.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { AppFirebaseModule } from '../../app-firebase.module';
     AppFirebaseModule,
     AppMaterialModule,
     AdminRoutingModule,
+    SharedModule
   ],
   exports: [
     ThemeOverviewComponent,
