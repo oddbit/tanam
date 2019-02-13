@@ -1,19 +1,23 @@
 <div *ngIf="(theme$ |async) as theme">
   <app-sub-toolbar>
     Themes<mat-icon class="icon-sub-toolbar">keyboard_arrow_right</mat-icon> {{ theme.title }}
+    <span class="sub-toolbar-spacer"></span>
+    <button mat-button
+            class="sub-toolbar-icon"
+            (click)="editTheme()">
+      <mat-icon>mode_edit</mat-icon> Edit Theme
+    </button>
+    <button mat-button
+            color="primary"
+            class="sub-toolbar-icon"
+            (click)="createNewTemplate()">
+      <mat-icon>add</mat-icon> Create Template
+    </button>
   </app-sub-toolbar>
   <mat-card>
     <mat-card-title-group>
       <mat-card-title>
         {{ theme.title }}
-        <button mat-flat-button
-                color="accent"
-                class="btn-margin"
-                (click)="createNewTemplate(theme)">+ Add Template</button>
-        <button mat-flat-button
-                color="accent"
-                class="btn-margin"
-                (click)="editTheme(theme)">Edit Theme</button>
       </mat-card-title>
     </mat-card-title-group>
     <mat-card-content>
