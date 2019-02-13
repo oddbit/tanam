@@ -1,4 +1,7 @@
 <div *ngIf="(theme$ |async) as theme">
+  <app-sub-toolbar>
+    Themes<mat-icon class="icon-sub-toolbar">keyboard_arrow_right</mat-icon> {{ theme.title }}
+  </app-sub-toolbar>
   <mat-card>
     <mat-card-title-group>
       <mat-card-title>
