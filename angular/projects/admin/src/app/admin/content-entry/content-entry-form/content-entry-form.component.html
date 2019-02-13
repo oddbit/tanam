@@ -1,3 +1,27 @@
+<app-sub-toolbar>
+  {{ (documentType$ | async)?.title }} <mat-icon class="icon-sub-toolbar">keyboard_arrow_right</mat-icon> Edit
+  {{entryForm.controls['title'].value}}
+  <span class="sub-toolbar-spacer"></span>
+  <button mat-button
+          class="sub-toolbar-icon"
+          color="warn"
+          (click)="cancelEditing()">
+    <mat-icon>keyboard_backspace</mat-icon> Cancel
+  </button>
+  <button mat-button
+          class="sub-toolbar-icon"
+          color="primary"
+          (click)="saveEntry()"
+          [disabled]="entryForm.pristine">
+    <mat-icon>save</mat-icon> Save
+  </button>
+  <button mat-button
+          class="sub-toolbar-icon"
+          color="warn"
+          (click)="deleteEntry()">
+    <mat-icon>delete</mat-icon> Delete
+  </button>
+</app-sub-toolbar>
 <form [formGroup]="entryForm"
       novalidate>
   <div class="wrap">
@@ -102,29 +126,6 @@
                    disabled>
           </mat-form-field>
         </mat-card-content>
-        <mat-card-actions class="wrap-actions">
-          <button mat-button
-                  class="btn-close-dialog"
-                  (click)="closeDialog()">
-            <mat-icon>close</mat-icon>
-          </button>
-          <button mat-raised-button
-                  color="warn"
-                  (click)="cancelEditing()">
-            <mat-icon>keyboard_backspace</mat-icon>
-          </button>
-          <button mat-raised-button
-                  color="warn"
-                  (click)="deleteEntry()">
-            <mat-icon>delete</mat-icon>
-          </button>
-          <button mat-raised-button
-                  color="primary"
-                  (click)="saveEntry()"
-                  [disabled]="entryForm.pristine">
-            <mat-icon>save</mat-icon>
-          </button>
-        </mat-card-actions>
       </mat-card>
     </div>
   </div>

@@ -7,6 +7,7 @@ import { ContentEntryEditComponent } from './content-entry-edit/content-entry-ed
 import { ContentEntryFormComponent } from './content-entry-form/content-entry-form.component';
 import { ContentEntryListComponent } from './content-entry-list/content-entry-list.component';
 import { ContentEntryOverviewComponent } from './content-entry-overview/content-entry-overview.component';
+import { SharedModule } from '../shared.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ContentEntryOverviewComponent } from './content-entry-overview/content-
     AppFirebaseModule,
     AppMaterialModule,
     FormModule,
+    SharedModule,
   ],
   exports: [
     ContentEntryEditComponent,
