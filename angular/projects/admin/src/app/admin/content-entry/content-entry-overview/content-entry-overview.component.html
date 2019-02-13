@@ -1,4 +1,7 @@
 <div *ngIf="(documentType$ |async) as documentType">
+  <app-sub-toolbar>
+    Content <mat-icon class="icon-sub-toolbar">keyboard_arrow_right</mat-icon> {{ documentType.title }}
+  </app-sub-toolbar>
   <mat-card>
     <mat-card-title-group>
       <mat-card-title>
