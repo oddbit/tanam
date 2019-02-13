@@ -1,10 +1,13 @@
 <app-sub-toolbar>
   Themes
-  <span class="spacer"></span>
+  <span class="sub-toolbar-spacer"></span>
+  <button mat-button
+            class="sub-toolbar-icon"
+            color="primary"
+            (click)="cancelEditing()">
+      <mat-icon>add</mat-icon> Create New
+    </button>
 </app-sub-toolbar>
-<h1 class="mat-h1">
-  Themes
-</h1>
 <mat-card class="create-theme-card">
   <mat-card-header>
     <mat-card-title>
@@ -16,10 +19,6 @@
       Information about themes ...
     </p>
   </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button
-            color="primary">+ Create new</button>
-  </mat-card-actions>
 </mat-card>
 
 <app-theme-list></app-theme-list>
