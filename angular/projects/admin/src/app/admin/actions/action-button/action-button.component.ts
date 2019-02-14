@@ -13,11 +13,15 @@ export class ActionButtonComponent implements OnInit {
   readonly BUTTON_COLORS = {
     delete: 'warn',
     save: 'primary',
+    editTemplate: '',
+    cancel: 'warn'
   };
 
   readonly BUTTON_TITLES = {
     delete: 'Delete',
     save: 'Save',
+    editTemplate: 'Edit Template',
+    cancel: 'cancel'
   };
 
   @Input() buttonType: ActionButtonType;

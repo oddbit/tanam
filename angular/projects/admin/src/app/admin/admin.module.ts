@@ -16,7 +16,6 @@ import { NavigationModule } from './navigation/navigation.module';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { SettingsModule } from './settings/settings.module';
 import { ThemeModule } from './theme/theme.module';
-import { ActionsModule } from './actions/actions.module';
 
 @NgModule({
   declarations: [
@@ -40,7 +39,6 @@ import { ActionsModule } from './actions/actions.module';
     NavigationModule,
     ThemeModule,
     FormModule,
-    ActionsModule,
   ]
 })
 export class AdminModule { }

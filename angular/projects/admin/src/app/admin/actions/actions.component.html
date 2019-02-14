@@ -1,3 +1,5 @@
 <div class="button-row">
-  <ng-content select="[app-action-button]"></ng-content>
+  <ng-container *cdkPortal>
+    <ng-content></ng-content>
+  </ng-container>
 </div>
