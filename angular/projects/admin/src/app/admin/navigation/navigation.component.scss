@@ -77,6 +77,12 @@
   cursor: pointer;
 }
 
+.sub-toolbar {
+  position: sticky;
+  top: 64px;
+  z-index: 1;
+}
+
 .sub-toolbar-spacer {
   flex: 1 1 auto;
 }
