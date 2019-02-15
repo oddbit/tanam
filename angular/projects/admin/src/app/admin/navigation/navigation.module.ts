@@ -4,11 +4,13 @@ import { NavigationListItemComponent } from './navigation-list-item/navigation-l
 import { NavigationComponent } from './navigation.component';
 import { AdminRoutingModule } from '../admin-routing.module';
 import { AppMaterialModule } from '../../app-material.module';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 
 @NgModule({
   declarations: [
     NavigationListItemComponent,
     NavigationComponent,
+    BreadcrumbComponent,
   ],
   imports: [
     CommonModule,
