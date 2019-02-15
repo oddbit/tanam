@@ -7,6 +7,7 @@ import { ContentTypeOverviewComponent } from './content-type-overview/content-ty
 import { AppMaterialModule } from '../../app-material.module';
 import { AppFirebaseModule } from '../../app-firebase.module';
 import { AdminRoutingModule } from '../admin-routing.module';
+import { ActionsModule } from '../actions/actions.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { AdminRoutingModule } from '../admin-routing.module';
     AppFirebaseModule,
     AppMaterialModule,
     AdminRoutingModule,
+    ActionsModule
   ],
   exports: [
     ContentTypeEditComponent,
