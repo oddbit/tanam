@@ -21,7 +21,7 @@ export class ActionButtonComponent implements OnInit {
     delete: 'Delete',
     save: 'Save',
     editTemplate: 'Edit Template',
-    cancel: 'cancel'
+    cancel: 'Cancel'
   };
 
   readonly BUTTON_ICONS = {
