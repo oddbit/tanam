@@ -35,16 +35,22 @@ const routes: Routes = [
         canActivate: [AdminAuthGuard],
         children: [
           { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-          { path: 'dashboard', component: DashboardComponent },
+          {
+            path: 'dashboard',
+            component: DashboardComponent,
+            data: { breadcrumb: 'Dashboard' },
+          },
           {
             path: 'settings',
             component: SettingsComponent,
-            canActivate: [AdminGuard]
+            canActivate: [AdminGuard],
+            data: { breadcrumb: 'Settings' },
           },
           {
             path: 'media',
             component: MediaComponent,
-            canActivate: [PublisherGuard]
+            canActivate: [PublisherGuard],
+            data: { breadcrumb: 'Media' },
           },
           {
             path: 'types',
@@ -53,6 +59,7 @@ const routes: Routes = [
                 path: '',
                 component: ContentTypeOverviewComponent,
                 canActivate: [AdminGuard],
+                data: { breadcrumb: 'Document types' },
               },
               {
                 path: ':typeId',
@@ -96,11 +103,16 @@ const routes: Routes = [
               {
                 path: '',
                 component: ThemeOverviewComponent,
+                data: { breadcrumb: 'Themes' },
               },
               {
                 path: ':themeId',
                 children: [
-                  { path: '', component: ContentTemplateOverviewComponent },
+                  {
+                    path: '',
+                    component: ContentTemplateOverviewComponent,
+                    data: { breadcrumb: 'Themes' },
+                  },
                   {
                     path: 'templates',
                     children: [

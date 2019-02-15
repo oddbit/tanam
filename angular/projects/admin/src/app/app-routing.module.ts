@@ -9,7 +9,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { enableTracing: environment.logging.routing }),
+    RouterModule.forRoot(routes, { enableTracing: environment.logging.routing, onSameUrlNavigation: 'reload' }),
   ],
   exports: [RouterModule]
 })
