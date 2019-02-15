@@ -24,6 +24,13 @@ export class ActionButtonComponent implements OnInit {
     cancel: 'cancel'
   };
 
+  readonly BUTTON_ICONS = {
+    delete: 'delete',
+    save: 'save',
+    editTemplate: 'edit',
+    cancel: 'keyboard_arrow_left'
+  };
+
   @Input() buttonType: ActionButtonType;
 
   constructor() { }
