@@ -41,7 +41,7 @@ export async function getSitemap() {
     const entries = [];
     documentsQuery.forEach(doc => {
         const document = doc.data() as Document;
-        const url = [document.url.root, document.url.path].filter(s => s.length).join('/');
+        const url = document.url;
         const updated = document.updated.toDate();
         const created = document.created.toDate();
         const daysOfExistence = Math.round((updated - created) / (1000 * 60 * 60 * 24));

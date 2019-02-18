@@ -15,7 +15,7 @@ export const buildEntryCache = functions.firestore.document('tanam/{siteId}/docu
             tasks.push({
                 action: 'update',
                 domain: domain,
-                url: `${entryBefore.url.root}/${entryBefore.url.path}`,
+                url: entryBefore.url,
             } as CacheTask);
         }
 
@@ -23,7 +23,7 @@ export const buildEntryCache = functions.firestore.document('tanam/{siteId}/docu
             tasks.push({
                 action: 'update',
                 domain: domain,
-                url: `${entryAfter.url.root}/${entryAfter.url.path}`,
+                url: entryAfter.url,
             } as CacheTask);
         }
     }
