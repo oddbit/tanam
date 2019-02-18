@@ -31,8 +31,6 @@ dust.helpers.documents = (chunk, context, bodies, params) => {
     });
 }
 
-
-
 export async function renderTemplate(context: DocumentContext) {
     const templates = await templateService.getTemplates();
 
@@ -87,7 +85,9 @@ export async function renderDocument(context: DocumentContext) {
             ${renderThemeStyles(theme).join('\n')}
         </head>
 
-        <body>${template}</body>
+        <body>
+        ${template}
         ${renderThemeScripts(theme).join('\n')}
+        </body>
         </html>`;
 }
