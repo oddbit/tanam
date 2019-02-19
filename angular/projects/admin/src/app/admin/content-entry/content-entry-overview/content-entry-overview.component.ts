@@ -16,6 +16,8 @@ export class ContentEntryOverviewComponent implements OnInit {
   readonly domain$ = this.siteSettingsService.getPrimaryDomain();
   documentType$: Observable<DocumentType>;
 
+  loading: boolean;
+
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
@@ -29,11 +31,14 @@ export class ContentEntryOverviewComponent implements OnInit {
       const documentTypeId = params.get('typeId');
       return this.cts.getContentType(documentTypeId);
     }));
+    this.loading = false;
   }
 
   async createNewEntry(documentType: DocumentType) {
     const entryId = this.ces.getNewId();
-    this.ces.create(documentType, entryId);
+    this.loading = true;
+    await this.ces.create(documentType, entryId);
     this.router.navigateByUrl(`/_/admin/entries/${entryId}/edit`);
+    this.loading = false;
   }
 }
