@@ -1,0 +1,24 @@
+<div class="wrapper">
+  <mat-card class="card"
+            *ngFor="let file of files$ | async">
+    <mat-card-content class="mat-card-content">
+      <p [matTooltip]="file.title">{{file.title}}</p>
+      <mat-menu #menu="matMenu"
+                xPosition="before">
+        <button mat-menu-item>Expand</button>
+        <button mat-menu-item>Remove</button>
+      </mat-menu>
+      <button mat-icon-button
+              class="more-button"
+              [matMenuTriggerFor]="menu"
+              aria-label="Toggle menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </mat-card-content>
+    <div mat-card-image
+         class="img-wrapper">
+      <img [src]="file.url"
+           [alt]="file.title">
+    </div>
+  </mat-card>
+</div>

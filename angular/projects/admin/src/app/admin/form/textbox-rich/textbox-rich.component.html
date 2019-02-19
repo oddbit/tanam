@@ -1,0 +1,8 @@
+<ckeditor [editor]="formEditor"
+[data]="editorData"
+[disabled]="disabled"
+(change)="onChange($event)"
+(focus)="focused = true"
+(blur)="focused = false"
+[config]="editorConfig"
+></ckeditor>

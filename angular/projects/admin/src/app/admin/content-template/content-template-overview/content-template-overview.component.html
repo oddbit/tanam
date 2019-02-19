@@ -1,0 +1,21 @@
+<div *ngIf="(theme$ |async) as theme">
+  <mat-card>
+    <mat-card-title-group>
+      <mat-card-title>
+        {{ theme.title }}
+        <button mat-flat-button
+                color="accent"
+                class="btn-margin"
+                (click)="createNewTemplate(theme)">+ Add Template</button>
+        <button mat-flat-button
+                color="accent"
+                class="btn-margin"
+                (click)="editTheme(theme)">Edit Theme</button>
+      </mat-card-title>
+    </mat-card-title-group>
+    <mat-card-content>
+      <p *ngIf="theme.description">{{ theme.description }}</p>
+    </mat-card-content>
+  </mat-card>
+</div>
+<app-content-template-list [theme$]="theme$"></app-content-template-list>

@@ -1,0 +1,144 @@
+<form [formGroup]="entryForm"
+      novalidate>
+  <app-actions>
+    <app-action-button buttonType='delete'
+                       (click)='deleteEntry()'></app-action-button>
+    <app-action-button buttonType='save'
+                       (click)='saveEntry()'></app-action-button>
+  </app-actions>
+
+  <div class="wrap">
+    <div class="edit-content">
+      <mat-card class="">
+        <mat-card-header>
+          <mat-card-title>
+            Editing {{ (documentType$ | async)?.title }}
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div formGroupName="dataForm">
+            <div class="row"
+                 *ngFor="let field of (documentType$ | async)?.fields">
+              <div class="col"
+                   [ngSwitch]="field.type">
+
+
+                <mat-form-field class="full-width">
+
+                  <!-- If input type is just simple line of text -->
+                  <input matInput
+                         *ngSwitchCase="'input-text'"
+                         (input)="onTitleChange($event.target.value, field.isTitle)"
+                         placeholder="{{field.title}}"
+                         formControlName="{{field.key}}">
+
+                  <!-- If input type is larger amount of text: paragraph -->
+                  <textarea matInput
+                            *ngSwitchCase="'textbox-plain'"
+                            placeholder="{{field.title}}"
+                            formControlName="{{field.key}}"></textarea>
+
+
+                  <app-textbox-rich matInput
+                                    *ngSwitchCase="'textbox-rich'"
+                                    placeholder="{{field.title}}"
+                                    [editorConfig]="richTextEditorConfig"
+                                    formControlName="{{field.key}}"></app-textbox-rich>
+
+
+                  <!-- Use radio button selection -->
+                  <mat-radio-group *ngSwitchCase="'radio-buttons'"
+                                   formControlName="{{field.key}}">
+                    <mat-radio-button *ngFor="let opt of field.options"
+                                      value="{{option.key}}">{{option.value}}</mat-radio-button>
+                  </mat-radio-group>
+
+                  <mat-error *ngIf="dataForm.controls[field.key].hasError('required')">
+                    {{ field.title }} is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="edit-metadata"
+         [ngClass]="{'open-dialog': metaDataDialog}">
+      <mat-card>
+        <mat-card-content>
+          <mat-form-field class="full-width">
+            <input matInput
+                   placeholder="Slug"
+                   formControlName="url">
+            <mat-hint>https://{{ domain$ | async }}/{{ document.url }}</mat-hint>
+            <mat-error *ngIf="entryForm.controls['url'].hasError('required')">
+              URL slug is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-select formControlName="status"
+                        placeholder="Status">
+              <mat-option *ngFor="let statusOption of statusOptions"
+                          value="{{statusOption.value}}">{{statusOption.title}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input matInput
+                   placeholder="Publish Date"
+                   value="{{ publishedTime | date:'yyyy-MM-dd' }}"
+                   disabled>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input matInput
+                   placeholder="Revision"
+                   value="{{ document.revision }}"
+                   disabled>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input matInput
+                   placeholder="Created"
+                   value="{{ createdTime | date:'yyyy-MM-dd' }}"
+                   disabled>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input matInput
+                   placeholder="Updated"
+                   value="{{ updatedTime | date:'yyyy-MM-dd' }}"
+                   disabled>
+          </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions class="wrap-actions">
+          <button mat-button
+                  class="btn-close-dialog"
+                  (click)="closeDialog()">
+            <mat-icon>close</mat-icon>
+          </button>
+          <button mat-raised-button
+                  color="warn"
+                  (click)="cancelEditing()">
+            <mat-icon>keyboard_backspace</mat-icon>
+          </button>
+          <button mat-raised-button
+                  color="warn"
+                  (click)="deleteEntry()">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-raised-button
+                  color="primary"
+                  (click)="saveEntry()"
+                  [disabled]="entryForm.pristine">
+            <mat-icon>save</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</form>
+
+<div *ngIf="!metaDataDialog"
+     class="btn-open-dialog"
+     (click)="showDialog()">
+  <mat-icon>settings</mat-icon>
+</div>

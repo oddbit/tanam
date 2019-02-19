@@ -1,0 +1,17 @@
+.sub-toolbar-button {
+  display: block
+}
+
+.sub-toolbar-menu {
+  display: none;
+}
+
+@media only screen and (max-width: 600px) {
+  .sub-toolbar-menu {
+    display: block;
+  }
+
+  .sub-toolbar-button {
+    display: none
+  }
+}

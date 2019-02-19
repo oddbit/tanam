@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es6"
+    ],
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "target": "es6",
+    "baseUrl": "./",
+    "paths": {
+      "tanam-models": [
+        "../models"
+      ],
+      "tanam-models/*": [
+        "../models/*"
+      ]
+    }
+  },
+  "compileOnSave": true,
+  "typeRoots": [
+    "node_modules/@types"
+  ],
+  "include": [
+    "src"
+  ]
+}

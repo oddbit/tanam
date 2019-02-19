@@ -1,0 +1,56 @@
+{
+  "name": "tanam",
+  "version": "0.5.0",
+  "description": "Pluggable CMS for Firebase",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oddbit/tanam.git"
+  },
+  "bugs": {
+    "url": "https://github.com/oddbit/tanam/issues"
+  },
+  "homepage": "https://github.com/oddbit/tanam#readme",
+  "keywords": [
+    "cms",
+    "firebase",
+    "angular",
+    "angularfire",
+    "angularfire2"
+  ],
+  "engines": {
+    "node": "8"
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "watch": "tsc -w -p .",
+    "serve": "npm run build && npm run package && firebase serve",
+    "lint": "tslint --project tsconfig.json",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log",
+    "package": "node ./package-dist",
+    "build:angular": "npm --prefix ../angular run build:all",
+    "build:functions": "npm run lint && npm run build",
+    "build:all": "npm run build:angular && npm run build:functions",
+    "build:dist": "npm run build:all && npm run package"
+  },
+  "dependencies": {
+    "crypto-js": "^3.1.9-1",
+    "dustjs-helpers": "^1.7.4",
+    "dustjs-linkedin": "^2.7.5",
+    "firebase-admin": "^6.5.1",
+    "firebase-functions": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^3.1.43",
+    "@types/node": "^10.12.19",
+    "copy": "^0.3.2",
+    "fs-extra": "^7.0.1",
+    "ts-loader": "^5.3.3",
+    "ts-node": "^8.0.2",
+    "tslint": "^5.12.1",
+    "typescript": "^3.2.4"
+  }
+}

@@ -1,0 +1,5 @@
+<div *ngIf="(contentEntry$ | async) as contentEntry">
+    <app-content-entry-form [document]="contentEntry"
+                            [onCancelRoute]="'/_/admin/types/' + contentEntry.documentType"
+                            [afterSaveRoute]="'/_/admin/types/' + contentEntry.documentType"></app-content-entry-form>
+</div>
