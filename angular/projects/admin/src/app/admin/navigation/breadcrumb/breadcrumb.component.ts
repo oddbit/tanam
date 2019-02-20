@@ -1,6 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router, NavigationEnd, ChildActivationStart, ChildActivationEnd } from '@angular/router';
-import { filter, distinctUntilChanged, map, pluck } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 interface Breadcrumb {
@@ -22,21 +21,27 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this._subscriptions.push(this.activatedRoute.url.subscribe(_ => this.buildBreadcrumbs()));
+    this._subscriptions.push(this.activatedRoute.url.subscribe(() => {
+      this.breadcrumbs.splice(0, this.breadcrumbs.length);
+      this.buildBreadcrumbs(this.activatedRoute, '/_/');
+    }));
   }
 
   ngOnDestroy() {
     this._subscriptions.filter(s => !!s && !s.closed).forEach(s => s.unsubscribe);
   }
 
-  private buildBreadcrumbs() {
-    this.breadcrumbs.splice(0, this.breadcrumbs.length);
-    // const route = this.activatedRoute.children[0];
-    // if (route.routeConfig.data && route.routeConfig.data.breadcrumb) {
-    //   this.breadcrumbs.push({
-    //     title: route.routeConfig.data.breadcrumb,
-    //     url: '',
-    //   } as Breadcrumb);
-    // }
+  private buildBreadcrumbs(activatedRoute: ActivatedRoute, currentRootUrl: string) {
+    const currentUrl = [currentRootUrl, activatedRoute.routeConfig.path].join('/');
+    if (activatedRoute.routeConfig.data && activatedRoute.routeConfig.data.breadcrumb) {
+      this.breadcrumbs.push({
+        title: activatedRoute.routeConfig.data.breadcrumb,
+        url: currentUrl,
+      } as Breadcrumb);
+    }
+
+    if (!!activatedRoute.firstChild) {
+      this.buildBreadcrumbs(activatedRoute.firstChild, currentUrl);
+    }
   }
 }
