@@ -2,14 +2,14 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { DocumentTemplate } from 'tanam-models';
-import { ContentTemplateService } from '../../../services/content-template.service';
+import { ThemeTemplateService } from '../../../services/theme-template.service';
 
 @Component({
-  selector: 'app-content-template-form',
-  templateUrl: './content-template-form.component.html',
-  styleUrls: ['./content-template-form.component.scss']
+  selector: 'app-theme-template-form',
+  templateUrl: './theme-template-form.component.html',
+  styleUrls: ['./theme-template-form.component.scss']
 })
-export class ContentTemplateFormComponent implements OnInit, OnDestroy {
+export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
   @Input() themeId: string;
   @Input() templateId: string;
 
@@ -24,11 +24,11 @@ export class ContentTemplateFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly contentTemplateservice: ContentTemplateService,
+    private readonly themeTemplateservice: ThemeTemplateService,
   ) { }
 
   ngOnInit() {
-    this.templateSubscription = this.contentTemplateservice
+    this.templateSubscription = this.themeTemplateservice
       .getTemplate(this.themeId, this.templateId)
       .subscribe(template => {
         this.template = template;
@@ -49,7 +49,7 @@ export class ContentTemplateFormComponent implements OnInit, OnDestroy {
 
   onSave() {
     const formData = this.templateForm.value;
-    this.contentTemplateservice.saveTemplate({
+    this.themeTemplateservice.saveTemplate({
       id: this.templateId,
       title: formData.title,
       selector: formData.selector,

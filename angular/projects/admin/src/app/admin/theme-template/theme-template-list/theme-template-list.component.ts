@@ -3,27 +3,27 @@ import { MatPaginator, MatSort } from '@angular/material';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { SiteTheme } from 'tanam-models';
-import { ContentTemplateService } from '../../../services/content-template.service';
-import { ContentTemplateListDataSource } from './content-template-list-datasource';
+import { ThemeTemplateService } from '../../../services/theme-template.service';
+import { ThemeTemplateListDataSource } from './theme-template-list-datasource';
 import { take } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-content-template-list',
-  templateUrl: './content-template-list.component.html',
-  styleUrls: ['./content-template-list.component.scss']
+  selector: 'app-theme-template-list',
+  templateUrl: './theme-template-list.component.html',
+  styleUrls: ['./theme-template-list.component.scss']
 })
-export class ContentTemplateListComponent implements OnInit, OnDestroy {
+export class ThemeTemplateListComponent implements OnInit, OnDestroy {
   @Input() theme$: Observable<SiteTheme>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  dataSource: ContentTemplateListDataSource;
+  dataSource: ThemeTemplateListDataSource;
   private _subscriptions: Subscription[] = [];
 
   constructor(
     private readonly router: Router,
-    private readonly contentTemplateService: ContentTemplateService,
+    private readonly themeTemplateService: ThemeTemplateService,
   ) { }
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
@@ -31,7 +31,7 @@ export class ContentTemplateListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._subscriptions.push(this.theme$.subscribe(theme => {
-      this.dataSource = new ContentTemplateListDataSource(theme, this.paginator, this.sort, this.contentTemplateService);
+      this.dataSource = new ThemeTemplateListDataSource(theme, this.paginator, this.sort, this.themeTemplateService);
     }));
   }
 

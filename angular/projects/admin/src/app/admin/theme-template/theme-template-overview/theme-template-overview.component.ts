@@ -3,22 +3,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { SiteTheme } from 'tanam-models';
-import { ContentTemplateService } from '../../../services/content-template.service';
 import { SiteThemeService } from '../../../services/site-theme.service';
 
 @Component({
-  selector: 'app-content-template-overview',
-  templateUrl: './content-template-overview.component.html',
-  styleUrls: ['./content-template-overview.component.scss']
+  selector: 'app-theme-template-overview',
+  templateUrl: './theme-template-overview.component.html',
+  styleUrls: ['./theme-template-overview.component.scss']
 })
-export class ContentTemplateOverviewComponent implements OnInit {
+export class ThemeTemplateOverviewComponent implements OnInit {
   theme$: Observable<SiteTheme>;
 
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly siteThemeservice: SiteThemeService,
-    private readonly contentTemplateService: ContentTemplateService,
   ) { }
 
   ngOnInit() {
@@ -30,7 +28,7 @@ export class ContentTemplateOverviewComponent implements OnInit {
 
   async createNewTemplate(theme: SiteTheme) {
     // TODO: Implement new way of creating template
-    // const newId = await this.contentTemplateService.createTemplateInTheme(theme);
+    // const newId = await this.themeTemplateService.createTemplateInTheme(theme);
     // this.router.navigateByUrl(`/_/admin/templates/${newId}`);
   }
 

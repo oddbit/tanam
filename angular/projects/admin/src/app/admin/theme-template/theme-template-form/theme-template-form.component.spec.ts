@@ -9,15 +9,15 @@ import {
   MatSelectModule,
 } from '@angular/material';
 
-import { ContentTemplateFormComponent } from './content-template-form.component';
+import { ThemeTemplateFormComponent } from './theme-template-form.component';
 
-describe('ContentTemplateFormComponent', () => {
-  let component: ContentTemplateFormComponent;
-  let fixture: ComponentFixture<ContentTemplateFormComponent>;
+describe('ThemeTemplateFormComponent', () => {
+  let component: ThemeTemplateFormComponent;
+  let fixture: ComponentFixture<ThemeTemplateFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentTemplateFormComponent],
+      declarations: [ThemeTemplateFormComponent],
       imports: [
         NoopAnimationsModule,
         ReactiveFormsModule,
@@ -31,7 +31,7 @@ describe('ContentTemplateFormComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContentTemplateFormComponent);
+    fixture = TestBed.createComponent(ThemeTemplateFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

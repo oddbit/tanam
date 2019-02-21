@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin.component';
 import { DocumentEditComponent } from './document/document-edit/document-edit.component';
 import { DocumentOverviewComponent } from './document/document-overview/document-overview.component';
-import { ContentTemplateEditComponent } from './content-template/content-template-edit/content-template-edit.component';
-import { ContentTemplateOverviewComponent } from './content-template/content-template-overview/content-template-overview.component';
+import { ThemeTemplateEditComponent } from './theme-template/theme-template-edit/theme-template-edit.component';
+import { ThemeTemplateOverviewComponent } from './theme-template/theme-template-overview/theme-template-overview.component';
 import { DocumentTypeEditComponent } from './document-type/document-type-edit/document-type-edit.component';
 import { DocumentTypeOverviewComponent } from './document-type/document-type-overview/document-type-overview.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -104,14 +104,14 @@ const routes: Routes = [
                 children: [
                   {
                     path: '',
-                    component: ContentTemplateOverviewComponent,
+                    component: ThemeTemplateOverviewComponent,
                   },
                   {
                     path: 'templates',
                     children: [
                       { path: '', component: NotFoundComponent },
-                      { path: ':templateId', component: ContentTemplateEditComponent },
-                      { path: ':templateId/edit', component: ContentTemplateEditComponent },
+                      { path: ':templateId', component: ThemeTemplateEditComponent },
+                      { path: ':templateId/edit', component: ThemeTemplateEditComponent },
                     ],
                   },
                   { path: 'edit', component: ThemeEditComponent }

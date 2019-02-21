@@ -8,7 +8,7 @@ import { AppConfigService } from './app-config.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ContentTemplateService {
+export class ThemeTemplateService {
   readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
 
   constructor(

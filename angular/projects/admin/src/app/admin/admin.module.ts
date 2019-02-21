@@ -6,7 +6,7 @@ import { AppMaterialModule } from '../app-material.module';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
 import { DocumentModule } from './document/document.module';
-import { ContentTemplateModule } from './content-template/content-template.module';
+import { ThemeTemplateModule } from './theme-template/theme-template.module';
 import { DocumentTypeModule } from './document-type/document-type.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormModule } from './form/form.module';
@@ -34,7 +34,7 @@ import { ThemeModule } from './theme/theme.module';
     LayoutModule,
     MediaModule,
     DocumentModule,
-    ContentTemplateModule,
+    ThemeTemplateModule,
     DocumentTypeModule,
     NavigationModule,
     ThemeModule,

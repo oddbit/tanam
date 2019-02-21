@@ -2,22 +2,22 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Observable } from 'rxjs';
 import { DocumentTemplate, SiteTheme } from 'tanam-models';
-import { ContentTemplateService } from '../../../services/content-template.service';
+import { ThemeTemplateService } from '../../../services/theme-template.service';
 
-export class ContentTemplateListDataSource extends DataSource<DocumentTemplate> {
+export class ThemeTemplateListDataSource extends DataSource<DocumentTemplate> {
   data: DocumentTemplate[];
 
   constructor(
     private readonly theme: SiteTheme,
     private readonly paginator: MatPaginator,
     private readonly sort: MatSort,
-    private readonly contentTemplateService: ContentTemplateService,
+    private readonly themeTemplateService: ThemeTemplateService,
   ) {
     super();
   }
 
   connect(): Observable<DocumentTemplate[]> {
-    return this.contentTemplateService.getTemplatesForTheme(this.theme.id);
+    return this.themeTemplateService.getTemplatesForTheme(this.theme.id);
   }
 
   disconnect() { }
