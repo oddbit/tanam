@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-export type ActionButtonType = 'delete' | 'save' | 'create' | 'cancel' | 'editTemplate';
+export type ActionButtonType = 'delete' | 'save' | 'create' | 'cancel'| 'upload' | 'editTemplate';
 
 
 @Component({
@@ -15,7 +15,8 @@ export class ActionButtonComponent implements OnInit {
     save: 'primary',
     editTemplate: '',
     create: '',
-    cancel: 'warn'
+    cancel: 'warn',
+    upload: '',
   };
 
   readonly BUTTON_TITLES = {
@@ -23,7 +24,8 @@ export class ActionButtonComponent implements OnInit {
     save: 'Save',
     editTemplate: 'Edit Template',
     create: 'Create new',
-    cancel: 'Cancel'
+    cancel: 'Cancel',
+    upload: 'Upload',
   };
 
   readonly BUTTON_ICONS = {
@@ -31,7 +33,8 @@ export class ActionButtonComponent implements OnInit {
     save: 'save',
     editTemplate: 'edit',
     create: 'create',
-    cancel: 'keyboard_arrow_left'
+    cancel: 'keyboard_arrow_left',
+    upload: 'file_upload',
   };
 
   @Input() buttonType: ActionButtonType;
