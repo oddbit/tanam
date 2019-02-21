@@ -109,29 +109,6 @@
                    disabled>
           </mat-form-field>
         </mat-card-content>
-        <mat-card-actions class="wrap-actions">
-          <button mat-button
-                  class="btn-close-dialog"
-                  (click)="closeDialog()">
-            <mat-icon>close</mat-icon>
-          </button>
-          <button mat-raised-button
-                  color="warn"
-                  (click)="cancelEditing()">
-            <mat-icon>keyboard_backspace</mat-icon>
-          </button>
-          <button mat-raised-button
-                  color="warn"
-                  (click)="deleteEntry()">
-            <mat-icon>delete</mat-icon>
-          </button>
-          <button mat-raised-button
-                  color="primary"
-                  (click)="saveEntry()"
-                  [disabled]="entryForm.pristine">
-            <mat-icon>save</mat-icon>
-          </button>
-        </mat-card-actions>
       </mat-card>
     </div>
   </div>
