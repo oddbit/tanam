@@ -5,7 +5,7 @@ import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-page-title',
   templateUrl: './page-title.component.html',
-  styleUrls: ['./page-title.component.css']
+  styleUrls: ['./page-title.component.scss']
 })
 export class PageTitleComponent implements AfterViewInit, OnDestroy {
 

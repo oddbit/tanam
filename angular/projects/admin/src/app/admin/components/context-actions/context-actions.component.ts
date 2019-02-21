@@ -4,7 +4,7 @@ import { AfterViewInit, ApplicationRef, Component, ComponentFactoryResolver, Inj
 @Component({
   selector: 'app-context-actions',
   templateUrl: './context-actions.component.html',
-  styleUrls: ['./context-actions.component.css']
+  styleUrls: ['./context-actions.component.scss']
 })
 export class ContextActionsComponent implements AfterViewInit, OnDestroy {
   @ViewChild(CdkPortal)

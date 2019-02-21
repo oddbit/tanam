@@ -132,5 +132,10 @@
       }
     }
   },
-  "defaultProject": "admin"
+  "defaultProject": "admin",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }
