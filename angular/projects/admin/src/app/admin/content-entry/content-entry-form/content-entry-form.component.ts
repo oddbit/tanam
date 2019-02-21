@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -18,7 +18,7 @@ interface StatusOption {
   templateUrl: './content-entry-form.component.html',
   styleUrls: ['./content-entry-form.component.scss']
 })
-export class ContentEntryFormComponent implements OnInit, OnDestroy {
+export class ContentEntryFormComponent implements OnInit, OnDestroy, OnChanges {
   @Input() document: Document;
   @Input() afterSaveRoute: string;
   @Input() onCancelRoute: string;
@@ -67,9 +67,6 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
       url: this.document.url,
       status: this.document.status,
     });
-    this.publishedTime = this.document.published && this.document.published.toDate();
-    this.updatedTime = this.document.updated.toDate();
-    this.createdTime = this.document.created.toDate();
     this.documentType$ = this.documentTypeService.getContentType(this.document.documentType);
     this._documentTypeSubscription = this.documentType$
       .subscribe(documentType => {
@@ -83,6 +80,14 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy {
           }
         }
       });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.document.currentValue.created) {
+      this.publishedTime = this.document.published && this.document.published.toDate();
+      this.updatedTime = this.document.updated.toDate();
+      this.createdTime = this.document.created.toDate();
+    }
   }
 
   ngOnDestroy() {
