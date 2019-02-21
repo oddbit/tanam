@@ -1,4 +1,5 @@
 <div *ngIf="(documentType$ |async) as documentType">
+  <tanam-page-title pageTitle="{{documentType.title}} overview"></tanam-page-title>
   <tanam-context-actions>
     <tanam-action-button buttonType='create'
                          (click)='createNewEntry(documentType)'></tanam-action-button>
