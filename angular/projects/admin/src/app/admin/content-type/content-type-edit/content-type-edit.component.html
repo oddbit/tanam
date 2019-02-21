@@ -1,2 +1,9 @@
-<app-content-type-form [documentTypeId]="documentTypeId"
-                       [onCancelRoute]="onCancelRoute"></app-content-type-form>
+<app-breadcrumbs>
+    <app-breadcrumb routerLink="/_/admin/types">Content Types</app-breadcrumb>
+</app-breadcrumbs>
+
+<div *ngIf="(documentType$ | async) as documentType">
+    <app-page-title pageTitle="Edit {{ documentType.title }}"></app-page-title>
+    <app-content-type-form [documentType]="documentType"
+                           onCancelRoute="/_/admin/types"></app-content-type-form>
+</div>

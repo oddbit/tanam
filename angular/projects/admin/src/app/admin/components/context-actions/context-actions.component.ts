@@ -1,13 +1,12 @@
-import { Component, ApplicationRef, Injector, OnDestroy, AfterViewInit, ViewChild, ComponentFactoryResolver } from '@angular/core';
 import { CdkPortal, DomPortalHost } from '@angular/cdk/portal';
+import { AfterViewInit, ApplicationRef, Component, ComponentFactoryResolver, Injector, OnDestroy, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-actions',
-  templateUrl: './actions.component.html',
-  styleUrls: ['./actions.component.css']
+  selector: 'app-context-actions',
+  templateUrl: './context-actions.component.html',
+  styleUrls: ['./context-actions.component.css']
 })
-export class ActionsComponent implements AfterViewInit, OnDestroy  {
-
+export class ContextActionsComponent implements AfterViewInit, OnDestroy {
   @ViewChild(CdkPortal)
   private portal: CdkPortal;
   private host: DomPortalHost;
@@ -20,17 +19,16 @@ export class ActionsComponent implements AfterViewInit, OnDestroy  {
 
   ngAfterViewInit(): void {
     this.host = new DomPortalHost(
-      document.querySelector('#sub-toolbar-button'),
+      document.querySelector('#context-actions'),
       this.componentFactoryReslover,
       this.applicationRef,
       this.injector
     );
-    console.log(this.portal);
+
     this.host.attach(this.portal);
   }
 
   ngOnDestroy(): void {
     this.host.detach();
   }
-
 }

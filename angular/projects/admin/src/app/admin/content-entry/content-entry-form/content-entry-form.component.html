@@ -1,11 +1,11 @@
 <form [formGroup]="entryForm"
       novalidate>
-  <app-actions>
+  <app-context-actions>
     <app-action-button buttonType='delete'
                        (click)='deleteEntry()'></app-action-button>
     <app-action-button buttonType='save'
                        (click)='saveEntry()'></app-action-button>
-  </app-actions>
+  </app-context-actions>
 
   <div class="wrap">
     <div class="edit-content">

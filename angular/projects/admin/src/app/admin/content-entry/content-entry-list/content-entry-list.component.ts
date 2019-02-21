@@ -17,7 +17,7 @@ export class ContentEntryListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: ContentEntryListDataSource;
-  private _documentTypeSubscription: Subscription;
+  private _subscriptions: Subscription[] = [];
 
   constructor(
     private readonly router: Router,
@@ -27,19 +27,17 @@ export class ContentEntryListComponent implements OnInit, OnDestroy {
   displayedColumns = ['title', 'updated'];
 
   ngOnInit() {
-    this._documentTypeSubscription = this.documentType$.subscribe(documentType => {
+    this._subscriptions.push(this.documentType$.subscribe(documentType => {
       this.dataSource = new ContentEntryListDataSource(documentType, this.contentEntryService, this.paginator, this.sort);
-    });
+    }));
   }
 
   ngOnDestroy() {
-    if (this._documentTypeSubscription && !this._documentTypeSubscription.closed) {
-      this._documentTypeSubscription.unsubscribe();
-    }
+    this._subscriptions.filter(s => !!s && !s.closed).forEach(s => s.unsubscribe());
   }
 
-  editEntry(entryId: string) {
-    const url = `/_/admin/entries/${entryId}`;
+  editEntry(documentId: string) {
+    const url = `/_/admin/document/${documentId}`;
     this.router.navigateByUrl(url);
   }
 }

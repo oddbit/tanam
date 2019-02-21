@@ -1,5 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AppAuthService } from '../../services/app-auth.service';
@@ -26,6 +27,7 @@ export class NavigationComponent {
     .pipe(map(result => result.matches));
 
   constructor(
+    private readonly activatedRoute: ActivatedRoute,
     private readonly breakpointObserver: BreakpointObserver,
     private readonly documentTypeService: ContentTypeService,
     private readonly appAuthService: AppAuthService,

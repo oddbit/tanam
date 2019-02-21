@@ -57,19 +57,19 @@ export class ContentEntryService {
       .update(entry);
   }
 
-  delete(entryId: string) {
-    if (!entryId) {
+  delete(documentId: string) {
+    if (!documentId) {
       throw new Error('Document ID must be provided as an attribute when deleting an entry.');
     }
-    console.log(entryId);
+    console.log(documentId);
     return this.siteCollection
-      .collection<Document>('documents').doc(entryId)
+      .collection<Document>('documents').doc(documentId)
       .delete();
   }
 
-  get(entryId: string): Observable<Document> {
+  get(documentId: string): Observable<Document> {
     return this.siteCollection
-      .collection('documents').doc<Document>(entryId)
+      .collection('documents').doc<Document>(documentId)
       .valueChanges();
   }
 

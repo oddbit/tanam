@@ -1,25 +1,26 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { DocumentType, DocumentField } from 'tanam-models';
+import { DocumentField, DocumentType } from 'tanam-models';
 import { ContentTypeService } from '../../../services/content-type.service';
 import { SiteService } from '../../../services/site.service';
 import { documentTypeMaterialIcons } from './content-type-form.icons';
-import { SiteThemeService } from '../../../services/site-theme.service';
 
 @Component({
   selector: 'app-content-type-form',
   templateUrl: './content-type-form.component.html',
   styleUrls: ['./content-type-form.component.scss']
 })
-export class ContentTypeFormComponent implements OnInit, OnDestroy {
-  @Input() documentTypeId: string;
+export class ContentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() documentType: DocumentType;
   @Input() afterSaveRoute: string;
   @Input() onCancelRoute: string;
 
   themeId: string;
 
+  readonly domain$: Observable<string> = this.siteSettingsService.getPrimaryDomain();
+  readonly icons = documentTypeMaterialIcons;
   readonly documentTypeForm: FormGroup = this.formBuilder.group({
     title: [null, Validators.required],
     slug: [null, Validators.required],
@@ -27,14 +28,6 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
     description: [null, Validators.required],
     fields: this.formBuilder.array([]),
   });
-
-  get fieldForms() {
-    return this.documentTypeForm.get('fields') as FormArray;
-  }
-
-  readonly domain$: Observable<string> = this.siteSettingsService.getPrimaryDomain();
-  readonly icons = documentTypeMaterialIcons;
-
   readonly fieldTypes = [
     { type: 'input-text', title: 'Single line of text' },
     { type: 'input-number', title: 'Input number on a line' },
@@ -46,7 +39,7 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
     { type: 'slide-toggle', title: 'Slide toggle value for yes/no' },
   ];
 
-  private documentTypeSubscription: Subscription;
+  private _subscriptions: Subscription[] = [];
 
   constructor(
     private readonly router: Router,
@@ -56,32 +49,35 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    console.log(`ngOnInit documentTypeId: ${this.documentTypeId}`);
+    console.log(`ngOnInit documentTypeId: ${this.documentType}`);
 
-    this.siteSettingsService.getSiteInfo().subscribe(settings => {
+    this._subscriptions.push(this.siteSettingsService.getSiteInfo().subscribe(settings => {
       this.themeId = settings.theme;
-    });
+    }));
+  }
 
-    const documentType$ = this.documentTypeService.getContentType(this.documentTypeId);
-    this.documentTypeSubscription = documentType$.subscribe(documentType => {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.documentType) {
       this.clearFields();
-      for (const field of documentType.fields) {
+      for (const field of this.documentType.fields) {
         this.addField(field);
       }
 
       this.documentTypeForm.patchValue({
-        title: documentType.title,
-        slug: documentType.slug,
-        icon: documentType.icon,
-        description: documentType.description,
+        title: this.documentType.title,
+        slug: this.documentType.slug,
+        icon: this.documentType.icon,
+        description: this.documentType.description,
       });
-    });
+    }
   }
 
   ngOnDestroy(): void {
-    if (this.documentTypeSubscription && !this.documentTypeSubscription.closed) {
-      this.documentTypeSubscription.unsubscribe();
-    }
+    this._subscriptions.filter(s => !!s && !s.closed).forEach(s => s.unsubscribe());
+  }
+
+  get fieldForms() {
+    return this.documentTypeForm.get('fields') as FormArray;
   }
 
   editTemplate() {
@@ -121,7 +117,7 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy {
     }
 
     await this.documentTypeService.save({
-      id: this.documentTypeId,
+      id: this.documentType.id,
       title: formData.title,
       slug: formData.slug || '',
       icon: formData.icon,

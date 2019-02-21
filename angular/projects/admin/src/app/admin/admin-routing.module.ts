@@ -38,34 +38,35 @@ const routes: Routes = [
           {
             path: 'dashboard',
             component: DashboardComponent,
-            data: { breadcrumb: 'Dashboard' },
           },
           {
             path: 'settings',
             component: SettingsComponent,
             canActivate: [AdminGuard],
-            data: { breadcrumb: 'Settings' },
           },
           {
             path: 'media',
             component: MediaComponent,
             canActivate: [PublisherGuard],
-            data: { breadcrumb: 'Media' },
           },
           {
             path: 'types',
+            component: ContentTypeOverviewComponent,
+            canActivate: [AdminGuard],
+          },
+          {
+            path: 'type',
             children: [
-              {
-                path: '',
-                component: ContentTypeOverviewComponent,
-                canActivate: [AdminGuard],
-                data: { breadcrumb: 'Document types' },
-              },
               {
                 path: ':typeId',
                 children: [
                   {
                     path: '',
+                    redirectTo: 'overview',
+                    pathMatch: 'full',
+                  },
+                  {
+                    path: 'overview',
                     component: ContentEntryOverviewComponent,
                     canActivate: [PublisherGuard],
                   },
@@ -78,16 +79,11 @@ const routes: Routes = [
               },
             ],
           },
-
           {
-            path: 'entries',
+            path: 'document',
             children: [
               {
-                path: '',
-                component: NotFoundComponent,
-              },
-              {
-                path: ':entryId',
+                path: ':documentId',
                 children: [
                   { path: '', redirectTo: 'edit', pathMatch: 'full' },
                   { path: 'edit', component: ContentEntryEditComponent, canActivate: [PublisherGuard] }
@@ -95,7 +91,6 @@ const routes: Routes = [
               },
             ],
           },
-
           {
             path: 'themes',
             canActivate: [AdminGuard],
@@ -103,7 +98,6 @@ const routes: Routes = [
               {
                 path: '',
                 component: ThemeOverviewComponent,
-                data: { breadcrumb: 'Themes' },
               },
               {
                 path: ':themeId',
@@ -111,7 +105,6 @@ const routes: Routes = [
                   {
                     path: '',
                     component: ContentTemplateOverviewComponent,
-                    data: { breadcrumb: 'Themes' },
                   },
                   {
                     path: 'templates',
@@ -139,6 +132,8 @@ const routes: Routes = [
   imports: [
     RouterModule.forChild(routes),
   ],
-  exports: [RouterModule]
+  exports: [
+    RouterModule,
+  ]
 })
 export class AdminRoutingModule { }

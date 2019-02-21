@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContentTypeService } from '../../../services/content-type.service';
 
@@ -7,7 +7,7 @@ import { ContentTypeService } from '../../../services/content-type.service';
   templateUrl: './content-type-overview.component.html',
   styleUrls: ['./content-type-overview.component.scss']
 })
-export class ContentTypeOverviewComponent implements OnInit {
+export class ContentTypeOverviewComponent {
   readonly createTypeForm: FormGroup = this.formBuilder.group({
     title: [null, [Validators.required]],
   });
@@ -15,9 +15,7 @@ export class ContentTypeOverviewComponent implements OnInit {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly documentTypeService: ContentTypeService,
-  ) { }
-
-  ngOnInit() {
+  ) {
   }
 
   createNewType() {

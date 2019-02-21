@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-export type ActionButtonType = 'delete' | 'save';
+export type ActionButtonType = 'delete' | 'save' | 'create' | 'cancel' | 'editTemplate';
 
 
 @Component({
@@ -14,6 +14,7 @@ export class ActionButtonComponent implements OnInit {
     delete: 'warn',
     save: 'primary',
     editTemplate: '',
+    create: '',
     cancel: 'warn'
   };
 
@@ -21,6 +22,7 @@ export class ActionButtonComponent implements OnInit {
     delete: 'Delete',
     save: 'Save',
     editTemplate: 'Edit Template',
+    create: 'Create new',
     cancel: 'Cancel'
   };
 
@@ -28,6 +30,7 @@ export class ActionButtonComponent implements OnInit {
     delete: 'delete',
     save: 'save',
     editTemplate: 'edit',
+    create: 'create',
     cancel: 'keyboard_arrow_left'
   };
 

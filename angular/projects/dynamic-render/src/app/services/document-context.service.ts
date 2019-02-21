@@ -54,10 +54,10 @@ export class DocumentContextService {
       (siteInfo, docs) => docs.map(doc => this._toContext(siteInfo, doc)));
   }
 
-  getById(entryId: string): Observable<TanamDocumentContext> {
+  getById(documentId: string): Observable<TanamDocumentContext> {
     const queryFn = (ref: CollectionReference) => {
       return ref
-        .where('id', '==', entryId)
+        .where('id', '==', documentId)
         .where('status', '==', 'published')
         .limit(1);
     };

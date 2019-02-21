@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { DocumentType } from 'tanam-models';
 import { ContentEntryService } from '../../../services/content-entry.service';
@@ -12,9 +11,9 @@ import { SiteService } from '../../../services/site.service';
   templateUrl: './content-entry-overview.component.html',
   styleUrls: ['./content-entry-overview.component.scss']
 })
-export class ContentEntryOverviewComponent implements OnInit {
+export class ContentEntryOverviewComponent {
   readonly domain$ = this.siteSettingsService.getPrimaryDomain();
-  documentType$: Observable<DocumentType>;
+  readonly documentType$ = this.route.paramMap.pipe(switchMap(params => this.cts.getContentType(params.get('typeId'))));
 
   constructor(
     private readonly router: Router,
@@ -24,16 +23,9 @@ export class ContentEntryOverviewComponent implements OnInit {
     private readonly siteSettingsService: SiteService,
   ) { }
 
-  ngOnInit() {
-    this.documentType$ = this.route.paramMap.pipe(switchMap(params => {
-      const documentTypeId = params.get('typeId');
-      return this.cts.getContentType(documentTypeId);
-    }));
-  }
-
   async createNewEntry(documentType: DocumentType) {
-    const entryId = this.ces.getNewId();
-    this.ces.create(documentType, entryId);
-    this.router.navigateByUrl(`/_/admin/entries/${entryId}/edit`);
+    const documentId = this.ces.getNewId();
+    this.ces.create(documentType, documentId);
+    this.router.navigateByUrl(`/_/admin/document/${documentId}/edit`);
   }
 }

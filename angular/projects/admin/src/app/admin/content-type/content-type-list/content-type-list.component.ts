@@ -26,7 +26,7 @@ export class ContentTypeListComponent implements OnInit {
   }
 
   editContentType(documentTypeId: string) {
-    const url = `/_/admin/types/${documentTypeId}/edit`;
+    const url = `/_/admin/type/${documentTypeId}/edit`;
     this.router.navigateByUrl(url);
   }
 }

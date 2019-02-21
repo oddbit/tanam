@@ -19,7 +19,7 @@ export class ContentEntryEditComponent implements OnInit {
 
   ngOnInit() {
     this.contentEntry$ = this.route.paramMap.pipe(switchMap(params => {
-      const documentTypeId = params.get('entryId');
+      const documentTypeId = params.get('documentId');
       return this.contentEntryService.get(documentTypeId);
     }));
   }
