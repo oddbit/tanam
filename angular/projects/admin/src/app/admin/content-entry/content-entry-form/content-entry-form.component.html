@@ -1,4 +1,10 @@
-<app-page-title pageTitle="{{ document.title }}"></app-page-title>
+<div *ngIf="(documentType$ | async) as documentType">
+  <app-page-title pageTitle="{{ document.title }}"></app-page-title>
+  <app-breadcrumbs>
+    <app-breadcrumb routerLink="/_/admin/type/{{ documentType.id }}">{{ documentType.title }}</app-breadcrumb>
+  </app-breadcrumbs>
+</div>
+
 <form [formGroup]="entryForm"
       novalidate>
   <app-context-actions>
