@@ -10,7 +10,7 @@ import { AppConfigService } from './app-config.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ContentFileService {
+export class UserFileService {
   readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
 
   constructor(

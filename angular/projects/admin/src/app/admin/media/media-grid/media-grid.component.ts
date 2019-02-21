@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TanamFile } from 'tanam-models';
-import { ContentFileService } from '../../../services/content-file.service';
+import { UserFileService } from '../../../services/user-file.service';
 
 @Component({
   selector: 'app-media-grid',
@@ -17,6 +17,6 @@ export class MediaGridComponent {
 
   constructor(
     private readonly breakpointObserver: BreakpointObserver,
-    private readonly fileService: ContentFileService,
+    private readonly fileService: UserFileService,
   ) { }
 }
