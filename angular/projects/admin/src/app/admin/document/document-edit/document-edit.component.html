@@ -1,4 +1,9 @@
+<tanam-breadcrumbs *ngIf="(documentType$ | async) as documentType">
+    <tanam-breadcrumb routerLink="/_/admin/type/{{ documentType.id }}">{{ documentType.title }}</tanam-breadcrumb>
+</tanam-breadcrumbs>
+
 <div *ngIf="(document$ | async) as document">
+    <tanam-page-title pageTitle="{{ document.title }}"></tanam-page-title>
     <tanam-document-form [document]="document"
                          [onCancelRoute]="'/_/admin/types/' + document.documentType"
                          [afterSaveRoute]="'/_/admin/types/' + document.documentType"></tanam-document-form>
