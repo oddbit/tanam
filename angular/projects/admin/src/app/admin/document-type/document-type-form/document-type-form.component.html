@@ -1,13 +1,13 @@
 <form [formGroup]="documentTypeForm"
       novalidate>
-  <app-context-actions>
-    <app-action-button buttonType='cancel'
-                       (click)='cancelEditing()'></app-action-button>
-    <app-action-button buttonType='save'
-                       (click)='save()'></app-action-button>
-    <app-action-button buttonType='editTemplate'
-                       (click)='editTemplate()'></app-action-button>
-  </app-context-actions>
+  <tanam-context-actions>
+    <tanam-action-button buttonType='cancel'
+                         (click)='cancelEditing()'></tanam-action-button>
+    <tanam-action-button buttonType='save'
+                         (click)='save()'></tanam-action-button>
+    <tanam-action-button buttonType='editTemplate'
+                         (click)='editTemplate()'></tanam-action-button>
+  </tanam-context-actions>
   <mat-card class="document-type-static-card">
     <mat-card-header>
       <mat-card-title>Content type information</mat-card-title>

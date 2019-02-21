@@ -18,7 +18,8 @@
 
 
 <!-- Show the progress of file uploads if there are any. Then hide itself when all are finished -->
-<mat-card class="upload-card" *ngIf="(uploadTasks | json) != '{}'">
+<mat-card class="upload-card"
+          *ngIf="(uploadTasks | json) != '{}'">
   <mat-card-header>
     <mat-card-title>
       Uploads
@@ -35,4 +36,4 @@
   </mat-card-content>
 </mat-card>
 
-<app-media-grid></app-media-grid>
+<tanam-media-grid></tanam-media-grid>

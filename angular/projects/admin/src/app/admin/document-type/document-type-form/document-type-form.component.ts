@@ -8,7 +8,7 @@ import { SiteService } from '../../../services/site.service';
 import { documentTypeMaterialIcons } from './document-type-form.icons';
 
 @Component({
-  selector: 'app-document-type-form',
+  selector: 'tanam-document-type-form',
   templateUrl: './document-type-form.component.html',
   styleUrls: ['./document-type-form.component.scss']
 })

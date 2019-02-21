@@ -9,7 +9,7 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'app-textbox-rich',
+  selector: 'tanam-textbox-rich',
   templateUrl: './textbox-rich.component.html',
   styleUrls: ['./textbox-rich.component.scss'],
   providers: [

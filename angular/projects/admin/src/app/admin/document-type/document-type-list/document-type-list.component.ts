@@ -5,7 +5,7 @@ import { DocumentTypeService } from '../../../services/document-type.service';
 import { DocumentTypeListDataSource } from './document-type-list-datasource';
 
 @Component({
-  selector: 'app-document-type-list',
+  selector: 'tanam-document-type-list',
   templateUrl: './document-type-list.component.html',
   styleUrls: ['./document-type-list.component.scss']
 })

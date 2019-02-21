@@ -8,7 +8,7 @@ import { ThemeTemplateListDataSource } from './theme-template-list-datasource';
 import { take } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-theme-template-list',
+  selector: 'tanam-theme-template-list',
   templateUrl: './theme-template-list.component.html',
   styleUrls: ['./theme-template-list.component.scss']
 })

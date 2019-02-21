@@ -6,7 +6,7 @@ import { Theme } from 'tanam-models';
 import { ThemeService } from '../../../services/theme.service';
 
 @Component({
-  selector: 'app-theme-template-overview',
+  selector: 'tanam-theme-template-overview',
   templateUrl: './theme-template-overview.component.html',
   styleUrls: ['./theme-template-overview.component.scss']
 })

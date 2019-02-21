@@ -7,7 +7,7 @@ import { DocumentTypeService } from '../../services/document-type.service';
 import { SiteService } from '../../services/site.service';
 
 @Component({
-  selector: 'app-admin-navigation',
+  selector: 'tanam-admin-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })

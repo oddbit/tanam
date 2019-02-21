@@ -5,7 +5,7 @@ import { ThemeTemplate } from 'tanam-models';
 import { ThemeTemplateService } from '../../../services/theme-template.service';
 
 @Component({
-  selector: 'app-theme-template-form',
+  selector: 'tanam-theme-template-form',
   templateUrl: './theme-template-form.component.html',
   styleUrls: ['./theme-template-form.component.scss']
 })

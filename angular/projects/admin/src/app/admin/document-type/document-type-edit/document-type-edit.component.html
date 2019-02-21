@@ -1,9 +1,9 @@
-<app-breadcrumbs>
-    <app-breadcrumb routerLink="/_/admin/types">Content Types</app-breadcrumb>
-</app-breadcrumbs>
+<tanam-breadcrumbs>
+    <tanam-breadcrumb routerLink="/_/admin/types">Content Types</tanam-breadcrumb>
+</tanam-breadcrumbs>
 
 <div *ngIf="(documentType$ | async) as documentType">
-    <app-page-title pageTitle="Edit {{ documentType.title }}"></app-page-title>
-    <app-document-type-form [documentType]="documentType"
-                           onCancelRoute="/_/admin/types"></app-document-type-form>
+    <tanam-page-title pageTitle="Edit {{ documentType.title }}"></tanam-page-title>
+    <tanam-document-type-form [documentType]="documentType"
+                              onCancelRoute="/_/admin/types"></tanam-document-type-form>
 </div>

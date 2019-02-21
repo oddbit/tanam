@@ -4,7 +4,7 @@ export type ActionButtonType = 'delete' | 'save' | 'create' | 'cancel' | 'editTe
 
 
 @Component({
-  selector: 'app-action-button',
+  selector: 'tanam-action-button',
   templateUrl: './action-button.component.html',
   styleUrls: ['./action-button.component.scss']
 })

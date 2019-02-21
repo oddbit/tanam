@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { AppAuthService } from '../../services/app-auth.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'tanam-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ThemeService } from '../../../services/theme.service';
 
 @Component({
-  selector: 'app-theme-overview',
+  selector: 'tanam-theme-overview',
   templateUrl: './theme-overview.component.html',
   styleUrls: ['./theme-overview.component.scss']
 })

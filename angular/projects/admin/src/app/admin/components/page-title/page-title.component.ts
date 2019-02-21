@@ -3,7 +3,7 @@ import { CdkPortal, DomPortalHost } from '@angular/cdk/portal';
 import { Title } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-page-title',
+  selector: 'tanam-page-title',
   templateUrl: './page-title.component.html',
   styleUrls: ['./page-title.component.scss']
 })

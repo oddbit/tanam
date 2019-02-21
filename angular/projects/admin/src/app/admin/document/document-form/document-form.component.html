@@ -1,18 +1,18 @@
 <div *ngIf="(documentType$ | async) as documentType">
-  <app-page-title pageTitle="{{ document.title }}"></app-page-title>
-  <app-breadcrumbs>
-    <app-breadcrumb routerLink="/_/admin/type/{{ documentType.id }}">{{ documentType.title }}</app-breadcrumb>
-  </app-breadcrumbs>
+  <tanam-page-title pageTitle="{{ document.title }}"></tanam-page-title>
+  <tanam-breadcrumbs>
+    <tanam-breadcrumb routerLink="/_/admin/type/{{ documentType.id }}">{{ documentType.title }}</tanam-breadcrumb>
+  </tanam-breadcrumbs>
 </div>
 
 <form [formGroup]="documentForm"
       novalidate>
-  <app-context-actions>
-    <app-action-button buttonType='delete'
-                       (click)='deleteEntry()'></app-action-button>
-    <app-action-button buttonType='save'
-                       (click)='saveEntry()'></app-action-button>
-  </app-context-actions>
+  <tanam-context-actions>
+    <tanam-action-button buttonType='delete'
+                         (click)='deleteEntry()'></tanam-action-button>
+    <tanam-action-button buttonType='save'
+                         (click)='saveEntry()'></tanam-action-button>
+  </tanam-context-actions>
 
   <div class="wrap">
     <div class="edit-content">
@@ -41,11 +41,11 @@
                             formControlName="{{field.key}}"></textarea>
 
 
-                  <app-textbox-rich matInput
-                                    *ngSwitchCase="'textbox-rich'"
-                                    placeholder="{{field.title}}"
-                                    [editorConfig]="richTextEditorConfig"
-                                    formControlName="{{field.key}}"></app-textbox-rich>
+                  <tanam-textbox-rich matInput
+                                      *ngSwitchCase="'textbox-rich'"
+                                      placeholder="{{field.title}}"
+                                      [editorConfig]="richTextEditorConfig"
+                                      formControlName="{{field.key}}"></tanam-textbox-rich>
 
 
                   <!-- Use radio button selection -->

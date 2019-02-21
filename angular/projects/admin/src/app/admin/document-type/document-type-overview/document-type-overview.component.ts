@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DocumentTypeService } from '../../../services/document-type.service';
 
 @Component({
-  selector: 'app-document-type-overview',
+  selector: 'tanam-document-type-overview',
   templateUrl: './document-type-overview.component.html',
   styleUrls: ['./document-type-overview.component.scss']
 })

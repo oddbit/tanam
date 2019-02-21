@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-theme-edit',
+  selector: 'tanam-theme-edit',
   templateUrl: './theme-edit.component.html',
   styleUrls: ['./theme-edit.component.scss']
 })

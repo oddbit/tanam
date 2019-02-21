@@ -5,7 +5,7 @@ import { ThemeService } from '../../../services/theme.service';
 import { ThemeListDataSource } from './theme-list-datasource';
 
 @Component({
-  selector: 'app-theme-list',
+  selector: 'tanam-theme-list',
   templateUrl: './theme-list.component.html',
   styleUrls: ['./theme-list.component.scss']
 })

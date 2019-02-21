@@ -1,5 +1,5 @@
 <div *ngIf="(document$ | async) as document">
-    <app-document-form [document]="document"
-                       [onCancelRoute]="'/_/admin/types/' + document.documentType"
-                       [afterSaveRoute]="'/_/admin/types/' + document.documentType"></app-document-form>
+    <tanam-document-form [document]="document"
+                         [onCancelRoute]="'/_/admin/types/' + document.documentType"
+                         [afterSaveRoute]="'/_/admin/types/' + document.documentType"></tanam-document-form>
 </div>

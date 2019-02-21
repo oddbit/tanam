@@ -4,7 +4,7 @@ import { switchMap } from 'rxjs/operators';
 import { DocumentTypeService } from '../../../services/document-type.service';
 
 @Component({
-  selector: 'app-document-type-edit',
+  selector: 'tanam-document-type-edit',
   templateUrl: './document-type-edit.component.html',
   styleUrls: ['./document-type-edit.component.scss']
 })

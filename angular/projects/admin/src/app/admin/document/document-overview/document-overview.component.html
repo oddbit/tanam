@@ -1,8 +1,8 @@
 <div *ngIf="(documentType$ |async) as documentType">
-  <app-context-actions>
-    <app-action-button buttonType='create'
-                       (click)='createNewEntry(documentType)'></app-action-button>
-  </app-context-actions>
+  <tanam-context-actions>
+    <tanam-action-button buttonType='create'
+                         (click)='createNewEntry(documentType)'></tanam-action-button>
+  </tanam-context-actions>
 
   <mat-card *ngIf="documentType.description">
     <mat-card-content>
@@ -13,17 +13,17 @@
   <mat-tab-group>
     <mat-tab label="All [{{ documentType.numEntries.published + documentType.numEntries.unpublished }}]">
       <ng-template matTabContent>
-        <app-document-list [documentType$]="documentType$"></app-document-list>
+        <tanam-document-list [documentType$]="documentType$"></tanam-document-list>
       </ng-template>
     </mat-tab>
     <mat-tab label="Published [{{ documentType.numEntries.published || 0 }}]">
       <ng-template matTabContent>
-        <app-document-list [documentType$]="documentType$"></app-document-list>
+        <tanam-document-list [documentType$]="documentType$"></tanam-document-list>
       </ng-template>
     </mat-tab>
     <mat-tab label="Unpublished [{{ documentType.numEntries.unpublished || 0}}]">
       <ng-template matTabContent>
-        <app-document-list [documentType$]="documentType$"></app-document-list>
+        <tanam-document-list [documentType$]="documentType$"></tanam-document-list>
       </ng-template>
     </mat-tab>
   </mat-tab-group>

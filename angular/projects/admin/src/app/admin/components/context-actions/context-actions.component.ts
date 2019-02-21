@@ -2,7 +2,7 @@ import { CdkPortal, DomPortalHost } from '@angular/cdk/portal';
 import { AfterViewInit, ApplicationRef, Component, ComponentFactoryResolver, Injector, OnDestroy, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-context-actions',
+  selector: 'tanam-context-actions',
   templateUrl: './context-actions.component.html',
   styleUrls: ['./context-actions.component.scss']
 })

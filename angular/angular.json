@@ -7,7 +7,7 @@
       "root": "projects/admin/",
       "sourceRoot": "projects/admin/src",
       "projectType": "application",
-      "prefix": "app",
+      "prefix": "tanam",
       "schematics": {},
       "architect": {
         "build": {

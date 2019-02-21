@@ -6,7 +6,7 @@ import { SiteService } from '../../../services/site.service';
 import { ThemeService } from '../../../services/theme.service';
 
 @Component({
-  selector: 'app-site-form',
+  selector: 'tanam-site-form',
   templateUrl: './site-form.component.html',
   styleUrls: ['./site-form.component.scss']
 })

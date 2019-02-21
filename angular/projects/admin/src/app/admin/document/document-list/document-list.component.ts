@@ -7,7 +7,7 @@ import { DocumentService } from '../../../services/document.service';
 import { DocumentListDataSource } from './document-list-datasource';
 
 @Component({
-  selector: 'app-document-list',
+  selector: 'tanam-document-list',
   templateUrl: './document-list.component.html',
   styleUrls: ['./document-list.component.scss']
 })

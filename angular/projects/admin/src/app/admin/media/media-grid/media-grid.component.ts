@@ -6,7 +6,7 @@ import { TanamFile } from 'tanam-models';
 import { UserFileService } from '../../../services/user-file.service';
 
 @Component({
-  selector: 'app-media-grid',
+  selector: 'tanam-media-grid',
   templateUrl: './media-grid.component.html',
   styleUrls: ['./media-grid.component.scss']
 })

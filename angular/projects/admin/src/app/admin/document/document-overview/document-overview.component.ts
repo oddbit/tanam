@@ -7,7 +7,7 @@ import { DocumentTypeService } from '../../../services/document-type.service';
 import { SiteService } from '../../../services/site.service';
 
 @Component({
-  selector: 'app-document-overview',
+  selector: 'tanam-document-overview',
   templateUrl: './document-overview.component.html',
   styleUrls: ['./document-overview.component.scss']
 })

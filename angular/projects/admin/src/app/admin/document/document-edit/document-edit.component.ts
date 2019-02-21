@@ -5,7 +5,7 @@ import { switchMap } from 'rxjs/operators';
 import { Document } from 'tanam-models';
 import { DocumentService } from '../../../services/document.service';
 @Component({
-  selector: 'app-document-edit',
+  selector: 'tanam-document-edit',
   templateUrl: './document-edit.component.html',
   styleUrls: ['./document-edit.component.scss']
 })

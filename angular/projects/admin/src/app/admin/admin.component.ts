@@ -5,7 +5,7 @@ import { AppAuthService } from '../services/app-auth.service';
 import { UserPrefsService } from '../services/user-prefs.service';
 
 @Component({
-  selector: 'app-admin',
+  selector: 'tanam-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })

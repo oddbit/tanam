@@ -8,7 +8,7 @@ import { SiteService } from '../../../services/site.service';
 const REGEX_DOMAIN = '^(((?!-))(xn--|_{1,1})?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$';
 
 @Component({
-  selector: 'app-domain-form',
+  selector: 'tanam-domain-form',
   templateUrl: './domain-form.component.html',
   styleUrls: ['./domain-form.component.scss']
 })

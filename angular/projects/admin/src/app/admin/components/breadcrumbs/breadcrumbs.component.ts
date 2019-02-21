@@ -2,7 +2,7 @@ import { CdkPortal, DomPortalHost } from '@angular/cdk/portal';
 import { AfterViewInit, ApplicationRef, Component, ComponentFactoryResolver, Injector, OnDestroy, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-breadcrumbs',
+  selector: 'tanam-breadcrumbs',
   templateUrl: './breadcrumbs.component.html',
   styleUrls: ['./breadcrumbs.component.scss']
 })

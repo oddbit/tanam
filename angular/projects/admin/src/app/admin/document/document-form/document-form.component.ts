@@ -14,7 +14,7 @@ interface StatusOption {
 }
 
 @Component({
-  selector: 'app-document-form',
+  selector: 'tanam-document-form',
   templateUrl: './document-form.component.html',
   styleUrls: ['./document-form.component.scss']
 })

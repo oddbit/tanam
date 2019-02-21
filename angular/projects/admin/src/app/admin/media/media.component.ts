@@ -4,7 +4,7 @@ import { tap } from 'rxjs/operators';
 import { UserFileService } from '../../services/user-file.service';
 
 @Component({
-  selector: 'app-media',
+  selector: 'tanam-media',
   templateUrl: './media.component.html',
   styleUrls: ['./media.component.scss']
 })
