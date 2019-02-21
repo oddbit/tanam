@@ -33,6 +33,6 @@ export class ThemeTemplateOverviewComponent implements OnInit {
   }
 
   editTheme(theme: Theme) {
-    this.router.navigateByUrl(`/_/admin/themes/${theme.id}/edit`);
+    this.router.navigateByUrl(`/_/admin/theme/${theme.id}/edit`);
   }
 }

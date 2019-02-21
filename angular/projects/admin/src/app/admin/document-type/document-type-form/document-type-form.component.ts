@@ -81,7 +81,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   editTemplate() {
-    this.router.navigateByUrl(`/_/admin/themes/${this.themeId}/templates/${this.documentTypeForm.controls['slug'].value}`);
+    this.router.navigateByUrl(`/_/admin/theme/${this.themeId}/templates/${this.documentTypeForm.controls['slug'].value}`);
   }
 
   addField(field?: DocumentField) {

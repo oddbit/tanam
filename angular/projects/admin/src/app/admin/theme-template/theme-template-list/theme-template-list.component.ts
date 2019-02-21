@@ -41,7 +41,7 @@ export class ThemeTemplateListComponent implements OnInit, OnDestroy {
 
   async editTemplate(templateId: string) {
     const theme = await this.theme$.pipe(take(1)).toPromise();
-    const url = `/_/admin/themes/${theme.id}/templates/${templateId}`;
+    const url = `/_/admin/theme/${theme.id}/templates/${templateId}`;
     this.router.navigateByUrl(url);
   }
 }

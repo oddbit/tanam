@@ -11,8 +11,8 @@ import { switchMap } from 'rxjs/operators';
 export class ThemeEditComponent {
   readonly theme$ = this.route.paramMap.pipe(switchMap(params => this.themeService.getTheme(params.get('themeId'))));
   readonly themeId = this.route.snapshot.paramMap.get('themeId');
-  readonly onCancelRoute = `/_/admin/themes/${this.themeId}`;
-  readonly afterSaveRoute = `/_/admin/themes/${this.themeId}`;
+  readonly onCancelRoute = `/_/admin/theme/${this.themeId}`;
+  readonly afterSaveRoute = `/_/admin/theme/${this.themeId}`;
 
   constructor(
     private readonly route: ActivatedRoute,

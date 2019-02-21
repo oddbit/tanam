@@ -24,7 +24,7 @@ export class ThemeOverviewComponent implements OnInit {
 
   createNewType() {
     this.themeService.create().then(id => {
-      this.router.navigateByUrl(`/_/admin/themes/${id}`);
+      this.router.navigateByUrl(`/_/admin/theme/${id}`);
     });
   }
 }

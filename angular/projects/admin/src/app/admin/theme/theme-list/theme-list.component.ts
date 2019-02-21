@@ -26,7 +26,7 @@ export class ThemeListComponent implements OnInit {
   }
 
   editTheme(themeId: string) {
-    const url = `/_/admin/themes/${themeId}`;
+    const url = `/_/admin/theme/${themeId}`;
     this.router.navigateByUrl(url);
   }
 }

@@ -94,11 +94,12 @@ const routes: Routes = [
           {
             path: 'themes',
             canActivate: [AdminGuard],
+            component: ThemeOverviewComponent,
+          },
+          {
+            path: 'theme',
+            canActivate: [AdminGuard],
             children: [
-              {
-                path: '',
-                component: ThemeOverviewComponent,
-              },
               {
                 path: ':themeId',
                 children: [
