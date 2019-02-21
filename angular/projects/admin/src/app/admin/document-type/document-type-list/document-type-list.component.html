@@ -1,0 +1,37 @@
+<div class="mat-elevation-z8">
+    <table mat-table
+           class="full-width-table"
+           [dataSource]="dataSource"
+           matSort
+           aria-label="Elements">
+
+        <ng-container matColumnDef="title">
+            <th mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header>Title</th>
+            <td mat-cell
+                *matCellDef="let row">{{row.title}}</td>
+        </ng-container>
+        <ng-container matColumnDef="updated">
+            <th mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header>Last update</th>
+            <td mat-cell
+                *matCellDef="let row">{{row.updated?.toDate() | date:'medium'}}</td>
+        </ng-container>
+
+        <tr mat-header-row
+            *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row
+            class="clickable-table-row"
+            *matRowDef="let row; columns: displayedColumns;"
+            (click)="editDocumentType(row.id)"></tr>
+    </table>
+
+    <mat-paginator #paginator
+                   [length]="dataSource.data?.length"
+                   [pageIndex]="0"
+                   [pageSize]="50"
+                   [pageSizeOptions]="[25, 50, 100, 250]">
+    </mat-paginator>
+</div>

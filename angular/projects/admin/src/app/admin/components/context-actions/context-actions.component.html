@@ -1,0 +1,25 @@
+<div class="button-row">
+  <ng-container *cdkPortal>
+    <!-- Menu on mobile view -->
+    <div class="sub-toolbar-menu">
+      <mat-menu #menu="matMenu">
+        <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
+      </mat-menu>
+      <button mat-icon-button
+              class="more-button"
+              [matMenuTriggerFor]="menu"
+              aria-label="Toggle menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </div>
+    <!-- === -->
+    <!-- Buttons on desktop -->
+    <div class="sub-toolbar-button">
+      <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
+    </div>
+    <!-- == -->
+    <ng-template #contentTpl>
+      <ng-content></ng-content>
+    </ng-template>
+  </ng-container>
+</div>

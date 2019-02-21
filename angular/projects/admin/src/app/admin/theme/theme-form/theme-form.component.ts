@@ -2,11 +2,11 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { SiteTheme } from 'tanam-models';
-import { SiteThemeService } from '../../../services/site-theme.service';
+import { Theme } from 'tanam-models';
+import { ThemeService } from '../../../services/theme.service';
 
 @Component({
-  selector: 'app-theme-form',
+  selector: 'tanam-theme-form',
   templateUrl: './theme-form.component.html',
   styleUrls: ['./theme-form.component.scss']
 })
@@ -15,7 +15,7 @@ export class ThemeFormComponent implements OnInit, OnDestroy {
   @Input() afterSaveRoute: string;
   @Input() onCancelRoute: string;
 
-  theme: SiteTheme;
+  theme: Theme;
   readonly themeForm: FormGroup = this.fb.group({
     title: [null, Validators.required],
     description: [null, Validators.required],
@@ -34,7 +34,7 @@ export class ThemeFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly siteThemeService: SiteThemeService,
+    private readonly siteThemeService: ThemeService,
     private readonly router: Router,
   ) { }
 
@@ -113,7 +113,7 @@ export class ThemeFormComponent implements OnInit, OnDestroy {
       description: formData.description,
       styles: formData.styles,
       scripts: formData.scripts,
-    } as SiteTheme);
+    } as Theme);
 
     if (this.afterSaveRoute) {
       this.router.navigateByUrl(this.afterSaveRoute);

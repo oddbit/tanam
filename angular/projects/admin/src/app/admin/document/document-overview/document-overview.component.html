@@ -1,0 +1,31 @@
+<div *ngIf="(documentType$ |async) as documentType">
+  <tanam-page-title pageTitle="{{documentType.title}} overview"></tanam-page-title>
+  <tanam-context-actions>
+    <tanam-action-button buttonType='create'
+                         (click)='createNewEntry(documentType)'></tanam-action-button>
+  </tanam-context-actions>
+
+  <mat-card *ngIf="documentType.description">
+    <mat-card-content>
+      <p>{{ documentType.description }}</p>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-tab-group>
+    <mat-tab label="All [{{ documentType.numEntries.published + documentType.numEntries.unpublished }}]">
+      <ng-template matTabContent>
+        <tanam-document-list [documentType$]="documentType$"></tanam-document-list>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Published [{{ documentType.numEntries.published || 0 }}]">
+      <ng-template matTabContent>
+        <tanam-document-list [documentType$]="documentType$"></tanam-document-list>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Unpublished [{{ documentType.numEntries.unpublished || 0}}]">
+      <ng-template matTabContent>
+        <tanam-document-list [documentType$]="documentType$"></tanam-document-list>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

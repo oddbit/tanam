@@ -5,16 +5,17 @@ import { AppFirebaseModule } from '../app-firebase.module';
 import { AppMaterialModule } from '../app-material.module';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
-import { ContentEntryModule } from './content-entry/content-entry.module';
-import { ContentTemplateModule } from './content-template/content-template.module';
-import { ContentTypeModule } from './content-type/content-type.module';
+import { ComponentsModule } from './components/components.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DocumentTypeModule } from './document-type/document-type.module';
+import { DocumentModule } from './document/document.module';
 import { FormModule } from './form/form.module';
 import { LoginComponent } from './login/login.component';
 import { MediaModule } from './media/media.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { SettingsModule } from './settings/settings.module';
+import { ThemeTemplateModule } from './theme-template/theme-template.module';
 import { ThemeModule } from './theme/theme.module';
 
 @NgModule({
@@ -33,12 +34,13 @@ import { ThemeModule } from './theme/theme.module';
     NavigationModule,
     LayoutModule,
     MediaModule,
-    ContentEntryModule,
-    ContentTemplateModule,
-    ContentTypeModule,
+    DocumentModule,
+    ThemeTemplateModule,
+    DocumentTypeModule,
     NavigationModule,
     ThemeModule,
     FormModule,
+    ComponentsModule,
   ]
 })
 export class AdminModule { }

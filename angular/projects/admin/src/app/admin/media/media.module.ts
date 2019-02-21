@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppMaterialModule } from '../../app-material.module';
+import { NgModule } from '@angular/core';
 import { AppFirebaseModule } from '../../app-firebase.module';
-import { MediaComponent } from './media.component';
+import { AppMaterialModule } from '../../app-material.module';
+import { ComponentsModule } from '../components/components.module';
 import { MediaGridComponent } from './media-grid/media-grid.component';
+import { MediaComponent } from './media.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { MediaGridComponent } from './media-grid/media-grid.component';
     CommonModule,
     AppFirebaseModule,
     AppMaterialModule,
+    ComponentsModule,
   ],
   exports: [
     MediaComponent,

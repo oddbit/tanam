@@ -25,7 +25,7 @@ export class SiteService {
     return this.getSiteInfo().pipe(map(settings => settings.title));
   }
 
-  getSiteTheme(): Observable<string> {
+  getTheme(): Observable<string> {
     return this.getSiteInfo().pipe(map(settings => settings.theme));
   }
 

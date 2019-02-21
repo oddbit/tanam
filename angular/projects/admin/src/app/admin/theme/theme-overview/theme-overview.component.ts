@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SiteThemeService } from '../../../services/site-theme.service';
+import { ThemeService } from '../../../services/theme.service';
 
 @Component({
-  selector: 'app-theme-overview',
+  selector: 'tanam-theme-overview',
   templateUrl: './theme-overview.component.html',
   styleUrls: ['./theme-overview.component.scss']
 })
@@ -16,7 +16,7 @@ export class ThemeOverviewComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly formBuilder: FormBuilder,
-    private readonly themeService: SiteThemeService,
+    private readonly themeService: ThemeService,
   ) { }
 
   ngOnInit() {
@@ -24,7 +24,7 @@ export class ThemeOverviewComponent implements OnInit {
 
   createNewType() {
     this.themeService.create().then(id => {
-      this.router.navigateByUrl(`/_/admin/themes/${id}`);
+      this.router.navigateByUrl(`/_/admin/theme/${id}`);
     });
   }
 }

@@ -42,8 +42,8 @@ export const countEntryStatus = functions.firestore.document('tanam/{siteId}/doc
         return null;
     }
 
-    const documentTypeRef = admin.firestore().collection('tanam-types').doc(entryBefore.documentType);
     const documentType = entryAfter.documentType || entryBefore.documentType;
+    const documentTypeRef = admin.firestore().collection('tanam-types').doc(documentType);
     const docsQuery = admin.firestore().collection('tanam-entries').where('documentType', '==', documentType);
 
     return admin.firestore().runTransaction(async (trx) => {

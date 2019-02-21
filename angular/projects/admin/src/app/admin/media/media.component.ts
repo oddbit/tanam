@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { ContentFileService } from '../../services/content-file.service';
+import { UserFileService } from '../../services/user-file.service';
 
 @Component({
-  selector: 'app-media',
+  selector: 'tanam-media',
   templateUrl: './media.component.html',
   styleUrls: ['./media.component.scss']
 })
@@ -12,7 +12,7 @@ export class MediaComponent implements OnInit {
   readonly uploadTasks: { [key: string]: Observable<number> } = {};
 
   constructor(
-    private readonly fileService: ContentFileService,
+    private readonly fileService: UserFileService,
   ) { }
 
   ngOnInit() {

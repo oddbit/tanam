@@ -1,24 +1,25 @@
-<h1 class="mat-h1">Media files</h1>
+<tanam-page-title pageTitle="Media files"></tanam-page-title>
 
-<!--
-  Angular Material doesn't support file input.
-  https://material.angular.io/components/input/overview#supported-code-lt-input-gt-code-types
+<tanam-context-actions>
+  <tanam-action-button buttonType="upload"
+                       (click)="fileInput.click()">
 
-  So this is a wrapper to make it look better. The button simply triggers the file upload input
--->
-<button mat-raised-button
-        (click)="fileInput.click()"
-        color="primary">
-  <span>Upload</span>
-  <input #fileInput
-         type="file"
-         (change)="uploadSingleFile($event)"
-         style="display:none;" />
-</button>
+    <!--
+    Angular Material doesn't support file input.
+    https://material.angular.io/components/input/overview#supported-code-lt-input-gt-code-types
 
+    So this is a wrapper to make it look better. The button simply triggers the file upload input
+    -->
+    <input #fileInput
+           type="file"
+           (change)="uploadSingleFile($event)"
+           style="display:none;" />
+  </tanam-action-button>
+</tanam-context-actions>
 
 <!-- Show the progress of file uploads if there are any. Then hide itself when all are finished -->
-<mat-card class="upload-card" *ngIf="(uploadTasks | json) != '{}'">
+<mat-card class="upload-card"
+          *ngIf="(uploadTasks | json) != '{}'">
   <mat-card-header>
     <mat-card-title>
       Uploads
@@ -35,4 +36,4 @@
   </mat-card-content>
 </mat-card>
 
-<app-media-grid></app-media-grid>
+<tanam-media-grid></tanam-media-grid>

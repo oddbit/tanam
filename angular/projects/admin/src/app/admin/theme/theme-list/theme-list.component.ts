@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Router } from '@angular/router';
-import { SiteThemeService } from '../../../services/site-theme.service';
+import { ThemeService } from '../../../services/theme.service';
 import { ThemeListDataSource } from './theme-list-datasource';
 
 @Component({
-  selector: 'app-theme-list',
+  selector: 'tanam-theme-list',
   templateUrl: './theme-list.component.html',
   styleUrls: ['./theme-list.component.scss']
 })
@@ -16,7 +16,7 @@ export class ThemeListComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly themeService: SiteThemeService,
+    private readonly themeService: ThemeService,
   ) { }
 
   displayedColumns = ['title', 'updated'];
@@ -26,7 +26,7 @@ export class ThemeListComponent implements OnInit {
   }
 
   editTheme(themeId: string) {
-    const url = `/_/admin/themes/${themeId}`;
+    const url = `/_/admin/theme/${themeId}`;
     this.router.navigateByUrl(url);
   }
 }

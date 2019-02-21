@@ -3,23 +3,13 @@
   "version": "0.0.1",
   "license": "Apache-2.0",
   "scripts": {
-    "start:admin": "ng serve admin",
-    "build:admin": "ng build admin --outputHashing=all --deployUrl=/",
-    "build:admin:prod": "ng build admin --prod=true --deployUrl=/",
-    "test:admin": "ng test admin",
-    "lint:admin": "ng lint admin",
-    "e2e:admin": "ng e2e admin",
-    "start:dynamic": "ng serve dynamic-render --port 4444",
-    "build:dynamic": "ng build dynamic-render --outputHashing=all --deployUrl=/",
-    "build:dynamic:prod": "ng build dynamic-render --outputHashing=all --aot=false --optimization=true --deployUrl=/",
-    "test:dynamic": "ng test dynamic-render",
-    "lint:dynamic": "ng lint dynamic-render",
-    "e2e:dynamic": "ng e2e dynamic-render",
-    "webpack:dynamic": "webpack --config webpack.server.config.js --progress --colors",
-    "serve:dynamic:ssr": "node dist/dynamic/server",
-    "build:dynamic:ssr": "npm run build:dynamic:bundle && npm run webpack:dynamic",
-    "build:dynamic:bundle": "npm run build:dynamic:prod && ng run dynamic-render:server:production",
-    "build:all": "npm run build:admin:prod"
+    "start": "ng serve admin",
+    "build": "ng build admin --outputHashing=all --deployUrl=/",
+    "build:prod": "ng build admin --prod=true --deployUrl=/",
+    "test": "ng test admin",
+    "lint": "ng lint admin",
+    "e2e": "ng e2e admin",
+    "build:all": "npm run build:prod"
   },
   "engines": {
     "node": "8"

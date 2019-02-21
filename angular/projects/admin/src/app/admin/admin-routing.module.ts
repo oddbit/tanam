@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin.component';
-import { ContentEntryEditComponent } from './content-entry/content-entry-edit/content-entry-edit.component';
-import { ContentEntryOverviewComponent } from './content-entry/content-entry-overview/content-entry-overview.component';
-import { ContentTemplateEditComponent } from './content-template/content-template-edit/content-template-edit.component';
-import { ContentTemplateOverviewComponent } from './content-template/content-template-overview/content-template-overview.component';
-import { ContentTypeEditComponent } from './content-type/content-type-edit/content-type-edit.component';
-import { ContentTypeOverviewComponent } from './content-type/content-type-overview/content-type-overview.component';
+import { DocumentEditComponent } from './document/document-edit/document-edit.component';
+import { DocumentOverviewComponent } from './document/document-overview/document-overview.component';
+import { ThemeTemplateEditComponent } from './theme-template/theme-template-edit/theme-template-edit.component';
+import { ThemeTemplateOverviewComponent } from './theme-template/theme-template-overview/theme-template-overview.component';
+import { DocumentTypeEditComponent } from './document-type/document-type-edit/document-type-edit.component';
+import { DocumentTypeOverviewComponent } from './document-type/document-type-overview/document-type-overview.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { AdminGuard } from './guards/admin.guard';
@@ -38,87 +38,81 @@ const routes: Routes = [
           {
             path: 'dashboard',
             component: DashboardComponent,
-            data: { breadcrumb: 'Dashboard' },
           },
           {
             path: 'settings',
             component: SettingsComponent,
             canActivate: [AdminGuard],
-            data: { breadcrumb: 'Settings' },
           },
           {
             path: 'media',
             component: MediaComponent,
             canActivate: [PublisherGuard],
-            data: { breadcrumb: 'Media' },
           },
           {
             path: 'types',
+            component: DocumentTypeOverviewComponent,
+            canActivate: [AdminGuard],
+          },
+          {
+            path: 'type',
             children: [
-              {
-                path: '',
-                component: ContentTypeOverviewComponent,
-                canActivate: [AdminGuard],
-                data: { breadcrumb: 'Document types' },
-              },
               {
                 path: ':typeId',
                 children: [
                   {
                     path: '',
-                    component: ContentEntryOverviewComponent,
+                    redirectTo: 'overview',
+                    pathMatch: 'full',
+                  },
+                  {
+                    path: 'overview',
+                    component: DocumentOverviewComponent,
                     canActivate: [PublisherGuard],
                   },
                   {
                     path: 'edit',
-                    component: ContentTypeEditComponent,
+                    component: DocumentTypeEditComponent,
                     canActivate: [AdminGuard]
                   },
                 ],
               },
             ],
           },
-
           {
-            path: 'entries',
+            path: 'document',
             children: [
               {
-                path: '',
-                component: NotFoundComponent,
-              },
-              {
-                path: ':entryId',
+                path: ':documentId',
                 children: [
                   { path: '', redirectTo: 'edit', pathMatch: 'full' },
-                  { path: 'edit', component: ContentEntryEditComponent, canActivate: [PublisherGuard] }
+                  { path: 'edit', component: DocumentEditComponent, canActivate: [PublisherGuard] }
                 ],
               },
             ],
           },
-
           {
             path: 'themes',
             canActivate: [AdminGuard],
+            component: ThemeOverviewComponent,
+          },
+          {
+            path: 'theme',
+            canActivate: [AdminGuard],
             children: [
-              {
-                path: '',
-                component: ThemeOverviewComponent,
-                data: { breadcrumb: 'Themes' },
-              },
               {
                 path: ':themeId',
                 children: [
                   {
                     path: '',
-                    component: ContentTemplateOverviewComponent,
-                    data: { breadcrumb: 'Themes' },
+                    component: ThemeTemplateOverviewComponent,
                   },
                   {
                     path: 'templates',
                     children: [
                       { path: '', component: NotFoundComponent },
-                      { path: ':templateId', component: ContentTemplateEditComponent },
-                      { path: ':templateId/edit', component: ContentTemplateEditComponent },
+                      { path: ':templateId', component: ThemeTemplateEditComponent },
+                      { path: ':templateId/edit', component: ThemeTemplateEditComponent },
                     ],
                   },
                   { path: 'edit', component: ThemeEditComponent }
@@ -139,6 +133,8 @@ const routes: Routes = [
   imports: [
     RouterModule.forChild(routes),
   ],
-  exports: [RouterModule]
+  exports: [
+    RouterModule,
+  ]
 })
 export class AdminRoutingModule { }

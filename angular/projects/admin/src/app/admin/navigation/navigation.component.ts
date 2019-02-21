@@ -3,23 +3,18 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AppAuthService } from '../../services/app-auth.service';
-import { ContentTypeService } from '../../services/content-type.service';
+import { DocumentTypeService } from '../../services/document-type.service';
 import { SiteService } from '../../services/site.service';
 
-interface SideMenuItem {
-  name: string;
-  icon: string;
-  link: string;
-}
 @Component({
-  selector: 'app-admin-navigation',
+  selector: 'tanam-admin-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent {
   isExpanded = true;
   siteName$ = this.siteSettingsService.getSiteName();
-  documentTypes$ = this.documentTypeService.getContentTypes();
+  documentTypes$ = this.documentTypeService.getDocumentTypes();
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
@@ -27,7 +22,7 @@ export class NavigationComponent {
 
   constructor(
     private readonly breakpointObserver: BreakpointObserver,
-    private readonly documentTypeService: ContentTypeService,
+    private readonly documentTypeService: DocumentTypeService,
     private readonly appAuthService: AppAuthService,
     private readonly siteSettingsService: SiteService,
   ) { }
