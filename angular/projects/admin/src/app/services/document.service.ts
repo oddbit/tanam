@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { Document, DocumentType } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
 
-export interface ContentTypeQueryOptions {
+export interface DocumentTypeQueryOptions {
   limit?: number;
   orderBy?: {
     field: string,
@@ -73,8 +73,8 @@ export class DocumentService {
       .valueChanges();
   }
 
-  query(documentTypeId: string, queryOpts: ContentTypeQueryOptions = {}): Observable<Document[]> {
-    console.log(`[DocumentService:getContentTypeFields] ${documentTypeId}, query=${JSON.stringify(queryOpts)}`);
+  query(documentTypeId: string, queryOpts: DocumentTypeQueryOptions = {}): Observable<Document[]> {
+    console.log(`[DocumentService:getDocumentTypeFields] ${documentTypeId}, query=${JSON.stringify(queryOpts)}`);
 
     const queryFn = (ref: CollectionReference) => {
       let query = ref.where('documentType', '==', documentTypeId);

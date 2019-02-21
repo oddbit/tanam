@@ -7,7 +7,7 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
 import { DocumentModule } from './document/document.module';
 import { ContentTemplateModule } from './content-template/content-template.module';
-import { ContentTypeModule } from './content-type/content-type.module';
+import { DocumentTypeModule } from './document-type/document-type.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormModule } from './form/form.module';
 import { LoginComponent } from './login/login.component';
@@ -35,7 +35,7 @@ import { ThemeModule } from './theme/theme.module';
     MediaModule,
     DocumentModule,
     ContentTemplateModule,
-    ContentTypeModule,
+    DocumentTypeModule,
     NavigationModule,
     ThemeModule,
     FormModule,

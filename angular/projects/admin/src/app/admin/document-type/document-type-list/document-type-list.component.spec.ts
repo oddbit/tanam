@@ -2,15 +2,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule, MatSortModule, MatTableModule } from '@angular/material';
 
-import { ContentTypeListComponent } from './content-type-list.component';
+import { DocumentTypeListComponent } from './document-type-list.component';
 
-describe('ContentTypeListComponent', () => {
-  let component: ContentTypeListComponent;
-  let fixture: ComponentFixture<ContentTypeListComponent>;
+describe('DocumentTypeListComponent', () => {
+  let component: DocumentTypeListComponent;
+  let fixture: ComponentFixture<DocumentTypeListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentTypeListComponent],
+      declarations: [DocumentTypeListComponent],
       imports: [
         NoopAnimationsModule,
         MatPaginatorModule,
@@ -21,7 +21,7 @@ describe('ContentTypeListComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContentTypeListComponent);
+    fixture = TestBed.createComponent(DocumentTypeListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ContentTypeEditComponent } from './content-type-edit.component';
+import { DocumentTypeEditComponent } from './document-type-edit.component';
 
-describe('ContentTypeEditComponent', () => {
-  let component: ContentTypeEditComponent;
-  let fixture: ComponentFixture<ContentTypeEditComponent>;
+describe('DocumentTypeEditComponent', () => {
+  let component: DocumentTypeEditComponent;
+  let fixture: ComponentFixture<DocumentTypeEditComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentTypeEditComponent]
+      declarations: [DocumentTypeEditComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContentTypeEditComponent);
+    fixture = TestBed.createComponent(DocumentTypeEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

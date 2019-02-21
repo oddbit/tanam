@@ -5,8 +5,8 @@ import { DocumentEditComponent } from './document/document-edit/document-edit.co
 import { DocumentOverviewComponent } from './document/document-overview/document-overview.component';
 import { ContentTemplateEditComponent } from './content-template/content-template-edit/content-template-edit.component';
 import { ContentTemplateOverviewComponent } from './content-template/content-template-overview/content-template-overview.component';
-import { ContentTypeEditComponent } from './content-type/content-type-edit/content-type-edit.component';
-import { ContentTypeOverviewComponent } from './content-type/content-type-overview/content-type-overview.component';
+import { DocumentTypeEditComponent } from './document-type/document-type-edit/document-type-edit.component';
+import { DocumentTypeOverviewComponent } from './document-type/document-type-overview/document-type-overview.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { AdminGuard } from './guards/admin.guard';
@@ -51,7 +51,7 @@ const routes: Routes = [
           },
           {
             path: 'types',
-            component: ContentTypeOverviewComponent,
+            component: DocumentTypeOverviewComponent,
             canActivate: [AdminGuard],
           },
           {
@@ -72,7 +72,7 @@ const routes: Routes = [
                   },
                   {
                     path: 'edit',
-                    component: ContentTypeEditComponent,
+                    component: DocumentTypeEditComponent,
                     canActivate: [AdminGuard]
                   },
                 ],

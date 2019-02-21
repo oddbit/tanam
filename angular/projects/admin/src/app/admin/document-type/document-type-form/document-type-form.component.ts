@@ -3,16 +3,16 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { DocumentField, DocumentType } from 'tanam-models';
-import { ContentTypeService } from '../../../services/content-type.service';
+import { DocumentTypeService } from '../../../services/document-type.service';
 import { SiteService } from '../../../services/site.service';
-import { documentTypeMaterialIcons } from './content-type-form.icons';
+import { documentTypeMaterialIcons } from './document-type-form.icons';
 
 @Component({
-  selector: 'app-content-type-form',
-  templateUrl: './content-type-form.component.html',
-  styleUrls: ['./content-type-form.component.scss']
+  selector: 'app-document-type-form',
+  templateUrl: './document-type-form.component.html',
+  styleUrls: ['./document-type-form.component.scss']
 })
-export class ContentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
+export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   @Input() documentType: DocumentType;
   @Input() afterSaveRoute: string;
   @Input() onCancelRoute: string;
@@ -44,7 +44,7 @@ export class ContentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   constructor(
     private readonly router: Router,
     private readonly formBuilder: FormBuilder,
-    private readonly documentTypeService: ContentTypeService,
+    private readonly documentTypeService: DocumentTypeService,
     private readonly siteSettingsService: SiteService,
   ) { }
 

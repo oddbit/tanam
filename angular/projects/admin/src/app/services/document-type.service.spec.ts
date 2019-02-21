@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { ContentTypeService } from './content-type.service';
+import { DocumentTypeService } from './document-type.service';
 
 
-describe('ContentTypeService', () => {
+describe('DocumentTypeService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: ContentTypeService = TestBed.get(ContentTypeService);
+    const service: DocumentTypeService = TestBed.get(DocumentTypeService);
     expect(service).toBeTruthy();
   });
 });

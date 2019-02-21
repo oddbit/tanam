@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Document, DocumentStatus, DocumentType } from 'tanam-models';
 import { DocumentService } from '../../../services/document.service';
-import { ContentTypeService } from '../../../services/content-type.service';
+import { DocumentTypeService } from '../../../services/document-type.service';
 import { SiteService } from '../../../services/site.service';
 
 
@@ -56,7 +56,7 @@ export class DocumentFormComponent implements OnInit, OnDestroy, OnChanges {
     private readonly router: Router,
     private readonly formBuilder: FormBuilder,
     private readonly documentService: DocumentService,
-    private readonly documentTypeService: ContentTypeService,
+    private readonly documentTypeService: DocumentTypeService,
     private readonly siteService: SiteService,
   ) { }
 
@@ -67,7 +67,7 @@ export class DocumentFormComponent implements OnInit, OnDestroy, OnChanges {
       url: this.document.url,
       status: this.document.status,
     });
-    this.documentType$ = this.documentTypeService.getContentType(this.document.documentType);
+    this.documentType$ = this.documentTypeService.getDocumentType(this.document.documentType);
     this._documentTypeSubscription = this.documentType$
       .subscribe(documentType => {
         this._rootSlug = documentType.slug;

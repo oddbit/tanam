@@ -8,7 +8,7 @@ import { AppConfigService } from './app-config.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ContentTypeService {
+export class DocumentTypeService {
   readonly siteCollection = this.firestore.collection('tanam').doc<SiteInformation>(this.appConfig.siteId);
 
   constructor(
@@ -17,14 +17,14 @@ export class ContentTypeService {
   ) { }
 
 
-  getContentTypes(): Observable<DocumentType[]> {
+  getDocumentTypes(): Observable<DocumentType[]> {
     return this.siteCollection
       .collection<DocumentType>('document-types')
       .valueChanges();
   }
 
-  getContentType(documentTypeId: string): Observable<DocumentType> {
-    console.log(`getContentType documentType: ${documentTypeId}`);
+  getDocumentType(documentTypeId: string): Observable<DocumentType> {
+    console.log(`getDocumentType documentType: ${documentTypeId}`);
 
     return this.siteCollection
       .collection('document-types').doc<DocumentType>(documentTypeId)
@@ -57,7 +57,7 @@ export class ContentTypeService {
       updated: firebase.firestore.FieldValue.serverTimestamp(),
     };
 
-    console.log(`[ContentTypeService:saveContentType] ${JSON.stringify(documentType, null, 2)}`);
+    console.log(`[DocumentTypeService:saveDocumentType] ${JSON.stringify(documentType, null, 2)}`);
     return doc.update(documentType);
   }
 }

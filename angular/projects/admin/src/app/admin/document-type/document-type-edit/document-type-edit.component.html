@@ -4,6 +4,6 @@
 
 <div *ngIf="(documentType$ | async) as documentType">
     <app-page-title pageTitle="Edit {{ documentType.title }}"></app-page-title>
-    <app-content-type-form [documentType]="documentType"
-                           onCancelRoute="/_/admin/types"></app-content-type-form>
+    <app-document-type-form [documentType]="documentType"
+                           onCancelRoute="/_/admin/types"></app-document-type-form>
 </div>
