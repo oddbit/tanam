@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { AppAuthService } from '../services/app-auth.service';
-import { UserPrefsService } from '../services/user-prefs.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'tanam-admin',
@@ -10,13 +10,13 @@ import { UserPrefsService } from '../services/user-prefs.service';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit, OnDestroy {
-  readonly theme$: Observable<string> = this.userPrefs.getAdminTheme();
+  readonly theme$: Observable<string> = this.userService.getUserTheme();
 
   private authSubscription: Subscription;
 
   constructor(
     private readonly router: Router,
-    private readonly userPrefs: UserPrefsService,
+    private readonly userService: UserService,
     private readonly appAuthService: AppAuthService,
   ) { }
 
