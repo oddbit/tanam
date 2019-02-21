@@ -1,3 +1,4 @@
+<app-page-title pageTitle="{{ document.title }}"></app-page-title>
 <form [formGroup]="entryForm"
       novalidate>
   <app-context-actions>
@@ -10,11 +11,6 @@
   <div class="wrap">
     <div class="edit-content">
       <mat-card class="">
-        <mat-card-header>
-          <mat-card-title>
-            Editing {{ (documentType$ | async)?.title }}
-          </mat-card-title>
-        </mat-card-header>
         <mat-card-content>
           <div formGroupName="dataForm">
             <div class="row"
