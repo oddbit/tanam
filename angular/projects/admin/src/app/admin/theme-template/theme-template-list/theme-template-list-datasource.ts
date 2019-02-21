@@ -1,14 +1,14 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Observable } from 'rxjs';
-import { DocumentTemplate, SiteTheme } from 'tanam-models';
+import { ThemeTemplate, Theme } from 'tanam-models';
 import { ThemeTemplateService } from '../../../services/theme-template.service';
 
-export class ThemeTemplateListDataSource extends DataSource<DocumentTemplate> {
-  data: DocumentTemplate[];
+export class ThemeTemplateListDataSource extends DataSource<ThemeTemplate> {
+  data: ThemeTemplate[];
 
   constructor(
-    private readonly theme: SiteTheme,
+    private readonly theme: Theme,
     private readonly paginator: MatPaginator,
     private readonly sort: MatSort,
     private readonly themeTemplateService: ThemeTemplateService,
@@ -16,18 +16,18 @@ export class ThemeTemplateListDataSource extends DataSource<DocumentTemplate> {
     super();
   }
 
-  connect(): Observable<DocumentTemplate[]> {
+  connect(): Observable<ThemeTemplate[]> {
     return this.themeTemplateService.getTemplatesForTheme(this.theme.id);
   }
 
   disconnect() { }
 
-  private getPagedData(data: DocumentTemplate[]) {
+  private getPagedData(data: ThemeTemplate[]) {
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
     return data.splice(startIndex, this.paginator.pageSize);
   }
 
-  private getSortedData(data: DocumentTemplate[]) {
+  private getSortedData(data: ThemeTemplate[]) {
     if (!this.sort.active || this.sort.direction === '') {
       return data;
     }

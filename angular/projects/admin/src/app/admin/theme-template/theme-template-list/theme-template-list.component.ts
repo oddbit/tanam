@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { SiteTheme } from 'tanam-models';
+import { Theme } from 'tanam-models';
 import { ThemeTemplateService } from '../../../services/theme-template.service';
 import { ThemeTemplateListDataSource } from './theme-template-list-datasource';
 import { take } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./theme-template-list.component.scss']
 })
 export class ThemeTemplateListComponent implements OnInit, OnDestroy {
-  @Input() theme$: Observable<SiteTheme>;
+  @Input() theme$: Observable<Theme>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

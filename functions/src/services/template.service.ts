@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import { SiteInformation, DocumentTemplate, DocumentContext, DocumentType } from '../../../models';
+import { SiteInformation, ThemeTemplate, DocumentContext, DocumentType } from '../../../models';
 
 const siteCollection = () => admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
 
@@ -10,5 +10,5 @@ export async function getTemplates() {
         .collection('templates')
         .get();
 
-    return templatesSnap.docs.map(doc => doc.data() as DocumentTemplate);
+    return templatesSnap.docs.map(doc => doc.data() as ThemeTemplate);
 }

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { SiteTheme } from 'tanam-models';
-import { SiteThemeService } from '../../../services/site-theme.service';
+import { Theme } from 'tanam-models';
+import { ThemeService } from '../../../services/theme.service';
 
 @Component({
   selector: 'app-theme-template-overview',
@@ -11,12 +11,12 @@ import { SiteThemeService } from '../../../services/site-theme.service';
   styleUrls: ['./theme-template-overview.component.scss']
 })
 export class ThemeTemplateOverviewComponent implements OnInit {
-  theme$: Observable<SiteTheme>;
+  theme$: Observable<Theme>;
 
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly siteThemeservice: SiteThemeService,
+    private readonly siteThemeservice: ThemeService,
   ) { }
 
   ngOnInit() {
@@ -26,13 +26,13 @@ export class ThemeTemplateOverviewComponent implements OnInit {
     }));
   }
 
-  async createNewTemplate(theme: SiteTheme) {
+  async createNewTemplate(theme: Theme) {
     // TODO: Implement new way of creating template
     // const newId = await this.themeTemplateService.createTemplateInTheme(theme);
     // this.router.navigateByUrl(`/_/admin/templates/${newId}`);
   }
 
-  editTheme(theme: SiteTheme) {
+  editTheme(theme: Theme) {
     this.router.navigateByUrl(`/_/admin/themes/${theme.id}/edit`);
   }
 }

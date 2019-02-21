@@ -6,7 +6,7 @@ export const ADMIN_THEMES = {
     'dark': 'tanam-dark-theme',
 };
 
-export interface DocumentTemplate {
+export interface ThemeTemplate {
     id: string;
     title: string;
     selector: string;
@@ -16,7 +16,7 @@ export interface DocumentTemplate {
     created: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
 }
 
-export interface SiteTheme {
+export interface Theme {
     id: string;
     title: string;
     description: string;

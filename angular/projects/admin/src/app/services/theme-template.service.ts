@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { DocumentTemplate, SiteTheme, DocumentType } from 'tanam-models';
+import { ThemeTemplate, Theme, DocumentType } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
 
 @Injectable({
@@ -16,24 +16,24 @@ export class ThemeTemplateService {
     private readonly appConfig: AppConfigService,
   ) { }
 
-  getTemplate(theme: string, template: string): Observable<DocumentTemplate> {
+  getTemplate(theme: string, template: string): Observable<ThemeTemplate> {
     return this.siteCollection
       .collection('themes').doc(theme)
-      .collection('templates').doc<DocumentTemplate>(template)
+      .collection('templates').doc<ThemeTemplate>(template)
       .valueChanges();
   }
 
   getTemplatesForTheme(theme: string) {
     return this.siteCollection
       .collection('themes').doc(theme)
-      .collection<DocumentTemplate>('templates')
+      .collection<ThemeTemplate>('templates')
       .valueChanges();
   }
 
-  async createTemplateInTheme(theme: SiteTheme, documentType: DocumentType) {
+  async createTemplateInTheme(theme: Theme, documentType: DocumentType) {
     return this.siteCollection
       .collection('themes').doc(theme.id)
-      .collection('templates').doc<DocumentTemplate>(documentType.id)
+      .collection('templates').doc<ThemeTemplate>(documentType.id)
       .set({
         id: documentType.id,
         title: documentType.title,
@@ -42,10 +42,10 @@ export class ThemeTemplateService {
         styles: ['// Put your CSS template here'],
         updated: firebase.firestore.FieldValue.serverTimestamp(),
         created: firebase.firestore.FieldValue.serverTimestamp(),
-      } as DocumentTemplate);
+      } as ThemeTemplate);
   }
 
-  saveTemplate(template: DocumentTemplate) {
-    return this.firestore.collection('templates').doc<DocumentTemplate>(template.id).update(template);
+  saveTemplate(template: ThemeTemplate) {
+    return this.firestore.collection('templates').doc<ThemeTemplate>(template.id).update(template);
   }
 }

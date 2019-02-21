@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { DocumentTemplate } from 'tanam-models';
+import { ThemeTemplate } from 'tanam-models';
 import { ThemeTemplateService } from '../../../services/theme-template.service';
 
 @Component({
@@ -13,7 +13,7 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
   @Input() themeId: string;
   @Input() templateId: string;
 
-  template: DocumentTemplate;
+  template: ThemeTemplate;
   readonly templateForm: FormGroup = this.fb.group({
     title: [null, Validators.required],
     selector: [null, Validators.required],
@@ -55,6 +55,6 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
       selector: formData.selector,
       template: formData.templateHtml,
       styles: [formData.templateStyle],
-    } as DocumentTemplate);
+    } as ThemeTemplate);
   }
 }

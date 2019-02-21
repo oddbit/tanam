@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
-import { SiteInformation, SiteTheme } from 'tanam-models';
+import { SiteInformation, Theme } from 'tanam-models';
 import { SiteService } from '../../../services/site.service';
-import { SiteThemeService } from '../../../services/site-theme.service';
+import { ThemeService } from '../../../services/theme.service';
 
 @Component({
   selector: 'app-site-form',
@@ -12,7 +12,7 @@ import { SiteThemeService } from '../../../services/site-theme.service';
 })
 export class SiteFormComponent implements OnInit, OnDestroy {
   readonly siteName$: Observable<string> = this.siteSettingsService.getSiteName();
-  readonly themes$: Observable<SiteTheme[]> = this.themeService.getThemes();
+  readonly themes$: Observable<Theme[]> = this.themeService.getThemes();
   readonly settingsForm: FormGroup = this.formBuilder.group({
     title: [null, [Validators.required]],
     theme: [null, [Validators.required]],
@@ -22,7 +22,7 @@ export class SiteFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly siteSettingsService: SiteService,
-    private readonly themeService: SiteThemeService,
+    private readonly themeService: ThemeService,
     private readonly formBuilder: FormBuilder,
   ) { }
 

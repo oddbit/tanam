@@ -1,5 +1,5 @@
 import * as dust from 'dustjs-helpers';
-import { DocumentContext, SiteTheme } from '../../models';
+import { DocumentContext, Theme } from '../../models';
 import * as documentContextService from './services/document-context.service';
 import { getSiteInfo } from './services/site-info.service';
 import * as templateService from './services/template.service';
@@ -40,10 +40,10 @@ export async function renderTemplate(context: DocumentContext) {
         dust.register(template.id, dust.loadSource(source));
     }
 
-    const currentDocumentTemplate = context.documentType;
+    const currentThemeTemplate = context.documentType;
 
     return new Promise<string>((resolve, reject) => {
-        dust.render(currentDocumentTemplate, context, (err: any, out: string) => {
+        dust.render(currentThemeTemplate, context, (err: any, out: string) => {
             if (err) {
                 console.log(`[renderDocument] Error rendering: ${JSON.stringify(err)}`);
                 reject(JSON.stringify(err));
@@ -55,13 +55,13 @@ export async function renderTemplate(context: DocumentContext) {
     });
 }
 
-function renderThemeStyles(theme: SiteTheme): string[] {
+function renderThemeStyles(theme: Theme): string[] {
     return theme.styles.filter(s => !!s && s.trim().length).map(style =>
         style.startsWith('http') ? `<link href="${style}" rel="stylesheet" />` : style
     );
 }
 
-function renderThemeScripts(theme: SiteTheme): string[] {
+function renderThemeScripts(theme: Theme): string[] {
     return theme.scripts.filter(s => !!s && s.trim().length).map(script =>
         script.startsWith('http')
             ? `<script src="${script}"></script>`
