@@ -8,12 +8,17 @@
 
 .edit-content {
   width: calc(100% - 300px);
+  margin-right: 10px;
 }
 
 .edit-metadata {
   width: 300px;
-  position: fixed;
   right: 4%;
+}
+
+.edit-metadata .mat-card {
+  position: sticky;
+  top: 128px;
 }
 
 .btn-close-dialog, .btn-open-dialog {
@@ -59,10 +64,12 @@
 
   .edit-metadata {
     display: none;
+    position: fixed;
   }
 
   .edit-content {
     width: 100%;
+    margin-right: 0;
   }
 }
 
