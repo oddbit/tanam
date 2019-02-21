@@ -5,7 +5,7 @@ import { AppFirebaseModule } from '../app-firebase.module';
 import { AppMaterialModule } from '../app-material.module';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
-import { ContentEntryModule } from './content-entry/content-entry.module';
+import { DocumentModule } from './document/document.module';
 import { ContentTemplateModule } from './content-template/content-template.module';
 import { ContentTypeModule } from './content-type/content-type.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -33,7 +33,7 @@ import { ThemeModule } from './theme/theme.module';
     NavigationModule,
     LayoutModule,
     MediaModule,
-    ContentEntryModule,
+    DocumentModule,
     ContentTemplateModule,
     ContentTypeModule,
     NavigationModule,

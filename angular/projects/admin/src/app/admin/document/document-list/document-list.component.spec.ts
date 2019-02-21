@@ -2,15 +2,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule, MatSortModule, MatTableModule } from '@angular/material';
 
-import { ContentEntryListComponent } from './content-entry-list.component';
+import { DocumentListComponent } from './document-list.component';
 
-describe('ContentEntryListComponent', () => {
-  let component: ContentEntryListComponent;
-  let fixture: ComponentFixture<ContentEntryListComponent>;
+describe('DocumentListComponent', () => {
+  let component: DocumentListComponent;
+  let fixture: ComponentFixture<DocumentListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContentEntryListComponent ],
+      declarations: [ DocumentListComponent ],
       imports: [
         NoopAnimationsModule,
         MatPaginatorModule,
@@ -21,7 +21,7 @@ describe('ContentEntryListComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContentEntryListComponent);
+    fixture = TestBed.createComponent(DocumentListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

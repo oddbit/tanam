@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Document, DocumentStatus, DocumentType } from 'tanam-models';
-import { ContentEntryService } from '../../../services/content-entry.service';
+import { DocumentService } from '../../../services/document.service';
 import { ContentTypeService } from '../../../services/content-type.service';
 import { SiteService } from '../../../services/site.service';
 
@@ -14,11 +14,11 @@ interface StatusOption {
 }
 
 @Component({
-  selector: 'app-content-entry-form',
-  templateUrl: './content-entry-form.component.html',
-  styleUrls: ['./content-entry-form.component.scss']
+  selector: 'app-document-form',
+  templateUrl: './document-form.component.html',
+  styleUrls: ['./document-form.component.scss']
 })
-export class ContentEntryFormComponent implements OnInit, OnDestroy, OnChanges {
+export class DocumentFormComponent implements OnInit, OnDestroy, OnChanges {
   @Input() document: Document;
   @Input() afterSaveRoute: string;
   @Input() onCancelRoute: string;
@@ -30,7 +30,7 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy, OnChanges {
   createdTime: Date;
   domain$ = this.siteService.getPrimaryDomain();
   documentType$: Observable<DocumentType>;
-  entryForm = this.formBuilder.group({
+  documentForm = this.formBuilder.group({
     title: [null, Validators.required],
     url: [null, Validators.required],
     status: [null, Validators.required],
@@ -42,7 +42,7 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy, OnChanges {
   };
 
   get dataForm() {
-    return this.entryForm.get('dataForm') as FormGroup;
+    return this.documentForm.get('dataForm') as FormGroup;
   }
 
   readonly statusOptions: StatusOption[] = [
@@ -55,14 +55,14 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy, OnChanges {
   constructor(
     private readonly router: Router,
     private readonly formBuilder: FormBuilder,
-    private readonly contentEntryService: ContentEntryService,
+    private readonly documentService: DocumentService,
     private readonly documentTypeService: ContentTypeService,
     private readonly siteService: SiteService,
   ) { }
 
 
   ngOnInit() {
-    this.entryForm.patchValue({
+    this.documentForm.patchValue({
       title: this.document.title,
       url: this.document.url,
       status: this.document.status,
@@ -99,10 +99,10 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy, OnChanges {
   onTitleChange(title: string, isTitle: boolean) {
     if (!this.publishedTime && isTitle) {
       // Only auto slugify title if document has't been published before
-      this.entryForm.controls['url'].setValue(`${this._rootSlug}/${this._slugify(title)}`);
-      this.entryForm.controls['title'].setValue(title);
+      this.documentForm.controls['url'].setValue(`${this._rootSlug}/${this._slugify(title)}`);
+      this.documentForm.controls['title'].setValue(title);
     } else if (isTitle) {
-      this.entryForm.controls['title'].setValue(title);
+      this.documentForm.controls['title'].setValue(title);
     }
   }
 
@@ -119,13 +119,13 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async deleteEntry() {
-    await this.contentEntryService.delete(this.document.id);
+    await this.documentService.delete(this.document.id);
     this.router.navigateByUrl(this.onCancelRoute);
   }
 
   async saveEntry() {
-    const formData = this.entryForm.value;
-    console.log(`[ContentEntryEditComponent:saveEntry] ${JSON.stringify(formData)}`);
+    const formData = this.documentForm.value;
+    console.log(`[DocumentEditComponent:saveEntry] ${JSON.stringify(formData)}`);
 
 
     const updates = {
@@ -136,7 +136,7 @@ export class ContentEntryFormComponent implements OnInit, OnDestroy, OnChanges {
       data: this.dataForm.value,
       url: formData.url,
     } as Document;
-    await this.contentEntryService.update(updates);
+    await this.documentService.update(updates);
 
 
     if (!!this.afterSaveRoute) {

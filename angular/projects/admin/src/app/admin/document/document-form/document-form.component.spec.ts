@@ -9,15 +9,15 @@ import {
   MatSelectModule,
 } from '@angular/material';
 
-import { ContentEntryFormComponent } from './content-entry-form.component';
+import { DocumentFormComponent } from './document-form.component';
 
-describe('ContentEntryFormComponent', () => {
-  let component: ContentEntryFormComponent;
-  let fixture: ComponentFixture<ContentEntryFormComponent>;
+describe('DocumentFormComponent', () => {
+  let component: DocumentFormComponent;
+  let fixture: ComponentFixture<DocumentFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContentEntryFormComponent ],
+      declarations: [DocumentFormComponent],
       imports: [
         NoopAnimationsModule,
         ReactiveFormsModule,
@@ -31,7 +31,7 @@ describe('ContentEntryFormComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContentEntryFormComponent);
+    fixture = TestBed.createComponent(DocumentFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin.component';
-import { ContentEntryEditComponent } from './content-entry/content-entry-edit/content-entry-edit.component';
-import { ContentEntryOverviewComponent } from './content-entry/content-entry-overview/content-entry-overview.component';
+import { DocumentEditComponent } from './document/document-edit/document-edit.component';
+import { DocumentOverviewComponent } from './document/document-overview/document-overview.component';
 import { ContentTemplateEditComponent } from './content-template/content-template-edit/content-template-edit.component';
 import { ContentTemplateOverviewComponent } from './content-template/content-template-overview/content-template-overview.component';
 import { ContentTypeEditComponent } from './content-type/content-type-edit/content-type-edit.component';
@@ -67,7 +67,7 @@ const routes: Routes = [
                   },
                   {
                     path: 'overview',
-                    component: ContentEntryOverviewComponent,
+                    component: DocumentOverviewComponent,
                     canActivate: [PublisherGuard],
                   },
                   {
@@ -86,7 +86,7 @@ const routes: Routes = [
                 path: ':documentId',
                 children: [
                   { path: '', redirectTo: 'edit', pathMatch: 'full' },
-                  { path: 'edit', component: ContentEntryEditComponent, canActivate: [PublisherGuard] }
+                  { path: 'edit', component: DocumentEditComponent, canActivate: [PublisherGuard] }
                 ],
               },
             ],

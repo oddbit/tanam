@@ -16,7 +16,7 @@ export interface ContentTypeQueryOptions {
 @Injectable({
   providedIn: 'root'
 })
-export class ContentEntryService {
+export class DocumentService {
   readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
 
   constructor(
@@ -46,20 +46,20 @@ export class ContentEntryService {
       } as Document);
   }
 
-  update(entry: Document) {
-    if (!entry.id) {
-      throw new Error('Document ID must be provided as an attribute when updating an entry.');
+  update(document: Document) {
+    if (!document.id) {
+      throw new Error('Document ID must be provided as an attribute when updating an document.');
     }
 
-    entry.updated = firebase.firestore.FieldValue.serverTimestamp();
+    document.updated = firebase.firestore.FieldValue.serverTimestamp();
     return this.siteCollection
-      .collection<Document>('documents').doc(entry.id)
-      .update(entry);
+      .collection<Document>('documents').doc(document.id)
+      .update(document);
   }
 
   delete(documentId: string) {
     if (!documentId) {
-      throw new Error('Document ID must be provided as an attribute when deleting an entry.');
+      throw new Error('Document ID must be provided as an attribute when deleting an document.');
     }
     console.log(documentId);
     return this.siteCollection
@@ -74,7 +74,7 @@ export class ContentEntryService {
   }
 
   query(documentTypeId: string, queryOpts: ContentTypeQueryOptions = {}): Observable<Document[]> {
-    console.log(`[ContentEntryService:getContentTypeFields] ${documentTypeId}, query=${JSON.stringify(queryOpts)}`);
+    console.log(`[DocumentService:getContentTypeFields] ${documentTypeId}, query=${JSON.stringify(queryOpts)}`);
 
     const queryFn = (ref: CollectionReference) => {
       let query = ref.where('documentType', '==', documentTypeId);
