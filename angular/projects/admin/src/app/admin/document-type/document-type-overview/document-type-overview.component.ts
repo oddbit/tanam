@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DocumentTypeService } from '../../../services/document-type.service';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { DocumentTypeDialogCreateComponent } from '../document-type-dialog-create/document-type-dialog-create.component';
 
 @Component({
   selector: 'tanam-document-type-overview',
@@ -8,18 +8,10 @@ import { DocumentTypeService } from '../../../services/document-type.service';
   styleUrls: ['./document-type-overview.component.scss']
 })
 export class DocumentTypeOverviewComponent {
-  readonly createTypeForm: FormGroup = this.formBuilder.group({
-    title: [null, [Validators.required]],
-  });
 
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly documentTypeService: DocumentTypeService,
-  ) {
-  }
+  constructor(private dialog: MatDialog) {}
 
-  createNewType() {
-    const formData = this.createTypeForm.value;
-    this.documentTypeService.create(formData.title);
+  createNewTypeDialog() {
+    this.dialog.open(DocumentTypeDialogCreateComponent);
   }
 }
