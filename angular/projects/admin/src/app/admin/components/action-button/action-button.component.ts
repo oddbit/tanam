@@ -17,6 +17,7 @@ export class ActionButtonComponent implements OnInit {
     create: '',
     cancel: 'warn',
     upload: '',
+    editTheme: '',
   };
 
   readonly BUTTON_TITLES = {
@@ -26,15 +27,17 @@ export class ActionButtonComponent implements OnInit {
     create: 'Create new',
     cancel: 'Cancel',
     upload: 'Upload',
+    editTheme: 'Edit Theme',
   };
 
   readonly BUTTON_ICONS = {
     delete: 'delete',
     save: 'save',
-    editTemplate: 'edit',
+    editTemplate: 'new',
     create: 'create',
     cancel: 'keyboard_arrow_left',
     upload: 'file_upload',
+    editTheme: 'border_color',
   };
 
   @Input() buttonType: ActionButtonType;
