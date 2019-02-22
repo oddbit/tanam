@@ -24,7 +24,7 @@ export class ActionButtonComponent implements OnInit {
     delete: 'Delete',
     save: 'Save',
     editTemplate: 'Edit Template',
-    create: 'Create new',
+    create: 'Create New',
     cancel: 'Cancel',
     upload: 'Upload',
     editTheme: 'Edit Theme',
