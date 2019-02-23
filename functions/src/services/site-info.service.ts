@@ -9,7 +9,7 @@ export async function getSiteInfo() {
 export async function createDefaultSiteInfo() {
     const defaultDomain = `${process.env.GCLOUD_PROJECT}.firebaseapp.com`;
     console.log(`[createDefaultSiteInfo] ${defaultDomain}`);
-    
+
     const siteInfoData: SiteInformation = {
         defaultLanguage: 'en',
         languages: ['en'],

@@ -5,13 +5,21 @@ export type DocumentFieldFormElement = 'input-text'
     | 'textbox-rich'
     | 'date'
     | 'time'
+    | 'image'
+    | 'map'
+    | 'author'
     | 'date-time'
     | 'slide-toggle';
+
+export type DocumentFieldValidator = 'required';
 
 export interface DocumentField {
     key: string;
     title: string;
     type: DocumentFieldFormElement;
+    isTitle?: boolean;
+    defaultValue?: any;
+    validators: DocumentFieldValidator[];
 }
 
 export interface DocumentCount {
@@ -23,7 +31,6 @@ export interface DocumentType {
     id: string; // Document id
     title: string; // Presentation name
     slug: string; // Root slug to group entries by
-    template: string;
     standalone: boolean; // True if the content can be presented on a page with URL of its own
     description: string;
     icon: string; // Icon for menus etc

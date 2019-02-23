@@ -2,10 +2,15 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { DocumentField, DocumentType } from 'tanam-models';
+import { DocumentField, DocumentType, DocumentFieldFormElement } from 'tanam-models';
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { SiteService } from '../../../services/site.service';
 import { documentTypeMaterialIcons } from './document-type-form.icons';
+
+interface FieldType {
+  type: DocumentFieldFormElement;
+  title: string;
+}
 
 @Component({
   selector: 'tanam-document-type-form',
@@ -28,7 +33,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     description: [null, Validators.required],
     fields: this.formBuilder.array([]),
   });
-  readonly fieldTypes = [
+  readonly fieldTypes: FieldType[] = [
     { type: 'input-text', title: 'Single line of text' },
     { type: 'input-number', title: 'Input number on a line' },
     { type: 'textbox-plain', title: 'Box of plain text' },
@@ -36,6 +41,9 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     { type: 'date', title: 'Date picker' },
     { type: 'time', title: 'Time picker' },
     { type: 'date-time', title: 'Date and time picker' },
+    { type: 'map', title: 'Google Maps Location' },
+    { type: 'author', title: 'Content Author' },
+    { type: 'image', title: 'Image' },
     { type: 'slide-toggle', title: 'Slide toggle value for yes/no' },
   ];
 

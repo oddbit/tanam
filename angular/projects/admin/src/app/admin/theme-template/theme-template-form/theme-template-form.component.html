@@ -44,7 +44,8 @@
                 </mat-error>
               </mat-form-field>
             </mat-tab>
-            <mat-tab label="CSS">
+            <mat-tab *ngIf="!!templateStyle"
+                     label="CSS">
               <mat-form-field class="full-width">
                 <textarea matInput
                           cdkTextareaAutosize

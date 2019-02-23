@@ -36,6 +36,7 @@ export class DocumentTypeService {
     return docRef.set({
       id: id,
       title: null,
+      description: '',
       slug: null,
       template: null,
       standalone: true,

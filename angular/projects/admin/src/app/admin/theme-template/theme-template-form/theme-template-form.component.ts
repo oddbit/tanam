@@ -36,7 +36,7 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
           title: template.title,
           selector: template.selector,
           templateHtml: template.template,
-          templateStyle: template.styles[0]
+          templateStyle: template.styles ? template.styles[0] : null
         });
       });
   }
