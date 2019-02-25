@@ -1,15 +1,19 @@
 .wrapper {
   display: flex;
   flex-wrap: wrap;
-  margin: 10px -8px 0;
+  margin: 10px 0;
 }
 
 .card {
   flex: 0 0 calc(20% - 16px);
-  min-width: 200px;
-  margin: 8px;
+  min-width: 23%;
+  margin: 1%;
   box-sizing: border-box;
   overflow: hidden;
+  @media screen and (max-width: 600px) {
+    min-width: 48%;
+    margin: 1%;
+  }
 }
 
 .img-wrapper {
