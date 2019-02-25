@@ -1,4 +1,4 @@
-<form [formGroup]="documentForm"
+<form [formGroup]="settingsForm"
       novalidate>
   <tanam-page-title pageTitle="Settings"></tanam-page-title>
   <tanam-context-actions>
@@ -9,7 +9,32 @@
     <mat-card-title>Site information</mat-card-title>
     <mat-card-subtitle>Configure your site information</mat-card-subtitle>
     <mat-card-content>
-      <tanam-site-form></tanam-site-form>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput
+                   placeholder="Title"
+                   formControlName="title">
+            <mat-error *ngIf="settingsForm.controls['title'].hasError('required')">
+              Title is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-select formControlName="theme"
+                        placeholder="Theme">
+              <mat-option *ngFor="let theme of themes$ | async"
+                          value="{{theme.id}}">{{theme.title}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="settingsForm.controls['theme'].hasError('required')">
+              Theme is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
     </mat-card-content>
   </mat-card>
 
