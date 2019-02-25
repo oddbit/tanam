@@ -42,6 +42,15 @@
     <mat-card-title>Domain settings</mat-card-title>
     <mat-card-subtitle>Configure the URL settings and domain name.</mat-card-subtitle>
     <mat-card-content>
+      <p>
+        You must manually configure the domains that you have connected with your <a href="https://firebase.google.com/docs/hosting/custom-domain" target="_blank">Firebase hosting</a> in order for Tanam to handle caching and SEO properly.
+      </p>
+      <p>
+        The primary domain should be the domain which you are using for your site. You can add additional domains that
+        also
+        serve your content and Tanam will take care of configurations that
+        <a href="https://support.google.com/webmasters/answer/1716747?hl=en" target="_blank">avoid penalties from search engines</a> when multiple domains are serving the same content.
+      </p>
       <div class="row">
         <div class="col">
           <button mat-raised-button
@@ -49,29 +58,29 @@
                   (click)="addDomain()">Add domain</button>
         </div>
       </div>
-        <div class="settings-form">
-          <mat-radio-group formControlName="primaryDomain">
-            <div formArrayName="domains">
-              <div class="row"
-                   *ngFor="let domain of domainsFormArray.controls; let i=index"
-                   [formGroupName]="i">
-                <div class="col">
-                  <mat-radio-button [value]="domain.value.name">
-                  </mat-radio-button>
-                  <mat-form-field>
-                    <input matInput
-                           placeholder="Domain"
-                           formControlName="name">
-                  </mat-form-field>
-                  <button mat-raised-button
-                          color="warn"
-                          *ngIf="i > 0"
-                          (click)="removeDomain(i)">Remove</button>
-                </div>
+      <div class="settings-form">
+        <mat-radio-group formControlName="primaryDomain">
+          <div formArrayName="domains">
+            <div class="row"
+                 *ngFor="let domain of domainsFormArray.controls; let i=index"
+                 [formGroupName]="i">
+              <div class="col">
+                <mat-radio-button [value]="domain.value.name">
+                </mat-radio-button>
+                <mat-form-field>
+                  <input matInput
+                         placeholder="Domain"
+                         formControlName="name">
+                </mat-form-field>
+                <button mat-raised-button
+                        color="warn"
+                        *ngIf="i > 0"
+                        (click)="removeDomain(i)">Remove</button>
               </div>
             </div>
-          </mat-radio-group>
-        </div>
+          </div>
+        </mat-radio-group>
+      </div>
     </mat-card-content>
   </mat-card>
 </form>
