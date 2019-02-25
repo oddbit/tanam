@@ -1,6 +1,10 @@
 <form [formGroup]="documentForm"
       novalidate>
   <tanam-page-title pageTitle="Settings"></tanam-page-title>
+  <tanam-context-actions>
+    <tanam-action-button buttonType='save'
+                         (click)='saveSettings()'></tanam-action-button>
+  </tanam-context-actions>
   <mat-card class="card">
     <mat-card-title>Site information</mat-card-title>
     <mat-card-subtitle>Configure your site information</mat-card-subtitle>
