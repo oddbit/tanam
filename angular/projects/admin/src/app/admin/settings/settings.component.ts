@@ -37,17 +37,17 @@ export class SettingsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.settingsSubscription = this.siteSettingsService.getSiteInfo().subscribe(settings => {
       console.log(`[SettingsSiteComponent] site settings: ${JSON.stringify(settings)}`);
-      this.settingsForm.get('primaryDomain').setValue(settings.primaryDomain);
       while (this.domainsFormArray.length > 0) {
         this.domainsFormArray.removeAt(0);
       }
       for (const domain of settings.domains) {
-        console.log(domain);
         this.addDomain(domain);
       }
       this.settingsForm.setValue({
         title: settings.title,
-        theme: settings.theme
+        theme: settings.theme,
+        primaryDomain: settings.primaryDomain,
+        domains: settings.domains
       });
     });
   }
@@ -96,6 +96,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   saveSettings() {
     const formData = this.settingsForm.value;
-    return this.siteSettingsService.save(formData as SiteInformation);
+    return this.siteSettingsService.save({
+      title: formData.title,
+      theme: formData.theme,
+      primaryDomain: formData.primaryDomain,
+      domains: formData.domains.map((domain: any) => domain['name']),
+    } as SiteInformation);
   }
 }
