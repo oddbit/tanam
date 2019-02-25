@@ -1,17 +1,19 @@
-<tanam-page-title pageTitle="Settings"></tanam-page-title>
+<form [formGroup]="documentForm"
+      novalidate>
+  <tanam-page-title pageTitle="Settings"></tanam-page-title>
+  <mat-card class="card">
+    <mat-card-title>Site information</mat-card-title>
+    <mat-card-subtitle>Configure your site information</mat-card-subtitle>
+    <mat-card-content>
+      <tanam-site-form></tanam-site-form>
+    </mat-card-content>
+  </mat-card>
 
-<mat-card class="card">
-  <mat-card-title>Site information</mat-card-title>
-  <mat-card-subtitle>Configure your site information</mat-card-subtitle>
-  <mat-card-content>
-    <tanam-site-form></tanam-site-form>
-  </mat-card-content>
-</mat-card>
-
-<mat-card class="card">
-  <mat-card-title>Domain settings</mat-card-title>
-  <mat-card-subtitle>Configure the URL settings and domain name.</mat-card-subtitle>
-  <mat-card-content>
-    <tanam-domain-form></tanam-domain-form>
-  </mat-card-content>
-</mat-card>
+  <mat-card class="card">
+    <mat-card-title>Domain settings</mat-card-title>
+    <mat-card-subtitle>Configure the URL settings and domain name.</mat-card-subtitle>
+    <mat-card-content>
+      <tanam-domain-form></tanam-domain-form>
+    </mat-card-content>
+  </mat-card>
+</form>
