@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ThemeTemplate } from 'tanam-models';
 import { ThemeTemplateService } from '../../../services/theme-template.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'tanam-theme-template-form',
@@ -14,7 +15,7 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
   @Input() templateId: string;
 
   template: ThemeTemplate;
-  readonly templateForm: FormGroup = this.fb.group({
+  readonly templateForm: FormGroup = this.formBuilder.group({
     title: [null, Validators.required],
     selector: [null, Validators.required],
     templateHtml: [null, Validators.required],
@@ -23,7 +24,8 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
   templateSubscription: Subscription;
 
   constructor(
-    private readonly fb: FormBuilder,
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router,
     private readonly themeTemplateservice: ThemeTemplateService,
   ) { }
 
@@ -47,7 +49,11 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSave() {
+  cancelEdit() {
+    this.router.navigateByUrl(`/_/admin/theme/${this.themeId}`);
+  }
+
+  saveTemplate() {
     const formData = this.templateForm.value;
     this.themeTemplateservice.saveTemplate({
       id: this.templateId,
