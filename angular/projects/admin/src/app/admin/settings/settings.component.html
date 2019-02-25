@@ -1,26 +1,17 @@
 <tanam-page-title pageTitle="Settings"></tanam-page-title>
 
-<mat-accordion>
-  <mat-expansion-panel [expanded]="true">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Site information
-      </mat-panel-title>
-      <mat-panel-description>
-        Configure your site information
-      </mat-panel-description>
-    </mat-expansion-panel-header>
+<mat-card class="card">
+  <mat-card-title>Site information</mat-card-title>
+  <mat-card-subtitle>Configure your site information</mat-card-subtitle>
+  <mat-card-content>
     <tanam-site-form></tanam-site-form>
-  </mat-expansion-panel>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Domain settings
-      </mat-panel-title>
-      <mat-panel-description>
-        Configure the URL settings and domain name.
-      </mat-panel-description>
-    </mat-expansion-panel-header>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="card">
+  <mat-card-title>Domain settings</mat-card-title>
+  <mat-card-subtitle>Configure the URL settings and domain name.</mat-card-subtitle>
+  <mat-card-content>
     <tanam-domain-form></tanam-domain-form>
-  </mat-expansion-panel>
-</mat-accordion>
+  </mat-card-content>
+</mat-card>
