@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SiteService } from '../../../services/site.service';
 
 @Component({
   selector: 'tanam-settings-dialog-manage-languages',
@@ -15,19 +14,17 @@ export class SettingsDialogManageLanguagesComponent implements OnInit {
   });
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<SettingsDialogManageLanguagesComponent >,
-    private readonly siteSettingsService: SiteService,
     private readonly formBuilder: FormBuilder,
 
   ) { }
 
 
   ngOnInit() {
-    this.siteSettingsService.getSiteInfo().subscribe(settings => {
-      for (const language of settings.languages) {
-        this.addLanguage(language);
-      }
-    });
+    for (const language of this.data) {
+      this.addLanguage(language);
+    }
   }
 
   get languagesFormArray() {
