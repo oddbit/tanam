@@ -44,6 +44,10 @@ export class SettingsDialogManageLanguagesComponent implements OnInit {
     this.languagesFormArray.push(newLanguageLine);
   }
 
+  removeLanguage(index: number) {
+    this.languagesFormArray.removeAt(index);
+  }
+
   save() {
     const formData = this.languagesForm.value;
     const languages = {
