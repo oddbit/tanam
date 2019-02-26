@@ -16,18 +16,23 @@
                      placeholder="Language"
                      formControlName="name">
             </mat-form-field>
-            <button mat-raised-button
+            <button mat-icon-button
                     color="warn"
                     *ngIf="i > 0"
-                    (click)="removeLanguage(i)">Remove</button>
+                    (click)="removeLanguage(i)">
+              <mat-icon aria-label="Example icon-button with a heart icon">delete</mat-icon>
+            </button>
           </div>
         </div>
       </div>
     </form>
-    <button mat-raised-button
-                    color="accent"
-                    (click)="addLanguage()">Add Language</button>
+    <div class="actions">
+      <button mat-raised-button
+              color="primary"
+              (click)="save()">Save</button>
+      <button mat-raised-button
+              color="accent"
+              (click)="addLanguage()">Add Language</button>
+    </div>
   </div>
 </div>
-
-<button (click)="save()">Submit</button>
