@@ -45,8 +45,9 @@ export class SettingsDialogManageLanguagesComponent implements OnInit {
   }
 
   save() {
+    const formData = this.languagesForm.value;
     const languages = {
-      languages: ['en', 'id', 'tes'],
+      languages: formData.languages.map((language: any) => language['name']),
       status: 'submit'
     };
     this.dialogRef.close(languages);

@@ -1,18 +1,29 @@
-<form [formGroup]="languagesForm"
-      novalidate>
-  <div formArrayName="languages">
-    <div class="row"
-         *ngFor="let language of languagesFormArray.controls; let i=index"
-         [formGroupName]="i">
-      <div class="col">
-        <mat-form-field>
-          <input matInput
-                 placeholder="Language"
-                 formControlName="name">
-        </mat-form-field>
-      </div>
-    </div>
+<div class="row">
+  <div class="col">
+    <button mat-raised-button
+            color="accent"
+            (click)="addLanguage()">Add Language</button>
   </div>
-</form>
+</div>
+<div class="row">
+  <div class="col">
+    <form [formGroup]="languagesForm"
+          novalidate>
+      <div formArrayName="languages">
+        <div class="row"
+             *ngFor="let language of languagesFormArray.controls; let i=index"
+             [formGroupName]="i">
+          <div class="col">
+            <mat-form-field>
+              <input matInput
+                     placeholder="Language"
+                     formControlName="name">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 
 <button (click)="save()">Submit</button>
