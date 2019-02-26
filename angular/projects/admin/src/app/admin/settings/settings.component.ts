@@ -4,6 +4,8 @@ import { Observable, Subscription } from 'rxjs';
 import { SiteInformation, Theme } from 'tanam-models';
 import { SiteService } from '../../services/site.service';
 import { ThemeService } from '../../services/theme.service';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { SettingsDialogManageLanguagesComponent } from './settings-dialog-manage-languages/settings-dialog-manage-languages.component';
 
 // https://stackoverflow.com/a/26987741/7967164
 const REGEX_DOMAIN = '^(((?!-))(xn--|_{1,1})?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$';
@@ -34,6 +36,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     private readonly siteSettingsService: SiteService,
     private readonly themeService: ThemeService,
     private readonly formBuilder: FormBuilder,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -86,6 +89,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     this.domainsFormArray.removeAt(index);
+  }
+
+  dialogLanguage() {
+    this.dialog.open(SettingsDialogManageLanguagesComponent);
   }
 
   private getDomainNameAt(index: number) {
