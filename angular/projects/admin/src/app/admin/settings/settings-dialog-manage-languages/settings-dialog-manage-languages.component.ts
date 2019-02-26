@@ -57,4 +57,8 @@ export class SettingsDialogManageLanguagesComponent implements OnInit {
     this.dialogRef.close(languages);
   }
 
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
 }

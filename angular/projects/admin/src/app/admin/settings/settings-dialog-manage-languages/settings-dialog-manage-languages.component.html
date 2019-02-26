@@ -1,38 +1,40 @@
-<div class="row">
-  <div class="col">
-  </div>
-</div>
-<div class="row">
-  <div class="col">
-    <form [formGroup]="languagesForm"
-          novalidate>
-      <div formArrayName="languages">
-        <div class="row"
-             *ngFor="let language of languagesFormArray.controls; let i=index"
-             [formGroupName]="i">
-          <div class="col">
-            <mat-form-field>
-              <input matInput
-                     placeholder="Language"
-                     formControlName="name">
-            </mat-form-field>
-            <button mat-icon-button
-                    color="warn"
-                    *ngIf="i > 0"
-                    (click)="removeLanguage(i)">
-              <mat-icon aria-label="Example icon-button with a heart icon">delete</mat-icon>
-            </button>
+<div class="dialog">
+  <h2 mat-dialog-title>Manage Language</h2>
+  <mat-icon class="closeBtn" (click)="closeDialog()">close</mat-icon>
+  <mat-dialog-content class="content">
+    <div class="row">
+      <div class="col">
+        <form [formGroup]="languagesForm"
+              novalidate>
+          <div formArrayName="languages">
+            <div class="row"
+                 *ngFor="let language of languagesFormArray.controls; let i=index"
+                 [formGroupName]="i">
+              <div class="col">
+                <mat-form-field>
+                  <input matInput
+                         placeholder="Language"
+                         formControlName="name">
+                </mat-form-field>
+                <button mat-icon-button
+                        color="warn"
+                        *ngIf="i > 0"
+                        (click)="removeLanguage(i)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
-    </form>
-    <div class="actions">
-      <button mat-raised-button
-              color="primary"
-              (click)="save()">Save</button>
-      <button mat-raised-button
-              color="accent"
-              (click)="addLanguage()">Add Language</button>
     </div>
-  </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-raised-button
+            color="accent"
+            (click)="addLanguage()">Add Language</button>
+    <button mat-raised-button
+            color="primary"
+            (click)="save()">Save</button>
+  </mat-dialog-actions>
 </div>
