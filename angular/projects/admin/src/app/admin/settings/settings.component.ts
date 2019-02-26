@@ -119,6 +119,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     return this.siteSettingsService.save({
       title: formData.title,
       theme: formData.theme,
+      defaultLanguage: formData.defaultLanguage,
+      languages: this.languages,
       primaryDomain: formData.primaryDomain,
       domains: formData.domains.map((domain: any) => domain['name']),
     } as SiteInformation);
