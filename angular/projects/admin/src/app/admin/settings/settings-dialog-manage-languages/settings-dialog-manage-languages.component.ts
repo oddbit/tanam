@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'tanam-settings-dialog-manage-languages',
@@ -7,9 +8,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingsDialogManageLanguagesComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private dialogRef: MatDialogRef<SettingsDialogManageLanguagesComponent >,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit() {
+  }
+
+  save() {
+    const languages = {
+      languages: ['en', 'id', 'tes'],
+      status: 'submit'
+    };
+    this.dialogRef.close(languages);
   }
 
 }
