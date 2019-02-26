@@ -14,11 +14,13 @@ const REGEX_DOMAIN = '^(((?!-))(xn--|_{1,1})?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
+  languages: String[] = [];
   readonly siteName$: Observable<string> = this.siteSettingsService.getSiteName();
   readonly themes$: Observable<Theme[]> = this.themeService.getThemes();
   readonly settingsForm: FormGroup = this.formBuilder.group({
     title: [null, [Validators.required]],
     theme: [null, [Validators.required]],
+    defaultLanguage: [null, [Validators.required]],
     primaryDomain: [null, [Validators.required]],
     domains: this.formBuilder.array([], [
       Validators.required,
@@ -43,11 +45,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
       for (const domain of settings.domains) {
         this.addDomain(domain);
       }
+      this.languages = settings.languages;
       this.settingsForm.setValue({
         title: settings.title,
         theme: settings.theme,
+        defaultLanguage: settings.defaultLanguage,
         primaryDomain: settings.primaryDomain,
-        domains: settings.domains
+        domains: settings.domains,
       });
     });
   }

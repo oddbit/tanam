@@ -35,6 +35,18 @@
           </mat-form-field>
         </div>
       </div>
+      <div class="row">
+        <mat-form-field class="full-width">
+          <mat-select formControlName="defaultLanguage"
+                      placeholder="Default Language">
+            <mat-option *ngFor="let language of languages"
+                        value="{{language}}">{{language}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="settingsForm.controls['defaultLanguage'].hasError('required')">
+            Language is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
     </mat-card-content>
   </mat-card>
 
