@@ -96,11 +96,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
       data: this.languages
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-        if (result.status === 'submit') {
-          this.settingsForm.controls['defaultLanguage'].setValue('en');
-          this.languages = result.languages;
-        }
+      if (result && result.status === 'submit') {
+        this.settingsForm.controls['defaultLanguage'].setValue('en');
+        this.languages = result.languages;
       }
     });
   }
