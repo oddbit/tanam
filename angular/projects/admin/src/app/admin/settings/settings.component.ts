@@ -4,7 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { SiteInformation, Theme } from 'tanam-models';
 import { SiteService } from '../../services/site.service';
 import { ThemeService } from '../../services/theme.service';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { SettingsDialogManageLanguagesComponent } from './settings-dialog-manage-languages/settings-dialog-manage-languages.component';
 
 // https://stackoverflow.com/a/26987741/7967164
