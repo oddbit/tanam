@@ -12,7 +12,7 @@ export class ImageData {
   imageFilePath: string;
   tempLocalFile: string;
   tempLocalDir: string;
-  tempLocalJPEGFile: string;
+  tempLocalWebPFile: string;
   contentType: string;
   metadata: any;
 
@@ -34,7 +34,7 @@ export class ImageData {
 
     this.tempLocalFile = path.join(os.tmpdir(), this.filePath);
     this.tempLocalDir = path.dirname(this.tempLocalFile);
-    this.tempLocalJPEGFile = path.join(os.tmpdir(), this.imageFilePath);
+    this.tempLocalWebPFile = path.join(os.tmpdir(), this.imageFilePath);
 
     this.contentType = inputImage.contentType;
     this.metadata = {
