@@ -1,6 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { languageOptions } from '../settings.languages';
+
+export interface LanguageOptions {
+  id: string; // en, id, se...
+  title: string; // English title
+  nativeTitle: string; // Untranslated title of the language in its own local alphabet and language
+}
 
 @Component({
   selector: 'tanam-settings-dialog-manage-languages',
@@ -8,7 +15,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./settings-dialog-manage-languages.component.scss']
 })
 export class SettingsDialogManageLanguagesComponent implements OnInit {
-
+  readonly languageOptions: LanguageOptions[] = languageOptions;
   readonly languagesForm: FormGroup = this.formBuilder.group({
     languages: this.formBuilder.array([], [Validators.required]),
   });
