@@ -7,6 +7,8 @@ import { ImageData } from '../../../models/image-data.models';
 
 const spawn = require('child-process-promise').spawn;
 
+const siteCollection = () => admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
+
 export const convertToWebP = functions.storage.object().onFinalize(async (object: ObjectMetadata) => {
   const image = new ImageData(object);
 
@@ -28,5 +30,13 @@ export const convertToWebP = functions.storage.object().onFinalize(async (object
     destination: image.imageFilePath,
   });
 
+  await updateVariantsImagesDocument(image.fileName);
+
   return null;
 })
+
+const updateVariantsImagesDocument = async (fileName) => {
+  const doc = await siteCollection()
+    .collection('files').doc(fileName);
+
+}
