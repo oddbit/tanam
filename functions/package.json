@@ -37,11 +37,14 @@
     "build:dist": "npm run build:all && npm run package"
   },
   "dependencies": {
+    "child-process-promise": "^2.2.1",
     "crypto-js": "^3.1.9-1",
     "dustjs-helpers": "^1.7.4",
     "dustjs-linkedin": "^2.7.5",
     "firebase-admin": "^6.5.1",
-    "firebase-functions": "^2.1.0"
+    "firebase-functions": "^2.1.0",
+    "mkdirp": "^0.5.1",
+    "mkdirp-promise": "^5.0.1"
   },
   "devDependencies": {
     "@types/crypto-js": "^3.1.43",
