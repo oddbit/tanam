@@ -7,6 +7,7 @@ const WEBP_EXTENSION = '.webp';
 export class ImageData {
   bucketName: string;
   filePath: string;
+  fileName: string;
   baseFileName: string;
   fileDir: string;
   imageFilePath: string;
@@ -41,5 +42,8 @@ export class ImageData {
       contentType: this.contentType,
       metadata: inputImage.metadata,
     };
+
+    const [tanamDir, imageDir, fileName] = this.filePath.split('/');
+    this.fileName = fileName;
   }
 }
