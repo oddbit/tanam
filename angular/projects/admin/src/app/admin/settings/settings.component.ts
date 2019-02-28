@@ -5,7 +5,9 @@ import { SiteInformation, Theme } from 'tanam-models';
 import { SiteService } from '../../services/site.service';
 import { ThemeService } from '../../services/theme.service';
 import { MatDialog } from '@angular/material';
-import { SettingsDialogManageLanguagesComponent } from './settings-dialog-manage-languages/settings-dialog-manage-languages.component';
+import { SettingsDialogManageLanguagesComponent,
+         LanguageOptions } from './settings-dialog-manage-languages/settings-dialog-manage-languages.component';
+import { languageOptions } from './settings.languages';
 
 // https://stackoverflow.com/a/26987741/7967164
 const REGEX_DOMAIN = '^(((?!-))(xn--|_{1,1})?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$';
@@ -16,7 +18,8 @@ const REGEX_DOMAIN = '^(((?!-))(xn--|_{1,1})?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
-  languages: String[] = [];
+  languages: LanguageOptions[] = [];
+  langOptions = languageOptions;
   readonly siteName$: Observable<string> = this.siteSettingsService.getSiteName();
   readonly themes$: Observable<Theme[]> = this.themeService.getThemes();
   readonly settingsForm: FormGroup = this.formBuilder.group({
@@ -48,14 +51,19 @@ export class SettingsComponent implements OnInit, OnDestroy {
       for (const domain of settings.domains) {
         this.addDomain(domain);
       }
-      this.languages = settings.languages;
-      this.settingsForm.setValue({
+
+      this.settingsForm.patchValue({
         title: settings.title,
         theme: settings.theme,
         defaultLanguage: settings.defaultLanguage,
         primaryDomain: settings.primaryDomain,
         domains: settings.domains,
       });
+
+      this.languages = this.langOptions.filter(lang => {
+        return settings.languages.includes(lang.id);
+      });
+
     });
   }
 
@@ -119,7 +127,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       title: formData.title,
       theme: formData.theme,
       defaultLanguage: formData.defaultLanguage,
-      languages: this.languages,
+      // languages: this.languages,
       primaryDomain: formData.primaryDomain,
       domains: formData.domains.map((domain: any) => domain['name']),
     } as SiteInformation);
