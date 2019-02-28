@@ -23,7 +23,12 @@ export const convertToWebP = functions.storage.object().onFinalize(async (object
     .download({ destination: image.tempLocalFile });
   console.log('The file has been downloaded to', image.tempLocalFile);
 
-  await spawn('convert', [image.tempLocalFile, image.tempLocalWebPFile]);
+  await spawn('convert', [
+    image.tempLocalFile,
+    '-define',
+    'webp:lossless=true',
+    image.tempLocalWebPFile,
+  ]);
   console.log('WebP image created at', image.tempLocalWebPFile);
 
   await bucket.upload(image.tempLocalWebPFile, {
