@@ -1,6 +1,7 @@
 <div class="dialog">
   <h2 mat-dialog-title>Manage Language</h2>
-  <mat-icon class="closeBtn" (click)="closeDialog()">close</mat-icon>
+  <mat-icon class="closeBtn"
+            (click)="closeDialog()">close</mat-icon>
   <mat-dialog-content class="content">
     <div class="row">
       <div class="col">
@@ -11,10 +12,12 @@
                  *ngFor="let language of languagesFormArray.controls; let i=index"
                  [formGroupName]="i">
               <div class="col">
-                <mat-form-field>
-                  <input matInput
-                         placeholder="Language"
-                         formControlName="name">
+                <mat-form-field [ngClass]="{'readonly': i == 0}">
+                  <mat-select formControlName="name"
+                              placeholder="Language">
+                    <mat-option *ngFor="let language of languages"
+                                value="{{language.id}}">{{language.title}}</mat-option>
+                  </mat-select>
                 </mat-form-field>
                 <button mat-icon-button
                         color="warn"

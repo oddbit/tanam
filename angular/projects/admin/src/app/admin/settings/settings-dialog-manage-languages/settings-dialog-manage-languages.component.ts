@@ -15,6 +15,7 @@ export interface LanguageOptions {
   styleUrls: ['./settings-dialog-manage-languages.component.scss']
 })
 export class SettingsDialogManageLanguagesComponent implements OnInit {
+  languages: LanguageOptions[] = [];
   readonly languageOptions: LanguageOptions[] = languageOptions;
   readonly languagesForm: FormGroup = this.formBuilder.group({
     languages: this.formBuilder.array([], [Validators.required]),
@@ -32,6 +33,7 @@ export class SettingsDialogManageLanguagesComponent implements OnInit {
     for (const language of this.data) {
       this.addLanguage(language);
     }
+    this.languages = this.languageOptions;
   }
 
   get languagesFormArray() {

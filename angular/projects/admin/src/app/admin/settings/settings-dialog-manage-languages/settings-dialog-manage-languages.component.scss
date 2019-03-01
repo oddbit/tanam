@@ -8,3 +8,8 @@
   top: 0;
   right: 0;
 }
+
+.readonly {
+  pointer-events: none;
+  opacity: 0.5;
+}

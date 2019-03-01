@@ -101,12 +101,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   dialogLanguage() {
     const dialogRef = this.dialog.open(SettingsDialogManageLanguagesComponent, {
-      data: this.languages
+      data: this.languages.map(lang => lang.id)
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.status === 'submit') {
-        this.settingsForm.controls['defaultLanguage'].setValue('en');
-        this.languages = result.languages;
+        this.languages = this.langOptions.filter(lang => {
+          return result.languages.includes(lang.id);
+        });
       }
     });
   }
@@ -127,7 +128,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       title: formData.title,
       theme: formData.theme,
       defaultLanguage: formData.defaultLanguage,
-      // languages: this.languages,
+      languages: this.languages.map(lang => lang.id),
       primaryDomain: formData.primaryDomain,
       domains: formData.domains.map((domain: any) => domain['name']),
     } as SiteInformation);
