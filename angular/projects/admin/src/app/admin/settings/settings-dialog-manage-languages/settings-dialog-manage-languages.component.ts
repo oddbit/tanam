@@ -31,8 +31,8 @@ export class SettingsDialogManageLanguagesComponent implements OnInit {
 
   ngOnInit() {
     this.sortLanguages(this.data.languages, this.data.defaultLanguage);
-    for (const language of this.data.languages) {
-      this.addLanguage(language);
+    for (let index = 0; index < this.data.languages.length; index++) {
+      this.addLanguage(this.data.languages[index], index);
     }
     this.languages = this.languageOptions;
   }
@@ -41,13 +41,12 @@ export class SettingsDialogManageLanguagesComponent implements OnInit {
     return this.languagesForm.get('languages') as FormArray;
   }
 
-  addLanguage(language?: string) {
+  addLanguage(language: string, index?: number) {
     console.log(`[SettingsLanguageComponent:addLanguage] ${JSON.stringify(language)}`);
+    const isDisable = index === 0;
     const newLanguageLine = this.formBuilder.group({
       name: [
-        language, [
-          Validators.required,
-        ],
+        {value: language, disabled: isDisable}, Validators.required,
       ],
     });
 
@@ -59,9 +58,9 @@ export class SettingsDialogManageLanguagesComponent implements OnInit {
   }
 
   save() {
-    const formData = this.languagesForm.value;
+    const languagesArray = this.languagesForm.getRawValue().languages;
     const languages = {
-      languages: formData.languages.map((language: any) => language['name']),
+      languages: languagesArray.map((language: any) => language['name']),
       status: 'submit'
     };
     this.dialogRef.close(languages);

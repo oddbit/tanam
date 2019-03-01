@@ -12,7 +12,7 @@
                  *ngFor="let language of languagesFormArray.controls; let i=index"
                  [formGroupName]="i">
               <div class="col">
-                <mat-form-field [ngClass]="{'readonly': i == 0}">
+                <mat-form-field>
                   <mat-select formControlName="name"
                               placeholder="Language">
                     <mat-option *ngFor="let language of languages"
