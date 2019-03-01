@@ -111,6 +111,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.languages = this.langOptions.filter(lang => {
           return result.languages.includes(lang.id);
         });
+
+        if (!result.languages.includes(this.settingsForm.value.defaultLanguage)) {
+          this.settingsForm.patchValue({defaultLanguage: result.languages[0]});
+        }
       }
     });
   }
