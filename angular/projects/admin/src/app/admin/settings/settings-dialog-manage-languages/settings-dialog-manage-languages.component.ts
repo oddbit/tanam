@@ -30,7 +30,8 @@ export class SettingsDialogManageLanguagesComponent implements OnInit {
 
 
   ngOnInit() {
-    for (const language of this.data) {
+    this.sortLanguages(this.data.languages, this.data.defaultLanguage);
+    for (const language of this.data.languages) {
       this.addLanguage(language);
     }
     this.languages = this.languageOptions;
@@ -68,6 +69,11 @@ export class SettingsDialogManageLanguagesComponent implements OnInit {
 
   closeDialog() {
     this.dialogRef.close();
+  }
+
+  private sortLanguages (languages: string[], defaultLanguage: string) {
+    languages.splice(languages.indexOf(defaultLanguage), 1);
+    languages.splice(0, 0, defaultLanguage);
   }
 
 }

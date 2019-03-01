@@ -101,7 +101,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   dialogLanguage() {
     const dialogRef = this.dialog.open(SettingsDialogManageLanguagesComponent, {
-      data: this.languages.map(lang => lang.id)
+      data: {
+        languages: this.languages.map(lang => lang.id),
+        defaultLanguage: this.settingsForm.value.defaultLanguage
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.status === 'submit') {
