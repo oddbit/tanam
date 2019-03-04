@@ -1,11 +1,10 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import * as mkdirp from 'mkdirp-promise';
 import { ObjectMetadata } from 'firebase-functions/lib/providers/storage';
+import * as sharp from 'sharp';
 
 import { ImageData } from '../../../models/image-data.models';
 
-const spawn = require('child-process-promise').spawn;
 
 const siteCollection = () => admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
 
