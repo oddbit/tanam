@@ -1,21 +1,16 @@
 import * as path from 'path';
-import * as os from 'os';
 import { ObjectMetadata } from 'firebase-functions/lib/providers/storage';
-
-const WEBP_EXTENSION = '.webp';
 
 export class ImageData {
   bucketName: string;
   filePath: string;
-  fileName: string;
   baseFileName: string;
-  fileDir: string;
-  imageFilePath: string;
-  tempLocalFile: string;
-  tempLocalDir: string;
-  tempLocalWebPFile: string;
   contentType: string;
   metadata: any;
+
+  small: string;
+  medium: string;
+  large: string;
 
   constructor(inputImage: ObjectMetadata) {
     this.bucketName = inputImage.bucket;
@@ -24,26 +19,18 @@ export class ImageData {
       this.filePath,
       path.extname(this.filePath),
     );
-    this.fileDir = path.dirname(this.filePath);
-    this.imageFilePath = path.normalize(
-      path.format({
-        dir: this.fileDir,
-        name: this.baseFileName,
-        ext: WEBP_EXTENSION,
-      }),
-    );
-
-    this.tempLocalFile = path.join(os.tmpdir(), this.filePath);
-    this.tempLocalDir = path.dirname(this.tempLocalFile);
-    this.tempLocalWebPFile = path.join(os.tmpdir(), this.imageFilePath);
 
     this.contentType = inputImage.contentType;
     this.metadata = {
-      contentType: this.contentType,
+      contentType: 'image/webp',
       metadata: inputImage.metadata,
     };
 
-    const [tanamDir, imageDir, fileName] = this.filePath.split('/');
-    this.fileName = fileName;
+    const [tanamDir, imageDir] = this.filePath.split('/');
+
+    const baseImagePath = path.join(tanamDir, imageDir, this.baseFileName);
+    this.small = `${baseImagePath}_small.webp`;
+    this.medium = `${baseImagePath}_medium.webp`;
+    this.large = `${baseImagePath}_large.webp`;
   }
 }
