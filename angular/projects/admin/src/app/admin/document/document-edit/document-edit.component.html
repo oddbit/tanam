@@ -5,6 +5,6 @@
 <div *ngIf="(document$ | async) as document">
     <tanam-page-title pageTitle="{{ document.title }}"></tanam-page-title>
     <tanam-document-form [document]="document"
-                         [onCancelRoute]="'/_/admin/types/' + document.documentType"
-                         [afterSaveRoute]="'/_/admin/types/' + document.documentType"></tanam-document-form>
+                         [onCancelRoute]="'/_/admin/type/' + document.documentType + '/overview'"
+                         [afterSaveRoute]="'/_/admin/type/' + document.documentType + '/overview'"></tanam-document-form>
 </div>
