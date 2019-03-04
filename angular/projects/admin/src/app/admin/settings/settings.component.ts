@@ -131,11 +131,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   saveSettings() {
     const formData = this.settingsForm.value;
+    const languages = this.languages.map(lang => lang.id);
+    languages.splice(languages.indexOf(formData.defaultLanguage), 1);
+    languages.splice(0, 0, formData.defaultLanguage);
     return this.siteSettingsService.save({
       title: formData.title,
       theme: formData.theme,
       defaultLanguage: formData.defaultLanguage,
-      languages: this.languages.map(lang => lang.id),
+      languages: languages,
       primaryDomain: formData.primaryDomain,
       domains: formData.domains.map((domain: any) => domain['name']),
     } as SiteInformation);
