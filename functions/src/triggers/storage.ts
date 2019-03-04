@@ -5,42 +5,41 @@ import * as sharp from 'sharp';
 
 import { ImageData } from '../../../models/image-data.models';
 
-
-const siteCollection = () => admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
-
 export const convertToWebP = functions.storage.object().onFinalize(async (object: ObjectMetadata) => {
   const image = new ImageData(object);
 
   if (!image.contentType.startsWith('image/')) return null;
-  if (image.baseFileName.endsWith('.webp')) return null;
+  if (image.filePath.endsWith('.webp')) return null;
 
   const bucket = admin.storage().bucket(image.bucketName);
 
-  await mkdirp(image.tempLocalDir);
-  await bucket
-    .file(image.filePath)
-    .download({ destination: image.tempLocalFile });
-  console.log('The file has been downloaded to', image.tempLocalFile);
+  const [fileBuffer] = await bucket.file(image.filePath).download();
 
-  await spawn('convert', [
-    image.tempLocalFile,
-    '-define',
-    'webp:lossless=true',
-    image.tempLocalWebPFile,
-  ]);
-  console.log('WebP image created at', image.tempLocalWebPFile);
-
-  await bucket.upload(image.tempLocalWebPFile, {
-    destination: image.imageFilePath,
-  });
-
-  await updateVariantsImagesDocument(image.fileName);
+  await convertAndResizeImage(fileBuffer, image, bucket);
 
   return null;
 })
 
-const updateVariantsImagesDocument = async (fileName) => {
-  const doc = await siteCollection()
-    .collection('files').doc(fileName);
+async function convertAndResizeImage(fileBuffer, image, bucket) {
+  const resiveAndConvertImage = size =>
+    sharp(fileBuffer)
+      .resize(size, size, {
+        withoutEnlargement: true,
+        fit: sharp.fit.cover,
+        position: sharp.strategy.entropy,
+      })
+      .toFormat(sharp.format.webp)
+      .toBuffer();
 
+  return await Promise.all([
+    bucket
+      .file(image.small)
+      .save(await resiveAndConvertImage(300), image.metadata),
+    bucket
+      .file(image.medium)
+      .save(await resiveAndConvertImage(800), image.metadata),
+    bucket
+      .file(image.large)
+      .save(await resiveAndConvertImage(1600), image.metadata),
+  ]);
 }
