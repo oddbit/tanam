@@ -17,6 +17,12 @@
               <div class="col"
                    [ngSwitch]="field.type">
 
+                <!-- If input type is author -->
+                <div *ngSwitchCase="'author'">
+                  <tanam-author [title]="field.title"
+                                (changeEvent)="receiveDataAuthor($event)"></tanam-author>
+                </div>
+
 
                 <!-- If input type is just simple line of text -->
                 <mat-form-field *ngSwitchCase="'input-text'"

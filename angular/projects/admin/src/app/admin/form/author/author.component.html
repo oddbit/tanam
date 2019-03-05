@@ -1,0 +1,24 @@
+<div class="wrap">
+  <h2>{{title}}</h2>
+  <form [formGroup]="authorForm"
+        novalidate>
+    <mat-form-field class="full-width">
+      <input matInput
+             placeholder="Name"
+             formControlName="name">
+      <mat-error *ngIf="authorForm.controls['name'].hasError('required')">
+        Name is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput
+             placeholder="Profile Url"
+             formControlName="profileUrl">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput
+             placeholder="email"
+             formControlName="email">
+    </mat-form-field>
+  </form>
+</div>
