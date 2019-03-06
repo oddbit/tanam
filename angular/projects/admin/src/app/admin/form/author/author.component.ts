@@ -13,13 +13,15 @@ interface Author {
 })
 
 export class AuthorComponent implements OnInit, OnChanges {
+  readonly reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+
   @Input() title: string;
   @Output() changeEvent = new EventEmitter<object>();
   @Input() author: Author;
 
   authorForm = this.formBuilder.group({
     name: [null, Validators.required],
-    profileUrl: [null],
+    profileUrl: [null, Validators.pattern(this.reg)],
     email: [null, Validators.email],
   });
 
