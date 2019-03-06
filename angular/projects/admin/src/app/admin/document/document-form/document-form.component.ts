@@ -124,22 +124,24 @@ export class DocumentFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async saveEntry() {
-    const formData = this.documentForm.value;
-    console.log(`[DocumentEditComponent:saveEntry] ${JSON.stringify(formData)}`);
+    console.log(this.documentForm.value['dataForm']['author'] && this.documentForm.value['dataForm'].author['valid']);
+    console.log(this.documentForm.valid);
+    if (this.documentForm.valid && (this.documentForm.value['dataForm']['author'] && this.documentForm.value['dataForm'].author['valid'])) {
+      const formData = this.documentForm.value;
+      console.log(`[DocumentEditComponent:saveEntry] ${JSON.stringify(formData)}`);
+      const updates = {
+        id: this.document.id,
+        title: formData.title,
+        documentType: this.document.documentType,
+        status: formData.status,
+        data: this.dataForm.value,
+        url: formData.url,
+      } as Document;
+      await this.documentService.update(updates);
 
-    const updates = {
-      id: this.document.id,
-      title: formData.title,
-      documentType: this.document.documentType,
-      status: formData.status,
-      data: this.dataForm.value,
-      url: formData.url,
-    } as Document;
-    await this.documentService.update(updates);
-
-
-    if (!!this.afterSaveRoute) {
-      this.router.navigateByUrl(this.afterSaveRoute);
+      if (!!this.afterSaveRoute) {
+        this.router.navigateByUrl(this.afterSaveRoute);
+      }
     }
   }
 
