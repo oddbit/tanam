@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, ValidationErrors } from '@angular/forms';
 
 interface Author {
   name: string;
@@ -13,7 +13,6 @@ interface Author {
 })
 
 export class AuthorComponent implements OnInit, OnChanges {
-
   @Input() title: string;
   @Output() changeEvent = new EventEmitter<object>();
   @Input() author: Author;
@@ -21,7 +20,7 @@ export class AuthorComponent implements OnInit, OnChanges {
   authorForm = this.formBuilder.group({
     name: [null, Validators.required],
     profileUrl: [null],
-    email: [null],
+    email: [null, Validators.email],
   });
 
   constructor(
@@ -34,9 +33,11 @@ export class AuthorComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.authorForm.valueChanges.subscribe(val => {
-      this.sendToDocument(val);
+      this.sendToDocument({
+        ...val,
+        valid: this.authorForm.valid
+      });
     });
-
   }
 
   sendToDocument (val: object) {

@@ -19,6 +19,9 @@
       <input matInput
              placeholder="email"
              formControlName="email">
+      <mat-error *ngIf="authorForm.controls['email'].hasError('email')">
+        Please enter a valid email address
+      </mat-error>
     </mat-form-field>
   </form>
 </div>
