@@ -127,7 +127,6 @@ export class DocumentFormComponent implements OnInit, OnDestroy, OnChanges {
     const formData = this.documentForm.value;
     console.log(`[DocumentEditComponent:saveEntry] ${JSON.stringify(formData)}`);
 
-    console.log(this.receiveDataAuthor);
     const updates = {
       id: this.document.id,
       title: formData.title,
@@ -146,7 +145,7 @@ export class DocumentFormComponent implements OnInit, OnDestroy, OnChanges {
 
   receiveDataAuthor($event) {
     console.log($event);
-    console.log(this.dataForm.value);
+    this.documentForm.value['dataForm']['author'] = $event;
   }
 
   private _slugify(text: string) {
