@@ -115,18 +115,16 @@ app.get('/favicon.ico', async (request, response) => {
         response.sendFile(join(DIST_FOLDER, 'favicon.ico'));
     }
 
-    const hostname = request.hostname;
-    if (hostname === 'localhost') {
-        return null;
-    }
-
     // Save "known" domains upon request to resources that are likely to seldom change -> cached for long
     // So that the overhead is done as seldom as possible
-    return admin.database().ref('tanam')
-        .child(process.env.GCLOUD_PROJECT)
-        .child('domains')
-        .child(MD5(hostname).toString())
-        .set(hostname);
+    const hostname = request.hostname;
+    return hostname === 'localhost'
+        ? null
+        : admin.database().ref('tanam')
+            .child(process.env.GCLOUD_PROJECT)
+            .child('domains')
+            .child(MD5(hostname).toString())
+            .set(hostname);
 });
 
 app.get('*', async (request, response) => {
