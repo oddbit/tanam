@@ -15,6 +15,7 @@ interface Author {
 export class AuthorComponent implements OnInit, OnChanges {
   readonly reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
+  @Input() title: string;
   @Input() key: string;
   @Output() changeEvent = new EventEmitter<object>();
   @Input() author: Author;
@@ -30,6 +31,11 @@ export class AuthorComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
+    this.sendToDocument({
+      key: '',
+      value: '',
+      valid: false
+    });
     if (this.author) { this.authorForm.patchValue(this.author); }
   }
 
@@ -39,8 +45,7 @@ export class AuthorComponent implements OnInit, OnChanges {
         key: this.key,
         value: val,
         valid: this.authorForm.valid
-      }
-      );
+      });
     });
   }
 

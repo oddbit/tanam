@@ -24,6 +24,7 @@ export class DocumentFormComponent implements OnInit, OnDestroy, OnChanges {
   @Input() onCancelRoute: string;
 
   private _rootSlug: string;
+  authorIsValid: boolean;
   metaDataDialog = false;
   publishedTime: Date;
   updatedTime: Date;
@@ -124,29 +125,29 @@ export class DocumentFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async saveEntry() {
-    // console.log(this.documentForm.value['dataForm']['author'] && this.documentForm.value['dataForm'].author['valid']);
-    // console.log(this.documentForm.valid);
-    if (this.documentForm.valid && (this.documentForm.value['dataForm']['author'] && this.documentForm.value['dataForm'].author['valid'])) {
       const formData = this.documentForm.value;
+      const formIsValid = this.authorIsValid !== undefined ? this.documentForm.valid && this.authorIsValid : this.documentForm.valid ;
       console.log(`[DocumentEditComponent:saveEntry] ${JSON.stringify(formData)}`);
-      const updates = {
-        id: this.document.id,
-        title: formData.title,
-        documentType: this.document.documentType,
-        status: formData.status,
-        data: this.dataForm.value,
-        url: formData.url,
-      } as Document;
-      await this.documentService.update(updates);
+      if (formIsValid) {
+        const updates = {
+          id: this.document.id,
+          title: formData.title,
+          documentType: this.document.documentType,
+          status: formData.status,
+          data: this.dataForm.value,
+          url: formData.url,
+        } as Document;
+        await this.documentService.update(updates);
 
-      if (!!this.afterSaveRoute) {
-        this.router.navigateByUrl(this.afterSaveRoute);
+        if (!!this.afterSaveRoute) {
+          this.router.navigateByUrl(this.afterSaveRoute);
+        }
       }
-    }
   }
 
-  receiveDataAuthor($author) {
+  receiveDataAuthor($author): void {
     this.documentForm.value['dataForm'][$author.key] = $author.value;
+    this.authorIsValid = $author.valid && !null;
   }
 
   private _slugify(text: string) {
