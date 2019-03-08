@@ -124,8 +124,8 @@ export class DocumentFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async saveEntry() {
-    console.log(this.documentForm.value['dataForm']['author'] && this.documentForm.value['dataForm'].author['valid']);
-    console.log(this.documentForm.valid);
+    // console.log(this.documentForm.value['dataForm']['author'] && this.documentForm.value['dataForm'].author['valid']);
+    // console.log(this.documentForm.valid);
     if (this.documentForm.valid && (this.documentForm.value['dataForm']['author'] && this.documentForm.value['dataForm'].author['valid'])) {
       const formData = this.documentForm.value;
       console.log(`[DocumentEditComponent:saveEntry] ${JSON.stringify(formData)}`);
@@ -145,9 +145,8 @@ export class DocumentFormComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  receiveDataAuthor($event) {
-    console.log($event);
-    this.documentForm.value['dataForm']['author'] = $event;
+  receiveDataAuthor($author) {
+    this.documentForm.value['dataForm'][$author.key] = $author.value;
   }
 
   private _slugify(text: string) {

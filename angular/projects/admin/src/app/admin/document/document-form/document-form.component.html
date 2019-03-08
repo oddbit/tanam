@@ -19,8 +19,8 @@
 
                 <!-- If input type is author -->
                 <div *ngSwitchCase="'author'">
-                  <tanam-author [title]="field.title"
-                                [author]="document.data.author"
+                  <tanam-author [key]="field.key"
+                                [author]="document.data[field.key]"
                                 (changeEvent)="receiveDataAuthor($event)"></tanam-author>
                 </div>
 
