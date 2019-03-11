@@ -5,7 +5,7 @@ import * as sharp from 'sharp';
 
 import { ImageData } from '../../../models/image-data.models';
 
-export const convertToWebP = functions.storage.object().onFinalize(async (object: ObjectMetadata) => {
+export const convertAndResizeImage = functions.storage.object().onFinalize(async (object: ObjectMetadata) => {
   const image = new ImageData(object);
 
   if (!image.contentType.startsWith('image/')) return null;
@@ -15,12 +15,6 @@ export const convertToWebP = functions.storage.object().onFinalize(async (object
 
   const [fileBuffer] = await bucket.file(image.filePath).download();
 
-  await convertAndResizeImage(fileBuffer, image, bucket);
-
-  return null;
-})
-
-async function convertAndResizeImage(fileBuffer, image, bucket) {
   const resiveAndConvertImage = size =>
     sharp(fileBuffer)
       .resize(size, size, {
@@ -42,4 +36,4 @@ async function convertAndResizeImage(fileBuffer, image, bucket) {
       .file(image.large)
       .save(await resiveAndConvertImage(1600), image.metadata),
   ]);
-}
+})
