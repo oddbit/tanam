@@ -83,6 +83,9 @@ export class DocumentFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.documentForm.valueChanges.subscribe(val => {
+      console.log(this.documentForm.value);
+    });
     if (changes.document.currentValue.created) {
       this.publishedTime = this.document.published && this.document.published.toDate();
       this.updatedTime = this.document.updated.toDate();

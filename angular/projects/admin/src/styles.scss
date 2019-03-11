@@ -3,6 +3,7 @@
 
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import '~@angular/material/theming';
+@import '~@mat-datetimepicker/core/datetimepicker/datetimepicker-theme.scss';
 
 @include mat-core();
 
@@ -18,6 +19,9 @@ $tanam-admin-dark-primary: mat-palette($mat-blue-grey);
 $tanam-admin-dark-accent:  mat-palette($mat-amber, A200, A100, A400);
 $tanam-admin-dark-warn:    mat-palette($mat-deep-orange);
 $tanam-admin-dark-theme:   mat-dark-theme($tanam-admin-dark-primary, $tanam-admin-dark-accent, $tanam-admin-dark-warn);
+
+$dateTimePickerTheme: mat-light-theme($tanam-admin-primary, $tanam-admin-accent, $tanam-admin-dark-warn);
+@include mat-datetimepicker-theme($dateTimePickerTheme);
 
 .tanam-dark-theme {
   @include angular-material-theme($tanam-admin-dark-theme);
