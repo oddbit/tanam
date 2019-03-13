@@ -18,41 +18,44 @@
                    [ngSwitch]="field.type">
 
 
-                <mat-form-field class="full-width">
-
-                  <!-- If input type is just simple line of text -->
+                <!-- If input type is just simple line of text -->
+                <mat-form-field *ngSwitchCase="'input-text'"
+                                class="full-width">
                   <input matInput
-                         *ngSwitchCase="'input-text'"
                          (input)="onTitleChange($event.target.value, field.isTitle)"
                          placeholder="{{field.title}}"
                          formControlName="{{field.key}}">
-
-                  <!-- If input type is larger amount of text: paragraph -->
-                  <textarea matInput
-                            *ngSwitchCase="'textbox-plain'"
-                            placeholder="{{field.title}}"
-                            formControlName="{{field.key}}"></textarea>
-
-
-                  <tanam-textbox-rich matInput
-                                      *ngSwitchCase="'textbox-rich'"
-                                      placeholder="{{field.title}}"
-                                      [editorConfig]="richTextEditorConfig"
-                                      formControlName="{{field.key}}"></tanam-textbox-rich>
-
-
-                  <!-- Use radio button selection -->
-                  <mat-radio-group *ngSwitchCase="'radio-buttons'"
-                                   formControlName="{{field.key}}">
-                    <mat-radio-button *ngFor="let opt of field.options"
-                                      value="{{option.key}}">{{option.value}}</mat-radio-button>
-                  </mat-radio-group>
-
                   <mat-error *ngIf="dataForm.controls[field.key].hasError('required')">
                     {{ field.title }} is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
 
+
+                <!-- If input type is larger amount of text: paragraph -->
+                <mat-form-field *ngSwitchCase="'textbox-plain'"
+                                class="full-width">
+                  <textarea matInput
+                            placeholder="{{field.title}}"
+                            formControlName="{{field.key}}"></textarea>
+                </mat-form-field>
+
+                <mat-form-field *ngSwitchCase="'textbox-rich'"
+                                class="full-width">
+                  <tanam-textbox-rich matInput
+                                      placeholder="{{field.title}}"
+                                      [editorConfig]="richTextEditorConfig"
+                                      formControlName="{{field.key}}"></tanam-textbox-rich>
+                </mat-form-field>
+
+                <!-- Use radio button selection -->
+                <mat-form-field *ngSwitchCase="'radio-buttons'"
+                                class="full-width">
+                  <mat-radio-group formControlName="{{field.key}}"
+                                   class="full-width">
+                    <mat-radio-button *ngFor="let opt of field.options"
+                                      value="{{option.key}}">{{option.value}}</mat-radio-button>
+                  </mat-radio-group>
+                </mat-form-field>
               </div>
             </div>
           </div>

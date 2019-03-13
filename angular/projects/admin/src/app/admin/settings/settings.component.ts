@@ -4,6 +4,10 @@ import { Observable, Subscription } from 'rxjs';
 import { SiteInformation, Theme } from 'tanam-models';
 import { SiteService } from '../../services/site.service';
 import { ThemeService } from '../../services/theme.service';
+import { MatDialog } from '@angular/material';
+import { SettingsDialogManageLanguagesComponent,
+         LanguageOptions } from './settings-dialog-manage-languages/settings-dialog-manage-languages.component';
+import { languageOptions } from './settings.languages';
 
 // https://stackoverflow.com/a/26987741/7967164
 const REGEX_DOMAIN = '^(((?!-))(xn--|_{1,1})?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$';
@@ -14,11 +18,14 @@ const REGEX_DOMAIN = '^(((?!-))(xn--|_{1,1})?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
+  languages: LanguageOptions[] = [];
+  langOptions = languageOptions;
   readonly siteName$: Observable<string> = this.siteSettingsService.getSiteName();
   readonly themes$: Observable<Theme[]> = this.themeService.getThemes();
   readonly settingsForm: FormGroup = this.formBuilder.group({
     title: [null, [Validators.required]],
     theme: [null, [Validators.required]],
+    defaultLanguage: [null, [Validators.required]],
     primaryDomain: [null, [Validators.required]],
     domains: this.formBuilder.array([], [
       Validators.required,
@@ -32,6 +39,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     private readonly siteSettingsService: SiteService,
     private readonly themeService: ThemeService,
     private readonly formBuilder: FormBuilder,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -43,12 +51,19 @@ export class SettingsComponent implements OnInit, OnDestroy {
       for (const domain of settings.domains) {
         this.addDomain(domain);
       }
-      this.settingsForm.setValue({
+
+      this.settingsForm.patchValue({
         title: settings.title,
         theme: settings.theme,
+        defaultLanguage: settings.defaultLanguage,
         primaryDomain: settings.primaryDomain,
-        domains: settings.domains
+        domains: settings.domains,
       });
+
+      this.languages = this.langOptions.filter(lang => {
+        return settings.languages.includes(lang.id);
+      });
+
     });
   }
 
@@ -84,6 +99,26 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.domainsFormArray.removeAt(index);
   }
 
+  dialogLanguage() {
+    const dialogRef = this.dialog.open(SettingsDialogManageLanguagesComponent, {
+      data: {
+        languages: this.languages.map(lang => lang.id),
+        defaultLanguage: this.settingsForm.value.defaultLanguage
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.status === 'submit') {
+        this.languages = this.langOptions.filter(lang => {
+          return result.languages.includes(lang.id);
+        });
+
+        if (!result.languages.includes(this.settingsForm.value.defaultLanguage)) {
+          this.settingsForm.patchValue({defaultLanguage: result.languages[0]});
+        }
+      }
+    });
+  }
+
   private getDomainNameAt(index: number) {
     return this.domainsFormArray.at(index).value['name'];
   }
@@ -96,9 +131,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   saveSettings() {
     const formData = this.settingsForm.value;
+    const languages = this.languages.map(lang => lang.id);
+    languages.splice(languages.indexOf(formData.defaultLanguage), 1);
+    languages.splice(0, 0, formData.defaultLanguage);
     return this.siteSettingsService.save({
       title: formData.title,
       theme: formData.theme,
+      defaultLanguage: formData.defaultLanguage,
+      languages: languages,
       primaryDomain: formData.primaryDomain,
       domains: formData.domains.map((domain: any) => domain['name']),
     } as SiteInformation);
