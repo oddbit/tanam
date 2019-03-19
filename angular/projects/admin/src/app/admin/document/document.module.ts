@@ -44,14 +44,14 @@ import { MatInputModule, MatDatepickerModule } from '@angular/material';
         parse: {
           dateInput: 'L',
           monthInput: 'MM',
-          timeInput: 'HH:HH',
+          timeInput: 'HH:mm',
           datetimeInput: 'L H HH'
         },
         display: {
           dateInput: 'L',
           monthInput: 'MM',
-          datetimeInput: 'L HH:HH',
-          timeInput: 'HH:HH',
+          datetimeInput: 'L HH:mm',
+          timeInput: 'HH:mm',
           monthYearLabel: 'MM YYYY',
           dateA11yLabel: 'LL',
           monthYearA11yLabel: 'MM YYYY',
