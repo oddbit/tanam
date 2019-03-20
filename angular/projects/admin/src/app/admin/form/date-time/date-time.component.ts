@@ -39,7 +39,7 @@ export class DateTimeComponent implements MatFormFieldControl<firestore.Timestam
   required: boolean;
   errorState: boolean;
   autofilled?: boolean;
-  editorData: any;
+  timestamp: Date;
 
   private _disabled = false;
   private _focused = false;
@@ -72,7 +72,7 @@ export class DateTimeComponent implements MatFormFieldControl<firestore.Timestam
   }
 
   get empty() {
-    return !this.editorData || this.editorData.trim().length === 0;
+    return !this.timestamp;
   }
 
   @Input()
@@ -86,10 +86,10 @@ export class DateTimeComponent implements MatFormFieldControl<firestore.Timestam
 
   @Input()
   get value(): firestore.Timestamp {
-    return this.editorData;
+    return firestore.Timestamp.fromDate(this.timestamp);
   }
   set value(value: firestore.Timestamp) {
-    this.editorData = value;
+    this.timestamp = value.toDate();
     this.stateChanges.next();
   }
 
@@ -125,8 +125,8 @@ export class DateTimeComponent implements MatFormFieldControl<firestore.Timestam
     this._onTouchedCallback();
   }
 
-  writeValue(text: firestore.Timestamp): void {
-    this.editorData = text ? text.toDate() : text;
+  writeValue(timestamp: firestore.Timestamp): void {
+    this.timestamp = timestamp && timestamp.toDate() || new Date();
   }
 
   registerOnChange(callback: (val: firestore.Timestamp) => void): void {
