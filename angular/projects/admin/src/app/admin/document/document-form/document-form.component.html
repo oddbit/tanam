@@ -67,6 +67,15 @@
                   </tanam-date-time>
                 </div>
 
+                <mat-form-field *ngSwitchCase="'document-reference'"
+                                class="full-width">
+                  <tanam-document-reference matInput
+                                            placeholder="{{field.title}}"
+                                            formControlName="{{field.key}}"
+                                            documentType="{{field.documentType}}">
+
+                  </tanam-document-reference>
+                </mat-form-field>
               </div>
             </div>
           </div>
