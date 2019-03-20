@@ -4,6 +4,7 @@ import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { Document, DocumentType } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
+import * as moment from 'moment';
 
 export interface DocumentTypeQueryOptions {
   limit?: number;

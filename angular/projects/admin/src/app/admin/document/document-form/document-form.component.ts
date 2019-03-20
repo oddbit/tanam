@@ -7,7 +7,6 @@ import { DocumentService } from '../../../services/document.service';
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { SiteService } from '../../../services/site.service';
 
-
 interface StatusOption {
   title: string;
   value: DocumentStatus;

@@ -8,6 +8,7 @@ import { DocumentEditComponent } from './document-edit/document-edit.component';
 import { DocumentFormComponent } from './document-form/document-form.component';
 import { DocumentListComponent } from './document-list/document-list.component';
 import { DocumentOverviewComponent } from './document-overview/document-overview.component';
+import { MatInputModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -22,10 +23,11 @@ import { DocumentOverviewComponent } from './document-overview/document-overview
     AppMaterialModule,
     FormModule,
     ComponentsModule,
+    MatInputModule,
   ],
   exports: [
     DocumentEditComponent,
     DocumentOverviewComponent,
-  ],
+  ]
 })
 export class DocumentModule { }

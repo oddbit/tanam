@@ -39,7 +39,6 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     { type: 'textbox-plain', title: 'Box of plain text' },
     { type: 'textbox-rich', title: 'Rich text editor' },
     { type: 'date', title: 'Date picker' },
-    { type: 'time', title: 'Time picker' },
     { type: 'date-time', title: 'Date and time picker' },
     { type: 'map', title: 'Google Maps Location' },
     { type: 'author', title: 'Content Author' },
