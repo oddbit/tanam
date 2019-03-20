@@ -52,17 +52,6 @@ export class DocumentService {
       throw new Error('Document ID must be provided as an attribute when updating an document.');
     }
 
-    // Convert moment data to firestore timestamp
-    const data = document.data;
-    for (const key in data) {
-      if (moment.isMoment(data[key])) {
-        const toDate = moment(data[key]).toDate();
-        const toTimestamp = firebase.firestore.Timestamp.fromDate(toDate);
-        document.data[key] = toTimestamp;
-      }
-    }
-
-
     document.updated = firebase.firestore.FieldValue.serverTimestamp();
     return this.siteCollection
       .collection<Document>('documents').doc(document.id)

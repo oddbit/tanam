@@ -1,0 +1,13 @@
+<mat-form-field>
+  <mat-placeholder>{{title}}</mat-placeholder>
+  <mat-datetimepicker-toggle [for]="dateTimePicker"
+                             matSuffix></mat-datetimepicker-toggle>
+  <mat-datetimepicker #dateTimePicker
+                      type="{{type == 'date' ? 'date' : 'datetime'}}"
+                      openOnFocus="true"></mat-datetimepicker>
+  <input matInput
+         [(ngModel)]="editorData"
+         (ngModelChange)="inputChange($event)"
+         [matDatetimepicker]="dateTimePicker"
+         autocomplete="false">
+</mat-form-field>

@@ -57,30 +57,16 @@
                   </mat-radio-group>
                 </mat-form-field>
 
-                <!-- Date Picker -->
-                <mat-form-field *ngSwitchCase="'date'">
-                  <mat-placeholder>{{field.title}}</mat-placeholder>
-                  <mat-datetimepicker-toggle [for]="datePicker" matSuffix></mat-datetimepicker-toggle>
-                  <mat-datetimepicker #datePicker type="date" openOnFocus="true"></mat-datetimepicker>
-                  <input matInput formControlName="{{field.key}}" [matDatetimepicker]="datePicker" autocomplete="false">
-                </mat-form-field>
-
-
-                <!-- Time Picker -->
-                <mat-form-field *ngSwitchCase="'time'">
-                  <mat-placeholder>{{field.title}}</mat-placeholder>
-                  <mat-datetimepicker-toggle [for]="timePicker" matSuffix></mat-datetimepicker-toggle>
-                  <mat-datetimepicker #timePicker type="time" openOnFocus="true"></mat-datetimepicker>
-                  <input matInput formControlName="{{field.key}}" [matDatetimepicker]="timePicker" autocomplete="false">
-                </mat-form-field>
-
                 <!-- Date Time Picker -->
-                <mat-form-field *ngSwitchCase="'date-time'">
-                  <mat-placeholder>{{field.title}}</mat-placeholder>
-                  <mat-datetimepicker-toggle [for]="dateTimePicker" matSuffix></mat-datetimepicker-toggle>
-                  <mat-datetimepicker #dateTimePicker type="datetime" openOnFocus="true"></mat-datetimepicker>
-                  <input matInput formControlName="{{field.key}}" [matDatetimepicker]="dateTimePicker" autocomplete="false">
-                </mat-form-field>
+                <div *ngSwitchCase="field.type === 'date' || field.type === 'date-time' ? field.type : '' ">
+                  <tanam-date-time matInput
+                                   formControlName="{{field.key}}"
+                                   type="{{field.type}}"
+                                   title="{{field.title}}"
+                                   key="{{field.key}}">
+                  </tanam-date-time>
+                </div>
+
               </div>
             </div>
           </div>

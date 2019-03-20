@@ -71,8 +71,6 @@ export class DocumentFormComponent implements OnInit, OnDestroy, OnChanges {
       .subscribe(documentType => {
         this._rootSlug = documentType.slug;
         for (const field of documentType.fields) {
-           // _isKeyTimestamp is checking if type format is timestamp
-           this.document.data[field.key] = this._isKeyTimestamp(field.type, this.document.data[field.key]);
           if (this.dataForm.get(field.key)) {
             this.dataForm.setValue(this.document.data[field.key]);
           } else {
@@ -152,13 +150,5 @@ export class DocumentFormComponent implements OnInit, OnDestroy, OnChanges {
       .replace(/\-\-+/g, '-')
       .replace(/^-+/, '')
       .replace(/-+$/, '');
-  }
-
-  private _isKeyTimestamp(type: string, value: any) {
-    const fieldType = ['date', 'time', 'date-time'];
-    if (fieldType.includes(type)) {
-      if (value) { return value.toDate(); }
-    }
-    return value;
   }
 }
