@@ -4,6 +4,7 @@ import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { DocumentType, SiteInformation } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class DocumentTypeService {
   constructor(
     private readonly firestore: AngularFirestore,
     private readonly appConfig: AppConfigService,
+    private router: Router
   ) { }
 
 
@@ -31,13 +33,15 @@ export class DocumentTypeService {
       .valueChanges();
   }
 
-  async create(title: string, slug: string) {
+  async createWithTitle(title: string) {
+    const slug = this._slugify(title);
     const docRef = this.siteCollection.collection('document-types').doc(slug);
+    this.router.navigateByUrl(`/_/admin/type/${slug}/edit`);
     return docRef.set({
       id: slug,
       title: title,
       description: '',
-      slug: null,
+      slug: slug,
       template: null,
       standalone: true,
       icon: 'cloud',
@@ -60,5 +64,14 @@ export class DocumentTypeService {
 
     console.log(`[DocumentTypeService:saveDocumentType] ${JSON.stringify(documentType, null, 2)}`);
     return doc.update(documentType);
+  }
+
+  private _slugify(text: string) {
+    return text.toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w\-]+/g, '')
+      .replace(/\-\-+/g, '-')
+      .replace(/^-+/, '')
+      .replace(/-+$/, '');
   }
 }
