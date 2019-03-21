@@ -93,3 +93,53 @@ export const deleteRevisions = functions.firestore.document('tanam/{siteId}/docu
 
     return Promise.all(promises);
 });
+
+export const updateDocumentReferenceFields = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite(async (change) => {
+    if (!change.before) {
+        console.log(`Nothing to do for newly created documents`);
+        return null;
+    }
+
+    const promises = [];
+    const documentBefore = change.before.data() as Document;
+    const documentAfter = change.after.data() as Document;
+
+    // 1. Check if this document is registered as a field reference
+    console.log(`Looking for document types that has content type "document-reference"`);
+    const documentTypeDocs = await admin.firestore()
+        .collection('tanam').doc(process.env.GCLOUD_PROJECT)
+        .collection('document-types')
+        .get();
+
+    for (const documentTypeDoc of documentTypeDocs.docs) {
+        const documentType = documentTypeDoc.data() as DocumentType;
+        const fieldNames = documentType.fields
+            .filter(field => field.type === 'document-reference' && field.documentType === documentBefore.documentType)
+            .map(field => field.key);
+
+        console.log(`Document type "${documentType.id}" has ${fieldNames.length} document references`);
+
+
+        for (const fieldName of fieldNames) {
+            console.log(`Searching and replacing all "${documentType.id}" documents with document reference: ${fieldName}`);
+            const referringDocumentsQuery = await admin.firestore()
+                .collection('tanam').doc(process.env.GCLOUD_PROJECT)
+                .collection('documents')
+                .where(`data.${fieldName}.id`, '==', documentBefore.id)
+                .get();
+
+            console.log(`Found ${referringDocumentsQuery.docs.length} documents that matched: data.${fieldName}.id == ${documentBefore.id}`);
+
+            // TODO: batchwrite for better performance and manage > 500 references
+            for (const doc of referringDocumentsQuery.docs) {
+                console.log(`Updating document reference "${fieldName}" in document data for id: ${doc.id}`);
+                const referringDocument = doc.data() as Document;
+                console.log(JSON.stringify({ before: referringDocument.data[fieldName], after: documentAfter }));
+                referringDocument.data[fieldName] = documentAfter;
+                promises.push(doc.ref.set(referringDocument));
+            }
+        }
+    }
+
+    return promises;
+});

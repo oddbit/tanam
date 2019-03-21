@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription, combineLatest } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { DocumentStatus } from 'tanam-models';
 import { DocumentTypeService } from '../../../services/document-type.service';
@@ -31,6 +31,12 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   readonly document$ = this.route.paramMap.pipe(switchMap(params => this.documentService.get(params.get('documentId'))));
   readonly documentType$ = this.document$.pipe(switchMap(document => this.documentTypeService.getDocumentType(document.documentType)));
   readonly domain$ = this.siteService.getPrimaryDomain();
+  readonly documentForm = this.formBuilder.group({
+    title: [null, Validators.required],
+    url: [null, Validators.required],
+    status: [null, Validators.required],
+    dataForm: this.formBuilder.group({}),
+  });
 
   private readonly _subscriptions: Subscription[] = [];
   private _rootSlug: string;
@@ -38,12 +44,6 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   publishedTime: Date;
   updatedTime: Date;
   createdTime: Date;
-  documentForm = this.formBuilder.group({
-    title: [null, Validators.required],
-    url: [null, Validators.required],
-    status: [null, Validators.required],
-    dataForm: this.formBuilder.group({}),
-  });
 
 
   constructor(
@@ -55,14 +55,11 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     private readonly documentTypeService: DocumentTypeService,
   ) { }
 
+  get dataForm() {
+    return this.documentForm.get('dataForm') as FormGroup;
+  }
+
   ngOnInit() {
-    this._subscriptions.push(this.document$.subscribe(document => {
-    }));
-
-    this._subscriptions.push(this.documentType$
-      .subscribe(documentType => {
-      }));
-
     const combinedDocumentData$ = combineLatest(this.documentType$, this.document$);
     this._subscriptions.push(combinedDocumentData$.subscribe(([documentType, document]) => {
       this.documentForm.patchValue({
@@ -73,18 +70,15 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
 
       this._rootSlug = documentType.slug;
       for (const field of documentType.fields) {
-        if (this.dataForm.get(field.key)) {
-          this.dataForm.setValue(document.data[field.key]);
-        } else {
+        if (!this.dataForm.get(field.key)) {
           const formControl = new FormControl(document.data[field.key]);
           this.dataForm.addControl(field.key, formControl);
         }
+        this.dataForm.patchValue({
+          [field.key]: document.data[field.key],
+        });
       }
     }));
-  }
-
-  get dataForm() {
-    return this.documentForm.get('dataForm') as FormGroup;
   }
 
   ngOnDestroy() {
@@ -151,6 +145,6 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   private _navigateBack() {
-    this.router.navigateByUrl('../');
+    // this.router.navigate(['../']);
   }
 }
