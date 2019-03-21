@@ -1,5 +1,5 @@
 import { Component, OnInit, Optional, Self, OnDestroy, HostBinding, Input, ElementRef } from '@angular/core';
-import { MatFormFieldControl } from '@angular/material';
+import { MatFormFieldControl, MatSelectChange } from '@angular/material';
 import { NgControl, ControlValueAccessor } from '@angular/forms';
 import { Subject, Observable } from 'rxjs';
 import { DocumentService } from '../../../services/document.service';
@@ -38,6 +38,8 @@ export class DocumentReferenceComponent implements MatFormFieldControl<Document>
   private _required = false;
   private _disabled = false;
   private _value: Document;
+  private _onTouchedCallback: () => void;
+  private _onChangeCallback: (value: Document) => void;
 
   constructor(
     @Optional() @Self() public ngControl: NgControl,
@@ -104,22 +106,33 @@ export class DocumentReferenceComponent implements MatFormFieldControl<Document>
   setDescribedByIds(ids: string[]): void {
     this.describedBy = ids.join(' ');
   }
+
   onContainerClick(event: MouseEvent): void {
-    // n/a
+    this._onTouchedCallback();
   }
+
   writeValue(document: Document): void {
     this.value = document;
   }
-  registerOnChange(callback: (val: any) => void): void {
-    // n/a
+
+  registerOnChange(callback: (val: Document) => void): void {
+    this._onChangeCallback = callback;
   }
+
   registerOnTouched(callback: () => void): void {
-    // n/a
+    this._onTouchedCallback = callback;
   }
+
   setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
+
   compareFn(c1: any, c2: any): boolean {
     return !!c1 && !!c2 ? c1.id === c2.id : c1 === c2;
+  }
+
+  onChange(changeEvent: MatSelectChange) {
+    this._onChangeCallback(changeEvent.value);
+    this.stateChanges.next();
   }
 }
