@@ -31,11 +31,11 @@ export class DocumentTypeService {
       .valueChanges();
   }
 
-  async create(id: string) {
-    const docRef = this.siteCollection.collection('document-types').doc(id);
+  async create(title: string, slug: string) {
+    const docRef = this.siteCollection.collection('document-types').doc(slug);
     return docRef.set({
-      id: id,
-      title: null,
+      id: slug,
+      title: title,
       description: '',
       slug: null,
       template: null,
