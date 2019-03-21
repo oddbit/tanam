@@ -81,7 +81,6 @@
             <input matInput
                    placeholder="Slug"
                    formControlName="url">
-            <mat-hint>https://{{ domain$ | async }}/{{ document.url }}</mat-hint>
             <mat-error *ngIf="documentForm.controls['url'].hasError('required')">
               URL slug is <strong>required</strong>
             </mat-error>
