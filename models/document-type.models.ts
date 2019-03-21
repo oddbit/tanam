@@ -18,9 +18,11 @@ export interface DocumentField {
     title: string;
     type: DocumentFieldFormElement;
     isTitle?: boolean;
+    documentType?: string; // only applies to 'document-reference'
     defaultValue?: any;
     validators: DocumentFieldValidator[];
 }
+
 
 export interface DocumentCount {
     published: number;
