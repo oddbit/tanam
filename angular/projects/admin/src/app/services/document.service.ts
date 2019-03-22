@@ -4,7 +4,7 @@ import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { Document, DocumentType } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
-import * as moment from 'moment';
+import { FirebaseApp } from '@angular/fire';
 
 export interface DocumentTypeQueryOptions {
   limit?: number;
@@ -21,6 +21,7 @@ export class DocumentService {
   readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
 
   constructor(
+    private readonly firebaseApp: FirebaseApp,
     private readonly firestore: AngularFirestore,
     private readonly appConfig: AppConfigService,
   ) { }
@@ -52,10 +53,18 @@ export class DocumentService {
       throw new Error('Document ID must be provided as an attribute when updating an document.');
     }
 
-    document.updated = firebase.firestore.FieldValue.serverTimestamp();
-    return this.siteCollection
-      .collection<Document>('documents').doc(document.id)
-      .update(document);
+    const docRef = this.siteCollection.collection<Document>('documents').doc(document.id).ref;
+    return this.firebaseApp.firestore().runTransaction<void>(async (trx) => {
+      const trxDoc = await trx.get(docRef);
+      const trxDocument = trxDoc.data() as Document;
+
+      trx.update(docRef, {
+        ...document,
+        revision: trxDocument.revision + 1,
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    });
+
   }
 
   delete(documentId: string) {
