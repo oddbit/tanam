@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { DocumentStatus } from 'tanam-models';
@@ -19,12 +19,12 @@ interface StatusOption {
   styleUrls: ['./document-edit.component.scss']
 })
 export class DocumentEditComponent implements OnInit, OnDestroy {
-  static readonly statusOptions: StatusOption[] = [
+  readonly statusOptions: StatusOption[] = [
     { value: 'unpublished', title: 'Unpublished' },
     { value: 'published', title: 'Published' },
   ];
 
-  static readonly richTextEditorConfig = {
+  readonly richTextEditorConfig = {
     // toolbar: ['heading', '|', 'bold', 'italic', '|', 'bulletedList', 'numberedList'],
   };
 
@@ -48,7 +48,6 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly router: Router,
     private readonly formBuilder: FormBuilder,
     private readonly siteService: SiteService,
     private readonly documentService: DocumentService,
@@ -112,7 +111,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     document.title = formData.title;
     document.status = formData.status;
     document.url = formData.url;
-    document.data = this.dataForm.value;
+    document.data = this._sanitizeData(this.dataForm.value);
 
     await this.documentService.update(document);
     this._navigateBack();
@@ -133,6 +132,15 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
 
   private _setStateProcessing(isProcessing: boolean) {
     // Blur inputs or something
+  }
+
+  private _sanitizeData(data: any) {
+    for (const key in data) {
+      if (data[key] === undefined) {
+        data[key] = null;
+      }
+    }
+    return data;
   }
 
   private _slugify(text: string) {

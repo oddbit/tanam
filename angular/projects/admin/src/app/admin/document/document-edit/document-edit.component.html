@@ -64,12 +64,18 @@
                   </mat-form-field>
 
                   <!-- Date Time Picker -->
-                  <div *ngSwitchCase="field.type === 'date' || field.type === 'date-time' ? field.type : '' ">
+                  <div *ngSwitchCase="'date'">
                     <tanam-date-time matInput
+                                     type="date"
                                      formControlName="{{field.key}}"
-                                     type="{{field.type}}"
-                                     title="{{field.title}}"
-                                     key="{{field.key}}">
+                                     placeholder="{{field.title}}">
+                    </tanam-date-time>
+                  </div>
+                  <div *ngSwitchCase="'date-time'">
+                    <tanam-date-time matInput
+                                     type="date-time"
+                                     formControlName="{{field.key}}"
+                                     placeholder="{{field.title}}">
                     </tanam-date-time>
                   </div>
 
@@ -110,7 +116,7 @@
             <mat-form-field class="full-width">
               <input matInput
                      placeholder="Publish Date"
-                     value="{{ publishedTime | date:'yyyy-MM-dd HH:mm' }}"
+                     value="{{ document.published?.toDate() | date:'yyyy-MM-dd HH:mm' }}"
                      disabled>
             </mat-form-field>
             <mat-form-field class="full-width">
@@ -122,13 +128,13 @@
             <mat-form-field class="full-width">
               <input matInput
                      placeholder="Created"
-                     value="{{ createdTime | date:'yyyy-MM-dd HH:mm' }}"
+                     value="{{ document.created?.toDate() | date:'yyyy-MM-dd HH:mm' }}"
                      disabled>
             </mat-form-field>
             <mat-form-field class="full-width">
               <input matInput
                      placeholder="Updated"
-                     value="{{ updatedTime | date:'yyyy-MM-dd HH:mm' }}"
+                     value="{{ document.updated?.toDate() | date:'yyyy-MM-dd HH:mm' }}"
                      disabled>
             </mat-form-field>
           </mat-card-content>
