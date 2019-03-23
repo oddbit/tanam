@@ -1,0 +1,32 @@
+<div class="wrapper">
+  <mat-card class="card"
+            *ngIf="(image$ | async) as image">
+    <mat-card-content class="mat-card-content">
+      <p [matTooltip]="image.title">{{image.title}}</p>
+      <mat-menu #menu="matMenu"
+                xPosition="before">
+        <button mat-menu-item
+                (click)="replaceImage()">
+          <mat-icon>refresh</mat-icon>
+          <span>Replace</span>
+        </button>
+        <button mat-menu-item
+                (click)="removeImage()">
+          <mat-icon>delete</mat-icon>
+          <span>Remove</span>
+        </button>
+      </mat-menu>
+      <button mat-icon-button
+              class="more-button"
+              [matMenuTriggerFor]="menu"
+              aria-label="Toggle menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </mat-card-content>
+    <div mat-card-image
+         class="img-wrapper">
+      <img [src]="getImageUrl(image)"
+           [alt]="image.title">
+    </div>
+  </mat-card>
+</div>

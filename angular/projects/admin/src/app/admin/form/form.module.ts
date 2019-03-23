@@ -10,12 +10,14 @@ import { AppMaterialModule } from '../../app-material.module';
 import { DateTimeComponent } from './date-time/date-time.component';
 import { DocumentReferenceComponent } from './document-reference/document-reference.component';
 import { TextboxRichComponent } from './textbox-rich/textbox-rich.component';
+import { ImagePickerComponent } from './image-picker/image-picker.component';
 
 @NgModule({
   declarations: [
     TextboxRichComponent,
     DateTimeComponent,
     DocumentReferenceComponent,
+    ImagePickerComponent,
   ],
   imports: [
     CommonModule,
@@ -32,6 +34,7 @@ import { TextboxRichComponent } from './textbox-rich/textbox-rich.component';
     TextboxRichComponent,
     DateTimeComponent,
     DocumentReferenceComponent,
-  ]
+    ImagePickerComponent,
+  ],
 })
 export class FormModule { }
