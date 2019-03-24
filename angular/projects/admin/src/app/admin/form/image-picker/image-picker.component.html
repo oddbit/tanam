@@ -1,6 +1,6 @@
 <div class="wrapper">
   <mat-card class="card"
-            *ngIf="(image$ | async) as image">
+            *ngIf="(image$ | async) as image; else addImageDisplay">
     <mat-card-content class="mat-card-content">
       <p [matTooltip]="image.title">{{image.title}}</p>
       <mat-menu #menu="matMenu"
@@ -25,8 +25,11 @@
     </mat-card-content>
     <div mat-card-image
          class="img-wrapper">
-      <img [src]="getImageUrl(image)"
+      <img [src]="image.url"
            [alt]="image.title">
     </div>
   </mat-card>
+  <ng-template #addImageDisplay>
+    TODO: Display some "add new button"
+  </ng-template>
 </div>

@@ -5,9 +5,10 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatFormFieldControl, MatSelectChange } from '@angular/material';
 import { from, Observable, Subject, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { UserFileService } from '../../../services/user-file.service';
 import { TanamFile } from 'tanam-models';
+import { firestore } from 'firebase';
 
 @Component({
   selector: 'tanam-image-picker',
@@ -23,6 +24,8 @@ import { TanamFile } from 'tanam-models';
 export class ImagePickerComponent implements MatFormFieldControl<string>, ControlValueAccessor, OnDestroy {
   private static _nextId = 0;
 
+  image$: Observable<TanamFile>;
+
   @HostBinding('attr.aria-describedby') describedBy = '';
   @HostBinding() id = `date-time-${ImagePickerComponent._nextId++}`;
   controlType = 'tanam-image-picker';
@@ -33,16 +36,8 @@ export class ImagePickerComponent implements MatFormFieldControl<string>, Contro
   errorState: boolean;
   autofilled?: boolean;
 
-  // valueStream = new Subject<string>();
+  valueStream = new Subject<string>();
   stateChanges = new Subject<void>();
-  image$ = of({
-    id: 'foo',
-    title: 'Foo image',
-  } as TanamFile);
-  // readonly imageUrl$: Observable<string> = this.valueStream
-  //   .pipe(switchMap(id => this.fileService.getFile(id)))
-  //   .pipe(switchMap(file => from(this.fireStorage.ref(file.variants['medium']).getDownloadURL())));
-
 
   private _required = false;
   private _disabled = false;
@@ -76,11 +71,15 @@ export class ImagePickerComponent implements MatFormFieldControl<string>, Contro
 
   @Input()
   get value(): string {
+    if (!this._value || this._value.trim().length === 0) {
+      return null;
+    }
+
     return this._value;
   }
   set value(id: string) {
     this._value = id;
-
+    this.image$ = this.fileService.getFile(id);
   }
 
   @Input()
@@ -98,7 +97,7 @@ export class ImagePickerComponent implements MatFormFieldControl<string>, Contro
   }
 
   get empty() {
-    return !this._value;
+    return !this.value;
   }
 
   ngOnDestroy() {
@@ -136,7 +135,9 @@ export class ImagePickerComponent implements MatFormFieldControl<string>, Contro
   }
 
   getImageUrl(file: TanamFile) {
-    return 'https://via.placeholder.com/768x576';
+    return this.fireStorage.ref(file.filePath)
+      .getDownloadURL()
+      .pipe(tap(url => console.log(`[ImagePickerComponent:getImageUrl] ${JSON.stringify(url)}`)));
   }
 
   removeImage() {
