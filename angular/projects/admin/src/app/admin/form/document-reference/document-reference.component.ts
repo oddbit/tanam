@@ -1,11 +1,11 @@
-import { Component, OnInit, Optional, Self, OnDestroy, HostBinding, Input, ElementRef } from '@angular/core';
-import { MatFormFieldControl, MatSelectChange } from '@angular/material';
-import { NgControl, ControlValueAccessor } from '@angular/forms';
-import { Subject, Observable } from 'rxjs';
-import { DocumentService } from '../../../services/document.service';
-import { Document } from 'tanam-models';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { FocusMonitor } from '@angular/cdk/a11y';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self } from '@angular/core';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { MatFormFieldControl, MatSelectChange } from '@angular/material';
+import { Observable, Subject } from 'rxjs';
+import { Document } from 'tanam-models';
+import { DocumentService } from '../../../services/document.service';
 
 @Component({
   selector: 'tanam-document-reference',
@@ -28,7 +28,6 @@ export class DocumentReferenceComponent implements MatFormFieldControl<Document>
   @Input() documentType: string;
   @Input() placeholder: string;
 
-  focused: boolean;
   errorState: boolean;
   autofilled?: boolean;
 
@@ -38,6 +37,7 @@ export class DocumentReferenceComponent implements MatFormFieldControl<Document>
   private _required = false;
   private _disabled = false;
   private _value: Document;
+  private _focused = false;
   private _onTouchedCallback: () => void;
   private _onChangeCallback: (value: Document) => void;
 
@@ -66,10 +66,11 @@ export class DocumentReferenceComponent implements MatFormFieldControl<Document>
 
   @Input()
   get value(): Document {
-    return this._value;
+    return !this._value ? null : this._value;
   }
   set value(document: Document) {
     this._value = !!document ? { ...document } : null;
+    this.stateChanges.next();
   }
 
   @Input()
@@ -87,6 +88,15 @@ export class DocumentReferenceComponent implements MatFormFieldControl<Document>
 
   get empty() {
     return !this._value;
+  }
+
+  get focused() {
+    return this._focused;
+  }
+
+  set focused(flag: boolean) {
+    this._focused = coerceBooleanProperty(flag);
+    this._onTouchedCallback();
   }
 
   ngOnInit() {
