@@ -4,6 +4,7 @@ import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { DocumentType, SiteInformation } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -31,13 +32,13 @@ export class DocumentTypeService {
       .valueChanges();
   }
 
-  async create(id: string) {
+  async createWithTitle(id: string, title: string) {
     const docRef = this.siteCollection.collection('document-types').doc(id);
     return docRef.set({
       id: id,
-      title: null,
+      title: title,
       description: '',
-      slug: null,
+      slug: id,
       template: null,
       standalone: true,
       icon: 'cloud',
