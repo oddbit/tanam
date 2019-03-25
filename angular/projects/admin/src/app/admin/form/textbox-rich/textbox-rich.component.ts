@@ -19,7 +19,7 @@ import { Subject } from 'rxjs';
     },
   ],
 })
-export class TextboxRichComponent implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy {
+export class TextboxRichComponent implements MatFormFieldControl<string>, ControlValueAccessor, OnDestroy {
   private static _nextId = 0;
 
   @HostBinding('attr.aria-describedby') describedBy = '';
@@ -84,10 +84,15 @@ export class TextboxRichComponent implements MatFormFieldControl<string>, Contro
 
   @Input()
   get value(): string {
-    return this.editorData;
+    if (!this.editorData || this.editorData.trim().length === 0) {
+      return null;
+    }
+
+    return this.editorData.trim();
   }
+
   set value(value: string) {
-    this.editorData = value;
+    this.editorData = value || '';
     this.stateChanges.next();
   }
 
@@ -98,12 +103,6 @@ export class TextboxRichComponent implements MatFormFieldControl<string>, Contro
   set focused(flag: boolean) {
     this._focused = coerceBooleanProperty(flag);
     this._onTouchedCallback();
-  }
-
-  ngOnInit() {
-    if (!this.editorData) {
-      this.editorData = '';
-    }
   }
 
   ngOnDestroy() {
