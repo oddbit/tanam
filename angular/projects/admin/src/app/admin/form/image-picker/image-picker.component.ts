@@ -39,6 +39,7 @@ export class ImagePickerComponent implements MatFormFieldControl<string>, Contro
   valueStream = new Subject<string>();
   stateChanges = new Subject<void>();
 
+  readonly shouldLabelFloat = true;
   private _required = false;
   private _disabled = false;
   private _value: string;
@@ -92,10 +93,6 @@ export class ImagePickerComponent implements MatFormFieldControl<string>, Contro
     this.stateChanges.next();
   }
 
-  get shouldLabelFloat() {
-    return false; // Never float the label
-  }
-
   get empty() {
     return !this.value;
   }
@@ -141,7 +138,7 @@ export class ImagePickerComponent implements MatFormFieldControl<string>, Contro
   }
 
   removeImage() {
-    console.log('Remove current image');
+    this.value = null;
   }
 
   replaceImage() {
