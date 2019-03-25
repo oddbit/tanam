@@ -56,9 +56,11 @@
                   <!-- Image Picker -->
                   <mat-form-field *ngSwitchCase="'image'"
                                   class="full-width">
-                    <tanam-image-picker matInput
-                                        placeholder="{{field.title}}"
-                                        formControlName="{{field.key}}"></tanam-image-picker>
+                    <tanam-file-picker matInput
+                                       fileType='image'
+                                       placeholder="{{field.title}}"
+                                       formControlName="{{field.key}}">
+                    </tanam-file-picker>
                   </mat-form-field>
 
                   <!-- Use radio button selection -->

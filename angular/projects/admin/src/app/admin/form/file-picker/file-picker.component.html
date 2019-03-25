@@ -1,17 +1,17 @@
 <div class="wrapper">
   <mat-card class="card"
-            *ngIf="(image$ | async) as image; else noImageSet">
+            *ngIf="(file$ | async) as file; else newAttachment">
     <mat-card-content class="mat-card-content">
-      <p [matTooltip]="image.title">{{image.title}}</p>
+      <p [matTooltip]="file.title">{{file.title}}</p>
       <mat-menu #menu="matMenu"
                 xPosition="before">
         <button mat-menu-item
-                (click)="openGalleyModal()">
+                (click)="openFilePicker()">
           <mat-icon>refresh</mat-icon>
           <span>Replace</span>
         </button>
         <button mat-menu-item
-                (click)="removeImage()">
+                (click)="removeAttachment()">
           <mat-icon>delete</mat-icon>
           <span>Remove</span>
         </button>
@@ -23,16 +23,16 @@
         <mat-icon>more_vert</mat-icon>
       </button>
     </mat-card-content>
-    <div mat-card-image
+    <div mat-card-file
          class="img-wrapper">
-      <img [src]="image.url"
-           [alt]="image.title">
+      <img [src]="file.url"
+           [alt]="file.title">
     </div>
   </mat-card>
-  <ng-template #noImageSet>
+  <ng-template #newAttachment>
     <button mat-stroked-button
-    (click)="openGalleyModal()">
-          <mat-icon aria-label="Select image from gallery">collections</mat-icon>
-        </button>
+            (click)="openFilePicker()">
+      <mat-icon aria-label="Add new file attachment">collections</mat-icon>
+    </button>
   </ng-template>
 </div>
