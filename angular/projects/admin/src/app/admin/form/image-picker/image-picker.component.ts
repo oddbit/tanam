@@ -1,14 +1,12 @@
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self } from '@angular/core';
-import { AngularFireStorage } from '@angular/fire/storage';
+import { Component, ElementRef, HostBinding, Input, OnDestroy, Optional, Self } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatFormFieldControl, MatSelectChange } from '@angular/material';
-import { from, Observable, Subject, of } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
-import { UserFileService } from '../../../services/user-file.service';
-import { TanamFile } from 'tanam-models';
 import { firestore } from 'firebase';
+import { Observable, Subject } from 'rxjs';
+import { TanamFile } from 'tanam-models';
+import { UserFileService } from '../../../services/user-file.service';
 
 @Component({
   selector: 'tanam-image-picker',
@@ -24,24 +22,22 @@ import { firestore } from 'firebase';
 export class ImagePickerComponent implements MatFormFieldControl<firestore.DocumentReference>, ControlValueAccessor, OnDestroy {
   private static _nextId = 0;
 
-  image$: Observable<TanamFile>;
-
   @HostBinding('attr.aria-describedby') describedBy = '';
-  @HostBinding() id = `date-time-${ImagePickerComponent._nextId++}`;
+  @HostBinding() id = `tanam-image-picker-${ImagePickerComponent._nextId++}`;
   controlType = 'tanam-image-picker';
 
   @Input() placeholder: string;
 
-  focused: boolean;
   errorState: boolean;
   autofilled?: boolean;
 
-  valueStream = new Subject<string>();
+  image$: Observable<TanamFile>;
   stateChanges = new Subject<void>();
-
   readonly shouldLabelFloat = true;
+
   private _required = false;
   private _disabled = false;
+  private _focused = false;
   private _value: firestore.DocumentReference;
   private _onTouchedCallback: () => void;
   private _onChangeCallback: (value: firestore.DocumentReference) => void;
@@ -51,7 +47,6 @@ export class ImagePickerComponent implements MatFormFieldControl<firestore.Docum
     private readonly focusMonitor: FocusMonitor,
     private readonly elementRef: ElementRef<HTMLElement>,
     private readonly fileService: UserFileService,
-    private readonly fireStorage: AngularFireStorage,
   ) {
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
@@ -77,7 +72,8 @@ export class ImagePickerComponent implements MatFormFieldControl<firestore.Docum
 
   set value(ref: firestore.DocumentReference) {
     this._value = ref;
-    this.image$ = this.fileService.getFile(ref.id);
+    this.image$ = !!ref ? this.fileService.getFile(ref.id) : null;
+    this.stateChanges.next();
   }
 
   @Input()
@@ -92,6 +88,15 @@ export class ImagePickerComponent implements MatFormFieldControl<firestore.Docum
 
   get empty() {
     return !this.value;
+  }
+
+  get focused() {
+    return this._focused;
+  }
+
+  set focused(flag: boolean) {
+    this._focused = coerceBooleanProperty(flag);
+    this._onTouchedCallback();
   }
 
   ngOnDestroy() {
@@ -128,17 +133,11 @@ export class ImagePickerComponent implements MatFormFieldControl<firestore.Docum
     this.stateChanges.next();
   }
 
-  getImageUrl(file: TanamFile) {
-    return this.fireStorage.ref(file.filePath)
-      .getDownloadURL()
-      .pipe(tap(url => console.log(`[ImagePickerComponent:getImageUrl] ${JSON.stringify(url)}`)));
-  }
-
   removeImage() {
     this.value = null;
   }
 
-  replaceImage() {
-    console.log('Replace current image');
+  openGalleyModal() {
+    console.log('[openGalleyModal]');
   }
 }

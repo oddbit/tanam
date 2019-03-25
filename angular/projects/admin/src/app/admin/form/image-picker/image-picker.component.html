@@ -1,12 +1,12 @@
 <div class="wrapper">
   <mat-card class="card"
-            *ngIf="(image$ | async) as image; else addImageDisplay">
+            *ngIf="(image$ | async) as image; else noImageSet">
     <mat-card-content class="mat-card-content">
       <p [matTooltip]="image.title">{{image.title}}</p>
       <mat-menu #menu="matMenu"
                 xPosition="before">
         <button mat-menu-item
-                (click)="replaceImage()">
+                (click)="openGalleyModal()">
           <mat-icon>refresh</mat-icon>
           <span>Replace</span>
         </button>
@@ -29,7 +29,10 @@
            [alt]="image.title">
     </div>
   </mat-card>
-  <ng-template #addImageDisplay>
-    TODO: Display some "add new button"
+  <ng-template #noImageSet>
+    <button mat-stroked-button
+    (click)="openGalleyModal()">
+          <mat-icon aria-label="Select image from gallery">collections</mat-icon>
+        </button>
   </ng-template>
 </div>

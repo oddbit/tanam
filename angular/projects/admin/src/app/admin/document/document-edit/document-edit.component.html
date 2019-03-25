@@ -53,6 +53,7 @@
                                         formControlName="{{field.key}}"></tanam-textbox-rich>
                   </mat-form-field>
 
+                  <!-- Image Picker -->
                   <mat-form-field *ngSwitchCase="'image'"
                                   class="full-width">
                     <tanam-image-picker matInput
@@ -70,7 +71,7 @@
                     </mat-radio-group>
                   </mat-form-field>
 
-                  <!-- Date Time Picker -->
+                  <!-- Date Picker -->
                   <div *ngSwitchCase="'date'">
                     <tanam-date-time matInput
                                      type="date"
@@ -78,6 +79,8 @@
                                      placeholder="{{field.title}}">
                     </tanam-date-time>
                   </div>
+
+                  <!-- Date Time Picker -->
                   <div *ngSwitchCase="'date-time'">
                     <tanam-date-time matInput
                                      type="date-time"
@@ -86,6 +89,7 @@
                     </tanam-date-time>
                   </div>
 
+                  <!-- Pick a reference to another document -->
                   <mat-form-field *ngSwitchCase="'document-reference'"
                                   class="full-width">
                     <tanam-document-reference matInput
