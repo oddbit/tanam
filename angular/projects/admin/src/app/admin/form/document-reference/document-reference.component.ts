@@ -22,7 +22,7 @@ export class DocumentReferenceComponent implements MatFormFieldControl<Document>
   private static _nextId = 0;
 
   @HostBinding('attr.aria-describedby') describedBy = '';
-  @HostBinding() id = `date-time-${DocumentReferenceComponent._nextId++}`;
+  @HostBinding() id = `tanam-document-reference-${DocumentReferenceComponent._nextId++}`;
   controlType = 'document-reference';
 
   @Input() documentType: string;
