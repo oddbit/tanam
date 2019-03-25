@@ -30,7 +30,7 @@ export class TextboxRichComponent implements MatFormFieldControl<string>, Contro
 
   stateChanges = new Subject<void>();
   controlType = 'textbox-rich';
-  shouldLabelFloat = false;
+  shouldLabelFloat = true;
 
   required: boolean;
   errorState: boolean;
