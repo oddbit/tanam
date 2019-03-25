@@ -15,7 +15,6 @@ export class DocumentTypeService {
   constructor(
     private readonly firestore: AngularFirestore,
     private readonly appConfig: AppConfigService,
-    private router: Router
   ) { }
 
 
@@ -33,15 +32,13 @@ export class DocumentTypeService {
       .valueChanges();
   }
 
-  async createWithTitle(title: string) {
-    const slug = this._slugify(title);
-    const docRef = this.siteCollection.collection('document-types').doc(slug);
-    this.router.navigateByUrl(`/_/admin/type/${slug}/edit`);
+  async createWithTitle(id: string, title: string) {
+    const docRef = this.siteCollection.collection('document-types').doc(id);
     return docRef.set({
-      id: slug,
+      id: id,
       title: title,
       description: '',
-      slug: slug,
+      slug: id,
       template: null,
       standalone: true,
       icon: 'cloud',
@@ -64,14 +61,5 @@ export class DocumentTypeService {
 
     console.log(`[DocumentTypeService:saveDocumentType] ${JSON.stringify(documentType, null, 2)}`);
     return doc.update(documentType);
-  }
-
-  private _slugify(text: string) {
-    return text.toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w\-]+/g, '')
-      .replace(/\-\-+/g, '-')
-      .replace(/^-+/, '')
-      .replace(/-+$/, '');
   }
 }
