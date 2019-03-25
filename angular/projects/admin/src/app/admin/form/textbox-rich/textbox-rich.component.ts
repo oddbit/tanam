@@ -101,6 +101,9 @@ export class TextboxRichComponent implements MatFormFieldControl<string>, Contro
   }
 
   ngOnInit() {
+    if (!this.editorData) {
+      this.editorData = '';
+    }
   }
 
   ngOnDestroy() {
