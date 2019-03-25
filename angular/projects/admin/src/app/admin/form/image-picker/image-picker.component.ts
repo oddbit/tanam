@@ -21,7 +21,7 @@ import { firestore } from 'firebase';
     },
   ],
 })
-export class ImagePickerComponent implements MatFormFieldControl<string>, ControlValueAccessor, OnDestroy {
+export class ImagePickerComponent implements MatFormFieldControl<firestore.DocumentReference>, ControlValueAccessor, OnDestroy {
   private static _nextId = 0;
 
   image$: Observable<TanamFile>;
@@ -42,9 +42,9 @@ export class ImagePickerComponent implements MatFormFieldControl<string>, Contro
   readonly shouldLabelFloat = true;
   private _required = false;
   private _disabled = false;
-  private _value: string;
+  private _value: firestore.DocumentReference;
   private _onTouchedCallback: () => void;
-  private _onChangeCallback: (value: string) => void;
+  private _onChangeCallback: (value: firestore.DocumentReference) => void;
 
   constructor(
     @Optional() @Self() public ngControl: NgControl,
@@ -71,16 +71,13 @@ export class ImagePickerComponent implements MatFormFieldControl<string>, Contro
   }
 
   @Input()
-  get value(): string {
-    if (!this._value || this._value.trim().length === 0) {
-      return null;
-    }
-
-    return this._value;
+  get value(): firestore.DocumentReference {
+    return !this._value ? null : this._value;
   }
-  set value(id: string) {
-    this._value = id;
-    this.image$ = this.fileService.getFile(id);
+
+  set value(ref: firestore.DocumentReference) {
+    this._value = ref;
+    this.image$ = this.fileService.getFile(ref.id);
   }
 
   @Input()
@@ -110,11 +107,11 @@ export class ImagePickerComponent implements MatFormFieldControl<string>, Contro
     this._onTouchedCallback();
   }
 
-  writeValue(id: string): void {
-    this.value = id;
+  writeValue(ref: firestore.DocumentReference): void {
+    this.value = ref;
   }
 
-  registerOnChange(callback: (val: string) => void): void {
+  registerOnChange(callback: (val: firestore.DocumentReference) => void): void {
     this._onChangeCallback = callback;
   }
 
