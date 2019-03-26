@@ -16,7 +16,8 @@
                   <mat-select formControlName="name"
                               placeholder="Language">
                     <mat-option *ngFor="let language of languages"
-                                value="{{language.id}}">{{language.title}}</mat-option>
+                                value="{{language.id}}">{{language.title}} ({{language.nativeTitle}})
+                    </mat-option>
                   </mat-select>
                 </mat-form-field>
                 <button mat-icon-button
