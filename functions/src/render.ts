@@ -41,9 +41,12 @@ export async function renderTemplate(context: DocumentContext) {
     }
 
     const currentThemeTemplate = context.documentType;
+    const pageContext = {
+        context,
+    };
 
     return new Promise<string>((resolve, reject) => {
-        dust.render(currentThemeTemplate, context, (err: any, out: string) => {
+        dust.render(currentThemeTemplate, pageContext, (err: any, out: string) => {
             if (err) {
                 console.log(`[renderDocument] Error rendering: ${JSON.stringify(err)}`);
                 reject(JSON.stringify(err));
