@@ -2,10 +2,11 @@
 <div mat-dialog-content>
   <mat-grid-list cols="3"
                  rowHeight="200px">
-    <mat-grid-tile *ngFor="let image of images"
-                   (click)="selectImage(image)"
-                   [ngClass]="{focus: image.id === selectedImage.id}">
-      <img src="{{image.src}}" />
+    <mat-grid-tile *ngFor="let file of files$ | async"
+                   (click)="selectFile(file)"
+                   [ngClass]="{focus: file.id === selectedFile.id}">
+      <img [src]="file.url"
+           [alt]="file.title" />
     </mat-grid-tile>
   </mat-grid-list>
 </div>
@@ -13,7 +14,7 @@
   <button mat-raised-button
           color="primary"
           (click)="chooseFile()"
-          [disabled]="!selectedImage">Choose</button>
+          [disabled]="!selectedFile">Choose</button>
   <button mat-raised-button
           (click)="closeDialog()">Cancel</button>
 </div>
