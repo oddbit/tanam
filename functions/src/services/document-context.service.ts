@@ -30,6 +30,7 @@ export async function queryDocumentContext(documentTypeId: string, queryOpts: Do
 }
 
 export async function getDocumentContextById(docId: string) {
+    console.log(`[getDocumentContextById] ${JSON.stringify(docId)}`);
     const querySnap = await siteCollection()
         .collection('documents')
         .where('status', '==', 'published')
@@ -37,7 +38,8 @@ export async function getDocumentContextById(docId: string) {
         .limit(1)
         .get();
 
-    if (querySnap.empty) {
+    console.log(`[getDocumentContextById] Number of query results: ${querySnap.docs.length}`);
+    if (querySnap.docs.length === 0) {
         return null;
     }
 
@@ -46,6 +48,7 @@ export async function getDocumentContextById(docId: string) {
 }
 
 export async function getDocumentContextByUrl(url: string) {
+    console.log(`[getDocumentContextByUrl] ${JSON.stringify(url)}`);
     const querySnap = await siteCollection()
         .collection('documents')
         .where('status', '==', 'published')
@@ -53,7 +56,9 @@ export async function getDocumentContextByUrl(url: string) {
         .limit(1)
         .get();
 
-    if (querySnap.empty) {
+
+    console.log(`[getDocumentContextByUrl] Number of query results: ${querySnap.docs.length}`);
+    if (querySnap.docs.length === 0) {
         return null;
     }
 
