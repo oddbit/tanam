@@ -118,9 +118,11 @@ app.get('/favicon.ico', async (request, response) => {
     // Save "known" domains upon request to resources that are likely to seldom change -> cached for long
     // So that the overhead is done as seldom as possible
     const hostname = request.hostname;
-    return hostname === 'localhost'
-        ? null
-        : admin.database().ref('tanam')
+    if (hostname === 'localhost' || hostname.endsWith(`.cloudfunctions.net`)) {
+        return null;
+    }
+
+    return admin.database().ref('tanam')
             .child(process.env.GCLOUD_PROJECT)
             .child('domains')
             .child(MD5(hostname).toString())
