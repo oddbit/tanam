@@ -4,7 +4,8 @@
                  rowHeight="200px">
     <mat-grid-tile *ngFor="let file of files$ | async"
                    (click)="selectFile(file)"
-                   [ngClass]="{focus: file.id === selectedFile.id}">
+                   [ngClass]="{focus: file.id === selectedFile.id}"
+                   [matTooltip]="file.title">
       <img [src]="file.url"
            [alt]="file.title" />
     </mat-grid-tile>
