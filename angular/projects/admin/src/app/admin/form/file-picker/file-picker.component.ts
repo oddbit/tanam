@@ -3,7 +3,7 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Component, ElementRef, HostBinding, Input, OnDestroy, Optional, Self } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatFormFieldControl } from '@angular/material/form-field';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { FileType, TanamFile } from 'tanam-models';
 import { UserFileService } from '../../../services/user-file.service';
 import { FilePickerDialogComponent } from './file-picker-dialog/file-picker-dialog.component';
@@ -30,6 +30,7 @@ export class FilePickerComponent implements MatFormFieldControl<string>, Control
 
   file$: Observable<TanamFile>;
   stateChanges = new Subject<void>();
+
   controlType = 'tanam-file-picker';
   shouldLabelFloat = true;
 
@@ -140,10 +141,16 @@ export class FilePickerComponent implements MatFormFieldControl<string>, Control
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '800px';
     const dialogRef = this.dialog.open(FilePickerDialogComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(file => {
+
+
+    const subscription = dialogRef.afterClosed().subscribe(file => {
       if (!!file) {
         this._onChangeCallback(file.id);
         this.value = file.id;
+      }
+
+      if (!!subscription && !subscription.closed) {
+        subscription.unsubscribe();
       }
     });
   }
