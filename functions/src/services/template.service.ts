@@ -27,7 +27,7 @@ export async function createDefaultTemplates() {
         selector: 'blog',
         templateType: 'dust',
         template: `
-        <h1>{context.data.title}</h1>
+        <h1>{context.title}</h1>
         <img src="{context.data.featuredImage}" />
         {#context.data.author}
             <p><a href="{profileUrl}">{name}</a></p>
@@ -43,7 +43,7 @@ export async function createDefaultTemplates() {
         selector: 'event',
         templateType: 'dust',
         template: `
-        <h1>{context.data.title}</h1>
+        <h1>{context.title}</h1>
         <img src="{context.data.featuredImage}" />
         <div class="event-dates">
             <span>{context.data.timeStart}</span>
@@ -51,7 +51,7 @@ export async function createDefaultTemplates() {
         </div>
         {#context.data.location}
             <p><a href="{mapUrl}">{name}</a></p>
-        {/context.data.author}
+        {/context.data.location}
         <p>{context.data.content|s}</p>
         `,
     };
@@ -64,9 +64,9 @@ export async function createDefaultTemplates() {
         templateType: 'dust',
         template: `
         {@select key=context.data.layout}
-            {@eq value="landing-page"}{> page_landing}{/eq}
-            {@eq value="right-sidebar"}{> page_right_sidebar}{/eq}
-            {@none}{> page_default}{/none}
+            {@eq value="landing-page"}Show a landing page layout{/eq}
+            {@eq value="right-sidebar"}Include a right sidebar page template{/eq}
+            {@none} Display the regular page layout {/none}
         {/select}
         `,
     };
