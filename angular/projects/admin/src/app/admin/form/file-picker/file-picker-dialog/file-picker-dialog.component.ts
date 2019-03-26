@@ -25,8 +25,7 @@ export class FilePickerDialogComponent {
   }
 
   chooseFile() {
-    console.log(this.selectedFile);
-    this.dialogRef.close();
+    this.dialogRef.close(this.selectedFile);
   }
 
   closeDialog() {

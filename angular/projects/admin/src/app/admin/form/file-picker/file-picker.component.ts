@@ -137,12 +137,14 @@ export class FilePickerComponent implements MatFormFieldControl<string>, Control
   }
 
   openFilePicker() {
-    // console.log('[openFilePicker]');
-    // const fileId = '273XtwTFD8SrlNoTOxtv'; // TODO: Deta, replace with modal result's file.id
-    // this._onChangeCallback(fileId);
-    // this.value = fileId;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '800px';
-    this.dialog.open(FilePickerDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(FilePickerDialogComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(file => {
+      if (!!file) {
+        this._onChangeCallback(file.id);
+        this.value = file.id;
+      }
+    });
   }
 }
