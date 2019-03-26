@@ -49,7 +49,7 @@ export async function getDocumentContextByUrl(url: string) {
     const querySnap = await siteCollection()
         .collection('documents')
         .where('status', '==', 'published')
-        .where('url.path', '==', url)
+        .where('url', '==', url)
         .limit(1)
         .get();
 
