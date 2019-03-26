@@ -7,7 +7,7 @@ import { Observable, Subject } from 'rxjs';
 import { FileType, TanamFile } from 'tanam-models';
 import { UserFileService } from '../../../services/user-file.service';
 import { FilePickerDialogComponent } from './file-picker-dialog/file-picker-dialog.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 
 @Component({
   selector: 'tanam-file-picker',
@@ -141,6 +141,8 @@ export class FilePickerComponent implements MatFormFieldControl<string>, Control
     // const fileId = '273XtwTFD8SrlNoTOxtv'; // TODO: Deta, replace with modal result's file.id
     // this._onChangeCallback(fileId);
     // this.value = fileId;
-    this.dialog.open(FilePickerDialogComponent);
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '800px';
+    this.dialog.open(FilePickerDialogComponent, dialogConfig);
   }
 }

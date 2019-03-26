@@ -1,3 +1,19 @@
-<p>
-  file-picker-dialog works!
-</p>
+<h1 mat-dialog-title>Choose File</h1>
+<div mat-dialog-content>
+  <mat-grid-list cols="3"
+                 rowHeight="200px">
+    <mat-grid-tile *ngFor="let image of images"
+                   (click)="selectImage(image)"
+                   [ngClass]="{focus: image.id === selectedImage.id}">
+      <img src="{{image.src}}" />
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button
+          color="primary"
+          (click)="chooseFile()"
+          [disabled]="!selectedImage">Choose</button>
+  <button mat-raised-button
+          (click)="closeDialog()">Cancel</button>
+</div>
