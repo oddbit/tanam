@@ -30,7 +30,7 @@ export async function createDefaultTemplates() {
         templateType: 'dust',
         template: `
         <h1>{context.title}</h1>
-        <img src="{context.data.featuredImage}" />
+        <img src="/_/image/{context.data.featuredImage}?s=medium" />
         {#context.data.author}
             <p><a href="{profileUrl}">{name}</a></p>
         {/context.data.author}
@@ -46,7 +46,7 @@ export async function createDefaultTemplates() {
         templateType: 'dust',
         template: `
         <h1>{context.title}</h1>
-        <img src="{context.data.featuredImage}" />
+        <img src="/_/image/{context.data.featuredImage}" />
         <div class="event-dates">
             <span>{context.data.timeStart}</span>
             <span>{context.data.timeEnd}</span>

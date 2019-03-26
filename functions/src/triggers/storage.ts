@@ -58,6 +58,7 @@ export const convertAndResizeImage = functions.storage.object().onFinalize(async
       .toFormat(sharp.format.webp)
       .toBuffer();
 
+  console.log(JSON.stringify(image));
   return await Promise.all([
     bucket
       .file(image.small)
