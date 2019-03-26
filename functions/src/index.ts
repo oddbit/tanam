@@ -140,6 +140,11 @@ app.get('*', async (request, response) => {
     }
 
     const html = await renderDocument(context);
+    if (!html) {
+        console.error(`[HTTP 500] could not create template for: ${request.url}`);
+        return response.status(500).send('Could not create HTML template document');
+    }
+
     response.setHeader('Cache-Control', getCacheHeader());
     response.send(html);
     return null;

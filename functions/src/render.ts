@@ -75,8 +75,12 @@ function renderThemeScripts(theme: Theme): string[] {
 
 export async function renderDocument(context: DocumentContext) {
     const siteInfo = await getSiteInfo();
-    const template = await renderTemplate(context);
     const theme = await getTheme();
+    const template = await renderTemplate(context);
+    if (!template) {
+        console.error(`No template rendered for document ${context.id}`);
+        return null;
+    }
 
     return `<!doctype html>
         <html lang="en">
