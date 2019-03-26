@@ -41,7 +41,7 @@ export class SettingsDialogManageLanguagesComponent implements OnInit {
     return this.languagesForm.get('languages') as FormArray;
   }
 
-  addLanguage(language: string, index?: number) {
+  addLanguage(language: string = this.languageOptions[0].id, index?: number) {
     console.log(`[SettingsLanguageComponent:addLanguage] ${JSON.stringify(language)}`);
     const isDisable = index === 0;
     const newLanguageLine = this.formBuilder.group({
