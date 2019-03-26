@@ -123,10 +123,10 @@ app.get('/favicon.ico', async (request, response) => {
     }
 
     return admin.database().ref('tanam')
-            .child(process.env.GCLOUD_PROJECT)
-            .child('domains')
-            .child(MD5(hostname).toString())
-            .set(hostname);
+        .child(process.env.GCLOUD_PROJECT)
+        .child('domains')
+        .child(MD5(hostname).toString())
+        .set(hostname);
 });
 
 app.get('*', async (request, response) => {
@@ -136,8 +136,7 @@ app.get('*', async (request, response) => {
     const context = await getDocumentContextByUrl(url);
     if (!context) {
         console.log(`[HTTP 404] page not found for: ${request.url}`);
-        response.status(404).send(`Not found: ${request.url}`);
-        return;
+        return response.status(404).send(`Not found: ${request.url}`);
     }
 
     const html = await renderDocument(context);

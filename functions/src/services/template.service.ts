@@ -1,15 +1,17 @@
 import * as admin from 'firebase-admin';
-import { SiteInformation, ThemeTemplate, DocumentContext, DocumentType } from '../../../models';
+import { SiteInformation, ThemeTemplate } from '../../../models';
 
 const siteCollection = () => admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
 
 export async function getTemplates() {
     const siteInfo = (await siteCollection().get()).data() as SiteInformation;
+    console.log(`[getTemplates] Finding templates for theme: ${siteInfo.theme}`);
     const templatesSnap = await siteCollection()
         .collection('themes').doc(siteInfo.theme)
         .collection('templates')
         .get();
 
+    console.log(`[getTemplates] Number of templates found: ${templatesSnap.docs.length}`);
     return templatesSnap.docs.map(doc => doc.data() as ThemeTemplate);
 }
 

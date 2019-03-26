@@ -33,9 +33,10 @@ dust.helpers.documents = (chunk, context, bodies, params) => {
 
 export async function renderTemplate(context: DocumentContext) {
     const templates = await templateService.getTemplates();
+    console.log(`[renderTemplate] Theme has ${templates.length} templates.`);
 
     for (const template of templates) {
-        console.log(`[renderDocument] Compiling template: ${template.id}`);
+        console.log(`[renderTemplate] Compiling template: ${template.id}`);
         const source = dust.compile(template.template, template.id);
         dust.register(template.id, dust.loadSource(source));
     }
@@ -84,7 +85,7 @@ export async function renderDocument(context: DocumentContext) {
             <title>${context.title} | ${siteInfo.title}</title>
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <link rel="icon" type="image/x-icon" href="/favicon.ico">
-            <link rel="canonical" href="https://${siteInfo.primaryDomain}">
+            <link rel="canonical" href="https://${context.permalink}">
             ${renderThemeStyles(theme).join('\n')}
         </head>
 
