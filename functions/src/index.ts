@@ -65,7 +65,7 @@ app.get(/^\/?assets\/(.*)\/?$/i,
 app.get('/_/image/:fileId', async (request, response) => {
     const fileId = request.params.fileId;
     console.log(`GET ${request.url} (fileId: ${fileId})`);
-    console.log(`QUERY: ${JSON.stringify(request.query, null, 2)}`);
+    console.log(`URL query parameters: ${JSON.stringify(request.query, null, 2)}`);
 
     const fileContents = await fileService.getImageFile(fileId, request.query.s);
     if (!fileContents) {
