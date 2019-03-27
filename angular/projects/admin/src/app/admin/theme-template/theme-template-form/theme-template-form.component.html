@@ -1,6 +1,6 @@
 <form [formGroup]="templateForm"
       novalidate
-      (ngSubmit)="onSave()">
+      (ngSubmit)="saveTemplate()">
   <tanam-context-actions>
     <tanam-action-button buttonType='cancel'
                          (click)='cancelEdit()'></tanam-action-button>
@@ -50,7 +50,7 @@
                 </mat-error>
               </mat-form-field>
             </mat-tab>
-            <mat-tab *ngIf="!!templateStyle"
+            <mat-tab *ngIf="!!template?.styles"
                      label="CSS">
               <mat-form-field class="full-width">
                 <textarea matInput

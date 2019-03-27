@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap, take } from 'rxjs/operators';
 import { TanamFile } from 'tanam-models';
 import { UserFileService } from '../../../services/user-file.service';
 
@@ -11,12 +11,37 @@ import { UserFileService } from '../../../services/user-file.service';
   styleUrls: ['./media-grid.component.scss']
 })
 export class MediaGridComponent {
-  readonly files$: Observable<TanamFile[]> = this.fileService.getFiles('image');
-  readonly numCols$ = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
-    map(({ matches }) => matches ? 2 : 4));
+  readonly files$: Observable<TanamFile[]> = this.fileService.getFiles('image')
+    .pipe(tap(files => console.log(`[MediaGridComponent:files$] num files: ${files.length}`)));
+
+  readonly numCols$ = this.breakpointObserver
+    .observe(Breakpoints.Handset)
+    .pipe(
+      map(({ matches }) => matches ? 2 : 4),
+      tap(numCols => console.log(`[MediaGridComponent:numCols$] ${JSON.stringify({ numCols })}`)),
+    );
+
+  private readonly _downloadUrls = {};
 
   constructor(
     private readonly breakpointObserver: BreakpointObserver,
     private readonly fileService: UserFileService,
   ) { }
+
+  getDownloadUrl(file: TanamFile): Observable<string> {
+    if (!this._downloadUrls[file.id]) {
+      this._downloadUrls[file.id] = this.fileService.getDownloadUrl(file, 'small')
+        .pipe(tap(url => console.log(`[getDownloadUrl] ${JSON.stringify({ url })}`)));
+    }
+
+    return this._downloadUrls[file.id];
+  }
+
+  showDetails(file: TanamFile) {
+    console.log(`[MediaGridComponent:showDetails] ${JSON.stringify({ file })}`);
+  }
+
+  remove(file: TanamFile) {
+    this.fileService.remove(file);
+  }
 }

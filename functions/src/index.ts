@@ -65,7 +65,7 @@ app.get(/^\/?assets\/(.*)\/?$/i,
 app.get('/_/image/:fileId', async (request, response) => {
     const fileId = request.params.fileId;
     console.log(`GET ${request.url} (fileId: ${fileId})`);
-    console.log(`QUERY: ${JSON.stringify(request.query, null, 2)}`);
+    console.log(`URL query parameters: ${JSON.stringify(request.query, null, 2)}`);
 
     const fileContents = await fileService.getImageFile(fileId, request.query.s);
     if (!fileContents) {
@@ -118,13 +118,15 @@ app.get('/favicon.ico', async (request, response) => {
     // Save "known" domains upon request to resources that are likely to seldom change -> cached for long
     // So that the overhead is done as seldom as possible
     const hostname = request.hostname;
-    return hostname === 'localhost'
-        ? null
-        : admin.database().ref('tanam')
-            .child(process.env.GCLOUD_PROJECT)
-            .child('domains')
-            .child(MD5(hostname).toString())
-            .set(hostname);
+    if (hostname === 'localhost' || hostname.endsWith(`.cloudfunctions.net`)) {
+        return null;
+    }
+
+    return admin.database().ref('tanam')
+        .child(process.env.GCLOUD_PROJECT)
+        .child('domains')
+        .child(MD5(hostname).toString())
+        .set(hostname);
 });
 
 app.get('*', async (request, response) => {
@@ -134,11 +136,15 @@ app.get('*', async (request, response) => {
     const context = await getDocumentContextByUrl(url);
     if (!context) {
         console.log(`[HTTP 404] page not found for: ${request.url}`);
-        response.status(404).send(`Not found: ${request.url}`);
-        return;
+        return response.status(404).send(`Not found: ${request.url}`);
     }
 
     const html = await renderDocument(context);
+    if (!html) {
+        console.error(`[HTTP 500] could not create template for: ${request.url}`);
+        return response.status(500).send('Could not create HTML template document');
+    }
+
     response.setHeader('Cache-Control', getCacheHeader());
     response.send(html);
     return null;

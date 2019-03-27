@@ -40,7 +40,8 @@
           <mat-select formControlName="defaultLanguage"
                       placeholder="Default Language">
             <mat-option *ngFor="let language of languages"
-                        value="{{language.id}}">{{language.title}}</mat-option>
+                        value="{{language.id}}">{{language.title}} ({{language.nativeTitle}})
+                      </mat-option>
           </mat-select>
           <mat-error *ngIf="settingsForm.controls['defaultLanguage'].hasError('required')">
             Language is <strong>required</strong>

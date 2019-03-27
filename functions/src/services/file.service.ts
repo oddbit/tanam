@@ -14,11 +14,14 @@ export async function getFavicon() {
 }
 
 export async function getImageFile(fileId: string, variant?: 'large' | 'medium' | 'small') {
+    console.log(`[getImageFile] ${JSON.stringify({ fileId, variant})}`);
     const doc = await siteCollection()
         .collection('files').doc(fileId)
         .get();
 
     const tanamFile = doc.data() as TanamFile;
+    console.log(`[getImageFile] ${JSON.stringify({ tanamFile })}`);
+
     const storagePath = tanamFile.variants[variant] || tanamFile.filePath;
     const contentFile = await admin.storage().bucket().file(storagePath);
     const [contentExists] = await contentFile.exists();

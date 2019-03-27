@@ -33,17 +33,21 @@ dust.helpers.documents = (chunk, context, bodies, params) => {
 
 export async function renderTemplate(context: DocumentContext) {
     const templates = await templateService.getTemplates();
+    console.log(`[renderTemplate] Theme has ${templates.length} templates.`);
 
     for (const template of templates) {
-        console.log(`[renderDocument] Compiling template: ${template.id}`);
+        console.log(`[renderTemplate] Compiling template: ${template.id}`);
         const source = dust.compile(template.template, template.id);
         dust.register(template.id, dust.loadSource(source));
     }
 
     const currentThemeTemplate = context.documentType;
+    const pageContext = {
+        context,
+    };
 
     return new Promise<string>((resolve, reject) => {
-        dust.render(currentThemeTemplate, context, (err: any, out: string) => {
+        dust.render(currentThemeTemplate, pageContext, (err: any, out: string) => {
             if (err) {
                 console.log(`[renderDocument] Error rendering: ${JSON.stringify(err)}`);
                 reject(JSON.stringify(err));
@@ -71,8 +75,12 @@ function renderThemeScripts(theme: Theme): string[] {
 
 export async function renderDocument(context: DocumentContext) {
     const siteInfo = await getSiteInfo();
-    const template = await renderTemplate(context);
     const theme = await getTheme();
+    const template = await renderTemplate(context);
+    if (!template) {
+        console.error(`No template rendered for document ${context.id}`);
+        return null;
+    }
 
     return `<!doctype html>
         <html lang="en">
@@ -81,7 +89,7 @@ export async function renderDocument(context: DocumentContext) {
             <title>${context.title} | ${siteInfo.title}</title>
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <link rel="icon" type="image/x-icon" href="/favicon.ico">
-            <link rel="canonical" href="https://${siteInfo.primaryDomain}">
+            <link rel="canonical" href="https://${context.permalink}">
             ${renderThemeStyles(theme).join('\n')}
         </head>
 
