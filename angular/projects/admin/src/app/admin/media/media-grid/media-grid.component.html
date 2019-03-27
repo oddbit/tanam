@@ -5,8 +5,12 @@
       <p [matTooltip]="file.title">{{file.title}}</p>
       <mat-menu #menu="matMenu"
                 xPosition="before">
-        <button mat-menu-item>Expand</button>
-        <button mat-menu-item>Remove</button>
+        <button mat-menu-item
+        (click)="showDetails(file)"
+        >Details</button>
+        <button mat-menu-item
+                (click)="delete(file)">
+          Remove</button>
       </mat-menu>
       <button mat-icon-button
               class="more-button"

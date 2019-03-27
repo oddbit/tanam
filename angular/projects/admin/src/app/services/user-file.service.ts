@@ -35,4 +35,8 @@ export class UserFileService {
     const storageRef = this.siteStorage.child(`upload/${file.name}`);
     return storageRef.put(file).percentageChanges();
   }
+
+  remove(file: TanamFile) {
+    return this.siteCollection.collection('files').doc(file.id).delete();
+  }
 }

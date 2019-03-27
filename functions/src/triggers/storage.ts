@@ -23,8 +23,7 @@ export const processImageUpload = functions.storage.object().onFinalize(async (o
     sharp(originalFileBuffer)
       .resize(size, size, {
         withoutEnlargement: true,
-        fit: sharp.fit.cover,
-        position: sharp.strategy.entropy,
+        fit: sharp.fit.inside,
       })
       .toFormat(sharp.format.webp)
       .toBuffer();

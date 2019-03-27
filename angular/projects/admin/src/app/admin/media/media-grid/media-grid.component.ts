@@ -36,4 +36,12 @@ export class MediaGridComponent {
 
     return this._downloadUrls[file.id];
   }
+
+  showDetails(file: TanamFile) {
+    console.log(`[MediaGridComponent:showDetails] ${JSON.stringify({ file })}`);
+  }
+
+  remove(file: TanamFile) {
+    this.fileService.remove(file);
+  }
 }
