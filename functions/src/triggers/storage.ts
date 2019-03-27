@@ -1,55 +1,26 @@
-import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import * as path from 'path';
+import * as functions from 'firebase-functions';
 import { ObjectMetadata } from 'firebase-functions/lib/providers/storage';
 import * as sharp from 'sharp';
+import { TanamFile } from '../../../models';
 
-class ImageData {
-  bucketName: string;
-  filePath: string;
-  baseFileName: string;
-  contentType: string;
-  metadata: any;
-
-  small: string;
-  medium: string;
-  large: string;
-
-  constructor(inputImage: ObjectMetadata) {
-    this.bucketName = inputImage.bucket;
-    this.filePath = inputImage.name;
-    this.baseFileName = path.basename(
-      this.filePath,
-      path.extname(this.filePath),
-    );
-
-    this.contentType = inputImage.contentType;
-    this.metadata = {
-      contentType: 'image/webp',
-      metadata: inputImage.metadata,
-    };
-
-    const [tanamDir, imageDir] = this.filePath.split('/');
-
-    const baseImagePath = path.join(tanamDir, imageDir, this.baseFileName);
-    this.small = `${baseImagePath}_small.webp`;
-    this.medium = `${baseImagePath}_medium.webp`;
-    this.large = `${baseImagePath}_large.webp`;
+export const processImageUpload = functions.storage.object().onFinalize(async (object: ObjectMetadata) => {
+  if (!object.name.startsWith(`tanam/${process.env.GCLOUD_PROJECT}/upload/`)) {
+    console.log(`Not an upload task: ${object.name} (${object.contentType})`);
+    return null;
   }
-}
 
-export const convertAndResizeImage = functions.storage.object().onFinalize(async (object: ObjectMetadata) => {
-  const image = new ImageData(object);
+  if (!object.contentType.startsWith('image/')) {
+    console.log(`File is not an image: ${object.name} (${object.contentType})`);
+    return null;
+  }
 
-  if (!image.contentType.startsWith('image/')) return null;
-  if (image.filePath.endsWith('.webp')) return null;
+  console.log(`Processing file: ${object.name}`);
+  const bucket = admin.storage().bucket(object.bucket);
+  const [originalFileBuffer] = await bucket.file(object.name).download();
 
-  const bucket = admin.storage().bucket(image.bucketName);
-
-  const [fileBuffer] = await bucket.file(image.filePath).download();
-
-  const resiveAndConvertImage = size =>
-    sharp(fileBuffer)
+  const resiveAndConvertImage = (size: number) =>
+    sharp(originalFileBuffer)
       .resize(size, size, {
         withoutEnlargement: true,
         fit: sharp.fit.cover,
@@ -58,16 +29,41 @@ export const convertAndResizeImage = functions.storage.object().onFinalize(async
       .toFormat(sharp.format.webp)
       .toBuffer();
 
-  console.log(JSON.stringify(image));
+  const originalSuffix = object.name.lastIndexOf('.') > 0 ? object.name.substr(object.name.lastIndexOf('.')) : '';
+  const firestoreRef = admin.firestore()
+    .collection('tanam').doc(process.env.GCLOUD_PROJECT)
+    .collection('files').doc();
+
+  const newFileName = firestoreRef.id;
+  const newFilePath = `tanam/${process.env.GCLOUD_PROJECT}/images/`;
+  const metadata = {
+    contentType: 'image/webp',
+    metadata: object.metadata,
+  };
+
+  const tanamFile: TanamFile = {
+    id: firestoreRef.id,
+    title: object.name.substr(object.name.lastIndexOf('/') + 1),
+    bucket: object.bucket,
+    filePath: [newFilePath, newFileName, originalSuffix].join(''),
+    updated: admin.firestore.FieldValue.serverTimestamp(),
+    created: admin.firestore.FieldValue.serverTimestamp(),
+    bytes: originalFileBuffer.byteLength,
+    variants: {
+      small: `${newFilePath}${newFileName}_small.webp`,
+      medium: `${newFilePath}${newFileName}_medium.webp`,
+      large: `${newFilePath}${newFileName}_large.webp`,
+    },
+    mimeType: object.contentType,
+    fileType: 'image',
+  };
+
   return await Promise.all([
-    bucket
-      .file(image.small)
-      .save(await resiveAndConvertImage(300), image.metadata),
-    bucket
-      .file(image.medium)
-      .save(await resiveAndConvertImage(800), image.metadata),
-    bucket
-      .file(image.large)
-      .save(await resiveAndConvertImage(1600), image.metadata),
+    firestoreRef.set(tanamFile),
+    bucket.file(object.name).delete(),
+    bucket.file(tanamFile.filePath).save(originalFileBuffer, object.metadata),
+    bucket.file(tanamFile.variants.small).save(await resiveAndConvertImage(300), metadata),
+    bucket.file(tanamFile.variants.medium).save(await resiveAndConvertImage(800), metadata),
+    bucket.file(tanamFile.variants.large).save(await resiveAndConvertImage(1600), metadata),
   ]);
-})
+});

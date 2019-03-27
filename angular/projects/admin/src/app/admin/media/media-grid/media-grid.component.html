@@ -16,8 +16,9 @@
       </button>
     </mat-card-content>
     <div mat-card-image
+         *ngIf="(getDownloadUrl(file) | async) as imageUrl"
          class="img-wrapper">
-      <img [src]="file.url"
+      <img [src]="imageUrl"
            [alt]="file.title">
     </div>
   </mat-card>

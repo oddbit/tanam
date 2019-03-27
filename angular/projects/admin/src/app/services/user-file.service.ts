@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
-import * as firebase from 'firebase/app';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
-import { FileType, MIME_TYPE_ENDING_MAP, TanamFile } from 'tanam-models';
+import { FileType, TanamFile } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
+import { distinct } from 'rxjs/operators';
 
 
 @Injectable({
@@ -12,6 +12,7 @@ import { AppConfigService } from './app-config.service';
 })
 export class UserFileService {
   readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
+  readonly siteStorage = this.fireStorage.ref(`/tanam/${this.appConfig.siteId}`);
 
   constructor(
     private readonly firestore: AngularFirestore,
@@ -25,49 +26,13 @@ export class UserFileService {
       .valueChanges();
   }
 
-  upload(file: File): Observable<number> {
-    const fileId = this.firestore.createId();
-    const fileName = file.name;
-    const fileType = this.fileTypeFrom(file);
-    const fileEnding = MIME_TYPE_ENDING_MAP[file.type] || file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase();
-    const storageRef = this.fireStorage.ref(`/tanam/${fileType}/${fileId}.${fileEnding}`);
-    const uploadTask: AngularFireUploadTask = storageRef.put(file);
-
-    uploadTask.then(async (snapshot) => {
-      if (snapshot.state !== 'success') {
-        console.error(`[FileService:upload] ${snapshot.state}`);
-        return;
-      }
-
-      const downloadURL = await snapshot.ref.getDownloadURL();
-      const tanamFile: TanamFile = {
-        id: fileId,
-        title: fileName,
-        bucket: snapshot.metadata.bucket,
-        filePath: snapshot.metadata.fullPath,
-        updated: firebase.firestore.FieldValue.serverTimestamp(),
-        created: firebase.firestore.FieldValue.serverTimestamp(),
-        bytes: snapshot.totalBytes,
-        variants: {},
-        mimeType: snapshot.metadata.contentType,
-        fileType: fileType,
-        url: downloadURL,
-      };
-
-      this.siteCollection
-        .collection<TanamFile>('files').doc(fileId)
-        .set(tanamFile);
-    });
-
-    return uploadTask.percentageChanges();
+  getDownloadUrl(file: TanamFile, variant?: 'large' | 'medium' | 'small'): Observable<string> {
+    const filePath = !!variant ? file.variants[variant] : file.filePath;
+    return this.fireStorage.ref(filePath).getDownloadURL();
   }
 
-  private fileTypeFrom(file: File): FileType {
-    switch (file.type.split('/')[0]) {
-      case 'image':
-        return 'image';
-      default:
-        return 'document';
-    }
+  upload(file: File): Observable<number> {
+    const storageRef = this.siteStorage.child(`upload/${file.name}`);
+    return storageRef.put(file).percentageChanges();
   }
 }
