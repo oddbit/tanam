@@ -6,8 +6,11 @@
                    (click)="selectFile(file)"
                    [ngClass]="{focus: file.id === selectedFile.id}"
                    [matTooltip]="file.title">
-      <img [src]="file.url"
-           [alt]="file.title" />
+
+      <div *ngIf="(getDownloadUrl(file) | async) as imageUrl">
+        <img [src]="imageUrl"
+             [alt]="file.title" />
+      </div>
     </mat-grid-tile>
   </mat-grid-list>
 </div>
