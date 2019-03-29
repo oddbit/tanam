@@ -31,7 +31,7 @@ export class MediaGridComponent {
   getDownloadUrl(file: TanamFile): Observable<string> {
     if (!this._downloadUrls[file.id]) {
       this._downloadUrls[file.id] = this.fileService.getDownloadUrl(file, 'small')
-        .pipe(tap(url => console.log(`[getDownloadUrl] ${JSON.stringify({ url })}`)));
+        .pipe(tap(url => console.log(`[MediaGridComponent:getDownloadUrl] ${JSON.stringify({ url })}`)));
     }
 
     return this._downloadUrls[file.id];
