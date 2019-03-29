@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { languageOptions } from '../settings.languages';
+import { UserService } from '../../../services/user.service';
 
 export interface LanguageOptions {
   id: string; // en, id, se...
@@ -25,8 +26,10 @@ export class SettingsDialogManageLanguagesComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<SettingsDialogManageLanguagesComponent >,
     private readonly formBuilder: FormBuilder,
-
-  ) { }
+    userService: UserService,
+  ) {
+    userService.overlayTheme();
+  }
 
 
   ngOnInit() {
