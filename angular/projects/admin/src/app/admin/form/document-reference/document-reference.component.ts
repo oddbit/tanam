@@ -18,7 +18,7 @@ import { DocumentService } from '../../../services/document.service';
     },
   ],
 })
-export class DocumentReferenceComponent implements MatFormFieldControl<Document>, ControlValueAccessor, OnInit, OnDestroy {
+export class DocumentReferenceComponent implements MatFormFieldControl<string>, ControlValueAccessor, OnInit, OnDestroy {
   private static _nextId = 0;
 
   @HostBinding('attr.aria-describedby') describedBy = '';
@@ -36,10 +36,10 @@ export class DocumentReferenceComponent implements MatFormFieldControl<Document>
 
   private _required = false;
   private _disabled = false;
-  private _value: Document;
+  private _value: string;
   private _focused = false;
   private _onTouchedCallback: () => void;
-  private _onChangeCallback: (value: Document) => void;
+  private _onChangeCallback: (value: string) => void;
 
   constructor(
     @Optional() @Self() public ngControl: NgControl,
@@ -65,11 +65,11 @@ export class DocumentReferenceComponent implements MatFormFieldControl<Document>
   }
 
   @Input()
-  get value(): Document {
-    return !this._value ? null : this._value;
+  get value(): string {
+    return this._value || null;
   }
-  set value(document: Document) {
-    this._value = !!document ? { ...document } : null;
+  set value(value: string) {
+    this._value = !!value && value.trim().length > 0 ? value : null;
     this.stateChanges.next();
   }
 
@@ -121,11 +121,11 @@ export class DocumentReferenceComponent implements MatFormFieldControl<Document>
     this._onTouchedCallback();
   }
 
-  writeValue(document: Document): void {
+  writeValue(document: string): void {
     this.value = document;
   }
 
-  registerOnChange(callback: (val: Document) => void): void {
+  registerOnChange(callback: (val: string) => void): void {
     this._onChangeCallback = callback;
   }
 
@@ -135,10 +135,6 @@ export class DocumentReferenceComponent implements MatFormFieldControl<Document>
 
   setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
-  }
-
-  compareFn(c1: any, c2: any): boolean {
-    return !!c1 && !!c2 ? c1.id === c2.id : c1 === c2;
   }
 
   onChange(changeEvent: MatSelectChange) {

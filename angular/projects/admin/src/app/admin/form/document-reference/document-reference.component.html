@@ -1,9 +1,8 @@
 <mat-select [(ngModel)]="value"
-            (selectionChange)="onChange($event)"
-            [compareWith]="compareFn">
+            (selectionChange)="onChange($event)">
   <mat-option [value]="null">--</mat-option>
   <mat-option *ngFor="let documentOption of documentOptions$ | async"
-              [value]="documentOption">
+              [value]="documentOption.id">
     {{documentOption.title}}
   </mat-option>
 </mat-select>
