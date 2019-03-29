@@ -8,6 +8,7 @@ import { FileType, TanamFile } from 'tanam-models';
 import { UserFileService } from '../../../services/user-file.service';
 import { FilePickerDialogComponent } from './file-picker-dialog/file-picker-dialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'tanam-file-picker',
@@ -44,6 +45,7 @@ export class FilePickerComponent implements MatFormFieldControl<string>, Control
   private _placeholder: string;
   private _onTouchedCallback: () => void;
   private _onChangeCallback: (value: string) => void;
+  private readonly _downloadUrls = {};
 
   constructor(
     @Optional() @Self() public ngControl: NgControl,
@@ -130,6 +132,15 @@ export class FilePickerComponent implements MatFormFieldControl<string>, Control
 
   setDisabledState(isDisabled: boolean): void {
     this._disabled = isDisabled;
+  }
+
+  getDownloadUrl(file: TanamFile): Observable<string> {
+    if (!this._downloadUrls[file.id]) {
+      this._downloadUrls[file.id] = this.fileService.getDownloadUrl(file, 'small')
+        .pipe(tap(url => console.log(`[FilePickerComponent:getDownloadUrl] ${JSON.stringify({ url })}`)));
+    }
+
+    return this._downloadUrls[file.id];
   }
 
   removeAttachment() {

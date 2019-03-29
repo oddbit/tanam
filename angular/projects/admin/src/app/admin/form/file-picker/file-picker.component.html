@@ -24,9 +24,10 @@
       </button>
     </mat-card-content>
     <div mat-card-file
+         *ngIf="(getDownloadUrl(file) | async) as imageUrl"
          class="img-wrapper">
-      <img [src]="file.url"
-           [alt]="file.title">
+      <img [src]="imageUrl"
+           [alt]="file.title"/>
     </div>
   </mat-card>
   <ng-template #newAttachment>
