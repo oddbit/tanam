@@ -20,10 +20,6 @@ export class UserFileService {
     private readonly appConfig: AppConfigService,
   ) { }
 
-  getDownloadUrl(storagePath: string) {
-    return this.fireStorage.ref(storagePath).getDownloadURL();
-  }
-
   getFile(id: string): Observable<TanamFile> {
     return this.siteCollection
       .collection('files').doc<TanamFile>(id)
