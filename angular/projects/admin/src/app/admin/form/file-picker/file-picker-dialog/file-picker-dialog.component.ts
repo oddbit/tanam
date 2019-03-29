@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { UserFileService } from '../../../../services/user-file.service';
-import { TanamFile } from '../../../../../../../../../models';
+import { MatDialogRef } from '@angular/material';
 import { Observable } from 'rxjs';
+import { TanamFile } from 'tanam-models';
+import { UserFileService } from '../../../../services/user-file.service';
 
 @Component({
   selector: 'tanam-file-picker-dialog',
