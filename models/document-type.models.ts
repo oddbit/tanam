@@ -13,12 +13,14 @@ export type DocumentFieldFormElement = 'input-text'
 
 export type DocumentFieldValidator = 'required';
 
+export type DocumentReferenceType = 'file' | 'document';
+
 export interface DocumentField {
     key: string;
     title: string;
     type: DocumentFieldFormElement;
     isTitle?: boolean;
-    documentType?: string; // only applies to 'document-reference'
+    referenceType?: DocumentReferenceType;
     defaultValue?: any;
     validators: DocumentFieldValidator[];
 }

@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>Choose File</h1>
+<div mat-dialog-content>
+  <mat-grid-list cols="3"
+                 rowHeight="200px">
+    <mat-grid-tile *ngFor="let file of files$ | async"
+                   (click)="selectFile(file)"
+                   [ngClass]="{focus: file.id === selectedFile.id}"
+                   [matTooltip]="file.title">
+
+      <div *ngIf="(getDownloadUrl(file) | async) as imageUrl">
+        <img [src]="imageUrl"
+             [alt]="file.title" />
+      </div>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button
+          color="primary"
+          (click)="chooseFile()"
+          [disabled]="!selectedFile">Choose</button>
+  <button mat-raised-button
+          (click)="closeDialog()">Cancel</button>
+</div>

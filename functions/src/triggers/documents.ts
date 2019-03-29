@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { Document, CacheTask, DocumentType, SiteInformation } from '../../../models';
+import { CacheTask, Document, DocumentField, DocumentType, SiteInformation } from '../../../models';
 
 export const buildEntryCache = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite(async (change) => {
     const entryBefore = change.before.data() as Document;
@@ -94,18 +94,17 @@ export const deleteRevisions = functions.firestore.document('tanam/{siteId}/docu
     return Promise.all(promises);
 });
 
-export const updateDocumentReferenceFields = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite(async (change) => {
-    if (!change.before) {
-        console.log(`Nothing to do for newly created documents`);
+export const deleteFieldReferences = functions.firestore.document('tanam/{siteId}/{contentType}/{fileId}').onDelete(async (snap, context) => {
+    const contentType = context.params.contentType;
+    if (!['documents', 'files'].some(c => c === contentType)) {
+        console.log(`Deleted a ${contentType} document. Nothing to do for this function.`);
         return null;
     }
 
     const promises = [];
-    const documentBefore = change.before.data() as Document;
-    const documentAfter = change.after.data() as Document;
+    const deletedDoc = snap.data();
 
-    // 1. Check if this document is registered as a field reference
-    console.log(`Looking for document types that has content type "document-reference"`);
+    console.log(`Looking through all document types to find reference fields.`);
     const documentTypeDocs = await admin.firestore()
         .collection('tanam').doc(process.env.GCLOUD_PROJECT)
         .collection('document-types')
@@ -114,29 +113,30 @@ export const updateDocumentReferenceFields = functions.firestore.document('tanam
     for (const documentTypeDoc of documentTypeDocs.docs) {
         const documentType = documentTypeDoc.data() as DocumentType;
         const fieldNames = documentType.fields
-            .filter(field => field.type === 'document-reference' && field.documentType === documentBefore.documentType)
+            .filter((field: DocumentField) => !!field.referenceType)
             .map(field => field.key);
 
-        console.log(`Document type "${documentType.id}" has ${fieldNames.length} document references`);
-
-
+        console.log(`Document type "${documentType.id}" has ${fieldNames.length} file references`);
         for (const fieldName of fieldNames) {
-            console.log(`Searching and replacing all "${documentType.id}" documents with document reference: ${fieldName}`);
+            console.log(`Searching and replacing all "${documentType.id}" documents with reference: ${fieldName}`);
             const referringDocumentsQuery = await admin.firestore()
                 .collection('tanam').doc(process.env.GCLOUD_PROJECT)
                 .collection('documents')
-                .where(`data.${fieldName}.id`, '==', documentBefore.id)
+                .where(`data.${fieldName}`, '==', deletedDoc.id)
                 .get();
 
-            console.log(`Found ${referringDocumentsQuery.docs.length} documents that matched: data.${fieldName}.id == ${documentBefore.id}`);
+            console.log(`Found ${referringDocumentsQuery.docs.length} documents that matched: data.${fieldName} == ${deletedDoc.id}`);
 
             // TODO: batchwrite for better performance and manage > 500 references
             for (const doc of referringDocumentsQuery.docs) {
-                console.log(`Updating document reference "${fieldName}" in document data for id: ${doc.id}`);
-                const referringDocument = doc.data() as Document;
-                console.log(JSON.stringify({ before: referringDocument.data[fieldName], after: documentAfter }));
-                referringDocument.data[fieldName] = documentAfter;
-                promises.push(doc.ref.set(referringDocument));
+                console.log(`Clearing reference "${fieldName}" in document data for id: ${doc.id}`);
+                promises.push(admin.firestore().runTransaction(async (trx) => {
+                    const trxDoc = await trx.get(doc.ref);
+                    return trx.update(doc.ref, {
+                        revision: trxDoc.data().revision + 1,
+                        [`data.${fieldName}`]: null
+                    });
+                }));
             }
         }
     }

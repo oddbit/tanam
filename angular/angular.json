@@ -25,6 +25,11 @@
             "styles": [
               "projects/admin/src/styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/admin/src/scss"
+              ]
+            },
             "scripts": []
           },
           "configurations": {

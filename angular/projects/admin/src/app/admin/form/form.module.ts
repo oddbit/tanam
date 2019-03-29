@@ -10,12 +10,16 @@ import { AppMaterialModule } from '../../app-material.module';
 import { DateTimeComponent } from './date-time/date-time.component';
 import { DocumentReferenceComponent } from './document-reference/document-reference.component';
 import { TextboxRichComponent } from './textbox-rich/textbox-rich.component';
+import { FilePickerComponent } from './file-picker/file-picker.component';
+import { FilePickerDialogComponent } from './file-picker/file-picker-dialog/file-picker-dialog.component';
 
 @NgModule({
   declarations: [
     TextboxRichComponent,
     DateTimeComponent,
     DocumentReferenceComponent,
+    FilePickerComponent,
+    FilePickerDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -32,6 +36,8 @@ import { TextboxRichComponent } from './textbox-rich/textbox-rich.component';
     TextboxRichComponent,
     DateTimeComponent,
     DocumentReferenceComponent,
-  ]
+    FilePickerComponent,
+  ],
+  entryComponents: [FilePickerDialogComponent]
 })
 export class FormModule { }

@@ -105,7 +105,6 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   async saveEntry() {
     this._setStateProcessing(true);
     const formData = this.documentForm.value;
-    console.log(`[DocumentEditComponent:saveEntry] ${JSON.stringify(formData)}`);
 
     const document = await this.document$.pipe(take(1)).toPromise();
     document.title = formData.title;
