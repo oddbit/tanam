@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { MatDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'tanam-document-type-dialog-create',
@@ -18,8 +19,11 @@ export class DocumentTypeDialogCreateComponent {
     private readonly formBuilder: FormBuilder,
     private readonly documentTypeService: DocumentTypeService,
     private dialogRef: MatDialogRef<DocumentTypeDialogCreateComponent>,
-    private router: Router
-  ) { }
+    private router: Router,
+    userService: UserService,
+  ) {
+    userService.overlayTheme();
+  }
 
   createNewType() {
     const title = this.createTypeForm.value.title;
