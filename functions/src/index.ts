@@ -11,7 +11,10 @@ import { renderPage } from './render';
 
 const DIST_FOLDER = join(process.cwd(), 'browser');
 
-admin.initializeApp();
+if (admin.apps.length === 0) {
+    admin.initializeApp();
+}
+
 admin.firestore().settings({ timestampsInSnapshots: true });
 
 export * from './triggers';
