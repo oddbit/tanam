@@ -35,6 +35,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     title: [null, Validators.required],
     url: [null, Validators.required],
     status: [null, Validators.required],
+    published: [null],
     dataForm: this.formBuilder.group({}),
   });
 
@@ -155,7 +156,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   private _onTitleChange(title: string) {
-    if (!this.dataForm.get('published').value) {
+    if (!this.documentForm.get('published').value) {
       // Only auto slugify title if document has't been published before
       this.documentForm.controls['url'].setValue(`${this._rootSlug}/${this._slugify(title)}`);
       this.documentForm.controls['title'].setValue(title);
