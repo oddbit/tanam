@@ -7,6 +7,7 @@ import { DocumentStatus } from 'tanam-models';
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { DocumentService } from '../../../services/document.service';
 import { SiteService } from '../../../services/site.service';
+import { firestore } from 'firebase/app';
 
 interface StatusOption {
   title: string;
@@ -35,6 +36,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     title: [null, Validators.required],
     url: [null, Validators.required],
     status: [null, Validators.required],
+    published: [null],
     dataForm: this.formBuilder.group({}),
   });
 
@@ -70,6 +72,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
         title: document.title,
         url: document.url,
         status: document.status,
+        published: document.published
       });
 
       this._rootSlug = documentType.slug;
@@ -85,9 +88,36 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
         if (field.isTitle) {
           this._titleSubscription = this.dataForm.get(field.key).valueChanges.subscribe(v => this._onTitleChange(v));
         }
+
+        this._onChanges();
       }
     }));
   }
+
+  private _onChanges() {
+    const now = firestore.Timestamp.now();
+    const formData = this.documentForm.value;
+    // this.documentForm.valueChanges.subscribe(data => {
+    //   if (!!data.published) {
+    //     if (data.status === 'published' && data.published.seconds > now.seconds) {
+    //       this.documentForm.controls['url'].setValue(now);
+    //     }
+    //   }
+    // });
+    // this.documentForm.get('status').valueChanges.subscribe(data => {
+    //   console.log(formData);
+    //   if (!!formData.published) {
+    //     if (data === 'published' && formData.published.seconds > now.seconds) {
+    //       this.documentForm.controls['url'].setValue(now);
+    //     }
+    //   }
+    // });
+    // this.documentForm.get('published').dataueChanges.subscribe(data => {
+    //   console.log('published');
+    // });
+  }
+
+
 
   ngOnDestroy() {
     this._subscriptions.push(this._titleSubscription);
@@ -110,6 +140,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     document.title = formData.title;
     document.status = formData.status;
     document.url = formData.url;
+    document.published = formData.published;
     document.data = this._sanitizeData(this.dataForm.value);
 
     await this.documentService.update(document);
