@@ -21,6 +21,7 @@ fse.copySync('../angular/dist/', '../dist/', { overwrite: true });
 fse.moveSync('../dist/admin/index.html', '../dist/browser/admin.html', { overwrite: true });
 copy('../dist/admin/**', '../dist/browser/', () => {
     fse.removeSync('../dist/admin/');
+    fse.removeSync('../dist/browser/assets/tanam.config.json');
 });
 
 console.log('Copying cloud functions dist bundle...');
