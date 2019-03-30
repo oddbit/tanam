@@ -6,8 +6,6 @@ export type DocumentFieldFormElement = 'input-text'
     | 'document-reference'
     | 'date'
     | 'image'
-    | 'map'
-    | 'author'
     | 'date-time'
     | 'slide-toggle';
 
