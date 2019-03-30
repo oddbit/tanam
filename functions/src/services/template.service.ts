@@ -29,6 +29,7 @@ export async function createDefaultTemplates() {
         selector: 'blog',
         templateType: 'dust',
         template: `
+        <!-- {@contextDump /} -->
         <h1>{document.title}</h1>
         <img src="/_/image/{document.data.featuredImage}?s=medium" />
         {@document id=document.data.author document=document}
@@ -46,6 +47,7 @@ export async function createDefaultTemplates() {
         selector: 'event',
         templateType: 'dust',
         template: `
+        <!-- {@contextDump /} -->
         <h1>{document.title}</h1>
         <img src="/_/image/{document.data.featuredImage}" />
         <div class="event-dates">
@@ -67,6 +69,7 @@ export async function createDefaultTemplates() {
         selector: 'location',
         templateType: 'dust',
         template: `
+        <!-- {@contextDump /} -->
         <h2>{document.title}</h2>
         {#document.data}
             <ul>
@@ -90,6 +93,7 @@ export async function createDefaultTemplates() {
         selector: 'author',
         templateType: 'dust',
         template: `
+        <!-- {@contextDump /} -->
         <h1>{document.title}</h1>
         {#document.data}
             <img src="{photoUrl}" />
@@ -111,6 +115,7 @@ export async function createDefaultTemplates() {
         selector: 'page',
         templateType: 'dust',
         template: `
+        <!-- {@contextDump /} -->
         {@select key=document.data.layout}
             {@eq value="landing-page"}Show a landing page layout{/eq}
             {@eq value="right-sidebar"}Include a right sidebar page template{/eq}
