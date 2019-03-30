@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
-import { switchMap, take, filter, tap } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 import { DocumentStatus } from 'tanam-models';
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { DocumentService } from '../../../services/document.service';
@@ -143,7 +143,9 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   private _slugify(text: string) {
-    return text.toLowerCase()
+    return text
+      .toString()
+      .toLowerCase()
       .replace(/\s+/g, '-')
       .replace(/[^\w\-]+/g, '')
       .replace(/\-\-+/g, '-')
