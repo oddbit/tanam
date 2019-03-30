@@ -48,11 +48,12 @@ export async function getDocumentContextById(docId: string) {
 }
 
 export async function getDocumentContextByUrl(url: string) {
-    console.log(`[getDocumentContextByUrl] ${JSON.stringify(url)}`);
+    const searchUrl = url || '/';
+    console.log(`[getDocumentContextByUrl] ${JSON.stringify(searchUrl)}`);
     const querySnap = await siteCollection()
         .collection('documents')
         .where('status', '==', 'published')
-        .where('url', '==', url)
+        .where('url', '==', searchUrl)
         .limit(1)
         .get();
 
