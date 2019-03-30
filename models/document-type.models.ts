@@ -3,26 +3,23 @@ export type DocumentFieldFormElement = 'input-text'
     | 'input-number'
     | 'textbox-plain'
     | 'textbox-rich'
+    | 'image'
     | 'document-reference'
     | 'date'
-    | 'image'
     | 'date-time'
     | 'slide-toggle';
 
 export type DocumentFieldValidator = 'required';
 
-export type DocumentReferenceType = 'file' | 'document';
-
 export interface DocumentField {
     key: string;
     title: string;
-    type: DocumentFieldFormElement;
     isTitle?: boolean;
-    referenceType?: DocumentReferenceType;
+    type: DocumentFieldFormElement;
+    documentType?: string;
     defaultValue?: any;
     validators: DocumentFieldValidator[];
 }
-
 
 export interface DocumentCount {
     published: number;

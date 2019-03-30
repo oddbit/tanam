@@ -57,6 +57,51 @@ export async function createDefaultTemplates() {
         <p>{context.data.content|s}</p>
         `,
     };
+
+    const location: ThemeTemplate = {
+        id: 'location',
+        title: 'Location template',
+        created: admin.firestore.FieldValue.serverTimestamp(),
+        updated: admin.firestore.FieldValue.serverTimestamp(),
+        selector: 'location',
+        templateType: 'dust',
+        template: `
+        <h2>{context.title}</h2>
+        {#context.data}
+            <ul>
+                <li>{address1}</li>
+                <li>{address2}</li>
+                <li>{city}</li>
+                <li>{region}</li>
+                <li>{postCode}</li>
+                <li>{country}</li>
+                <li><a href="{mapsUrl}">View on maps</a></li>
+            </ul>
+        {/context.data}
+        `,
+    };
+
+    const author: ThemeTemplate = {
+        id: 'author',
+        title: 'Author template',
+        created: admin.firestore.FieldValue.serverTimestamp(),
+        updated: admin.firestore.FieldValue.serverTimestamp(),
+        selector: 'author',
+        templateType: 'dust',
+        template: `
+        <h1>{context.title}</h1>
+        {#context.data}
+            <img src="{photoUrl}" />
+            <ul>
+                <li>{name}</li>
+                <li>{email}</li>
+                <li><a href="{website}">Profile website</a></li>
+            </ul>
+        {/context.data}
+        `,
+    };
+
+
     const page: ThemeTemplate = {
         id: 'page',
         title: 'Standard page template',
@@ -73,11 +118,13 @@ export async function createDefaultTemplates() {
         `,
     };
 
-    console.log(`[createDefaultTemplates] ${JSON.stringify({ blog, event, page }, null, 2)}`);
+    console.log(`[createDefaultTemplates] ${JSON.stringify({ blog, event, location, author, page }, null, 2)}`);
 
     return Promise.all([
         templatesCollection.doc(blog.id).set(blog),
         templatesCollection.doc(event.id).set(event),
+        templatesCollection.doc(location.id).set(location),
+        templatesCollection.doc(author.id).set(author),
         templatesCollection.doc(page.id).set(page),
     ]);
 }

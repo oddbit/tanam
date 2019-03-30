@@ -36,7 +36,8 @@ export async function createDefaultDocuments() {
             {
                 title: 'Author',
                 key: 'author',
-                type: 'author',
+                type: 'document-reference',
+                documentType: 'author',
                 validators: [],
             },
             {
@@ -84,7 +85,8 @@ export async function createDefaultDocuments() {
             {
                 title: 'Location',
                 key: 'location',
-                type: 'map',
+                type: 'document-reference',
+                documentType: 'location',
                 validators: [],
             },
             {
@@ -98,6 +100,114 @@ export async function createDefaultDocuments() {
                 key: 'content',
                 type: 'textbox-rich',
                 validators: ['required'],
+            },
+        ],
+    };
+
+    const location: DocumentType = {
+        id: 'location',
+        title: 'Location',
+        description: 'Location data such as venues, addresses or map pointers',
+        icon: 'place',
+        slug: 'location',
+        standalone: false,
+        created: admin.firestore.FieldValue.serverTimestamp(),
+        updated: admin.firestore.FieldValue.serverTimestamp(),
+        numEntries: {
+            published: 0,
+            unpublished: 0,
+        },
+        fields: [
+            {
+                title: 'Title',
+                key: 'title',
+                type: 'input-text',
+                isTitle: true,
+                validators: ['required'],
+            },
+            {
+                title: 'Address field 1',
+                key: 'address1',
+                type: 'input-text',
+                validators: [],
+            },
+            {
+                title: 'Address field 2',
+                key: 'address2',
+                type: 'input-text',
+                validators: [],
+            },
+            {
+                title: 'City',
+                key: 'city',
+                type: 'input-text',
+                validators: [],
+            },
+            {
+                title: 'Postal code',
+                key: 'postCode',
+                type: 'input-text',
+                validators: [],
+            },
+            {
+                title: 'Region (state/province)',
+                key: 'region',
+                type: 'input-text',
+                validators: [],
+            },
+            {
+                title: 'Country',
+                key: 'country',
+                type: 'input-text',
+                validators: [],
+            },
+            {
+                title: 'Maps URL',
+                key: 'mapsUrl',
+                type: 'input-text',
+                validators: [],
+            },
+        ],
+    };
+
+    const author: DocumentType = {
+        id: 'author',
+        title: 'Author',
+        description: 'Author profiles',
+        icon: 'person',
+        slug: 'profile',
+        standalone: false,
+        created: admin.firestore.FieldValue.serverTimestamp(),
+        updated: admin.firestore.FieldValue.serverTimestamp(),
+        numEntries: {
+            published: 0,
+            unpublished: 0,
+        },
+        fields: [
+            {
+                title: 'Name',
+                key: 'name',
+                type: 'input-text',
+                isTitle: true,
+                validators: ['required'],
+            },
+            {
+                title: 'Email',
+                key: 'email',
+                type: 'input-text',
+                validators: [],
+            },
+            {
+                title: 'Profile image URL',
+                key: 'photoUrl',
+                type: 'input-text',
+                validators: [],
+            },
+            {
+                title: 'Profile page URL',
+                key: 'website',
+                type: 'input-text',
+                validators: [],
             },
         ],
     };
@@ -139,11 +249,13 @@ export async function createDefaultDocuments() {
         ],
     };
 
-    console.log(`[createDefaultDocuments] ${JSON.stringify({ blog, event, page }, null, 2)}`);
+    console.log(`[createDefaultDocuments] ${JSON.stringify({ blog, event, location, author, page }, null, 2)}`);
 
     return Promise.all([
         documentsCollection.doc(blog.id).set(blog),
         documentsCollection.doc(event.id).set(event),
+        documentsCollection.doc(location.id).set(location),
+        documentsCollection.doc(author.id).set(author),
         documentsCollection.doc(page.id).set(page),
     ]);
 }
