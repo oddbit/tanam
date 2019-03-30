@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
+import { switchMap, take, filter, tap } from 'rxjs/operators';
 import { DocumentStatus } from 'tanam-models';
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { DocumentService } from '../../../services/document.service';
@@ -38,6 +38,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     dataForm: this.formBuilder.group({}),
   });
 
+  private _titleSubscription: Subscription;
   private readonly _subscriptions: Subscription[] = [];
   private _rootSlug: string;
   metaDataDialog = false;
@@ -61,6 +62,10 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const combinedDocumentData$ = combineLatest(this.documentType$, this.document$);
     this._subscriptions.push(combinedDocumentData$.subscribe(([documentType, document]) => {
+      if (this._titleSubscription && !this._titleSubscription.closed) {
+        this._titleSubscription.unsubscribe();
+      }
+
       this.documentForm.patchValue({
         title: document.title,
         url: document.url,
@@ -76,22 +81,17 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
         this.dataForm.patchValue({
           [field.key]: document.data[field.key],
         });
+
+        if (field.isTitle) {
+          this._titleSubscription = this.dataForm.get(field.key).valueChanges.subscribe(v => this._onTitleChange(v));
+        }
       }
     }));
   }
 
   ngOnDestroy() {
+    this._subscriptions.push(this._titleSubscription);
     this._subscriptions.filter(s => !!s && !s.closed).forEach(s => s.unsubscribe());
-  }
-
-  onTitleChange(title: string, isTitle: boolean) {
-    if (!this.publishedTime && isTitle) {
-      // Only auto slugify title if document has't been published before
-      this.documentForm.controls['url'].setValue(`${this._rootSlug}/${this._slugify(title)}`);
-      this.documentForm.controls['title'].setValue(title);
-    } else if (isTitle) {
-      this.documentForm.controls['title'].setValue(title);
-    }
   }
 
   async deleteEntry() {
@@ -153,5 +153,13 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
 
   private _navigateBack() {
     // this.router.navigate(['../']);
+  }
+
+  private _onTitleChange(title: string) {
+    if (!this.publishedTime) {
+      // Only auto slugify title if document has't been published before
+      this.documentForm.controls['url'].setValue(`${this._rootSlug}/${this._slugify(title)}`);
+      this.documentForm.controls['title'].setValue(title);
+    }
   }
 }

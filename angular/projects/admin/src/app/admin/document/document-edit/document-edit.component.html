@@ -28,7 +28,6 @@
                   <mat-form-field *ngSwitchCase="'input-text'"
                                   class="full-width">
                     <input matInput
-                           (input)="onTitleChange($event.target.value, field.isTitle)"
                            placeholder="{{field.title}}"
                            formControlName="{{field.key}}">
                     <mat-error *ngIf="dataForm.controls[field.key].hasError('required')">
