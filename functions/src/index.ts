@@ -7,7 +7,7 @@ import { join } from 'path';
 import { TanamConfig } from '../../models';
 import * as fileService from './services/file.service';
 import { getDocumentContextByUrl } from './services/document-context.service';
-import { renderDocument } from './render';
+import { renderPage } from './render';
 
 const DIST_FOLDER = join(process.cwd(), 'browser');
 
@@ -139,7 +139,7 @@ app.get('*', async (request, response) => {
         return response.status(404).send(`Not found: ${request.url}`);
     }
 
-    const html = await renderDocument(context);
+    const html = await renderPage(context);
     if (!html) {
         console.error(`[HTTP 500] could not create template for: ${request.url}`);
         return response.status(500).send('Could not create HTML template document');

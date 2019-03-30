@@ -29,12 +29,13 @@ export async function createDefaultTemplates() {
         selector: 'blog',
         templateType: 'dust',
         template: `
-        <h1>{context.title}</h1>
-        <img src="/_/image/{context.data.featuredImage}?s=medium" />
-        {#context.data.author}
-            <p><a href="{profileUrl}">{name}</a></p>
-        {/context.data.author}
-        <p>{context.data.content|s}</p>
+        <h1>{document.title}</h1>
+        <img src="/_/image/{document.data.featuredImage}?s=medium" />
+        {@document id=document.data.author document=document}
+            {> author document=document /}
+        {/document}
+
+        <p>{document.data.content|s}</p>
         `,
     };
     const event: ThemeTemplate = {
@@ -45,16 +46,16 @@ export async function createDefaultTemplates() {
         selector: 'event',
         templateType: 'dust',
         template: `
-        <h1>{context.title}</h1>
-        <img src="/_/image/{context.data.featuredImage}" />
+        <h1>{document.title}</h1>
+        <img src="/_/image/{document.data.featuredImage}" />
         <div class="event-dates">
-            <span>{context.data.timeStart}</span>
-            <span>{context.data.timeEnd}</span>
+            <span>{document.data.timeStart}</span>
+            <span>{document.data.timeEnd}</span>
         </div>
-        {#context.data.location}
+        {#document.data.location}
             <p><a href="{mapUrl}">{name}</a></p>
-        {/context.data.location}
-        <p>{context.data.content|s}</p>
+        {/document.data.location}
+        <p>{document.data.content|s}</p>
         `,
     };
 
@@ -66,8 +67,8 @@ export async function createDefaultTemplates() {
         selector: 'location',
         templateType: 'dust',
         template: `
-        <h2>{context.title}</h2>
-        {#context.data}
+        <h2>{document.title}</h2>
+        {#document.data}
             <ul>
                 <li>{address1}</li>
                 <li>{address2}</li>
@@ -77,7 +78,7 @@ export async function createDefaultTemplates() {
                 <li>{country}</li>
                 <li><a href="{mapsUrl}">View on maps</a></li>
             </ul>
-        {/context.data}
+        {/document.data}
         `,
     };
 
@@ -89,15 +90,15 @@ export async function createDefaultTemplates() {
         selector: 'author',
         templateType: 'dust',
         template: `
-        <h1>{context.title}</h1>
-        {#context.data}
+        <h1>{document.title}</h1>
+        {#document.data}
             <img src="{photoUrl}" />
             <ul>
                 <li>{name}</li>
                 <li>{email}</li>
                 <li><a href="{website}">Profile website</a></li>
             </ul>
-        {/context.data}
+        {/document.data}
         `,
     };
 
@@ -110,7 +111,7 @@ export async function createDefaultTemplates() {
         selector: 'page',
         templateType: 'dust',
         template: `
-        {@select key=context.data.layout}
+        {@select key=document.data.layout}
             {@eq value="landing-page"}Show a landing page layout{/eq}
             {@eq value="right-sidebar"}Include a right sidebar page template{/eq}
             {@none} Display the regular page layout {/none}

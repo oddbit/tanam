@@ -1,3 +1,4 @@
+import { SiteInformation } from './settings.models';
 
 /**
  * Document context is the object that is passed into the template and can be accessed via the `document` attribute.
@@ -42,8 +43,6 @@ export interface DocumentContext {
   data: { [key: string]: any };
   title: string;
   url?: string;
-  hostUrl: string;
-  hostDomain: string;
   permalink: string;
   revision: number;
   status: string;
@@ -51,4 +50,21 @@ export interface DocumentContext {
   created: Date;
   updated: Date;
   published?: Date;
+}
+
+
+export interface SiteContext {
+  url: string;
+  domain: string;
+  title: string;
+  theme: string;
+}
+
+
+/**
+ * This is the root object for any template.
+ */
+export interface PageContext {
+  document: DocumentContext;
+  site: SiteContext;
 }
