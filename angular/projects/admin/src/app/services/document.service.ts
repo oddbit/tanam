@@ -61,8 +61,9 @@ export class DocumentService {
       trx.update(docRef, {
         ...document,
         revision: trxDocument.revision + 1,
+        published: document.status === 'published' && !trxDocument.published ? firebase.firestore.FieldValue.serverTimestamp() : null,
         updated: firebase.firestore.FieldValue.serverTimestamp(),
-      });
+      } as Document);
     });
 
   }
