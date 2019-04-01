@@ -40,8 +40,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     { type: 'textbox-rich', title: 'Rich text editor' },
     { type: 'date', title: 'Date picker' },
     { type: 'date-time', title: 'Date and time picker' },
-    { type: 'map', title: 'Google Maps Location' },
-    { type: 'author', title: 'Content Author' },
+    { type: 'document-reference', title: 'Document reference' },
     { type: 'image', title: 'Image' },
     { type: 'slide-toggle', title: 'Slide toggle value for yes/no' },
   ];

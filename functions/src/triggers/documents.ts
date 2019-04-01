@@ -113,7 +113,7 @@ export const deleteFieldReferences = functions.firestore.document('tanam/{siteId
     for (const documentTypeDoc of documentTypeDocs.docs) {
         const documentType = documentTypeDoc.data() as DocumentType;
         const fieldNames = documentType.fields
-            .filter((field: DocumentField) => !!field.referenceType)
+            .filter((field: DocumentField) => field.type === 'image' || field.type === 'document-reference')
             .map(field => field.key);
 
         console.log(`Document type "${documentType.id}" has ${fieldNames.length} file references`);

@@ -14,6 +14,7 @@ export const createUser = functions.auth.user().onCreate(async (firebaseUser) =>
         roles: firebaseUser.email === process.env.TANAM_OWNER ? ['owner'] : [],
     };
 
+    console.log(`Creating account: ${user}`);
     return Promise.all([
         admin.firestore()
             .collection('tanam').doc(process.env.GCLOUD_PROJECT)

@@ -44,10 +44,6 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   private readonly _subscriptions: Subscription[] = [];
   private _rootSlug: string;
   metaDataDialog = false;
-  publishedTime: Date;
-  updatedTime: Date;
-  createdTime: Date;
-
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -72,7 +68,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
         title: document.title,
         url: document.url,
         status: document.status,
-        published: document.published
+        published: document.published,
       });
 
       this._rootSlug = documentType.slug;
@@ -181,7 +177,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   private _onTitleChange(title: string) {
-    if (!this.publishedTime) {
+    if (!this.documentForm.get('published').value) {
       // Only auto slugify title if document has't been published before
       this.documentForm.controls['url'].setValue(`${this._rootSlug}/${this._slugify(title)}`);
       this.documentForm.controls['title'].setValue(title);

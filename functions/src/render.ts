@@ -1,7 +1,6 @@
 import * as dust from 'dustjs-helpers';
-import { DocumentContext, Theme } from '../../models';
+import { PageContext, Theme } from '../../models';
 import * as documentContextService from './services/document-context.service';
-import { getSiteInfo } from './services/site-info.service';
 import * as templateService from './services/template.service';
 import { getTheme } from './services/theme.service';
 
@@ -10,7 +9,9 @@ import { getTheme } from './services/theme.service';
 // Implements Tanam helper extensions for the template engine
 //
 dust.helpers.document = (chunk, context, bodies, params) => {
-    if (!params.contextId) {
+    console.log(`[dust.helpers.document] Getting document id: ${JSON.stringify(params.id)}`);
+    if (!params.document) {
+        console.error(`[dust.helpers.document] Missing reference parameter "document"`);
         throw new Error(`Dust helper must declare referencing context ID.`);
     }
 
@@ -18,7 +19,14 @@ dust.helpers.document = (chunk, context, bodies, params) => {
 }
 
 dust.helpers.documents = (chunk, context, bodies, params) => {
-    if (!params.contextId) {
+    console.log(`[dust.helpers.documents] Getting documents: ${JSON.stringify({
+        limit: params.limit,
+        documentType: params.documentType,
+        orderBy: params.orderBy,
+        sortOrder: params.sortOrder
+    })}`);
+    if (!params.document) {
+        console.error(`[dust.helpers.document] Missing reference parameter "document"`);
         throw new Error(`Dust helper must declare referencing context ID.`);
     }
 
@@ -31,7 +39,7 @@ dust.helpers.documents = (chunk, context, bodies, params) => {
     });
 }
 
-export async function renderTemplate(context: DocumentContext) {
+export async function compileTemplate(context: PageContext) {
     const templates = await templateService.getTemplates();
     console.log(`[renderTemplate] Theme has ${templates.length} templates.`);
 
@@ -41,20 +49,19 @@ export async function renderTemplate(context: DocumentContext) {
         dust.register(template.id, dust.loadSource(source));
     }
 
-    const currentThemeTemplate = context.documentType;
-    const pageContext = {
-        context,
-    };
+    const currentThemeTemplate = context.document.documentType;
 
+    console.log(`[renderTemplate] ${JSON.stringify({ currentThemeTemplate, context })}`);
     return new Promise<string>((resolve, reject) => {
-        dust.render(currentThemeTemplate, pageContext, (err: any, out: string) => {
+        dust.render(currentThemeTemplate, context, (err: any, out: string) => {
             if (err) {
-                console.log(`[renderDocument] Error rendering: ${JSON.stringify(err)}`);
+                console.log(`[renderDocument] Error rendering: ${JSON.stringify({ err, out })}`);
                 reject(JSON.stringify(err));
-            } else {
-                console.log(`[renderDocument] Finished rendering`);
-                resolve(out);
+                return;
             }
+
+            console.log(`[renderDocument] Finished rendering`);
+            resolve(out);
         });
     });
 }
@@ -73,12 +80,11 @@ function renderThemeScripts(theme: Theme): string[] {
     );
 }
 
-export async function renderDocument(context: DocumentContext) {
-    const siteInfo = await getSiteInfo();
+export async function renderPage(context: PageContext) {
     const theme = await getTheme();
-    const template = await renderTemplate(context);
+    const template = await compileTemplate(context);
     if (!template) {
-        console.error(`No template rendered for document ${context.id}`);
+        console.error(`No template rendered for document ${context.document.id}`);
         return null;
     }
 
@@ -86,10 +92,10 @@ export async function renderDocument(context: DocumentContext) {
         <html lang="en">
         <head>
             <meta charset="utf-8">
-            <title>${context.title} | ${siteInfo.title}</title>
+            <title>${context.document.title} | ${context.site.title}</title>
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <link rel="icon" type="image/x-icon" href="/favicon.ico">
-            <link rel="canonical" href="https://${context.permalink}">
+            <link rel="canonical" href="https://${context.document.permalink}">
             ${renderThemeStyles(theme).join('\n')}
         </head>
 

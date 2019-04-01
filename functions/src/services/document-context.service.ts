@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import { SiteInformation, Document, DocumentContext } from '../../../models';
+import { Document, DocumentContext, PageContext, SiteContext, SiteInformation } from '../../../models';
 
 export interface DocumentQueryOptions {
     limit?: number;
@@ -17,7 +17,6 @@ export async function queryDocumentContext(documentTypeId: string, queryOpts: Do
     const sortOrder = queryOpts.orderBy && queryOpts.orderBy.sortOrder || 'desc';
     const limit = queryOpts.limit || 20;
 
-    const siteInfo = (await siteCollection().get()).data() as SiteInformation;
     const querySnap = await siteCollection()
         .collection('documents')
         .where('status', '==', 'published')
@@ -26,7 +25,7 @@ export async function queryDocumentContext(documentTypeId: string, queryOpts: Do
         .limit(limit)
         .get();
 
-    return querySnap.docs.map(doc => _toContext(siteInfo, doc.data() as Document))
+    return querySnap.docs.map(doc => _toContext(doc.data() as Document))
 }
 
 export async function getDocumentContextById(docId: string) {
@@ -43,16 +42,16 @@ export async function getDocumentContextById(docId: string) {
         return null;
     }
 
-    const siteInfo = (await siteCollection().get()).data() as SiteInformation;
-    return _toContext(siteInfo, querySnap.docs[0].data() as Document);
+    return _toContext(querySnap.docs[0].data() as Document);
 }
 
-export async function getDocumentContextByUrl(url: string) {
-    console.log(`[getDocumentContextByUrl] ${JSON.stringify(url)}`);
+export async function getDocumentContextByUrl(url: string): Promise<PageContext> {
+    const searchUrl = url || '/';
+    console.log(`[getDocumentContextByUrl] ${JSON.stringify(searchUrl)}`);
     const querySnap = await siteCollection()
         .collection('documents')
         .where('status', '==', 'published')
-        .where('url', '==', url)
+        .where('url', '==', searchUrl)
         .limit(1)
         .get();
 
@@ -62,24 +61,28 @@ export async function getDocumentContextByUrl(url: string) {
         return null;
     }
 
-    const siteInfo = (await siteCollection().get()).data() as SiteInformation;
-    return _toContext(siteInfo, querySnap.docs[0].data() as Document);
+    return _toContext(querySnap.docs[0].data() as Document);
 }
 
-function _toContext(siteInfo: SiteInformation, document: Document) {
+async function _toContext(document: Document) {
     if (!document) {
         return null;
     }
+    const siteInfo = (await siteCollection().get()).data() as SiteInformation;
+    const siteContext: SiteContext = {
+        domain: siteInfo.primaryDomain,
+        url: `https://${siteInfo.primaryDomain}`,
+        theme: siteInfo.theme,
+        title: siteInfo.title,
+    };
 
-    const context = {
+    const documentContext: DocumentContext = {
         id: document.id,
         documentType: document.documentType,
-        data: document.data,
+        data: _normalizeData(document.data),
         title: document.title,
-        url: null,
-        hostDomain: siteInfo.primaryDomain,
-        hostUrl: `https://${siteInfo.primaryDomain}`,
-        permalink: null,
+        url: document.standalone ? `/${document.url}` : null,
+        permalink: document.standalone ? `${siteContext.url}/${document.url}` : null,
         revision: document.revision,
         status: document.status,
         tags: document.tags,
@@ -90,10 +93,20 @@ function _toContext(siteInfo: SiteInformation, document: Document) {
             : null,
     } as DocumentContext;
 
-    if (document.standalone) {
-        context.url = `/${document.url}`;
-        context.permalink = `${context.hostUrl}${context.url}`;
+    return {
+        document: documentContext,
+        site: siteContext,
+    } as PageContext;
+}
+
+function _normalizeData(data: any) {
+    for (const key in data) {
+        const val = data[key];
+        if (val && val.toDate) {
+            // Applies to Firestore timestamps
+            data[key] = val.toDate();
+        }
     }
 
-    return context;
+    return data;
 }

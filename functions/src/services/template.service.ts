@@ -29,12 +29,14 @@ export async function createDefaultTemplates() {
         selector: 'blog',
         templateType: 'dust',
         template: `
-        <h1>{context.title}</h1>
-        <img src="/_/image/{context.data.featuredImage}?s=medium" />
-        {#context.data.author}
-            <p><a href="{profileUrl}">{name}</a></p>
-        {/context.data.author}
-        <p>{context.data.content|s}</p>
+        <!-- {@contextDump /} -->
+        <h1>{document.title}</h1>
+        <img src="/_/image/{document.data.featuredImage}?s=medium" />
+        {@document id=document.data.author document=document}
+            {> author document=document /}
+        {/document}
+
+        <p>{document.data.content|s}</p>
         `,
     };
     const event: ThemeTemplate = {
@@ -45,18 +47,66 @@ export async function createDefaultTemplates() {
         selector: 'event',
         templateType: 'dust',
         template: `
-        <h1>{context.title}</h1>
-        <img src="/_/image/{context.data.featuredImage}" />
+        <!-- {@contextDump /} -->
+        <h1>{document.title}</h1>
+        <img src="/_/image/{document.data.featuredImage}" />
         <div class="event-dates">
-            <span>{context.data.timeStart}</span>
-            <span>{context.data.timeEnd}</span>
+            <span>{document.data.timeStart}</span>
+            <span>{document.data.timeEnd}</span>
         </div>
-        {#context.data.location}
+        {#document.data.location}
             <p><a href="{mapUrl}">{name}</a></p>
-        {/context.data.location}
-        <p>{context.data.content|s}</p>
+        {/document.data.location}
+        <p>{document.data.content|s}</p>
         `,
     };
+
+    const location: ThemeTemplate = {
+        id: 'location',
+        title: 'Location template',
+        created: admin.firestore.FieldValue.serverTimestamp(),
+        updated: admin.firestore.FieldValue.serverTimestamp(),
+        selector: 'location',
+        templateType: 'dust',
+        template: `
+        <!-- {@contextDump /} -->
+        <h2>{document.title}</h2>
+        {#document.data}
+            <ul>
+                <li>{address1}</li>
+                <li>{address2}</li>
+                <li>{city}</li>
+                <li>{region}</li>
+                <li>{postCode}</li>
+                <li>{country}</li>
+                <li><a href="{mapsUrl}">View on maps</a></li>
+            </ul>
+        {/document.data}
+        `,
+    };
+
+    const author: ThemeTemplate = {
+        id: 'author',
+        title: 'Author template',
+        created: admin.firestore.FieldValue.serverTimestamp(),
+        updated: admin.firestore.FieldValue.serverTimestamp(),
+        selector: 'author',
+        templateType: 'dust',
+        template: `
+        <!-- {@contextDump /} -->
+        <h1>{document.title}</h1>
+        {#document.data}
+            <img src="{photoUrl}" />
+            <ul>
+                <li>{name}</li>
+                <li>{email}</li>
+                <li><a href="{website}">Profile website</a></li>
+            </ul>
+        {/document.data}
+        `,
+    };
+
+
     const page: ThemeTemplate = {
         id: 'page',
         title: 'Standard page template',
@@ -65,7 +115,8 @@ export async function createDefaultTemplates() {
         selector: 'page',
         templateType: 'dust',
         template: `
-        {@select key=context.data.layout}
+        <!-- {@contextDump /} -->
+        {@select key=document.data.layout}
             {@eq value="landing-page"}Show a landing page layout{/eq}
             {@eq value="right-sidebar"}Include a right sidebar page template{/eq}
             {@none} Display the regular page layout {/none}
@@ -73,11 +124,13 @@ export async function createDefaultTemplates() {
         `,
     };
 
-    console.log(`[createDefaultTemplates] ${JSON.stringify({ blog, event, page }, null, 2)}`);
+    console.log(`[createDefaultTemplates] ${JSON.stringify({ blog, event, location, author, page }, null, 2)}`);
 
     return Promise.all([
         templatesCollection.doc(blog.id).set(blog),
         templatesCollection.doc(event.id).set(event),
+        templatesCollection.doc(location.id).set(location),
+        templatesCollection.doc(author.id).set(author),
         templatesCollection.doc(page.id).set(page),
     ]);
 }
