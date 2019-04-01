@@ -125,12 +125,11 @@
                             value="{{statusOption.value}}">{{statusOption.title}}</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field class="full-width">
-              <input matInput
-                     placeholder="Publish Date"
-                     value="{{ document.published?.toDate() | date:'yyyy-MM-dd HH:mm' }}"
-                     disabled>
-            </mat-form-field>
+            <tanam-date-time matInput
+                             type="date-time"
+                             formControlName="published"
+                             placeholder="Publish Date">
+            </tanam-date-time>
             <mat-form-field class="full-width">
               <input matInput
                      placeholder="Revision"
