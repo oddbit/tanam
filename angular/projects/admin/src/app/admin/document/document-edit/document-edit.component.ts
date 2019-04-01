@@ -96,25 +96,17 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
 
   private _onChanges() {
     const now = firestore.Timestamp.now();
-    const formData = this.documentForm.value;
-    // this.documentForm.valueChanges.subscribe(data => {
-    //   if (!!data.published) {
-    //     if (data.status === 'published' && data.published.seconds > now.seconds) {
-    //       this.documentForm.controls['url'].setValue(now);
-    //     }
-    //   }
-    // });
-    // this.documentForm.get('status').valueChanges.subscribe(data => {
-    //   console.log(formData);
-    //   if (!!formData.published) {
-    //     if (data === 'published' && formData.published.seconds > now.seconds) {
-    //       this.documentForm.controls['url'].setValue(now);
-    //     }
-    //   }
-    // });
-    // this.documentForm.get('published').dataueChanges.subscribe(data => {
-    //   console.log('published');
-    // });
+    this.documentForm.valueChanges.subscribe(data => {
+      if (!!data.published) {
+        if (data.status === 'published' && data.published.seconds > now.seconds) {
+          this.documentForm.controls['published'].setValue(null);
+          this.documentForm.controls['status'].setValue('unpublished');
+        } else if (data.status === 'unpublished' && data.published.seconds <= now.seconds) {
+          this.documentForm.controls['published'].setValue(null);
+          this.documentForm.controls['status'].setValue('published');
+        }
+      }
+    });
   }
 
 
