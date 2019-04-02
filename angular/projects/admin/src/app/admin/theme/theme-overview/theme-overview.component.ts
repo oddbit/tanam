@@ -22,9 +22,9 @@ export class ThemeOverviewComponent implements OnInit {
   ngOnInit() {
   }
 
-  createNewType() {
-    this.themeService.create().then(id => {
-      this.router.navigateByUrl(`/_/admin/theme/${id}`);
-    });
+  createTheme() {
+    const themeId = this.themeService.getNewId();
+    this.themeService.create(themeId);
+    this.router.navigateByUrl(`/_/admin/theme/${themeId}/edit`);
   }
 }
