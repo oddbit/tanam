@@ -29,6 +29,8 @@ const CACHE_CONFIG = {
     max_age: 60 * 10
 };
 
+let userTanamConfig = {};
+
 /**
  * Get a cache header string that can be set in a HTTP response header.
  */
@@ -46,11 +48,7 @@ export function getCacheHeader(): string {
 export function initializeApp(tanamConfig: TanamConfig) {
     const configUrl = '/assets/tanam.config.json';
     console.log(`[initializeApp] ${JSON.stringify({ configUrl, tanamConfig })}`)
-    app.get(configUrl, (req: express.Request, res: express.Response) => {
-        console.log(`[GET] ${configUrl} => ${JSON.stringify(tanamConfig, null, 2)}`);
-        res.set('Cache-Control', getCacheHeader());
-        res.json(tanamConfig);
-    });
+    userTanamConfig = tanamConfig;
 }
 
 async function _getDistFolder() {
@@ -94,9 +92,18 @@ app.get(/^\/?main|polyfills|runtime|styles|vendor\.[\w\d]{20}\.js|css\/?$/i, asy
 
 // Handle Angular app's assets
 app.get(/^\/?assets\/(.*)\/?$/i, async (request, response) => {
+    console.log(`[express.assets] ${request.url}`);
+
+    response.setHeader('Cache-Control', `public, max-age=600, s-maxage=36, stale-while-revalidate=120`);
+
+    if (request.url.match(/^\/?assets\/tanam\.config\.json$/i)) {
+        console.log(`[express.assets] ${JSON.stringify({ userTanamConfig })}`);
+        response.json(userTanamConfig);
+        return null;
+    }
+
     const requestUrl = request.url.split('/');
     const distFolder = await _getDistFolder();
-    response.setHeader('Cache-Control', `public, max-age=600, s-maxage=3600, stale-while-revalidate=120`);
     response.sendFile(join(distFolder, ...requestUrl));
     return null;
 });
