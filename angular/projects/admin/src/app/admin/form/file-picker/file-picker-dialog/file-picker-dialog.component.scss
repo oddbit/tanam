@@ -1,0 +1,17 @@
+mat-grid-tile {
+  cursor: pointer;
+}
+
+.focus {
+  border: 4px solid #1ff702;
+  box-sizing: border-box;
+}
+
+img {
+  position: absolute;
+  top: 0;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  left: 0;
+}

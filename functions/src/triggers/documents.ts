@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { Document, CacheTask, DocumentType, SiteInformation } from '../../../models';
+import { CacheTask, Document, DocumentField, DocumentType, SiteInformation } from '../../../models';
 
 export const buildEntryCache = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite(async (change) => {
     const entryBefore = change.before.data() as Document;
@@ -92,4 +92,54 @@ export const deleteRevisions = functions.firestore.document('tanam/{siteId}/docu
     });
 
     return Promise.all(promises);
+});
+
+export const deleteFieldReferences = functions.firestore.document('tanam/{siteId}/{contentType}/{fileId}').onDelete(async (snap, context) => {
+    const contentType = context.params.contentType;
+    if (!['documents', 'files'].some(c => c === contentType)) {
+        console.log(`Deleted a ${contentType} document. Nothing to do for this function.`);
+        return null;
+    }
+
+    const promises = [];
+    const deletedDoc = snap.data();
+
+    console.log(`Looking through all document types to find reference fields.`);
+    const documentTypeDocs = await admin.firestore()
+        .collection('tanam').doc(process.env.GCLOUD_PROJECT)
+        .collection('document-types')
+        .get();
+
+    for (const documentTypeDoc of documentTypeDocs.docs) {
+        const documentType = documentTypeDoc.data() as DocumentType;
+        const fieldNames = documentType.fields
+            .filter((field: DocumentField) => field.type === 'image' || field.type === 'document-reference')
+            .map(field => field.key);
+
+        console.log(`Document type "${documentType.id}" has ${fieldNames.length} file references`);
+        for (const fieldName of fieldNames) {
+            console.log(`Searching and replacing all "${documentType.id}" documents with reference: ${fieldName}`);
+            const referringDocumentsQuery = await admin.firestore()
+                .collection('tanam').doc(process.env.GCLOUD_PROJECT)
+                .collection('documents')
+                .where(`data.${fieldName}`, '==', deletedDoc.id)
+                .get();
+
+            console.log(`Found ${referringDocumentsQuery.docs.length} documents that matched: data.${fieldName} == ${deletedDoc.id}`);
+
+            // TODO: batchwrite for better performance and manage > 500 references
+            for (const doc of referringDocumentsQuery.docs) {
+                console.log(`Clearing reference "${fieldName}" in document data for id: ${doc.id}`);
+                promises.push(admin.firestore().runTransaction(async (trx) => {
+                    const trxDoc = await trx.get(doc.ref);
+                    return trx.update(doc.ref, {
+                        revision: trxDoc.data().revision + 1,
+                        [`data.${fieldName}`]: null
+                    });
+                }));
+            }
+        }
+    }
+
+    return promises;
 });

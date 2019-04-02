@@ -6,16 +6,10 @@
   overflow: hidden;
 }
 
-:host ::ng-deep .sidenav-container .mat-list-item-content, .mat-subheader{
-  color: white !important;
-}
-
 :host ::ng-deep .sidenav-container .mat-list-base {
   padding: 0;
   height: calc(100% - (64px * 2));
   overflow: auto;
-  background-color: #494949;
-  color: white;
   @media only screen and (max-width: 600px) {
     height: calc(100% - (56px * 2));
   }
@@ -50,11 +44,6 @@
   position: sticky;
   top: 0;
   z-index: 2;
-}
-
-.header-side-nav, .expand-toolbar {
-  background-color: #212121;
-  color: white;
 }
 
 .expand-toolbar {

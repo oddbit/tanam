@@ -1,0 +1,14 @@
+.breadcrumb {
+  font-size: 0.8em;
+  cursor: pointer;
+}
+
+.breadcrumb:focus {
+  outline: none;
+}
+
+.breadcrumb .icon {
+  position: relative;
+  top: 3px;
+  font-size: 1em;
+}

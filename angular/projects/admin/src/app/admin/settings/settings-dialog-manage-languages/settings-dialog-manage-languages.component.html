@@ -1,0 +1,44 @@
+<div class="dialog">
+  <h2 mat-dialog-title>Manage Language</h2>
+  <mat-icon class="closeBtn"
+            (click)="closeDialog()">close</mat-icon>
+  <mat-dialog-content class="content">
+    <div class="row">
+      <div class="col">
+        <form [formGroup]="languagesForm"
+              novalidate>
+          <div formArrayName="languages">
+            <div class="row"
+                 *ngFor="let language of languagesFormArray.controls; let i=index"
+                 [formGroupName]="i">
+              <div class="col">
+                <mat-form-field>
+                  <mat-select formControlName="name"
+                              placeholder="Language">
+                    <mat-option *ngFor="let language of languages"
+                                value="{{language.id}}">{{language.title}} ({{language.nativeTitle}})
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <button mat-icon-button
+                        color="warn"
+                        *ngIf="i > 0"
+                        (click)="removeLanguage(i)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-raised-button
+            color="accent"
+            (click)="addLanguage()">Add Language</button>
+    <button mat-raised-button
+            color="primary"
+            (click)="save()">Save</button>
+  </mat-dialog-actions>
+</div>

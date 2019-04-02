@@ -1,6 +1,12 @@
 <form [formGroup]="templateForm"
       novalidate
-      (ngSubmit)="onSave()">
+      (ngSubmit)="saveTemplate()">
+  <tanam-context-actions>
+    <tanam-action-button buttonType='cancel'
+                         (click)='cancelEdit()'></tanam-action-button>
+    <tanam-action-button buttonType='save'
+                         (click)='saveTemplate()'></tanam-action-button>
+  </tanam-context-actions>
   <mat-card class="shipping-card">
     <mat-card-header>
       <mat-card-title>{{ template?.title }} template definition</mat-card-title>
@@ -44,7 +50,8 @@
                 </mat-error>
               </mat-form-field>
             </mat-tab>
-            <mat-tab label="CSS">
+            <mat-tab *ngIf="!!template?.styles"
+                     label="CSS">
               <mat-form-field class="full-width">
                 <textarea matInput
                           cdkTextareaAutosize
@@ -58,10 +65,5 @@
         </div>
       </div>
     </mat-card-content>
-    <mat-card-actions align="end">
-      <button mat-raised-button
-              color="primary"
-              type="submit">Submit</button>
-    </mat-card-actions>
   </mat-card>
 </form>

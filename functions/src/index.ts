@@ -3,15 +3,21 @@ import { MD5 } from 'crypto-js';
 import * as express from 'express';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import * as fs from 'fs';
 import { join } from 'path';
 import { TanamConfig } from '../../models';
-import * as fileService from './services/file.service';
+import { renderPage } from './render';
 import { getDocumentContextByUrl } from './services/document-context.service';
-import { renderDocument } from './render';
+import * as fileService from './services/file.service';
+import * as configService from './services/config.service';
 
 const DIST_FOLDER = join(process.cwd(), 'browser');
+const TANAM_FOLDER = join(process.cwd(), 'node_modules', 'tanam', 'browser');
 
-admin.initializeApp();
+if (admin.apps.length === 0) {
+    admin.initializeApp();
+}
+
 admin.firestore().settings({ timestampsInSnapshots: true });
 
 export * from './triggers';
@@ -23,6 +29,8 @@ const CACHE_CONFIG = {
     s_max_age: 60 * 5, // 60 * 60 * 24,
     max_age: 60 * 10
 };
+
+export const initializeApp = configService.setConfig;
 
 /**
  * Get a cache header string that can be set in a HTTP response header.
@@ -38,34 +46,70 @@ export function getCacheHeader(): string {
     return `public, max-age=${CACHE_CONFIG.max_age}, s-maxage=${CACHE_CONFIG.s_max_age}, stale-while-revalidate=120`;
 }
 
-export function initializeApp(tanamConfig: TanamConfig) {
-    app.get('/assets/tanam.config.json', (req: express.Request, res: express.Response) => {
-        console.log(`[GET] /assets/tanam.config.json => ${JSON.stringify(tanamConfig, null, 2)}`);
-        res.set('Cache-Control', getCacheHeader());
-        res.json(tanamConfig);
+
+async function _getDistFolder() {
+    return new Promise<string>((resolve) => {
+        fs.exists(TANAM_FOLDER, exists => {
+            const folder = exists ? TANAM_FOLDER : DIST_FOLDER;
+            console.log(`[_getDistFolder]: ${folder}`);
+            resolve(folder);
+        });
     });
+}
+
+async function _registerHostname(request) {
+    const domainsRef = admin.database().ref('tanam')
+        .child(process.env.GCLOUD_PROJECT)
+        .child('domains');
+
+    const defaultDomain = `${process.env.GCLOUD_PROJECT}.firebaseapp.com`;
+    const promises = [domainsRef.child(MD5(defaultDomain).toString()).set(defaultDomain)];
+
+    // Save "known" domains upon request to resources that are likely to seldom change -> cached for long
+    // So that the overhead is done as seldom as possible
+    const hostname = request.hostname;
+    if (hostname !== 'localhost' && !hostname.endsWith(`.cloudfunctions.net`)) {
+        console.log(`[_registerHostname] Saving hostname: ${hostname}`);
+        promises.push(domainsRef.child(MD5(hostname).toString()).set(hostname));
+    }
+
+    return Promise.all(promises);
 }
 
 // Match the Angular generated files with the unique hash
 // Serve them with fairly long cache lifetime since they'll be unique for each deploy
-app.get(/^\/?main|polyfills|runtime|styles|vendor\.[\w\d]{20}\.js|css\/?$/i,
-    express.static(DIST_FOLDER, {
-        setHeaders: (res, path) => res.set('Cache-Control', getCacheHeader()),
-    }),
-);
+app.get(/^\/?main|polyfills|runtime|styles|vendor\.[\w\d]{20}\.js|css\/?$/i, async (request, response) => {
+    const requestUrl = request.url.split('/');
+    const distFolder = await _getDistFolder();
+    response.setHeader('Cache-Control', `public, max-age=600, s-maxage=8640000, stale-while-revalidate=120`);
+    response.sendFile(join(distFolder, ...requestUrl));
+    return null;
+});
 
 // Handle Angular app's assets
-app.get(/^\/?assets\/(.*)\/?$/i,
-    express.static(DIST_FOLDER, {
-        setHeaders: (res, path) => res.set('Cache-Control', getCacheHeader()),
-    }),
-);
+app.get(/^\/?assets\/(.*)\/?$/i, async (request, response) => {
+    console.log(`[express.assets] ${request.url}`);
+
+    response.setHeader('Cache-Control', `public, max-age=600, s-maxage=3600, stale-while-revalidate=120`);
+
+    if (request.url.match(/^\/?assets\/tanam\.config\.json$/i)) {
+        const tanamConfig = configService.getPublicConfig();
+        console.log(`[express.assets] ${JSON.stringify({ tanamConfig })}`);
+        response.json(tanamConfig);
+        return null;
+    }
+
+    const requestUrl = request.url.split('/');
+    const distFolder = await _getDistFolder();
+    response.sendFile(join(distFolder, ...requestUrl));
+    return null;
+});
 
 // Handle request for user uploaded files
 app.get('/_/image/:fileId', async (request, response) => {
     const fileId = request.params.fileId;
     console.log(`GET ${request.url} (fileId: ${fileId})`);
-    console.log(`QUERY: ${JSON.stringify(request.query, null, 2)}`);
+    console.log(`URL query parameters: ${JSON.stringify(request.query, null, 2)}`);
 
     const fileContents = await fileService.getImageFile(fileId, request.query.s);
     if (!fileContents) {
@@ -80,12 +124,12 @@ app.get('/_/image/:fileId', async (request, response) => {
 });
 
 // Any other "underscore path" -> serve tanam Angular Admin App
-app.get(/^\/?_\/(.*)\/?$/i, (request, response) => {
-    console.log(`DIST FOLDER: ${DIST_FOLDER}`);
-    console.log(`WORK DIR: ${process.cwd()}`);
+app.get(/^\/?_\/(.*)\/?$/i, async (request, response) => {
+    const distFolder = await _getDistFolder();
+    response.setHeader('Cache-Control', `public, max-age=600, s-maxage=3600, stale-while-revalidate=120`);
 
-    response.setHeader('Cache-Control', getCacheHeader());
-    response.sendFile(join(DIST_FOLDER, 'admin.html'));
+    response.sendFile(join(distFolder, 'admin.html'));
+    return _registerHostname(request);
 });
 
 app.get('/manifest.json', (request, response) => {
@@ -111,22 +155,12 @@ app.get('/favicon.ico', async (request, response) => {
     const favicon = await fileService.getFavicon();
     if (favicon) {
         response.send(favicon);
-    } else {
-        response.sendFile(join(DIST_FOLDER, 'favicon.ico'));
-    }
-
-    const hostname = request.hostname;
-    if (hostname === 'localhost') {
         return null;
     }
 
-    // Save "known" domains upon request to resources that are likely to seldom change -> cached for long
-    // So that the overhead is done as seldom as possible
-    return admin.database().ref('tanam')
-        .child(process.env.GCLOUD_PROJECT)
-        .child('domains')
-        .child(MD5(hostname).toString())
-        .set(hostname);
+    const distFolder = await _getDistFolder();
+    response.sendFile(join(distFolder, 'favicon.ico'));
+    return null;
 });
 
 app.get('*', async (request, response) => {
@@ -136,12 +170,16 @@ app.get('*', async (request, response) => {
     const context = await getDocumentContextByUrl(url);
     if (!context) {
         console.log(`[HTTP 404] page not found for: ${request.url}`);
-        response.status(404).send(`Not found: ${request.url}`);
-        return;
+        return response.status(404).send(`Not found: ${request.url}`);
     }
 
-    const html = await renderDocument(context);
+    const html = await renderPage(context);
+    if (!html) {
+        console.error(`[HTTP 500] could not create template for: ${request.url}`);
+        return response.status(500).send('Could not create HTML template document');
+    }
+
     response.setHeader('Cache-Control', getCacheHeader());
     response.send(html);
-    return null;
+    return _registerHostname(request);
 });

@@ -1,26 +1,103 @@
-<tanam-page-title pageTitle="Settings"></tanam-page-title>
+<form [formGroup]="settingsForm"
+      novalidate>
+  <tanam-page-title pageTitle="Settings"></tanam-page-title>
+  <tanam-context-actions>
+    <tanam-action-button buttonType='save'
+                         (click)='saveSettings()'></tanam-action-button>
+  </tanam-context-actions>
+  <mat-card class="card">
+    <mat-card-title>Site information</mat-card-title>
+    <mat-card-subtitle>Configure your site information</mat-card-subtitle>
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput
+                   placeholder="Title"
+                   formControlName="title">
+            <mat-error *ngIf="settingsForm.controls['title'].hasError('required')">
+              Title is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-select formControlName="theme"
+                        placeholder="Theme">
+              <mat-option *ngFor="let theme of themes$ | async"
+                          value="{{theme.id}}">{{theme.title}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="settingsForm.controls['theme'].hasError('required')">
+              Theme is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <mat-form-field class="full-width">
+          <mat-select formControlName="defaultLanguage"
+                      placeholder="Default Language">
+            <mat-option *ngFor="let language of languages"
+                        value="{{language.id}}">{{language.title}} ({{language.nativeTitle}})
+                      </mat-option>
+          </mat-select>
+          <mat-error *ngIf="settingsForm.controls['defaultLanguage'].hasError('required')">
+            Language is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <button mat-raised-button
+              color="secondary"
+              type="button"
+              (click)="dialogLanguage()">Manage Language</button>
+    </mat-card-content>
+  </mat-card>
 
-<mat-accordion>
-  <mat-expansion-panel [expanded]="true">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Site information
-      </mat-panel-title>
-      <mat-panel-description>
-        Configure your site information
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <tanam-site-form></tanam-site-form>
-  </mat-expansion-panel>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Domain settings
-      </mat-panel-title>
-      <mat-panel-description>
-        Configure the URL settings and domain name.
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <tanam-domain-form></tanam-domain-form>
-  </mat-expansion-panel>
-</mat-accordion>
+  <mat-card class="card">
+    <mat-card-title>Domain settings</mat-card-title>
+    <mat-card-subtitle>Configure the URL settings and domain name.</mat-card-subtitle>
+    <mat-card-content>
+      <p>
+        You must manually configure the domains that you have connected with your <a href="https://firebase.google.com/docs/hosting/custom-domain" target="_blank">Firebase hosting</a> in order for Tanam to handle caching and SEO properly.
+      </p>
+      <p>
+        The primary domain should be the domain which you are using for your site. You can add additional domains that
+        also
+        serve your content and Tanam will take care of configurations that
+        <a href="https://support.google.com/webmasters/answer/1716747?hl=en" target="_blank">avoid penalties from search engines</a> when multiple domains are serving the same content.
+      </p>
+      <div class="row">
+        <div class="col">
+          <button mat-raised-button
+                  color="accent"
+                  (click)="addDomain()">Add domain</button>
+        </div>
+      </div>
+      <div class="settings-form">
+        <mat-radio-group formControlName="primaryDomain">
+          <div formArrayName="domains">
+            <div class="row"
+                 *ngFor="let domain of domainsFormArray.controls; let i=index"
+                 [formGroupName]="i">
+              <div class="col">
+                <mat-radio-button [value]="domain.value.name">
+                </mat-radio-button>
+                <mat-form-field>
+                  <input matInput
+                         placeholder="Domain"
+                         formControlName="name">
+                </mat-form-field>
+                <button mat-raised-button
+                        color="warn"
+                        *ngIf="i > 0"
+                        (click)="removeDomain(i)">Remove</button>
+              </div>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</form>

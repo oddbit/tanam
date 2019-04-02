@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Create New Content Type</h1>
+<div mat-dialog-content>
+  <form [formGroup]="createTypeForm"
+        novalidate>
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="full-width">
+          <input matInput
+                 placeholder="Content type name"
+                 formControlName="title">
+          <mat-error *ngIf="createTypeForm.controls['title'].hasError('required')">
+            Name of the content type is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button
+          color="primary"
+          (click)="createNewType()">Create</button>
+</div>

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { AdminTheme, ADMIN_THEMES, TanamUser, UserRole } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
+import { OverlayContainer } from '@angular/cdk/overlay';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class UserService {
     private readonly firestore: AngularFirestore,
     private readonly appConfig: AppConfigService,
     private readonly fbApp: FirebaseApp,
+    private overlayContainer: OverlayContainer
   ) { }
 
   getCurrentUser(): Observable<TanamUser> {
@@ -65,6 +67,18 @@ export class UserService {
       const prefs = { ...trxUser.prefs, theme };
 
       trx.update(docRef.ref, { prefs });
+    });
+  }
+
+  overlayTheme () {
+    const overlayContainerClasses = this.overlayContainer.getContainerElement().classList;
+    const themeClassesToRemove = Array.from(overlayContainerClasses).filter((item: string) => item.includes('-theme'));
+    if (themeClassesToRemove.length) {
+       overlayContainerClasses.remove(...themeClassesToRemove);
+    }
+
+    this.getUserTheme().subscribe(val => {
+      this.overlayContainer.getContainerElement().classList.add(val);
     });
   }
 }

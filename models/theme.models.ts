@@ -6,12 +6,15 @@ export const ADMIN_THEMES = {
     'dark': 'tanam-dark-theme',
 };
 
+export type TemplateType = 'dust';
+
 export interface ThemeTemplate {
     id: string;
     title: string;
     selector: string;
     template: string;
-    styles: string[];
+    styles?: string[];
+    templateType: TemplateType;
     updated: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
     created: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
 }

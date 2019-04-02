@@ -9,8 +9,11 @@ export interface TanamFile {
     fileType: string;
     mimeType: string;
     bytes: number;
-    url: string;
-    variants: { [key: string]: string };
+    variants?: {
+        small: string,
+        medium: string,
+        large: string,
+    };
     updated: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
     created: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
 }

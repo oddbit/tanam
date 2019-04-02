@@ -1,16 +1,25 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { SiteInformation } from '../../../models/settings.models';
+import { createDefaultDocuments } from '../services/document.service';
+import { createDefaultSiteInfo } from '../services/site-info.service';
+import { createDefaultTemplates } from '../services/template.service';
+import { createDefaultTheme } from '../services/theme.service';
 
 export const registerHost = functions.database.ref('tanam/{siteId}/domains/{hash}').onCreate(async (snap) => {
     const host = snap.val();
-    console.log(`Discovered request to new host: ${host}`);
+    console.log(`[registerHost] Discovered request to new host: ${host}`);
 
     const siteInfoDoc = admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
-    const siteIsSetup = (await siteInfoDoc.get()).exists;
-    if (!siteIsSetup) {
-        console.log(`Site is not setup yet. Remove this record and retry later when all data is complete.`);
-        return snap.ref.remove();
+
+    if (!(await siteInfoDoc.get()).exists) {
+        console.log(`[registerHost] Site is not setup yet.`);
+        await Promise.all([
+            createDefaultSiteInfo(),
+            createDefaultDocuments(),
+            createDefaultTheme(),
+            createDefaultTemplates(),
+        ]);
     }
 
     return admin.firestore().runTransaction(async (trx) => {
@@ -25,17 +34,12 @@ export const registerHost = functions.database.ref('tanam/{siteId}/domains/{hash
     });
 });
 
-export const setupBasicSiteInfo = functions.database.ref('tanam').onCreate(async (snap) => {
-    const defaultDomain = `${process.env.GCLOUD_PROJECT}.firebaseapp.com`;
-    const siteInfoData: SiteInformation = {
-        defaultLanguage: 'en',
-        languages: ['en'],
-        isCustomDomain: false,
-        domains: [defaultDomain],
-        primaryDomain: defaultDomain,
-        theme: '(default)',
-        title: process.env.GCLOUD_PROJECT
-    };
-
-    return admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT).set(siteInfoData);
+export const testingSetDefaultData = functions.database.ref('setDefaultData').onCreate(async (snap) => {
+    return Promise.all([
+        createDefaultSiteInfo(),
+        createDefaultDocuments(),
+        createDefaultTheme(),
+        createDefaultTemplates(),
+        snap.ref.remove(),
+    ]);
 });

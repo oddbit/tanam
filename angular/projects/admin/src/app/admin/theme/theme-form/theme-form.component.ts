@@ -101,7 +101,7 @@ export class ThemeFormComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(this.onCancelRoute);
   }
 
-  onSave() {
+  saveTheme() {
     const formData = this.themeForm.value;
     if (this.themeForm.errors) {
       return;
