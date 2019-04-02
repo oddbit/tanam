@@ -17,6 +17,7 @@ const BUTTON_TITLES = {
   create: 'Create New',
   cancel: 'Cancel',
   upload: 'Upload',
+  saveAndClose: 'Save and close',
 };
 
 const BUTTON_ICONS = {
@@ -26,6 +27,7 @@ const BUTTON_ICONS = {
   create: 'create',
   cancel: 'keyboard_arrow_left',
   upload: 'file_upload',
+  saveAndClose: 'check',
 };
 
 @Component({
