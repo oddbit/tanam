@@ -8,6 +8,7 @@ import { DocumentTypeService } from '../../../services/document-type.service';
 import { DocumentService } from '../../../services/document.service';
 import { SiteService } from '../../../services/site.service';
 import { firestore } from 'firebase/app';
+import { MatSnackBar } from '@angular/material';
 
 interface StatusOption {
   title: string;
@@ -52,6 +53,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     private readonly documentService: DocumentService,
     private readonly documentTypeService: DocumentTypeService,
     private router: Router,
+    private snackBar: MatSnackBar
   ) { }
 
   get dataForm() {
@@ -131,9 +133,11 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     document.url = formData.url;
     document.published = formData.published;
     document.data = this._sanitizeData(this.dataForm.value);
+    this._snackbar('Saving..');
 
     await this.documentService.update(document);
     this._setStateProcessing(false);
+    this._snackbar('Saved');
     if (val === 'close') { this._navigateBack(); }
   }
 
@@ -175,6 +179,12 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
 
   private _navigateBack() {
     this.router.navigateByUrl(`/_/admin/type/${this._rootSlug}/overview`);
+  }
+
+  private _snackbar(message: string) {
+    this.snackBar.open(message, 'Dismiss', {
+      duration: 2000,
+    });
   }
 
   private _onTitleChange(title: string) {
