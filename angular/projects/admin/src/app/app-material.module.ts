@@ -24,6 +24,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material';
 
 @NgModule({
   declarations: [],
@@ -53,6 +54,7 @@ import { MatDialogModule } from '@angular/material';
     MatProgressBarModule,
     MatTooltipModule,
     MatDialogModule,
+    MatSnackBarModule,
   ],
   exports: [
     CommonModule,
@@ -80,6 +82,7 @@ import { MatDialogModule } from '@angular/material';
     MatProgressBarModule,
     MatTooltipModule,
     MatDialogModule,
+    MatSnackBarModule,
   ]
 })
 export class AppMaterialModule { }

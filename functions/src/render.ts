@@ -68,7 +68,7 @@ export async function compileTemplate(context: PageContext) {
 
 function renderThemeStyles(theme: Theme): string[] {
     return theme.styles.filter(s => !!s && s.trim().length).map(style =>
-        style.startsWith('http') ? `<link href="${style}" rel="stylesheet" />` : style
+        style.startsWith('http') ? `<link href="${style}" rel="stylesheet" />` : `<style>${style}</style>`
     );
 }
 

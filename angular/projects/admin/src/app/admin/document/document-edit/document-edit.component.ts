@@ -1,12 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { DocumentStatus } from 'tanam-models';
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { DocumentService } from '../../../services/document.service';
 import { SiteService } from '../../../services/site.service';
+import { firestore } from 'firebase/app';
+import { MatSnackBar } from '@angular/material';
 
 interface StatusOption {
   title: string;
@@ -50,6 +52,8 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     private readonly siteService: SiteService,
     private readonly documentService: DocumentService,
     private readonly documentTypeService: DocumentTypeService,
+    private router: Router,
+    private snackBar: MatSnackBar
   ) { }
 
   get dataForm() {
@@ -83,9 +87,28 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
         if (field.isTitle) {
           this._titleSubscription = this.dataForm.get(field.key).valueChanges.subscribe(v => this._onTitleChange(v));
         }
+
+        this._onChanges();
       }
     }));
   }
+
+  private _onChanges() {
+    const now = firestore.Timestamp.now();
+    this.documentForm.valueChanges.subscribe(data => {
+      if (!!data.published) {
+        if (data.status === 'published' && data.published.seconds > now.seconds) {
+          this.documentForm.controls['published'].setValue(null);
+          this.documentForm.controls['status'].setValue('unpublished');
+        } else if (data.status === 'unpublished' && data.published.seconds <= now.seconds) {
+          this.documentForm.controls['published'].setValue(null);
+          this.documentForm.controls['status'].setValue('published');
+        }
+      }
+    });
+  }
+
+
 
   ngOnDestroy() {
     this._subscriptions.push(this._titleSubscription);
@@ -100,7 +123,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     this._setStateProcessing(false);
   }
 
-  async saveEntry() {
+  async saveEntry(val: string) {
     this._setStateProcessing(true);
     const formData = this.documentForm.value;
 
@@ -108,11 +131,14 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     document.title = formData.title;
     document.status = formData.status;
     document.url = formData.url;
+    document.published = formData.published;
     document.data = this._sanitizeData(this.dataForm.value);
+    this._snackbar('Saving..');
 
     await this.documentService.update(document);
-    this._navigateBack();
     this._setStateProcessing(false);
+    this._snackbar('Saved');
+    if (val === 'close') { this._navigateBack(); }
   }
 
   cancelEditing() {
@@ -152,7 +178,13 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   private _navigateBack() {
-    // this.router.navigate(['../']);
+    this.router.navigateByUrl(`/_/admin/type/${this._rootSlug}/overview`);
+  }
+
+  private _snackbar(message: string) {
+    this.snackBar.open(message, 'Dismiss', {
+      duration: 2000,
+    });
   }
 
   private _onTitleChange(title: string) {
