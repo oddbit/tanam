@@ -16,9 +16,13 @@ export class ThemeService {
     private readonly appConfig: AppConfigService,
   ) { }
 
-  async create(id: string = this.firestore.createId()) {
-    const docRef = this.siteCollection.collection('document-types').doc<Theme>(id);
-    return docRef.set({
+  getNewId() {
+    return this.firestore.createId();
+  }
+
+  async create(id: string) {
+    const docRef = this.siteCollection.collection('themes').doc<Theme>(id);
+    docRef.set({
       id: id,
       title: '',
       description: '',
@@ -28,6 +32,18 @@ export class ThemeService {
       updated: firebase.firestore.FieldValue.serverTimestamp(),
       created: firebase.firestore.FieldValue.serverTimestamp(),
     } as Theme);
+
+    return docRef.collection('template').doc('page').set({
+      id: 'page',
+      selector: 'page',
+      template: `{@contextDump to="console"/}
+      {@select key=document.data.layout}
+      Theme Work
+      {/select}`,
+      title: 'Page',
+      updated: firebase.firestore.FieldValue.serverTimestamp(),
+      created: firebase.firestore.FieldValue.serverTimestamp(),
+    });
   }
 
   update(theme: Theme) {
