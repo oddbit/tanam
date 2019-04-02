@@ -33,7 +33,7 @@ export class ThemeService {
       created: firebase.firestore.FieldValue.serverTimestamp(),
     } as Theme);
 
-    return docRef.collection('template').doc('page').set({
+    return docRef.collection('templates').doc('page').set({
       id: 'page',
       selector: 'page',
       template: `{@contextDump to="console"/}
