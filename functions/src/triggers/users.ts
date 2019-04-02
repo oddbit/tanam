@@ -1,8 +1,13 @@
 import { MD5 } from 'crypto-js';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import * as configService from '../services/config.service';
 
 export const createUser = functions.auth.user().onCreate(async (firebaseUser) => {
+
+    const tanamConfig = configService.getConfig();
+    const initialRole = firebaseUser.email === process.env.TANAM_OWNER ? 'owner' : tanamConfig.users[firebaseUser.email];
+
     // Use gravatar as default if photoUrl isn't specified in user data
     // https://en.gravatar.com/site/implement/images/
     const gravatarHash = MD5(firebaseUser.email || firebaseUser.uid).toString().toLowerCase();
@@ -11,10 +16,10 @@ export const createUser = functions.auth.user().onCreate(async (firebaseUser) =>
         name: firebaseUser.displayName || firebaseUser.email,
         email: firebaseUser.email,
         photoUrl: firebaseUser.photoURL || `https://www.gravatar.com/avatar/${gravatarHash}.jpg?s=1024&d=identicon`,
-        roles: firebaseUser.email === process.env.TANAM_OWNER ? ['owner'] : [],
+        roles: !!initialRole ? [initialRole] : [],
     };
 
-    console.log(`Creating account: ${user}`);
+    console.log(`Creating account: ${JSON.stringify({ user })}`);
     return Promise.all([
         admin.firestore()
             .collection('tanam').doc(process.env.GCLOUD_PROJECT)
@@ -25,6 +30,7 @@ export const createUser = functions.auth.user().onCreate(async (firebaseUser) =>
 });
 
 export const deleteUser = functions.auth.user().onDelete(firebaseUser => {
+    console.log(`Deleting account: ${JSON.stringify({ firebaseUser })}`);
     return admin.firestore()
         .collection('tanam').doc(process.env.GCLOUD_PROJECT)
         .collection('users').doc(firebaseUser.uid)
@@ -39,7 +45,7 @@ export const updateAuthRoles = functions.firestore.document('tanam/{siteId}/user
     const promises = [];
 
     if (userBefore.roles.length !== userAfter.roles.length
-        || userBefore.roles.some((role) => userAfter.roles.indexOf(role) === -1)) {
+        || userBefore.roles.some((role: string) => userAfter.roles.indexOf(role) === -1)) {
         promises.push(setUserRoleToAuth({ uid: uid, roles: userAfter.roles as string[] }));
     }
 
