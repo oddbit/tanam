@@ -9,6 +9,7 @@ import { TanamConfig } from '../../models';
 import { renderPage } from './render';
 import { getDocumentContextByUrl } from './services/document-context.service';
 import * as fileService from './services/file.service';
+import * as configService from './services/config.service';
 
 const DIST_FOLDER = join(process.cwd(), 'browser');
 const TANAM_FOLDER = join(process.cwd(), 'node_modules', 'tanam', 'browser');
@@ -29,7 +30,7 @@ const CACHE_CONFIG = {
     max_age: 60 * 10
 };
 
-let userTanamConfig = {};
+export const initializeApp = configService.setConfig;
 
 /**
  * Get a cache header string that can be set in a HTTP response header.
@@ -45,11 +46,6 @@ export function getCacheHeader(): string {
     return `public, max-age=${CACHE_CONFIG.max_age}, s-maxage=${CACHE_CONFIG.s_max_age}, stale-while-revalidate=120`;
 }
 
-export function initializeApp(tanamConfig: TanamConfig) {
-    const configUrl = '/assets/tanam.config.json';
-    console.log(`[initializeApp] ${JSON.stringify({ configUrl, tanamConfig })}`)
-    userTanamConfig = tanamConfig;
-}
 
 async function _getDistFolder() {
     return new Promise<string>((resolve) => {
@@ -94,11 +90,12 @@ app.get(/^\/?main|polyfills|runtime|styles|vendor\.[\w\d]{20}\.js|css\/?$/i, asy
 app.get(/^\/?assets\/(.*)\/?$/i, async (request, response) => {
     console.log(`[express.assets] ${request.url}`);
 
-    response.setHeader('Cache-Control', `public, max-age=600, s-maxage=36, stale-while-revalidate=120`);
+    response.setHeader('Cache-Control', `public, max-age=600, s-maxage=3600, stale-while-revalidate=120`);
 
     if (request.url.match(/^\/?assets\/tanam\.config\.json$/i)) {
-        console.log(`[express.assets] ${JSON.stringify({ userTanamConfig })}`);
-        response.json(userTanamConfig);
+        const tanamConfig = configService.getPublicConfig();
+        console.log(`[express.assets] ${JSON.stringify({ tanamConfig })}`);
+        response.json(tanamConfig);
         return null;
     }
 
