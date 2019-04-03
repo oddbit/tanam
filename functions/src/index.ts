@@ -5,11 +5,10 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import * as fs from 'fs';
 import { join } from 'path';
-import { TanamConfig } from '../../models';
 import { renderPage } from './render';
+import * as configService from './services/config.service';
 import { getDocumentContextByUrl } from './services/document-context.service';
 import * as fileService from './services/file.service';
-import * as configService from './services/config.service';
 
 const DIST_FOLDER = join(process.cwd(), 'browser');
 const TANAM_FOLDER = join(process.cwd(), 'node_modules', 'tanam', 'browser');

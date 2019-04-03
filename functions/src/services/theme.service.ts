@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import { SiteInformation, Theme } from '../../../models';
+import { SiteInformation, Theme } from '../models';
 
 const siteCollection = () => admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
 

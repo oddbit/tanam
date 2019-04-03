@@ -2,7 +2,7 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { ObjectMetadata } from 'firebase-functions/lib/providers/storage';
 import * as sharp from 'sharp';
-import { TanamFile } from '../../../models';
+import { TanamFile } from '../models';
 
 export const processImageUpload = functions.storage.object().onFinalize(async (object: ObjectMetadata) => {
   if (!object.name.startsWith(`tanam/${process.env.GCLOUD_PROJECT}/upload/`)) {

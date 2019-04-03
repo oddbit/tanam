@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import { DocumentType } from '../../../models';
+import { DocumentType } from '../models';
 
 export async function createDefaultDocuments() {
     const documentsCollection = admin.firestore()

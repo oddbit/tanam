@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import { TanamFile, Document, SiteInformation } from '../../../models';
+import { TanamFile, Document, SiteInformation } from '../models';
 
 const siteCollection = () => admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
 
@@ -14,7 +14,7 @@ export async function getFavicon() {
 }
 
 export async function getImageFile(fileId: string, variant?: 'large' | 'medium' | 'small') {
-    console.log(`[getImageFile] ${JSON.stringify({ fileId, variant})}`);
+    console.log(`[getImageFile] ${JSON.stringify({ fileId, variant })}`);
     const doc = await siteCollection()
         .collection('files').doc(fileId)
         .get();

@@ -6,23 +6,17 @@
     "module": "commonjs",
     "noImplicitReturns": true,
     "outDir": "dist",
+    "declaration": true,
     "sourceMap": true,
     "target": "es6",
-    "baseUrl": "./",
-    "paths": {
-      "tanam-models": [
-        "../models"
-      ],
-      "tanam-models/*": [
-        "../models/*"
-      ]
-    }
+    "baseUrl": "./"
   },
   "compileOnSave": true,
   "typeRoots": [
     "node_modules/@types"
   ],
   "include": [
-    "src"
+    "src",
+    "../models"
   ]
 }

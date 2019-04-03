@@ -3,13 +3,19 @@ const copy = require('copy');
 
 console.log('Removing old dist files...');
 // Retaining node_modules by not deleting the whole dist folder
-fse.removeSync('../dist/admin/');
 fse.removeSync('../dist/browser/');
-fse.removeSync('../dist/dynamic/');
-fse.removeSync('../dist/tanam-core/');
+fse.removeSync('../dist/models/');
+fse.removeSync('../dist/render/');
+fse.removeSync('../dist/services/');
 fse.removeSync('../dist/triggers/');
+fse.removeSync('../dist/cache.js');
+fse.removeSync('../dist/cache.js.map');
+fse.removeSync('../dist/index.d.ts');
 fse.removeSync('../dist/index.js');
 fse.removeSync('../dist/index.js.map');
+fse.removeSync('../dist/render.d.ts');
+fse.removeSync('../dist/render.js');
+fse.removeSync('../dist/render.js.map');
 fse.removeSync('../dist/package.json');
 fse.removeSync('../dist/package-lock.json');
 
@@ -25,7 +31,7 @@ copy('../dist/admin/**', '../dist/browser/', () => {
 });
 
 console.log('Copying cloud functions dist bundle...');
-fse.copySync('./dist/functions/src', '../dist/');
+fse.copySync('./dist/', '../dist/');
 fse.copySync('./package.json', '../dist/package.json');
 fse.copySync('./package-lock.json', '../dist/package-lock.json');
 
