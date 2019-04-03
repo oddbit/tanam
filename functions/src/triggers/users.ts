@@ -55,6 +55,7 @@ export const updateAuthRoles = functions.firestore.document('tanam/{siteId}/user
 
 
 function setUserRoleToAuth({ uid, roles }: { uid: string, roles: string[] }) {
-    console.log(`[setUserRoleToAuth] Setting roles: ${JSON.stringify({ uid, roles })}`);
-    return admin.auth().setCustomUserClaims(uid, { tanam: roles });
+    const customClaims = { tanam: { [process.env.GCLOUD_PROJECT]: roles } };
+    console.log(`[setUserRoleToAuth] ${JSON.stringify({ uid, customClaims })}`);
+    return admin.auth().setCustomUserClaims(uid, customClaims);
 }
