@@ -1,4 +1,4 @@
-# Tanam 🌱 A pluggable CMS for Firebase
+# Tanam 🌱 A plug n play CMS for Firebase
 ![License](https://img.shields.io/npm/l/tanam.svg)
 ![NPM version](https://img.shields.io/npm/v/tanam.svg)
 ![Total NPM downloads](https://img.shields.io/npm/dt/tanam.svg)
@@ -113,7 +113,7 @@ skip directly to step 6.
 ```
 
 
- 5. Add NPM dependency `tanam@latest`
+ 5. Add NPM dependency [`tanam@latest`](https://www.npmjs.com/package/tanam)
  6. Copy paste the code below into your `index.ts` file.
     1. Replace (and add any) email that should have access to the site. You can assign the roles (owner, admin, publisher) for different access of content. Make sure that at least someone is the "owner".
     2. Replace the `firebaseApp` with your own web configuration that you got when adding a web app in the  Firebase console
