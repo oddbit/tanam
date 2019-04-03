@@ -1,4 +1,4 @@
-import { TanamConfig } from '../../../models';
+import { TanamConfig } from '../models';
 
 let tanamConfig: TanamConfig;
 export function setConfig(config: TanamConfig) {

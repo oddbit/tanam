@@ -20,10 +20,10 @@
     ],
     "paths": {
       "tanam-models": [
-        "../models"
+        "../functions/src/models"
       ],
       "tanam-models/*": [
-        "../models/*"
+        "../functions/src/models/*"
       ]
     }
   }

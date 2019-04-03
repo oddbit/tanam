@@ -1,5 +1,5 @@
 import * as dust from 'dustjs-helpers';
-import { PageContext, Theme } from '../../models';
+import { PageContext, Theme } from './models';
 import * as documentContextService from './services/document-context.service';
 import * as templateService from './services/template.service';
 import { getTheme } from './services/theme.service';

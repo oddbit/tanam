@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { SiteInformation } from '../../../models/settings.models';
+import { SiteInformation } from '../models/settings.models';
 import { createDefaultDocuments } from '../services/document.service';
 import { createDefaultSiteInfo } from '../services/site-info.service';
 import { createDefaultTemplates } from '../services/template.service';

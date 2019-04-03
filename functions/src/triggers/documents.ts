@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { CacheTask, Document, DocumentField, DocumentType, SiteInformation } from '../../../models';
+import { CacheTask, Document, DocumentField, DocumentType, SiteInformation } from '../models';
 
 export const buildEntryCache = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite(async (change) => {
     const entryBefore = change.before.data() as Document;

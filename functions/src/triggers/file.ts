@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { TanamFile } from '../../../models';
+import { TanamFile } from '../models';
 
 export const deleteStorageFiles = functions.firestore.document('tanam/{siteId}/files/{fileId}').onDelete(async (snap) => {
     const file = snap.data() as TanamFile;

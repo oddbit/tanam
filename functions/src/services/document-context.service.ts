@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import { Document, DocumentContext, PageContext, SiteContext, SiteInformation } from '../../../models';
+import { Document, DocumentContext, PageContext, SiteContext, SiteInformation } from '../models';
 
 export interface DocumentQueryOptions {
     limit?: number;
