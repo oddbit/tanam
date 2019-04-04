@@ -2,9 +2,9 @@ import { MD5 } from 'crypto-js';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import * as configService from '../services/config.service';
+import * as siteService from '../services/site-info.service';
 
 export const createUser = functions.auth.user().onCreate(async (firebaseUser) => {
-
     const tanamConfig = configService.getConfig();
     const initialRole = firebaseUser.email === process.env.TANAM_OWNER ? 'owner' : tanamConfig.users[firebaseUser.email];
 
@@ -21,6 +21,7 @@ export const createUser = functions.auth.user().onCreate(async (firebaseUser) =>
 
     console.log(`Creating account: ${JSON.stringify({ user })}`);
     return Promise.all([
+        siteService.initializeSite(),
         admin.firestore()
             .collection('tanam').doc(process.env.GCLOUD_PROJECT)
             .collection('users').doc(firebaseUser.uid)
@@ -54,6 +55,7 @@ export const updateAuthRoles = functions.firestore.document('tanam/{siteId}/user
 
 
 function setUserRoleToAuth({ uid, roles }: { uid: string, roles: string[] }) {
-    console.log(`[setUserRoleToAuth] Setting roles: ${JSON.stringify({ uid, roles })}`);
-    return admin.auth().setCustomUserClaims(uid, { tanam: roles });
+    const customClaims = { tanam: { [process.env.GCLOUD_PROJECT]: roles } };
+    console.log(`[setUserRoleToAuth] ${JSON.stringify({ uid, customClaims })}`);
+    return admin.auth().setCustomUserClaims(uid, customClaims);
 }

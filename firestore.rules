@@ -1,7 +1,66 @@
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write;
+    match /tanam/{siteId} {
+      allow read: if hasAnyRole();
+      allow write: if isAtLeastManager();
+
+      match /document-types/{typeId} {
+        allow read: if hasAnyRole();
+        allow write: if isAtLeastManager();
+      }
+
+      match /documents/{documentId} {
+        allow read: if hasAnyRole();
+        allow write: if isAtLeastManager();
+
+        match /revisions/{revisionId} {
+          allow read: if hasAnyRole();
+          allow write: if false;
+        }
+      }
+
+      match /files/{fileId} {
+        allow read: if hasAnyRole();
+        allow write: if isPublisher();
+      }
+
+      match /themes/{document=**} {
+        allow read: if hasAnyRole();
+        allow write: if isAtLeastManager();
+      }
+
+      match /users/{userId} {
+        allow read: if isSignedInAs(userId);
+        allow write: if isSignedInAs(userId);
+      }
+
+      function hasUserRole(role) {
+        return isSignedIn() && role in request.auth.token.tanam[siteId];
+      }
+
+      function hasAnyRole() {
+        return isSignedIn() && request.auth.token.tanam[siteId].size() > 0;
+      }
+
+			function isOwner() {
+        return hasUserRole("owner");
+      }
+
+      function isAtLeastManager() {
+        return isOwner() || hasUserRole("manager");
+      }
+
+      function isPublisher() {
+        return isAtLeastManager() || hasUserRole("publisher");
+      }
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isSignedInAs(uid) {
+      return isSignedIn() && request.auth.uid == uid;
     }
   }
 }
