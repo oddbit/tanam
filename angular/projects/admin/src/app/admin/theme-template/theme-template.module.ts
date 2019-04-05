@@ -7,6 +7,7 @@ import { ThemeTemplateEditComponent } from './theme-template-edit/theme-template
 import { ThemeTemplateFormComponent } from './theme-template-form/theme-template-form.component';
 import { ThemeTemplateListComponent } from './theme-template-list/theme-template-list.component';
 import { ThemeTemplateOverviewComponent } from './theme-template-overview/theme-template-overview.component';
+import { ThemeTemplateDialogCreateComponent } from './theme-template-dialog-create/theme-template-dialog-create.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { ThemeTemplateOverviewComponent } from './theme-template-overview/theme-
     ThemeTemplateFormComponent,
     ThemeTemplateListComponent,
     ThemeTemplateOverviewComponent,
+    ThemeTemplateDialogCreateComponent,
   ],
   imports: [
     CommonModule,
@@ -25,5 +27,6 @@ import { ThemeTemplateOverviewComponent } from './theme-template-overview/theme-
     ThemeTemplateEditComponent,
     ThemeTemplateListComponent,
   ],
+  entryComponents: [ThemeTemplateDialogCreateComponent]
 })
 export class ThemeTemplateModule { }
