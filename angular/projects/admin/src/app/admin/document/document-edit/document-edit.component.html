@@ -8,8 +8,10 @@
     <tanam-action-button buttonType='delete'
                          (click)='deleteEntry()'></tanam-action-button>
     <tanam-action-button buttonType='save'
+                         pristine={{documentForm.pristine}}
                          (click)='saveEntry("save")'></tanam-action-button>
     <tanam-action-button buttonType='saveAndClose'
+                         pristine={{documentForm.pristine}}
                          (click)='saveEntry("close")'></tanam-action-button>
   </tanam-context-actions>
 
