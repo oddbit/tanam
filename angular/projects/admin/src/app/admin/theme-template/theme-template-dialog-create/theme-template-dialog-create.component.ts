@@ -19,9 +19,8 @@ export class ThemeTemplateDialogCreateComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<ThemeTemplateDialogCreateComponent>,
     private readonly formBuilder: FormBuilder,
-    private readonly documentTypeService: DocumentTypeService,
-    private dialogRef: MatDialogRef<DocumentTypeDialogCreateComponent>,
     private router: Router,
     private templateService: ThemeTemplateService
   ) { }
@@ -29,5 +28,7 @@ export class ThemeTemplateDialogCreateComponent {
   async createNewTemplate () {
     const formData = this.createTemplateForm.value;
     await this.templateService.createTemplateInTheme(this.data.theme, formData.title, formData.selector);
+    this.router.navigateByUrl(`_/admin/theme/${this.data.theme.id}/templates/${formData.selector}`);
+    this.dialogRef.close();
   }
 }
