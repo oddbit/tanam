@@ -116,11 +116,13 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   async deleteEntry() {
-    this._setStateProcessing(true);
-    const document = await this.document$.pipe(take(1)).toPromise();
-    await this.documentService.delete(document.id);
-    this._navigateBack();
-    this._setStateProcessing(false);
+    if (confirm(`Are you sure to delete the: ${this.documentForm.controls['title'].value} ?`)) {
+      this._setStateProcessing(true);
+      const document = await this.document$.pipe(take(1)).toPromise();
+      await this.documentService.delete(document.id);
+      this._navigateBack();
+      this._setStateProcessing(false);
+    }
   }
 
   async saveEntry(val: string) {
