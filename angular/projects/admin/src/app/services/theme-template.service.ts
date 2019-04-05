@@ -44,8 +44,6 @@ export class ThemeTemplateService {
         templateType: 'dust',
         template: `<h1>Template ${title} worked</h1>`,
     };
-    console.log('templateCollection', templatesCollection);
-    console.log('template', template);
     return templatesCollection.doc(template.id).set(template);
   }
 
