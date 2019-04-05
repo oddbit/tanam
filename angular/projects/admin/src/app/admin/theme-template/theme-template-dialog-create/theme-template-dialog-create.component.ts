@@ -27,8 +27,8 @@ export class ThemeTemplateDialogCreateComponent {
 
   async createNewTemplate () {
     const formData = this.createTemplateForm.value;
-    await this.templateService.createTemplateInTheme(this.data.theme, formData.title, formData.selector);
     this.router.navigateByUrl(`_/admin/theme/${this.data.theme.id}/templates/${formData.selector}`);
+    await this.templateService.createTemplateInTheme(this.data.theme, formData.title, formData.selector);
     this.dialogRef.close();
   }
 }
