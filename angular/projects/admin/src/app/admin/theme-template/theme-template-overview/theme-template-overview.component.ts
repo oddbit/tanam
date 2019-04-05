@@ -33,7 +33,9 @@ export class ThemeTemplateOverviewComponent implements OnInit {
     // TODO: Implement new way of creating template
     // const newId = await this.themeTemplateService.createTemplateInTheme(theme);
     // this.router.navigateByUrl(`/_/admin/templates/${newId}`);
-      this.dialog.open(ThemeTemplateDialogCreateComponent);
+      this.dialog.open(ThemeTemplateDialogCreateComponent, {
+        data: { theme: theme }
+      });
   }
 
   editTheme(theme: Theme) {

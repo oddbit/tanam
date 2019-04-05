@@ -6,16 +6,18 @@
       <div class="col">
         <mat-form-field class="full-width">
           <input matInput
-                 placeholder="Template Name"
+                 placeholder="Title"
                  formControlName="title">
+          <mat-hint align="end">Example: Blog</mat-hint>
           <mat-error *ngIf="createTemplateForm.controls['title'].hasError('required')">
-            Template Name is <strong>required</strong>
+            Title is <strong>required</strong>
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
           <input matInput
                  placeholder="Selector Name"
                  formControlName="selector">
+          <mat-hint align="end">Example: blog</mat-hint>
           <mat-error *ngIf="createTemplateForm.controls['selector'].hasError('required')">
             Selector name is <strong>required</strong>
           </mat-error>

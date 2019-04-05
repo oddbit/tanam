@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { DocumentTypeDialogCreateComponent } from '../../document-type/document-type-dialog-create/document-type-dialog-create.component';
 import { Router } from '@angular/router';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ThemeTemplateService } from '../../../services/theme-template.service';
 
 @Component({
   selector: 'tanam-theme-template-dialog-create',
@@ -17,14 +18,16 @@ export class ThemeTemplateDialogCreateComponent {
   });
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private readonly formBuilder: FormBuilder,
     private readonly documentTypeService: DocumentTypeService,
     private dialogRef: MatDialogRef<DocumentTypeDialogCreateComponent>,
     private router: Router,
+    private templateService: ThemeTemplateService
   ) { }
 
-  createNewTemplate () {
-    alert();
-    console.log(this.createTemplateForm)
+  async createNewTemplate () {
+    const formData = this.createTemplateForm.value;
+    await this.templateService.createTemplateInTheme(this.data.theme, formData.title, formData.selector);
   }
 }
