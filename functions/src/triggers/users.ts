@@ -6,7 +6,10 @@ import * as siteService from '../services/site-info.service';
 
 export const createUser = functions.auth.user().onCreate(async (firebaseUser) => {
     const tanamConfig = configService.getConfig();
-    const initialRole = firebaseUser.email === process.env.TANAM_OWNER ? 'owner' : tanamConfig.users[firebaseUser.email];
+
+    const tanamConfigRole = tanamConfig.users ? tanamConfig.users[firebaseUser.email] : null;
+    const envRole = firebaseUser.email === process.env.TANAM_OWNER ? 'owner' :  null;
+    const initialRole = envRole || tanamConfigRole;
 
     // Use gravatar as default if photoUrl isn't specified in user data
     // https://en.gravatar.com/site/implement/images/
@@ -16,7 +19,7 @@ export const createUser = functions.auth.user().onCreate(async (firebaseUser) =>
         name: firebaseUser.displayName || firebaseUser.email,
         email: firebaseUser.email,
         photoUrl: firebaseUser.photoURL || `https://www.gravatar.com/avatar/${gravatarHash}.jpg?s=1024&d=identicon`,
-        roles: !!initialRole ? [initialRole] : [],
+        roles: [initialRole],
     };
 
     console.log(`Creating account: ${JSON.stringify({ user })}`);
