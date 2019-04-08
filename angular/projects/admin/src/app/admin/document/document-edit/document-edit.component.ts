@@ -9,6 +9,8 @@ import { DocumentService } from '../../../services/document.service';
 import { SiteService } from '../../../services/site.service';
 import { firestore } from 'firebase/app';
 import { MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
+import { DocumentDialogDeleteComponent } from '../document-dialog-delete/document-dialog-delete.component';
 
 interface StatusOption {
   title: string;
@@ -53,7 +55,8 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     private readonly documentService: DocumentService,
     private readonly documentTypeService: DocumentTypeService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) { }
 
   get dataForm() {
@@ -116,13 +119,14 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   async deleteEntry() {
-    if (confirm(`Are you sure to delete the: ${this.documentForm.controls['title'].value} ?`)) {
-      this._setStateProcessing(true);
-      const document = await this.document$.pipe(take(1)).toPromise();
-      await this.documentService.delete(document.id);
-      this._navigateBack();
-      this._setStateProcessing(false);
-    }
+    this.dialog.open(DocumentDialogDeleteComponent);
+    // if (confirm(`Are you sure to delete the: ${this.documentForm.controls['title'].value} ?`)) {
+    //   this._setStateProcessing(true);
+    //   const document = await this.document$.pipe(take(1)).toPromise();
+    //   await this.documentService.delete(document.id);
+    //   this._navigateBack();
+    //   this._setStateProcessing(false);
+    // }
   }
 
   async saveEntry(val: string) {

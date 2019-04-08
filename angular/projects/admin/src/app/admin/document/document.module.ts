@@ -8,12 +8,14 @@ import { DocumentEditComponent } from './document-edit/document-edit.component';
 import { DocumentListComponent } from './document-list/document-list.component';
 import { DocumentOverviewComponent } from './document-overview/document-overview.component';
 import { MatInputModule } from '@angular/material';
+import { DocumentDialogDeleteComponent } from './document-dialog-delete/document-dialog-delete.component';
 
 @NgModule({
   declarations: [
     DocumentEditComponent,
     DocumentListComponent,
     DocumentOverviewComponent,
+    DocumentDialogDeleteComponent,
   ],
   imports: [
     CommonModule,
@@ -26,6 +28,7 @@ import { MatInputModule } from '@angular/material';
   exports: [
     DocumentEditComponent,
     DocumentOverviewComponent,
-  ]
+  ],
+  entryComponents: [DocumentDialogDeleteComponent]
 })
 export class DocumentModule { }
