@@ -32,6 +32,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     icon: [null, Validators.required],
     description: [null, Validators.required],
     fields: this.formBuilder.array([]),
+    standalone: [false, Validators.required]
   });
   readonly fieldTypes: FieldType[] = [
     { type: 'input-text', title: 'Single line of text' },
@@ -74,6 +75,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
         slug: this.documentType.slug,
         icon: this.documentType.icon,
         description: this.documentType.description,
+        standalone: this.documentType.standalone
       });
     }
   }
@@ -129,6 +131,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
       icon: formData.icon,
       description: formData.description,
       fields: this.fieldForms.value,
+      standalone: formData.standalone
     } as DocumentType);
 
     if (this.afterSaveRoute) {

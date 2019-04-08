@@ -23,7 +23,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatDialogModule } from '@angular/material';
+import { MatDialogModule, MatSlideToggleModule } from '@angular/material';
 import { MatSnackBarModule } from '@angular/material';
 
 @NgModule({
@@ -55,6 +55,7 @@ import { MatSnackBarModule } from '@angular/material';
     MatTooltipModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatSlideToggleModule
   ],
   exports: [
     CommonModule,
@@ -83,6 +84,7 @@ import { MatSnackBarModule } from '@angular/material';
     MatTooltipModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatSlideToggleModule
   ]
 })
 export class AppMaterialModule { }
