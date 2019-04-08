@@ -118,15 +118,21 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     this._subscriptions.filter(s => !!s && !s.closed).forEach(s => s.unsubscribe());
   }
 
-  async deleteEntry() {
-    this.dialog.open(DocumentDialogDeleteComponent);
-    // if (confirm(`Are you sure to delete the: ${this.documentForm.controls['title'].value} ?`)) {
-    //   this._setStateProcessing(true);
-    //   const document = await this.document$.pipe(take(1)).toPromise();
-    //   await this.documentService.delete(document.id);
-    //   this._navigateBack();
-    //   this._setStateProcessing(false);
-    // }
+async deleteEntry() {
+    const dialogRef = this.dialog.open(DocumentDialogDeleteComponent, {
+      data: {
+        title: this.documentForm.controls['title'].value
+      }
+    });
+    dialogRef.afterClosed().subscribe(async status => {
+       if (status === 'delete') {
+        this._setStateProcessing(true);
+        const document = await this.document$.pipe(take(1)).toPromise();
+        await this.documentService.delete(document.id);
+        this._navigateBack();
+        this._setStateProcessing(false);
+      }
+    });
   }
 
   async saveEntry(val: string) {
