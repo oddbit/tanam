@@ -30,19 +30,21 @@ export class ThemeTemplateService {
       .valueChanges();
   }
 
-  async createTemplateInTheme(theme: Theme, documentType: DocumentType) {
-    return this.siteCollection
-      .collection('themes').doc(theme.id)
-      .collection('templates').doc<ThemeTemplate>(documentType.id)
-      .set({
-        id: documentType.id,
-        title: documentType.title,
-        selector: `<${documentType.id}>`,
-        template: '<!-- Put your HTML template here -->',
-        styles: ['// Put your CSS template here'],
-        updated: firebase.firestore.FieldValue.serverTimestamp(),
+  async createTemplateInTheme(theme: Theme, title: string, selector: string ) {
+    const templatesCollection = this.siteCollection
+    .collection('themes').doc(theme.id)
+    .collection('templates');
+
+    const template: ThemeTemplate = {
+        id: selector,
+        title: title,
         created: firebase.firestore.FieldValue.serverTimestamp(),
-      } as ThemeTemplate);
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        selector: selector,
+        templateType: 'dust',
+        template: `<h1>Template ${title} worked</h1>`,
+    };
+    return templatesCollection.doc(template.id).set(template);
   }
 
   saveTemplate(template: ThemeTemplate) {
