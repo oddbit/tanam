@@ -131,13 +131,11 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
         this.fieldForms.at(index).patchValue({
           isTitle: true
         });
-        console.log(this.fieldForms.value);
       }
       if (index !== formData.indexTitle) {
         this.fieldForms.at(index).patchValue({
           isTitle: false
         });
-        console.log(this.fieldForms.value);
       }
     }
     if (this.documentTypeForm.errors) {
