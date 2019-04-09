@@ -15,6 +15,12 @@
     </mat-card-header>
     <mat-card-content>
       <div class="row">
+        <div class="col slider-toogle">
+          <mat-slide-toggle formControlName="standalone"
+                            matTooltip="Standalone means this content type will be accessed as a page">Standalone</mat-slide-toggle>
+        </div>
+      </div>
+      <div class="row">
         <div class="col">
           <mat-form-field class="full-width">
             <input matInput
@@ -56,9 +62,6 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="col">
-          <mat-slide-toggle formControlName="standalone">Standalone</mat-slide-toggle>
-        </div>
       </div>
     </mat-card-content>
 
@@ -91,24 +94,23 @@
       <mat-radio-group formControlName="indexTitle">
         <div formArrayName="fields">
           <div class="row"
-              *ngFor="let field of fieldForms.controls; let i=index"
-              [formGroupName]="i">
-            <div class="col">
-                <small>Title</small>
-                <mat-radio-button [value]="i"></mat-radio-button>
+               *ngFor="let field of fieldForms.controls; let i=index"
+               [formGroupName]="i">
+            <div class="col-1">
+              <mat-radio-button [value]="i" matTooltip="Set this field as title"></mat-radio-button>
             </div>
             <div class="col">
               <mat-form-field>
                 <input matInput
-                      placeholder="Key"
-                      formControlName="key">
+                       placeholder="Key"
+                       formControlName="key">
               </mat-form-field>
             </div>
             <div class="col">
               <mat-form-field>
                 <input matInput
-                      placeholder="Title"
-                      formControlName="title">
+                       placeholder="Title"
+                       formControlName="title">
               </mat-form-field>
             </div>
             <div class="col">
