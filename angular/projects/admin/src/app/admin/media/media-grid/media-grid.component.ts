@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap, take } from 'rxjs/operators';
 import { TanamFile } from 'tanam-models';
@@ -11,6 +11,10 @@ import { UserFileService } from '../../../services/user-file.service';
   styleUrls: ['./media-grid.component.scss']
 })
 export class MediaGridComponent {
+  placeHolder = 'https://dummyimage.com/10x10/cccccc/000000.png&text=+';
+  @Input() message: boolean;
+
+
   readonly files$: Observable<TanamFile[]> = this.fileService.getFiles('image')
     .pipe(tap(files => console.log(`[MediaGridComponent:files$] num files: ${files.length}`)));
 
@@ -28,7 +32,7 @@ export class MediaGridComponent {
     private readonly fileService: UserFileService,
   ) { }
 
-  getDownloadUrl(file: TanamFile): Observable<string> {
+    getDownloadUrl(file: TanamFile): Observable<string> {
     if (!this._downloadUrls[file.id]) {
       this._downloadUrls[file.id] = this.fileService.getDownloadUrl(file, 'small')
         .pipe(tap(url => console.log(`[MediaGridComponent:getDownloadUrl] ${JSON.stringify({ url })}`)));
