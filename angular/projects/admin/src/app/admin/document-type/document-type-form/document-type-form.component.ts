@@ -32,6 +32,8 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     icon: [null, Validators.required],
     description: [null, Validators.required],
     fields: this.formBuilder.array([]),
+    standalone: [false, Validators.required],
+    indexTitle: []
   });
   readonly fieldTypes: FieldType[] = [
     { type: 'input-text', title: 'Single line of text' },
@@ -65,8 +67,8 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.documentType) {
       this.clearFields();
-      for (const field of this.documentType.fields) {
-        this.addField(field);
+      for (let index = 0; index < this.documentType.fields.length; index++) {
+        this.addField(this.documentType.fields[index], index);
       }
 
       this.documentTypeForm.patchValue({
@@ -74,6 +76,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
         slug: this.documentType.slug,
         icon: this.documentType.icon,
         description: this.documentType.description,
+        standalone: this.documentType.standalone
       });
     }
   }
@@ -90,13 +93,18 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     this.router.navigateByUrl(`/_/admin/theme/${this.themeId}/templates/${this.documentTypeForm.controls['slug'].value}`);
   }
 
-  addField(field?: DocumentField) {
+  addField(field?: DocumentField, index?: number) {
     const val = field ? field : { type: 'input-text' } as DocumentField;
+    console.log(val);
     const formField = this.formBuilder.group({
       type: [val.type, Validators.required],
       title: [val.title, Validators.required],
       key: [val.key, Validators.required],
+      isTitle: [val.isTitle, Validators.required],
     });
+    if (val.isTitle) {
+      this.documentTypeForm.controls['indexTitle'].setValue(index);
+    }
 
     this.fieldForms.push(formField);
   }
@@ -118,6 +126,18 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
 
   async save() {
     const formData = this.documentTypeForm.value;
+    for (let index = 0; index < this.fieldForms.value.length; index++) {
+      if (index === formData.indexTitle) {
+        this.fieldForms.at(index).patchValue({
+          isTitle: true
+        });
+      }
+      if (index !== formData.indexTitle) {
+        this.fieldForms.at(index).patchValue({
+          isTitle: false
+        });
+      }
+    }
     if (this.documentTypeForm.errors) {
       return;
     }
@@ -129,6 +149,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
       icon: formData.icon,
       description: formData.description,
       fields: this.fieldForms.value,
+      standalone: formData.standalone
     } as DocumentType);
 
     if (this.afterSaveRoute) {
