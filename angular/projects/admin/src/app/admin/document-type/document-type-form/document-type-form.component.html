@@ -96,11 +96,11 @@
           <div class="row"
                *ngFor="let field of fieldForms.controls; let i=index"
                [formGroupName]="i">
-            <div class="col-1">
+            <div id="radio-isTitle">
               <mat-radio-button [value]="i" matTooltip="Set this field as title"></mat-radio-button>
             </div>
             <div class="col">
-              <mat-form-field>
+              <mat-form-field class="full-width">
                 <input matInput
                        placeholder="Key"
                        formControlName="key">
