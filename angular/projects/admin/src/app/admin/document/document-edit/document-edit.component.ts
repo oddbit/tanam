@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
+import { switchMap, take, filter } from 'rxjs/operators';
 import { DocumentStatus } from 'tanam-models';
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { DocumentService } from '../../../services/document.service';
@@ -32,8 +32,13 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     // toolbar: ['heading', '|', 'bold', 'italic', '|', 'bulletedList', 'numberedList'],
   };
 
-  readonly document$ = this.route.paramMap.pipe(switchMap(params => this.documentService.get(params.get('documentId'))));
-  readonly documentType$ = this.document$.pipe(switchMap(document => this.documentTypeService.getDocumentType(document.documentType)));
+  readonly document$ = this.route.paramMap.pipe(
+    switchMap(params => this.documentService.get(params.get('documentId'))),
+    filter(doc => !!doc),
+  );
+  readonly documentType$ = this.document$.pipe(
+    filter(doc => !!doc),
+    switchMap(document => this.documentTypeService.getDocumentType(document.documentType)));
   readonly domain$ = this.siteService.getPrimaryDomain();
   readonly documentForm = this.formBuilder.group({
     title: [null, Validators.required],
