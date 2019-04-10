@@ -10,7 +10,6 @@ import { UserFileService } from '../../services/user-file.service';
 })
 export class MediaComponent implements OnInit {
   uploadTasks: { [key: string]: Observable<number> } = {};
-  createPlaceholder = false;
 
   constructor(
     private readonly fileService: UserFileService,
@@ -23,11 +22,8 @@ export class MediaComponent implements OnInit {
     const file: File = event.target.files[0];
     const uploadTaskProgress = this.fileService.upload(file);
     this.uploadTasks[file.name] = uploadTaskProgress.pipe(tap(progress => {
-      this.createPlaceholder = false;
-      console.log(progress);
       if (progress === 100) {
         delete this.uploadTasks[file.name];
-        this.createPlaceholder = true;
       }
     }));
   }
