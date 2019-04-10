@@ -11,6 +11,9 @@ import { UserFileService } from '../../../services/user-file.service';
   styleUrls: ['./media-grid.component.scss']
 })
 export class MediaGridComponent {
+  readonly placeHolder = 'https://dummyimage.com/1x1/cccccc/000000.png&text=+';
+
+
   readonly files$: Observable<TanamFile[]> = this.fileService.getFiles('image')
     .pipe(tap(files => console.log(`[MediaGridComponent:files$] num files: ${files.length}`)));
 
