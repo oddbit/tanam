@@ -5,11 +5,13 @@ import { AppMaterialModule } from '../../app-material.module';
 import { ComponentsModule } from '../components/components.module';
 import { MediaGridComponent } from './media-grid/media-grid.component';
 import { MediaComponent } from './media.component';
+import { MediaDialogDetailComponent } from './media-dialog-detail/media-dialog-detail.component';
 
 @NgModule({
   declarations: [
     MediaComponent,
     MediaGridComponent,
+    MediaDialogDetailComponent,
   ],
   imports: [
     CommonModule,
@@ -20,5 +22,6 @@ import { MediaComponent } from './media.component';
   exports: [
     MediaComponent,
   ],
+  entryComponents: [MediaDialogDetailComponent]
 })
 export class MediaModule { }
