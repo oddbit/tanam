@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Theme } from 'tanam-models';
 import { ThemeService } from '../../../services/theme.service';
+import { MatDialog } from '@angular/material';
+import { ThemeTemplateDialogCreateComponent } from '../theme-template-dialog-create/theme-template-dialog-create.component';
 
 @Component({
   selector: 'tanam-theme-template-overview',
@@ -17,6 +19,7 @@ export class ThemeTemplateOverviewComponent implements OnInit {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly siteThemeservice: ThemeService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -26,10 +29,13 @@ export class ThemeTemplateOverviewComponent implements OnInit {
     }));
   }
 
-  async createNewTemplate(theme: Theme) {
+  async createNewTemplateDialog(theme: Theme) {
     // TODO: Implement new way of creating template
     // const newId = await this.themeTemplateService.createTemplateInTheme(theme);
     // this.router.navigateByUrl(`/_/admin/templates/${newId}`);
+      this.dialog.open(ThemeTemplateDialogCreateComponent, {
+        data: { theme: theme }
+      });
   }
 
   editTheme(theme: Theme) {

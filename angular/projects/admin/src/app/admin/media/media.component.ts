@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { UserFileService } from '../../services/user-file.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'tanam-media',
@@ -9,10 +10,11 @@ import { UserFileService } from '../../services/user-file.service';
   styleUrls: ['./media.component.scss']
 })
 export class MediaComponent implements OnInit {
-  readonly uploadTasks: { [key: string]: Observable<number> } = {};
+  uploadTasks: { [key: string]: Observable<number> } = {};
 
   constructor(
     private readonly fileService: UserFileService,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit() {
@@ -24,6 +26,9 @@ export class MediaComponent implements OnInit {
     this.uploadTasks[file.name] = uploadTaskProgress.pipe(tap(progress => {
       if (progress === 100) {
         delete this.uploadTasks[file.name];
+        this.snackBar.open('Getting file..', 'Dismiss', {
+          duration: 5000,
+        });
       }
     }));
   }

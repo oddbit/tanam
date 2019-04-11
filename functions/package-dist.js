@@ -42,4 +42,8 @@ try {
     console.log("No Tanam config file found. Not a problem if you provided configuration in another way.");
 }
 
+console.log('Copying README and LICENSE');
+fse.copySync('../README.md', '../dist/README.md', { overwrite: true });
+fse.copySync('../LICENSE', '../dist/LICENSE', { overwrite: true });
+
 console.log('Done!');

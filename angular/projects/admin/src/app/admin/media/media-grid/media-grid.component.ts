@@ -1,9 +1,11 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map, tap, take } from 'rxjs/operators';
 import { TanamFile } from 'tanam-models';
 import { UserFileService } from '../../../services/user-file.service';
+import { MediaDialogDetailComponent } from '../media-dialog-detail/media-dialog-detail.component';
 
 @Component({
   selector: 'tanam-media-grid',
@@ -11,6 +13,9 @@ import { UserFileService } from '../../../services/user-file.service';
   styleUrls: ['./media-grid.component.scss']
 })
 export class MediaGridComponent {
+  readonly placeHolder = 'https://dummyimage.com/1x1/cccccc/000000.png&text=+';
+
+
   readonly files$: Observable<TanamFile[]> = this.fileService.getFiles('image')
     .pipe(tap(files => console.log(`[MediaGridComponent:files$] num files: ${files.length}`)));
 
@@ -26,6 +31,7 @@ export class MediaGridComponent {
   constructor(
     private readonly breakpointObserver: BreakpointObserver,
     private readonly fileService: UserFileService,
+    private dialog: MatDialog
   ) { }
 
   getDownloadUrl(file: TanamFile): Observable<string> {
@@ -38,6 +44,9 @@ export class MediaGridComponent {
   }
 
   showDetails(file: TanamFile) {
+    this.dialog.open(MediaDialogDetailComponent, {
+      data: file
+    });
     console.log(`[MediaGridComponent:showDetails] ${JSON.stringify({ file })}`);
   }
 

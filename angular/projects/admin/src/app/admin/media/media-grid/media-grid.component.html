@@ -9,7 +9,7 @@
         (click)="showDetails(file)"
         >Details</button>
         <button mat-menu-item
-                (click)="delete(file)">
+                (click)="remove(file)">
           Remove</button>
       </mat-menu>
       <button mat-icon-button
@@ -20,9 +20,8 @@
       </button>
     </mat-card-content>
     <div mat-card-image
-         *ngIf="(getDownloadUrl(file) | async) as imageUrl"
          class="img-wrapper">
-      <img [src]="imageUrl"
+      <img [src]="(getDownloadUrl(file) | async) || placeHolder"
            [alt]="file.title">
     </div>
   </mat-card>

@@ -2,13 +2,15 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
+import { switchMap, take, filter } from 'rxjs/operators';
 import { DocumentStatus } from 'tanam-models';
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { DocumentService } from '../../../services/document.service';
 import { SiteService } from '../../../services/site.service';
 import { firestore } from 'firebase/app';
 import { MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
+import { DocumentDialogDeleteComponent } from '../document-dialog-delete/document-dialog-delete.component';
 
 interface StatusOption {
   title: string;
@@ -30,8 +32,13 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     // toolbar: ['heading', '|', 'bold', 'italic', '|', 'bulletedList', 'numberedList'],
   };
 
-  readonly document$ = this.route.paramMap.pipe(switchMap(params => this.documentService.get(params.get('documentId'))));
-  readonly documentType$ = this.document$.pipe(switchMap(document => this.documentTypeService.getDocumentType(document.documentType)));
+  readonly document$ = this.route.paramMap.pipe(
+    switchMap(params => this.documentService.get(params.get('documentId'))),
+    filter(doc => !!doc),
+  );
+  readonly documentType$ = this.document$.pipe(
+    filter(doc => !!doc),
+    switchMap(document => this.documentTypeService.getDocumentType(document.documentType)));
   readonly domain$ = this.siteService.getPrimaryDomain();
   readonly documentForm = this.formBuilder.group({
     title: [null, Validators.required],
@@ -53,7 +60,8 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     private readonly documentService: DocumentService,
     private readonly documentTypeService: DocumentTypeService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) { }
 
   get dataForm() {
@@ -115,12 +123,21 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     this._subscriptions.filter(s => !!s && !s.closed).forEach(s => s.unsubscribe());
   }
 
-  async deleteEntry() {
-    this._setStateProcessing(true);
-    const document = await this.document$.pipe(take(1)).toPromise();
-    await this.documentService.delete(document.id);
-    this._navigateBack();
-    this._setStateProcessing(false);
+async deleteEntry() {
+    const dialogRef = this.dialog.open(DocumentDialogDeleteComponent, {
+      data: {
+        title: this.documentForm.controls['title'].value
+      }
+    });
+    dialogRef.afterClosed().subscribe(async status => {
+       if (status === 'delete') {
+        this._setStateProcessing(true);
+        const document = await this.document$.pipe(take(1)).toPromise();
+        await this.documentService.delete(document.id);
+        this._navigateBack();
+        this._setStateProcessing(false);
+      }
+    });
   }
 
   async saveEntry(val: string) {
