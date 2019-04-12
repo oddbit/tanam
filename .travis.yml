@@ -9,20 +9,20 @@ branches:
   only:
   - master
   - /^[0-9]+\.[0-9]+\.[0-9]+/
-before_script:
+script:
   - cd angular
   - npm install
   - cd ../functions
   - npm install
   - npm run build:dist
+before_deploy:
   - cd ../dist
+  - ls
   - npm install
-jobs:
-  include:
-    - stage: npm release
-      node_js: "8"
-      script:
-        - cd dist
-        - npm publish
-      on:
-        tags: true
+deploy:
+  skip_cleanup: true
+  provider: npm
+  email: dennis@oddbit.id
+  api_key: $NPM_TOKEN
+  on:
+    tags: true
