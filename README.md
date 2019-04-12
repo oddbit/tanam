@@ -71,7 +71,7 @@ on demand, and as the owner of your website you and your team are the only users
 
 # Read more
  * [Install and get Tanam for your site](/docs/install.md)
- * [How do develop web templates](/docs/develop-templates.md)
+ * [How to develop web templates](/docs/develop-templates.md)
  * [The technical infrastructure](/docs/infrastructure.md)
  * [Screenshots and CMS in action](/docs/in-action.md)
  * [Portfolio](/docs/portfolio.md)
