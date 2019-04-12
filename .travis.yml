@@ -2,13 +2,20 @@ language: node_js
 node_js:
   - "8"
 cache:
-  - functions/node_modules
+  - angular/node_modules
   - dist/node_modules
+  - functions/node_modules
 branches:
   only:
   - master
 before_script:
-  - npm --prefix functions run build:dist
+  - cd angular
+  - npm install
+  - cd ../functions
+  - npm install
+  - npm run build:dist
+  - cd ../dist
+  - npm install
 script:
   - echo "npm test is temporarily disabled"
 deploy:
