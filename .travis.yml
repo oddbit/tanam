@@ -15,14 +15,12 @@ before_script:
   - cd ../functions
   - npm install
   - npm run build:dist
-  - cd ../dist
+before_deploy:
+  - cd dist
   - npm install
-jobs:
-  include:
-    - stage: npm release
-      node_js: "8"
-      script:
-        - cd dist
-        - npm publish
-      on:
-        tags: true
+deploy:
+  provider: npm
+  email: dennis@oddbit.id
+  api_key: $NPM_TOKEN
+  on:
+    tags: true
