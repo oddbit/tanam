@@ -17,11 +17,12 @@ before_script:
   - npm run build:dist
   - cd ../dist
   - npm install
-script:
-  - echo "npm test is temporarily disabled"
-deploy:
-  provider: npm
-  email: dennis@oddbit.id
-  api_key: $NPM_TOKEN
-  on:
-    tags: true
+jobs:
+  include:
+    - stage: npm release
+      node_js: "8"
+      script:
+        - cd dist
+        - npm publish
+      on:
+        tags: true
