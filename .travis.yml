@@ -8,6 +8,7 @@ cache:
 branches:
   only:
   - master
+  - /^[0-9]+\.[0-9]+\.[0-9]+/
 before_script:
   - cd angular
   - npm install
@@ -24,4 +25,3 @@ deploy:
   api_key: $NPM_TOKEN
   on:
     tags: true
-    condition: $TRAVIS_TAG =~ ^[0-9]+\.[0-9]+\.[0-9]+
