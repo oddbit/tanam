@@ -11,7 +11,7 @@ side templates with support for asynchronous template values and directives.
   <strong>Hey, this document has received a lot of love!</strong>
   {:else}
   <span>Keep it up, champ!</span>
-  {/eq}
+  {/gt}
 {/document}
 ```
 
@@ -31,11 +31,11 @@ about the site and the currently rendered document.
     "id": "2pLAoWMSUZPMj72rST0t",
     "documentType": "event",
     "data": {
-      "venue": "Z1DripWIhE4vJFSZNSzX", // ID of another document
+      "venue": "Z1DripWIhE4vJFSZNSzX",
       "body": "<p>Full HTML supported content</p>",
-      "startDate": "2019-01-31T04:00:00.000Z", // Javascript Date
-      "endDate": "2019-01-31T06:00:00.000Z", // Javascript Date
-      "image": "LOhmisLtnesWTMRtNZxY", // ID of an image file
+      "startDate": "2019-01-31T04:00:00.000Z",
+      "endDate": "2019-01-31T06:00:00.000Z",
+      "image": "LOhmisLtnesWTMRtNZxY",
       "registerLink": "bit.ly/AIForBusiness",
       "title": "Women Will"
     },
@@ -64,6 +64,12 @@ about the site and the currently rendered document.
 
 The `data` field consist of custom user data, as defined by the content type. While all the other
 fields are consistent and present for all documen types.
+
+## Types
+In the example above, `document.data.venue` is referring to another document that can be fetched
+using the [@document](#document-helper) directive helper.
+
+The values for `document.data.startDate`, `document.data.endDate`, `document.created`, `document.updated` and `document.published` are regular Javascript dates.
 
 ## Referring to images
 Images are simply refeerred to by their file IDs as saved in the document data. From the example
