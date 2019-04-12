@@ -4,10 +4,25 @@ import * as documentContextService from './services/document-context.service';
 import * as templateService from './services/template.service';
 import { getTheme } from './services/theme.service';
 
+dust.isDebug = true;
+
 // ----------------------------------------------------------------------------
 // DUST HELPERS
 // Implements Tanam helper extensions for the template engine
 //
+dust.helpers.debugDump = (chunk, context, bodies, params) => {
+    const data = context.stack.head;
+    console.log(`[dust.helpers.debugDump] ${JSON.stringify(data)}`)
+    const prefix = !!params.prefix ? `${params.prefix}: ` : '';
+    const outputData = JSON.stringify(data, null, 2);
+    if (params.to === 'console') {
+        console.log(prefix + outputData);
+        return chunk;
+    }
+
+    return chunk.write(outputData.replace(/</g, '\\u003c'));
+}
+
 dust.helpers.document = (chunk, context, bodies, params) => {
     console.log(`[dust.helpers.document] Getting document id: ${JSON.stringify(params.id)}`);
     if (!params.document) {
@@ -50,7 +65,6 @@ export async function compileTemplate(context: PageContext) {
     }
 
     const currentThemeTemplate = context.document.documentType;
-
     console.log(`[renderTemplate] ${JSON.stringify({ currentThemeTemplate, context })}`);
     return new Promise<string>((resolve, reject) => {
         dust.render(currentThemeTemplate, context, (err: any, out: string) => {
