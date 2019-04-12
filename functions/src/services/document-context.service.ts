@@ -17,15 +17,24 @@ export async function queryDocumentContext(documentTypeId: string, queryOpts: Do
     const sortOrder = queryOpts.orderBy && queryOpts.orderBy.sortOrder || 'desc';
     const limit = queryOpts.limit || 20;
 
+    console.log(`[queryDocumentContext] effective query ${JSON.stringify({ orderByField, sortOrder, limit })}`);
     const querySnap = await siteCollection()
         .collection('documents')
         .where('status', '==', 'published')
         .where('documentType', '==', documentTypeId)
-        .orderBy(orderByField, sortOrder)
-        .limit(limit)
+        // .orderBy(orderByField, sortOrder)
+        // .limit(limit)
         .get();
 
-    return querySnap.docs.map(doc => _toContext(doc.data() as Document))
+    console.log(`[queryDocumentContext] num results: ${querySnap.docs.length}`);
+
+    const result = [];
+    for (const doc of querySnap.docs) {
+        console.log(`[queryDocumentContext] ${JSON.stringify(doc.data())}`);
+        result.push(_toContext(doc.data() as Document));
+    }
+
+    return result;
 }
 
 export async function getDocumentContextById(docId: string) {

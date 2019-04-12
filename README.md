@@ -49,7 +49,6 @@ All cached content is immediately replaced as you update it. Since we are pre-bu
 the content, all your URLs will serve instantly as a static website would. Performance only depends
 on the size of your page.
 
-
 The word *tanam* means "to plant" in Indonesian language. The name comes from the seed of thought that
 this project was for about a year before inception. Also because the leading design guidelines for
 building Tanam is: using the CMS should be as easy as planting the seed and then nurture your site
@@ -57,6 +56,13 @@ with good content and just watch it grow and scale by itself.
 
 For anyone exposed to use Tanam, either as a developer that is building a site or a content creator who is sharing creative works,
 we want to provide an easy to use platform that allows you to simply create a platform for sharing your thoughts.
+
+## Read more
+
+ * [How do develop web templates](/docs/develop-templates.md)
+ * [The technical infrastructure](/docs/infrastructure.md)
+ * [Screenshots and CMS in action](/docs/in-action.md)
+ * [Portfolio](/docs/portfolio.md)
 
 # Does it really cost nothing?
 Hosting Tanam can cost you as little as nothing. Firebase has a very generous
