@@ -2,11 +2,12 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { CacheTask, Document, DocumentField, DocumentType, SiteInformation } from '../models';
 
-export const buildEntryCache = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite(async (change) => {
+export const buildEntryCache = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite(async (change, context) => {
+    const siteId = context.params.siteId;
     const entryBefore = change.before.data() as Document;
     const entryAfter = change.after.data() as Document;
 
-    const siteInfoDoc = await admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT).get();
+    const siteInfoDoc = await admin.firestore().collection('tanam').doc(siteId).get();
     const siteInfo = siteInfoDoc.data() as SiteInformation;
 
     const tasks = [];
@@ -33,7 +34,8 @@ export const buildEntryCache = functions.firestore.document('tanam/{siteId}/docu
     );
 });
 
-export const countEntryStatus = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite((change) => {
+export const countEntryStatus = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite((change, context) => {
+    const siteId = context.params.siteId;
     const entryBefore = change.before.data() as Document;
     const entryAfter = change.after.data() as Document;
 
@@ -43,18 +45,26 @@ export const countEntryStatus = functions.firestore.document('tanam/{siteId}/doc
     }
 
     const documentType = entryAfter.documentType || entryBefore.documentType;
-    const documentTypeRef = admin.firestore().collection('tanam-types').doc(documentType);
-    const docsQuery = admin.firestore().collection('tanam-entries').where('documentType', '==', documentType);
+    const documentTypeRef = admin.firestore()
+        .collection('tanam').doc(siteId)
+        .collection('document-types').doc(documentType);
 
+    const docsQuery = admin.firestore()
+        .collection('tanam').doc(siteId)
+        .collection('documents').where('documentType', '==', documentType);
+
+    console.log(`Updating counters for ${documentType}`);
     return admin.firestore().runTransaction(async (trx) => {
         const trxDoc = await trx.get(documentTypeRef);
         const trxContentType = trxDoc.data() as DocumentType;
 
         const promises = []
         promises.push(docsQuery.where('status', '==', 'published').get().then((snap) => {
+            console.log(`Num published: ${snap.docs.length}`);
             trxContentType.numEntries.published = snap.docs.length;
         }));
         promises.push(docsQuery.where('status', '==', 'unpublished').get().then((snap) => {
+            console.log(`Num unpublished: ${snap.docs.length}`);
             trxContentType.numEntries.unpublished = snap.docs.length;
         }));
 
@@ -95,6 +105,7 @@ export const deleteRevisions = functions.firestore.document('tanam/{siteId}/docu
 });
 
 export const deleteFieldReferences = functions.firestore.document('tanam/{siteId}/{contentType}/{fileId}').onDelete(async (snap, context) => {
+    const siteId = context.params.siteId;
     const contentType = context.params.contentType;
     if (!['documents', 'files'].some(c => c === contentType)) {
         console.log(`Deleted a ${contentType} document. Nothing to do for this function.`);
@@ -106,7 +117,7 @@ export const deleteFieldReferences = functions.firestore.document('tanam/{siteId
 
     console.log(`Looking through all document types to find reference fields.`);
     const documentTypeDocs = await admin.firestore()
-        .collection('tanam').doc(process.env.GCLOUD_PROJECT)
+        .collection('tanam').doc(siteId)
         .collection('document-types')
         .get();
 
@@ -120,7 +131,7 @@ export const deleteFieldReferences = functions.firestore.document('tanam/{siteId
         for (const fieldName of fieldNames) {
             console.log(`Searching and replacing all "${documentType.id}" documents with reference: ${fieldName}`);
             const referringDocumentsQuery = await admin.firestore()
-                .collection('tanam').doc(process.env.GCLOUD_PROJECT)
+                .collection('tanam').doc(siteId)
                 .collection('documents')
                 .where(`data.${fieldName}`, '==', deletedDoc.id)
                 .get();
