@@ -16,7 +16,9 @@ script:
   - npm install
   - npm run build:dist
 before_deploy:
+  - npm --prefix functions run package
   - cd dist
+  - ls
   - npm install
 deploy:
   skip_cleanup: true
