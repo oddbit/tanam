@@ -1,4 +1,4 @@
-# About
+# Develop Tanam HTML Templates
 HTML templates are written using [DustJS](http://www.dustjs.com/) template language.
 It is an old template language and engine that is not very actively maintained.
 But it is currently the only existing engine of our knowledge that can render server
@@ -145,7 +145,7 @@ You can fetch a single document by its ID like the example below, and access the
 ```
 
 
-## Documents query
+## Documents Helper
 You can fetch a number of documents through simple query
 
  - `document` it is mandatory to pass in the document context of the page that is embedding other document
@@ -201,4 +201,3 @@ list iteration with the [documents query directive that was mentioned above](#do
 /tanam/my-awesome-tanam-site/themes/my-custom-theme-1/templates/blog-grid-card
 /tanam/my-awesome-tanam-site/themes/my-custom-theme-2/templates/blog-list-element
 ```
-
