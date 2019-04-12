@@ -182,7 +182,7 @@ You can fetch a number of documents through simple query
 ```
 
 ### What's up with the curly-brackets-hash-dot-syntax?
-The `@documents` helper is returning an arrayn of documents, so the `{$.}` refers to the "current context"
+The `@documents` helper is returning an arrayn of documents, so the `{#.}` refers to the "current context"
 and Dust will loop over it since it's an array. You can access the current index in the loop with the
 `$idx` variable or access a document at its index in the array with `[$idx]` syntax.
 
