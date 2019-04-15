@@ -55,12 +55,14 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
 
   saveTemplate() {
     const formData = this.templateForm.value;
-    this.themeTemplateservice.saveTemplate({
-      id: this.templateId,
-      title: formData.title,
-      selector: formData.selector,
-      template: formData.templateHtml,
-      styles: [formData.templateStyle],
-    } as ThemeTemplate);
+    this.themeTemplateservice.saveTemplate(
+      {
+        id: this.templateId,
+        title: formData.title,
+        selector: formData.selector,
+        template: formData.templateHtml,
+        styles: [formData.templateStyle],
+      } as ThemeTemplate, this.themeId as string
+      );
   }
 }
