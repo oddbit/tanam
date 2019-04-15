@@ -1,5 +1,7 @@
 # How do I get Tanam
-Setting up Tanam for the first time requires a bit of Firebase knowledge.
+Setting up Tanam for the first time requires a bit of Firebase knowledge. The easiest way to get started is to clone the 
+[tanam-starter](https://github.com/oddbit/tanam-starter) repository and just update the Firebase configuration from *step 6* 
+below.
 
 ## Firebase console
 First, you need to set some things up in the [Firebase console](https://console.firebase.google.com/).
