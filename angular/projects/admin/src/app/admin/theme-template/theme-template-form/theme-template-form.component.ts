@@ -53,9 +53,9 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(`/_/admin/theme/${this.themeId}`);
   }
 
-  saveTemplate() {
+  async saveTemplate() {
     const formData = this.templateForm.value;
-    this.themeTemplateservice.saveTemplate(
+    await this.themeTemplateservice.saveTemplate(
       {
         id: this.templateId,
         title: formData.title,
@@ -63,6 +63,7 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
         template: formData.templateHtml,
         styles: [formData.templateStyle],
       } as ThemeTemplate, this.themeId as string
-      );
+    );
+    this.router.navigateByUrl(`/_/admin/theme/${this.themeId}`);
   }
 }
