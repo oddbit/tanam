@@ -49,7 +49,7 @@ skip directly to step 7.
  $ npm i --save tanam@latest
  ```
  
- 6. Update [`.firebaserc`](../.firebaserc) and add your project ID as the *default* project
+ 6. Update [`.firebaserc`](https://github.com/oddbit/tanam-starter/blob/master/.firebaserc) and add your project ID as the *default* project
  ```json
  {
   "projects": {
@@ -58,7 +58,7 @@ skip directly to step 7.
 }
  ```
  
- 7. Copy paste the code below into your [`index.ts`](../functions/src/index.ts) file.
+ 7. Copy paste the code below into your [`index.ts`](https://github.com/oddbit/tanam-starter/blob/master/functions/src/index.ts) file.
     1. Replace (and add any) email that should have access to the site. You can assign the roles (owner, admin, publisher) for different access of content. Make sure that at least someone is the "owner".
     2. Replace the `firebaseApp` with your own web configuration that you got when adding a web app in the  Firebase console
 
