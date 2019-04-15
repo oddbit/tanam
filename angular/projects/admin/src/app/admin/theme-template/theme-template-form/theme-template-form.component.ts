@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { ThemeTemplate } from 'tanam-models';
 import { ThemeTemplateService } from '../../../services/theme-template.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'tanam-theme-template-form',
@@ -27,7 +28,8 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
     private readonly formBuilder: FormBuilder,
     private readonly router: Router,
     private readonly themeTemplateservice: ThemeTemplateService,
-  ) { }
+    private snackBar: MatSnackBar,
+    ) { }
 
   ngOnInit() {
     this.templateSubscription = this.themeTemplateservice
@@ -53,14 +55,20 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(`/_/admin/theme/${this.themeId}`);
   }
 
-  saveTemplate() {
+  async saveTemplate() {
     const formData = this.templateForm.value;
-    this.themeTemplateservice.saveTemplate({
-      id: this.templateId,
-      title: formData.title,
-      selector: formData.selector,
-      template: formData.templateHtml,
-      styles: [formData.templateStyle],
-    } as ThemeTemplate);
+    this.snackBar.open('Saving template', 'Dismiss', {
+      duration: 1000,
+    });
+    await this.themeTemplateservice.saveTemplate(
+      {
+        id: this.templateId,
+        title: formData.title,
+        selector: formData.selector,
+        template: formData.templateHtml,
+        styles: [formData.templateStyle],
+      } as ThemeTemplate, this.themeId as string
+    );
+    this.router.navigateByUrl(`/_/admin/theme/${this.themeId}`);
   }
 }

@@ -47,7 +47,7 @@ export class ThemeTemplateService {
     return templatesCollection.doc(template.id).set(template);
   }
 
-  saveTemplate(template: ThemeTemplate) {
-    return this.firestore.collection('templates').doc<ThemeTemplate>(template.id).update(template);
+  saveTemplate(template: ThemeTemplate, themeId: string) {
+    return  this.siteCollection.collection('themes').doc(themeId).collection('templates').doc<ThemeTemplate>(template.id).update(template);
   }
 }
