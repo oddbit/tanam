@@ -9,10 +9,10 @@
                          (click)='deleteEntry()'></tanam-action-button>
     <tanam-action-button buttonType='save'
                          disabled={{documentForm.pristine}}
-                         (click)='saveEntry("save")'></tanam-action-button>
+                         (click)='documentForm.pristine? "" : saveEntry("save")'></tanam-action-button>
     <tanam-action-button buttonType='saveAndClose'
                          disabled={{documentForm.pristine}}
-                         (click)='saveEntry("close")'></tanam-action-button>
+                         (click)='documentForm.pristine? "" : saveEntry("close")'></tanam-action-button>
   </tanam-context-actions>
 
   <form [formGroup]="documentForm"
