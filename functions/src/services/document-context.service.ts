@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import { Document, DocumentContext, PageContext, SiteContext, SiteInformation } from '../models';
+import * as documentService from '../services/document.service';
 
 export interface DocumentQueryOptions {
     limit?: number;
@@ -17,51 +18,37 @@ export async function queryDocumentContext(documentTypeId: string, queryOpts: Do
     const sortOrder = queryOpts.orderBy && queryOpts.orderBy.sortOrder || 'desc';
     const limit = queryOpts.limit || 20;
 
+    console.log(`[queryDocumentContext] effective query ${JSON.stringify({ orderByField, sortOrder, limit })}`);
     const querySnap = await siteCollection()
         .collection('documents')
         .where('status', '==', 'published')
         .where('documentType', '==', documentTypeId)
-        .orderBy(orderByField, sortOrder)
-        .limit(limit)
+        // .orderBy(orderByField, sortOrder)
+        // .limit(limit)
         .get();
 
-    return querySnap.docs.map(doc => _toContext(doc.data() as Document))
+    console.log(`[queryDocumentContext] num results: ${querySnap.docs.length}`);
+
+    const result = [];
+    for (const doc of querySnap.docs) {
+        console.log(`[queryDocumentContext] ${JSON.stringify(doc.data())}`);
+        result.push(_toContext(doc.data() as Document));
+    }
+
+    return result;
 }
 
 export async function getDocumentContextById(docId: string) {
     console.log(`[getDocumentContextById] ${JSON.stringify(docId)}`);
-    const querySnap = await siteCollection()
-        .collection('documents')
-        .where('status', '==', 'published')
-        .where('id', '==', docId)
-        .limit(1)
-        .get();
-
-    console.log(`[getDocumentContextById] Number of query results: ${querySnap.docs.length}`);
-    if (querySnap.docs.length === 0) {
-        return null;
-    }
-
-    return _toContext(querySnap.docs[0].data() as Document);
+    const doc = await documentService.getDocumentById(docId);
+    return !!doc ? _toContext(doc) : null;
 }
 
 export async function getDocumentContextByUrl(url: string): Promise<PageContext> {
-    const searchUrl = url || '/';
-    console.log(`[getDocumentContextByUrl] ${JSON.stringify(searchUrl)}`);
-    const querySnap = await siteCollection()
-        .collection('documents')
-        .where('status', '==', 'published')
-        .where('url', '==', searchUrl)
-        .limit(1)
-        .get();
-
-
-    console.log(`[getDocumentContextByUrl] Number of query results: ${querySnap.docs.length}`);
-    if (querySnap.docs.length === 0) {
-        return null;
-    }
-
-    return _toContext(querySnap.docs[0].data() as Document);
+    console.log(`[getDocumentContextByUrl] ${JSON.stringify(url)}`);
+    const documents = await documentService.getDocumentByUrl(url || '/');
+    console.log(`[getDocumentContextByUrl] Number of query results: ${documents.length}`);
+    return documents.length === 0 ? null : _toContext(documents[0]);
 }
 
 async function _toContext(document: Document) {
