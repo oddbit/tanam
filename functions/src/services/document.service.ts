@@ -1,5 +1,38 @@
 import * as admin from 'firebase-admin';
-import { DocumentType } from '../models';
+import { DocumentType, Document } from '../models';
+
+const siteCollection = () => admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
+const normalizeUrl = (url: string) => `/${url}`.replace(/\/+/g, '/');
+
+export async function getDocumentById(docId: string): Promise<Document> {
+    console.log(`[document.service.getDocumentById] ID: ${docId}`);
+    const querySnap = await siteCollection()
+        .collection('documents')
+        .where('status', '==', 'published')
+        .where('id', '==', docId)
+        .limit(1)
+        .get();
+
+    console.log(`[document.service.getDocumentById] Number of query results: ${querySnap.docs.length}`);
+    return querySnap.empty ? null : querySnap.docs[0].data() as Document;
+}
+
+export async function getDocumentByUrl(url: string): Promise<Document[]> {
+    console.log(`[document.service.getDocumentByUrl] URL: ${url}`);
+    const querySnap = await siteCollection()
+        .collection('documents')
+        .where('status', '==', 'published')
+        .where('url', '==', normalizeUrl(url))
+        .limit(1)
+        .get();
+
+    console.log(`[document.service.getDocumentByUrl] Number of query results: ${querySnap.docs.length}`);
+    const results = [];
+    for (const doc of querySnap.docs) {
+        results.push(doc.data() as Document);
+    }
+    return results;
+}
 
 export async function createDefaultDocuments() {
     const documentsCollection = admin.firestore()
@@ -249,7 +282,7 @@ export async function createDefaultDocuments() {
         ],
     };
 
-    console.log(`[createDefaultDocuments] ${JSON.stringify({ blog, event, location, author, page }, null, 2)}`);
+    console.log(`[document.service.createDefaultDocuments] ${JSON.stringify({ blog, event, location, author, page }, null, 2)}`);
 
     return Promise.all([
         documentsCollection.doc(blog.id).set(blog),
@@ -258,4 +291,21 @@ export async function createDefaultDocuments() {
         documentsCollection.doc(author.id).set(author),
         documentsCollection.doc(page.id).set(page),
     ]);
+}
+
+/**
+ * This method builds up a dependency graph by registering document references
+ *
+ * A document reference is when one document is embedding another document through
+ * partial templates or by using lookup directives to use data from another document
+ * inside of the current web template.
+ *
+ * Once any of those documents are changed, the graph needs to be traversed until
+ * all rippling changes have been re-rendered.
+ *
+ * @param docId The ID of the document that is referring to other documents
+ * @param references One or more document IDs that are being referred to in a document
+ */
+export async function addDependency(docId: string, references: string | string[]) {
+    const documentsCollection = siteCollection().collection('documents');
 }

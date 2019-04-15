@@ -26,6 +26,10 @@ export class DocumentService {
     private readonly appConfig: AppConfigService,
   ) { }
 
+  private static _normalizeUrl(url: string): string {
+    return `/${url}`.replace(/\/+/g, '/');
+  }
+
   getNewId() {
     return this.firestore.createId();
   }
@@ -37,7 +41,7 @@ export class DocumentService {
         id: id,
         documentType: documentType.id,
         title: '',
-        url: `${documentType.slug}/${id}`,
+        url: DocumentService._normalizeUrl(`/${documentType.slug}/${id}`),
         revision: 0,
         standalone: documentType.standalone,
         status: 'unpublished',
@@ -60,7 +64,7 @@ export class DocumentService {
 
       trx.update(docRef, {
         ...document,
-        url: document.url || '/',
+        url: DocumentService._normalizeUrl(document.url || '/'),
         revision: trxDocument.revision + 1,
         published: document.status === 'published' && !trxDocument.published ? firebase.firestore.FieldValue.serverTimestamp() : null,
         updated: firebase.firestore.FieldValue.serverTimestamp(),
