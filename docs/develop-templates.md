@@ -136,7 +136,7 @@ You can fetch a single document by its ID like the example below, and access the
 <!-- This is the ID of a venue from the example above -->
 {@document id="Z1DripWIhE4vJFSZNSzX" document=document}
   <h1>{title}</h1>
-  {#data}
+  {#document.data}
     <ul>
       <li>{address1}</li>
       <li>{address2}</li>
@@ -146,7 +146,7 @@ You can fetch a single document by its ID like the example below, and access the
       <li>{country}</li>
       <li><a href="{mapsUrl}">View on maps</a></li>
     </ul>
-  {/data}
+  {/document.data}
 {/document}
 ```
 
@@ -166,7 +166,7 @@ You can fetch a number of documents through simple query
 {@documents documentType="event" document=document}
   {#.}
     <h1>{title}</h1>
-    {#data}
+    {#document.data}
       <ul>
           <li>{address1}</li>
           <li>{address2}</li>
@@ -176,7 +176,7 @@ You can fetch a number of documents through simple query
           <li>{country}</li>
           <li><a href="{mapsUrl}">View on maps</a></li>
       </ul>
-    {/data}
+    {/document.data}
   {/.}
 {/documents}
 ```
