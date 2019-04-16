@@ -154,6 +154,5 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
       standalone: formData.standalone
     } as DocumentType);
     this.snackBar.open('Saved', 'Dismiss', {duration: 2000});
-    this.router.navigateByUrl(this.onCancelRoute);
   }
 }
