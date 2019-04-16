@@ -153,6 +153,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       defaultLanguage: formData.defaultLanguage,
       languages: languages,
       primaryDomain: formData.primaryDomain,
+      analytics: formData.analytics,
       domains: formData.domains.map((domain: any) => domain['name']),
     } as SiteInformation);
   }
