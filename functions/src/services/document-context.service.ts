@@ -58,6 +58,7 @@ async function _toContext(document: Document) {
     const siteInfo = (await siteCollection().get()).data() as SiteInformation;
     const siteContext: SiteContext = {
         domain: siteInfo.primaryDomain,
+        analytics: siteInfo.analytics,
         url: `https://${siteInfo.primaryDomain}`,
         theme: siteInfo.theme,
         title: siteInfo.title,

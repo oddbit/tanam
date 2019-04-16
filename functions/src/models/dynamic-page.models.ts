@@ -56,6 +56,7 @@ export interface DocumentContext {
 export interface SiteContext {
   url: string;
   domain: string;
+  analytics: string;
   title: string;
   theme: string;
 }
