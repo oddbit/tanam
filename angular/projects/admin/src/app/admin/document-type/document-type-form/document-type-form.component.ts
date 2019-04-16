@@ -6,6 +6,7 @@ import { DocumentField, DocumentType, DocumentFieldFormElement } from 'tanam-mod
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { SiteService } from '../../../services/site.service';
 import { documentTypeMaterialIcons } from './document-type-form.icons';
+import { MatSnackBar } from '@angular/material';
 
 interface FieldType {
   type: DocumentFieldFormElement;
@@ -19,7 +20,6 @@ interface FieldType {
 })
 export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   @Input() documentType: DocumentType;
-  @Input() afterSaveRoute: string;
   @Input() onCancelRoute: string;
 
   themeId: string;
@@ -54,6 +54,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     private readonly formBuilder: FormBuilder,
     private readonly documentTypeService: DocumentTypeService,
     private readonly siteSettingsService: SiteService,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -125,6 +126,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async save() {
+    this.snackBar.open('Saving..', 'Dismiss', {duration: 2000});
     const formData = this.documentTypeForm.value;
     for (let index = 0; index < this.fieldForms.value.length; index++) {
       if (index === formData.indexTitle) {
@@ -151,9 +153,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
       fields: this.fieldForms.value,
       standalone: formData.standalone
     } as DocumentType);
-
-    if (this.afterSaveRoute) {
-      this.router.navigateByUrl(this.afterSaveRoute);
-    }
+    this.snackBar.open('Saved', 'Dismiss', {duration: 2000});
+    this.router.navigateByUrl(this.onCancelRoute);
   }
 }
