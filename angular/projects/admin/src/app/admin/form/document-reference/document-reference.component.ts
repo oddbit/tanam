@@ -26,6 +26,7 @@ export class DocumentReferenceComponent implements MatFormFieldControl<string>, 
   controlType = 'document-reference';
 
   @Input() documentType: string;
+  @Input() status: string;
   @Input() placeholder: string;
 
   errorState: boolean;
@@ -100,7 +101,7 @@ export class DocumentReferenceComponent implements MatFormFieldControl<string>, 
   }
 
   ngOnInit() {
-    this.documentOptions$ = this.documentService.query(this.documentType, {
+    this.documentOptions$ = this.documentService.query(this.documentType, this.status, {
       orderBy: {
         field: 'title',
         sortOrder: 'asc',

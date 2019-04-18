@@ -19,12 +19,12 @@
     </mat-tab>
     <mat-tab label="Published [{{ documentType.numEntries.published || 0 }}]">
       <ng-template matTabContent>
-        <tanam-document-list [documentType$]="documentType$"></tanam-document-list>
+        <tanam-document-list [documentType$]="documentType$" status="published"></tanam-document-list>
       </ng-template>
     </mat-tab>
     <mat-tab label="Unpublished [{{ documentType.numEntries.unpublished || 0}}]">
       <ng-template matTabContent>
-        <tanam-document-list [documentType$]="documentType$"></tanam-document-list>
+        <tanam-document-list [documentType$]="documentType$" status="unpublished"></tanam-document-list>
       </ng-template>
     </mat-tab>
   </mat-tab-group>
