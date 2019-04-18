@@ -13,6 +13,7 @@ import { DocumentListDataSource } from './document-list-datasource';
 })
 export class DocumentListComponent implements OnInit, OnDestroy {
   @Input() documentType$: Observable<DocumentType>;
+  @Input() status = 'all';
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -28,7 +29,7 @@ export class DocumentListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._subscriptions.push(this.documentType$.subscribe(documentType => {
-      this.dataSource = new DocumentListDataSource(documentType, this.documentService, this.paginator, this.sort);
+      this.dataSource = new DocumentListDataSource(documentType, this.documentService, this.paginator, this.sort, this.status);
     }));
   }
 

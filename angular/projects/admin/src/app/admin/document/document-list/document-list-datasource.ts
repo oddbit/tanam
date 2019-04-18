@@ -12,12 +12,13 @@ export class DocumentListDataSource extends DataSource<Document> {
     private readonly documentService: DocumentService,
     private readonly paginator: MatPaginator,
     private readonly sort: MatSort,
+    private readonly status: string,
   ) {
     super();
   }
 
   connect(): Observable<Document[]> {
-    return this.documentService.query(this.documentType.id);
+    return this.documentService.query(this.documentType.id, this.status);
   }
 
   disconnect() { }
