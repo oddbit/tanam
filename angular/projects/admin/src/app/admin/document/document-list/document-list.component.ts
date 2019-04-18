@@ -12,6 +12,8 @@ import { DocumentListDataSource } from './document-list-datasource';
   styleUrls: ['./document-list.component.scss']
 })
 export class DocumentListComponent implements OnInit, OnDestroy {
+  total_count: number;
+
   @Input() documentType$: Observable<DocumentType>;
   @Input() status = 'all';
 
@@ -30,6 +32,7 @@ export class DocumentListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._subscriptions.push(this.documentType$.subscribe(documentType => {
       this.dataSource = new DocumentListDataSource(documentType, this.documentService, this.paginator, this.sort, this.status);
+      this.setTotalCount(this.dataSource);
     }));
   }
 
@@ -40,5 +43,15 @@ export class DocumentListComponent implements OnInit, OnDestroy {
   editEntry(documentId: string) {
     const url = `/_/admin/document/${documentId}`;
     this.router.navigateByUrl(url);
+  }
+  setTotalCount (dataSource: Object) {
+    const refNumEntries = dataSource['documentType'].numEntries;
+    if (this.status === 'all') {
+      this.total_count = refNumEntries.published + refNumEntries.unpublished;
+    } else if (this.status === 'published') {
+      this.total_count = refNumEntries.published;
+    } else {
+      this.total_count = refNumEntries.unpublished;
+    }
   }
 }
