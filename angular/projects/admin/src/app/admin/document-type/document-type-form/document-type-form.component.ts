@@ -6,8 +6,7 @@ import { DocumentField, DocumentType, DocumentFieldFormElement } from 'tanam-mod
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { SiteService } from '../../../services/site.service';
 import { documentTypeMaterialIcons } from './document-type-form.icons';
-import { MatSnackBar } from '@angular/material';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { DocumentTypeDialogDeleteComponent } from '../document-type-dialog-delete/document-type-dialog-delete.component';
 
 interface FieldType {
@@ -127,7 +126,10 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     });
     dialogRef.afterClosed().subscribe(async status => {
        if (status === 'delete') {
-        console.log('Deleted');
+        this.snackBar.open('Deleting..', 'Dismiss', {duration: 2000});
+        await this.documentTypeService.delete(this.documentType.id);
+        this.snackBar.open('Deleted', 'Dismiss', {duration: 2000});
+        this.cancelEditing();
       }
     });
   }
