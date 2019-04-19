@@ -124,6 +124,7 @@
             </mat-form-field>
             <mat-form-field class="full-width">
               <mat-select formControlName="status"
+                          [disabled]="isScheduled"
                           placeholder="Status">
                 <mat-option *ngIf="!isScheduled"
                             value="unpublished">Unpublished</mat-option>
