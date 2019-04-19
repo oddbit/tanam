@@ -12,22 +12,12 @@ import { MatSnackBar } from '@angular/material';
 import { MatDialog } from '@angular/material';
 import { DocumentDialogDeleteComponent } from '../document-dialog-delete/document-dialog-delete.component';
 
-interface StatusOption {
-  title: string;
-  value: DocumentStatus;
-}
-
 @Component({
   selector: 'tanam-document-edit',
   templateUrl: './document-edit.component.html',
   styleUrls: ['./document-edit.component.scss']
 })
 export class DocumentEditComponent implements OnInit, OnDestroy {
-  readonly statusOptions: StatusOption[] = [
-    { value: 'unpublished', title: 'Unpublished' },
-    { value: 'published', title: 'Published' },
-  ];
-
   readonly richTextEditorConfig = {
     // toolbar: ['heading', '|', 'bold', 'italic', '|', 'bulletedList', 'numberedList'],
   };
@@ -70,6 +60,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const combinedDocumentData$ = combineLatest(this.documentType$, this.document$);
+    this._subscriptions.push(this.documentForm.get('published').valueChanges.subscribe(v => this._onPublishDateChange(v)));
     this._subscriptions.push(combinedDocumentData$.subscribe(([documentType, document]) => {
       if (this._titleSubscription && !this._titleSubscription.closed) {
         this._titleSubscription.unsubscribe();
@@ -116,21 +107,23 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     });
   }
 
-
-
   ngOnDestroy() {
     this._subscriptions.push(this._titleSubscription);
     this._subscriptions.filter(s => !!s && !s.closed).forEach(s => s.unsubscribe());
   }
 
-async deleteEntry() {
+  get isScheduled(): boolean {
+    return this.documentForm.value.published && this.documentForm.value.published.toDate().getTime() > Date.now();
+  }
+
+  async deleteEntry() {
     const dialogRef = this.dialog.open(DocumentDialogDeleteComponent, {
       data: {
         title: this.documentForm.controls['title'].value
       }
     });
     dialogRef.afterClosed().subscribe(async status => {
-       if (status === 'delete') {
+      if (status === 'delete') {
         this._setStateProcessing(true);
         const document = await this.document$.pipe(take(1)).toPromise();
         await this.documentService.delete(document.id);
@@ -209,6 +202,19 @@ async deleteEntry() {
       // Only auto slugify title if document has't been published before
       this.documentForm.controls['url'].setValue(`${this._rootSlug}/${this._slugify(title)}`);
       this.documentForm.controls['title'].setValue(title);
+    }
+  }
+
+  private _onPublishDateChange(date: firestore.Timestamp) {
+    if (!date) {
+      // Unpublish the document if it doesn't have a publish date
+      this.documentForm.patchValue({ status: 'unpublished' as DocumentStatus });
+    } else if (date.toDate().getTime() > Date.now()) {
+      // Publish timestamp is in the future
+      this.documentForm.patchValue({ status: 'scheduled' as DocumentStatus });
+    } else if (this.documentForm.value['status'] === 'scheduled') {
+      // Document was scheduled, but current timestamp is "not future"
+      this.documentForm.patchValue({ status: 'published' as DocumentStatus });
     }
   }
 }
