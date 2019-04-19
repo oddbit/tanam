@@ -1,5 +1,5 @@
 
-export type DocumentStatus = 'published' | 'unpublished' | 'deleted';
+export type DocumentStatus = 'published' | 'unpublished' | 'scheduled' | 'deleted';
 
 export interface Document {
     id: string; // Document id
