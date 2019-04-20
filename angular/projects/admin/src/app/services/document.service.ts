@@ -89,11 +89,14 @@ export class DocumentService {
       .valueChanges();
   }
 
-  query(documentTypeId: string, queryOpts: DocumentTypeQueryOptions = {}): Observable<Document[]> {
+  query(documentTypeId: string, status: string, queryOpts: DocumentTypeQueryOptions = {} ): Observable<Document[]> {
     console.log(`[DocumentService:getDocumentTypeFields] ${documentTypeId}, query=${JSON.stringify(queryOpts)}`);
 
     const queryFn = (ref: CollectionReference) => {
       let query = ref.where('documentType', '==', documentTypeId);
+      if (status !== 'all') {
+        query = query.where('status', '==', status);
+      }
 
       if (queryOpts.orderBy) {
         query = query.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);

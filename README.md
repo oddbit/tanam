@@ -6,7 +6,7 @@
 
 ## Tanam is a free CMS; both free as in FOSS and as in free ice cream 🍦
 
-![Login screen](/docs/images/login.png)
+![Login screen](/docs/images/overview.png)
 
 
 ```
