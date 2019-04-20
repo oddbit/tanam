@@ -133,7 +133,8 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     });
   }
 
-  async saveEntry(val: string) {
+  async saveEntry(closeAfterSave: boolean = false) {
+    this._snackbar('Saving...');
     this._setStateProcessing(true);
     const formData = this.documentForm.value;
 
@@ -143,12 +144,13 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     document.url = formData.url;
     document.published = formData.published;
     document.data = this._sanitizeData(this.dataForm.value);
-    this._snackbar('Saving..');
 
     await this.documentService.update(document);
     this._setStateProcessing(false);
     this._snackbar('Saved');
-    if (val === 'close') { this._navigateBack(); }
+    if (closeAfterSave === true) {
+      this._navigateBack();
+    }
   }
 
   cancelEditing() {
