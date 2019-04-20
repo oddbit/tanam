@@ -155,7 +155,7 @@ export const deleteFieldReferences = functions.firestore.document('tanam/{siteId
     return promises;
 });
 
-export const publishScheduledDocuments = functions.pubsub.schedule('*/15 * * * *').onRun(async (context) => {
+export const publishScheduledDocuments = functions.pubsub.schedule('every 5 minutes').onRun(async (context) => {
     const unpublishedDocuments = await admin.firestore()
         .collection('tanam').doc(process.env.GCLOUD_PROJECT)
         .collection('documents')
