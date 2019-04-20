@@ -68,6 +68,16 @@ export class DocumentService {
     document.url = DocumentService._normalizeUrl(document.url || '/');
     document.updated = firebase.firestore.FieldValue.serverTimestamp();
     document.revision = firebase.firestore.FieldValue.increment(1);
+
+    if (document.data) {
+      for (const key in document.data) {
+        if (document.data[key] === undefined) {
+          // Make sure that values are not accidentally of type undefined if not provided
+          document.data[key] = null;
+        }
+      }
+    }
+
     this.siteCollection.collection<Document>('documents').doc(document.id).update(document);
   }
 
@@ -110,5 +120,15 @@ export class DocumentService {
     return this.siteCollection
       .collection<Document>('documents', queryFn)
       .valueChanges();
+  }
+
+
+  private _sanitizeData(data: any) {
+    for (const key in data) {
+      if (data[key] === undefined) {
+        data[key] = null;
+      }
+    }
+    return data;
   }
 }

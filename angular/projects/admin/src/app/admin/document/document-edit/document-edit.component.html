@@ -20,7 +20,7 @@
 
     <div class="wrap">
       <div class="edit-content">
-        <mat-card class="">
+        <mat-card>
           <mat-card-content>
             <div formGroupName="dataForm">
               <div class="row"
@@ -122,19 +122,17 @@
                 URL slug is <strong>required</strong>
               </mat-error>
             </mat-form-field>
-            <mat-form-field class="full-width">
-              <mat-select formControlName="status"
-                          [disabled]="isScheduled"
-                          placeholder="Status">
-                <mat-option *ngIf="!isScheduled"
-                            value="unpublished">Unpublished</mat-option>
-                <mat-option *ngIf="!isScheduled"
-                            value="published">Published</mat-option>
-                <mat-option *ngIf="isScheduled"
-                            value="scheduled">Scheduled</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <tanam-date-time matInput
+            <div class="row">
+              <div class="col slider-toogle">
+                <mat-slide-toggle value="isPublished"
+                                  formControlName="publishStatus"
+                                  matTooltip="Unpublished documents are in draft and can not be seen">
+                  {{ isScheduled ? 'Scheduled' : 'Published' }}
+                </mat-slide-toggle>
+              </div>
+            </div>
+            <tanam-date-time *ngIf="isPublished"
+                             matInput
                              type="date-time"
                              formControlName="published"
                              placeholder="Publish Date">

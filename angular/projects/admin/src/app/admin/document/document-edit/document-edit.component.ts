@@ -33,7 +33,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   readonly documentForm = this.formBuilder.group({
     title: [null, Validators.required],
     url: [null, Validators.required],
-    status: [null, Validators.required],
+    publishStatus: [false, Validators.required],
     published: [null],
     dataForm: this.formBuilder.group({}),
   });
@@ -59,8 +59,8 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this._subscriptions.push(this.documentForm.get('publishStatus').valueChanges.subscribe((v) => this._onDocumentStatusChange(v)));
     const combinedDocumentData$ = combineLatest(this.documentType$, this.document$);
-    this._subscriptions.push(this.documentForm.get('published').valueChanges.subscribe(v => this._onPublishDateChange(v)));
     this._subscriptions.push(combinedDocumentData$.subscribe(([documentType, document]) => {
       if (this._titleSubscription && !this._titleSubscription.closed) {
         this._titleSubscription.unsubscribe();
@@ -68,8 +68,8 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
 
       this.documentForm.patchValue({
         title: document.title,
-        url: document.url,
-        status: document.status,
+        url: document.url || '/',
+        publishStatus: !!document.published,
         published: document.published,
       });
 
@@ -86,25 +86,8 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
         if (field.isTitle) {
           this._titleSubscription = this.dataForm.get(field.key).valueChanges.subscribe(v => this._onTitleChange(v));
         }
-
-        this._onChanges();
       }
     }));
-  }
-
-  private _onChanges() {
-    const now = firestore.Timestamp.now();
-    this.documentForm.valueChanges.subscribe(data => {
-      if (!!data.published) {
-        if (data.status === 'published' && data.published.seconds > now.seconds) {
-          this.documentForm.controls['published'].setValue(null);
-          this.documentForm.controls['status'].setValue('unpublished');
-        } else if (data.status === 'unpublished' && data.published.seconds <= now.seconds) {
-          this.documentForm.controls['published'].setValue(null);
-          this.documentForm.controls['status'].setValue('published');
-        }
-      }
-    });
   }
 
   ngOnDestroy() {
@@ -113,7 +96,11 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   get isScheduled(): boolean {
-    return this.documentForm.value.published && this.documentForm.value.published.toDate().getTime() > Date.now();
+    return this.documentForm.value.published && this.documentForm.value.published.toMillis() > Date.now();
+  }
+
+  get isPublished(): boolean {
+    return this.documentForm.value.published;
   }
 
   async deleteEntry() {
@@ -140,10 +127,9 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
 
     const document = await this.document$.pipe(take(1)).toPromise();
     document.title = formData.title;
-    document.status = formData.status;
     document.url = formData.url;
     document.published = formData.published;
-    document.data = this._sanitizeData(this.dataForm.value);
+    document.data = this.dataForm.value;
 
     await this.documentService.update(document);
     this._setStateProcessing(false);
@@ -167,15 +153,6 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
 
   private _setStateProcessing(isProcessing: boolean) {
     // Blur inputs or something
-  }
-
-  private _sanitizeData(data: any) {
-    for (const key in data) {
-      if (data[key] === undefined) {
-        data[key] = null;
-      }
-    }
-    return data;
   }
 
   private _slugify(text: string) {
@@ -207,16 +184,9 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _onPublishDateChange(date: firestore.Timestamp) {
-    if (!date) {
-      // Unpublish the document if it doesn't have a publish date
-      this.documentForm.patchValue({ status: 'unpublished' as DocumentStatus });
-    } else if (date.toDate().getTime() > Date.now()) {
-      // Publish timestamp is in the future
-      this.documentForm.patchValue({ status: 'scheduled' as DocumentStatus });
-    } else if (this.documentForm.value['status'] === 'scheduled') {
-      // Document was scheduled, but current timestamp is "not future"
-      this.documentForm.patchValue({ status: 'published' as DocumentStatus });
-    }
+  private _onDocumentStatusChange(publishStatus: boolean) {
+    console.log(JSON.stringify({ status: publishStatus }));
+    const publishedTimestamp = publishStatus ? firestore.Timestamp.now() : null;
+    this.documentForm.controls['published'].setValue(publishedTimestamp);
   }
 }
