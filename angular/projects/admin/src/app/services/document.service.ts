@@ -97,7 +97,7 @@ export class DocumentService {
       .valueChanges();
   }
 
-  query(documentTypeId: string, status: string, queryOpts: DocumentTypeQueryOptions = {} ): Observable<Document[]> {
+  query(documentTypeId: string, status: string, queryOpts: DocumentTypeQueryOptions = {}): Observable<Document[]> {
     console.log(`[DocumentService:getDocumentTypeFields] ${documentTypeId}, query=${JSON.stringify(queryOpts)}`);
 
     const queryFn = (ref: CollectionReference) => {
@@ -120,15 +120,5 @@ export class DocumentService {
     return this.siteCollection
       .collection<Document>('documents', queryFn)
       .valueChanges();
-  }
-
-
-  private _sanitizeData(data: any) {
-    for (const key in data) {
-      if (data[key] === undefined) {
-        data[key] = null;
-      }
-    }
-    return data;
   }
 }
