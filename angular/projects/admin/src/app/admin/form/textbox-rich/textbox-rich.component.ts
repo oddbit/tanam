@@ -119,7 +119,7 @@ export class TextboxRichComponent implements MatFormFieldControl<string>, Contro
   }
 
   writeValue(text: string): void {
-    this.editorData = text;
+    this.editorData = text || '';
   }
 
   registerOnChange(callback: (val: any) => void): void {
