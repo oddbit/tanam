@@ -62,10 +62,6 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     this._subscriptions.push(this.documentForm.get('publishStatus').valueChanges.subscribe((v) => this._onDocumentStatusChange(v)));
     const combinedDocumentData$ = combineLatest(this.documentType$, this.document$);
     this._subscriptions.push(combinedDocumentData$.subscribe(([documentType, document]) => {
-      if (this._titleSubscription && !this._titleSubscription.closed) {
-        this._titleSubscription.unsubscribe();
-      }
-
       this.documentForm.patchValue({
         title: document.title,
         url: document.url || '/',
@@ -78,14 +74,17 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
         if (!this.dataForm.get(field.key)) {
           const formControl = new FormControl(document.data[field.key]);
           this.dataForm.addControl(field.key, formControl);
+          if (field.isTitle) {
+            if (!!this._titleSubscription && !this._titleSubscription.closed) {
+              this._titleSubscription.unsubscribe();
+            }
+
+            this._titleSubscription = this.dataForm.get(field.key).valueChanges.subscribe(v => this._onTitleChange(v));
+          }
         }
         this.dataForm.patchValue({
           [field.key]: document.data[field.key],
         });
-
-        if (field.isTitle) {
-          this._titleSubscription = this.dataForm.get(field.key).valueChanges.subscribe(v => this._onTitleChange(v));
-        }
       }
     }));
   }
@@ -177,6 +176,10 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   private _onTitleChange(title: string) {
+    if (!title) {
+      return;
+    }
+
     if (!this.documentForm.get('published').value) {
       // Only auto slugify title if document has't been published before
       this.documentForm.controls['url'].setValue(`${this._rootSlug}/${this._slugify(title)}`);

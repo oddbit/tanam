@@ -66,6 +66,7 @@ export class DocumentService {
     }
 
     document.url = DocumentService._normalizeUrl(document.url || '/');
+    document.published = document.published || null;
     document.updated = firebase.firestore.FieldValue.serverTimestamp();
     document.revision = firebase.firestore.FieldValue.increment(1);
 
