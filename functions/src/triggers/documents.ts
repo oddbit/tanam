@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { CacheTask, Document, DocumentField, DocumentType, SiteInformation } from '../models';
+import { CacheTask, Document, DocumentField, DocumentType, SiteInformation, DocumentStatus } from '../models';
 
 export const buildEntryCache = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite(async (change, context) => {
     const siteId = context.params.siteId;
@@ -153,4 +153,22 @@ export const deleteFieldReferences = functions.firestore.document('tanam/{siteId
     }
 
     return promises;
+});
+
+export const publishScheduledDocuments = functions.pubsub.schedule('every 5 minutes').onRun(async (context) => {
+    const unpublishedDocuments = await admin.firestore()
+        .collection('tanam').doc(process.env.GCLOUD_PROJECT)
+        .collection('documents')
+        .where('status', '==', 'scheduled' as DocumentStatus)
+        .where('published', '<', admin.firestore.Timestamp.fromDate(new Date()))
+        .get();
+
+    console.log(`Found ${unpublishedDocuments.docs.length} that are due for publishing`);
+
+    const promises = [];
+    for (const doc of unpublishedDocuments.docs) {
+        promises.push(doc.ref.update({ status: 'published' as DocumentStatus } as Document));
+    }
+
+    return Promise.all(promises);
 });
