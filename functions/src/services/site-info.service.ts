@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import { SiteInformation } from '../models';
-import { createDefaultDocuments } from '../services/document.service';
+import { createDefaultDocuments } from '../services/document-type.service';
 import { createDefaultTemplates } from '../services/template.service';
 import { createDefaultTheme } from '../services/theme.service';
 
