@@ -62,4 +62,14 @@ export class DocumentTypeService {
     console.log(`[DocumentTypeService:saveDocumentType] ${JSON.stringify(documentType, null, 2)}`);
     return doc.update(documentType);
   }
+
+  delete(documentTypeId: string) {
+    if (!documentTypeId) {
+      throw new Error('Document ID must be provided as an attribute when deleting an document.');
+    }
+    console.log(documentTypeId);
+    return this.siteCollection
+      .collection<Document>('document-types').doc(documentTypeId)
+      .delete();
+  }
 }

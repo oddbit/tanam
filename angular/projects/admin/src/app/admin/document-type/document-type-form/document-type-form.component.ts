@@ -6,7 +6,8 @@ import { DocumentField, DocumentType, DocumentFieldFormElement } from 'tanam-mod
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { SiteService } from '../../../services/site.service';
 import { documentTypeMaterialIcons } from './document-type-form.icons';
-import { MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { DocumentTypeDialogDeleteComponent } from '../document-type-dialog-delete/document-type-dialog-delete.component';
 
 interface FieldType {
   type: DocumentFieldFormElement;
@@ -54,7 +55,8 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     private readonly formBuilder: FormBuilder,
     private readonly documentTypeService: DocumentTypeService,
     private readonly siteSettingsService: SiteService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -113,6 +115,23 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   deleteField(index: number) {
     console.log(`Removing field ${index}: ${JSON.stringify(this.fieldForms.at(index).value)}`);
     this.fieldForms.removeAt(index);
+  }
+
+  deleteContentTypeDialog() {
+    const dialogRef = this.dialog.open(DocumentTypeDialogDeleteComponent, {
+      data: {
+        title: this.documentTypeForm.controls['title'].value
+      },
+      width: '300px'
+    });
+    dialogRef.afterClosed().subscribe(async status => {
+       if (status === 'delete') {
+        this.snackBar.open('Deleting..', 'Dismiss', {duration: 2000});
+        await this.documentTypeService.delete(this.documentType.id);
+        this.snackBar.open('Deleted', 'Dismiss', {duration: 2000});
+        this.cancelEditing();
+      }
+    });
   }
 
   clearFields() {
