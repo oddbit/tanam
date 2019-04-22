@@ -176,11 +176,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   private _onTitleChange(title: string) {
-    if (!title) {
-      return;
-    }
-
-    if (!this.documentForm.get('published').value) {
+    if (!!title && !this.documentForm.get('published').value) {
       // Only auto slugify title if document has't been published before
       this.documentForm.controls['url'].setValue(`${this._rootSlug}/${this._slugify(title)}`);
       this.documentForm.controls['title'].setValue(title);
