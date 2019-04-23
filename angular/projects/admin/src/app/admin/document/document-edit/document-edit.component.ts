@@ -10,7 +10,7 @@ import { SiteService } from '../../../services/site.service';
 import { firestore } from 'firebase/app';
 import { MatSnackBar } from '@angular/material';
 import { MatDialog } from '@angular/material';
-import { DocumentDialogDeleteComponent } from '../document-dialog-delete/document-dialog-delete.component';
+import { DialogComponent } from '../../components/dialog/dialog.component';
 
 @Component({
   selector: 'tanam-document-edit',
@@ -103,8 +103,9 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   async deleteEntry() {
-    const dialogRef = this.dialog.open(DocumentDialogDeleteComponent, {
+    const dialogRef = this.dialog.open(DialogComponent, {
       data: {
+        type: 'delete',
         title: this.documentForm.controls['title'].value
       }
     });

@@ -7,7 +7,7 @@ import { DocumentTypeService } from '../../../services/document-type.service';
 import { SiteService } from '../../../services/site.service';
 import { documentTypeMaterialIcons } from './document-type-form.icons';
 import { MatDialog, MatSnackBar } from '@angular/material';
-import { DocumentTypeDialogDeleteComponent } from '../document-type-dialog-delete/document-type-dialog-delete.component';
+import { DialogComponent } from '../../components/dialog/dialog.component';
 
 interface FieldType {
   type: DocumentFieldFormElement;
@@ -118,9 +118,10 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   deleteContentTypeDialog() {
-    const dialogRef = this.dialog.open(DocumentTypeDialogDeleteComponent, {
+    const dialogRef = this.dialog.open(DialogComponent, {
       data: {
-        title: this.documentTypeForm.controls['title'].value
+        title: this.documentTypeForm.controls['title'].value,
+        type: 'delete'
       },
       width: '300px'
     });
