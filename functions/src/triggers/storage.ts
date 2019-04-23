@@ -19,7 +19,7 @@ export const processImageUpload = functions.storage.object().onFinalize(async (o
   const bucket = admin.storage().bucket(object.bucket);
   const [originalFileBuffer] = await bucket.file(object.name).download();
 
-  const resiveAndConvertImage = (size: number) =>
+  const resizeAndConvertImage = (size: number) =>
     sharp(originalFileBuffer)
       .resize(size, size, {
         withoutEnlargement: true,
@@ -61,8 +61,8 @@ export const processImageUpload = functions.storage.object().onFinalize(async (o
     firestoreRef.set(tanamFile),
     bucket.file(object.name).delete(),
     bucket.file(tanamFile.filePath).save(originalFileBuffer, object.metadata),
-    bucket.file(tanamFile.variants.small).save(await resiveAndConvertImage(300), metadata),
-    bucket.file(tanamFile.variants.medium).save(await resiveAndConvertImage(800), metadata),
-    bucket.file(tanamFile.variants.large).save(await resiveAndConvertImage(1600), metadata),
+    bucket.file(tanamFile.variants.small).save(await resizeAndConvertImage(300), metadata),
+    bucket.file(tanamFile.variants.medium).save(await resizeAndConvertImage(800), metadata),
+    bucket.file(tanamFile.variants.large).save(await resizeAndConvertImage(1600), metadata),
   ]);
 });
