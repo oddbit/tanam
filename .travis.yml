@@ -7,6 +7,7 @@ cache:
   - functions/node_modules
 branches:
   only:
+  - develop
   - master
   - /^[0-9]+\.[0-9]+\.[0-9]+/
 script:
