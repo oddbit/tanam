@@ -9,7 +9,6 @@ import { DocumentTypeFormComponent } from './document-type-form/document-type-fo
 import { DocumentTypeListComponent } from './document-type-list/document-type-list.component';
 import { DocumentTypeOverviewComponent } from './document-type-overview/document-type-overview.component';
 import { DocumentTypeDialogCreateComponent } from './document-type-dialog-create/document-type-dialog-create.component';
-import { DocumentTypeDialogDeleteComponent } from './document-type-dialog-delete/document-type-dialog-delete.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +17,6 @@ import { DocumentTypeDialogDeleteComponent } from './document-type-dialog-delete
     DocumentTypeListComponent,
     DocumentTypeOverviewComponent,
     DocumentTypeDialogCreateComponent,
-    DocumentTypeDialogDeleteComponent,
   ],
   imports: [
     CommonModule,
@@ -31,6 +29,6 @@ import { DocumentTypeDialogDeleteComponent } from './document-type-dialog-delete
     DocumentTypeEditComponent,
     DocumentTypeOverviewComponent,
   ],
-  entryComponents: [DocumentTypeDialogCreateComponent, DocumentTypeDialogDeleteComponent]
+  entryComponents: [DocumentTypeDialogCreateComponent]
 })
 export class DocumentTypeModule { }
