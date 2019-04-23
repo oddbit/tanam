@@ -6,6 +6,7 @@ import { map, tap, take } from 'rxjs/operators';
 import { TanamFile } from 'tanam-models';
 import { UserFileService } from '../../../services/user-file.service';
 import { MediaDialogDetailComponent } from '../media-dialog-detail/media-dialog-detail.component';
+import { MediaDialogDeleteComponent } from '../media-dialog-delete/media-dialog-delete.component';
 
 @Component({
   selector: 'tanam-media-grid',
@@ -51,6 +52,14 @@ export class MediaGridComponent {
   }
 
   remove(file: TanamFile) {
-    this.fileService.remove(file);
+    const dialogRef = this.dialog.open(MediaDialogDeleteComponent, {
+      data: file,
+      width: '300px'
+    });
+    dialogRef.afterClosed().subscribe(async status => {
+      if (status === 'delete') {
+        this.fileService.remove(file);
+      }
+    });
   }
 }

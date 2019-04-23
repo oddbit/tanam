@@ -1,0 +1,14 @@
+<div class="dialog-title">
+  <h1 mat-dialog-title>Delete File</h1>
+  <mat-icon color="warn">warning</mat-icon>
+</div>
+<div mat-dialog-content>
+  <p class="mat-body">Are you sure to delete the "{{data.title}}" ?</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button
+          (click)="closeDialog()">Cancel</button>
+  <button mat-button
+          color="warn"
+          (click)="delete()">Delete</button>
+</div>
