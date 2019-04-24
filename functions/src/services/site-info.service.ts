@@ -10,10 +10,12 @@ export async function getSiteInfo() {
 }
 
 export async function createDefaultSiteInfo() {
+    const siteId = process.env.GCLOUD_PROJECT;
     const defaultDomain = `${process.env.GCLOUD_PROJECT}.firebaseapp.com`;
     console.log(`[createDefaultSiteInfo] ${defaultDomain}`);
 
     const siteInfoData: SiteInformation = {
+        id: siteId,
         defaultLanguage: 'en',
         languages: ['en'],
         isCustomDomain: false,
@@ -23,7 +25,7 @@ export async function createDefaultSiteInfo() {
         title: process.env.GCLOUD_PROJECT
     };
 
-    return admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT).set(siteInfoData);
+    return admin.firestore().collection('tanam').doc(siteId).set(siteInfoData);
 }
 
 export async function initializeSite(force: boolean = false) {
