@@ -19,7 +19,7 @@ export const createUser = functions.auth.user().onCreate(async (firebaseUser) =>
         name: firebaseUser.displayName || firebaseUser.email,
         email: firebaseUser.email,
         photoUrl: firebaseUser.photoURL || `https://www.gravatar.com/avatar/${gravatarHash}.jpg?s=1024&d=identicon`,
-        roles: [initialRole],
+        roles: !!initialRole ? [initialRole] : [],
     };
 
     console.log(`Creating account: ${JSON.stringify({ user })}`);
