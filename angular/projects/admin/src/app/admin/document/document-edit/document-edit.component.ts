@@ -9,8 +9,7 @@ import { DocumentService } from '../../../services/document.service';
 import { SiteService } from '../../../services/site.service';
 import { firestore } from 'firebase/app';
 import { MatSnackBar } from '@angular/material';
-import { MatDialog } from '@angular/material';
-import { DialogComponent } from '../../components/dialog/dialog.component';
+import { DialogConfirmService } from '../../../services/dialogConfirm.service';
 
 @Component({
   selector: 'tanam-document-edit',
@@ -51,7 +50,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     private readonly documentTypeService: DocumentTypeService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialogConfirmService: DialogConfirmService
   ) { }
 
   get dataForm() {
@@ -103,14 +102,13 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   async deleteEntry() {
-    const dialogRef = this.dialog.open(DialogComponent, {
-      data: {
-        type: 'delete',
-        title: this.documentForm.controls['title'].value
-      }
-    });
-    dialogRef.afterClosed().subscribe(async status => {
-      if (status === 'delete') {
+    this.dialogConfirmService.openDialogConfirm({
+      title: 'Delete Document',
+      message: `Are you sure to delete the "${this.documentForm.controls['title'].value}" ?`,
+      buttons: ['cancel', 'yes'],
+      icon: 'warning'
+    }).afterClosed().subscribe(async res => {
+      if (res === 'yes') {
         this._setStateProcessing(true);
         const document = await this.document$.pipe(take(1)).toPromise();
         await this.documentService.delete(document.id);

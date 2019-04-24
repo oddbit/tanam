@@ -1,28 +1,13 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'tanam-dialog',
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.scss']
 })
-export class DialogComponent implements OnInit {
+export class DialogComponent {
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<DialogComponent>
-  ) { }
-
-  ngOnInit() {
-    console.log(this.data);
-  }
-
-  closeDialog() {
-    this.dialogRef.close('close');
-  }
-
-  delete() {
-    this.dialogRef.close('delete');
-  }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) { }
 
 }

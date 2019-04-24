@@ -1,40 +1,11 @@
-<div [ngSwitch]="data.type">
-
-    <div *ngSwitchCase="'delete'">
-      <div class="dialog-title">
-        <h1 mat-dialog-title>Delete</h1>
-        <mat-icon color="warn">warning</mat-icon>
-      </div>
-      <div mat-dialog-content>
-        <p class="mat-body">Are you sure to delete the "{{data.title}}" ?</p>
-      </div>
-      <div mat-dialog-actions>
-        <button mat-button
-                (click)="closeDialog()">Cancel</button>
-        <button mat-button
-                color="warn"
-                (click)="delete()">Delete</button>
-      </div>
-    </div>
-
-    <div *ngSwitchCase="'detail-file'">
-        <div class="dialog-title">
-            <h1 mat-dialog-title>Detail File</h1>
-            <mat-icon>insert_drive_file</mat-icon>
-          </div>
-          <div mat-dialog-content>
-            <div class="mat-caption">Name</div>
-            <div class="mat-body">{{data.title}}</div>
-            <div class="mat-caption">Type</div>
-            <div class="mat-body">{{data.fileType}}</div>
-            <div class="mat-caption">Date Uploaded</div>
-            <div class="mat-body">{{data.created.toDate() | date:'yyyy-MM-dd HH:mm'}}</div>
-          </div>
-          <div mat-dialog-actions>
-            <button mat-raised-button
-                    color="primary"
-                    (click)="closeDialog()">Close</button>
-          </div>
-    </div>
-
-  </div>
+<div class="dialog-title">
+  <h1 mat-dialog-title>{{data.title}}</h1>
+  <mat-icon color="{{data.color}}">{{data.icon}}</mat-icon>
+</div>
+<div mat-dialog-content>
+  <p class="mat-body">{{data.message}}</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button
+          *ngFor="let button of data.buttons" [(mat-dialog-close)]="button">{{button | uppercase}}</button>
+</div>
