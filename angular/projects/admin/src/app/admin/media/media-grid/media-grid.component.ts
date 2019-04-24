@@ -6,6 +6,7 @@ import { map, tap, take } from 'rxjs/operators';
 import { TanamFile } from 'tanam-models';
 import { UserFileService } from '../../../services/user-file.service';
 import { DialogComponent } from '../../components/dialog/dialog.component';
+import { DialogConfirmService } from '../../../services/dialogConfirm.service';
 
 @Component({
   selector: 'tanam-media-grid',
@@ -31,7 +32,8 @@ export class MediaGridComponent {
   constructor(
     private readonly breakpointObserver: BreakpointObserver,
     private readonly fileService: UserFileService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dialogConfirmService: DialogConfirmService
   ) { }
 
   getDownloadUrl(file: TanamFile): Observable<string> {
@@ -54,15 +56,13 @@ export class MediaGridComponent {
   }
 
   remove(file: TanamFile) {
-    const dialogRef = this.dialog.open(DialogComponent, {
-      data: {
-        type: 'delete',
-        title: file.title
-      },
-      width: '300px'
-    });
-    dialogRef.afterClosed().subscribe(async status => {
-      if (status === 'delete') {
+    this.dialogConfirmService.openDialogConfirm({
+      title: 'Delete File',
+      message: `Are you sure to delete the "${file.title}" ?`,
+      buttons: ['cancel', 'yes'],
+      icon: 'warning'
+    }).afterClosed().subscribe(async res => {
+      if (res === 'yes') {
         this.fileService.remove(file);
       }
     });
