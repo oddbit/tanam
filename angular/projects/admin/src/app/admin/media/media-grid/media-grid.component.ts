@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 import { map, tap, take } from 'rxjs/operators';
 import { TanamFile } from 'tanam-models';
 import { UserFileService } from '../../../services/user-file.service';
-import { DialogComponent } from '../../components/dialog/dialog.component';
 import { DialogConfirmService } from '../../../services/dialogConfirm.service';
+import { MediaDialogDetailComponent } from '../media-dialog-detail/media-dialog-detail.component';
 
 @Component({
   selector: 'tanam-media-grid',
@@ -46,11 +46,12 @@ export class MediaGridComponent {
   }
 
   showDetails(file: TanamFile) {
-    this.dialog.open(DialogComponent, {
+    this.dialog.open(MediaDialogDetailComponent, {
       data: {
         ...file,
         type: 'detail-file'
       },
+      width: '300px'
     });
     console.log(`[MediaGridComponent:showDetails] ${JSON.stringify({ file })}`);
   }
