@@ -23,7 +23,6 @@ export interface Theme {
     id: string;
     title: string;
     description: string;
-    images: string[];
     updated: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
     created: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
 }
