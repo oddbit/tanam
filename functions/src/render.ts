@@ -89,7 +89,7 @@ export async function renderPage(context: PageContext): Promise<string> {
 
     const $ = cheerio.load(template);
     const $head = $('head');
-    if (!$head.find('link[rel="canonical"]')) {
+    if ($head.find('link[rel="canonical"]').length === 0) {
         // Ony add canonical link data if not already present in document
         $head.append(`<link rel="canonical" href="${context.document.permalink}">`)
     }
