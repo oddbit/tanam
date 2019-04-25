@@ -1,8 +1,8 @@
+import * as cheerio from 'cheerio';
 import * as dust from 'dustjs-helpers';
 import { PageContext, Theme } from './models';
 import * as documentContextService from './services/document-context.service';
 import * as templateService from './services/template.service';
-import { getTheme } from './services/theme.service';
 
 dust.isDebug = true;
 
@@ -94,28 +94,18 @@ function renderThemeScripts(theme: Theme): string[] {
     );
 }
 
-export async function renderPage(context: PageContext) {
-    const theme = await getTheme();
+export async function renderPage(context: PageContext): Promise<string> {
     const template = await compileTemplate(context);
     if (!template) {
         console.error(`No template rendered for document ${context.document.id}`);
         return null;
     }
 
-    return `<!doctype html>
-        <html lang="en">
-        <head>
-            <meta charset="utf-8">
-            <title>${context.document.title} | ${context.site.title}</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <link rel="icon" type="image/x-icon" href="/favicon.ico">
-            <link rel="canonical" href="https://${context.document.permalink}">
-            ${renderThemeStyles(theme).join('\n')}
-        </head>
-
-        <body>
-        ${template}
-        ${renderThemeScripts(theme).join('\n')}
-        </body>
-        </html>`;
+    const $ = cheerio.load(template);
+    const $head = $('head');
+    if (!$head.find('link[rel="canonical"]')) {
+        // Ony add canonical link data if not already present in document
+        $head.append(`<link rel="canonical" href="${context.document.permalink}">`)
+    }
+    return $.html();
 }
