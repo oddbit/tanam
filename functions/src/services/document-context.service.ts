@@ -69,7 +69,7 @@ async function _toContext(document: Document) {
         data: _normalizeData(document.data),
         title: document.title,
         url: document.standalone ? `/${document.url}` : null,
-        permalink: document.standalone ? `${siteContext.url}/${document.url}` : null,
+        permalink: document.standalone ? `${siteContext.url}${document.url}` : null,
         revision: document.revision,
         status: document.status,
         tags: document.tags,
