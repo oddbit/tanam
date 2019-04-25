@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MediaDialogDeleteComponent } from './media-dialog-delete.component';
+import { DialogComponent } from './dialog.component';
 
-describe('MediaDialogDeleteComponent', () => {
-  let component: MediaDialogDeleteComponent;
-  let fixture: ComponentFixture<MediaDialogDeleteComponent>;
+describe('DialogComponent', () => {
+  let component: DialogComponent;
+  let fixture: ComponentFixture<DialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MediaDialogDeleteComponent ]
+      declarations: [ DialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MediaDialogDeleteComponent);
+    fixture = TestBed.createComponent(DialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

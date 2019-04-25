@@ -7,6 +7,11 @@ export const buildEntryCache = functions.firestore.document('tanam/{siteId}/docu
     const entryBefore = change.before.data() as Document;
     const entryAfter = change.after.data() as Document;
 
+    if (!entryBefore.standalone && !entryAfter.standalone) {
+        console.log(`The document is not standalone and is not managed by cache. Do nothing.`);
+        return null;
+    }
+
     const siteInfoDoc = await admin.firestore().collection('tanam').doc(siteId).get();
     const siteInfo = siteInfoDoc.data() as SiteInformation;
 

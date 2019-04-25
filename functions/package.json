@@ -1,6 +1,6 @@
 {
   "name": "tanam",
-  "version": "0.8.3",
+  "version": "0.9.0",
   "description": "Pluggable CMS for Firebase",
   "license": "Apache-2.0",
   "repository": {
@@ -37,6 +37,7 @@
     "build:dist": "npm run build:all && npm run package"
   },
   "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
     "crypto-js": "^3.1.9-1",
     "dustjs-helpers": "^1.7.4",
     "dustjs-linkedin": "^2.7.5",
@@ -45,6 +46,7 @@
     "sharp": "^0.21.3"
   },
   "devDependencies": {
+    "@types/cheerio": "^0.22.11",
     "@types/crypto-js": "^3.1.43",
     "@types/node": "^10.12.19",
     "@types/sharp": "^0.22.0",

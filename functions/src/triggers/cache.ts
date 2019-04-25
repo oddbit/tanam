@@ -9,17 +9,17 @@ export const cacheTask = functions.database.ref('tanam/{siteId}/tasks/cache/{tas
 
     switch (task.action) {
         case 'delete':
-            promises.push(purgeCacheFromCdn(task.domain, task.url));
+            promises.push(makeRequest('PURGE', task.domain, task.url));
             break;
 
         case 'create':
-            promises.push(createCacheOnCdn(task.domain, task.url));
+            promises.push(makeRequest('GET', task.domain, task.url));
             break;
 
         case 'update':
         default:
-            await purgeCacheFromCdn(task.domain, task.url);
-            promises.push(createCacheOnCdn(task.domain, task.url));
+            await makeRequest('PURGE', task.domain, task.url);
+            promises.push(makeRequest('GET', task.domain, task.url));
     }
 
     return promises;
@@ -27,40 +27,34 @@ export const cacheTask = functions.database.ref('tanam/{siteId}/tasks/cache/{tas
 
 
 /**
- * Send a request to CDN to purge one specific page
+ * Send a request to either purge or heat the CDN
+ *
+ * For `GET` requests, this function will pre-heat the CDN cache by trying to request the updated document
+ * before any visitor is hitting it. It's a race condition agains visitors to try and beat them to be the
+ * first to trigger a new render. The hope is that this function will be the only client that is exposed to
+ * the relativly slow operation of rendering a document. Any subsequest client request will get a static
+ * version from the CDN cache.
+ *
+ * The `PURGE` action removes the previously cached document at given URL. This allows for the next `GET`
+ * request to get a freshly rendered document that accurately represents the current content.
+ *
+ * @param action PURGE | GET
+ * @param host Domain host (e.g. somesubdomain.example.com)
+ * @param path Path part of the URL
  */
-function purgeCacheFromCdn(host: string, path: string) {
-    console.log(`[purgeCacheFromCdn] ${host}/${path}`);
+function makeRequest(action: 'PURGE' | 'GET', host: string, path: string) {
+    const normalizedPath = path.replace(/\/+/g, '/');
     const opts = {
         hostname: host,
         port: 443,
-        path: path,
-        method: 'PURGE'
+        path: normalizedPath,
+        method: action,
     };
 
+    console.log(`[makeRequest] BEGIN ${JSON.stringify(opts)}`);
     return new Promise((resolve) => {
         https.get(opts, (res) => {
-            console.log(`[purgeCacheFromCdn] Finished request: ${res.statusCode} ${res.statusMessage}`);
-            resolve(null);
-        });
-    });
-}
-
-/**
- * Send a request to our selves for one specific page, that will in turn heat up the CDN cache
- */
-function createCacheOnCdn(host: string, path: string) {
-    console.log(`[createCacheOnCdn] ${host}/${path}`);
-    const opts = {
-        hostname: host,
-        port: 443,
-        path: path,
-        method: 'GET'
-    };
-
-    return new Promise((resolve) => {
-        https.get(opts, (res) => {
-            console.log(`[createCacheOnCdn] Finished request: ${res.statusCode} ${res.statusMessage}`);
+            console.log(`[makeRequest] FINISHED ${JSON.stringify({...opts, statusCode: res.statusCode, statusMessage: res.statusMessage})}`);
             resolve(null);
         });
     });

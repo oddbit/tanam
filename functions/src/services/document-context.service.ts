@@ -23,8 +23,8 @@ export async function queryDocumentContext(documentTypeId: string, queryOpts: Do
         .collection('documents')
         .where('status', '==', 'published')
         .where('documentType', '==', documentTypeId)
-        // .orderBy(orderByField, sortOrder)
-        // .limit(limit)
+        // .orderBy(orderByField, sortOrder) // https://github.com/oddbit/tanam/issues/119
+        .limit(limit)
         .get();
 
     console.log(`[queryDocumentContext] num results: ${querySnap.docs.length}`);
@@ -69,7 +69,7 @@ async function _toContext(document: Document) {
         data: _normalizeData(document.data),
         title: document.title,
         url: document.standalone ? `/${document.url}` : null,
-        permalink: document.standalone ? `${siteContext.url}/${document.url}` : null,
+        permalink: document.standalone ? `${siteContext.url}${document.url}` : null,
         revision: document.revision,
         status: document.status,
         tags: document.tags,
