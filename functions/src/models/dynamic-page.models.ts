@@ -40,8 +40,9 @@ export interface DocumentContext {
   documentType: string;
   data: { [key: string]: any };
   title: string;
+  standalone: boolean;
   url?: string;
-  permalink: string;
+  permalink?: string;
   revision: number;
   status: string;
   tags: string[];
