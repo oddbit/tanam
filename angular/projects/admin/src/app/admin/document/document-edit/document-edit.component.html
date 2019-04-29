@@ -94,6 +94,15 @@
                     </tanam-date-time>
                   </div>
 
+                  <!-- Time Picker -->
+                  <div *ngSwitchCase="'time'">
+                    <tanam-date-time matInput
+                                     type="time"
+                                     formControlName="{{field.key}}"
+                                     placeholder="{{field.title}}">
+                    </tanam-date-time>
+                  </div>
+
                   <!-- Pick a reference to another document -->
                   <mat-form-field *ngSwitchCase="'document-reference'"
                                   class="full-width">
