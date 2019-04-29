@@ -7,6 +7,7 @@ export type DocumentFieldFormElement = 'input-text'
     | 'document-reference'
     | 'date'
     | 'date-time'
+    | 'time'
     | 'slide-toggle';
 
 export type DocumentFieldValidator = 'required';
