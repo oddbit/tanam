@@ -74,13 +74,13 @@ export async function createDefaultDocuments() {
             {
                 title: 'Start time',
                 key: 'timeStart',
-                type: 'date-time',
+                type: 'datetime',
                 validators: ['required'],
             },
             {
                 title: 'End time',
                 key: 'timeEnd',
-                type: 'date-time',
+                type: 'datetime',
                 validators: ['required'],
             },
             {

@@ -86,9 +86,9 @@
                   </div>
 
                   <!-- Date Time Picker -->
-                  <div *ngSwitchCase="'date-time'">
+                  <div *ngSwitchCase="'datetime'">
                     <tanam-date-time matInput
-                                     type="date-time"
+                                     type="datetime"
                                      formControlName="{{field.key}}"
                                      placeholder="{{field.title}}">
                     </tanam-date-time>
@@ -142,7 +142,7 @@
             </div>
             <tanam-date-time *ngIf="isPublished"
                              matInput
-                             type="date-time"
+                             type="datetime"
                              formControlName="published"
                              placeholder="Publish Date">
             </tanam-date-time>

@@ -47,7 +47,7 @@ export class DateTimeComponent implements MatFormFieldControl<firestore.Timestam
   @HostBinding('attr.aria-describedby') describedBy = '';
   @HostBinding() id = `date-time-${DateTimeComponent._nextId++}`;
 
-  @Input() type: 'date-time' | 'date' | 'time';
+  @Input() type: 'datetime' | 'date' | 'time';
 
   stateChanges = new Subject<void>();
   controlType = 'date-time';
