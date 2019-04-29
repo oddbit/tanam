@@ -26,10 +26,7 @@ export class SettingsDialogManageLanguagesComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<SettingsDialogManageLanguagesComponent >,
     private readonly formBuilder: FormBuilder,
-    userService: UserService,
-  ) {
-    userService.overlayTheme();
-  }
+  ) {}
 
 
   ngOnInit() {

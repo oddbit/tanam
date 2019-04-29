@@ -57,20 +57,29 @@ export class DocumentService {
       throw new Error('Document ID must be provided as an attribute when updating an document.');
     }
 
-    const docRef = this.siteCollection.collection<Document>('documents').doc(document.id).ref;
-    return this.firebaseApp.firestore().runTransaction<void>(async (trx) => {
-      const trxDoc = await trx.get(docRef);
-      const trxDocument = trxDoc.data() as Document;
+    if (!document.published) {
+      document.status = 'unpublished';
+    } else if (document.published.toMillis() > Date.now()) {
+      document.status = 'scheduled';
+    } else {
+      document.status = 'published';
+    }
 
-      trx.update(docRef, {
-        ...document,
-        url: DocumentService._normalizeUrl(document.url || '/'),
-        revision: trxDocument.revision + 1,
-        published: document.status === 'published' && !trxDocument.published ? firebase.firestore.FieldValue.serverTimestamp() : null,
-        updated: firebase.firestore.FieldValue.serverTimestamp(),
-      } as Document);
-    });
+    document.url = DocumentService._normalizeUrl(document.url || '/');
+    document.published = document.published || null;
+    document.updated = firebase.firestore.FieldValue.serverTimestamp();
+    document.revision = firebase.firestore.FieldValue.increment(1);
 
+    if (document.data) {
+      for (const key in document.data) {
+        if (document.data[key] === undefined) {
+          // Make sure that values are not accidentally of type undefined if not provided
+          document.data[key] = null;
+        }
+      }
+    }
+
+    this.siteCollection.collection<Document>('documents').doc(document.id).update(document);
   }
 
   delete(documentId: string) {
@@ -89,11 +98,14 @@ export class DocumentService {
       .valueChanges();
   }
 
-  query(documentTypeId: string, queryOpts: DocumentTypeQueryOptions = {}): Observable<Document[]> {
+  query(documentTypeId: string, status: string, queryOpts: DocumentTypeQueryOptions = {}): Observable<Document[]> {
     console.log(`[DocumentService:getDocumentTypeFields] ${documentTypeId}, query=${JSON.stringify(queryOpts)}`);
 
     const queryFn = (ref: CollectionReference) => {
       let query = ref.where('documentType', '==', documentTypeId);
+      if (status !== 'all') {
+        query = query.where('status', '==', status);
+      }
 
       if (queryOpts.orderBy) {
         query = query.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);

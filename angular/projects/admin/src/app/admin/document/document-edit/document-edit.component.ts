@@ -9,13 +9,7 @@ import { DocumentService } from '../../../services/document.service';
 import { SiteService } from '../../../services/site.service';
 import { firestore } from 'firebase/app';
 import { MatSnackBar } from '@angular/material';
-import { MatDialog } from '@angular/material';
-import { DocumentDialogDeleteComponent } from '../document-dialog-delete/document-dialog-delete.component';
-
-interface StatusOption {
-  title: string;
-  value: DocumentStatus;
-}
+import { DialogConfirmService } from '../../../services/dialogConfirm.service';
 
 @Component({
   selector: 'tanam-document-edit',
@@ -23,11 +17,6 @@ interface StatusOption {
   styleUrls: ['./document-edit.component.scss']
 })
 export class DocumentEditComponent implements OnInit, OnDestroy {
-  readonly statusOptions: StatusOption[] = [
-    { value: 'unpublished', title: 'Unpublished' },
-    { value: 'published', title: 'Published' },
-  ];
-
   readonly richTextEditorConfig = {
     // toolbar: ['heading', '|', 'bold', 'italic', '|', 'bulletedList', 'numberedList'],
   };
@@ -43,7 +32,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   readonly documentForm = this.formBuilder.group({
     title: [null, Validators.required],
     url: [null, Validators.required],
-    status: [null, Validators.required],
+    publishStatus: [false, Validators.required],
     published: [null],
     dataForm: this.formBuilder.group({}),
   });
@@ -61,7 +50,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     private readonly documentTypeService: DocumentTypeService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialogConfirmService: DialogConfirmService
   ) { }
 
   get dataForm() {
@@ -69,16 +58,13 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this._subscriptions.push(this.documentForm.get('publishStatus').valueChanges.subscribe((v) => this._onDocumentStatusChange(v)));
     const combinedDocumentData$ = combineLatest(this.documentType$, this.document$);
     this._subscriptions.push(combinedDocumentData$.subscribe(([documentType, document]) => {
-      if (this._titleSubscription && !this._titleSubscription.closed) {
-        this._titleSubscription.unsubscribe();
-      }
-
       this.documentForm.patchValue({
         title: document.title,
-        url: document.url,
-        status: document.status,
+        url: document.url || '/',
+        publishStatus: !!document.published,
         published: document.published,
       });
 
@@ -87,50 +73,42 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
         if (!this.dataForm.get(field.key)) {
           const formControl = new FormControl(document.data[field.key]);
           this.dataForm.addControl(field.key, formControl);
+          if (field.isTitle) {
+            if (!!this._titleSubscription && !this._titleSubscription.closed) {
+              this._titleSubscription.unsubscribe();
+            }
+
+            this._titleSubscription = this.dataForm.get(field.key).valueChanges.subscribe(v => this._onTitleChange(v));
+          }
         }
         this.dataForm.patchValue({
           [field.key]: document.data[field.key],
         });
-
-        if (field.isTitle) {
-          this._titleSubscription = this.dataForm.get(field.key).valueChanges.subscribe(v => this._onTitleChange(v));
-        }
-
-        this._onChanges();
       }
     }));
   }
-
-  private _onChanges() {
-    const now = firestore.Timestamp.now();
-    this.documentForm.valueChanges.subscribe(data => {
-      if (!!data.published) {
-        if (data.status === 'published' && data.published.seconds > now.seconds) {
-          this.documentForm.controls['published'].setValue(null);
-          this.documentForm.controls['status'].setValue('unpublished');
-        } else if (data.status === 'unpublished' && data.published.seconds <= now.seconds) {
-          this.documentForm.controls['published'].setValue(null);
-          this.documentForm.controls['status'].setValue('published');
-        }
-      }
-    });
-  }
-
-
 
   ngOnDestroy() {
     this._subscriptions.push(this._titleSubscription);
     this._subscriptions.filter(s => !!s && !s.closed).forEach(s => s.unsubscribe());
   }
 
-async deleteEntry() {
-    const dialogRef = this.dialog.open(DocumentDialogDeleteComponent, {
-      data: {
-        title: this.documentForm.controls['title'].value
-      }
-    });
-    dialogRef.afterClosed().subscribe(async status => {
-       if (status === 'delete') {
+  get isScheduled(): boolean {
+    return this.documentForm.value.published && this.documentForm.value.published.toMillis() > Date.now();
+  }
+
+  get isPublished(): boolean {
+    return this.documentForm.value.published;
+  }
+
+  async deleteEntry() {
+    this.dialogConfirmService.openDialogConfirm({
+      title: 'Delete Document',
+      message: `Are you sure to delete the "${this.documentForm.controls['title'].value}" ?`,
+      buttons: ['cancel', 'yes'],
+      icon: 'warning'
+    }).afterClosed().subscribe(async res => {
+      if (res === 'yes') {
         this._setStateProcessing(true);
         const document = await this.document$.pipe(take(1)).toPromise();
         await this.documentService.delete(document.id);
@@ -140,22 +118,23 @@ async deleteEntry() {
     });
   }
 
-  async saveEntry(val: string) {
+  async saveEntry(closeAfterSave: boolean = false) {
+    this._snackbar('Saving...');
     this._setStateProcessing(true);
     const formData = this.documentForm.value;
 
     const document = await this.document$.pipe(take(1)).toPromise();
     document.title = formData.title;
-    document.status = formData.status;
     document.url = formData.url;
     document.published = formData.published;
-    document.data = this._sanitizeData(this.dataForm.value);
-    this._snackbar('Saving..');
+    document.data = this.dataForm.value;
 
     await this.documentService.update(document);
     this._setStateProcessing(false);
     this._snackbar('Saved');
-    if (val === 'close') { this._navigateBack(); }
+    if (closeAfterSave === true) {
+      this._navigateBack();
+    }
   }
 
   cancelEditing() {
@@ -172,15 +151,6 @@ async deleteEntry() {
 
   private _setStateProcessing(isProcessing: boolean) {
     // Blur inputs or something
-  }
-
-  private _sanitizeData(data: any) {
-    for (const key in data) {
-      if (data[key] === undefined) {
-        data[key] = null;
-      }
-    }
-    return data;
   }
 
   private _slugify(text: string) {
@@ -205,10 +175,16 @@ async deleteEntry() {
   }
 
   private _onTitleChange(title: string) {
-    if (!this.documentForm.get('published').value) {
+    if (!!title && !this.documentForm.get('published').value) {
       // Only auto slugify title if document has't been published before
       this.documentForm.controls['url'].setValue(`${this._rootSlug}/${this._slugify(title)}`);
       this.documentForm.controls['title'].setValue(title);
     }
+  }
+
+  private _onDocumentStatusChange(publishStatus: boolean) {
+    console.log(JSON.stringify({ status: publishStatus }));
+    const publishedTimestamp = publishStatus ? firestore.Timestamp.now() : null;
+    this.documentForm.controls['published'].setValue(publishedTimestamp);
   }
 }

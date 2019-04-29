@@ -9,10 +9,10 @@
                          (click)='deleteEntry()'></tanam-action-button>
     <tanam-action-button buttonType='save'
                          disabled={{documentForm.pristine}}
-                         (click)='documentForm.pristine? "" : saveEntry("save")'></tanam-action-button>
+                         (click)='documentForm.pristine? "" : saveEntry()'></tanam-action-button>
     <tanam-action-button buttonType='saveAndClose'
                          disabled={{documentForm.pristine}}
-                         (click)='documentForm.pristine? "" : saveEntry("close")'></tanam-action-button>
+                         (click)='documentForm.pristine? "" : saveEntry(true)'></tanam-action-button>
   </tanam-context-actions>
 
   <form [formGroup]="documentForm"
@@ -20,7 +20,7 @@
 
     <div class="wrap">
       <div class="edit-content">
-        <mat-card class="">
+        <mat-card>
           <mat-card-content>
             <div formGroupName="dataForm">
               <div class="row"
@@ -122,14 +122,17 @@
                 URL slug is <strong>required</strong>
               </mat-error>
             </mat-form-field>
-            <mat-form-field class="full-width">
-              <mat-select formControlName="status"
-                          placeholder="Status">
-                <mat-option *ngFor="let statusOption of statusOptions"
-                            value="{{statusOption.value}}">{{statusOption.title}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <tanam-date-time matInput
+            <div class="row">
+              <div class="col slider-toogle">
+                <mat-slide-toggle value="isPublished"
+                                  formControlName="publishStatus"
+                                  matTooltip="Unpublished documents are in draft and can not be seen">
+                  {{ isScheduled ? 'Scheduled' : 'Published' }}
+                </mat-slide-toggle>
+              </div>
+            </div>
+            <tanam-date-time *ngIf="isPublished"
+                             matInput
                              type="date-time"
                              formControlName="published"
                              placeholder="Publish Date">

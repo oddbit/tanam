@@ -11,7 +11,8 @@ $tanam-brand-color: mat-palette($mat-green);
 
 $tanam-admin-primary: mat-palette($mat-green, 600);
 $tanam-admin-accent:  mat-palette($mat-brown, A200, A100, A400);
-$tanam-admin-theme:   mat-light-theme($tanam-admin-primary, $tanam-admin-accent);
+$tanam-admin-warn:    mat-palette($mat-deep-orange);
+$tanam-admin-theme:   mat-light-theme($tanam-admin-primary, $tanam-admin-accent, $tanam-admin-warn);
 
 @include angular-material-theme($tanam-admin-theme);
 
@@ -20,14 +21,13 @@ $tanam-admin-dark-accent:  mat-palette($mat-amber, A200, A100, A400);
 $tanam-admin-dark-warn:    mat-palette($mat-deep-orange);
 $tanam-admin-dark-theme:   mat-dark-theme($tanam-admin-dark-primary, $tanam-admin-dark-accent, $tanam-admin-dark-warn);
 
-$dateTimePickerTheme: mat-light-theme($tanam-admin-primary, $tanam-admin-accent, $tanam-admin-dark-warn);
-@include mat-datetimepicker-theme($dateTimePickerTheme);
-
 .tanam-dark-theme {
+  @include mat-datetimepicker-theme($tanam-admin-dark-theme);
   @include angular-material-theme($tanam-admin-dark-theme);
 }
 
 .tanam-light-theme {
+  @include mat-datetimepicker-theme($tanam-admin-theme);
   @include angular-material-theme($tanam-admin-theme);
 }
 

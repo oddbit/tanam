@@ -122,6 +122,30 @@ app.get('/_/image/:fileId', async (request, response) => {
     return null;
 });
 
+// Handle request for user uploaded files
+app.get(/^\/?_\/theme\/(.*)$/, async (request, response) => {
+    console.log(`[theme handler] GET ${request.url}`);
+    const match = request.url.match(/\/?_\/theme\/(.*)$/);
+    const filePath = match[1];
+    if (!filePath) {
+        console.error(`Could not match a file path for URL: ${request.url}`);
+        response.status(500).send(`Could not handle request: ${request.url}`);
+        return null;
+    }
+
+    const fileContents = await fileService.getThemeAssetsFile(filePath);
+    if (!fileContents) {
+        console.log(`[HTTP 404] No media file: ${request.url}`);
+        response.status(404).send(`Not found: ${request.url}`);
+        return;
+    }
+
+    response.setHeader('Content-Type', fileService.getContentTypeFromPath(filePath));
+    response.setHeader('Cache-Control', getCacheHeader());
+    response.send(fileContents);
+    return null;
+});
+
 // Any other "underscore path" -> serve tanam Angular Admin App
 app.get(/^\/?_\/(.*)\/?$/i, async (request, response) => {
     const distFolder = await _getDistFolder();

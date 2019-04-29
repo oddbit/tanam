@@ -1,5 +1,6 @@
 
 export interface SiteInformation {
+    id: string;
     title: string;
     theme: string;
     defaultLanguage: string;

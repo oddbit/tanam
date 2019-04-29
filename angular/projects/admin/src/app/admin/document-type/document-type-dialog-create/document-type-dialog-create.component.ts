@@ -20,10 +20,7 @@ export class DocumentTypeDialogCreateComponent {
     private readonly documentTypeService: DocumentTypeService,
     private dialogRef: MatDialogRef<DocumentTypeDialogCreateComponent>,
     private router: Router,
-    userService: UserService,
-  ) {
-    userService.overlayTheme();
-  }
+  ) {}
 
   createNewType() {
     const title = this.createTypeForm.value.title;

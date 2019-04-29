@@ -1,0 +1,15 @@
+{
+  "name": "Tanam - Web CMS",
+  "platforms": [
+    "Web"
+  ],
+  "content": "README.md",
+  "pages": {
+    "docs/install.md": "Install and get Tanam for your site",
+    "docs/develop-templates.md": "How to develop web templates",
+    "docs/infrastructure.md": "The technical infrastructure",
+    "docs/in-action.md": "Screenshots and CMS in action",
+    "docs/portfolio.md": "Portfolio"
+  },
+  "related": []
+}

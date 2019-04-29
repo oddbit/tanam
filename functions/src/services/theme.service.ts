@@ -14,9 +14,6 @@ export async function createDefaultTheme() {
         id: 'default',
         title: 'Default theme',
         description: 'Default site theme',
-        images: [],
-        styles: [],
-        scripts: [],
         created: admin.firestore.FieldValue.serverTimestamp(),
         updated: admin.firestore.FieldValue.serverTimestamp(),
     };
