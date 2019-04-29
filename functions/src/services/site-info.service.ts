@@ -21,6 +21,7 @@ export async function createDefaultSiteInfo() {
         isCustomDomain: false,
         domains: [defaultDomain],
         primaryDomain: defaultDomain,
+        analytics: '',
         theme: 'default',
         title: process.env.GCLOUD_PROJECT
     };
