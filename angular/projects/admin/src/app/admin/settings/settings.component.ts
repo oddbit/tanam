@@ -55,9 +55,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
       }
 
       this.settingsForm.valueChanges.subscribe(form => {
-        if (form.analytics.substring(0, 2)  === 'UA') {
+        const analyticsCode = (form.analytics as string).trim().toUpperCase();
+        if (analyticsCode.startsWith('UA')) {
           this.analyticsName = 'Google Analytics';
-        } else if (form.analytics.substring(0, 2)  === 'GM') {
+        } else if (analyticsCode.startsWith('GTM')) {
           this.analyticsName = 'Google Tag Manager';
         } else {
           this.analyticsName = 'Analytics code not supported';
@@ -153,7 +154,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       defaultLanguage: formData.defaultLanguage,
       languages: languages,
       primaryDomain: formData.primaryDomain,
-      analytics: formData.analytics,
+      analytics: formData.analytics.trim().toUpperCase(),
       domains: formData.domains.map((domain: any) => domain['name']),
     } as SiteInformation);
   }
