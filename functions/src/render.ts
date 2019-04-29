@@ -1,7 +1,8 @@
 import * as cheerio from 'cheerio';
 import * as dust from 'dustjs-helpers';
-import { PageContext, Theme } from './models';
+import { PageContext } from './models';
 import * as documentContextService from './services/document-context.service';
+import * as siteInfoService from './services/site-info.service';
 import * as templateService from './services/template.service';
 
 dust.isDebug = true;
@@ -81,6 +82,7 @@ export async function compileTemplate(context: PageContext) {
 }
 
 export async function renderPage(context: PageContext): Promise<string> {
+    const siteInfo = await siteInfoService.getSiteInfo();
     const template = await compileTemplate(context);
     if (!template) {
         console.error(`No template rendered for document ${context.document.id}`);
@@ -89,9 +91,37 @@ export async function renderPage(context: PageContext): Promise<string> {
 
     const $ = cheerio.load(template);
     const $head = $('head');
+    const $body = $('body');
+
+    // Add canonical link
     if ($head.find('link[rel="canonical"]').length === 0) {
         // Ony add canonical link data if not already present in document
         $head.append(`<link rel="canonical" href="${context.document.permalink}">`)
     }
+
+    // Add Google Analytics tracking
+    if (siteInfo.analytics && siteInfo.analytics.startsWith('UA')) {
+        $head.prepend(`<!-- Global site tag (gtag.js) - Google Analytics -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=${siteInfo.analytics}"></script>
+            <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${siteInfo.analytics}');
+            </script>`);
+    } else if (siteInfo.analytics && siteInfo.analytics.startsWith('GTM')) {
+        $head.prepend(`<!-- Google Tag Manager -->
+            <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','${siteInfo.analytics}');</script>
+            <!-- End Google Tag Manager -->`);
+        $body.prepend(`<!-- Google Tag Manager (noscript) -->
+            <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${siteInfo.analytics}"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+            <!-- End Google Tag Manager (noscript) -->`);
+    }
+
     return $.html();
 }
