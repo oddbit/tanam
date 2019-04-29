@@ -48,6 +48,12 @@ export class ThemeTemplateService {
   }
 
   saveTemplate(template: ThemeTemplate, themeId: string) {
-    return  this.siteCollection.collection('themes').doc(themeId).collection('templates').doc<ThemeTemplate>(template.id).update(template);
+    template.updated = firebase.firestore.FieldValue.serverTimestamp();
+    return this.siteCollection
+    .collection('themes')
+    .doc(themeId)
+    .collection('templates')
+    .doc<ThemeTemplate>(template.id)
+    .update(template);
   }
 }
