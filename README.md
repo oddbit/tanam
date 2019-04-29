@@ -1,4 +1,4 @@
-# Tanam 🌱 A plug n play CMS for Firebase
+# Tanam 🌱 Plug-n-play CMS for websites on Firebase
 ![License](https://img.shields.io/npm/l/tanam.svg)
 ![NPM version](https://img.shields.io/npm/v/tanam.svg)
 ![Total NPM downloads](https://img.shields.io/npm/dt/tanam.svg)
@@ -37,14 +37,15 @@ Firebase is a suite of services that offers all elements necessary to serve a CM
 virtually infinitly high performance.
 
 # What is Tanam
-Tanam is built and fully powered by Firebase. It allows you to host your own CMS completely free
-both free as in FOSS and as in free ice cream 🍦
+Tanam is built and fully powered by Firebase. It transforms your Firebase project to a dynamic content
+website backed by a CMS that is completely free; both free as in FOSS and as in free ice cream 🍦
 
-Tanam is providing a platform with dynamic content (server side rendered) with static site performance
-straight out of the box. It's a auto-scaling platform that will work just as well for small personal
-sites as it will also be able to serve heavy load without breaking a sweat.
+Tanam is providing a platform that server side renders your dynamic content and delivers it with static 
+site performance straight out of the box. It's a auto-scaling platform that will work just as well for 
+small personal sites as it will also be able to serve heavy load without breaking a sweat.
 
-Tanam is leveraging Google's global CDN to deliver pre-built versions of your dynamic content.
+The simple way to describe how this is possible is to say that we're using Google's global CDN as our
+filesystem for statically generated pages. 
 All cached content is immediately replaced as you update it. Since we are pre-building
 the content, all your URLs will serve instantly as a static website would. Performance only depends
 on the size of your page.

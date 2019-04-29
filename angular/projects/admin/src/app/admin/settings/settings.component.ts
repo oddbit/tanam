@@ -20,6 +20,7 @@ const REGEX_DOMAIN = '^(((?!-))(xn--|_{1,1})?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn
 export class SettingsComponent implements OnInit, OnDestroy {
   languages: LanguageOptions[] = [];
   langOptions = languageOptions;
+  analyticsName = '';
   readonly siteName$: Observable<string> = this.siteSettingsService.getSiteName();
   readonly themes$: Observable<Theme[]> = this.themeService.getThemes();
   readonly settingsForm: FormGroup = this.formBuilder.group({
@@ -27,6 +28,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     theme: [null, [Validators.required]],
     defaultLanguage: [null, [Validators.required]],
     primaryDomain: [null, [Validators.required]],
+    analytics: [null],
     domains: this.formBuilder.array([], [
       Validators.required,
       Validators.minLength(1),
@@ -52,11 +54,23 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.addDomain(domain);
       }
 
+      this.settingsForm.valueChanges.subscribe(form => {
+        const analyticsCode = (form.analytics as string).trim().toUpperCase();
+        if (analyticsCode.startsWith('UA')) {
+          this.analyticsName = 'Google Analytics';
+        } else if (analyticsCode.startsWith('GTM')) {
+          this.analyticsName = 'Google Tag Manager';
+        } else {
+          this.analyticsName = 'Analytics code not supported';
+        }
+      });
+
       this.settingsForm.patchValue({
         title: settings.title,
         theme: settings.theme,
         defaultLanguage: settings.defaultLanguage,
         primaryDomain: settings.primaryDomain,
+        analytics: settings.analytics,
         domains: settings.domains,
       });
 
@@ -140,6 +154,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       defaultLanguage: formData.defaultLanguage,
       languages: languages,
       primaryDomain: formData.primaryDomain,
+      analytics: formData.analytics.trim().toUpperCase(),
       domains: formData.domains.map((domain: any) => domain['name']),
     } as SiteInformation);
   }

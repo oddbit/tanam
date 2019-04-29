@@ -7,5 +7,6 @@ export interface SiteInformation {
     languages: string[];
     isCustomDomain: boolean;
     primaryDomain: string;
+    analytics: string;
     domains: string[];
 }
