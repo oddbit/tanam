@@ -48,6 +48,26 @@ export class ThemeTemplateService {
   }
 
   saveTemplate(template: ThemeTemplate, themeId: string) {
-    return  this.siteCollection.collection('themes').doc(themeId).collection('templates').doc<ThemeTemplate>(template.id).update(template);
+    template.updated = firebase.firestore.FieldValue.serverTimestamp();
+    return this.siteCollection
+    .collection('themes')
+    .doc(themeId)
+    .collection('templates')
+    .doc<ThemeTemplate>(template.id)
+    .update(template);
+  }
+
+  deleteTemplate(templateId: string, themeId: string) {
+    console.log(templateId);
+    console.log(themeId);
+    if (!templateId && themeId) {
+      throw new Error('Template ID and Theme id must be provided as an attribute when deleting a template.');
+    }
+    return this.siteCollection
+      .collection('themes')
+      .doc(themeId)
+      .collection('templates')
+      .doc(templateId)
+      .delete();
   }
 }
