@@ -1,3 +1,18 @@
-<p>
-  theme-template-dialog-list-template works!
-</p>
+<h1 mat-dialog-title>List template</h1>
+<div mat-dialog-content>
+  <ul>
+    <li class="mat-body">
+      Hello
+      <hr>
+    </li>
+    <li class="mat-body">
+      Hello
+      <hr>
+    </li>
+  </ul>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button
+          color="primary"
+          [(mat-dialog-close)]="close">Close</button>
+</div>
