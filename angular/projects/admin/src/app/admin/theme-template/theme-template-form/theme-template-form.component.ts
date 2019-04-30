@@ -20,7 +20,6 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
     title: [null, Validators.required],
     selector: [null, Validators.required],
     templateHtml: [null, Validators.required],
-    templateStyle: null,
   });
   templateSubscription: Subscription;
 
@@ -39,8 +38,7 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
         this.templateForm.patchValue({
           title: template.title,
           selector: template.selector,
-          templateHtml: template.template,
-          templateStyle: template.styles ? template.styles[0] : null
+          templateHtml: template.template
         });
       });
   }
@@ -66,7 +64,6 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
         title: formData.title,
         selector: formData.selector,
         template: formData.templateHtml,
-        styles: [formData.templateStyle],
       } as ThemeTemplate, this.themeId as string
     );
     this.router.navigateByUrl(`/_/admin/theme/${this.themeId}`);
