@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { ThemeTemplate } from 'tanam-models';
 import { ThemeTemplateService } from '../../../services/theme-template.service';
 import { Router } from '@angular/router';
-import { MatSnackBar, MatDialog } from '@angular/material';
+import { MatSnackBar, MatDialog,  } from '@angular/material';
 import { DialogConfirmService } from '../../../services/dialogConfirm.service';
 import {
   ThemeTemplateDialogListTemplateComponent
@@ -76,7 +76,10 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
   }
 
   viewTemplates() {
-    this.dialog.open(ThemeTemplateDialogListTemplateComponent);
+    this.dialog.open(ThemeTemplateDialogListTemplateComponent, {
+      width: '300px',
+      maxHeight: '500px'
+    });
   }
 
   async deleteTemplate() {
