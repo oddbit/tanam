@@ -78,12 +78,20 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
     alert('Viewing Selector');
   }
 
-  deleteTemplate() {
+  async deleteTemplate() {
     this.dialogConfirmService.openDialogConfirm({
       title: 'Delete Template',
       message: `Are you sure to delete the "${this.templateForm.controls['title'].value}" ?`,
       buttons: ['cancel', 'yes'],
       icon: 'warning'
+    }).afterClosed().subscribe(async res => {
+      if (res === 'yes') {
+        this.templateSubscription.unsubscribe();
+        this.snackBar.open('Deleting Template', 'Dismiss', {duration: 1000});
+        await this.themeTemplateservice.deleteTemplate(this.templateId, this.themeId);
+        this.snackBar.open('Template Deleted', 'Dismiss', {duration: 1000});
+        this.router.navigateByUrl(`/_/admin/theme/${this.themeId}`);
+      }
     });
   }
 }
