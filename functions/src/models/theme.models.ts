@@ -13,7 +13,6 @@ export interface ThemeTemplate {
     title: string;
     selector: string;
     template: string;
-    styles?: string[];
     templateType: TemplateType;
     updated: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
     created: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
