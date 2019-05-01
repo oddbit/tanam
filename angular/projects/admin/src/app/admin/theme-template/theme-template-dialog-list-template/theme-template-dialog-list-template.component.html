@@ -1,13 +1,12 @@
 <h1 mat-dialog-title>List template</h1>
 <div mat-dialog-content>
-  <ul>
-    <li class="mat-body"
-        *ngFor="let template of templates$ | async"
-        (click)="copyTemplate(template.selector)">
-      {{template.title}}
-      <hr>
-    </li>
-  </ul>
+    <div class="row"
+        *ngFor="let template of templates$ | async">
+      <div class="col">
+        <button mat-button
+                (click)="copyTemplate(template.selector)">{{template.title}}</button>
+      </div>
+    </div>
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button
