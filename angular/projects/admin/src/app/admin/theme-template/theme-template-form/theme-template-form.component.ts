@@ -77,6 +77,7 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
 
   viewTemplates() {
     this.dialog.open(ThemeTemplateDialogListTemplateComponent, {
+      data: { themeId: this.themeId },
       width: '300px',
       maxHeight: '500px'
     });
