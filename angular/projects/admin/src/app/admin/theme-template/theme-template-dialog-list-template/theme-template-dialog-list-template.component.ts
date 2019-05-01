@@ -27,7 +27,7 @@ export class ThemeTemplateDialogListTemplateComponent {
     txtArea.style.top = '0';
     txtArea.style.left = '0';
     txtArea.style.opacity = '0';
-    txtArea.value = `{>"${templateSelector}'"/}` ;
+    txtArea.value = `{>"${templateSelector}"/}` ;
     document.body.appendChild(txtArea);
     txtArea.select();
 
