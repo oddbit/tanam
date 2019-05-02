@@ -27,9 +27,9 @@ export class NotificationsService {
       .valueChanges();
   }
 
-  markNotificationAsRead(notificationId: string) {
+  markNotificationAsRead(notification: SystemNotification) {
     return this.siteCollection
-      .collection<SystemNotification>('notifications').doc(notificationId)
+      .collection<SystemNotification>('notifications').doc(notification.id)
       .update({ isRead: true });
   }
 

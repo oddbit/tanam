@@ -21,12 +21,14 @@ export class NotificationsComponent implements OnInit {
 
   readNotification(notification: SystemNotification) {
     console.log(`[readNotification] ${JSON.stringify(notification)}`);
-    this.notificationService.markNotificationAsRead(notification.id);
+
     this.dialogConfirmService.openDialogConfirm({
       buttons: ['ok'],
       icon: notification.type === 'error' ? 'error' : 'info',
       message: notification.message,
       title: notification.title,
-    });
+    })
+    .afterOpened()
+    .subscribe(() => this.notificationService.markNotificationAsRead(notification));
   }
 }
