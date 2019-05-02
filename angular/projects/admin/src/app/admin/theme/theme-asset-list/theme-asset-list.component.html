@@ -1,9 +1,14 @@
 <div class="title-table">
   <h3 class="mat-h3">File Assets</h3>
-  <button mat-stroked-button>
+  <button mat-stroked-button
+          (click)="fileInput.click()">
     <mat-icon>file_upload</mat-icon>
     Upload File
   </button>
+  <input #fileInput
+        type="file"
+        (change)="uploadSingleFile($event)"
+        style="display:none;" />
 </div>
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource" matSort>

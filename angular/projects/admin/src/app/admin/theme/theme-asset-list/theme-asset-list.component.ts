@@ -5,6 +5,8 @@ import { ThemeAssetListDataSource } from './theme-asset-list-datasource';
 import {  TanamFile } from '../../../../../../../../functions/src/models';
 import { ActivatedRoute } from '@angular/router';
 import { DialogConfirmService } from '../../../services/dialogConfirm.service';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'tanam-theme-asset-list',
@@ -13,6 +15,7 @@ import { DialogConfirmService } from '../../../services/dialogConfirm.service';
 })
 export class ThemeAssetListComponent implements OnInit {
   readonly themeId = this.route.snapshot.paramMap.get('themeId');
+  uploadTasks: { [key: string]: Observable<number> } = {};
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -30,6 +33,20 @@ export class ThemeAssetListComponent implements OnInit {
   ngOnInit() {
     console.log(this.themeId);
     this.dataSource = new ThemeAssetListDataSource(this.themeId, this.themeAssetService, this.paginator, this.sort);
+  }
+
+  uploadSingleFile(event) {
+    const file: File = event.target.files[0];
+    console.log(file);
+    const uploadTaskProgress = this.themeAssetService.uploadThemeAsset(file, this.themeId);
+    this.uploadTasks[file.name] = uploadTaskProgress.pipe(tap(progress => {
+      if (progress === 100) {
+        delete this.uploadTasks[file.name];
+        this.snackBar.open('Getting file..', 'Dismiss', {
+          duration: 5000,
+        });
+      }
+    }));
   }
 
   deleteFile(file: TanamFile) {
