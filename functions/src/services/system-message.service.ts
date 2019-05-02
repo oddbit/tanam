@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import { SystemNotification } from '../models/system';
+import { SystemNotification } from '../models/system.models';
 
 const siteCollection = () => admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
 
