@@ -3,9 +3,11 @@
   <mat-icon color="{{data.color}}">{{data.icon}}</mat-icon>
 </div>
 <div mat-dialog-content>
-  <p class="mat-body">{{data.message}}</p>
+  <p class="mat-body"
+     [innerHTML]="data.message"></p>
 </div>
 <div mat-dialog-actions>
   <button mat-button
-          *ngFor="let button of data.buttons" [(mat-dialog-close)]="button">{{button | uppercase}}</button>
+          *ngFor="let button of data.buttons"
+          [(mat-dialog-close)]="button">{{button | uppercase}}</button>
 </div>
