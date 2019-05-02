@@ -4,11 +4,13 @@ import { AppMaterialModule } from '../../app-material.module';
 import { AdminRoutingModule } from '../admin-routing.module';
 import { NavigationListItemComponent } from './navigation-list-item/navigation-list-item.component';
 import { NavigationComponent } from './navigation.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 @NgModule({
   declarations: [
     NavigationListItemComponent,
     NavigationComponent,
+    NotificationsComponent,
   ],
   imports: [
     CommonModule,
