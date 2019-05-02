@@ -1,11 +1,10 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AppAuthService } from '../../services/app-auth.service';
 import { DocumentTypeService } from '../../services/document-type.service';
 import { SiteService } from '../../services/site.service';
-import { NotificationsService } from '../../services/notifications.service';
 
 @Component({
   selector: 'tanam-admin-navigation',
@@ -21,14 +20,12 @@ export class NavigationComponent {
     .observe(Breakpoints.Handset)
     .pipe(map(result => result.matches));
 
-  notifications$ = this.notificationService.getNofifications();
 
   constructor(
     private readonly breakpointObserver: BreakpointObserver,
     private readonly documentTypeService: DocumentTypeService,
     private readonly appAuthService: AppAuthService,
     private readonly siteSettingsService: SiteService,
-    private readonly notificationService: NotificationsService,
   ) { }
 
   toggleMiniNav() {

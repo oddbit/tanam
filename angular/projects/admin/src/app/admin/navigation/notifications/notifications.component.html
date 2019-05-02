@@ -1,3 +1,14 @@
-<p>
-  notifications works!
-</p>
+<button type="button"
+        aria-label="Notifications"
+        mat-icon-button
+        [matMenuTriggerFor]="menu">
+  <mat-icon aria-label="Notifications">notifications</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <div *ngFor="let notification of notifications$ | async">
+    <button mat-menu-item
+            (click)="readNotification(notification)">
+      {{ notification.title }}
+    </button>
+  </div>
+</mat-menu>
