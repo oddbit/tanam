@@ -8,6 +8,7 @@ export class ThemeAssetListDataSource extends DataSource<TanamFile> {
   data: TanamFile[];
 
   constructor(
+    private readonly themeId: string,
     private readonly themeAssetService: UserThemeAssetService,
     private readonly paginator: MatPaginator,
     private readonly sort: MatSort
@@ -16,8 +17,7 @@ export class ThemeAssetListDataSource extends DataSource<TanamFile> {
   }
 
   connect(): Observable<TanamFile[]> {
-    // Todo: Change default to dynamic theme id
-    return this.themeAssetService.getThemeAssets('default');
+    return this.themeAssetService.getThemeAssets(this.themeId);
   }
 
   disconnect() { }
