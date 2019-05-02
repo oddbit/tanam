@@ -1,7 +1,8 @@
+import { QuerySnapshot } from '@google-cloud/firestore';
 import * as admin from 'firebase-admin';
 import { Document, DocumentContext, PageContext, SiteContext, SiteInformation } from '../models';
 import * as documentService from '../services/document.service';
-
+import * as systemNotificationService from '../services/system-message.service';
 export interface DocumentQueryOptions {
     limit?: number;
     orderBy?: {
@@ -12,6 +13,7 @@ export interface DocumentQueryOptions {
 
 const siteCollection = () => admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
 
+
 export async function queryDocumentContext(documentTypeId: string, queryOpts: DocumentQueryOptions = {}) {
     console.log(`[queryDocumentContext] ${documentTypeId}, query=${JSON.stringify(queryOpts)}`);
     const orderByField = queryOpts.orderBy && queryOpts.orderBy.field || 'updated';
@@ -19,13 +21,25 @@ export async function queryDocumentContext(documentTypeId: string, queryOpts: Do
     const limit = queryOpts.limit || 20;
 
     console.log(`[queryDocumentContext] effective query ${JSON.stringify({ orderByField, sortOrder, limit })}`);
-    const querySnap = await siteCollection()
-        .collection('documents')
-        .where('status', '==', 'published')
-        .where('documentType', '==', documentTypeId)
-        // .orderBy(orderByField, sortOrder) // https://github.com/oddbit/tanam/issues/119
-        .limit(limit)
-        .get();
+    let querySnap: QuerySnapshot;
+    try {
+        querySnap = await siteCollection()
+            .collection('documents')
+            .where('status', '==', 'published')
+            .where('documentType', '==', documentTypeId)
+            .orderBy(orderByField, sortOrder) // https://github.com/oddbit/tanam/issues/119
+            .limit(limit)
+            .get();
+
+    } catch (err) {
+        console.error(`[queryDocumentContext] ${JSON.stringify(err)}`);
+        await systemNotificationService.reportError(
+            'Missing database index',
+            'Your template code is in need of a database index to work properly. Please follow instructions in the message',
+            err.details,
+        );
+        return [];
+    }
 
     console.log(`[queryDocumentContext] num results: ${querySnap.docs.length}`);
 
