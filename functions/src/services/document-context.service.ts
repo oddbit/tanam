@@ -33,11 +33,7 @@ export async function queryDocumentContext(documentTypeId: string, queryOpts: Do
 
     } catch (err) {
         console.error(`[queryDocumentContext] ${JSON.stringify(err)}`);
-        await systemNotificationService.reportError(
-            'Missing database index',
-            'Your template code is in need of a database index to work properly. Please follow instructions in the message',
-            err.details,
-        );
+        await systemNotificationService.reportMissingIndex(err.details);
         return [];
     }
 
