@@ -1,9 +1,10 @@
 import {Component, OnInit, ViewChild, Input} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatPaginator, MatSort, MatTableDataSource, MatSnackBar} from '@angular/material';
 import { UserThemeAssetService } from '../../../services/user-theme-asset.service';
 import { ThemeAssetListDataSource } from './theme-asset-list-datasource';
-import { Theme } from '../../../../../../../../functions/src/models';
+import {  TanamFile } from '../../../../../../../../functions/src/models';
 import { ActivatedRoute } from '@angular/router';
+import { DialogConfirmService } from '../../../services/dialogConfirm.service';
 
 @Component({
   selector: 'tanam-theme-asset-list',
@@ -21,7 +22,9 @@ export class ThemeAssetListComponent implements OnInit {
 
   constructor(
     private readonly themeAssetService: UserThemeAssetService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private dialogConfirmService: DialogConfirmService,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -29,8 +32,19 @@ export class ThemeAssetListComponent implements OnInit {
     this.dataSource = new ThemeAssetListDataSource(this.themeId, this.themeAssetService, this.paginator, this.sort);
   }
 
-  deleteFile() {
-    console.log('Delete file');
+  deleteFile(file: TanamFile) {
+    this.dialogConfirmService.openDialogConfirm({
+      title: 'Delete Content Type',
+      message: `Are you sure to delete the "${file.title}" ?`,
+      buttons: ['cancel', 'yes'],
+      icon: 'warning'
+    }).afterClosed().subscribe(async res => {
+      if (res === 'yes') {
+        this.snackBar.open('Deleting..', 'Dismiss', {duration: 2000});
+        await this.themeAssetService.deleteThemeAsset(file, this.themeId);
+        this.snackBar.open('Deleted', 'Dismiss', {duration: 2000});
+      }
+    });
   }
 
   detailFile() {

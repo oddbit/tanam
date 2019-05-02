@@ -16,9 +16,19 @@ export class UserThemeAssetService {
     ) { }
 
   getThemeAssets(themeId: string): Observable <TanamFile[]> {
-  return this.siteCollection
-  .collection('themes').doc(themeId)
-  .collection<TanamFile>('assets')
-  .valueChanges();
+    return this.siteCollection
+      .collection('themes').doc(themeId)
+      .collection<TanamFile>('assets')
+      .valueChanges();
+  }
+
+  deleteThemeAsset(file: TanamFile, themeId: string) {
+    console.log(file.id);
+    console.log(themeId);
+    return this.siteCollection
+      .collection('themes').doc(themeId)
+      .collection<TanamFile>('assets')
+      .doc(file.id)
+      .delete();
   }
 }
