@@ -8,6 +8,7 @@ import { ThemeEditComponent } from './theme-edit/theme-edit.component';
 import { ThemeFormComponent } from './theme-form/theme-form.component';
 import { ThemeListComponent } from './theme-list/theme-list.component';
 import { ThemeOverviewComponent } from './theme-overview/theme-overview.component';
+import { ThemeAssetListComponent } from './theme-asset-list/theme-asset-list.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { ThemeOverviewComponent } from './theme-overview/theme-overview.componen
     ThemeListComponent,
     ThemeEditComponent,
     ThemeFormComponent,
+    ThemeAssetListComponent,
   ],
   imports: [
     CommonModule,
