@@ -24,6 +24,11 @@ service cloud.firestore {
         allow write: if isPublisher();
       }
 
+			match /notifications/{notificationId} {
+        allow read: if isAtLeastManager();
+        allow write: if isAtLeastManager();
+      }
+
       match /themes/{document=**} {
         allow read: if hasAnyRole();
         allow write: if isAtLeastManager();
