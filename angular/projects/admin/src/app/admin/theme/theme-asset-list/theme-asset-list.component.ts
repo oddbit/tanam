@@ -64,7 +64,7 @@ export class ThemeAssetListComponent implements OnInit {
     });
   }
 
-  detailFile() {
-    console.log('Detail File');
+  detailFile(file: TanamFile) {
+    console.log('[Detail File]' + JSON.stringify(file));
   }
 }
