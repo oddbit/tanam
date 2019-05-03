@@ -4,8 +4,11 @@ import { Subscription } from 'rxjs';
 import { ThemeTemplate } from 'tanam-models';
 import { ThemeTemplateService } from '../../../services/theme-template.service';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog,  } from '@angular/material';
 import { DialogConfirmService } from '../../../services/dialogConfirm.service';
+import {
+  ThemeTemplateDialogListTemplateComponent
+} from '../theme-template-dialog-list-template/theme-template-dialog-list-template.component';
 
 @Component({
   selector: 'tanam-theme-template-form',
@@ -29,7 +32,8 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly themeTemplateservice: ThemeTemplateService,
     private snackBar: MatSnackBar,
-    private dialogConfirmService: DialogConfirmService
+    private dialogConfirmService: DialogConfirmService,
+    private dialog: MatDialog
     ) { }
 
   ngOnInit() {
@@ -71,8 +75,12 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(`/_/admin/theme/${this.themeId}`);
   }
 
-  viewSelector() {
-    alert('Viewing Selector');
+  viewTemplates() {
+    this.dialog.open(ThemeTemplateDialogListTemplateComponent, {
+      data: { themeId: this.themeId },
+      width: '250px',
+      maxHeight: '500px'
+    });
   }
 
   async deleteTemplate() {
