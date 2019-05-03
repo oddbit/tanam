@@ -66,3 +66,40 @@ export const processImageUpload = functions.storage.object().onFinalize(async (o
     bucket.file(tanamFile.variants.large).save(await resizeAndConvertImage(1600), metadata),
   ]);
 });
+
+
+export const uploadAssetFiles = functions.storage.object().onFinalize(async (object: ObjectMetadata) => {
+
+  if (!object.name.startsWith(`tanam/${process.env.GCLOUD_PROJECT}/themes/`)) {
+    console.log(`Not an upload asset file task: ${object.name} (${object.contentType})`);
+    return null;
+  }
+  console.log('[UploadAssetFiles]' + JSON.stringify(object))
+
+  const objectNameArr = object.name.split('/');
+  const themeId = objectNameArr[3];
+
+  const originalSuffix = object.name.lastIndexOf('.') > 0 ? object.name.substr(object.name.lastIndexOf('.')) : '';
+  const firestoreRef = admin.firestore()
+    .collection('tanam').doc(process.env.GCLOUD_PROJECT)
+    .collection('themes').doc(themeId)
+    .collection('assets').doc()
+
+
+  const newFileName = firestoreRef.id;
+  const newFilePath = `tanam/${process.env.GCLOUD_PROJECT}/images/`;
+
+  const tanamFile: TanamFile = {
+    id: firestoreRef.id,
+    title: object.name.substr(object.name.lastIndexOf('/') + 1),
+    bucket: object.bucket,
+    filePath: [newFilePath, newFileName, originalSuffix].join(''),
+    updated: admin.firestore.FieldValue.serverTimestamp(),
+    created: admin.firestore.FieldValue.serverTimestamp(),
+    bytes: Number(object.size),
+    mimeType: object.contentType,
+    fileType: object.contentType,
+  };
+
+  return firestoreRef.set(tanamFile);
+});
