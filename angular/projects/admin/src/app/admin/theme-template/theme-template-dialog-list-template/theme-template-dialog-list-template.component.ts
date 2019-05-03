@@ -34,7 +34,7 @@ export class ThemeTemplateDialogListTemplateComponent {
     try {
       const successful = document.execCommand('copy');
       if (successful) {
-        this.snackBar.open('Template Copied', 'Dismiss', {duration: 1000});
+        this.snackBar.open('Template copied to clipboard', 'Dismiss', {duration: 1000});
         return true;
       }
     } catch (err) {
