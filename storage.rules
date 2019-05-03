@@ -9,7 +9,7 @@ service firebase.storage {
 
       match /themes/{allPaths=**} {
         allow read: if hasAnyRole();
-        allow write: if false;
+        allow write: if isPublisher();
       }
 
       match /upload/{allPaths=**} {

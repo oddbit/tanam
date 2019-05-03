@@ -20,6 +20,7 @@ export class NavigationComponent {
     .observe(Breakpoints.Handset)
     .pipe(map(result => result.matches));
 
+
   constructor(
     private readonly breakpointObserver: BreakpointObserver,
     private readonly documentTypeService: DocumentTypeService,
@@ -29,6 +30,10 @@ export class NavigationComponent {
 
   toggleMiniNav() {
     this.isExpanded = !this.isExpanded;
+  }
+
+  showNotifications() {
+    // Open the drawer
   }
 
   logout() {

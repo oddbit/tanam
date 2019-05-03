@@ -8,6 +8,9 @@ import { ThemeTemplateFormComponent } from './theme-template-form/theme-template
 import { ThemeTemplateListComponent } from './theme-template-list/theme-template-list.component';
 import { ThemeTemplateOverviewComponent } from './theme-template-overview/theme-template-overview.component';
 import { ThemeTemplateDialogCreateComponent } from './theme-template-dialog-create/theme-template-dialog-create.component';
+import {
+  ThemeTemplateDialogListTemplateComponent
+} from './theme-template-dialog-list-template/theme-template-dialog-list-template.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +19,7 @@ import { ThemeTemplateDialogCreateComponent } from './theme-template-dialog-crea
     ThemeTemplateListComponent,
     ThemeTemplateOverviewComponent,
     ThemeTemplateDialogCreateComponent,
+    ThemeTemplateDialogListTemplateComponent,
   ],
   imports: [
     CommonModule,
@@ -27,6 +31,6 @@ import { ThemeTemplateDialogCreateComponent } from './theme-template-dialog-crea
     ThemeTemplateEditComponent,
     ThemeTemplateListComponent,
   ],
-  entryComponents: [ThemeTemplateDialogCreateComponent]
+  entryComponents: [ThemeTemplateDialogCreateComponent, ThemeTemplateDialogListTemplateComponent]
 })
 export class ThemeTemplateModule { }
