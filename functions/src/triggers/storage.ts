@@ -75,7 +75,6 @@ export const uploadAssetFiles = functions.storage.object().onFinalize(async (obj
     return null;
   }
   console.log('[UploadAssetFiles]' + JSON.stringify(object))
-
   const objectNameArr = object.name.split('/');
   const themeId = objectNameArr[3];
 
@@ -85,15 +84,11 @@ export const uploadAssetFiles = functions.storage.object().onFinalize(async (obj
     .collection('themes').doc(themeId)
     .collection('assets').doc()
 
-
-  const newFileName = firestoreRef.id;
-  const newFilePath = `tanam/${process.env.GCLOUD_PROJECT}/images/`;
-
   const tanamFile: TanamFile = {
     id: firestoreRef.id,
     title: object.name.substr(object.name.lastIndexOf('/') + 1),
     bucket: object.bucket,
-    filePath: [newFilePath, newFileName, originalSuffix].join(''),
+    filePath: object.name,
     updated: admin.firestore.FieldValue.serverTimestamp(),
     created: admin.firestore.FieldValue.serverTimestamp(),
     bytes: Number(object.size),
