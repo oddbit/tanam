@@ -33,7 +33,13 @@ export async function queryPageContext(documentTypeId: string, queryOpts: Docume
 
     } catch (err) {
         console.error(`[queryPageContext] ${JSON.stringify(err)}`);
-        await systemNotificationService.reportMissingIndex(err.details);
+        const details = err.details;
+        if (details.indexOf('firestore/indexes?create')) {
+            await systemNotificationService.reportMissingIndex(details);
+        } else {
+            await systemNotificationService.reportUnknownError(details);
+        }
+        
         return [];
     }
 
