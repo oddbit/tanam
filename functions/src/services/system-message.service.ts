@@ -1,8 +1,35 @@
+import { SHA1 } from 'crypto-js';
 import * as admin from 'firebase-admin';
-import { SystemNotification } from '../models/system.models';
+import { SystemNotification, SystemNotificationType } from '../models/system.models';
 
 const siteCollection = () => admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
 
+function createNoficication(type: SystemNotificationType, title: string, message: string) {
+    const id = SHA1(type + title + message).toString().toLowerCase();
+    const docRef = siteCollection().collection('notifications').doc(id);
+
+    return admin.firestore().runTransaction(async (trx) => {
+        const trxNotifDoc = await trx.get(docRef);
+        if (trxNotifDoc.exists) {
+            trx.update(docRef, {
+                updated: admin.firestore.FieldValue.serverTimestamp(),
+                numOccurances: admin.firestore.FieldValue.increment(1),
+                isRead: false,
+            } as SystemNotification);
+        } else {
+            trx.set(docRef, {
+                id: id,
+                type: 'error',
+                title: title,
+                message: message,
+                isRead: false,
+                numOccurances: 0,
+                updated: admin.firestore.FieldValue.serverTimestamp(),
+                created: admin.firestore.FieldValue.serverTimestamp(),
+            } as SystemNotification);
+        }
+    });
+}
 
 /**
  * Creates a system message about missing index.
@@ -18,17 +45,18 @@ const siteCollection = () => admin.firestore().collection('tanam').doc(process.e
  * @param message Error message from Firebase SDK exception
  */
 export function reportMissingIndex(message: string) {
-    const notificationDocRef = siteCollection().collection('notifications').doc();
     const createIndexUrl = message.match(/(https:\/\/.*)$/)[1];
-    const errorMessage: SystemNotification = {
-        id: notificationDocRef.id,
-        type: 'error',
-        title: 'Missing database index',
-        message: `One of your templates is missing a database index. You can create it by <a target="_blank" href="${createIndexUrl}">clicking here</a>.`,
-        isRead: false,
-        created: admin.firestore.FieldValue.serverTimestamp(),
-    };
-
-    return notificationDocRef.set(errorMessage);
+    return createNoficication(
+        'error',
+        'Missing database index',
+        `One of your templates is missing a database index. You can create it by <a target="_blank" href="${createIndexUrl}">clicking here</a>.`,
+    );
 }
-// The query requires an index. You can create it here: https://console.firebase.google.com/project/tanam-e8e7d/database/firestore/indexes?create_composite=Ck1wcm9qZWN0cy90YW5hbS1lOGU3ZC9kYXRhYmFzZXMvKGRlZmF1bHQpL2NvbGxlY3Rpb25Hcm91cHMvZG9jdW1lbnRzL2luZGV4ZXMvXxABGhAKDGRvY3VtZW50VHlwZRABGgoKBnN0YXR1cxABGgsKB3VwZGF0ZWQQAhoMCghfX25hbWVfXxAC
+
+export function reportUnknownError(message: string) {
+    return createNoficication(
+        'error',
+        'Unknown error',
+         message,
+    );
+}
