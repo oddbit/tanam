@@ -27,7 +27,7 @@ export async function queryPageContext(documentTypeId: string, queryOpts: Docume
             .collection('documents')
             .where('status', '==', 'published')
             .where('documentType', '==', documentTypeId)
-            .orderBy(orderByField, sortOrder) // https://github.com/oddbit/tanam/issues/119
+            .orderBy(orderByField, sortOrder)
             .limit(limit)
             .get();
 
