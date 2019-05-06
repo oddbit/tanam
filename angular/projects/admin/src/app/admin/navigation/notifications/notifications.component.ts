@@ -10,6 +10,7 @@ import { NotificationsService } from '../../../services/notifications.service';
 })
 export class NotificationsComponent implements OnInit {
   notifications$ = this.notificationService.getNofifications();
+  readonly filterSelected = 'all';
 
   constructor(
     private readonly notificationService: NotificationsService,
@@ -47,5 +48,13 @@ export class NotificationsComponent implements OnInit {
   async delete(event: Event, notificationId: string) {
     event.stopPropagation();
     await this.notificationService.delete(notificationId);
+  }
+
+  filterNotifications(event) {
+    if (event.value === 'all') {
+      this.notifications$ = this.notificationService.getNofifications();
+    } else {
+      this.notifications$ = this.notificationService.getUnreadNofifications();
+    }
   }
 }
