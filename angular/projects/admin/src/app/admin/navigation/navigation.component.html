@@ -66,14 +66,9 @@
 
       <!-- This fills the remaining space of the current row -->
       <span class="fill-remaining-space"></span>
+      <!-- Navigation Actions -->
       <tanam-notifications></tanam-notifications>
-
-      <button type="button"
-              aria-label="Log out"
-              mat-icon-button
-              (click)="logout()">
-        <mat-icon aria-label="Logout icon">power_settings_new</mat-icon>
-      </button>
+      <tanam-profile-widget></tanam-profile-widget>
     </mat-toolbar>
     <mat-toolbar class="sub-toolbar">
       <mat-toolbar-row>
