@@ -66,8 +66,10 @@
 
       <!-- This fills the remaining space of the current row -->
       <span class="fill-remaining-space"></span>
-      <tanam-notifications></tanam-notifications>
-
+      <button mat-icon-button
+              (click)="showNotifications()">
+        <mat-icon aria-label="notifications">notifications</mat-icon>
+      </button>
       <button type="button"
               aria-label="Log out"
               mat-icon-button
@@ -88,4 +90,19 @@
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>
+  <mat-sidenav mode="over"
+               position="end"
+               [opened]="opened"
+               (closed)="opened = false"
+               class="notifications">
+    <mat-toolbar color="primary">
+      Notifications
+      <span class="sub-toolbar-spacer"></span>
+      <button mat-icon-button
+              (click)="opened = false">
+        <mat-icon aria-label="close notifications">close</mat-icon>
+      </button>
+    </mat-toolbar>
+    <tanam-notifications></tanam-notifications>
+  </mat-sidenav>
 </mat-sidenav-container>
