@@ -44,9 +44,8 @@ export class NotificationsComponent implements OnInit {
     return notificationType === 'error' ? 'error' : 'info';
   }
 
-  delete(event) {
+  async delete(event: Event, notificationId: string) {
     event.stopPropagation();
-    alert('Delete triggerred');
-    // Delete notification service
+    await this.notificationService.delete(notificationId);
   }
 }
