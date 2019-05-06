@@ -1,3 +1,9 @@
+.wrap {
+  overflow: auto;
+  height: 93%;
+  margin-bottom: 180px;
+}
+
 .notification-card {
   cursor: pointer;
   margin: 20px;
@@ -31,7 +37,7 @@
     display: flex;
   }
 
-  .alertType .icon{
+  .alertType .icon {
     font-size: inherit;
     width: auto;
     height: auto;
