@@ -10,7 +10,7 @@
               (click)="readNotification(notification)">
       <mat-card-content>
         <p class="title" [ngClass]="{'title-bold':!notification.isRead}">{{ notification.title }} <mat-icon (click)="delete($event, notification.id)" class="title-icon">delete</mat-icon></p>
-        <div (click)="$event.stopPropagation()" [innerHtml]="notification.message"></div>
+        <div (click)="$event.stopPropagation()" class="message" [innerHtml]="notification.message"></div>
       </mat-card-content>
       <mat-card-actions>
         <div class="alert">
