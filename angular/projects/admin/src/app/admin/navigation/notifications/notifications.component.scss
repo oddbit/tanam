@@ -1,6 +1,6 @@
 .wrap {
   overflow: auto;
-  height: 93%;
+  height: 81%;
 }
 
 .filter {
@@ -25,6 +25,10 @@
 
 .title-bold {
   font-weight: bolder;
+}
+
+.message {
+  cursor: text;
 }
 
 .alert {
