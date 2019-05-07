@@ -10,7 +10,7 @@ import { NotificationsService } from '../../../services/notifications.service';
 })
 export class NotificationsComponent implements OnInit {
   notifications$ = this.notificationService.getNofifications();
-  readonly filterSelected = 'all';
+  filterSelected = 'all';
 
   constructor(
     private readonly notificationService: NotificationsService,
