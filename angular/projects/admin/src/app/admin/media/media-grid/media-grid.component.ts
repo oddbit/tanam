@@ -46,14 +46,14 @@ export class MediaGridComponent {
   }
 
   showDetails(file: TanamFile) {
-    this.dialog.open(MediaDialogDetailComponent, {
-      data: {
-        ...file,
-        type: 'detail-file'
-      },
-      width: '300px'
+    this.dialogService.openDialogDetailFile({
+      title: 'Detail Media',
+      name: file.title,
+      fileType: file.fileType,
+      created: file.created,
+      buttons: ['ok'],
+      icon: 'info'
     });
-    console.log(`[MediaGridComponent:showDetails] ${JSON.stringify({ file })}`);
   }
 
   remove(file: TanamFile) {
