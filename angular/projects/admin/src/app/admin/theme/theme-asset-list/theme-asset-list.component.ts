@@ -66,5 +66,13 @@ export class ThemeAssetListComponent implements OnInit {
 
   detailFile(file: TanamFile) {
     console.log('[Detail File]' + JSON.stringify(file));
+    this.dialogService.openDialogDetailFile({
+      title: 'Detail File',
+      name: file.title,
+      fileType: file.fileType,
+      created: file.created,
+      buttons: ['ok'],
+      icon: 'info'
+    });
   }
 }
