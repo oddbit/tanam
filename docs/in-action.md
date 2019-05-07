@@ -13,3 +13,10 @@ of small to large scaled WebP versions for option of higher performance.
 
 
 ![Media gallery](/docs/images/media-files.png)
+
+# Notifications
+The CMS will notify you if you are in need of a composite index for any query that
+your templates are trying to perform. Clicking the notification link will take you
+to the Firebase console and automatically open the "click-to-create index" dialog.
+
+![Blog posts](/docs/images/notifications.gif)
