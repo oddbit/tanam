@@ -4,9 +4,11 @@ import { Observable, Subscription } from 'rxjs';
 import { SiteInformation, Theme } from 'tanam-models';
 import { SiteService } from '../../services/site.service';
 import { ThemeService } from '../../services/theme.service';
-import { MatDialog } from '@angular/material';
-import { SettingsDialogManageLanguagesComponent,
-         LanguageOptions } from './settings-dialog-manage-languages/settings-dialog-manage-languages.component';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import {
+  SettingsDialogManageLanguagesComponent,
+  LanguageOptions
+} from './settings-dialog-manage-languages/settings-dialog-manage-languages.component';
 import { languageOptions } from './settings.languages';
 
 // https://stackoverflow.com/a/26987741/7967164
@@ -42,6 +44,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     private readonly themeService: ThemeService,
     private readonly formBuilder: FormBuilder,
     private dialog: MatDialog,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit() {
@@ -127,7 +130,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         });
 
         if (!result.languages.includes(this.settingsForm.value.defaultLanguage)) {
-          this.settingsForm.patchValue({defaultLanguage: result.languages[0]});
+          this.settingsForm.patchValue({ defaultLanguage: result.languages[0] });
         }
       }
     });
@@ -143,12 +146,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  saveSettings() {
+  async saveSettings() {
     const formData = this.settingsForm.value;
     const languages = this.languages.map(lang => lang.id);
     languages.splice(languages.indexOf(formData.defaultLanguage), 1);
     languages.splice(0, 0, formData.defaultLanguage);
-    return this.siteSettingsService.save({
+    await this.siteSettingsService.save({
       title: formData.title,
       theme: formData.theme,
       defaultLanguage: formData.defaultLanguage,
@@ -157,5 +160,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
       analytics: formData.analytics.trim().toUpperCase(),
       domains: formData.domains.map((domain: any) => domain['name']),
     } as SiteInformation);
+    this.snackBar.open('Settings saved', 'Dismiss', {
+      duration: 2000,
+    });
   }
 }
