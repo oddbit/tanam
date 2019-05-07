@@ -12,9 +12,18 @@ const ICON_COLORS: { [key: string]: IconColor } = {
   error: 'warn',
 };
 
-interface DialogData {
+interface DialogConfirmData {
   title: string;
   message: string;
+  buttons: DialogButton[];
+  icon: DialogIcon;
+}
+
+interface DialogDetailFileData {
+  title: string;
+  name: string;
+  fileType: string;
+  created: Date;
   buttons: DialogButton[];
   icon: DialogIcon;
 }
@@ -23,18 +32,35 @@ interface DialogData {
 @Injectable({
   providedIn: 'root'
 })
-export class DialogConfirmService {
+export class DialogService {
 
   constructor(private dialog: MatDialog) { }
 
-  openDialogConfirm(value: DialogData) {
+  openDialogConfirm(value: DialogConfirmData) {
     return this.dialog.open(DialogComponent, {
       data: {
         title: value.title,
         message: value.message,
         buttons: value.buttons,
         icon: value.icon,
-        color: ICON_COLORS[value.icon]
+        color: ICON_COLORS[value.icon],
+        type: 'confirmation'
+      },
+      width: '300px'
+    });
+  }
+
+  openDialogDetailFile(value: DialogDetailFileData) {
+    return this.dialog.open(DialogComponent, {
+      data: {
+        title: value.title,
+        name: value.name,
+        fileType: value.fileType,
+        created: value.created,
+        buttons: value.buttons,
+        icon: value.icon,
+        color: ICON_COLORS[value.icon],
+        type: 'detail-file'
       },
       width: '300px'
     });
