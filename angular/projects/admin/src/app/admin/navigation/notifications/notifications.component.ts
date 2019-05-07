@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SystemNotification } from 'tanam-models';
+import { SystemNotification, SystemNotificationType } from 'tanam-models';
 import { DialogConfirmService } from '../../../services/dialogConfirm.service';
 import { NotificationsService } from '../../../services/notifications.service';
 
@@ -10,6 +10,7 @@ import { NotificationsService } from '../../../services/notifications.service';
 })
 export class NotificationsComponent implements OnInit {
   notifications$ = this.notificationService.getNofifications();
+  filterSelected = 'all';
 
   constructor(
     private readonly notificationService: NotificationsService,
@@ -30,5 +31,30 @@ export class NotificationsComponent implements OnInit {
     })
     .afterOpened()
     .subscribe(() => this.notificationService.markNotificationAsRead(notification));
+  }
+
+  setColor (notificationType: SystemNotificationType) {
+    return notificationType === 'error' ? 'warn' : 'accent';
+  }
+
+  setAlertText (notificationType: SystemNotificationType) {
+    return notificationType === 'error' ? 'Warning' : 'Information';
+  }
+
+  setIcon (notificationType: SystemNotificationType) {
+    return notificationType === 'error' ? 'error' : 'info';
+  }
+
+  async delete(event: Event, notificationId: string) {
+    event.stopPropagation();
+    await this.notificationService.delete(notificationId);
+  }
+
+  filterNotifications(event) {
+    if (event.value === 'all') {
+      this.notifications$ = this.notificationService.getNofifications();
+    } else {
+      this.notifications$ = this.notificationService.getUnreadNofifications();
+    }
   }
 }

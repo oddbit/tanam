@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AppAuthService } from '../../services/app-auth.service';
@@ -12,6 +12,7 @@ import { SiteService } from '../../services/site.service';
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent {
+  opened: Boolean = false;
   isExpanded = true;
   siteName$ = this.siteSettingsService.getSiteName();
   documentTypes$ = this.documentTypeService.getDocumentTypes();
@@ -33,7 +34,7 @@ export class NavigationComponent {
   }
 
   showNotifications() {
-    // Open the drawer
+    this.opened = !this.opened;
   }
 
   logout() {
