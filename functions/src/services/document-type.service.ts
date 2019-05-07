@@ -230,7 +230,7 @@ export async function createDefaultDocuments() {
         title: 'Page',
         description: 'A regular web page such as front page, or contact page etc.',
         icon: 'chrome_reader_mode',
-        slug: '',
+        slug: 'page',
         standalone: true,
         created: admin.firestore.FieldValue.serverTimestamp(),
         updated: admin.firestore.FieldValue.serverTimestamp(),
