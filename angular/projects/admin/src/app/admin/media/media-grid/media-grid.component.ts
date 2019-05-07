@@ -6,7 +6,6 @@ import { map, tap, take } from 'rxjs/operators';
 import { TanamFile } from 'tanam-models';
 import { UserFileService } from '../../../services/user-file.service';
 import { DialogService } from '../../../services/dialog.service';
-import { MediaDialogDetailComponent } from '../media-dialog-detail/media-dialog-detail.component';
 
 @Component({
   selector: 'tanam-media-grid',
