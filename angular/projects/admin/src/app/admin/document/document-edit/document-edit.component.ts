@@ -9,7 +9,7 @@ import { DocumentService } from '../../../services/document.service';
 import { SiteService } from '../../../services/site.service';
 import { firestore } from 'firebase/app';
 import { MatSnackBar } from '@angular/material';
-import { DialogConfirmService } from '../../../services/dialogConfirm.service';
+import { DialogService } from '../../../services/dialog.service';
 
 @Component({
   selector: 'tanam-document-edit',
@@ -50,7 +50,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     private readonly documentTypeService: DocumentTypeService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private dialogConfirmService: DialogConfirmService
+    private dialogService: DialogService
   ) { }
 
   get dataForm() {
@@ -102,7 +102,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   async deleteEntry() {
-    this.dialogConfirmService.openDialogConfirm({
+    this.dialogService.openDialogConfirm({
       title: 'Delete Document',
       message: `Are you sure to delete the "${this.documentForm.controls['title'].value}" ?`,
       buttons: ['cancel', 'yes'],

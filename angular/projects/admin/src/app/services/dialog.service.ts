@@ -23,7 +23,7 @@ interface DialogData {
 @Injectable({
   providedIn: 'root'
 })
-export class DialogConfirmService {
+export class DialogService {
 
   constructor(private dialog: MatDialog) { }
 
