@@ -7,7 +7,7 @@ import * as fs from 'fs';
 import { join } from 'path';
 import { renderPage } from './render';
 import * as configService from './services/config.service';
-import { getDocumentContextByUrl } from './services/document-context.service';
+import { getPageContextByUrl } from './services/page-context.service';
 import * as fileService from './services/file.service';
 
 const DIST_FOLDER = join(process.cwd(), 'browser');
@@ -190,7 +190,7 @@ app.get('*', async (request, response) => {
     console.log(`GET ${request.url}`);
     const url = request.url.replace(/^\//, ''); // Remove leading slash
 
-    const context = await getDocumentContextByUrl(url);
+    const context = await getPageContextByUrl(url);
     if (!context) {
         console.log(`[HTTP 404] page not found for: ${request.url}`);
         return response.status(404).send(`Not found: ${request.url}`);

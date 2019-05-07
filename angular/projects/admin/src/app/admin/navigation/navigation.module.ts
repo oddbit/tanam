@@ -5,12 +5,14 @@ import { AdminRoutingModule } from '../admin-routing.module';
 import { NavigationListItemComponent } from './navigation-list-item/navigation-list-item.component';
 import { NavigationComponent } from './navigation.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { ProfileWidgetComponent } from './profile-widget/profile-widget.component';
 
 @NgModule({
   declarations: [
     NavigationListItemComponent,
     NavigationComponent,
     NotificationsComponent,
+    ProfileWidgetComponent,
   ],
   imports: [
     CommonModule,

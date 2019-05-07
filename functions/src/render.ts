@@ -1,7 +1,7 @@
 import * as cheerio from 'cheerio';
 import * as dust from 'dustjs-helpers';
 import { PageContext } from './models';
-import * as documentContextService from './services/document-context.service';
+import * as documentContextService from './services/page-context.service';
 import * as siteInfoService from './services/site-info.service';
 import * as templateService from './services/template.service';
 
@@ -31,7 +31,7 @@ dust.helpers.document = (chunk, context, bodies, params) => {
         throw new Error(`Dust helper must declare referencing context ID.`);
     }
 
-    return documentContextService.getDocumentContextById(params.id);
+    return documentContextService.getPageContextById(params.id);
 }
 
 dust.helpers.documents = (chunk, context, bodies, params) => {
@@ -46,7 +46,7 @@ dust.helpers.documents = (chunk, context, bodies, params) => {
         throw new Error(`Dust helper must declare referencing context ID.`);
     }
 
-    return documentContextService.queryDocumentContext(params.documentType, {
+    return documentContextService.queryPageContext(params.documentType, {
         limit: params.limit,
         orderBy: {
             field: params.orderBy,

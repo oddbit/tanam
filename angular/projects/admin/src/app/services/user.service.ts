@@ -24,9 +24,11 @@ export class UserService {
 
   getCurrentUser(): Observable<TanamUser> {
     const firebaseUser = this.fireAuth.auth.currentUser;
-    return this.siteCollection
-      .collection('users').doc<TanamUser>(firebaseUser.uid)
-      .valueChanges();
+    return this.getUser(firebaseUser.uid)
+    .pipe(map(user => {
+      user.photoUrl = user.photoUrl || firebaseUser.photoURL;
+      return user;
+    }));
   }
 
   getUser(uid: string): Observable<TanamUser> {

@@ -1,0 +1,53 @@
+.wrap {
+  overflow: auto;
+  height: 81%;
+}
+
+.filter {
+  margin: 10px 20px;
+}
+
+.notification-card {
+  cursor: pointer;
+  margin: 20px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+
+  .title-icon {
+    margin-left: auto;
+    font-size: 1.3em;
+  }
+
+}
+
+.title-bold {
+  font-weight: bolder;
+}
+
+.message {
+  cursor: text;
+}
+
+.alert {
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+
+  .date {
+    margin-left: auto;
+  }
+
+  .alertType {
+    display: flex;
+  }
+
+  .alertType .icon {
+    font-size: inherit;
+    width: auto;
+    height: auto;
+    margin-right: 5px;
+  }
+}

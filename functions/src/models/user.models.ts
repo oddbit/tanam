@@ -11,4 +11,5 @@ export interface TanamUser {
     name: string;
     roles: UserRole[];
     prefs: UserPrefs;
+    photoUrl?: string;
 }
