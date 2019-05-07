@@ -16,9 +16,38 @@
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button
+          (click)="fileInput.click()">
+    <mat-icon>file_upload</mat-icon>Upload
+  </button>
+  <button mat-raised-button
           color="primary"
           (click)="chooseFile()"
           [disabled]="!selectedFile">Choose</button>
   <button mat-raised-button
           (click)="closeDialog()">Cancel</button>
 </div>
+
+<!-- Image upload -->
+<input #fileInput
+       type="file"
+       (change)="uploadSingleFile($event)"
+       style="display:none;" />
+
+<!-- Show the progress of file uploads if there are any. Then hide itself when all are finished -->
+<mat-card class="upload-card"
+          *ngIf="(uploadTasks | json) != '{}'">
+  <mat-card-header>
+    <mat-card-title>
+      Uploads
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <section *ngFor="let uploadTasks of uploadTasks | keyvalue">
+      <strong>{{uploadTasks.key}}</strong>
+      <mat-progress-bar [color]="accent"
+                        [mode]="determinate"
+                        [value]="uploadTasks.value | async">
+      </mat-progress-bar>
+    </section>
+  </mat-card-content>
+</mat-card>
