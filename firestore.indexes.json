@@ -69,7 +69,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "created",
+          "fieldPath": "updated",
           "order": "DESCENDING"
         }
       ]
