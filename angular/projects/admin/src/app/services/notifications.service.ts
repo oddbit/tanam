@@ -17,13 +17,13 @@ export class NotificationsService {
 
   getUnreadNofifications(): Observable<SystemNotification[]> {
     return this.siteCollection
-      .collection<SystemNotification>('notifications', (ref) => ref.where('isRead', '==', false).orderBy('created', 'desc'))
+      .collection<SystemNotification>('notifications', (ref) => ref.where('isRead', '==', false).orderBy('updated', 'desc'))
       .valueChanges();
   }
 
   getNofifications(): Observable<SystemNotification[]> {
     return this.siteCollection
-      .collection<SystemNotification>('notifications', (ref) => ref.orderBy('created', 'desc'))
+      .collection<SystemNotification>('notifications', (ref) => ref.orderBy('updated', 'desc'))
       .valueChanges();
   }
 
