@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { UserFileService } from '../../services/user-file.service';
@@ -11,6 +11,9 @@ import { MatSnackBar } from '@angular/material';
 })
 export class MediaComponent implements OnInit {
   uploadTasks: { [key: string]: Observable<number> } = {};
+
+  @ViewChild('fileInput')
+  fileInputVariable: ElementRef;
 
   constructor(
     private readonly fileService: UserFileService,
@@ -26,6 +29,7 @@ export class MediaComponent implements OnInit {
     this.uploadTasks[file.name] = uploadTaskProgress.pipe(tap(progress => {
       if (progress === 100) {
         delete this.uploadTasks[file.name];
+        this.fileInputVariable.nativeElement.value = '';
         this.snackBar.open('Getting file..', 'Dismiss', {
           duration: 5000,
         });
