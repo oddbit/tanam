@@ -24,7 +24,7 @@ import { Subject } from 'rxjs';
           dateInput: 'L',
           monthInput: 'MM',
           timeInput: 'HH:mm',
-          datetimeInput: 'L H HH'
+          datetimeInput: 'L HH:mm'
         },
         display: {
           dateInput: 'L',
