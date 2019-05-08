@@ -5,7 +5,7 @@ import { ThemeTemplate } from 'tanam-models';
 import { ThemeTemplateService } from '../../../services/theme-template.service';
 import { Router } from '@angular/router';
 import { MatSnackBar, MatDialog,  } from '@angular/material';
-import { DialogConfirmService } from '../../../services/dialogConfirm.service';
+import { DialogService } from '../../../services/dialog.service';
 import {
   ThemeTemplateDialogListTemplateComponent
 } from '../theme-template-dialog-list-template/theme-template-dialog-list-template.component';
@@ -32,7 +32,7 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly themeTemplateservice: ThemeTemplateService,
     private snackBar: MatSnackBar,
-    private dialogConfirmService: DialogConfirmService,
+    private dialogService: DialogService,
     private dialog: MatDialog
     ) { }
 
@@ -84,7 +84,7 @@ export class ThemeTemplateFormComponent implements OnInit, OnDestroy {
   }
 
   async deleteTemplate() {
-    this.dialogConfirmService.openDialogConfirm({
+    this.dialogService.openDialogConfirm({
       title: 'Delete Template',
       message: `Are you sure to delete the "${this.templateForm.controls['title'].value}" ?`,
       buttons: ['cancel', 'yes'],

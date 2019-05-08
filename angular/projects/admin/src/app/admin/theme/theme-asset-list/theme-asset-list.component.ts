@@ -4,7 +4,7 @@ import { UserThemeAssetService } from '../../../services/user-theme-asset.servic
 import { ThemeAssetListDataSource } from './theme-asset-list-datasource';
 import {  TanamFile } from '../../../../../../../../functions/src/models';
 import { ActivatedRoute } from '@angular/router';
-import { DialogConfirmService } from '../../../services/dialogConfirm.service';
+import { DialogService } from '../../../services/dialog.service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -26,7 +26,7 @@ export class ThemeAssetListComponent implements OnInit {
   constructor(
     private readonly themeAssetService: UserThemeAssetService,
     private readonly route: ActivatedRoute,
-    private dialogConfirmService: DialogConfirmService,
+    private dialogService: DialogService,
     private snackBar: MatSnackBar
   ) { }
 
@@ -50,7 +50,7 @@ export class ThemeAssetListComponent implements OnInit {
   }
 
   deleteFile(file: TanamFile) {
-    this.dialogConfirmService.openDialogConfirm({
+    this.dialogService.openDialogConfirm({
       title: 'Delete Content Type',
       message: `Are you sure to delete the "${file.title}" ?`,
       buttons: ['cancel', 'yes'],
@@ -66,5 +66,13 @@ export class ThemeAssetListComponent implements OnInit {
 
   detailFile(file: TanamFile) {
     console.log('[Detail File]' + JSON.stringify(file));
+    this.dialogService.openDialogDetailFile({
+      title: 'Detail File',
+      name: file.title,
+      fileType: file.fileType,
+      created: file.created,
+      buttons: ['ok'],
+      icon: 'info'
+    });
   }
 }

@@ -7,7 +7,7 @@ import { DocumentTypeService } from '../../../services/document-type.service';
 import { SiteService } from '../../../services/site.service';
 import { documentTypeMaterialIcons } from './document-type-form.icons';
 import { MatDialog, MatSnackBar } from '@angular/material';
-import { DialogConfirmService } from '../../../services/dialogConfirm.service';
+import { DialogService } from '../../../services/dialog.service';
 
 interface FieldType {
   type: DocumentFieldFormElement;
@@ -56,7 +56,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     private readonly documentTypeService: DocumentTypeService,
     private readonly siteSettingsService: SiteService,
     private snackBar: MatSnackBar,
-    private dialogConfirmService: DialogConfirmService
+    private dialogService: DialogService
   ) { }
 
   ngOnInit() {
@@ -118,7 +118,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   deleteContentTypeDialog() {
-    this.dialogConfirmService.openDialogConfirm({
+    this.dialogService.openDialogConfirm({
       title: 'Delete Content Type',
       message: `Are you sure to delete the "${this.documentTypeForm.controls['title'].value}" ?`,
       buttons: ['cancel', 'yes'],

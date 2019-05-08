@@ -5,8 +5,7 @@ import { Observable } from 'rxjs';
 import { map, tap, take } from 'rxjs/operators';
 import { TanamFile } from 'tanam-models';
 import { UserFileService } from '../../../services/user-file.service';
-import { DialogConfirmService } from '../../../services/dialogConfirm.service';
-import { MediaDialogDetailComponent } from '../media-dialog-detail/media-dialog-detail.component';
+import { DialogService } from '../../../services/dialog.service';
 
 @Component({
   selector: 'tanam-media-grid',
@@ -33,7 +32,7 @@ export class MediaGridComponent {
     private readonly breakpointObserver: BreakpointObserver,
     private readonly fileService: UserFileService,
     private dialog: MatDialog,
-    private dialogConfirmService: DialogConfirmService
+    private dialogService: DialogService
   ) { }
 
   getDownloadUrl(file: TanamFile): Observable<string> {
@@ -46,18 +45,18 @@ export class MediaGridComponent {
   }
 
   showDetails(file: TanamFile) {
-    this.dialog.open(MediaDialogDetailComponent, {
-      data: {
-        ...file,
-        type: 'detail-file'
-      },
-      width: '300px'
+    this.dialogService.openDialogDetailFile({
+      title: 'Detail Media',
+      name: file.title,
+      fileType: file.fileType,
+      created: file.created,
+      buttons: ['ok'],
+      icon: 'info'
     });
-    console.log(`[MediaGridComponent:showDetails] ${JSON.stringify({ file })}`);
   }
 
   remove(file: TanamFile) {
-    this.dialogConfirmService.openDialogConfirm({
+    this.dialogService.openDialogConfirm({
       title: 'Delete File',
       message: `Are you sure to delete the "${file.title}" ?`,
       buttons: ['cancel', 'yes'],

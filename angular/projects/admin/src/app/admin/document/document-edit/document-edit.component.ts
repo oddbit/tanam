@@ -9,7 +9,7 @@ import { DocumentService } from '../../../services/document.service';
 import { SiteService } from '../../../services/site.service';
 import { firestore } from 'firebase/app';
 import { MatSnackBar } from '@angular/material';
-import { DialogConfirmService } from '../../../services/dialogConfirm.service';
+import { DialogService } from '../../../services/dialog.service';
 
 @Component({
   selector: 'tanam-document-edit',
@@ -40,6 +40,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   private _titleSubscription: Subscription;
   private readonly _subscriptions: Subscription[] = [];
   private _rootSlug: string;
+  private _documentType: string;
   metaDataDialog = false;
 
   constructor(
@@ -50,7 +51,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     private readonly documentTypeService: DocumentTypeService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private dialogConfirmService: DialogConfirmService
+    private dialogService: DialogService
   ) { }
 
   get dataForm() {
@@ -69,6 +70,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
       });
 
       this._rootSlug = documentType.slug;
+      this._documentType = documentType.id;
       for (const field of documentType.fields) {
         if (!this.dataForm.get(field.key)) {
           const formControl = new FormControl(document.data[field.key]);
@@ -102,7 +104,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   async deleteEntry() {
-    this.dialogConfirmService.openDialogConfirm({
+    this.dialogService.openDialogConfirm({
       title: 'Delete Document',
       message: `Are you sure to delete the "${this.documentForm.controls['title'].value}" ?`,
       buttons: ['cancel', 'yes'],
@@ -165,7 +167,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   private _navigateBack() {
-    this.router.navigateByUrl(`/_/admin/type/${this._rootSlug}/overview`);
+    this.router.navigateByUrl(`/_/admin/type/${this._documentType}/overview`);
   }
 
   private _snackbar(message: string) {

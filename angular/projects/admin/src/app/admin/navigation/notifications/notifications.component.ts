@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SystemNotification, SystemNotificationType } from 'tanam-models';
-import { DialogConfirmService } from '../../../services/dialogConfirm.service';
+import { DialogService } from '../../../services/dialog.service';
 import { NotificationsService } from '../../../services/notifications.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class NotificationsComponent implements OnInit {
 
   constructor(
     private readonly notificationService: NotificationsService,
-    private readonly dialogConfirmService: DialogConfirmService,
+    private readonly dialogService: DialogService,
   ) { }
 
   ngOnInit() {
@@ -23,7 +23,7 @@ export class NotificationsComponent implements OnInit {
   readNotification(notification: SystemNotification) {
     console.log(`[readNotification] ${JSON.stringify(notification)}`);
 
-    this.dialogConfirmService.openDialogConfirm({
+    this.dialogService.openDialogConfirm({
       buttons: ['ok'],
       icon: notification.type === 'error' ? 'error' : 'info',
       message: notification.message,
