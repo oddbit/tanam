@@ -2,8 +2,7 @@
   <mat-datetimepicker-toggle [for]="dateTimePicker"
                              matSuffix></mat-datetimepicker-toggle>
   <mat-datetimepicker #dateTimePicker
-                      type="{{type == 'date' ? 'date' : 'datetime'}}"
-                      openOnFocus="true"></mat-datetimepicker>
+                      type="{{type == 'date' ? 'date' : 'datetime'}}"></mat-datetimepicker>
   <input matInput
          placeholder="{{placeholder}}"
          [(ngModel)]="timestamp"

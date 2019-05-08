@@ -21,15 +21,15 @@ import { Subject } from 'rxjs';
       provide: MAT_DATETIME_FORMATS,
       useValue: {
         parse: {
-          dateInput: 'L',
+          dateInput: 'YYYY-MM-DD',
           monthInput: 'MM',
           timeInput: 'HH:mm',
-          datetimeInput: 'L H HH'
+          datetimeInput: 'YYYY-MM-DD HH:mm'
         },
         display: {
-          dateInput: 'L',
+          dateInput: 'YYYY-MM-DD',
           monthInput: 'MM',
-          datetimeInput: 'L HH:mm',
+          datetimeInput: 'YYYY-MM-DD HH:mm',
           timeInput: 'HH:mm',
           monthYearLabel: 'MM YYYY',
           dateA11yLabel: 'LL',
