@@ -1,4 +1,4 @@
-import { Component, ApplicationRef, Injector, OnDestroy, AfterViewInit, ViewChild, ComponentFactoryResolver, Input } from '@angular/core';
+import { Component, ApplicationRef, Injector, OnDestroy, AfterViewInit, ViewChild, ComponentFactoryResolver, Input, OnChanges } from '@angular/core';
 import { CdkPortal, DomPortalHost } from '@angular/cdk/portal';
 import { Title } from '@angular/platform-browser';
 
@@ -7,7 +7,7 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './page-title.component.html',
   styleUrls: ['./page-title.component.scss']
 })
-export class PageTitleComponent implements AfterViewInit, OnDestroy {
+export class PageTitleComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   @Input()
   pageTitle: string;
@@ -23,9 +23,11 @@ export class PageTitleComponent implements AfterViewInit, OnDestroy {
     private readonly title: Title,
   ) { }
 
-  ngAfterViewInit(): void {
+  ngOnChanges(): void {
     this.title.setTitle(this.pageTitle);
+  }
 
+  ngAfterViewInit(): void {
     this.host = new DomPortalHost(
       document.querySelector('#page-title'),
       this.componentFactoryReslover,
