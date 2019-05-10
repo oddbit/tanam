@@ -4,6 +4,7 @@ import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { Theme } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
+import { UserThemeAssetService } from './user-theme-asset.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class ThemeService {
   constructor(
     private readonly firestore: AngularFirestore,
     private readonly appConfig: AppConfigService,
+    private readonly userThemeAssetService: UserThemeAssetService
   ) { }
 
   getNewId() {
@@ -62,5 +64,19 @@ export class ThemeService {
     return this.siteCollection
       .collection('themes').doc<Theme>(themeId)
       .valueChanges();
+  }
+
+  deleteTheme(themeId: string, activeTheme: string) {
+    if (!themeId) {
+      throw new Error('Theme ID must be provided as an attribute when deleting a theme.');
+    }
+    if (themeId === activeTheme) {
+      console.log('inside');
+      throw new Error('Cannot deleting an active theme.');
+    }
+    return this.siteCollection
+      .collection<Theme>('themes')
+      .doc(themeId)
+      .delete();
   }
 }
