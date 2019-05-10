@@ -31,10 +31,7 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
   displayedColumns = ['title', 'updated'];
 
   ngOnInit() {
-    this._subscriptions.push(this.documentType$.subscribe(documentType => {
-      this.dataSource = new DocumentListDataSource(documentType, this.documentService, this.paginator, this.sort, this.status);
-      this.setTotalCount(this.dataSource);
-    }));
+    this.loadDataSource();
   }
 
   ngAfterViewInit(): void {
@@ -43,14 +40,8 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     merge(this.sort.sortChange, this.paginator.page)
         .pipe(
-          // tap(() => this.loadLessonsPage())
           tap(() => {
-            console.log(this.sort);
-            // make a function for this to not repeat code
-            this._subscriptions.push(this.documentType$.subscribe(documentType => {
-              this.dataSource = new DocumentListDataSource(documentType, this.documentService, this.paginator, this.sort, this.status);
-              this.setTotalCount(this.dataSource);
-            }));
+            this.loadDataSource();
           }
         )
       ).subscribe();
@@ -58,6 +49,13 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this._subscriptions.filter(s => !!s && !s.closed).forEach(s => s.unsubscribe());
+  }
+
+  private loadDataSource () {
+    this._subscriptions.push(this.documentType$.subscribe(documentType => {
+      this.dataSource = new DocumentListDataSource(documentType, this.documentService, this.paginator, this.sort, this.status);
+      this.setTotalCount(this.dataSource);
+    }));
   }
 
   editEntry(documentId: string) {

@@ -19,7 +19,7 @@ export class DocumentListDataSource extends DataSource<Document> {
 
   connect(): Observable<Document[]> {
     console.log(this.sort);
-    return this.loadDocuments('updated', 'desc');
+    return this.loadDocuments(this.sort.active, this.sort.direction === 'asc' ? 'asc' : 'desc' );
   }
 
   disconnect() { }
