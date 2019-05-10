@@ -13,6 +13,14 @@
             <td mat-cell
                 *matCellDef="let row">{{row.title}}</td>
         </ng-container>
+
+        <ng-container matColumnDef="slug">
+          <th mat-header-cell
+              *matHeaderCellDef>Slug</th>
+          <td mat-cell
+              *matCellDef="let row">{{row.url}}</td>
+      </ng-container>
+
         <ng-container matColumnDef="updated">
             <th mat-header-cell
                 *matHeaderCellDef
