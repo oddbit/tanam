@@ -18,10 +18,20 @@ export class DocumentListDataSource extends DataSource<Document> {
   }
 
   connect(): Observable<Document[]> {
-    return this.documentService.query(this.documentType.id, this.status);
+    console.log(this.sort);
+    return this.loadDocuments('updated', 'desc');
   }
 
   disconnect() { }
+
+  private loadDocuments (field: string, sortOrder: 'asc' | 'desc') {
+    return this.documentService.query(this.documentType.id, this.status, {
+      orderBy: {
+        field: field,
+        sortOrder: sortOrder
+      }
+    });
+  }
 
   private getPagedData(data: Document[]) {
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
