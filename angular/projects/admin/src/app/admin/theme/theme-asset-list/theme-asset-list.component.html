@@ -10,6 +10,13 @@
         (change)="uploadSingleFile($event)"
         style="display:none;" />
 </div>
+<section *ngFor="let uploadTasks of uploadTasks | keyvalue">
+  <strong>{{uploadTasks.key}}</strong>
+  <mat-progress-bar [color]="accent"
+                    [mode]="determinate"
+                    [value]="uploadTasks.value | async">
+  </mat-progress-bar>
+</section>
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource" matSort>
 
