@@ -1,10 +1,11 @@
-<div *ngIf="dataSource"
-     class="mat-elevation-z8">
-  <table mat-table
-         class="full-width-table"
-         [dataSource]="dataSource"
-         matSort
-         aria-label="Elements">
+<div class="mat-elevation-z8">
+    <table mat-table
+           class="full-width-table"
+           [dataSource]="dataSource"
+           matSort
+           matSortActive="updated"
+           matSortDirection="desc"
+           aria-label="Elements">
 
     <ng-container matColumnDef="title">
       <th mat-header-cell

@@ -1,17 +1,18 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, merge } from 'rxjs';
 import { DocumentType } from 'tanam-models';
 import { DocumentService } from '../../../services/document.service';
 import { DocumentListDataSource } from './document-list-datasource';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'tanam-document-list',
   templateUrl: './document-list.component.html',
   styleUrls: ['./document-list.component.scss']
 })
-export class DocumentListComponent implements OnInit, OnDestroy {
+export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
   total_count: number;
 
   @Input() documentType$: Observable<DocumentType>;
@@ -30,14 +31,31 @@ export class DocumentListComponent implements OnInit, OnDestroy {
   displayedColumns = ['title', 'slug', 'updated'];
 
   ngOnInit() {
+    this.loadDataSource();
+  }
+
+  ngAfterViewInit(): void {
+    // reset the paginator after sorting
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    merge(this.sort.sortChange, this.paginator.page)
+        .pipe(
+          tap(() => {
+            this.loadDataSource();
+          }
+        )
+      ).subscribe();
+}
+
+  ngOnDestroy() {
+    this._subscriptions.filter(s => !!s && !s.closed).forEach(s => s.unsubscribe());
+  }
+
+  private loadDataSource () {
     this._subscriptions.push(this.documentType$.subscribe(documentType => {
       this.dataSource = new DocumentListDataSource(documentType, this.documentService, this.paginator, this.sort, this.status);
       this.setTotalCount(this.dataSource);
     }));
-  }
-
-  ngOnDestroy() {
-    this._subscriptions.filter(s => !!s && !s.closed).forEach(s => s.unsubscribe());
   }
 
   editEntry(documentId: string) {
