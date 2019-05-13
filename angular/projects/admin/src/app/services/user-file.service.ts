@@ -26,9 +26,9 @@ export class UserFileService {
       .valueChanges();
   }
 
-  getFiles(fileType: FileType): Observable<TanamFile[]> {
+  getFiles(fileType: FileType, sort: 'asc' | 'desc' = 'desc'): Observable<TanamFile[]> {
     return this.siteCollection
-      .collection<TanamFile>('files', ref => ref.where('fileType', '==', fileType))
+      .collection<TanamFile>('files', ref => ref.where('fileType', '==', fileType).orderBy('updated', sort))
       .valueChanges();
   }
 
