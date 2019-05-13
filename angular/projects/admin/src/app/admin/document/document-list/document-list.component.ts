@@ -28,7 +28,7 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly documentService: DocumentService,
   ) { }
 
-  displayedColumns = ['title', 'updated'];
+  displayedColumns = ['title', 'slug', 'updated'];
 
   ngOnInit() {
     this.loadDataSource();
