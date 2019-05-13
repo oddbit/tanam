@@ -1,38 +1,47 @@
-<div *ngIf="dataSource"
-     class="mat-elevation-z8">
+<div class="mat-elevation-z8">
     <table mat-table
            class="full-width-table"
            [dataSource]="dataSource"
            matSort
+           matSortActive="updated"
+           matSortDirection="desc"
            aria-label="Elements">
 
-        <ng-container matColumnDef="title">
-            <th mat-header-cell
-                *matHeaderCellDef
-                mat-sort-header>Title</th>
-            <td mat-cell
-                *matCellDef="let row">{{row.title}}</td>
-        </ng-container>
-        <ng-container matColumnDef="updated">
-            <th mat-header-cell
-                *matHeaderCellDef
-                mat-sort-header>Last update</th>
-            <td mat-cell
-                *matCellDef="let row">{{row.updated?.toDate() | date:'medium'}}</td>
-        </ng-container>
+    <ng-container matColumnDef="title">
+      <th mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header>Title</th>
+      <td mat-cell
+          *matCellDef="let row">{{row.title}}</td>
+    </ng-container>
 
-        <tr mat-header-row
-            *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row
-            class="clickable-table-row"
-            *matRowDef="let row; columns: displayedColumns;"
-            (click)="editEntry(row.id)"></tr>
-    </table>
+    <ng-container matColumnDef="slug">
+      <th mat-header-cell
+          *matHeaderCellDef>Slug</th>
+      <td mat-cell
+          *matCellDef="let row">{{row.url}}</td>
+    </ng-container>
 
-    <mat-paginator #paginator
-                   [length]="total_count"
-                   [pageIndex]="0"
-                   [pageSize]="10"
-                   [pageSizeOptions]="[10, 20, 50, 100]">
-    </mat-paginator>
+    <ng-container matColumnDef="updated">
+      <th mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header>Last update</th>
+      <td mat-cell
+          *matCellDef="let row">{{row.updated?.toDate() | date:'medium'}}</td>
+    </ng-container>
+
+    <tr mat-header-row
+        *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row
+        class="clickable-table-row"
+        *matRowDef="let row; columns: displayedColumns;"
+        (click)="editEntry(row.id)"></tr>
+  </table>
+
+  <mat-paginator #paginator
+                 [length]="total_count"
+                 [pageIndex]="0"
+                 [pageSize]="10"
+                 [pageSizeOptions]="[10, 20, 50, 100]">
+  </mat-paginator>
 </div>
