@@ -2,16 +2,16 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /tanam/{siteId} {
       allow read: if hasAnyRole();
-      allow write: if isAtLeastManager();
+      allow write: if isAtLeastAdmin();
 
       match /document-types/{typeId} {
         allow read: if hasAnyRole();
-        allow write: if isAtLeastManager();
+        allow write: if isAtLeastAdmin();
       }
 
       match /documents/{documentId} {
         allow read: if hasAnyRole();
-        allow write: if isAtLeastManager();
+        allow write: if isAtLeastAdmin();
 
         match /revisions/{revisionId} {
           allow read: if hasAnyRole();
@@ -25,13 +25,13 @@ service cloud.firestore {
       }
 
 			match /notifications/{notificationId} {
-        allow read: if isAtLeastManager();
-        allow write: if isAtLeastManager();
+        allow read: if isAtLeastAdmin();
+        allow write: if isAtLeastAdmin();
       }
 
       match /themes/{document=**} {
         allow read: if hasAnyRole();
-        allow write: if isAtLeastManager();
+        allow write: if isAtLeastAdmin();
       }
 
       match /users/{userId} {
@@ -47,16 +47,16 @@ service cloud.firestore {
         return isSignedIn() && request.auth.token.tanam[siteId].size() > 0;
       }
 
-			function isOwner() {
-        return hasUserRole("owner");
+			function isSuperAdmin() {
+        return hasUserRole("superAdmin");
       }
 
-      function isAtLeastManager() {
-        return isOwner() || hasUserRole("manager");
+      function isAtLeastAdmin() {
+        return isSuperAdmin() || hasUserRole("admin");
       }
 
       function isPublisher() {
-        return isAtLeastManager() || hasUserRole("publisher");
+        return isAtLeastAdmin() || hasUserRole("publisher");
       }
     }
 
