@@ -59,9 +59,11 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this._setStateProcessing(true);
     this._subscriptions.push(this.documentForm.get('publishStatus').valueChanges.subscribe((v) => this._onDocumentStatusChange(v)));
     const combinedDocumentData$ = combineLatest(this.documentType$, this.document$);
     this._subscriptions.push(combinedDocumentData$.subscribe(([documentType, document]) => {
+      this._setStateProcessing(true);
       this.documentForm.patchValue({
         title: document.title,
         url: document.url || '/',
@@ -72,11 +74,6 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
       this._rootSlug = documentType.slug;
       this._documentType = documentType.id;
       for (const field of documentType.fields) {
-        if (!document.created) {
-          this._setStateProcessing(true);
-        } else {
-          this._setStateProcessing(false);
-        }
         if (!this.dataForm.get(field.key)) {
           const formControl = new FormControl(document.data[field.key]);
           this.dataForm.addControl(field.key, formControl);
@@ -92,6 +89,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
           [field.key]: document.data[field.key],
         });
       }
+      this._setStateProcessing(!document.created);
     }));
   }
 
@@ -105,7 +103,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   get isPublished(): boolean {
-    return this.documentForm.value.published;
+    return !!this.documentForm.value.published;
   }
 
   async deleteEntry() {
