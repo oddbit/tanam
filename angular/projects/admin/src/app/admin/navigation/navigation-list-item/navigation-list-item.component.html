@@ -1,6 +1,8 @@
 <a mat-list-item
    routerLink="{{routerLink}}"
-   routerLinkActive="active">
-  <mat-icon mat-list-icon>{{icon}}</mat-icon>
-  <span *ngIf="isExpanded">{{title}}</span>
+   routerLinkActive="active mat-primary">
+  <mat-icon mat-list-icon
+            class="icon">{{icon}}</mat-icon>
+  <span *ngIf="isExpanded"
+        class="mat-body-2 title">{{title}}</span>
 </a>

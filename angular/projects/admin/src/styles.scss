@@ -42,3 +42,11 @@ body, html {
 body {
   margin: 0;
 }
+
+.mat-toolbar-row,
+.mat-toolbar-single-row {
+  height: 56px !important;
+}
+.mat-toolbar-multiple-rows {
+  min-height: 56px !important;
+}

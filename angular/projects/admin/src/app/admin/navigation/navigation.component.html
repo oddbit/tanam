@@ -9,26 +9,28 @@
     <mat-toolbar class="header-side-nav">
       <img class="logo"
            src="assets/icons/tanam-icon.svg"
-           height="25"
-           style="margin-right:10px" /> <b>{{isExpanded? 'Tanam':''}}</b>
+           height="25" />
+      <span [ngClass]="{'text-padding': isExpanded}">{{isExpanded ? 'Tanam' : null}}</span>
     </mat-toolbar>
     <mat-nav-list>
       <tanam-navigation-list-item routerLink="/_/admin/dashboard"
                                   icon="dashboard"
                                   [isExpanded]="isExpanded"
+                                  class="dashboard"
                                   title="Dashboard"></tanam-navigation-list-item>
       <h3 mat-subheader
-          *ngIf="isExpanded">Content</h3>
-      <mat-divider *ngIf="!isExpanded"></mat-divider>
+          *ngIf="isExpanded"
+          class="subheader">Content</h3>
       <tanam-navigation-list-item *ngFor="let documentType of documentTypes$ | async"
                                   routerLink="/_/admin/type/{{documentType.id}}"
                                   icon="{{documentType.icon}}"
                                   [isExpanded]="isExpanded"
                                   title="{{documentType.title}}"></tanam-navigation-list-item>
 
+      <mat-divider class="divider"></mat-divider>
       <h3 mat-subheader
-          *ngIf="isExpanded">Manage</h3>
-      <mat-divider *ngIf="!isExpanded"></mat-divider>
+          *ngIf="isExpanded"
+          class="subheader">Manage</h3>
       <tanam-navigation-list-item routerLink="/_/admin/media"
                                   icon="image"
                                   [isExpanded]="isExpanded"

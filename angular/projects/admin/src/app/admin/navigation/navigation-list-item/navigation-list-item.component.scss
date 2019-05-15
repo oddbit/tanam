@@ -1,0 +1,25 @@
+::ng-deep .mat-list-base .mat-list-item.mat-list-item-with-avatar, .mat-list-base .mat-list-option.mat-list-item-with-avatar {
+  height: auto !important;
+}
+::ng-deep .mat-list-base .mat-list-item .mat-list-item-content, .mat-list-base .mat-list-option .mat-list-item-content {
+  padding: 6px 24px !important;
+}
+
+::ng-deep .mat-list-option:hover, .mat-list-option:focus, .mat-list-item:hover, .mat-list-item:focus {
+  background: rgba(255,255,255,0.1) !important;
+}
+
+::ng-deep .mat-list-base .dashboard .mat-list-item {
+  height: 56px !important;
+  background: rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  margin-bottom: 20px;
+}
+
+.icon {
+  padding: 0 !important;
+}
+
+.title {
+  padding-left: 16px;
+}
