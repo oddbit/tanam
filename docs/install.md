@@ -59,7 +59,7 @@ skip directly to step 7.
  ```
  
  7. Copy paste the code below into your [`index.ts`](https://github.com/oddbit/tanam-starter/blob/master/functions/src/index.ts) file.
-    1. Replace (and add any) email that should have access to the site. You can assign the roles (owner, admin, publisher) for different access of content. Make sure that at least someone is the "owner".
+    1. Replace (and add any) email that should have access to the site. You can assign the roles (superAdmin, admin, publisher) for different access of content. Make sure that at least someone is the "superAdmin".
     2. Replace the `firebaseApp` with your own web configuration that you got when adding a web app in the  Firebase console
 
 
@@ -68,7 +68,7 @@ import * as tanam from 'tanam';
 
 tanam.initializeApp({
     users: {
-        "your.email@gmail.com": "owner",
+        "your.email@gmail.com": "superAdmin",
     },
     firebaseApp: {
         apiKey: "xxxxxxxxxxxxxxxxxxxxxxxxxxx",
