@@ -72,6 +72,11 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
       this._rootSlug = documentType.slug;
       this._documentType = documentType.id;
       for (const field of documentType.fields) {
+        if (!document.created) {
+          this._setStateProcessing(true);
+        } else {
+          this._setStateProcessing(false);
+        }
         if (!this.dataForm.get(field.key)) {
           const formControl = new FormControl(document.data[field.key]);
           this.dataForm.addControl(field.key, formControl);
@@ -152,7 +157,13 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   private _setStateProcessing(isProcessing: boolean) {
-    // Blur inputs or something
+    console.log(`[_setStateProcessing] isProcessing=${isProcessing}`);
+    if (isProcessing) {
+      console.log('disabling form');
+      return this.documentForm.disable();
+    }
+    console.log('enabling form');
+    return this.documentForm.enable();
   }
 
   private _slugify(text: string) {
