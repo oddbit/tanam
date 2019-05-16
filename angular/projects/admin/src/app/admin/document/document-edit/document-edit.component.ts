@@ -125,7 +125,6 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
 
   async saveEntry(closeAfterSave: boolean = false) {
     this._snackbar('Saving...');
-    this._setStateProcessing(true);
     const formData = this.documentForm.value;
 
     const document = await this.document$.pipe(take(1)).toPromise();
@@ -133,7 +132,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     document.url = formData.url;
     document.published = formData.published;
     document.data = this.dataForm.value;
-
+    this._setStateProcessing(true);
     await this.documentService.update(document);
     this._setStateProcessing(false);
     this._snackbar('Saved');
@@ -186,10 +185,10 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   private _onTitleChange(title: string) {
+    this.documentForm.controls['title'].setValue(title);
     if (!!title && !this.documentForm.get('published').value) {
       // Only auto slugify title if document has't been published before
       this.documentForm.controls['url'].setValue(`${this._rootSlug}/${this._slugify(title)}`);
-      this.documentForm.controls['title'].setValue(title);
     }
   }
 
