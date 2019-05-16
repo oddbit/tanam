@@ -13,6 +13,20 @@ export interface DocumentQueryOptions {
 
 const siteCollection = () => admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
 
+function _normalizeData(data: any) {
+    const normalizedData = { ...data };
+    for (const key in normalizedData) {
+        const val = normalizedData[key];
+        if (val && val.toDate) {
+            // Applies to Firestore timestamps
+            normalizedData[key] = val.toDate();
+        } else if (val === undefined) {
+            normalizedData[key] = null;
+        }
+    }
+
+    return normalizedData;
+}
 
 export async function queryPageContext(documentTypeId: string, queryOpts: DocumentQueryOptions = {}) {
     console.log(`[queryPageContext] ${documentTypeId}, query=${JSON.stringify(queryOpts)}`);
@@ -39,7 +53,7 @@ export async function queryPageContext(documentTypeId: string, queryOpts: Docume
         } else {
             await systemNotificationService.reportUnknownError(details);
         }
-        
+
         return [];
     }
 
@@ -71,6 +85,15 @@ async function _toContext(document: Document) {
     if (!document) {
         return null;
     }
+
+    // Run update operation in parallel while doing preparing the context data
+    const updatePromise = siteCollection()
+        .collection('documents').doc(document.id)
+        .update({
+            timesRendered: admin.firestore.FieldValue.increment(1),
+            rendered: admin.firestore.FieldValue.serverTimestamp(),
+        } as Document);
+
     const siteInfo = (await siteCollection().get()).data() as SiteInformation;
     const siteContext: SiteContext = {
         domain: siteInfo.primaryDomain,
@@ -80,38 +103,28 @@ async function _toContext(document: Document) {
         title: siteInfo.title,
     };
 
+    const normalizedDoc = _normalizeData(document);
     const documentContext: DocumentContext = {
-        id: document.id,
-        documentType: document.documentType,
-        data: _normalizeData(document.data),
-        title: document.title,
-        standalone: document.standalone,
-        url: document.standalone ? document.url : null,
-        permalink: document.standalone ? `${siteContext.url}${document.url}` : null,
-        revision: document.revision,
-        status: document.status,
-        tags: document.tags,
-        created: (document.created as admin.firestore.Timestamp).toDate(),
-        updated: (document.updated as admin.firestore.Timestamp).toDate(),
-        published: !!document.published
-            ? (document.published as admin.firestore.Timestamp).toDate()
-            : null,
+        id: normalizedDoc.id,
+        documentType: normalizedDoc.documentType,
+        data: _normalizeData(normalizedDoc.data),
+        title: normalizedDoc.title,
+        standalone: normalizedDoc.standalone,
+        url: normalizedDoc.standalone ? normalizedDoc.url : null,
+        permalink: normalizedDoc.standalone ? `${siteContext.url}${normalizedDoc.url}` : null,
+        revision: normalizedDoc.revision,
+        status: normalizedDoc.status,
+        tags: normalizedDoc.tags,
+        created: normalizedDoc.created,
+        updated: normalizedDoc.updated,
+        published: normalizedDoc.published,
     } as DocumentContext;
+
+    // Wait until update operation finish
+    await updatePromise;
 
     return {
         document: documentContext,
         site: siteContext,
     } as PageContext;
-}
-
-function _normalizeData(data: any) {
-    for (const key in data) {
-        const val = data[key];
-        if (val && val.toDate) {
-            // Applies to Firestore timestamps
-            data[key] = val.toDate();
-        }
-    }
-
-    return data;
 }
