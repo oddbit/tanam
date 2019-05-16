@@ -2,13 +2,20 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { CacheTask, Document, DocumentField, DocumentType, SiteInformation, DocumentStatus } from '../models';
 
-export const buildEntryCache = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite(async (change, context) => {
+export const onChangeRequestRendering = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite(async (change, context) => {
     const siteId = context.params.siteId;
-    const entryBefore = change.before.data() as Document;
-    const entryAfter = change.after.data() as Document;
+    const entryBefore = change.before.data() || {} as Document;
+    const entryAfter = change.after.data() || {} as Document;
 
     if (!entryBefore.standalone && !entryAfter.standalone) {
         console.log(`The document is not standalone and is not managed by cache. Do nothing.`);
+        return null;
+    }
+
+    if (['data', 'title', 'url', 'tags', 'standalone', 'status', 'published'].every(key =>
+        JSON.stringify(entryBefore[key]) === JSON.stringify(entryAfter[key])
+    )) {
+        console.log(`Document changes doesn't require it to be re-rendered.`);
         return null;
     }
 
@@ -18,6 +25,7 @@ export const buildEntryCache = functions.firestore.document('tanam/{siteId}/docu
     const tasks = [];
     for (const domain of siteInfo.domains) {
         if (change.before.exists) {
+            console.log(`Request cache update entryBefore.url=${entryBefore.url}`);
             tasks.push({
                 action: 'update',
                 domain: domain,
@@ -26,6 +34,7 @@ export const buildEntryCache = functions.firestore.document('tanam/{siteId}/docu
         }
 
         if (change.after.exists) {
+            console.log(`Request cache update entryAfter.url=${entryAfter.url}`);
             tasks.push({
                 action: 'update',
                 domain: domain,
