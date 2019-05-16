@@ -60,8 +60,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   ) { }
 
   ngOnInit() {
-    console.log(`ngOnInit documentTypeId: ${this.documentType}`);
-
+    console.log(`ngOnInit documentTypeId: ${JSON.stringify(this.documentType.id)}`);
     this._subscriptions.push(this.siteSettingsService.getSiteInfo().subscribe(settings => {
       this.themeId = settings.theme;
     }));
@@ -108,12 +107,22 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     if (val.isTitle) {
       this.documentTypeForm.controls['indexTitle'].setValue(index);
     }
+    // If there was no field, this will create field with checked radio button
+    if (this.fieldForms.length === 0) {
+      this.documentTypeForm.controls['indexTitle'].setValue(0);
+    }
 
     this.fieldForms.push(formField);
   }
 
   deleteField(index: number) {
     console.log(`Removing field ${index}: ${JSON.stringify(this.fieldForms.at(index).value)}`);
+    const hasTitleIndex = this.documentTypeForm.controls['indexTitle'].value === index;
+    const hasTitleValue = this.fieldForms.at(index).value.isTitle;
+    if (hasTitleValue || hasTitleIndex) {
+      // if deleted field has title value/index, the isTitle will be reset to first field
+      this.documentTypeForm.controls['indexTitle'].setValue(0);
+    }
     this.fieldForms.removeAt(index);
   }
 
@@ -125,9 +134,9 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
       icon: 'warning'
     }).afterClosed().subscribe(async res => {
       if (res === 'yes') {
-        this.snackBar.open('Deleting..', 'Dismiss', {duration: 2000});
+        this.snackBar.open('Deleting..', 'Dismiss', { duration: 2000 });
         await this.documentTypeService.delete(this.documentType.id);
-        this.snackBar.open('Deleted', 'Dismiss', {duration: 2000});
+        this.snackBar.open('Deleted', 'Dismiss', { duration: 2000 });
         this.cancelEditing();
       }
     });
@@ -144,7 +153,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async save() {
-    this.snackBar.open('Saving..', 'Dismiss', {duration: 2000});
+    this.snackBar.open('Saving..', 'Dismiss', { duration: 2000 });
     const formData = this.documentTypeForm.value;
     for (let index = 0; index < this.fieldForms.value.length; index++) {
       if (index === formData.indexTitle) {
@@ -171,6 +180,6 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
       fields: this.fieldForms.value,
       standalone: formData.standalone
     } as DocumentType);
-    this.snackBar.open('Saved', 'Dismiss', {duration: 2000});
+    this.snackBar.open('Saved', 'Dismiss', { duration: 2000 });
   }
 }
