@@ -11,7 +11,6 @@ export interface Document {
     status: DocumentStatus;
     tags: string[];
     standalone: boolean;
-    timesRendered: number | any; // firebase.firestore.FieldValue.increment;
     rendered?: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue.serverTimestamp;
     published?: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue.serverTimestamp;
     updated: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue.serverTimestamp;
