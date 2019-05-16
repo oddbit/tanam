@@ -32,7 +32,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     slug: [null, Validators.required],
     icon: [null, Validators.required],
     description: [null, Validators.required],
-    fields: this.formBuilder.array([]),
+    fields: this.formBuilder.array([], Validators.required),
     standalone: [false, Validators.required],
     indexTitle: []
   });
@@ -60,7 +60,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   ) { }
 
   ngOnInit() {
-    console.log(`ngOnInit documentTypeId: ${JSON.stringify(this.documentType.id)}`);
+    console.log(`[ngOnInit] documentTypeId: ${JSON.stringify(this.documentType.id)}`);
     this._subscriptions.push(this.siteSettingsService.getSiteInfo().subscribe(settings => {
       this.themeId = settings.theme;
     }));
@@ -156,18 +156,18 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     this.snackBar.open('Saving..', 'Dismiss', { duration: 2000 });
     const formData = this.documentTypeForm.value;
     for (let index = 0; index < this.fieldForms.value.length; index++) {
-      if (index === formData.indexTitle) {
-        this.fieldForms.at(index).patchValue({
-          isTitle: true
-        });
-      }
-      if (index !== formData.indexTitle) {
-        this.fieldForms.at(index).patchValue({
-          isTitle: false
-        });
-      }
+      this.fieldForms.at(index).patchValue({
+        isTitle: index === formData.indexTitle
+      });
     }
+
+    if (this.fieldForms.length === 0) {
+      this.snackBar.open('You must declare at least 1 field', 'Dismiss', { duration: 2000 });
+      return;
+    }
+
     if (this.documentTypeForm.errors) {
+      this.snackBar.open('Form has errors', 'Dismiss', { duration: 2000 });
       return;
     }
 
