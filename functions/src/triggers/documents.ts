@@ -1,6 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { CacheTask, Document, DocumentField, DocumentType, SiteInformation, DocumentStatus } from '../models';
+import { Document, DocumentField, DocumentStatus, DocumentType, SiteInformation } from '../models';
+import * as taskService from '../services/task.service';
 
 export const onChangeRequestRendering = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite(async (change, context) => {
     const siteId = context.params.siteId;
@@ -22,30 +23,13 @@ export const onChangeRequestRendering = functions.firestore.document('tanam/{sit
     const siteInfoDoc = await admin.firestore().collection('tanam').doc(siteId).get();
     const siteInfo = siteInfoDoc.data() as SiteInformation;
 
-    const tasks = [];
-    for (const domain of siteInfo.domains) {
-        if (change.before.exists) {
-            console.log(`Request cache update entryBefore.url=${entryBefore.url}`);
-            tasks.push({
-                action: 'update',
-                domain: domain,
-                url: entryBefore.url,
-            } as CacheTask);
-        }
+    const promises = [];
+    siteInfo.domains.forEach(domain => {
+        promises.push(taskService.updateCache(siteId, domain, entryBefore.url));
+        promises.push(taskService.updateCache(siteId, domain, entryAfter.url));
+    });
 
-        if (change.after.exists) {
-            console.log(`Request cache update entryAfter.url=${entryAfter.url}`);
-            tasks.push({
-                action: 'update',
-                domain: domain,
-                url: entryAfter.url,
-            } as CacheTask);
-        }
-    }
-
-    return Promise.all(
-        tasks.map(task => admin.database().ref('tanam/{siteId}/tasks/cache').push(task))
-    );
+    return Promise.all(promises);
 });
 
 export const updateDocumentStatusCounter = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite((change, context) => {
