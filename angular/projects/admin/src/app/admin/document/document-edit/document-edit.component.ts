@@ -59,9 +59,11 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this._setStateProcessing(true);
     this._subscriptions.push(this.documentForm.get('publishStatus').valueChanges.subscribe((v) => this._onDocumentStatusChange(v)));
     const combinedDocumentData$ = combineLatest(this.documentType$, this.document$);
     this._subscriptions.push(combinedDocumentData$.subscribe(([documentType, document]) => {
+      this._setStateProcessing(true);
       this.documentForm.patchValue({
         title: document.title,
         url: document.url || '/',
@@ -87,6 +89,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
           [field.key]: document.data[field.key],
         });
       }
+      this._setStateProcessing(!document.created);
     }));
   }
 
@@ -100,7 +103,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   get isPublished(): boolean {
-    return this.documentForm.value.published;
+    return !!this.documentForm.value.published;
   }
 
   async deleteEntry() {
@@ -122,7 +125,6 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
 
   async saveEntry(closeAfterSave: boolean = false) {
     this._snackbar('Saving...');
-    this._setStateProcessing(true);
     const formData = this.documentForm.value;
 
     const document = await this.document$.pipe(take(1)).toPromise();
@@ -130,7 +132,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     document.url = formData.url;
     document.published = formData.published;
     document.data = this.dataForm.value;
-
+    this._setStateProcessing(true);
     await this.documentService.update(document);
     this._setStateProcessing(false);
     this._snackbar('Saved');
@@ -152,7 +154,13 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   private _setStateProcessing(isProcessing: boolean) {
-    // Blur inputs or something
+    console.log(`[_setStateProcessing] isProcessing=${isProcessing}`);
+    if (isProcessing) {
+      console.log('disabling form');
+      return this.documentForm.disable();
+    }
+    console.log('enabling form');
+    return this.documentForm.enable();
   }
 
   private _slugify(text: string) {
