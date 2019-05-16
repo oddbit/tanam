@@ -43,7 +43,7 @@ export class DocumentTypeService {
       standalone: true,
       icon: 'cloud',
       fields: [],
-      numEntries: {
+      documentCount: {
         published: 0,
         unpublished: 0,
       },

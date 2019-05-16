@@ -48,7 +48,7 @@ export const onChangeRequestRendering = functions.firestore.document('tanam/{sit
     );
 });
 
-export const countEntryStatus = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite((change, context) => {
+export const updateDocumentStatusCounter = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite((change, context) => {
     const siteId = context.params.siteId;
     const entryBefore = change.before.data() as Document;
     const entryAfter = change.after.data() as Document;
@@ -59,32 +59,20 @@ export const countEntryStatus = functions.firestore.document('tanam/{siteId}/doc
     }
 
     const documentType = entryAfter.documentType || entryBefore.documentType;
-    const documentTypeRef = admin.firestore()
-        .collection('tanam').doc(siteId)
-        .collection('document-types').doc(documentType);
-
-    const docsQuery = admin.firestore()
-        .collection('tanam').doc(siteId)
-        .collection('documents').where('documentType', '==', documentType);
 
     console.log(`Updating counters for ${documentType}`);
-    return admin.firestore().runTransaction(async (trx) => {
-        const trxDoc = await trx.get(documentTypeRef);
-        const trxContentType = trxDoc.data() as DocumentType;
+    const updates = {};
+    if (change.before.exists) {
+        updates[`documentCount.${entryBefore.status}`] = admin.firestore.FieldValue.increment(-1);
+    }
+    if (change.after.exists) {
+        updates[`documentCount.${entryAfter.status}`] = admin.firestore.FieldValue.increment(1);
+    }
 
-        const promises = []
-        promises.push(docsQuery.where('status', '==', 'published').get().then((snap) => {
-            console.log(`Num published: ${snap.docs.length}`);
-            trxContentType.numEntries.published = snap.docs.length;
-        }));
-        promises.push(docsQuery.where('status', '==', 'unpublished').get().then((snap) => {
-            console.log(`Num unpublished: ${snap.docs.length}`);
-            trxContentType.numEntries.unpublished = snap.docs.length;
-        }));
-
-        await Promise.all(promises);
-        trx.set(documentTypeRef, trxContentType);
-    });
+    return admin.firestore()
+        .collection('tanam').doc(siteId)
+        .collection('document-types').doc(documentType)
+        .update(updates);
 });
 
 export const saveRevision = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onUpdate((change) => {
