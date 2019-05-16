@@ -16,7 +16,7 @@ $tanam-admin-theme:   mat-light-theme($tanam-admin-primary, $tanam-admin-accent,
 
 @include angular-material-theme($tanam-admin-theme);
 
-$tanam-admin-dark-primary: mat-palette($mat-blue-grey);
+$tanam-admin-dark-primary: mat-palette($mat-green, 600);
 $tanam-admin-dark-accent:  mat-palette($mat-amber, A200, A100, A400);
 $tanam-admin-dark-warn:    mat-palette($mat-deep-orange);
 $tanam-admin-dark-theme:   mat-dark-theme($tanam-admin-dark-primary, $tanam-admin-dark-accent, $tanam-admin-dark-warn);

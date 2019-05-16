@@ -2,21 +2,12 @@
   height: 100%;
 }
 
-.mat-drawer {
-  background: #212121 !important;
-  color: rgba(255,255,255,.7) !important;
+.main-drawer {
+  background: rgba(0,0,0,0.05);
 }
 
-.mat-drawer-side {
+.main-drawer.mat-drawer-side {
   border-right: none;
-}
-
-::ng-deep .mat-list-base .mat-list-item {
-  color: rgba(255,255,255,.7) !important;
-}
-
-::ng-deep .mat-list-base .mat-subheader {
-  color: #fff !important;
 }
 
 :host ::ng-deep .sidenav-container .mat-drawer-inner-container {
@@ -54,15 +45,17 @@
 }
 
 .expanded-nav {
-  width: 200px;
+  min-width: 250px;
 }
 
 .header-side-nav {
-  background: rgba(255,255,255,0.06);
-  color: #fff;
-  border-bottom: 1px solid rgba(255,255,255,0.15);
-  padding-left: 24px !important;
-  padding-right: 24px !important;
+  background: rgba(0,0,0,0.1);
+  .logo {
+    padding: 0 4px;
+  }
+  .text-padding {
+    padding-left: 10px;
+  }
 }
 
 .header-side-nav , .mat-toolbar.mat-primary{
@@ -71,22 +64,19 @@
   z-index: 2;
 }
 
-.text-padding {
-  padding-left: 15px;
+.list-item-group {
+  margin-bottom: 20px;
 }
 
 .divider {
-  border-top-color: rgba(255, 255, 255, 0.15);
-  margin-top: 20px;
+  border-top-color: rgba(0,0,0,0.15);
   margin-bottom: 20px;
 }
 
 .subheader {
-  font-size: 15px;
-  padding: 0 24px 20px 24px !important;
-  letter-spacing: 0.5px;
-  line-height: normal !important;
+  font-size: 15px !important;
   height: auto !important;
+  line-height: auto !important;
 }
 
 .expand-toolbar {
@@ -95,9 +85,7 @@
   justify-content: flex-end;
   bottom: 0;
   z-index: 2;
-  background: rgba(255,255,255,0.06);
-  color: #fff;
-  border-top: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.1);
 }
 
 .admin-container {
