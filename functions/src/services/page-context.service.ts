@@ -89,7 +89,10 @@ async function _toContext(document: Document) {
     // Run update operation in parallel while doing preparing the context data
     const updatePromise = siteCollection()
         .collection('documents').doc(document.id)
-        .update({ rendered: admin.firestore.FieldValue.serverTimestamp() } as Document);
+        .update({
+            dependencies: [],
+            rendered: admin.firestore.FieldValue.serverTimestamp(),
+        } as Document);
 
     const siteInfo = (await siteCollection().get()).data() as SiteInformation;
     const siteContext: SiteContext = {

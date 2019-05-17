@@ -47,7 +47,7 @@ export const onUpdateRequestRendering = functions.firestore.document('tanam/{sit
         return null;
     }
 
-    await change.after.ref.update({ dependencies: [] } as Document);
+    console.log(JSON.stringify({ siteId, documentId, urlBefore: entryBefore.url, urlAfter: entryAfter.url }));
     const referencingDocs = await admin.firestore()
         .collection('tanam').doc(siteId)
         .collection('documents')
