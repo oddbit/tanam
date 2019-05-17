@@ -1,27 +1,17 @@
 
 import * as admin from 'firebase-admin';
-import { CacheTask, CacheTaskAction } from '../models';
 
-const baseRef = (siteId) => admin.database().ref('tanam').child(siteId).child('tasks');
-const cacheQueueRef = (siteId) => baseRef(siteId).child('cache');
+const taskQueueRef = (siteId) => admin.database().ref('tanam').child(siteId).child('tasks');
+const cacheQueueRef = (siteId) => taskQueueRef(siteId);
 
-
-async function makeCacheTask(siteId: string, domain: string, path: string, action: CacheTaskAction) {
-    const taskQueueRef = cacheQueueRef(siteId);
-
+async function makeCacheTask(siteId: string, path: string, action: 'create' | 'update' | 'delete') {
     if (!path) {
         return null;
     }
-
-    const cacheTask = {
-        action: action,
-        domain: domain,
-        url: path,
-    } as CacheTask;
-
-    console.log(`[makeCacheTask] ${JSON.stringify(cacheTask)}`);
-    return taskQueueRef.push(cacheTask);
+    console.log(`[makeCacheTask] ${JSON.stringify({ siteId, path, action })}`);
+    return cacheQueueRef(siteId).child('cache').child(action).push(path);
 }
 
-export const updateCache = (siteId: string, domain: string, path: string) => makeCacheTask(siteId, domain, path, 'update');
-export const deleteCache = (siteId: string, domain: string, path: string) => makeCacheTask(siteId, domain, path, 'delete');
+export const createCache = (siteId: string, path: string) => makeCacheTask(siteId, path, 'create');
+export const updateCache = (siteId: string, path: string) => makeCacheTask(siteId, path, 'update');
+export const deleteCache = (siteId: string, path: string) => makeCacheTask(siteId, path, 'delete');

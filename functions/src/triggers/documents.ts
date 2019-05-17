@@ -20,14 +20,9 @@ export const onChangeRequestRendering = functions.firestore.document('tanam/{sit
         return null;
     }
 
-    const siteInfoDoc = await admin.firestore().collection('tanam').doc(siteId).get();
-    const siteInfo = siteInfoDoc.data() as SiteInformation;
-
     const promises = [];
-    siteInfo.domains.forEach(domain => {
-        promises.push(taskService.updateCache(siteId, domain, entryBefore.url));
-        promises.push(taskService.updateCache(siteId, domain, entryAfter.url));
-    });
+    promises.push(taskService.updateCache(siteId, entryBefore.url));
+    promises.push(taskService.updateCache(siteId, entryAfter.url));
 
     return Promise.all(promises);
 });
