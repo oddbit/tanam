@@ -18,6 +18,8 @@ export interface DocumentTypeQueryOptions {
   providedIn: 'root'
 })
 export class DocumentService {
+  private lastDoc: any;
+  private firstDoc = [];
   readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
 
   constructor(
@@ -98,8 +100,18 @@ export class DocumentService {
       .valueChanges();
   }
 
-  query(documentTypeId: string, status: string, queryOpts: DocumentTypeQueryOptions = {}): Observable<Document[]> {
+  query(
+    documentTypeId: string, status: string, queryOpts: DocumentTypeQueryOptions = {}, nextPage?: Boolean, pageIndex?: number
+  ): Observable<Document[]> {
     console.log(`[DocumentService:getDocumentTypeFields] ${documentTypeId}, query=${JSON.stringify(queryOpts)}`);
+
+    console.log('[Next page] ', nextPage);
+    console.log('[page index] ', pageIndex);
+
+    if (pageIndex === 0) {
+      this.firstDoc = [];
+      this.lastDoc = '';
+    }
 
     const queryFn = (ref: CollectionReference) => {
       let query = ref.where('documentType', '==', documentTypeId);
@@ -111,15 +123,36 @@ export class DocumentService {
         query = query.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
       }
 
+      if (!nextPage && this.firstDoc[this.firstDoc.length - 2]) { // back
+        console.log('back');
+        console.log(this.firstDoc[this.firstDoc.length - 2]);
+        query = query.startAt(this.firstDoc[this.firstDoc.length - 2]);
+        this.firstDoc.length = this.firstDoc.length - 1;
+      }
+
+      if (nextPage && this.lastDoc) { // next page
+        console.log('last doc', this.lastDoc);
+        query = query.startAfter(this.lastDoc);
+      }
+
       if (queryOpts.limit) {
         query = query.limit(queryOpts.limit);
       }
-
       return query;
     };
 
-    return this.siteCollection
-      .collection<Document>('documents', queryFn)
-      .valueChanges();
+
+    const ref = this.siteCollection
+      .collection<Document>('documents', queryFn);
+
+    ref.snapshotChanges().subscribe(res => {
+      if (this.firstDoc.length === 0 || nextPage) {
+        this.firstDoc.push(res[0].payload.doc);
+      }
+      this.lastDoc = res[res.length - 1].payload.doc;
+      console.log(this.firstDoc);
+    })
+
+    return ref.valueChanges();
   }
 }

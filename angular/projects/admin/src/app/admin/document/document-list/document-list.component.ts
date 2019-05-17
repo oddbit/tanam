@@ -14,6 +14,7 @@ import { tap } from 'rxjs/operators';
 })
 export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
   total_count: number;
+  lastPageIndex: Number = 0;
 
   @Input() documentType$: Observable<DocumentType>;
   @Input() status = 'all';
@@ -39,21 +40,22 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
     merge(this.sort.sortChange, this.paginator.page)
-        .pipe(
-          tap(() => {
-            this.loadDataSource();
-          }
-        )
+      .pipe(
+        tap(() => {
+          this.loadDataSource();
+        })
       ).subscribe();
-}
+  }
 
   ngOnDestroy() {
     this._subscriptions.filter(s => !!s && !s.closed).forEach(s => s.unsubscribe());
   }
 
-  private loadDataSource () {
+  private loadDataSource() {
+    const nextPage = this.paginator.pageIndex > this.lastPageIndex;
+    this.lastPageIndex = this.paginator.pageIndex;
     this._subscriptions.push(this.documentType$.subscribe(documentType => {
-      this.dataSource = new DocumentListDataSource(documentType, this.documentService, this.paginator, this.sort, this.status);
+      this.dataSource = new DocumentListDataSource(documentType, this.documentService, this.paginator, this.sort, this.status, nextPage);
       this.setTotalCount(this.dataSource);
     }));
   }
@@ -62,7 +64,7 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     const url = `/_/admin/document/${documentId}`;
     this.router.navigateByUrl(url);
   }
-  setTotalCount (dataSource: Object) {
+  setTotalCount(dataSource: Object) {
     const refNumEntries = dataSource['documentType'].numEntries;
     if (this.status === 'all') {
       this.total_count = refNumEntries.published + refNumEntries.unpublished;
