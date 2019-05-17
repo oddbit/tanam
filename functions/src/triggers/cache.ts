@@ -53,7 +53,7 @@ export const handleCacheTask = functions.database.ref('tanam/{siteId}/tasks/cach
         await Promise.all(siteInfo.domains.map(domain => _makeRequest('PURGE', domain, url)));
     }
 
-    if (action === 'create' && action === 'update') {
+    if (action === 'create' || action === 'update') {
         console.log(`Create cache: ${JSON.stringify(siteInfo.domains)}`);
         siteInfo.domains.forEach(domain => promises.push(_makeRequest('GET', domain, url)));
     }
