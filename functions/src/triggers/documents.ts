@@ -20,11 +20,6 @@ export const onDeleteDocumentCleanUp = functions.firestore.document('tanam/{site
     const documentId = context.params.documentId;
     const document = snap.data() as Document;
 
-    if (!document.standalone || document.status !== 'published') {
-        console.log(`The document is not published and standalone and is not managed by cache. Do nothing.`);
-        return null;
-    }
-
     const referencingDocs = await admin.firestore()
         .collection('tanam').doc(siteId)
         .collection('documents')
@@ -44,11 +39,6 @@ export const onUpdateRequestRendering = functions.firestore.document('tanam/{sit
     const documentId = context.params.documentId;
     const entryBefore = change.before.data() as Document;
     const entryAfter = change.after.data() as Document;
-
-    if (!entryBefore.standalone && !entryAfter.standalone) {
-        console.log(`The document is not standalone and is not managed by cache. Do nothing.`);
-        return null;
-    }
 
     if (['data', 'title', 'url', 'tags', 'standalone', 'status', 'published'].every(key =>
         JSON.stringify(entryBefore[key]) === JSON.stringify(entryAfter[key])
