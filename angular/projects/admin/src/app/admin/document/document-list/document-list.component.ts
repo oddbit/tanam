@@ -14,7 +14,7 @@ import { tap } from 'rxjs/operators';
 })
 export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
   total_count: number;
-  lastPageIndex: Number = 0;
+  lastPageIndex = 0;
 
   @Input() documentType$: Observable<DocumentType>;
   @Input() status = 'all';
