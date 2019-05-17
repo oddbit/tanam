@@ -51,6 +51,6 @@ export async function getDocumentByUrl(url: string): Promise<Document[]> {
 export async function addDependency(docId: string, references: string | string[]) {
     console.log(`[addDependency] ${JSON.stringify({ docId, references })}`);
     return siteCollection().collection('documents').doc(docId).update({
-        dependees: admin.firestore.FieldValue.arrayUnion(references),
+        dependencies: admin.firestore.FieldValue.arrayUnion(references),
     } as Document);
 }
