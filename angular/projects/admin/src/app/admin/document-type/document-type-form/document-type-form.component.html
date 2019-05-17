@@ -19,7 +19,8 @@
       <div class="row">
         <div class="col slider-toogle">
           <mat-slide-toggle formControlName="standalone"
-                            matTooltip="Standalone means this content type will be accessed as a page">Standalone</mat-slide-toggle>
+                            matTooltip="Standalone means this content type will be accessed as a page">Standalone
+          </mat-slide-toggle>
         </div>
       </div>
       <div class="row">
@@ -88,57 +89,98 @@
   </mat-card>
 
   <!-- A dynamic list of form fields that can be added or removed -->
-  <mat-card class="document-type-static-card">
-    <mat-card-header>
-      <mat-card-title>Conent type fields</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
+  <section class="document-type-form-fields">
+    <div class="header">
+      <h4 class="mat-body-1">Content type fields</h4>
+      <div class="actions">
+        <button mat-raised-button
+                color="primary"
+                class="mat-elevation-z0"
+                (click)="addField(null, null, true)">Add Field</button>
+      </div>
+    </div>
+    <div>
       <mat-radio-group formControlName="indexTitle">
         <div formArrayName="fields">
           <div class="row"
                *ngFor="let field of fieldForms.controls; let i=index"
-               [formGroupName]="i">
-            <div id="radio-isTitle">
-              <mat-radio-button [value]="i" matTooltip="Set this field as title"></mat-radio-button>
-            </div>
-            <div class="col">
-              <mat-form-field class="full-width">
-                <input matInput
-                       placeholder="Key"
-                       formControlName="key">
-              </mat-form-field>
-            </div>
-            <div class="col">
-              <mat-form-field>
-                <input matInput
-                       placeholder="Title"
-                       formControlName="title">
-              </mat-form-field>
-            </div>
-            <div class="col">
-              <mat-form-field>
-                <mat-select placeholder="Type"
-                            formControlName="type">
-
-                  <mat-option *ngFor="let fieldType of fieldTypes"
-                              [value]="fieldType.type">
-                    {{fieldType.title }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="col">
-              <button mat-icon-button
-                      (click)="deleteField(i)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
+               [formGroupName]="i"
+               id="ct-field-{{i}}">
+            <mat-card class="document-type-static-card field-card">
+              <mat-card-content class="field-card-content">
+                <div id="radio-isTitle">
+                  <mat-radio-button [value]="i"
+                                    matTooltip="Set this field as title"></mat-radio-button>
+                </div>
+                <div class="field-wrapper">
+                  <div class="col">
+                    <h5 class="mat-caption">Key</h5>
+                    <mat-form-field appearance="outline">
+                      <input matInput
+                             formControlName="key"
+                             class="field-input">
+                    </mat-form-field>
+                  </div>
+                  <div class="col">
+                    <h5 class="mat-caption">Title</h5>
+                    <mat-form-field appearance="outline">
+                      <input matInput
+                             formControlName="title"
+                             class="field-input">
+                    </mat-form-field>
+                  </div>
+                  <div class="col">
+                    <h5 class="mat-caption">Type</h5>
+                    <mat-form-field appearance="outline">
+                      <mat-select formControlName="type"
+                                  class="field-input">
+                        <mat-option *ngFor="let fieldType of fieldTypes"
+                                    [value]="fieldType.type">
+                          {{fieldType.title }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col"
+                       *ngIf="field.value.type === 'document-reference'">
+                    <h5 class="mat-caption">Document Type</h5>
+                    <mat-form-field appearance="outline">
+                      <mat-select formControlName="documentType"
+                                  class="field-input">
+                        <mat-option *ngFor="let documentType of documentTypes$ | async"
+                                    [value]="documentType.id">
+                          {{documentType.title}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col">
+                    <h5 class="mat-caption">Validators</h5>
+                    <mat-form-field appearance="outline">
+                      <mat-select multiple
+                                  formControlName="validators"
+                                  class="field-input">
+                        <mat-option *ngFor="let validator of validators"
+                                    [value]="validator">
+                          {{validator | titlecase}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div>
+                  <button mat-icon-button
+                          (click)="deleteField(i)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </mat-card-content>
+            </mat-card>
           </div>
         </div>
       </mat-radio-group>
-      <button mat-raised-button
-              (click)="addField()">Add Field</button>
+    </div>
+  </section>
 
-    </mat-card-content>
-  </mat-card>
+
 </form>
