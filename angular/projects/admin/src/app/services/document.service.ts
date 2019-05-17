@@ -18,8 +18,8 @@ export interface DocumentTypeQueryOptions {
   providedIn: 'root'
 })
 export class DocumentService {
-  private lastDoc: any;
-  private firstDoc = [];
+  private lastDocOnPreviousPage: any;
+  private pageStartingPointDocs = [];
   readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
 
   constructor(
@@ -109,8 +109,8 @@ export class DocumentService {
     console.log('[page index] ', pageIndex);
 
     if (pageIndex === 0) {
-      this.firstDoc = [];
-      this.lastDoc = '';
+      this.pageStartingPointDocs = [];
+      this.lastDocOnPreviousPage = '';
     }
 
     const queryFn = (ref: CollectionReference) => {
@@ -123,16 +123,16 @@ export class DocumentService {
         query = query.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
       }
 
-      if (!nextPage && this.firstDoc[this.firstDoc.length - 2]) { // back
+      if (!nextPage && this.pageStartingPointDocs[this.pageStartingPointDocs.length - 2]) { // back
         console.log('back');
-        console.log(this.firstDoc[this.firstDoc.length - 2]);
-        query = query.startAt(this.firstDoc[this.firstDoc.length - 2]);
-        this.firstDoc.length = this.firstDoc.length - 1;
+        console.log(this.pageStartingPointDocs[this.pageStartingPointDocs.length - 2]);
+        query = query.startAt(this.pageStartingPointDocs[this.pageStartingPointDocs.length - 2]);
+        this.pageStartingPointDocs.length = this.pageStartingPointDocs.length - 1;
       }
 
-      if (nextPage && this.lastDoc) { // next page
-        console.log('last doc', this.lastDoc);
-        query = query.startAfter(this.lastDoc);
+      if (nextPage && this.lastDocOnPreviousPage) { // next page
+        console.log('last doc', this.lastDocOnPreviousPage);
+        query = query.startAfter(this.lastDocOnPreviousPage);
       }
 
       if (queryOpts.limit) {
@@ -146,12 +146,12 @@ export class DocumentService {
       .collection<Document>('documents', queryFn);
 
     ref.snapshotChanges().subscribe(res => {
-      if (this.firstDoc.length === 0 || nextPage) {
-        this.firstDoc.push(res[0].payload.doc);
+      if (this.pageStartingPointDocs.length === 0 || nextPage) {
+        this.pageStartingPointDocs.push(res[0].payload.doc);
       }
-      this.lastDoc = res[res.length - 1].payload.doc;
-      console.log(this.firstDoc);
-    })
+      this.lastDocOnPreviousPage = res[res.length - 1].payload.doc;
+      console.log(this.pageStartingPointDocs);
+    });
 
     return ref.valueChanges();
   }
