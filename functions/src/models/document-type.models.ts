@@ -34,7 +34,7 @@ export interface DocumentType {
     description: string;
     icon: string; // Icon for menus etc
     fields: DocumentField[];
-    numEntries: DocumentCount;
+    documentCount: DocumentCount;
     updated: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
     created: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
 }
