@@ -68,6 +68,7 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     const url = `/_/admin/document/${documentId}`;
     this.router.navigateByUrl(url);
   }
+
   setTotalCount(dataSource: Object) {
     const refNumEntries = dataSource['documentType'].documentCount;
     if (this.status === 'all') {
