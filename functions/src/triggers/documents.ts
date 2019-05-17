@@ -3,10 +3,47 @@ import * as functions from 'firebase-functions';
 import { Document, DocumentField, DocumentStatus, DocumentType, SiteInformation } from '../models';
 import * as taskService from '../services/task.service';
 
-export const onChangeRequestRendering = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite(async (change, context) => {
+export const onCreateDocumentRequestRendering = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onCreate(async (snap, context) => {
     const siteId = context.params.siteId;
-    const entryBefore = change.before.data() || {} as Document;
-    const entryAfter = change.after.data() || {} as Document;
+    const document = snap.data() as Document;
+
+    if (!document.standalone || document.status !== 'published') {
+        console.log(`The document is not published and standalone and is not managed by cache. Do nothing.`);
+        return null;
+    }
+
+    return taskService.createCache(siteId, document.url)
+});
+
+export const onDeleteDocumentCleanUp = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onDelete(async (snap, context) => {
+    const siteId = context.params.siteId;
+    const documentId = context.params.documentId;
+    const document = snap.data() as Document;
+
+    if (!document.standalone || document.status !== 'published') {
+        console.log(`The document is not published and standalone and is not managed by cache. Do nothing.`);
+        return null;
+    }
+
+    const referencingDocs = await admin.firestore()
+        .collection('tanam').doc(siteId)
+        .collection('documents')
+        .where('dependencies', 'array-contains', documentId)
+        .get();
+
+    const promises = [taskService.deleteCache(siteId, document.url)];
+    for (const doc of referencingDocs.docs) {
+        promises.push(taskService.updateCache(siteId, doc.data().url));
+    }
+
+    return Promise.all(promises);
+});
+
+export const onUpdateRequestRendering = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onUpdate(async (change, context) => {
+    const siteId = context.params.siteId;
+    const documentId = context.params.documentId;
+    const entryBefore = change.before.data() as Document;
+    const entryAfter = change.after.data() as Document;
 
     if (!entryBefore.standalone && !entryAfter.standalone) {
         console.log(`The document is not standalone and is not managed by cache. Do nothing.`);
@@ -20,9 +57,21 @@ export const onChangeRequestRendering = functions.firestore.document('tanam/{sit
         return null;
     }
 
+    await change.after.ref.update({ dependencies: [] } as Document);
+    const referencingDocs = await admin.firestore()
+        .collection('tanam').doc(siteId)
+        .collection('documents')
+        .where('dependencies', 'array-contains', documentId)
+        .where('rendered', '<', entryAfter.updated)
+        .get();
+
     const promises = [];
     promises.push(taskService.updateCache(siteId, entryBefore.url));
     promises.push(taskService.updateCache(siteId, entryAfter.url));
+
+    for (const doc of referencingDocs.docs) {
+        promises.push(taskService.updateCache(siteId, doc.data().url));
+    }
 
     return Promise.all(promises);
 });
