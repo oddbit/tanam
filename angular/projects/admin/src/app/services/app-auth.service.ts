@@ -25,7 +25,7 @@ export class AppAuthService {
     return this.fireAuth.auth.signOut();
   }
 
-  async reloadUserService() {
+  async reloadUser() {
     const idToken = await this.fireAuth.auth.currentUser.getIdToken(true);
     const payload = JSON.parse(this.b64DecodeUnicode(idToken.split('.')[1]));
     console.log('[User Token] ', payload);

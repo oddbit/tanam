@@ -24,7 +24,7 @@ export class ProfileWidgetComponent implements OnInit {
   }
 
   private async _reloaduser() {
-    const payload = await this.appAuthService.reloadUserService();
+    const payload = await this.appAuthService.reloadUser();
     if (!payload['tanam']) {
       alert('Fail to get user role, try again');
       this.logout();
