@@ -69,7 +69,7 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.router.navigateByUrl(url);
   }
   setTotalCount(dataSource: Object) {
-    const refNumEntries = dataSource['documentType'].numEntries;
+    const refNumEntries = dataSource['documentType'].documentCount;
     if (this.status === 'all') {
       this.total_count = refNumEntries.published + refNumEntries.unpublished;
     } else if (this.status === 'published') {
