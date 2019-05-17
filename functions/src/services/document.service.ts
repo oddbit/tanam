@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin';
 import { Document } from '../models';
 
 const siteCollection = () => admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
+const siteRef = () => admin.database().ref('tanam').child(process.env.GCLOUD_PROJECT);
 const normalizeUrl = (url: string) => `/${url}`.replace(/\/+/g, '/');
 
 export async function getDocumentById(docId: string): Promise<Document> {
@@ -48,5 +49,8 @@ export async function getDocumentByUrl(url: string): Promise<Document[]> {
  * @param references One or more document IDs that are being referred to in a document
  */
 export async function addDependency(docId: string, references: string | string[]) {
-    const documentsCollection = siteCollection().collection('documents');
+    console.log(`[addDependency] ${JSON.stringify({ docId, references })}`);
+    return siteCollection().collection('documents').doc(docId).update({
+        dependees: admin.firestore.FieldValue.arrayUnion(references),
+    } as Document);
 }
