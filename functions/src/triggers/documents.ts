@@ -34,7 +34,7 @@ export const onDeleteDocumentCleanUp = functions.firestore.document('tanam/{site
     return Promise.all(promises);
 });
 
-export const onUpdateRequestRendering = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onUpdate(async (change, context) => {
+export const onUpdateDocumentRequestRendering = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onUpdate(async (change, context) => {
     const siteId = context.params.siteId;
     const documentId = context.params.documentId;
     const entryBefore = change.before.data() as Document;
@@ -60,7 +60,9 @@ export const onUpdateRequestRendering = functions.firestore.document('tanam/{sit
     promises.push(taskService.updateCache(siteId, entryAfter.url));
 
     for (const doc of referencingDocs.docs) {
-        promises.push(taskService.updateCache(siteId, doc.data().url));
+        const referringDocument = doc.data() as Document;
+        console.log(`Referenced by document id=${referringDocument.id}, url=${referringDocument.url}`);
+        promises.push(taskService.updateCache(siteId, referringDocument.url));
     }
 
     return Promise.all(promises);
