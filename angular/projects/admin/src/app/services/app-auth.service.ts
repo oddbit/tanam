@@ -24,4 +24,21 @@ export class AppAuthService {
   logOut(): Promise<void> {
     return this.fireAuth.auth.signOut();
   }
+
+  async reloadUser() {
+    const idToken = await this.fireAuth.auth.currentUser.getIdToken(true);
+    const payload = JSON.parse(this.b64DecodeUnicode(idToken.split('.')[1]));
+    console.log('[User Token] ', payload);
+    return payload;
+  }
+
+  b64DecodeUnicode(str: string) {
+    return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
+      let code = p.charCodeAt(0).toString(16).toUpperCase();
+      if (code.length < 2) {
+        code = '0' + code;
+      }
+      return '%' + code;
+    }));
+  }
 }
