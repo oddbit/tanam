@@ -1,16 +1,44 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { CacheTask, Document, DocumentField, DocumentType, SiteInformation, DocumentStatus } from '../models';
+import { Document, DocumentField, DocumentStatus, DocumentType, SiteInformation } from '../models';
+import * as taskService from '../services/task.service';
 
-export const onChangeRequestRendering = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite(async (change, context) => {
+export const onCreateDocumentRequestRendering = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onCreate(async (snap, context) => {
     const siteId = context.params.siteId;
-    const entryBefore = change.before.data() || {} as Document;
-    const entryAfter = change.after.data() || {} as Document;
+    const document = snap.data() as Document;
 
-    if (!entryBefore.standalone && !entryAfter.standalone) {
-        console.log(`The document is not standalone and is not managed by cache. Do nothing.`);
+    if (!document.standalone || document.status !== 'published') {
+        console.log(`The document is not published and standalone and is not managed by cache. Do nothing.`);
         return null;
     }
+
+    return taskService.createCache(siteId, document.url)
+});
+
+export const onDeleteDocumentCleanUp = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onDelete(async (snap, context) => {
+    const siteId = context.params.siteId;
+    const documentId = context.params.documentId;
+    const document = snap.data() as Document;
+
+    const referencingDocs = await admin.firestore()
+        .collection('tanam').doc(siteId)
+        .collection('documents')
+        .where('dependencies', 'array-contains', documentId)
+        .get();
+
+    const promises = [taskService.deleteCache(siteId, document.url)];
+    for (const doc of referencingDocs.docs) {
+        promises.push(taskService.updateCache(siteId, doc.data().url));
+    }
+
+    return Promise.all(promises);
+});
+
+export const onUpdateDocumentRequestRendering = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onUpdate(async (change, context) => {
+    const siteId = context.params.siteId;
+    const documentId = context.params.documentId;
+    const entryBefore = change.before.data() as Document;
+    const entryAfter = change.after.data() as Document;
 
     if (['data', 'title', 'url', 'tags', 'standalone', 'status', 'published'].every(key =>
         JSON.stringify(entryBefore[key]) === JSON.stringify(entryAfter[key])
@@ -19,33 +47,25 @@ export const onChangeRequestRendering = functions.firestore.document('tanam/{sit
         return null;
     }
 
-    const siteInfoDoc = await admin.firestore().collection('tanam').doc(siteId).get();
-    const siteInfo = siteInfoDoc.data() as SiteInformation;
+    console.log(JSON.stringify({ siteId, documentId, urlBefore: entryBefore.url, urlAfter: entryAfter.url }));
+    const referencingDocs = await admin.firestore()
+        .collection('tanam').doc(siteId)
+        .collection('documents')
+        .where('dependencies', 'array-contains', documentId)
+        .where('rendered', '<', entryAfter.updated)
+        .get();
 
-    const tasks = [];
-    for (const domain of siteInfo.domains) {
-        if (change.before.exists) {
-            console.log(`Request cache update entryBefore.url=${entryBefore.url}`);
-            tasks.push({
-                action: 'update',
-                domain: domain,
-                url: entryBefore.url,
-            } as CacheTask);
-        }
+    const promises = [];
+    promises.push(taskService.updateCache(siteId, entryBefore.url));
+    promises.push(taskService.updateCache(siteId, entryAfter.url));
 
-        if (change.after.exists) {
-            console.log(`Request cache update entryAfter.url=${entryAfter.url}`);
-            tasks.push({
-                action: 'update',
-                domain: domain,
-                url: entryAfter.url,
-            } as CacheTask);
-        }
+    for (const doc of referencingDocs.docs) {
+        const referringDocument = doc.data() as Document;
+        console.log(`Referenced by document id=${referringDocument.id}, url=${referringDocument.url}`);
+        promises.push(taskService.updateCache(siteId, referringDocument.url));
     }
 
-    return Promise.all(
-        tasks.map(task => admin.database().ref('tanam/{siteId}/tasks/cache').push(task))
-    );
+    return Promise.all(promises);
 });
 
 export const updateDocumentStatusCounter = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite((change, context) => {

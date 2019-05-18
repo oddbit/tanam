@@ -11,6 +11,8 @@ export interface Document {
     status: DocumentStatus;
     tags: string[];
     standalone: boolean;
+    dependencies: string[] | any; // Array of ids for documents that are referred to by this document
+    rendered?: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue.serverTimestamp;
     published?: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue.serverTimestamp;
     updated: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue.serverTimestamp;
     created: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue.serverTimestamp;
