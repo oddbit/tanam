@@ -1,8 +1,8 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { ObjectMetadata } from 'firebase-functions/lib/providers/storage';
 import * as sharp from 'sharp';
 import { TanamFile } from '../models';
+import { SHA1 } from 'crypto-js';
 
 export const onUserImageUpload = functions.storage.object().onFinalize(async (storageObject) => {
   const regexNameMatch = storageObject.name.match(/^\/?tanam\/(.*)\/upload\//);
@@ -73,33 +73,33 @@ export const onUserImageUpload = functions.storage.object().onFinalize(async (st
 });
 
 
-export const uploadAssetFiles = functions.storage.object().onFinalize(async (object: ObjectMetadata) => {
+export const onThemeAssetsFileUpload = functions.storage.object().onFinalize(async (storageObject) => {
+  const regexNameMatch = storageObject.name.match(/^\/?tanam\/(.*)\/themes\//);
 
-  if (!object.name.startsWith(`tanam/${process.env.GCLOUD_PROJECT}/themes/`)) {
-    console.log(`Not an upload asset file task: ${object.name} (${object.contentType})`);
+  if (!regexNameMatch) {
+    console.log(`Not an upload asset file task: ${storageObject.name} (${storageObject.contentType})`);
     return null;
   }
-  console.log('[UploadAssetFiles]' + JSON.stringify(object))
-  const objectNameArr = object.name.split('/');
+  console.log('[UploadAssetFiles]' + JSON.stringify(storageObject))
+  const objectNameArr = storageObject.name.split('/');
   const themeId = objectNameArr[3];
 
-  const originalSuffix = object.name.lastIndexOf('.') > 0 ? object.name.substr(object.name.lastIndexOf('.')) : '';
-  const firestoreRef = admin.firestore()
-    .collection('tanam').doc(process.env.GCLOUD_PROJECT)
+  const siteId = regexNameMatch[1];
+  const fileId = SHA1(storageObject.name).toString().toLowerCase();
+
+  return admin.firestore()
+    .collection('tanam').doc(siteId)
     .collection('themes').doc(themeId)
-    .collection('assets').doc()
-
-  const tanamFile: TanamFile = {
-    id: firestoreRef.id,
-    title: object.name.substr(object.name.lastIndexOf('/') + 1),
-    bucket: object.bucket,
-    filePath: object.name,
-    updated: admin.firestore.FieldValue.serverTimestamp(),
-    created: admin.firestore.FieldValue.serverTimestamp(),
-    bytes: Number(object.size),
-    mimeType: object.contentType,
-    fileType: object.contentType,
-  };
-
-  return firestoreRef.set(tanamFile);
+    .collection('assets').doc(fileId)
+    .set({
+      id: fileId,
+      title: storageObject.name.substr(storageObject.name.lastIndexOf('/') + 1),
+      bucket: storageObject.bucket,
+      filePath: storageObject.name,
+      updated: admin.firestore.FieldValue.serverTimestamp(),
+      created: admin.firestore.FieldValue.serverTimestamp(),
+      bytes: Number(storageObject.size),
+      mimeType: storageObject.contentType,
+      fileType: storageObject.contentType,
+    } as TanamFile);
 });
