@@ -8,6 +8,7 @@ import { SiteService } from '../../../services/site.service';
 import { documentTypeMaterialIcons } from './document-type-form.icons';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { DialogService } from '../../../services/dialog.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 interface FieldType {
   type: DocumentFieldFormElement;
@@ -195,5 +196,9 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
       standalone: formData.standalone
     } as DocumentType);
     this.snackBar.open('Saved', 'Dismiss', { duration: 2000 });
+  }
+
+  rearrangeField(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.fieldForms.controls, event.previousIndex, event.currentIndex);
   }
 }

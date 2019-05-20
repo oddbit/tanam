@@ -11,7 +11,7 @@
                          title="Edit template"
                          (click)='editTemplate()'></tanam-action-button>
   </tanam-context-actions>
-  <mat-card class="document-type-static-card">
+  <mat-card class="document-type-static-card ct-information">
     <mat-card-header>
       <mat-card-title>Content type information</mat-card-title>
     </mat-card-header>
@@ -101,11 +101,14 @@
     </div>
     <div>
       <mat-radio-group formControlName="indexTitle">
-        <div formArrayName="fields">
-          <div class="row"
+        <div formArrayName="fields"
+             cdkDropList
+             (cdkDropListDropped)="rearrangeField($event)">
+          <div class=""
                *ngFor="let field of fieldForms.controls; let i=index"
                [formGroupName]="i"
-               id="ct-field-{{i}}">
+               id="ct-field-{{i}}"
+               cdkDrag>
             <mat-card class="document-type-static-card field-card">
               <mat-card-content class="field-card-content">
                 <div class="field-wrapper">
