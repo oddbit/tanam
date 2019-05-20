@@ -1,9 +1,10 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { Document, SiteInformation } from '../models';
+import { Document, SiteInformation, TanamFile } from '../models';
 import * as taskService from '../services/task.service';
 
-export const onUpdateActiveTheme = functions.firestore.document('tanam/{siteId}').onUpdate(async (change) => {
+export const onUpdateActiveTheme = functions.firestore.document('tanam/{siteId}').onUpdate(async (change, context) => {
+  const siteId = context.params.siteId;
   const siteInfoBefore = change.before.data() as SiteInformation;
   const siteInfoAfter = change.after.data() as SiteInformation;
   if (siteInfoBefore.theme === siteInfoAfter.theme) {
@@ -11,8 +12,45 @@ export const onUpdateActiveTheme = functions.firestore.document('tanam/{siteId}'
     return null;
   }
 
-  console.log(`TODO: Update all old assets`);
-  console.log(`TODO: Update all document URLs`);
+  const promises = [];
+
+  const oldAssetFiles = await admin.firestore()
+    .collection('tanam').doc(siteId)
+    .collection('themes').doc(siteInfoBefore.theme)
+    .collection('assets')
+    .get();
+
+  console.log(`Clearing cache for ${oldAssetFiles.docs.length} assets in previous theme (${siteInfoBefore.theme}).`);
+  for (const doc of oldAssetFiles.docs) {
+    const file = doc.data() as TanamFile;
+    promises.push(taskService.deleteCache(siteId, `/_/theme/${encodeURIComponent(file.title)}`));
+  }
+
+  const currentAssetFiles = await admin.firestore()
+    .collection('tanam').doc(siteId)
+    .collection('themes').doc(siteInfoAfter.theme)
+    .collection('assets')
+    .get();
+
+  console.log(`Heating cache for ${currentAssetFiles.docs.length} assets in current theme (${siteInfoAfter.theme}).`);
+  for (const doc of currentAssetFiles.docs) {
+    const file = doc.data() as TanamFile;
+    promises.push(taskService.createCache(siteId, `/_/theme/${encodeURIComponent(file.title)}`));
+  }
+
+  const publishedDocs = await admin.firestore()
+    .collection('tanam').doc(siteId)
+    .collection('documents')
+    .where('status', '==', 'published')
+    .get();
+
+  console.log(`Updating cache for ${publishedDocs.docs.length} published documents.`);
+  for (const doc of publishedDocs.docs) {
+    const document = doc.data() as Document;
+    promises.push(taskService.updateCache(siteId, document.url));
+  }
+
+  return Promise.all(promises);
 });
 
 export const onDeleteThemeDeleteTemplates = functions.firestore.document('tanam/{siteId}/themes/{themeId}').onDelete(async (snap) => {
@@ -85,6 +123,7 @@ export const onWriteTemplateUpdateCache = functions.firestore.document('tanam/{s
     .where('status', '==', 'published')
     .get();
 
+  console.log(`Updating cache for ${publishedDocs.docs.length} published documents.`);
   const promises = [];
   for (const doc of publishedDocs.docs) {
     const document = doc.data() as Document;
