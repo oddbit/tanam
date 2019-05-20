@@ -108,11 +108,13 @@
                id="ct-field-{{i}}">
             <mat-card class="document-type-static-card field-card">
               <mat-card-content class="field-card-content">
-                <div id="radio-isTitle">
-                  <mat-radio-button [value]="i"
-                                    matTooltip="Set this field as title"></mat-radio-button>
-                </div>
                 <div class="field-wrapper">
+                  <div id="radio-isTitle"
+                       class="col">
+                    <h5 class="mat-caption">Use As Title</h5>
+                    <mat-radio-button [value]="i"
+                                      matTooltip="Set this field as title"></mat-radio-button>
+                  </div>
                   <div class="col">
                     <h5 class="mat-caption">Key</h5>
                     <mat-form-field appearance="outline">
