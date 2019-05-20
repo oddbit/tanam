@@ -5,6 +5,20 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
+          "fieldPath": "dependencies",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "rendered",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "documents",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
           "fieldPath": "documentType",
           "order": "ASCENDING"
         },

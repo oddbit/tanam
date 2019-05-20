@@ -2,6 +2,7 @@ import * as cheerio from 'cheerio';
 import * as dust from 'dustjs-helpers';
 import { PageContext } from './models';
 import * as documentContextService from './services/page-context.service';
+import * as documentService from './services/document.service';
 import * as siteInfoService from './services/site-info.service';
 import * as templateService from './services/template.service';
 
@@ -24,17 +25,19 @@ dust.helpers.debugDump = (chunk, context, bodies, params) => {
     return chunk.write(outputData.replace(/</g, '\\u003c'));
 }
 
-dust.helpers.document = (chunk, context, bodies, params) => {
+dust.helpers.document = async (chunk, context, bodies, params) => {
     console.log(`[dust.helpers.document] Getting document id: ${JSON.stringify(params.id)}`);
     if (!params.document) {
         console.error(`[dust.helpers.document] Missing reference parameter "document"`);
         throw new Error(`Dust helper must declare referencing context ID.`);
     }
 
-    return documentContextService.getPageContextById(params.id);
+    const pageContext = await documentContextService.getPageContextById(params.id);
+    await documentService.addDependency(params.document.id, pageContext.document.id);
+    return pageContext;
 }
 
-dust.helpers.documents = (chunk, context, bodies, params) => {
+dust.helpers.documents = async (chunk, context, bodies, params) => {
     console.log(`[dust.helpers.documents] Getting documents: ${JSON.stringify({
         limit: params.limit,
         documentType: params.documentType,
@@ -46,13 +49,16 @@ dust.helpers.documents = (chunk, context, bodies, params) => {
         throw new Error(`Dust helper must declare referencing context ID.`);
     }
 
-    return documentContextService.queryPageContext(params.documentType, {
+    const pageContexts = await documentContextService.queryPageContext(params.documentType, {
         limit: params.limit,
         orderBy: {
             field: params.orderBy,
             sortOrder: params.sortOrder,
         },
     });
+
+    await documentService.addDependency(params.document.id, pageContexts.map(pageContext => pageContext.document.id));
+    return pageContexts;
 }
 
 export async function compileTemplate(context: PageContext) {
