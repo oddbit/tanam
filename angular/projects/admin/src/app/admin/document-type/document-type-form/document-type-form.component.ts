@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { DocumentField, DocumentType, DocumentFieldFormElement } from 'tanam-models';
+import { DocumentField, DocumentType, DocumentFieldFormElement, DocumentFieldValidator } from 'tanam-models';
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { SiteService } from '../../../services/site.service';
 import { documentTypeMaterialIcons } from './document-type-form.icons';
@@ -24,6 +24,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   @Input() onCancelRoute: string;
 
   themeId: string;
+  documentTypes$ = this.documentTypeService.getDocumentTypes();
 
   readonly domain$: Observable<string> = this.siteSettingsService.getPrimaryDomain();
   readonly icons = documentTypeMaterialIcons;
@@ -47,6 +48,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     { type: 'image', title: 'Image' },
     { type: 'slide-toggle', title: 'Slide toggle value for yes/no' },
   ];
+  readonly validators: DocumentFieldValidator[] = ['required'];
 
   private _subscriptions: Subscription[] = [];
 
@@ -95,15 +97,20 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     this.router.navigateByUrl(`/_/admin/theme/${this.themeId}/templates/${this.documentTypeForm.controls['slug'].value}`);
   }
 
-  addField(field?: DocumentField, index?: number) {
+  addField(field?: DocumentField, index?: number, scroll?: boolean) {
     const val = field ? field : { type: 'input-text' } as DocumentField;
     console.log(val);
-    const formField = this.formBuilder.group({
+    const fields: any = {
       type: [val.type, Validators.required],
       title: [val.title, Validators.required],
       key: [val.key, Validators.required],
       isTitle: [val.isTitle, Validators.required],
-    });
+      validators: [val.validators]
+    };
+    if (field && field.type === 'document-reference') {
+      fields.documentType = [val.documentType, Validators.required];
+    }
+    const formField = this.formBuilder.group(fields);
     if (val.isTitle) {
       this.documentTypeForm.controls['indexTitle'].setValue(index);
     }
@@ -113,6 +120,13 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.fieldForms.push(formField);
+
+    // Scroll to added field after adding one
+    if (scroll) {
+      setTimeout(() => {
+        document.getElementById(`ct-field-${this.fieldForms.length - 1}`).scrollIntoView();
+      }, 300);
+    }
   }
 
   deleteField(index: number) {
@@ -166,7 +180,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
       return;
     }
 
-    if (this.documentTypeForm.errors) {
+    if (this.documentTypeForm.invalid) {
       this.snackBar.open('Form has errors', 'Dismiss', { duration: 2000 });
       return;
     }
