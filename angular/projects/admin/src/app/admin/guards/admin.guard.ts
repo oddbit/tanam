@@ -15,8 +15,8 @@ export class AdminGuard implements CanActivate {
 
   async canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const isAdmin = this.userService.hasRole('admin').pipe(take(1)).toPromise();
-    const isOwner = this.userService.hasRole('owner').pipe(take(1)).toPromise();
-    const results = await Promise.all([isAdmin, isOwner]);
+    const isSuperAdmin = this.userService.hasRole('superAdmin').pipe(take(1)).toPromise();
+    const results = await Promise.all([isAdmin, isSuperAdmin]);
 
     if (results.some(roleCheck => roleCheck)) {
       return true;

@@ -5,6 +5,20 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
+          "fieldPath": "dependencies",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "rendered",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "documents",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
           "fieldPath": "documentType",
           "order": "ASCENDING"
         },
@@ -136,6 +150,20 @@
       "fields": [
         {
           "fieldPath": "isRead",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "updated",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "files",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "fileType",
           "order": "ASCENDING"
         },
         {

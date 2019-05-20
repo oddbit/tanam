@@ -9,6 +9,7 @@ import { renderPage } from './render';
 import * as configService from './services/config.service';
 import { getPageContextByUrl } from './services/page-context.service';
 import * as fileService from './services/file.service';
+import { TanamFile } from './models';
 
 const DIST_FOLDER = join(process.cwd(), 'browser');
 const TANAM_FOLDER = join(process.cwd(), 'node_modules', 'tanam', 'browser');
@@ -30,6 +31,7 @@ const CACHE_CONFIG = {
 };
 
 export const initializeApp = configService.setConfig;
+
 
 /**
  * Get a cache header string that can be set in a HTTP response header.
@@ -78,16 +80,17 @@ async function _registerHostname(request) {
 // Match the Angular generated files with the unique hash
 // Serve them with fairly long cache lifetime since they'll be unique for each deploy
 app.get(/^\/?main|polyfills|runtime|styles|vendor\.[\w\d]{20}\.js|css\/?$/i, async (request, response) => {
+    console.log(`Angular scripts: GET ${request.url}`);
     const requestUrl = request.url.split('/');
     const distFolder = await _getDistFolder();
-    response.setHeader('Cache-Control', `public, max-age=600, s-maxage=8640000, stale-while-revalidate=120`);
+    response.setHeader('Cache-Control', `public, max-age=604800, s-maxage=31536000, stale-while-revalidate=600`);
     response.sendFile(join(distFolder, ...requestUrl));
     return null;
 });
 
 // Handle Angular app's assets
 app.get(/^\/?assets\/(.*)\/?$/i, async (request, response) => {
-    console.log(`[express.assets] ${request.url}`);
+    console.log(`Assets: ${request.url}`);
 
     response.setHeader('Cache-Control', `public, max-age=600, s-maxage=3600, stale-while-revalidate=120`);
 
@@ -105,20 +108,44 @@ app.get(/^\/?assets\/(.*)\/?$/i, async (request, response) => {
 });
 
 // Handle request for user uploaded files
+// DEPRECATED: use /_/file/:fileId
 app.get('/_/image/:fileId', async (request, response) => {
     const fileId = request.params.fileId;
+    console.warn(`DEPRECATED: use /_/file/${fileId}`);
     console.log(`GET ${request.url} (fileId: ${fileId})`);
     console.log(`URL query parameters: ${JSON.stringify(request.query, null, 2)}`);
 
-    const fileContents = await fileService.getImageFile(fileId, request.query.s);
-    if (!fileContents) {
-        console.log(`[HTTP 404] No media file: ${request.url}`);
+    const userFile: TanamFile = await fileService.getUserFile(fileId);
+    if (!userFile) {
+        console.log(`[HTTP 404] No such file: ${request.url}`);
         response.status(404).send(`Not found: ${request.url}`);
         return;
     }
 
-    response.setHeader('Cache-Control', getCacheHeader());
-    response.send(fileContents);
+    const storagePath = userFile.variants[request.query.s || request.query.size] || userFile.filePath;
+    response.setHeader('Cache-Control', `public, max-age=604800, s-maxage=31536000, stale-while-revalidate=600`);
+    response.setHeader('Content-Type', fileService.getContentTypeFromPath(storagePath));
+    response.send(await fileService.getFileContents(storagePath));
+    return null;
+});
+
+// Handle request for user uploaded files
+app.get('/_/file/:fileId', async (request, response) => {
+    const fileId = request.params.fileId;
+    console.log(`GET ${request.url} (fileId: ${fileId})`);
+    console.log(`URL query parameters: ${JSON.stringify(request.query, null, 2)}`);
+
+    const userFile: TanamFile = await fileService.getUserFile(fileId);
+    if (!userFile) {
+        console.log(`[HTTP 404] No such file: ${request.url}`);
+        response.status(404).send(`Not found: ${request.url}`);
+        return;
+    }
+
+    const storagePath = userFile.variants[request.query.s || request.query.size] || userFile.filePath;
+    response.setHeader('Cache-Control', `public, max-age=604800, s-maxage=31536000, stale-while-revalidate=600`);
+    response.setHeader('Content-Type', fileService.getContentTypeFromPath(storagePath));
+    response.send(await fileService.getFileContents(storagePath));
     return null;
 });
 
@@ -133,16 +160,16 @@ app.get(/^\/?_\/theme\/(.*)$/, async (request, response) => {
         return null;
     }
 
-    const fileContents = await fileService.getThemeAssetsFile(filePath);
-    if (!fileContents) {
+    const themeAssetFile: TanamFile = await fileService.geThemeAssetsFile(filePath);
+    if (!themeAssetFile) {
         console.log(`[HTTP 404] No media file: ${request.url}`);
         response.status(404).send(`Not found: ${request.url}`);
         return;
     }
 
     response.setHeader('Content-Type', fileService.getContentTypeFromPath(filePath));
-    response.setHeader('Cache-Control', getCacheHeader());
-    response.send(fileContents);
+    response.setHeader('Cache-Control', `public, max-age=604800, s-maxage=31536000, stale-while-revalidate=600`);
+    response.send(await fileService.getFileContents(themeAssetFile.filePath));
     return null;
 });
 

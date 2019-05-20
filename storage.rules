@@ -26,12 +26,12 @@ service firebase.storage {
         return isSignedIn() && request.auth.token.tanam[siteId].size() > 0;
       }
 
-			function isOwner() {
-        return hasUserRole("owner");
+			function isSuperAdmin() {
+        return hasUserRole("superAdmin");
       }
 
       function isAtLeastManager() {
-        return isOwner() || hasUserRole("manager");
+        return isSuperAdmin() || hasUserRole("manager");
       }
 
       function isPublisher() {

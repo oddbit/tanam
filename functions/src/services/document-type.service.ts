@@ -16,7 +16,7 @@ export async function createDefaultDocuments() {
         standalone: true,
         created: admin.firestore.FieldValue.serverTimestamp(),
         updated: admin.firestore.FieldValue.serverTimestamp(),
-        numEntries: {
+        documentCount: {
             published: 0,
             unpublished: 0,
         },
@@ -59,7 +59,7 @@ export async function createDefaultDocuments() {
         standalone: true,
         created: admin.firestore.FieldValue.serverTimestamp(),
         updated: admin.firestore.FieldValue.serverTimestamp(),
-        numEntries: {
+        documentCount: {
             published: 0,
             unpublished: 0,
         },
@@ -114,7 +114,7 @@ export async function createDefaultDocuments() {
         standalone: false,
         created: admin.firestore.FieldValue.serverTimestamp(),
         updated: admin.firestore.FieldValue.serverTimestamp(),
-        numEntries: {
+        documentCount: {
             published: 0,
             unpublished: 0,
         },
@@ -180,7 +180,7 @@ export async function createDefaultDocuments() {
         standalone: false,
         created: admin.firestore.FieldValue.serverTimestamp(),
         updated: admin.firestore.FieldValue.serverTimestamp(),
-        numEntries: {
+        documentCount: {
             published: 0,
             unpublished: 0,
         },
@@ -234,7 +234,7 @@ export async function createDefaultDocuments() {
         standalone: true,
         created: admin.firestore.FieldValue.serverTimestamp(),
         updated: admin.firestore.FieldValue.serverTimestamp(),
-        numEntries: {
+        documentCount: {
             published: 0,
             unpublished: 0,
         },

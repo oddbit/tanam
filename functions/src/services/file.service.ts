@@ -14,35 +14,35 @@ export async function getFavicon() {
     return fileContent;
 }
 
-export async function getThemeAssetsFile(filePath: string) {
-    console.log(`[getThemeAssetsFile] ${JSON.stringify({ filePath })}`);
+export async function geThemeAssetsFile(filePath: string) {
+    console.log(`[geThemeAssetsFile] ${JSON.stringify({ filePath })}`);
     const siteInfo = await siteInfoService.getSiteInfo();
 
-    const storagePath = `/tanam/${siteInfo.id}/themes/${siteInfo.theme}/${filePath}`;
+    const fileQuery = await siteCollection()
+        .collection('themes').doc(siteInfo.theme)
+        .collection('assets').where('title', '==', filePath)
+        .limit(1)
+        .get();
 
-    console.log(`[getThemeAssetsFile] ${JSON.stringify({ storagePath })}`);
-    const contentFile = await admin.storage().bucket().file(storagePath);
-    const [contentExists] = await contentFile.exists();
-    if (!contentExists) {
+    if (fileQuery.docs.length === 0) {
         return null;
     }
 
-    const [fileContent] = await contentFile.download();
-    const bytesOfData = (fileContent.byteLength / 1024).toFixed(2);
-    console.log(`[getCloudStorageFile] File '${storagePath}' size: ${bytesOfData} kB`);
-    return fileContent;
+    return fileQuery.docs[0].data() as TanamFile;
 }
 
-export async function getImageFile(fileId: string, variant?: 'large' | 'medium' | 'small') {
-    console.log(`[getImageFile] ${JSON.stringify({ fileId, variant })}`);
+export async function getUserFile(fileId: string) {
+    console.log(`[getUserFile] ${JSON.stringify({ fileId })}`);
     const doc = await siteCollection()
         .collection('files').doc(fileId)
         .get();
 
-    const tanamFile = doc.data() as TanamFile;
-    console.log(`[getImageFile] ${JSON.stringify({ tanamFile })}`);
+    return doc.data() as TanamFile;
+}
 
-    const storagePath = tanamFile.variants[variant] || tanamFile.filePath;
+export async function getFileContents(storagePath: string) {
+    console.log(`[getFileContents] ${JSON.stringify({ storagePath })}`);
+
     const contentFile = await admin.storage().bucket().file(storagePath);
     const [contentExists] = await contentFile.exists();
     if (!contentExists) {
@@ -51,7 +51,7 @@ export async function getImageFile(fileId: string, variant?: 'large' | 'medium' 
 
     const [fileContent] = await contentFile.download();
     const bytesOfData = (fileContent.byteLength / 1024).toFixed(2);
-    console.log(`[getCloudStorageFile] File '${storagePath}' size: ${bytesOfData} kB`);
+    console.log(`[getFileContents] File '${storagePath}' size: ${bytesOfData} kB`);
     return fileContent;
 }
 
