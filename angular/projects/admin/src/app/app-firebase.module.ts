@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { AngularFireModule, FirebaseOptionsToken } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AppConfigService } from './services/app-config.service';
 
@@ -13,6 +14,7 @@ import { AppConfigService } from './services/app-config.service';
     AngularFireModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
+    AngularFireDatabaseModule
   ],
   exports: [
     CommonModule,
@@ -20,6 +22,7 @@ import { AppConfigService } from './services/app-config.service';
     AngularFireModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
+    AngularFireDatabaseModule
   ],
   providers: [
     AppConfigService,

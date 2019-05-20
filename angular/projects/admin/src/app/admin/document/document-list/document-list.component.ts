@@ -1,11 +1,12 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { MatPaginator, MatSort } from '@angular/material';
+import { MatPaginator, MatSort, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { Observable, Subscription, merge } from 'rxjs';
-import { DocumentType } from 'tanam-models';
+import { DocumentType, Document } from 'tanam-models';
 import { DocumentService } from '../../../services/document.service';
 import { DocumentListDataSource } from './document-list-datasource';
 import { tap } from 'rxjs/operators';
+import { TaskService } from '../../../services/task.service';
 
 @Component({
   selector: 'tanam-document-list',
@@ -26,9 +27,11 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private readonly router: Router,
     private readonly documentService: DocumentService,
+    private readonly taskService: TaskService,
+    private snackBar: MatSnackBar,
   ) { }
 
-  displayedColumns = ['title', 'slug', 'updated'];
+  displayedColumns = ['title', 'slug', 'updated', 'actionMenu'];
 
   ngOnInit() {
     this.loadDataSource();
@@ -39,19 +42,19 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
     merge(this.sort.sortChange, this.paginator.page)
-        .pipe(
-          tap(() => {
-            this.loadDataSource();
-          }
+      .pipe(
+        tap(() => {
+          this.loadDataSource();
+        }
         )
       ).subscribe();
-}
+  }
 
   ngOnDestroy() {
     this._subscriptions.filter(s => !!s && !s.closed).forEach(s => s.unsubscribe());
   }
 
-  private loadDataSource () {
+  private loadDataSource() {
     this._subscriptions.push(this.documentType$.subscribe(documentType => {
       this.dataSource = new DocumentListDataSource(documentType, this.documentService, this.paginator, this.sort, this.status);
       this.setTotalCount(this.dataSource);
@@ -62,7 +65,7 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     const url = `/_/admin/document/${documentId}`;
     this.router.navigateByUrl(url);
   }
-  setTotalCount (dataSource: any) {
+  setTotalCount(dataSource: any) {
     const refNumEntries = dataSource['documentType'].documentCount;
     if (this.status === 'all') {
       this.total_count = refNumEntries.published + refNumEntries.unpublished;
@@ -71,5 +74,15 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.total_count = refNumEntries.unpublished;
     }
+  }
+
+  async rebuildEntry(document: Document) {
+    this.snackBar.open('Rebuilding...', 'Dismiss', {
+      duration: 5000
+    });
+    await this.taskService.updateCache(document.url);
+    this.snackBar.open('Success', 'Dismiss', {
+      duration: 2000
+    });
   }
 }
