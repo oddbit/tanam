@@ -70,8 +70,8 @@ export const onUpdateDocumentRequestRendering = functions.firestore.document('ta
 
 export const updateDocumentStatusCounter = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite((change, context) => {
     const siteId = context.params.siteId;
-    const entryBefore = change.before.data() as Document;
-    const entryAfter = change.after.data() as Document;
+    const entryBefore = change.before.data() || {} as Document;
+    const entryAfter = change.after.data() || {} as Document;
 
     if (change.before.exists && change.after.exists && entryAfter.status === entryBefore.status) {
         console.log(`Document status unchanged. No counters updated.`);
