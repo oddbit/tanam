@@ -87,19 +87,26 @@ export const onThemeAssetsFileUpload = functions.storage.object().onFinalize(asy
   const siteId = regexNameMatch[1];
   const fileId = SHA1(storageObject.name).toString().toLowerCase();
 
-  return admin.firestore()
+  const fileRef = admin.firestore()
     .collection('tanam').doc(siteId)
     .collection('themes').doc(themeId)
-    .collection('assets').doc(fileId)
-    .set({
-      id: fileId,
-      title: storageObject.name.substr(storageObject.name.lastIndexOf('/') + 1),
-      bucket: storageObject.bucket,
-      filePath: storageObject.name,
-      updated: admin.firestore.FieldValue.serverTimestamp(),
-      created: admin.firestore.FieldValue.serverTimestamp(),
-      bytes: Number(storageObject.size),
-      mimeType: storageObject.contentType,
-      fileType: storageObject.contentType,
-    } as TanamFile);
+    .collection('assets').doc(fileId);
+
+  const fileData = {
+    id: fileId,
+    title: storageObject.name.substr(storageObject.name.lastIndexOf('/') + 1),
+    bucket: storageObject.bucket,
+    filePath: storageObject.name,
+    updated: admin.firestore.FieldValue.serverTimestamp(),
+    bytes: Number(storageObject.size),
+    mimeType: storageObject.contentType,
+    fileType: storageObject.contentType,
+  } as TanamFile;
+
+  const fileDoc = await fileRef.get();
+  if (!fileDoc.exists) {
+    fileData.created = admin.firestore.FieldValue.serverTimestamp();
+  }
+
+  return fileRef.set(fileData);
 });

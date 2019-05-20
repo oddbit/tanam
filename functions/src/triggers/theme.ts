@@ -1,7 +1,20 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { SiteInformation } from '../models';
 
-export const deleteTemplates = functions.firestore.document('tanam/{siteId}/themes/{themeId}').onDelete(async (snap) => {
+export const onUpdateActiveTheme = functions.firestore.document('tanam/{siteId}').onUpdate(async (change) => {
+  const siteInfoBefore = change.before.data() as SiteInformation;
+  const siteInfoAfter = change.after.data() as SiteInformation;
+  if (siteInfoBefore.theme === siteInfoAfter.theme) {
+    console.log(`Active theme is unchanged. Nothing to do.`);
+    return null;
+  }
+
+  console.log(`TODO: Update all old assets`);
+  console.log(`TODO: Update all document URLs`);
+});
+
+export const onDeleteThemeDeleteTemplates = functions.firestore.document('tanam/{siteId}/themes/{themeId}').onDelete(async (snap) => {
   console.log(`Deleting all templates for theme ${snap.data().title} (${snap.data().id})`);
   const templates = await snap.ref.collection('templates').get();
 
@@ -26,7 +39,7 @@ export const deleteTemplates = functions.firestore.document('tanam/{siteId}/them
   return Promise.all(promises);
 });
 
-export const deleteAssets = functions.firestore.document('tanam/{siteId}/themes/{themeId}').onDelete(async (snap) => {
+export const onDeleteThemeDeleteAssets = functions.firestore.document('tanam/{siteId}/themes/{themeId}').onDelete(async (snap) => {
   console.log(`Deleting all assets for theme ${snap.data().title} (${snap.data().id})`);
   const assets = await snap.ref.collection('assets').get();
 
