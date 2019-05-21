@@ -1,11 +1,11 @@
 <div class="mat-elevation-z8">
-    <table mat-table
-           class="full-width-table"
-           [dataSource]="dataSource"
-           matSort
-           matSortActive="updated"
-           matSortDirection="desc"
-           aria-label="Elements">
+  <table mat-table
+         class="full-width-table"
+         [dataSource]="dataSource"
+         matSort
+         matSortActive="updated"
+         matSortDirection="desc"
+         aria-label="Elements">
 
     <ng-container matColumnDef="title">
       <th mat-header-cell
@@ -41,7 +41,7 @@
   <mat-paginator #paginator
                  [length]="total_count"
                  [pageIndex]="0"
-                 [pageSize]="10"
-                 [pageSizeOptions]="[10, 20, 50, 100]">
+                 [pageSize]="100"
+                 [pageSizeOptions]="[100]">
   </mat-paginator>
 </div>
