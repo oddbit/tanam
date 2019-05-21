@@ -17,11 +17,13 @@
 
 ::ng-deep .mat-menu-panel.mat-menu-user-on-nav {
   max-width: 350px !important;
+  .mat-menu-content:not(:empty) {
+    padding: 0;
+  }
 }
 .menu-content {
   display: flex;
   align-items: flex-start;
-  padding: 12px 20px;
   .avatar {
     max-width: 96px;
     width: 100%;

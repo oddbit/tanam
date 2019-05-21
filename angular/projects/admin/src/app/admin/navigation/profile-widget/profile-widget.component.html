@@ -2,9 +2,9 @@
         aria-label="User Option"
         mat-icon-button
         class="btn-wrapper">
-  <div class="img-wrapper">
-    <img *ngIf="currentUser$ | async as user"
-         src="{{user.photoUrl}}"
+  <div *ngIf="currentUser$ | async as user"
+       class="img-wrapper">
+    <img [src]="user.photoUrl"
          alt="User"
          [matMenuTriggerFor]="userOption"
          [matMenuTriggerData]="{user: user}">
@@ -15,18 +15,21 @@
           class="mat-menu-user-on-nav">
   <ng-template matMenuContent
                let-user="user">
-    <div class="menu-content">
-      <img src="{{user.photoUrl}}"
-           alt="User"
-           class="avatar">
-      <div class="main-content">
-        <h5 class="mat-body-strong">{{user.name}}</h5>
-        <h5 class="mat-body">{{user.email}}</h5>
-        <button type="button"
-                mat-flat-button
-                color="primary"
-                (click)="logout()">LOGOUT</button>
+    <mat-card class="mat-elevation-z0">
+      <div class="menu-content">
+        <img *ngIf="user.photoUrl"
+             [src]="user.photoUrl"
+             alt="User"
+             class="avatar">
+        <div class="main-content">
+          <h5 class="mat-body-strong">{{user.name}}</h5>
+          <h5 class="mat-body">{{user.email}}</h5>
+          <button type="button"
+                  mat-flat-button
+                  color="primary"
+                  (click)="logout()">LOGOUT</button>
+        </div>
       </div>
-    </div>
+    </mat-card>
   </ng-template>
 </mat-menu>
