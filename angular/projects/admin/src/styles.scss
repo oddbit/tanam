@@ -50,3 +50,7 @@ body {
 .mat-toolbar-multiple-rows {
   min-height: 56px !important;
 }
+
+.primary-color {
+  color: mat-color($tanam-brand-color) !important;
+}
