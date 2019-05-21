@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { AppAuthService } from '../services/app-auth.service';
 import { UserService } from '../services/user.service';
-import { AppearanceService } from '../services/appearance.service';
 
 @Component({
   selector: 'tanam-admin',
@@ -19,10 +18,8 @@ export class AdminComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly userService: UserService,
     private readonly appAuthService: AppAuthService,
-    private readonly appearanceService: AppearanceService
   ) {
-    // userService.overlayTheme();
-    appearanceService.initAppearanceMode();
+    userService.overlayTheme();
   }
 
   ngOnInit() {
