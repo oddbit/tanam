@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { DocumentField, DocumentType, DocumentFieldFormElement } from 'tanam-models';
+import { DocumentField, DocumentType, DocumentFieldFormElement, DocumentFieldValidator } from 'tanam-models';
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { SiteService } from '../../../services/site.service';
 import { documentTypeMaterialIcons } from './document-type-form.icons';
@@ -24,6 +24,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   @Input() onCancelRoute: string;
 
   themeId: string;
+  documentTypes$ = this.documentTypeService.getDocumentTypes();
 
   readonly domain$: Observable<string> = this.siteSettingsService.getPrimaryDomain();
   readonly icons = documentTypeMaterialIcons;
@@ -32,7 +33,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     slug: [null, Validators.required],
     icon: [null, Validators.required],
     description: [null, Validators.required],
-    fields: this.formBuilder.array([]),
+    fields: this.formBuilder.array([], Validators.required),
     standalone: [false, Validators.required],
     indexTitle: []
   });
@@ -47,6 +48,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     { type: 'image', title: 'Image' },
     { type: 'slide-toggle', title: 'Slide toggle value for yes/no' },
   ];
+  readonly validators: DocumentFieldValidator[] = ['required'];
 
   private _subscriptions: Subscription[] = [];
 
@@ -60,8 +62,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   ) { }
 
   ngOnInit() {
-    console.log(`ngOnInit documentTypeId: ${this.documentType}`);
-
+    console.log(`[ngOnInit] documentTypeId: ${JSON.stringify(this.documentType.id)}`);
     this._subscriptions.push(this.siteSettingsService.getSiteInfo().subscribe(settings => {
       this.themeId = settings.theme;
     }));
@@ -96,24 +97,46 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     this.router.navigateByUrl(`/_/admin/theme/${this.themeId}/templates/${this.documentTypeForm.controls['slug'].value}`);
   }
 
-  addField(field?: DocumentField, index?: number) {
+  addField(field?: DocumentField, index?: number, scroll?: boolean) {
     const val = field ? field : { type: 'input-text' } as DocumentField;
     console.log(val);
-    const formField = this.formBuilder.group({
+    const fields: any = {
       type: [val.type, Validators.required],
       title: [val.title, Validators.required],
       key: [val.key, Validators.required],
       isTitle: [val.isTitle, Validators.required],
-    });
+      validators: [val.validators]
+    };
+    if (field && field.type === 'document-reference') {
+      fields.documentType = [val.documentType, Validators.required];
+    }
+    const formField = this.formBuilder.group(fields);
     if (val.isTitle) {
       this.documentTypeForm.controls['indexTitle'].setValue(index);
     }
+    // If there was no field, this will create field with checked radio button
+    if (this.fieldForms.length === 0) {
+      this.documentTypeForm.controls['indexTitle'].setValue(0);
+    }
 
     this.fieldForms.push(formField);
+
+    // Scroll to added field after adding one
+    if (scroll) {
+      setTimeout(() => {
+        document.getElementById(`ct-field-${this.fieldForms.length - 1}`).scrollIntoView();
+      }, 300);
+    }
   }
 
   deleteField(index: number) {
     console.log(`Removing field ${index}: ${JSON.stringify(this.fieldForms.at(index).value)}`);
+    const hasTitleIndex = this.documentTypeForm.controls['indexTitle'].value === index;
+    const hasTitleValue = this.fieldForms.at(index).value.isTitle;
+    if (hasTitleValue || hasTitleIndex) {
+      // if deleted field has title value/index, the isTitle will be reset to first field
+      this.documentTypeForm.controls['indexTitle'].setValue(0);
+    }
     this.fieldForms.removeAt(index);
   }
 
@@ -125,9 +148,9 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
       icon: 'warning'
     }).afterClosed().subscribe(async res => {
       if (res === 'yes') {
-        this.snackBar.open('Deleting..', 'Dismiss', {duration: 2000});
+        this.snackBar.open('Deleting..', 'Dismiss', { duration: 2000 });
         await this.documentTypeService.delete(this.documentType.id);
-        this.snackBar.open('Deleted', 'Dismiss', {duration: 2000});
+        this.snackBar.open('Deleted', 'Dismiss', { duration: 2000 });
         this.cancelEditing();
       }
     });
@@ -144,21 +167,21 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async save() {
-    this.snackBar.open('Saving..', 'Dismiss', {duration: 2000});
+    this.snackBar.open('Saving..', 'Dismiss', { duration: 2000 });
     const formData = this.documentTypeForm.value;
     for (let index = 0; index < this.fieldForms.value.length; index++) {
-      if (index === formData.indexTitle) {
-        this.fieldForms.at(index).patchValue({
-          isTitle: true
-        });
-      }
-      if (index !== formData.indexTitle) {
-        this.fieldForms.at(index).patchValue({
-          isTitle: false
-        });
-      }
+      this.fieldForms.at(index).patchValue({
+        isTitle: index === formData.indexTitle
+      });
     }
-    if (this.documentTypeForm.errors) {
+
+    if (this.fieldForms.length === 0) {
+      this.snackBar.open('You must declare at least 1 field', 'Dismiss', { duration: 2000 });
+      return;
+    }
+
+    if (this.documentTypeForm.invalid) {
+      this.snackBar.open('Form has errors', 'Dismiss', { duration: 2000 });
       return;
     }
 
@@ -171,6 +194,6 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
       fields: this.fieldForms.value,
       standalone: formData.standalone
     } as DocumentType);
-    this.snackBar.open('Saved', 'Dismiss', {duration: 2000});
+    this.snackBar.open('Saved', 'Dismiss', { duration: 2000 });
   }
 }

@@ -8,7 +8,67 @@
 
 .document-type-static-card {
   min-width: 120px;
+  width: 100%;
   margin: 20px auto;
+  box-sizing: border-box;
+}
+
+.document-type-form-fields {
+  margin: 48px auto;
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .field-card-content {
+    align-items: center;
+    .col {
+      flex: none;
+    }
+    .mat-caption {
+      margin: 0;
+      padding-bottom: 8px;
+    }
+    .field-input {
+      font-size: 16px;
+    }
+  }
+}
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+  margin: 0 !important;
+  padding-bottom: 0 !important;
+}
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
+  padding: 0 !important;
+  margin-top: 0 !important;
+}
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  top: 0;
+}
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 8px !important;
+  line-height: 20px;
+  border-top: 0;
+}
+::ng-deep .mat-form-field-appearance-outline .mat-select-arrow-wrapper {
+  transform: none;
+}
+
+.field-card {
+  margin: 8px auto;
+  border-radius: 8px;
+}
+
+.field-card-content {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.field-wrapper {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 .mat-radio-button {
@@ -23,7 +83,7 @@
 
 .col {
   flex: 1;
-  margin-right: 20px;
+  margin-right: 16px;
 }
 
 .slider-toogle {
