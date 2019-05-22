@@ -49,6 +49,7 @@ export interface DocumentContext {
   created: Date;
   updated: Date;
   published?: Date;
+  canonicalUrl?: string;
 }
 
 export interface SiteContext {
