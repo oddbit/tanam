@@ -73,6 +73,16 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     console.warn('Simple changes detected');
     if (changes.documentType) {
       this.clearFields();
+      // Add default field when fields is empty
+      if (this.documentType.fields.length === 0) {
+        this.addField({
+          key: 'title',
+          title: 'Title',
+          isTitle: true,
+          type: 'input-text',
+          validators: ['required']
+        }, 0);
+      }
       for (let index = 0; index < this.documentType.fields.length; index++) {
         this.addField(this.documentType.fields[index], index);
       }
