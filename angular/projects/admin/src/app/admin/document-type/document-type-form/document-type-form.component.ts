@@ -81,7 +81,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
           isTitle: true,
           type: 'input-text',
           validators: ['required']
-        }, null, true);
+        }, 0);
       }
       for (let index = 0; index < this.documentType.fields.length; index++) {
         this.addField(this.documentType.fields[index], index);

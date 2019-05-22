@@ -175,7 +175,7 @@
                   </mat-form-field>
                 </div>
               </div>
-              <div>
+              <div *ngIf="i !== 0">
                 <button mat-icon-button
                         (click)="deleteField(i)">
                   <mat-icon>delete</mat-icon>
