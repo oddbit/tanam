@@ -15,7 +15,7 @@ Create a Firebase project for your new CMS site (or choose an existing).
  go ot the settings page. You will need this configuration later when you setup your project.
 
 If you choose to not connect a custom domain, your website will only be available on the default
-hosting domain: https://your-project-id.firebaseapp.com/
+hosting domain: https://your-project-id.firebaseapp.com/ and https://your-project-id.web.app/
 
 
 
