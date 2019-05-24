@@ -11,16 +11,16 @@ export async function getSiteInfo() {
 
 export async function createDefaultSiteInfo() {
     const siteId = process.env.GCLOUD_PROJECT;
-    const defaultDomain = `${process.env.GCLOUD_PROJECT}.firebaseapp.com`;
-    console.log(`[createDefaultSiteInfo] ${defaultDomain}`);
+    const defaultDomains = [`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, `${process.env.GCLOUD_PROJECT}.web.app`];
+    console.log(`[createDefaultSiteInfo] ${defaultDomains}`);
 
     const siteInfoData: SiteInformation = {
         id: siteId,
         defaultLanguage: 'en',
         languages: ['en'],
         isCustomDomain: false,
-        domains: [defaultDomain],
-        primaryDomain: defaultDomain,
+        domains: defaultDomains,
+        primaryDomain: defaultDomains[0],
         analytics: '',
         theme: 'default',
         title: process.env.GCLOUD_PROJECT

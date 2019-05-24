@@ -63,8 +63,12 @@ async function _registerHostname(request) {
         .child(process.env.GCLOUD_PROJECT)
         .child('domains');
 
-    const defaultDomain = `${process.env.GCLOUD_PROJECT}.firebaseapp.com`;
-    const promises = [domainsRef.child(MD5(defaultDomain).toString()).set(defaultDomain)];
+    const defaultDomains = [`${process.env.GCLOUD_PROJECT}.firebaseapp.com`, `${process.env.GCLOUD_PROJECT}.web.app`];
+    const promises = [];
+
+    for (const domain of defaultDomains) {
+      promises.push(domainsRef.child(MD5(domain).toString()).set(domain));
+    }
 
     // Save "known" domains upon request to resources that are likely to seldom change -> cached for long
     // So that the overhead is done as seldom as possible
