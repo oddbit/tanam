@@ -30,6 +30,29 @@
           *matCellDef="let row">{{row.updated?.toDate() | date:'medium'}}</td>
     </ng-container>
 
+    <ng-container matColumnDef="actionMenu"
+                  stickyEnd>
+      <th mat-header-cell
+          *matHeaderCellDef></th>
+      <td mat-cell
+          *matCellDef="let row">
+        <button mat-icon-button
+                (click)="$event.stopPropagation()"
+                [matMenuTriggerFor]="menu"
+                class="action-menu-btn">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu"
+                  xPosition="before">
+          <button mat-menu-item
+                  (click)="rebuildEntry(row)">
+            <mat-icon>refresh</mat-icon>
+            <span>Rebuild</span>
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
     <tr mat-header-row
         *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row
