@@ -1,11 +1,11 @@
 <div class="mat-elevation-z8">
-    <table mat-table
-           class="full-width-table"
-           [dataSource]="dataSource"
-           matSort
-           matSortActive="updated"
-           matSortDirection="desc"
-           aria-label="Elements">
+  <table mat-table
+         class="full-width-table"
+         [dataSource]="dataSource"
+         matSort
+         matSortActive="updated"
+         matSortDirection="desc"
+         aria-label="Elements">
 
     <ng-container matColumnDef="title">
       <th mat-header-cell
@@ -30,6 +30,29 @@
           *matCellDef="let row">{{row.updated?.toDate() | date:'medium'}}</td>
     </ng-container>
 
+    <ng-container matColumnDef="actionMenu"
+                  stickyEnd>
+      <th mat-header-cell
+          *matHeaderCellDef></th>
+      <td mat-cell
+          *matCellDef="let row">
+        <button mat-icon-button
+                (click)="$event.stopPropagation()"
+                [matMenuTriggerFor]="menu"
+                class="action-menu-btn">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu"
+                  xPosition="before">
+          <button mat-menu-item
+                  (click)="rebuildEntry(row)">
+            <mat-icon>refresh</mat-icon>
+            <span>Rebuild</span>
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
     <tr mat-header-row
         *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row
@@ -41,7 +64,7 @@
   <mat-paginator #paginator
                  [length]="total_count"
                  [pageIndex]="0"
-                 [pageSize]="10"
-                 [pageSizeOptions]="[10, 20, 50, 100]">
+                 [pageSize]="100"
+                 [pageSizeOptions]="[100]">
   </mat-paginator>
 </div>

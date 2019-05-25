@@ -33,6 +33,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     title: [null, Validators.required],
     url: [null, Validators.required],
     publishStatus: [false, Validators.required],
+    canonicalUrl: [null],
     published: [null],
     dataForm: this.formBuilder.group({}),
   });
@@ -69,6 +70,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
         url: document.url || '/',
         publishStatus: !!document.published,
         published: document.published,
+        canonicalUrl: document.canonicalUrl
       });
 
       this._rootSlug = documentType.slug;
@@ -132,6 +134,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     document.url = formData.url;
     document.published = formData.published;
     document.data = this.dataForm.value;
+    document.canonicalUrl = formData.canonicalUrl;
     this._setStateProcessing(true);
     await this.documentService.update(document);
     this._setStateProcessing(false);

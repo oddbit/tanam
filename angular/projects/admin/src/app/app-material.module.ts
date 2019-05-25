@@ -26,6 +26,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [],
@@ -56,7 +57,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatTooltipModule,
     MatDialogModule,
     MatSnackBarModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    DragDropModule
   ],
   exports: [
     CommonModule,
@@ -85,7 +87,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatTooltipModule,
     MatDialogModule,
     MatSnackBarModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    DragDropModule
   ]
 })
 export class AppMaterialModule { }
