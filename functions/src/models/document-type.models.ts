@@ -31,7 +31,7 @@ export interface DocumentType {
   title: string; // Presentation name
   slug: string; // Root slug to group entries by
   standalone: boolean; // True if the content can be presented on a page with URL of its own
-  documentStatusDefault: 'publised' | 'unpublished',
+  documentStatusDefault: 'published' | 'unpublished',
   description: string;
   icon: string; // Icon for menus etc
   fields: DocumentField[];
