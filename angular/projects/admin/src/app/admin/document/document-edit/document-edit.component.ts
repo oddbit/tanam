@@ -68,7 +68,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
       this.documentForm.patchValue({
         title: document.title,
         url: document.url || '/',
-        publishStatus: !!document.published,
+        publishStatus: document.published === undefined ? documentType.documentStatusDefault : document.published,
         published: document.published,
         canonicalUrl: document.canonicalUrl
       });
@@ -134,7 +134,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     document.url = formData.url;
     document.published = formData.published;
     document.data = this.dataForm.value;
-    document.canonicalUrl = formData.canonicalUrl;
+    document.canonicalUrl = formData.canonicalUrl || '';
     this._setStateProcessing(true);
     await this.documentService.update(document);
     this._setStateProcessing(false);
