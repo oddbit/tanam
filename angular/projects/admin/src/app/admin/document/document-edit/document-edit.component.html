@@ -114,7 +114,7 @@
            [ngClass]="{'open-dialog': metaDataDialog}">
         <mat-card>
           <mat-card-content>
-            <mat-form-field class="full-width">
+            <mat-form-field *ngIf="document.standalone" [hidden]="!expression" class="full-width">
               <input matInput
                      placeholder="Slug"
                      formControlName="url">
@@ -131,7 +131,7 @@
                 </mat-slide-toggle>
               </div>
             </div>
-            <mat-form-field class="full-width canonical-field">
+            <mat-form-field *ngIf="document.standalone" class="full-width canonical-field">
               <input matInput
                      placeholder="Canonical URL"
                      formControlName="canonicalUrl">
