@@ -114,7 +114,7 @@
            [ngClass]="{'open-dialog': metaDataDialog}">
         <mat-card>
           <mat-card-content>
-            <mat-form-field *ngIf="document.standalone" [hidden]="!expression" class="full-width">
+            <mat-form-field *ngIf="document.standalone" class="full-width">
               <input matInput
                      placeholder="Slug"
                      formControlName="url">
