@@ -36,6 +36,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     description: [null, Validators.required],
     fields: this.formBuilder.array([], Validators.required),
     standalone: [false, Validators.required],
+    documentStatusDefault: ['published', Validators.required],
     indexTitle: [0]
   });
   readonly fieldTypes: FieldType[] = [
@@ -92,7 +93,8 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
         slug: this.documentType.slug,
         icon: this.documentType.icon,
         description: this.documentType.description,
-        standalone: this.documentType.standalone
+        standalone: this.documentType.standalone,
+        documentStatusDefault: this.documentType.documentStatusDefault
       });
     }
   }
@@ -208,7 +210,8 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
       icon: formData.icon,
       description: formData.description,
       fields: this.fieldForms.value,
-      standalone: formData.standalone
+      standalone: formData.standalone,
+      documentStatusDefault: formData.documentStatusDefault
     } as DocumentType);
     this.snackBar.open('Saved', 'Dismiss', { duration: 2000 });
   }
