@@ -41,7 +41,7 @@ export class ActionButtonComponent implements OnInit {
   @Input() icon: string; // Must be a material icon id
   @Input() color: ActionButtonColor;
   @Input() buttonType: ActionButtonType;
-  @Input() disabled: boolean = false;
+  @Input() disabled = false;
 
   constructor() { }
 
