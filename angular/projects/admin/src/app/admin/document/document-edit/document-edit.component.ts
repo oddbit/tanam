@@ -132,7 +132,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
 
     const document = await this.document$.pipe(take(1)).toPromise();
     document.title = formData.title;
-    document.url = formData.url;
+    document.url = formData.url || '';
     document.published = formData.published;
     document.data = this.dataForm.value;
     document.canonicalUrl = formData.canonicalUrl || '';
