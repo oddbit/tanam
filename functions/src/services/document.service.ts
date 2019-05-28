@@ -6,33 +6,33 @@ const siteRef = () => admin.database().ref('tanam').child(process.env.GCLOUD_PRO
 const normalizeUrl = (url: string) => `/${url}`.replace(/\/+/g, '/');
 
 export async function getDocumentById(docId: string): Promise<Document> {
-    console.log(`[document.service.getDocumentById] ID: ${docId}`);
-    const querySnap = await siteCollection()
-        .collection('documents')
-        .where('status', '==', 'published')
-        .where('id', '==', docId)
-        .limit(1)
-        .get();
+  console.log(`[document.service.getDocumentById] ID: ${docId}`);
+  const querySnap = await siteCollection()
+    .collection('documents')
+    .where('status', '==', 'published')
+    .where('id', '==', docId)
+    .limit(1)
+    .get();
 
-    console.log(`[document.service.getDocumentById] Number of query results: ${querySnap.docs.length}`);
-    return querySnap.empty ? null : querySnap.docs[0].data() as Document;
+  console.log(`[document.service.getDocumentById] Number of query results: ${querySnap.docs.length}`);
+  return querySnap.empty ? null : querySnap.docs[0].data() as Document;
 }
 
 export async function getDocumentByUrl(url: string): Promise<Document[]> {
-    console.log(`[document.service.getDocumentByUrl] URL: ${url}`);
-    const querySnap = await siteCollection()
-        .collection('documents')
-        .where('status', '==', 'published')
-        .where('url', '==', normalizeUrl(url))
-        .limit(1)
-        .get();
+  console.log(`[document.service.getDocumentByUrl] URL: ${url}`);
+  const querySnap = await siteCollection()
+    .collection('documents')
+    .where('status', '==', 'published')
+    .where('url', '==', normalizeUrl(url))
+    .limit(1)
+    .get();
 
-    console.log(`[document.service.getDocumentByUrl] Number of query results: ${querySnap.docs.length}`);
-    const results = [];
-    for (const doc of querySnap.docs) {
-        results.push(doc.data() as Document);
-    }
-    return results;
+  console.log(`[document.service.getDocumentByUrl] Number of query results: ${querySnap.docs.length}`);
+  const results = [];
+  for (const doc of querySnap.docs) {
+    results.push(doc.data() as Document);
+  }
+  return results;
 }
 
 /**
@@ -49,8 +49,8 @@ export async function getDocumentByUrl(url: string): Promise<Document[]> {
  * @param references One or more document IDs that are being referred to in a document
  */
 export async function addDependency(docId: string, references: string | string[]) {
-    console.log(`[addDependency] ${JSON.stringify({ docId, references })}`);
-    return siteCollection().collection('documents').doc(docId).update({
-        dependencies: admin.firestore.FieldValue.arrayUnion(references),
-    } as Document);
+  console.log(`[addDependency] ${JSON.stringify({ docId, references })}`);
+  return siteCollection().collection('documents').doc(docId).update({
+    dependencies: admin.firestore.FieldValue.arrayUnion(...references),
+  } as Document);
 }

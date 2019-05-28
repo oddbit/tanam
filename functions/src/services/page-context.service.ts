@@ -62,8 +62,9 @@ export async function queryPageContext(documentTypeId: string, queryOpts: Docume
   const result = [];
   for (const doc of querySnap.docs) {
     console.log(`[queryPageContext] ${JSON.stringify(doc.data())}`);
-    result.push(_toContext(doc.data() as Document));
+    result.push(await _toContext(doc.data() as Document));
   }
+  console.log(`[queryPageContextResult] ${JSON.stringify(result)}`)
 
   return result;
 }
