@@ -57,7 +57,13 @@ dust.helpers.documents = async (chunk, context, bodies, params) => {
     },
   });
 
-  await documentService.addDependency(params.document.id, pageContexts.map(pageContext => pageContext.document.id));
+  try {
+    await documentService.addDependency(params.document.id, pageContexts.map(pageContext => pageContext.document.id));
+    console.log(`[addDependencySuccess] Success`)
+  } catch (error) {
+    console.warn(`[addDependencyError] ${JSON.stringify(error)}`)
+  }
+  console.log(`[pageContextsResult] ${JSON.stringify(pageContexts)}`)
   return pageContexts;
 }
 
@@ -82,6 +88,7 @@ export async function compileTemplate(context: PageContext) {
       }
 
       console.log(`[renderDocument] Finished rendering`);
+      console.log(`[renderDocument-Result] ${JSON.stringify(out)}`)
       resolve(out);
     });
   });
