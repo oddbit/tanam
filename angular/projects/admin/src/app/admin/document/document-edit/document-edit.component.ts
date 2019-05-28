@@ -65,10 +65,11 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     const combinedDocumentData$ = combineLatest(this.documentType$, this.document$);
     this._subscriptions.push(combinedDocumentData$.subscribe(([documentType, document]) => {
       this._setStateProcessing(true);
+      const documentStatusDefault = documentType.documentStatusDefault === 'published' ? true : false;
       this.documentForm.patchValue({
         title: document.title,
         url: document.url || '/',
-        publishStatus: !!document.published,
+        publishStatus: document.published === undefined ? documentStatusDefault : document.published,
         published: document.published,
         canonicalUrl: document.canonicalUrl
       });
@@ -134,7 +135,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     document.url = formData.url;
     document.published = formData.published;
     document.data = this.dataForm.value;
-    document.canonicalUrl = formData.canonicalUrl;
+    document.canonicalUrl = formData.canonicalUrl || '';
     this._setStateProcessing(true);
     await this.documentService.update(document);
     this._setStateProcessing(false);
