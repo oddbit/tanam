@@ -12,7 +12,7 @@ import { SiteService } from '../../services/site.service';
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent {
-  opened: boolean = false;
+  opened = false;
   isExpanded = true;
   siteName$ = this.siteSettingsService.getSiteName();
   documentTypes$ = this.documentTypeService.getDocumentTypes();
