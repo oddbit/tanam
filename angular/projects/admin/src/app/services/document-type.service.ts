@@ -41,7 +41,7 @@ export class DocumentTypeService {
       slug: id,
       template: null,
       standalone: true,
-      documentStatusDefault: 'publised',
+      documentStatusDefault: 'published',
       icon: 'cloud',
       fields: [],
       documentCount: {
