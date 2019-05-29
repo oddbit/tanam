@@ -5,7 +5,7 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import * as fs from 'fs';
 import { join } from 'path';
-import { renderPage } from './render';
+import { renderPage, renderPage404 } from './render';
 import * as configService from './services/config.service';
 import { getPageContextByUrl } from './services/page-context.service';
 import * as fileService from './services/file.service';
@@ -223,9 +223,14 @@ app.get('*', async (request, response) => {
 
   const context = await getPageContextByUrl(url);
   if (!context) {
-    // If documenpage 404  doesn't set up
+    response.status(404);
     console.log(`[HTTP 404] page not found for: ${request.url}`);
-    return response.status(404).send(`Not found: ${request.url}`);
+    try {
+      const html404 = await renderPage404();
+      return response.send(html404);
+    } catch (error) {
+      return response.send(`Not found: ${request.url}`)
+    }
   }
 
   const html = await renderPage(context);
@@ -234,12 +239,7 @@ app.get('*', async (request, response) => {
     return response.status(500).send('Could not create HTML template document');
   }
 
-  if (context.document.url === '/404-page') {
-    console.log(`[HTTP 404] page not found for: ${request.url}`);
-    response.status(404);
-  } else {
-    response.setHeader('Cache-Control', getCacheHeader());
-  }
+  response.setHeader('Cache-Control', getCacheHeader());
   response.send(html);
   return _registerHostname(request);
 });
