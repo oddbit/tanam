@@ -69,6 +69,7 @@
         <mat-menu #menu="matMenu"
                   xPosition="before">
           <a mat-menu-item
+             *ngIf="row.standalone === true"
              href="{{row.url}}"
              target="_blank">
             <mat-icon>launch</mat-icon>
