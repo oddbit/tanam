@@ -20,6 +20,7 @@ export async function createDefaultDocuments() {
         documentCount: {
             published: 0,
             unpublished: 0,
+            scheduled: 0,
         },
         fields: [
             {
@@ -64,6 +65,7 @@ export async function createDefaultDocuments() {
         documentCount: {
             published: 0,
             unpublished: 0,
+            scheduled: 0,
         },
         fields: [
             {
@@ -120,6 +122,7 @@ export async function createDefaultDocuments() {
         documentCount: {
             published: 0,
             unpublished: 0,
+            scheduled: 0,
         },
         fields: [
             {
@@ -187,6 +190,7 @@ export async function createDefaultDocuments() {
         documentCount: {
             published: 0,
             unpublished: 0,
+            scheduled: 0,
         },
         fields: [
             {
@@ -242,6 +246,7 @@ export async function createDefaultDocuments() {
         documentCount: {
             published: 0,
             unpublished: 0,
+            scheduled: 0,
         },
         fields: [
             {
