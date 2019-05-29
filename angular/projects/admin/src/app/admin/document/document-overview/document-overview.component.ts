@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap, filter } from 'rxjs/operators';
 import { DocumentType } from 'tanam-models';
 import { DocumentService } from '../../../services/document.service';
 import { DocumentTypeService } from '../../../services/document-type.service';
@@ -17,6 +17,7 @@ export class DocumentOverviewComponent {
   readonly documentType$: Observable<DocumentType> = this.route.paramMap
     .pipe(
       switchMap(params => this.cts.getDocumentType(params.get('typeId'))),
+      filter(documentType => !!documentType),
       tap(documentType => {
         this.documentCountPublished = documentType.documentCount.published || 0;
         this.documentCountUnpublished = documentType.documentCount.unpublished || 0;
