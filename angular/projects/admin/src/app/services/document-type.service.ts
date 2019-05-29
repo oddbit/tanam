@@ -41,11 +41,13 @@ export class DocumentTypeService {
       slug: id,
       template: null,
       standalone: true,
+      documentStatusDefault: 'published',
       icon: 'cloud',
       fields: [],
       documentCount: {
         published: 0,
         unpublished: 0,
+        scheduled: 0,
       },
       updated: firebase.firestore.FieldValue.serverTimestamp(),
       created: firebase.firestore.FieldValue.serverTimestamp(),

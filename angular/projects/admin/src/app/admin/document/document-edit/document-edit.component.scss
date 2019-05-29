@@ -2,6 +2,10 @@
   width: 100%;
 }
 
+.canonical-field {
+  padding-bottom: 25px;
+}
+
 .wrap {
   display: flex;
 }
@@ -25,7 +29,8 @@
   top: 128px;
 }
 
-.btn-close-dialog, .btn-open-dialog {
+.btn-close-dialog,
+.btn-open-dialog {
   display: none
 }
 
@@ -35,7 +40,9 @@
 }
 
 @media only screen and (max-width: 600px) {
-  .btn-close-dialog, .btn-open-dialog {
+
+  .btn-close-dialog,
+  .btn-open-dialog {
     display: block;
   }
 
@@ -59,7 +66,7 @@
     z-index: 3;
     display: block !important;
     padding: 100%;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
     right: 0;
     left: 50%;
     top: 50%;

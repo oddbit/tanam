@@ -11,7 +11,7 @@
                          title="Edit template"
                          (click)='editTemplate()'></tanam-action-button>
   </tanam-context-actions>
-  <mat-card class="document-type-static-card">
+  <mat-card class="document-type-static-card ct-information">
     <mat-card-header>
       <mat-card-title>Content type information</mat-card-title>
     </mat-card-header>
@@ -32,6 +32,19 @@
             <mat-error *ngIf="documentTypeForm.controls['slug'].hasError('required')">
               Title is <strong>required</strong>
             </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field>
+            <mat-label>Default document status</mat-label>
+            <mat-select formControlName="documentStatusDefault">
+              <mat-option value="published">
+                published
+              </mat-option>
+              <mat-option value="unpublished">
+                unpublished
+              </mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
       </div>
@@ -100,87 +113,91 @@
       </div>
     </div>
     <div>
-      <mat-radio-group formControlName="indexTitle">
-        <div formArrayName="fields">
-          <div class="row"
-               *ngFor="let field of fieldForms.controls; let i=index"
-               [formGroupName]="i"
-               id="ct-field-{{i}}">
-            <mat-card class="document-type-static-card field-card">
-              <mat-card-content class="field-card-content">
-                <div class="field-wrapper">
-                  <div id="radio-isTitle"
-                       class="col">
-                    <h5 class="mat-caption">Use As Title</h5>
-                    <mat-radio-button [value]="i"
-                                      matTooltip="Set this field as title"></mat-radio-button>
-                  </div>
-                  <div class="col">
-                    <h5 class="mat-caption">Key</h5>
-                    <mat-form-field appearance="outline">
-                      <input matInput
-                             formControlName="key"
-                             class="field-input">
-                    </mat-form-field>
-                  </div>
-                  <div class="col">
-                    <h5 class="mat-caption">Title</h5>
-                    <mat-form-field appearance="outline">
-                      <input matInput
-                             formControlName="title"
-                             class="field-input">
-                    </mat-form-field>
-                  </div>
-                  <div class="col">
-                    <h5 class="mat-caption">Type</h5>
-                    <mat-form-field appearance="outline">
-                      <mat-select formControlName="type"
-                                  class="field-input">
-                        <mat-option *ngFor="let fieldType of fieldTypes"
-                                    [value]="fieldType.type">
-                          {{fieldType.title }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <div class="col"
-                       *ngIf="field.value.type === 'document-reference'">
-                    <h5 class="mat-caption">Document Type</h5>
-                    <mat-form-field appearance="outline">
-                      <mat-select formControlName="documentType"
-                                  class="field-input">
-                        <mat-option *ngFor="let documentType of documentTypes$ | async"
-                                    [value]="documentType.id">
-                          {{documentType.title}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <div class="col">
-                    <h5 class="mat-caption">Validators</h5>
-                    <mat-form-field appearance="outline">
-                      <mat-select multiple
-                                  formControlName="validators"
-                                  class="field-input">
-                        <mat-option *ngFor="let validator of validators"
-                                    [value]="validator">
-                          {{validator | titlecase}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
+      <div formArrayName="fields"
+           cdkDropList
+           (cdkDropListDropped)="rearrangeField($event)">
+        <div class=""
+             *ngFor="let field of fieldForms.controls; let i=index"
+             [formGroupName]="i"
+             id="ct-field-{{i}}"
+             [cdkDragDisabled]="i === 0"
+             cdkDrag>
+          <mat-card class="document-type-static-card field-card">
+            <mat-card-content class="field-card-content">
+              <div *ngIf="i !== 0"
+                   id="col-isTitle"
+                   class="col">
+                <button mat-raised-button
+                        color="primary"
+                        [disabled]="fieldForms.controls[i].value.type !== 'input-text'"
+                        (click)="setAsTitle(i, fieldForms.controls[i].value.type)">Set as Title</button>
+              </div>
+              <div class="field-wrapper">
+                <div class="col">
+                  <h5 class="mat-caption">Key</h5>
+                  <mat-form-field appearance="outline">
+                    <input matInput
+                           formControlName="key"
+                           class="field-input">
+                  </mat-form-field>
                 </div>
-                <div>
-                  <button mat-icon-button
-                          (click)="deleteField(i)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
+                <div class="col">
+                  <h5 class="mat-caption">Title</h5>
+                  <mat-form-field appearance="outline">
+                    <input matInput
+                           formControlName="title"
+                           class="field-input">
+                  </mat-form-field>
                 </div>
-              </mat-card-content>
-            </mat-card>
-          </div>
+                <div class="col">
+                  <h5 class="mat-caption">Type</h5>
+                  <mat-form-field appearance="outline">
+                    <mat-select formControlName="type"
+                                class="field-input">
+                      <mat-option *ngFor="let fieldType of fieldTypes"
+                                  [value]="fieldType.type">
+                        {{fieldType.title }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col"
+                     *ngIf="field.value.type === 'document-reference'">
+                  <h5 class="mat-caption">Document Type</h5>
+                  <mat-form-field appearance="outline">
+                    <mat-select formControlName="documentType"
+                                class="field-input">
+                      <mat-option *ngFor="let documentType of documentTypes$ | async"
+                                  [value]="documentType.id">
+                        {{documentType.title}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                  <h5 class="mat-caption">Validators</h5>
+                  <mat-form-field appearance="outline">
+                    <mat-select multiple
+                                formControlName="validators"
+                                class="field-input">
+                      <mat-option *ngFor="let validator of validators"
+                                  [value]="validator">
+                        {{validator | titlecase}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div *ngIf="i !== 0">
+                <button mat-icon-button
+                        (click)="deleteField(i)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </mat-card-content>
+          </mat-card>
         </div>
-      </mat-radio-group>
+      </div>
     </div>
   </section>
 

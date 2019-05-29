@@ -1,4 +1,14 @@
-import { Component, ApplicationRef, Injector, OnDestroy, AfterViewInit, ViewChild, ComponentFactoryResolver, Input, OnChanges } from '@angular/core';
+import {
+  Component,
+  ApplicationRef,
+  Injector,
+  OnDestroy,
+  AfterViewInit,
+  ViewChild,
+  ComponentFactoryResolver,
+  Input,
+  OnChanges
+} from '@angular/core';
 import { CdkPortal, DomPortalHost } from '@angular/cdk/portal';
 import { Title } from '@angular/platform-browser';
 

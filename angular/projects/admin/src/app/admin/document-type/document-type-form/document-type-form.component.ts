@@ -8,6 +8,7 @@ import { SiteService } from '../../../services/site.service';
 import { documentTypeMaterialIcons } from './document-type-form.icons';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { DialogService } from '../../../services/dialog.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 interface FieldType {
   type: DocumentFieldFormElement;
@@ -35,7 +36,8 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     description: [null, Validators.required],
     fields: this.formBuilder.array([], Validators.required),
     standalone: [false, Validators.required],
-    indexTitle: []
+    documentStatusDefault: ['published', Validators.required],
+    indexTitle: [0]
   });
   readonly fieldTypes: FieldType[] = [
     { type: 'input-text', title: 'Single line of text' },
@@ -69,8 +71,19 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.warn('Simple changes detected');
     if (changes.documentType) {
       this.clearFields();
+      // Add default field when fields is empty
+      if (this.documentType.fields.length === 0) {
+        this.addField({
+          key: 'title',
+          title: 'Title',
+          isTitle: true,
+          type: 'input-text',
+          validators: ['required']
+        }, 0);
+      }
       for (let index = 0; index < this.documentType.fields.length; index++) {
         this.addField(this.documentType.fields[index], index);
       }
@@ -80,7 +93,8 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
         slug: this.documentType.slug,
         icon: this.documentType.icon,
         description: this.documentType.description,
-        standalone: this.documentType.standalone
+        standalone: this.documentType.standalone,
+        documentStatusDefault: this.documentType.documentStatusDefault
       });
     }
   }
@@ -169,11 +183,15 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   async save() {
     this.snackBar.open('Saving..', 'Dismiss', { duration: 2000 });
     const formData = this.documentTypeForm.value;
+
+    // ===== Deprecated, no longer need use this loop
+    // isTitle is always on index 0
     for (let index = 0; index < this.fieldForms.value.length; index++) {
       this.fieldForms.at(index).patchValue({
         isTitle: index === formData.indexTitle
       });
     }
+    // =====
 
     if (this.fieldForms.length === 0) {
       this.snackBar.open('You must declare at least 1 field', 'Dismiss', { duration: 2000 });
@@ -192,8 +210,22 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
       icon: formData.icon,
       description: formData.description,
       fields: this.fieldForms.value,
-      standalone: formData.standalone
+      standalone: formData.standalone,
+      documentStatusDefault: formData.documentStatusDefault
     } as DocumentType);
     this.snackBar.open('Saved', 'Dismiss', { duration: 2000 });
+  }
+
+  rearrangeField(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.fieldForms.controls, event.previousIndex, event.currentIndex);
+  }
+
+  setAsTitle(i, field) {
+    console.log('Radio changed', field);
+
+    // move selected title to top
+    moveItemInArray(this.fieldForms.controls, i, 0);
+    this.snackBar.open('Title changed', 'Dismiss', { duration: 2000 });
+    console.log(this.documentTypeForm.controls['indexTitle']);
   }
 }

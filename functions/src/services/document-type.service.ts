@@ -14,11 +14,13 @@ export async function createDefaultDocuments() {
         icon: 'local_library',
         slug: 'blog',
         standalone: true,
+        documentStatusDefault: 'published',
         created: admin.firestore.FieldValue.serverTimestamp(),
         updated: admin.firestore.FieldValue.serverTimestamp(),
         documentCount: {
             published: 0,
             unpublished: 0,
+            scheduled: 0,
         },
         fields: [
             {
@@ -57,11 +59,13 @@ export async function createDefaultDocuments() {
         icon: 'event',
         slug: 'event',
         standalone: true,
+        documentStatusDefault: 'published',
         created: admin.firestore.FieldValue.serverTimestamp(),
         updated: admin.firestore.FieldValue.serverTimestamp(),
         documentCount: {
             published: 0,
             unpublished: 0,
+            scheduled: 0,
         },
         fields: [
             {
@@ -112,11 +116,13 @@ export async function createDefaultDocuments() {
         icon: 'place',
         slug: 'location',
         standalone: false,
+        documentStatusDefault: 'published',
         created: admin.firestore.FieldValue.serverTimestamp(),
         updated: admin.firestore.FieldValue.serverTimestamp(),
         documentCount: {
             published: 0,
             unpublished: 0,
+            scheduled: 0,
         },
         fields: [
             {
@@ -178,11 +184,13 @@ export async function createDefaultDocuments() {
         icon: 'person',
         slug: 'profile',
         standalone: false,
+        documentStatusDefault: 'published',
         created: admin.firestore.FieldValue.serverTimestamp(),
         updated: admin.firestore.FieldValue.serverTimestamp(),
         documentCount: {
             published: 0,
             unpublished: 0,
+            scheduled: 0,
         },
         fields: [
             {
@@ -232,11 +240,13 @@ export async function createDefaultDocuments() {
         icon: 'chrome_reader_mode',
         slug: '',
         standalone: true,
+        documentStatusDefault: 'published',
         created: admin.firestore.FieldValue.serverTimestamp(),
         updated: admin.firestore.FieldValue.serverTimestamp(),
         documentCount: {
             published: 0,
             unpublished: 0,
+            scheduled: 0,
         },
         fields: [
             {

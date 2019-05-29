@@ -1,11 +1,11 @@
 <div class="mat-elevation-z8">
-    <table mat-table
-           class="full-width-table"
-           [dataSource]="dataSource"
-           matSort
-           matSortActive="updated"
-           matSortDirection="desc"
-           aria-label="Elements">
+  <table mat-table
+         class="full-width-table"
+         [dataSource]="dataSource"
+         matSort
+         matSortActive="updated"
+         matSortDirection="desc"
+         aria-label="Elements">
 
     <ng-container matColumnDef="title">
       <th mat-header-cell
@@ -15,9 +15,33 @@
           *matCellDef="let row">{{row.title}}</td>
     </ng-container>
 
-    <ng-container matColumnDef="slug">
+    <ng-container *ngIf="shouldDisplayColumn('status')"
+                  matColumnDef="status">
       <th mat-header-cell
-          *matHeaderCellDef>Slug</th>
+          *matHeaderCellDef>Status</th>
+      <td mat-cell
+          *matCellDef="let row">
+        <ng-container [ngSwitch]="row.status">
+          <ng-container *ngSwitchCase="'published'">
+            Published
+          </ng-container>
+          <ng-container *ngSwitchCase="'unpublished'">
+            Unpublished
+          </ng-container>
+          <ng-container *ngSwitchCase="'scheduled'">
+            Scheduled
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            Unknown status
+          </ng-container>
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <ng-container *ngIf="shouldDisplayColumn('url')"
+                  matColumnDef="url">
+      <th mat-header-cell
+          *matHeaderCellDef>URL</th>
       <td mat-cell
           *matCellDef="let row">{{row.url}}</td>
     </ng-container>
@@ -30,6 +54,38 @@
           *matCellDef="let row">{{row.updated?.toDate() | date:'medium'}}</td>
     </ng-container>
 
+    <ng-container matColumnDef="actionMenu"
+                  stickyEnd>
+      <th mat-header-cell
+          *matHeaderCellDef></th>
+      <td mat-cell
+          *matCellDef="let row">
+        <button mat-icon-button
+                (click)="$event.stopPropagation()"
+                [matMenuTriggerFor]="menu"
+                class="action-menu-btn">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu"
+                  xPosition="before">
+          <a mat-menu-item
+             *ngIf="row.standalone === true"
+             href="{{row.url}}"
+             target="_blank">
+            <mat-icon>launch</mat-icon>
+            <span>Open page</span>
+          </a>
+
+          <button mat-menu-item
+                  (click)="rebuildEntry(row)">
+            <mat-icon>refresh</mat-icon>
+            <span>Rebuild</span>
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+
     <tr mat-header-row
         *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row
@@ -41,7 +97,7 @@
   <mat-paginator #paginator
                  [length]="total_count"
                  [pageIndex]="0"
-                 [pageSize]="10"
-                 [pageSizeOptions]="[10, 20, 50, 100]">
+                 [pageSize]="100"
+                 [pageSizeOptions]="[100]">
   </mat-paginator>
 </div>

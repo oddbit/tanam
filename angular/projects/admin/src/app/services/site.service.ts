@@ -41,7 +41,8 @@ export class SiteService {
 
     // Custom domain is flagged if the primary domain isn't the default hosting
     if (settings.primaryDomain) {
-      settings.isCustomDomain = settings.primaryDomain.indexOf('.firebaseapp.com') === -1;
+      settings.isCustomDomain = settings.primaryDomain.indexOf('.firebaseapp.com') === -1 ||
+                                settings.primaryDomain.indexOf('.web.app') === -1;
     }
 
 

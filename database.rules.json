@@ -1,6 +1,17 @@
 {
   "rules": {
-    ".read": false,
-    ".write": false
+    "tanam": {
+      "$siteId": {
+        "tasks": {
+          "cache": {
+            "$action": {
+              "$taskId": {
+                ".write": "(auth != null && auth.token.tanam[$siteId][0].length > 0)"
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

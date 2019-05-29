@@ -1,4 +1,4 @@
-#radio-isTitle {
+#col-isTitle {
   margin-right: 20px;
 }
 
@@ -15,41 +15,53 @@
 
 .document-type-form-fields {
   margin: 48px auto;
+
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
+}
+
+::ng-deep .cdk-drag .document-type-static-card.field-card {
   .field-card-content {
     align-items: center;
+
     .col {
       flex: none;
     }
+
     .mat-caption {
       margin: 0;
       padding-bottom: 8px;
     }
+
     .field-input {
       font-size: 16px;
     }
   }
 }
+
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
   margin: 0 !important;
   padding-bottom: 0 !important;
 }
+
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
   padding: 0 !important;
   margin-top: 0 !important;
 }
+
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
   top: 0;
 }
+
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
   padding: 8px !important;
   line-height: 20px;
   border-top: 0;
 }
+
 ::ng-deep .mat-form-field-appearance-outline .mat-select-arrow-wrapper {
   transform: none;
 }
@@ -69,11 +81,6 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-}
-
-.mat-radio-button {
-  display: block;
-  margin: 5px 0;
 }
 
 .row {
@@ -100,6 +107,7 @@
     top: 50%;
     transform: translateY(-50%);
   }
+
   span {
     margin-left: 32px;
   }

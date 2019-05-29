@@ -33,6 +33,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     title: [null, Validators.required],
     url: [null, Validators.required],
     publishStatus: [false, Validators.required],
+    canonicalUrl: [null],
     published: [null],
     dataForm: this.formBuilder.group({}),
   });
@@ -64,11 +65,13 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     const combinedDocumentData$ = combineLatest(this.documentType$, this.document$);
     this._subscriptions.push(combinedDocumentData$.subscribe(([documentType, document]) => {
       this._setStateProcessing(true);
+      const documentStatusDefault = documentType.documentStatusDefault === 'published' ? true : false;
       this.documentForm.patchValue({
         title: document.title,
         url: document.url || '/',
-        publishStatus: !!document.published,
+        publishStatus: document.published === undefined ? documentStatusDefault : document.published,
         published: document.published,
+        canonicalUrl: document.canonicalUrl
       });
 
       this._rootSlug = documentType.slug;
@@ -129,9 +132,10 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
 
     const document = await this.document$.pipe(take(1)).toPromise();
     document.title = formData.title;
-    document.url = formData.url;
+    document.url = formData.url || '';
     document.published = formData.published;
     document.data = this.dataForm.value;
+    document.canonicalUrl = formData.canonicalUrl || '';
     this._setStateProcessing(true);
     await this.documentService.update(document);
     this._setStateProcessing(false);

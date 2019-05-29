@@ -44,7 +44,7 @@ export class DocumentService {
         url: DocumentService._normalizeUrl(`/${documentType.slug}/${id}`),
         revision: 0,
         standalone: documentType.standalone,
-        status: 'unpublished',
+        status: documentType.documentStatusDefault,
         data: {},
         tags: [],
         updated: firebase.firestore.FieldValue.serverTimestamp(),

@@ -12,24 +12,25 @@
   </mat-card>
 
   <mat-tab-group>
-    <mat-tab label="All [{{ documentType.documentCount.published + documentType.documentCount.unpublished }}]">
+    <mat-tab
+             label="All [{{ documentCountTotal }}]">
       <ng-template matTabContent>
         <tanam-document-list [documentType$]="documentType$"></tanam-document-list>
       </ng-template>
     </mat-tab>
-    <mat-tab label="Published [{{ documentType.documentCount.published || 0 }}]">
+    <mat-tab label="Published [{{ documentCountPublished }}]">
       <ng-template matTabContent>
         <tanam-document-list [documentType$]="documentType$"
                              status="published"></tanam-document-list>
       </ng-template>
     </mat-tab>
-    <mat-tab label="Unpublished [{{ documentType.documentCount.unpublished || 0}}]">
+    <mat-tab label="Unpublished [{{ documentCountUnpublished }}]">
       <ng-template matTabContent>
         <tanam-document-list [documentType$]="documentType$"
                              status="unpublished"></tanam-document-list>
       </ng-template>
     </mat-tab>
-    <mat-tab label="Scheduled [{{ documentType.documentCount.scheduled || 0}}]">
+    <mat-tab label="Scheduled [{{ documentCountScheduled }}]">
       <ng-template matTabContent>
         <tanam-document-list [documentType$]="documentType$"
                              status="scheduled"></tanam-document-list>
