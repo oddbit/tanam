@@ -12,7 +12,8 @@
   </mat-card>
 
   <mat-tab-group>
-    <mat-tab label="All [{{ documentType.documentCount.published + documentType.documentCount.unpublished }}]">
+    <mat-tab
+             label="All [{{ documentType.documentCount.published + documentType.documentCount.unpublished + documentType.documentCount.scheduled }}]">
       <ng-template matTabContent>
         <tanam-document-list [documentType$]="documentType$"></tanam-document-list>
       </ng-template>
