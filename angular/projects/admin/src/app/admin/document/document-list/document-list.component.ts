@@ -31,7 +31,7 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     private snackBar: MatSnackBar,
   ) { }
 
-  displayedColumns = ['title', 'slug', 'updated', 'actionMenu'];
+  displayedColumns = ['title', 'url', 'updated', 'actionMenu'];
 
   ngOnInit() {
     this.loadDataSource();
