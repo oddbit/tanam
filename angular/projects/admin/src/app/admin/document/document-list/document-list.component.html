@@ -68,6 +68,13 @@
         </button>
         <mat-menu #menu="matMenu"
                   xPosition="before">
+          <a mat-menu-item
+             href="{{row.url}}"
+             target="_blank">
+            <mat-icon>launch</mat-icon>
+            <span>Open page</span>
+          </a>
+
           <button mat-menu-item
                   (click)="rebuildEntry(row)">
             <mat-icon>refresh</mat-icon>
