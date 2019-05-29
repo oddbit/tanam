@@ -15,9 +15,33 @@
           *matCellDef="let row">{{row.title}}</td>
     </ng-container>
 
-    <ng-container matColumnDef="url">
+    <ng-container *ngIf="shouldDisplayColumn('status')"
+                  matColumnDef="status">
       <th mat-header-cell
-          *matHeaderCellDef>Slug</th>
+          *matHeaderCellDef>Status</th>
+      <td mat-cell
+          *matCellDef="let row">
+        <ng-container [ngSwitch]="row.status">
+          <ng-container *ngSwitchCase="'published'">
+            Published
+          </ng-container>
+          <ng-container *ngSwitchCase="'unpublished'">
+            Unpublished
+          </ng-container>
+          <ng-container *ngSwitchCase="'scheduled'">
+            Scheduled
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            Unknown status
+          </ng-container>
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <ng-container *ngIf="shouldDisplayColumn('url')"
+                  matColumnDef="url">
+      <th mat-header-cell
+          *matHeaderCellDef>URL</th>
       <td mat-cell
           *matCellDef="let row">{{row.url}}</td>
     </ng-container>
@@ -52,6 +76,7 @@
         </mat-menu>
       </td>
     </ng-container>
+
 
     <tr mat-header-row
         *matHeaderRowDef="displayedColumns"></tr>

@@ -31,10 +31,27 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     private snackBar: MatSnackBar,
   ) { }
 
-  displayedColumns = ['title', 'url', 'updated', 'actionMenu'];
+  displayedColumns: string[] = [];
+
+  shouldDisplayColumn(title: string) {
+    return this.displayedColumns.indexOf(title) >= 0;
+  }
 
   ngOnInit() {
     this.loadDataSource();
+    this._subscriptions.push(this.documentType$.subscribe((documentType) => {
+      this.displayedColumns = ['title'];
+
+      if (this.status === 'all') {
+        this.displayedColumns.push('status');
+      }
+
+      if (documentType.standalone) {
+        this.displayedColumns.push('url');
+      }
+
+      this.displayedColumns.push('updated', 'actionMenu');
+    }));
   }
 
   ngAfterViewInit(): void {
