@@ -16,6 +16,7 @@ export class NavigationComponent {
   isExpanded = true;
   siteName$ = this.siteSettingsService.getSiteName();
   documentTypes$ = this.documentTypeService.getDocumentTypes();
+  siteLink$ = this.siteSettingsService.getPrimaryDomain();
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)

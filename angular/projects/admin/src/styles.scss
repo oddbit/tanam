@@ -51,6 +51,18 @@ body {
   min-height: 56px !important;
 }
 
+.container {
+  padding: 0 16px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
 .primary-color {
-  color: mat-color($tanam-brand-color) !important;
+  color: mat-color($tanam-admin-primary) !important;
+}
+
+.primary-background {
+  background-color: mat-color($tanam-admin-primary) !important;
 }

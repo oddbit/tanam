@@ -5,10 +5,11 @@
     <tanam-action-button buttonType='cancel'
                          (click)='cancelEdit()'></tanam-action-button>
     <tanam-action-button buttonType='delete'
-                          (click)='deleteTemplate()'></tanam-action-button>
+                         (click)='deleteTemplate()'></tanam-action-button>
     <tanam-action-button buttonType='save'
                          (click)='saveTemplate()'></tanam-action-button>
   </tanam-context-actions>
+
   <mat-card class="shipping-card">
     <mat-card-header>
       <mat-card-title>{{ template?.title }} template definition</mat-card-title>
@@ -36,11 +37,12 @@
           </mat-form-field>
         </div>
         <div class="col">
-            <button mat-raised-button
-                    color="primary"
-                    type="button"
-                    (click)="viewTemplates()">
-              <mat-icon>save_alt</mat-icon> Include Template</button>
+          <button mat-raised-button
+                  color="primary"
+                  type="button"
+                  (click)="viewTemplates()">
+            <mat-icon>save_alt</mat-icon> Include Template
+          </button>
         </div>
       </div>
       <div class="row">

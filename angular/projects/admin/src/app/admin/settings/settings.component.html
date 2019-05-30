@@ -5,6 +5,7 @@
     <tanam-action-button buttonType='save'
                          (click)='saveSettings()'></tanam-action-button>
   </tanam-context-actions>
+
   <mat-card class="card">
     <mat-card-title>Site information</mat-card-title>
     <mat-card-subtitle>Configure your site information</mat-card-subtitle>
@@ -51,8 +52,8 @@
       <div class="row">
         <mat-form-field class="full-width">
           <input matInput
-            placeholder="Analytics"
-            formControlName="analytics">
+                 placeholder="Analytics"
+                 formControlName="analytics">
           <span matSuffix>{{analyticsName}} &nbsp;</span>
         </mat-form-field>
       </div>
@@ -68,13 +69,16 @@
     <mat-card-subtitle>Configure the URL settings and domain name.</mat-card-subtitle>
     <mat-card-content>
       <p>
-        You must manually configure the domains that you have connected with your <a href="https://firebase.google.com/docs/hosting/custom-domain" target="_blank">Firebase hosting</a> in order for Tanam to handle caching and SEO properly.
+        You must manually configure the domains that you have connected with your <a
+           href="https://firebase.google.com/docs/hosting/custom-domain"
+           target="_blank">Firebase hosting</a> in order for Tanam to handle caching and SEO properly.
       </p>
       <p>
         The primary domain should be the domain which you are using for your site. You can add additional domains that
         also
         serve your content and Tanam will take care of configurations that
-        <a href="https://support.google.com/webmasters/answer/1716747?hl=en" target="_blank">avoid penalties from search engines</a> when multiple domains are serving the same content.
+        <a href="https://support.google.com/webmasters/answer/1716747?hl=en"
+           target="_blank">avoid penalties from search engines</a> when multiple domains are serving the same content.
       </p>
       <div class="row">
         <div class="col">

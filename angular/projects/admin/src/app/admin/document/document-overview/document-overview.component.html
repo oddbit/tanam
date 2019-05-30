@@ -1,19 +1,13 @@
 <div *ngIf="(documentType$ |async) as documentType">
-  <tanam-page-title pageTitle="{{documentType.title}} overview"></tanam-page-title>
+  <tanam-page-title pageTitle="{{documentType.title}} Overview"
+                    [description]="documentType.description"></tanam-page-title>
   <tanam-context-actions>
     <tanam-action-button buttonType='create'
                          (click)='createNewEntry(documentType)'></tanam-action-button>
   </tanam-context-actions>
 
-  <mat-card *ngIf="documentType.description">
-    <mat-card-content>
-      <p>{{ documentType.description }}</p>
-    </mat-card-content>
-  </mat-card>
-
   <mat-tab-group>
-    <mat-tab
-             label="All [{{ documentCountTotal }}]">
+    <mat-tab label="All [{{ documentCountTotal }}]">
       <ng-template matTabContent>
         <tanam-document-list [documentType$]="documentType$"></tanam-document-list>
       </ng-template>

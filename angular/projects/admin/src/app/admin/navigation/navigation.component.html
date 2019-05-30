@@ -71,9 +71,13 @@
               *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>
-        {{ siteName$ | async }}
-      </span>
+      <a *ngIf="siteLink$ | async as siteLink"
+         href="https://{{siteLink}}"
+         target="_blank"
+         class="mat-body view-web-link">
+        <mat-icon>public</mat-icon>
+        <span>View website</span>
+      </a>
 
       <!-- This fills the remaining space of the current row -->
       <span class="fill-remaining-space"></span>
@@ -83,13 +87,13 @@
       </button>
       <tanam-profile-widget></tanam-profile-widget>
     </mat-toolbar>
-    <mat-toolbar class="sub-toolbar">
-      <mat-toolbar-row>
-        <div id="breadcrumbs"></div>
-        <div id="page-title"></div>
-        <span class="sub-toolbar-spacer"></span>
-        <div id="context-actions"></div>
-      </mat-toolbar-row>
+    <tanam-navigation-header>
+      <div id="page-title"></div>
+    </tanam-navigation-header>
+    <mat-toolbar class="header-action-wrapper">
+      <div id="breadcrumbs"></div>
+      <div class="spacer"></div>
+      <div id="context-actions"></div>
     </mat-toolbar>
     <!-- Add Content Here -->
     <div class="admin-container">
