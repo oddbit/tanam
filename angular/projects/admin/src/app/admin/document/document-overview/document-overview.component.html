@@ -5,12 +5,6 @@
                          (click)='createNewEntry(documentType)'></tanam-action-button>
   </tanam-context-actions>
 
-  <mat-card *ngIf="documentType.description">
-    <mat-card-content>
-      <p>{{ documentType.description }}</p>
-    </mat-card-content>
-  </mat-card>
-
   <mat-tab-group>
     <mat-tab
              label="All [{{ documentCountTotal }}]">
