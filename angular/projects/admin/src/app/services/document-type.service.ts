@@ -47,6 +47,7 @@ export class DocumentTypeService {
       documentCount: {
         published: 0,
         unpublished: 0,
+        scheduled: 0,
       },
       updated: firebase.firestore.FieldValue.serverTimestamp(),
       created: firebase.firestore.FieldValue.serverTimestamp(),

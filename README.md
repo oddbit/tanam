@@ -6,7 +6,7 @@
 
 ## Tanam is a free CMS; both free as in FOSS and as in free ice cream 🍦
 
-![Login screen](/docs/images/overview.png)
+![Login screen](/docs/images/tanam-overview.gif)
 
 
 ```
@@ -24,11 +24,7 @@ Use at your own risk.
 
 # Problem statement
 Building a website for content creation such as personal blog or even for a business with regular
-updates can be unnecessary complicated or expensive.
-
-Some of the most popular CMS platforms requires to be hosted on a VPS or a cloud hosting offer
-that both will set you back a few dollars per month and in the case of VPS it will probably come
-with a fairly poor performance.
+updates can be unnecessary complicated or expensive. 
 
 Static websites are increasingly popular for the of performance of serving time. But they are on
 the other hand relatively difficult to maintain for a non-technical content creators.
@@ -40,12 +36,12 @@ virtually infinitly high performance.
 Tanam is built and fully powered by Firebase. It transforms your Firebase project to a dynamic content
 website backed by a CMS that is completely free; both free as in FOSS and as in free ice cream 🍦
 
-Tanam is providing a platform that server side renders your dynamic content and delivers it with static 
-site performance straight out of the box. It's a auto-scaling platform that will work just as well for 
+Tanam is providing a platform that server side renders your dynamic content and delivers it with static
+site performance straight out of the box. It's a auto-scaling platform that will work just as well for
 small personal sites as it will also be able to serve heavy load without breaking a sweat.
 
 The simple way to describe how this is possible is to say that we're using Google's global CDN as our
-filesystem for statically generated pages. 
+filesystem for statically generated pages.
 All cached content is immediately replaced as you update it. Since we are pre-building
 the content, all your URLs will serve instantly as a static website would. Performance only depends
 on the size of your page.

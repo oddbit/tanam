@@ -24,6 +24,7 @@ export interface DocumentField {
 export interface DocumentCount {
   published: number;
   unpublished: number;
+  scheduled: number;
 }
 
 export interface DocumentType {

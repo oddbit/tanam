@@ -31,10 +31,27 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     private snackBar: MatSnackBar,
   ) { }
 
-  displayedColumns = ['title', 'slug', 'updated', 'actionMenu'];
+  displayedColumns: string[] = [];
+
+  shouldDisplayColumn(title: string) {
+    return this.displayedColumns.indexOf(title) >= 0;
+  }
 
   ngOnInit() {
     this.loadDataSource();
+    this._subscriptions.push(this.documentType$.subscribe((documentType) => {
+      this.displayedColumns = ['title'];
+
+      if (this.status === 'all') {
+        this.displayedColumns.push('status');
+      }
+
+      if (documentType.standalone) {
+        this.displayedColumns.push('url');
+      }
+
+      this.displayedColumns.push('updated', 'actionMenu');
+    }));
   }
 
   ngAfterViewInit(): void {
@@ -68,11 +85,15 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
   setTotalCount(dataSource: any) {
     const refNumEntries = dataSource['documentType'].documentCount;
     if (this.status === 'all') {
-      this.total_count = refNumEntries.published + refNumEntries.unpublished;
+      this.total_count = refNumEntries.published + refNumEntries.unpublished + refNumEntries.scheduled;
     } else if (this.status === 'published') {
       this.total_count = refNumEntries.published;
-    } else {
+    } else if (this.status === 'unpublished') {
       this.total_count = refNumEntries.unpublished;
+    } else if (this.status === 'scheduled') {
+      this.total_count = refNumEntries.scheduled;
+    } else {
+      this.total_count = 0;
     }
   }
 
