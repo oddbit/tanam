@@ -94,6 +94,28 @@ export async function compileTemplate(context: PageContext) {
   });
 }
 
+export async function renderPage404() {
+  return new Promise<string>(async (resolve, reject) => {
+    const template = await templateService.getTemplate404();
+    if (!template) {
+      console.log(`[compileTemplate404] template http404 not found`);
+      reject();
+    }
+    const source = dust.compile(template.template, template.id);
+    dust.register(template.id, dust.loadSource(source));
+    dust.render('http404', {}, (err: any, out: string) => {
+      if (err) {
+        console.log(`[renderDocument] Error rendering: ${JSON.stringify({ err, out })}`);
+        reject();
+      }
+      console.log(`[renderDocument] Finished rendering`);
+      console.log(`[renderDocument-Result] ${JSON.stringify(out)}`)
+      const $ = cheerio.load(out);
+      resolve($.html());
+    });
+  });
+}
+
 export async function renderPage(context: PageContext): Promise<string> {
   const siteInfo = await siteInfoService.getSiteInfo();
   const template = await compileTemplate(context);
