@@ -21,6 +21,7 @@
           *ngIf="isExpanded">Content</h3>
       <mat-divider *ngIf="!isExpanded"></mat-divider>
       <tanam-navigation-list-item *ngFor="let documentType of documentTypes$ | async"
+                                  [id]="documentType.id"
                                   routerLink="/_/admin/type/{{documentType.id}}"
                                   icon="{{documentType.icon}}"
                                   [isExpanded]="isExpanded"
@@ -29,6 +30,10 @@
       <h3 mat-subheader
           *ngIf="isExpanded">Manage</h3>
       <mat-divider *ngIf="!isExpanded"></mat-divider>
+      <tanam-navigation-list-item routerLink="/_/admin/type/page/overview"
+                                  icon="chrome_reader_mode"
+                                  [isExpanded]="isExpanded"
+                                  title="Pages"></tanam-navigation-list-item>
       <tanam-navigation-list-item routerLink="/_/admin/media"
                                   icon="image"
                                   [isExpanded]="isExpanded"
