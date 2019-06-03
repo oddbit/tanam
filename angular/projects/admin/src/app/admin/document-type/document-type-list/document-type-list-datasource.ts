@@ -3,6 +3,7 @@ import { MatPaginator, MatSort } from '@angular/material';
 import { Observable } from 'rxjs';
 import { DocumentType } from 'tanam-models';
 import { DocumentTypeService } from '../../../services/document-type.service';
+import { map } from 'rxjs/operators';
 
 export class DocumentTypeListDataSource extends DataSource<DocumentType> {
   data: DocumentType[];
@@ -16,7 +17,8 @@ export class DocumentTypeListDataSource extends DataSource<DocumentType> {
   }
 
   connect(): Observable<DocumentType[]> {
-    return this.documentTypeService.getDocumentTypes();
+    return this.documentTypeService.getDocumentTypes()
+      .pipe(map(documentTypes => documentTypes.filter(documentType => documentType.id !== 'page')));
   }
 
   disconnect() { }
