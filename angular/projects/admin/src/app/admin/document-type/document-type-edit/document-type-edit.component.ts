@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, filter } from 'rxjs/operators';
 import { DocumentTypeService } from '../../../services/document-type.service';
 
 @Component({
@@ -9,7 +9,10 @@ import { DocumentTypeService } from '../../../services/document-type.service';
   styleUrls: ['./document-type-edit.component.scss']
 })
 export class DocumentTypeEditComponent {
-  documentType$ = this.route.paramMap.pipe(switchMap(params => this.cts.getDocumentType(params.get('typeId'))));
+  documentType$ = this.route.paramMap.pipe(
+    switchMap(params => this.cts.getDocumentType(params.get('typeId'))),
+    filter(documentType => documentType.id !== 'page')
+  );
 
   constructor(
     private readonly route: ActivatedRoute,
