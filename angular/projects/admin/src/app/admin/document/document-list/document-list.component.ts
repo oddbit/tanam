@@ -120,7 +120,7 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.router.navigateByUrl(url);
   }
 
-  setTotalCount(dataSource: Object) {
+  setTotalCount(dataSource: DocumentListDataSource) {
     const refNumEntries = dataSource['documentType'].documentCount;
     if (this.status === 'all') {
       this.total_count = refNumEntries.published + refNumEntries.unpublished + refNumEntries.scheduled;
@@ -143,9 +143,5 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.snackBar.open('Success', 'Dismiss', {
       duration: 2000
     });
-  }
-
-  private resetPagination () {
-
   }
 }

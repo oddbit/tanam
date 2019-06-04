@@ -18,7 +18,6 @@ export interface DocumentTypeQueryOptions {
   providedIn: 'root'
 })
 export class DocumentService {
-  // private pageStartingPointDocs = [];
   readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
 
   constructor(
