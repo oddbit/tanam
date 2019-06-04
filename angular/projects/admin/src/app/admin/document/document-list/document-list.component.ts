@@ -43,17 +43,15 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    this.documentType$.subscribe(val => {
-      this.paginator.pageIndex = 0;
-    });
     this.loadDataSource();
     this._subscriptions.push(this.documentType$.subscribe((documentType) => {
-      // Reset Pagination value when documentTypa changed
+      // Reset Pagination value when documentType changed
+      this.paginator.pageIndex = 0;
+      this.lastPageIndex = 0;
       this.lastDocSnap = null;
       this.firstDocSnap = null;
       this.arrFirstDocId = [];
       this.lastDocId = '';
-
       this.displayedColumns = ['title'];
 
       if (this.status === 'all') {
