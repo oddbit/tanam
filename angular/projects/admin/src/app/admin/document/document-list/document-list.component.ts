@@ -15,6 +15,11 @@ import { TaskService } from '../../../services/task.service';
 })
 export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
   total_count: number;
+  lastPageIndex = 0;
+  arrFirstDocId = [];
+  firstDocSnap: any;
+  lastDocId: string;
+  lastDocSnap: any;
 
   @Input() documentType$: Observable<DocumentType>;
   @Input() status = 'all';
@@ -38,8 +43,17 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    this.documentType$.subscribe(val => {
+      this.paginator.pageIndex = 0;
+    });
     this.loadDataSource();
     this._subscriptions.push(this.documentType$.subscribe((documentType) => {
+      console.log('Type changed');
+      this.lastDocSnap = null;
+      this.firstDocSnap = null;
+      this.arrFirstDocId = [];
+      this.lastDocId = '';
+
       this.displayedColumns = ['title'];
 
       if (this.status === 'all') {
@@ -60,10 +74,18 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
-        tap(() => {
+        tap(async () => {
+          const nextPage = this.paginator.pageIndex > this.lastPageIndex;
+          this.lastDocSnap = await this.documentService.getReference(this.lastDocId);
+          if (!nextPage && this.paginator.pageIndex !== 0 ) {
+            this.firstDocSnap = await this.documentService.getReference(this.arrFirstDocId[this.arrFirstDocId.length - 2]);
+            this.arrFirstDocId.length = this.arrFirstDocId.length - 1;
+          } else if (this.paginator.pageIndex === 0) {
+            this.firstDocSnap = await this.documentService.getReference(this.arrFirstDocId[0]);
+            this.arrFirstDocId = [];
+          }
           this.loadDataSource();
-        }
-        )
+        })
       ).subscribe();
   }
 
@@ -72,8 +94,25 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private loadDataSource() {
+    const nextPage = this.paginator.pageIndex > this.lastPageIndex;
+    this.lastPageIndex = this.paginator.pageIndex;
     this._subscriptions.push(this.documentType$.subscribe(documentType => {
-      this.dataSource = new DocumentListDataSource(documentType, this.documentService, this.paginator, this.sort, this.status);
+      this.dataSource = new DocumentListDataSource(
+        documentType,
+        this.documentService,
+        this.paginator,
+        this.sort,
+        this.status,
+        nextPage,
+        this.lastDocSnap,
+        this.firstDocSnap
+      );
+      this.dataSource.connect().subscribe(docs => {
+        if (nextPage || this.paginator.pageIndex === 0) {
+          this.arrFirstDocId.push(docs[0].id);
+        }
+        this.lastDocId = docs[docs.length - 1].id;
+      });
       this.setTotalCount(this.dataSource);
     }));
   }
@@ -82,7 +121,8 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     const url = `/_/admin/document/${documentId}`;
     this.router.navigateByUrl(url);
   }
-  setTotalCount(dataSource: any) {
+
+  setTotalCount(dataSource: Object) {
     const refNumEntries = dataSource['documentType'].documentCount;
     if (this.status === 'all') {
       this.total_count = refNumEntries.published + refNumEntries.unpublished + refNumEntries.scheduled;

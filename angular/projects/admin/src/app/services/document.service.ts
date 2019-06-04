@@ -18,6 +18,7 @@ export interface DocumentTypeQueryOptions {
   providedIn: 'root'
 })
 export class DocumentService {
+  // private pageStartingPointDocs = [];
   readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
 
   constructor(
@@ -98,8 +99,15 @@ export class DocumentService {
       .valueChanges();
   }
 
-  query(documentTypeId: string, status: string, queryOpts: DocumentTypeQueryOptions = {}): Observable<Document[]> {
-    console.log(`[DocumentService:getDocumentTypeFields] ${documentTypeId}, query=${JSON.stringify(queryOpts)}`);
+  query(
+    documentTypeId: string,
+    status: string,
+    queryOpts: DocumentTypeQueryOptions = {},
+    nextPage?: Boolean,
+    pageIndex?: number,
+    lastDocSnap?: any,
+    backDocSnap?: any
+  ): Observable<Document[]> {
 
     const queryFn = (ref: CollectionReference) => {
       let query = ref.where('documentType', '==', documentTypeId);
@@ -111,15 +119,31 @@ export class DocumentService {
         query = query.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
       }
 
+      if (!nextPage && backDocSnap) { // back
+        query = query.startAt(backDocSnap);
+      }
+
       if (queryOpts.limit) {
         query = query.limit(queryOpts.limit);
       }
 
+      if (nextPage && lastDocSnap) { // next page
+        query = query.startAfter(lastDocSnap);
+      }
       return query;
     };
 
     return this.siteCollection
-      .collection<Document>('documents', queryFn)
-      .valueChanges();
+    .collection<Document>('documents', queryFn).valueChanges();
+  }
+
+  getReference(id: string) {
+    if (!id) {
+      return;
+    }
+    const a = this.siteCollection
+      .collection<Document>('documents').doc(id)
+      .ref.get();
+    return a;
   }
 }
