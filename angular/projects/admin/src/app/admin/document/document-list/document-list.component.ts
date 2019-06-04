@@ -17,9 +17,9 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
   total_count: number;
   lastPageIndex = 0;
   arrFirstDocId = [];
-  firstDocSnap: any;
+  firstDocSnap: firebase.firestore.DocumentSnapshot;
   lastDocId: string;
-  lastDocSnap: any;
+  lastDocSnap: firebase.firestore.DocumentSnapshot;
 
   @Input() documentType$: Observable<DocumentType>;
   @Input() status = 'all';
@@ -48,7 +48,7 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     });
     this.loadDataSource();
     this._subscriptions.push(this.documentType$.subscribe((documentType) => {
-      console.log('Type changed');
+      // Reset Pagination value when documentTypa changed
       this.lastDocSnap = null;
       this.firstDocSnap = null;
       this.arrFirstDocId = [];
@@ -145,5 +145,9 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.snackBar.open('Success', 'Dismiss', {
       duration: 2000
     });
+  }
+
+  private resetPagination () {
+
   }
 }

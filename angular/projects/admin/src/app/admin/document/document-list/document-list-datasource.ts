@@ -14,8 +14,8 @@ export class DocumentListDataSource extends DataSource<Document> {
     private readonly sort: MatSort,
     private readonly status: string,
     private readonly nextPage: Boolean,
-    private readonly lastDocSnap: any,
-    private readonly firstDocSnap: any
+    private readonly lastDocSnap: firebase.firestore.DocumentSnapshot,
+    private readonly firstDocSnap: firebase.firestore.DocumentSnapshot
   ) {
     super();
   }

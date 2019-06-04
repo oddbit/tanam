@@ -141,9 +141,8 @@ export class DocumentService {
     if (!id) {
       return;
     }
-    const a = this.siteCollection
+    return this.siteCollection
       .collection<Document>('documents').doc(id)
       .ref.get();
-    return a;
   }
 }
