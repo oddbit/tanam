@@ -79,7 +79,11 @@ export async function getPageContextByUrl(url: string): Promise<PageContext> {
   console.log(`[getPageContextByUrl] ${JSON.stringify(url)}`);
   const documents = await documentService.getDocumentByUrl(url || '/');
   console.log(`[getPageContextByUrl] Number of query results: ${documents.length}`);
-  return documents.length === 0 ? null : _toContext(documents[0]);
+  if (documents.length === 0) {
+    const page404 = await documentService.getDocument404();
+    return _toContext(page404[0]);
+  }
+  return _toContext(documents[0]);
 }
 
 async function _toContext(document: Document) {

@@ -35,6 +35,22 @@ export async function getDocumentByUrl(url: string): Promise<Document[]> {
   return results;
 }
 
+export async function getDocument404() {
+  console.log(`[document.service.getDocument404]`);
+  const querySnap = await siteCollection()
+    .collection('documents')
+    .where('status', '==', 'published')
+    .where('url', '==', '/404-page')
+    .limit(1)
+    .get();
+
+  const results = [];
+  for (const doc of querySnap.docs) {
+    results.push(doc.data() as Document);
+  }
+  return results;
+}
+
 /**
  * This method builds up a dependency graph by registering document references
  *

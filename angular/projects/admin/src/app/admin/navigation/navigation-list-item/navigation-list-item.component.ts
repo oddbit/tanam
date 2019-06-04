@@ -6,6 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./navigation-list-item.component.scss']
 })
 export class NavigationListItemComponent implements OnInit {
+  @Input() id: string;
   @Input() icon: string;
   @Input() isExpanded: boolean;
   @Input() title: string;
