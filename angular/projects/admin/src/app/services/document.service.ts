@@ -13,7 +13,7 @@ export interface DocumentTypeQueryOptions {
     sortOrder: 'asc' | 'desc',
   };
   status?: DocumentStatus;
-  docStartAt?: firebase.firestore.DocumentSnapshot;
+  startAt?: firebase.firestore.DocumentSnapshot;
 }
 
 @Injectable({
@@ -115,8 +115,8 @@ export class DocumentService {
         query = query.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
       }
 
-      if (queryOpts.docStartAt) {
-        query = query.startAfter(queryOpts.docStartAt);
+      if (queryOpts.startAt) {
+        query = query.startAfter(queryOpts.startAt);
       }
 
       if (queryOpts.limit) {

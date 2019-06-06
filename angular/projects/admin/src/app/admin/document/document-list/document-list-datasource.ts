@@ -32,7 +32,7 @@ export class DocumentListDataSource extends DataSource<Document> {
         sortOrder: this.sort.direction === 'asc' ? 'asc' : 'desc',
       },
       status: this.status,
-      docStartAt: this.docStartAt
+      startAt: this.docStartAt
     });
     return queryObsv;
   }
