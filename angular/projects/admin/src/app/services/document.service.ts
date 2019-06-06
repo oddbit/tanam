@@ -116,7 +116,7 @@ export class DocumentService {
       }
 
       if (queryOpts.docStartAt) {
-        query = query.startAt(queryOpts.docStartAt);
+        query = query.startAfter(queryOpts.docStartAt);
       }
 
       if (queryOpts.limit) {

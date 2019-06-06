@@ -16,10 +16,8 @@ import { TaskService } from '../../../services/task.service';
 export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
   total_count: number;
   lastPageIndex = 0;
-  arrFirstDocId = [];
-  firstDocSnap: firebase.firestore.DocumentSnapshot;
-  lastDocId: string;
-  lastDocSnap: firebase.firestore.DocumentSnapshot;
+  arrLastDocsId: string[] ;
+  docSnap: firebase.firestore.DocumentSnapshot;
 
   @Input() documentType$: Observable<DocumentType>;
   @Input() status: DocumentStatus;
@@ -48,10 +46,8 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
       // Reset Pagination value when documentType changed
       this.paginator.pageIndex = 0;
       this.lastPageIndex = 0;
-      this.lastDocSnap = null;
-      this.firstDocSnap = null;
-      this.arrFirstDocId = [];
-      this.lastDocId = '';
+      this.docSnap = null;
+      this.arrLastDocsId = [];
       this.displayedColumns = ['title'];
 
       if (!this.status) {
@@ -74,13 +70,13 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(
         tap(async () => {
           const nextPage = this.paginator.pageIndex > this.lastPageIndex;
-          this.lastDocSnap = await this.documentService.getReference(this.lastDocId);
+          this.docSnap = await this.documentService.getReference(this.arrLastDocsId[this.arrLastDocsId.length - 1]);
           if (!nextPage && this.paginator.pageIndex !== 0 ) {
-            this.firstDocSnap = await this.documentService.getReference(this.arrFirstDocId[this.arrFirstDocId.length - 2]);
-            this.arrFirstDocId.length = this.arrFirstDocId.length - 1;
+            this.docSnap = await this.documentService.getReference(this.arrLastDocsId[this.arrLastDocsId.length - 3]);
+            this.arrLastDocsId.length = this.arrLastDocsId.length - 1;
           } else if (this.paginator.pageIndex === 0) {
-            this.firstDocSnap = await this.documentService.getReference(this.arrFirstDocId[0]);
-            this.arrFirstDocId = [];
+            this.docSnap = null;
+            this.arrLastDocsId = [];
           }
           this.loadDataSource();
         })
@@ -93,8 +89,6 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private loadDataSource() {
     const nextPage = this.paginator.pageIndex > this.lastPageIndex;
-    let docStartAt: firebase.firestore.DocumentSnapshot;
-    docStartAt = nextPage ? this.lastDocSnap : this.firstDocSnap;
 
     this.lastPageIndex = this.paginator.pageIndex;
     this._subscriptions.push(this.documentType$.subscribe(documentType => {
@@ -104,13 +98,12 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
         this.paginator,
         this.sort,
         this.status,
-        docStartAt
+        this.docSnap
       );
       this.dataSource.connect().subscribe(docs => {
-        if ((nextPage || this.paginator.pageIndex === 0) && !this.arrFirstDocId.includes(docs[0].id)) {
-          this.arrFirstDocId.push(docs[0].id);
+        if ((nextPage || this.paginator.pageIndex === 0) && !this.arrLastDocsId.includes(docs[docs.length - 1].id)) {
+          this.arrLastDocsId.push(docs[docs.length - 1].id);
         }
-        this.lastDocId = docs[docs.length - 1].id;
       });
       this.setTotalCount(this.dataSource);
     }));
