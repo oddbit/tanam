@@ -13,6 +13,7 @@ export interface DocumentTypeQueryOptions {
     sortOrder: 'asc' | 'desc',
   };
   status?: DocumentStatus;
+  docStartAt?: firebase.firestore.DocumentSnapshot;
 }
 
 @Injectable({
@@ -101,10 +102,7 @@ export class DocumentService {
 
   query(
     documentTypeId: string,
-    queryOpts: DocumentTypeQueryOptions = {},
-    nextPage?: Boolean,
-    lastDocSnap?: any,
-    backDocSnap?: any
+    queryOpts: DocumentTypeQueryOptions = {}
   ): Observable<Document[]> {
 
     const queryFn = (ref: CollectionReference) => {
@@ -117,17 +115,14 @@ export class DocumentService {
         query = query.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
       }
 
-      if (!nextPage && backDocSnap) { // back
-        query = query.startAt(backDocSnap);
+      if (queryOpts.docStartAt) {
+        query = query.startAt(queryOpts.docStartAt);
       }
 
       if (queryOpts.limit) {
         query = query.limit(queryOpts.limit);
       }
 
-      if (nextPage && lastDocSnap) { // next page
-        query = query.startAfter(lastDocSnap);
-      }
       return query;
     };
 

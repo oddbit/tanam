@@ -13,43 +13,27 @@ export class DocumentListDataSource extends DataSource<Document> {
     private readonly paginator: MatPaginator,
     private readonly sort: MatSort,
     private readonly status: DocumentStatus,
-    private readonly nextPage: boolean,
-    private readonly lastDocSnap: firebase.firestore.DocumentSnapshot,
-    private readonly firstDocSnap: firebase.firestore.DocumentSnapshot
+    private readonly docStartAt: firebase.firestore.DocumentSnapshot
   ) {
     super();
   }
 
   connect(): Observable<Document[]> {
-    return this.loadDocuments(
-      this.paginator.pageSize,
-      this.paginator.pageIndex,
-      this.sort.active,
-      this.sort.direction === 'asc' ? 'asc' : 'desc',
-      this.nextPage,
-      this.lastDocSnap,
-      this.firstDocSnap
-    );
+    return this.loadDocuments();
   }
 
   disconnect() { }
 
-  private loadDocuments(pageSize: number,
-    pageIndex: number,
-    field: string,
-    sortOrder: 'asc' | 'desc',
-    nextPage: boolean,
-    lastDocSnap?: any,
-    firstDocSnap?: any
-    ) {
+  private loadDocuments() {
     const queryObsv = this.documentService.query(this.documentType.id, {
-      limit: pageSize,
+      limit: this.paginator.pageSize,
       orderBy: {
-        field: field,
-        sortOrder: sortOrder
+        field: this.sort.active,
+        sortOrder: this.sort.direction === 'asc' ? 'asc' : 'desc',
       },
-      status: this.status
-    }, nextPage, lastDocSnap, firstDocSnap);
+      status: this.status,
+      docStartAt: this.docStartAt
+    });
     return queryObsv;
   }
 }

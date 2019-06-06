@@ -93,6 +93,9 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private loadDataSource() {
     const nextPage = this.paginator.pageIndex > this.lastPageIndex;
+    let docStartAt: firebase.firestore.DocumentSnapshot;
+    docStartAt = nextPage ? this.lastDocSnap : this.firstDocSnap;
+
     this.lastPageIndex = this.paginator.pageIndex;
     this._subscriptions.push(this.documentType$.subscribe(documentType => {
       this.dataSource = new DocumentListDataSource(
@@ -101,12 +104,10 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
         this.paginator,
         this.sort,
         this.status,
-        nextPage,
-        this.lastDocSnap,
-        this.firstDocSnap
+        docStartAt
       );
       this.dataSource.connect().subscribe(docs => {
-        if (nextPage || this.paginator.pageIndex === 0) {
+        if ((nextPage || this.paginator.pageIndex === 0) && !this.arrFirstDocId.includes(docs[0].id)) {
           this.arrFirstDocId.push(docs[0].id);
         }
         this.lastDocId = docs[docs.length - 1].id;
