@@ -18,7 +18,12 @@ export class AppAuthService {
   }
 
   login() {
-    this.fireAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+    const provider = new auth.GoogleAuthProvider();
+    provider.setCustomParameters({
+      prompt: 'select_account'
+    });
+
+    this.fireAuth.auth.signInWithPopup(provider);
   }
 
   logOut(): Promise<void> {
