@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { Document, DocumentType } from 'tanam-models';
+import { Document, DocumentType, DocumentStatus } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
 import { FirebaseApp } from '@angular/fire';
 
@@ -12,6 +12,7 @@ export interface DocumentTypeQueryOptions {
     field: string,
     sortOrder: 'asc' | 'desc',
   };
+  status?: DocumentStatus;
 }
 
 @Injectable({
@@ -100,18 +101,16 @@ export class DocumentService {
 
   query(
     documentTypeId: string,
-    status: string,
     queryOpts: DocumentTypeQueryOptions = {},
     nextPage?: Boolean,
-    pageIndex?: number,
     lastDocSnap?: any,
     backDocSnap?: any
   ): Observable<Document[]> {
 
     const queryFn = (ref: CollectionReference) => {
       let query = ref.where('documentType', '==', documentTypeId);
-      if (status !== 'all') {
-        query = query.where('status', '==', status);
+      if (queryOpts.status) {
+        query = query.where('status', '==', queryOpts.status);
       }
 
       if (queryOpts.orderBy) {

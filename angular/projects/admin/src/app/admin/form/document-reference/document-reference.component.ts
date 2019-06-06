@@ -4,7 +4,7 @@ import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional,
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatFormFieldControl, MatSelectChange } from '@angular/material';
 import { Observable, Subject } from 'rxjs';
-import { Document } from 'tanam-models';
+import { Document, DocumentStatus } from 'tanam-models';
 import { DocumentService } from '../../../services/document.service';
 
 @Component({
@@ -26,7 +26,7 @@ export class DocumentReferenceComponent implements MatFormFieldControl<string>, 
   controlType = 'document-reference';
 
   @Input() documentType: string;
-  @Input() status = 'published';
+  @Input() status: DocumentStatus = 'published';
   @Input() placeholder: string;
 
   errorState: boolean;
@@ -102,11 +102,12 @@ export class DocumentReferenceComponent implements MatFormFieldControl<string>, 
 
   ngOnInit() {
     console.log(this.status);
-    this.documentOptions$ = this.documentService.query(this.documentType, this.status, {
+    this.documentOptions$ = this.documentService.query(this.documentType, {
       orderBy: {
         field: 'title',
         sortOrder: 'asc',
       },
+      status: this.status,
     });
   }
 

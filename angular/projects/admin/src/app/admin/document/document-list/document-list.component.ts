@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@
 import { MatPaginator, MatSort, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { Observable, Subscription, merge } from 'rxjs';
-import { DocumentType, Document } from 'tanam-models';
+import { DocumentType, Document, DocumentStatus } from 'tanam-models';
 import { DocumentService } from '../../../services/document.service';
 import { DocumentListDataSource } from './document-list-datasource';
 import { tap } from 'rxjs/operators';
@@ -22,7 +22,7 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
   lastDocSnap: firebase.firestore.DocumentSnapshot;
 
   @Input() documentType$: Observable<DocumentType>;
-  @Input() status = 'all';
+  @Input() status: DocumentStatus;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -54,7 +54,7 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
       this.lastDocId = '';
       this.displayedColumns = ['title'];
 
-      if (this.status === 'all') {
+      if (!this.status) {
         this.displayedColumns.push('status');
       }
 
@@ -122,7 +122,7 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   setTotalCount(dataSource: DocumentListDataSource) {
     const refNumEntries = dataSource['documentType'].documentCount;
-    if (this.status === 'all') {
+    if (!this.status) {
       this.total_count = refNumEntries.published + refNumEntries.unpublished + refNumEntries.scheduled;
     } else if (this.status === 'published') {
       this.total_count = refNumEntries.published;

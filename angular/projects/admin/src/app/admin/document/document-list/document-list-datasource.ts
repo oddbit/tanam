@@ -1,7 +1,7 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { Observable } from 'rxjs';
-import { Document, DocumentType } from 'tanam-models';
+import { Document, DocumentType, DocumentStatus } from 'tanam-models';
 import { DocumentService } from '../../../services/document.service';
 
 export class DocumentListDataSource extends DataSource<Document> {
@@ -12,7 +12,7 @@ export class DocumentListDataSource extends DataSource<Document> {
     private readonly documentService: DocumentService,
     private readonly paginator: MatPaginator,
     private readonly sort: MatSort,
-    private readonly status: string,
+    private readonly status: DocumentStatus,
     private readonly nextPage: boolean,
     private readonly lastDocSnap: firebase.firestore.DocumentSnapshot,
     private readonly firstDocSnap: firebase.firestore.DocumentSnapshot
@@ -42,13 +42,14 @@ export class DocumentListDataSource extends DataSource<Document> {
     lastDocSnap?: any,
     firstDocSnap?: any
     ) {
-    const queryObsv = this.documentService.query(this.documentType.id, this.status, {
+    const queryObsv = this.documentService.query(this.documentType.id, {
       limit: pageSize,
       orderBy: {
         field: field,
         sortOrder: sortOrder
-      }
-    }, nextPage, pageIndex, lastDocSnap, firstDocSnap);
+      },
+      status: this.status
+    }, nextPage, lastDocSnap, firstDocSnap);
     return queryObsv;
   }
 }
