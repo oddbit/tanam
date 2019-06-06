@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { Document, DocumentType } from 'tanam-models';
+import { Document, DocumentStatus, DocumentType } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
-import { FirebaseApp } from '@angular/fire';
 
 export interface DocumentTypeQueryOptions {
   limit?: number;
@@ -12,6 +11,8 @@ export interface DocumentTypeQueryOptions {
     field: string,
     sortOrder: 'asc' | 'desc',
   };
+  status?: DocumentStatus;
+  startAt?: firebase.firestore.DocumentSnapshot;
 }
 
 @Injectable({
@@ -21,7 +22,6 @@ export class DocumentService {
   readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
 
   constructor(
-    private readonly firebaseApp: FirebaseApp,
     private readonly firestore: AngularFirestore,
     private readonly appConfig: AppConfigService,
   ) { }
@@ -98,17 +98,23 @@ export class DocumentService {
       .valueChanges();
   }
 
-  query(documentTypeId: string, status: string, queryOpts: DocumentTypeQueryOptions = {}): Observable<Document[]> {
-    console.log(`[DocumentService:getDocumentTypeFields] ${documentTypeId}, query=${JSON.stringify(queryOpts)}`);
+  query(
+    documentTypeId: string,
+    queryOpts: DocumentTypeQueryOptions = {}
+  ): Observable<Document[]> {
 
     const queryFn = (ref: CollectionReference) => {
       let query = ref.where('documentType', '==', documentTypeId);
-      if (status !== 'all') {
-        query = query.where('status', '==', status);
+      if (queryOpts.status) {
+        query = query.where('status', '==', queryOpts.status);
       }
 
       if (queryOpts.orderBy) {
         query = query.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
+      }
+
+      if (queryOpts.startAt) {
+        query = query.startAfter(queryOpts.startAt);
       }
 
       if (queryOpts.limit) {
@@ -119,7 +125,15 @@ export class DocumentService {
     };
 
     return this.siteCollection
-      .collection<Document>('documents', queryFn)
-      .valueChanges();
+    .collection<Document>('documents', queryFn).valueChanges();
+  }
+
+  getReference(id: string) {
+    if (!id) {
+      return;
+    }
+    return this.siteCollection
+      .collection<Document>('documents').doc(id)
+      .ref.get();
   }
 }

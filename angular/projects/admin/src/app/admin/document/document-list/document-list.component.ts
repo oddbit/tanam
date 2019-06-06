@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@
 import { MatPaginator, MatSort, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { Observable, Subscription, merge } from 'rxjs';
-import { DocumentType, Document } from 'tanam-models';
+import { DocumentType, Document, DocumentStatus } from 'tanam-models';
 import { DocumentService } from '../../../services/document.service';
 import { DocumentListDataSource } from './document-list-datasource';
 import { tap } from 'rxjs/operators';
@@ -15,9 +15,12 @@ import { TaskService } from '../../../services/task.service';
 })
 export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
   total_count: number;
+  lastPageIndex = 0;
+  arrLastDocsId: string[] ;
+  docSnap: firebase.firestore.DocumentSnapshot;
 
   @Input() documentType$: Observable<DocumentType>;
-  @Input() status = 'all';
+  @Input() status: DocumentStatus;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -40,9 +43,14 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     this.loadDataSource();
     this._subscriptions.push(this.documentType$.subscribe((documentType) => {
+      // Reset Pagination value when documentType changed
+      this.paginator.pageIndex = 0;
+      this.lastPageIndex = 0;
+      this.docSnap = null;
+      this.arrLastDocsId = [];
       this.displayedColumns = ['title'];
 
-      if (this.status === 'all') {
+      if (!this.status) {
         this.displayedColumns.push('status');
       }
 
@@ -60,10 +68,18 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
-        tap(() => {
+        tap(async () => {
+          const nextPage = this.paginator.pageIndex > this.lastPageIndex;
+          this.docSnap = await this.documentService.getReference(this.arrLastDocsId[this.arrLastDocsId.length - 1]);
+          if (!nextPage && this.paginator.pageIndex !== 0 ) {
+            this.docSnap = await this.documentService.getReference(this.arrLastDocsId[this.arrLastDocsId.length - 3]);
+            this.arrLastDocsId.length = this.arrLastDocsId.length - 1;
+          } else if (this.paginator.pageIndex === 0) {
+            this.docSnap = null;
+            this.arrLastDocsId = [];
+          }
           this.loadDataSource();
-        }
-        )
+        })
       ).subscribe();
   }
 
@@ -72,8 +88,23 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private loadDataSource() {
+    const nextPage = this.paginator.pageIndex > this.lastPageIndex;
+
+    this.lastPageIndex = this.paginator.pageIndex;
     this._subscriptions.push(this.documentType$.subscribe(documentType => {
-      this.dataSource = new DocumentListDataSource(documentType, this.documentService, this.paginator, this.sort, this.status);
+      this.dataSource = new DocumentListDataSource(
+        documentType,
+        this.documentService,
+        this.paginator,
+        this.sort,
+        this.status,
+        this.docSnap
+      );
+      this.dataSource.connect().subscribe(docs => {
+        if ((nextPage || this.paginator.pageIndex === 0) && !this.arrLastDocsId.includes(docs[docs.length - 1].id)) {
+          this.arrLastDocsId.push(docs[docs.length - 1].id);
+        }
+      });
       this.setTotalCount(this.dataSource);
     }));
   }
@@ -82,9 +113,10 @@ export class DocumentListComponent implements OnInit, OnDestroy, AfterViewInit {
     const url = `/_/admin/document/${documentId}`;
     this.router.navigateByUrl(url);
   }
-  setTotalCount(dataSource: any) {
+
+  setTotalCount(dataSource: DocumentListDataSource) {
     const refNumEntries = dataSource['documentType'].documentCount;
-    if (this.status === 'all') {
+    if (!this.status) {
       this.total_count = refNumEntries.published + refNumEntries.unpublished + refNumEntries.scheduled;
     } else if (this.status === 'published') {
       this.total_count = refNumEntries.published;
