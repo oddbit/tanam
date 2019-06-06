@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { Document, DocumentType, DocumentStatus } from 'tanam-models';
+import { Document, DocumentStatus, DocumentType } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
-import { FirebaseApp } from '@angular/fire';
 
 export interface DocumentTypeQueryOptions {
   limit?: number;
@@ -23,7 +22,6 @@ export class DocumentService {
   readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
 
   constructor(
-    private readonly firebaseApp: FirebaseApp,
     private readonly firestore: AngularFirestore,
     private readonly appConfig: AppConfigService,
   ) { }
