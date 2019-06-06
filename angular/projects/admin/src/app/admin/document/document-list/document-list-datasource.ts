@@ -13,7 +13,7 @@ export class DocumentListDataSource extends DataSource<Document> {
     private readonly paginator: MatPaginator,
     private readonly sort: MatSort,
     private readonly status: string,
-    private readonly nextPage: Boolean,
+    private readonly nextPage: boolean,
     private readonly lastDocSnap: firebase.firestore.DocumentSnapshot,
     private readonly firstDocSnap: firebase.firestore.DocumentSnapshot
   ) {
@@ -38,7 +38,7 @@ export class DocumentListDataSource extends DataSource<Document> {
     pageIndex: number,
     field: string,
     sortOrder: 'asc' | 'desc',
-    nextPage: Boolean,
+    nextPage: boolean,
     lastDocSnap?: any,
     firstDocSnap?: any
     ) {
