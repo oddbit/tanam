@@ -1,7 +1,8 @@
 <div *ngIf="(document$ | async) as document">
   <div *ngIf="(documentType$ | async) as documentType">
-    <tanam-page-title pageTitle="Edit {{documentType.title}}"></tanam-page-title>
-    <tanam-breadcrumbs title="Edit">
+    <tanam-page-title pageTitle="{{document.revision === 0 ? 'New' : 'Edit'}} {{documentType.title}} Content">
+    </tanam-page-title>
+    <tanam-breadcrumbs title="{{document.title || 'New'}}">
       <tanam-breadcrumb routerLink="/_/admin/type/{{ documentType.id }}">{{ documentType.title }}</tanam-breadcrumb>
     </tanam-breadcrumbs>
     <tanam-context-actions>
