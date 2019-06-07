@@ -62,7 +62,8 @@
                                     title="Settings"></tanam-navigation-list-item>
       </div>
     </mat-nav-list>
-    <mat-toolbar class="expand-toolbar">
+    <mat-toolbar class="expand-toolbar"
+                 [ngClass]="{'chevron-center': !isExpanded}">
       <mat-icon class="togglerMiniNav"
                 (click)="toggleMiniNav()">{{isExpanded? 'chevron_left':'chevron_right'}}</mat-icon>
     </mat-toolbar>
