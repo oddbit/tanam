@@ -1,23 +1,24 @@
-<div class="title-table">
-  <h3 class="mat-h3">File Assets</h3>
-  <button mat-stroked-button
-          (click)="fileInput.click()">
-    <mat-icon>file_upload</mat-icon>
-    Upload File
-  </button>
-  <input #fileInput
-         type="file"
-         (change)="uploadSingleFile($event)"
-         style="display:none;" />
-</div>
-<section *ngFor="let uploadTasks of uploadTasks | keyvalue">
-  <strong>{{uploadTasks.key}}</strong>
-  <mat-progress-bar [color]="accent"
-                    [mode]="determinate"
-                    [value]="uploadTasks.value | async">
-  </mat-progress-bar>
-</section>
-<div class="mat-elevation-z8">
+<p class="mat-body-1">Theme Assets</p>
+<div class="mat-elevation-z2 table-border-radius relative">
+  <div class="table-header-action">
+    <button mat-stroked-button
+            color="primary"
+            (click)="fileInput.click()">
+      <mat-icon>file_upload</mat-icon>
+      Upload File
+    </button>
+    <input #fileInput
+           type="file"
+           (change)="uploadSingleFile($event)"
+           style="display:none;" />
+  </div>
+  <section *ngFor="let uploadTasks of uploadTasks | keyvalue">
+    <span class="mat-body-2 fileupload-name">{{uploadTasks.key}}</span>
+    <mat-progress-bar color="primary"
+                      mode="determinate"
+                      [value]="uploadTasks.value | async">
+    </mat-progress-bar>
+  </section>
   <table mat-table
          [dataSource]="dataSource"
          matSort>
@@ -54,12 +55,13 @@
           *matCellDef="let row"> {{row.updated.toDate() | date:'medium'}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="action">
+    <ng-container matColumnDef="action"
+                  stickyEnd>
       <th mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header> Action </th>
+          *matHeaderCellDef></th>
       <td mat-cell
-          *matCellDef="let row">
+          *matCellDef="let row"
+          class="action-column">
         <button mat-icon-button>
           <mat-icon aria-label="Detail File"
                     (click)="detailFile(row)">info</mat-icon>

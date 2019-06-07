@@ -2,11 +2,16 @@ table {
   width: 100%;
 }
 
-.title-table {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  display: flex;
-  button {
-    margin-left: auto;
-  }
+.relative {
+  position: relative;
+}
+
+.fileupload-name {
+  position: absolute;
+  top: 16px;
+  left: 24px;
+}
+
+.action-column {
+  text-align: right;
 }
