@@ -1,16 +1,18 @@
 <p class="mat-body-1">Theme Assets</p>
 <div class="mat-elevation-z2 table-border-radius relative">
   <div class="table-header">
-    <button mat-stroked-button
-            color="primary"
-            (click)="fileInput.click()">
-      <mat-icon>file_upload</mat-icon>
-      Upload File
-    </button>
-    <input #fileInput
-           type="file"
-           (change)="uploadSingleFile($event)"
-           style="display:none;" />
+    <div class="actions-wrapper">
+      <button mat-stroked-button
+              color="primary"
+              (click)="fileInput.click()">
+        <mat-icon>file_upload</mat-icon>
+        Upload File
+      </button>
+      <input #fileInput
+             type="file"
+             (change)="uploadSingleFile($event)"
+             style="display:none;" />
+    </div>
   </div>
   <section *ngFor="let uploadTasks of uploadTasks | keyvalue">
     <span class="mat-body-2 fileupload-name">{{uploadTasks.key}}</span>

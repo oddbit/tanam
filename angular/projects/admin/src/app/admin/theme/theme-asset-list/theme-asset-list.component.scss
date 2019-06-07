@@ -6,6 +6,11 @@ table {
   position: relative;
 }
 
+.actions-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .fileupload-name {
   position: absolute;
   top: 16px;
