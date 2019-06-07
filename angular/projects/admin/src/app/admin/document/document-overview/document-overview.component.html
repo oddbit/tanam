@@ -6,29 +6,31 @@
                          (click)='createNewEntry(documentType)'></tanam-action-button>
   </tanam-context-actions>
 
-  <mat-tab-group>
-    <mat-tab label="All [{{ documentCountTotal }}]">
-      <ng-template matTabContent>
-        <tanam-document-list [documentType$]="documentType$"></tanam-document-list>
-      </ng-template>
-    </mat-tab>
-    <mat-tab label="Published [{{ documentCountPublished }}]">
-      <ng-template matTabContent>
-        <tanam-document-list [documentType$]="documentType$"
-                             status="published"></tanam-document-list>
-      </ng-template>
-    </mat-tab>
-    <mat-tab label="Unpublished [{{ documentCountUnpublished }}]">
-      <ng-template matTabContent>
-        <tanam-document-list [documentType$]="documentType$"
-                             status="unpublished"></tanam-document-list>
-      </ng-template>
-    </mat-tab>
-    <mat-tab label="Scheduled [{{ documentCountScheduled }}]">
-      <ng-template matTabContent>
-        <tanam-document-list [documentType$]="documentType$"
-                             status="scheduled"></tanam-document-list>
-      </ng-template>
-    </mat-tab>
-  </mat-tab-group>
+  <div class="mat-elevation-z2 table-border-radius">
+    <mat-tab-group>
+      <mat-tab label="All [{{ documentCountTotal }}]">
+        <ng-template matTabContent>
+          <tanam-document-list [documentType$]="documentType$"></tanam-document-list>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Published [{{ documentCountPublished }}]">
+        <ng-template matTabContent>
+          <tanam-document-list [documentType$]="documentType$"
+                               status="published"></tanam-document-list>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Unpublished [{{ documentCountUnpublished }}]">
+        <ng-template matTabContent>
+          <tanam-document-list [documentType$]="documentType$"
+                               status="unpublished"></tanam-document-list>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Scheduled [{{ documentCountScheduled }}]">
+        <ng-template matTabContent>
+          <tanam-document-list [documentType$]="documentType$"
+                               status="scheduled"></tanam-document-list>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
 </div>
