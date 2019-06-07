@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent implements AfterViewInit, OnDestroy {
   /** Based on the screen size, switch from standard to one column per row */
   cards: Observable<any> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map(({ matches }) => {
@@ -31,4 +31,12 @@ export class DashboardComponent {
   );
 
   constructor(private breakpointObserver: BreakpointObserver) { }
+
+  ngAfterViewInit() {
+    document.getElementById('header-action').style.display = 'none';
+  }
+
+  ngOnDestroy() {
+    document.getElementById('header-action').removeAttribute('style');
+  }
 }
