@@ -66,3 +66,8 @@ body {
 .primary-background {
   background-color: mat-color($tanam-admin-primary) !important;
 }
+
+.table-border-radius {
+  border-radius: 8px;
+  overflow: hidden;
+}
