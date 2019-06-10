@@ -1,5 +1,5 @@
 .card {
-  margin-bottom: 30px;
+  margin-bottom: 16px;
 }
 
 .full-width {
@@ -39,5 +39,18 @@
   .action {
     height: 40px;
     margin-left: 24px;
+  }
+}
+
+.table-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.domain-row {
+  align-items: center;
+
+  .flex-1 {
+    flex: 1;
   }
 }
