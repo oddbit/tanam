@@ -72,26 +72,24 @@
     </div>
     <mat-card>
       <mat-card-content>
-        <div class="settings-form">
-          <mat-radio-group formControlName="primaryDomain">
-            <div formArrayName="domains">
-              <div class="row domain-row"
-                   *ngFor="let domain of domainsFormArray.controls; let i=index"
-                   [formGroupName]="i">
-                <mat-radio-button [value]="domain.value.name">
-                </mat-radio-button>
-                <mat-form-field class="flex-1">
-                  <input matInput
-                         formControlName="name">
-                </mat-form-field>
-                <button mat-raised-button
-                        color="warn"
-                        *ngIf="i > 1"
-                        (click)="removeDomain(i)">Remove</button>
-              </div>
+        <mat-radio-group formControlName="primaryDomain">
+          <div formArrayName="domains">
+            <div class="row domain-row"
+                 *ngFor="let domain of domainsFormArray.controls; let i=index"
+                 [formGroupName]="i">
+              <mat-radio-button [value]="domain.value.name">
+              </mat-radio-button>
+              <mat-form-field class="flex-1">
+                <input matInput
+                       formControlName="name">
+              </mat-form-field>
+              <button mat-raised-button
+                      color="warn"
+                      *ngIf="i > 1"
+                      (click)="removeDomain(i)">Remove</button>
             </div>
-          </mat-radio-group>
-        </div>
+          </div>
+        </mat-radio-group>
       </mat-card-content>
     </mat-card>
   </div>
