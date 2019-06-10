@@ -10,7 +10,7 @@
                     mat-list-icon>style</mat-icon>
           <h4 mat-line>{{doc.title}}</h4>
           <p mat-line>{{doc.description}}</p>
-          <small style="width: 30%">{{doc.updated?.toDate() | date:'medium'}}</small>
+          <small style="width: 30%">Updated: <br /> {{doc.updated?.toDate() | date:'medium'}}</small>
           <mat-divider></mat-divider>
         </mat-list-item>
         <mat-progress-bar *ngIf="!theEnd"
