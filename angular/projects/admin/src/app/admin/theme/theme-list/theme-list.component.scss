@@ -1,7 +1,16 @@
-.full-width-table {
-  width: 100%;
+.icon {
+  color: #43a047;
 }
 
-.clickable-table-row {
-  cursor: pointer;
+cdk-virtual-scroll-viewport {
+  height: 50vh;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 8px;
+  }
 }
