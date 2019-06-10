@@ -30,3 +30,14 @@
   margin-bottom: 5%;
 }
 
+.language-row {
+  align-items: center;
+  .field {
+    width: auto;
+    flex: 1;
+  }
+  .action {
+    height: 40px;
+    margin-left: 24px;
+  }
+}
