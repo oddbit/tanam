@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AppAuthService } from '../../services/app-auth.service';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'tanam-login',
@@ -14,9 +15,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private readonly router: Router,
     private readonly appAuthService: AppAuthService,
+    private readonly title: Title,
   ) { }
 
   ngOnInit() {
+    this.title.setTitle('Tanam CMS');
     this.authSubscription = this.appAuthService.isLoggedIn().subscribe(isLoggedIn => {
       console.log(`[LoginComponent:isLoggedIn] ${isLoggedIn}`);
       if (isLoggedIn) {
