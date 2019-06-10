@@ -6,9 +6,8 @@
                          (click)='saveSettings()'></tanam-action-button>
   </tanam-context-actions>
 
-  <mat-card class="card">
-    <mat-card-title>Site information</mat-card-title>
-    <mat-card-subtitle>Configure your site information</mat-card-subtitle>
+  <p class="mat-body-1">Site information</p>
+  <mat-card class="card table-border-radius">
     <mat-card-content>
       <div class="row">
         <div class="col">
@@ -57,16 +56,15 @@
           <span matSuffix>{{analyticsName}} &nbsp;</span>
         </mat-form-field>
       </div>
-      <button mat-raised-button
-              color="secondary"
+      <button mat-flat-button
+              color="accent"
               type="button"
               (click)="dialogLanguage()">Manage Language</button>
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="card">
-    <mat-card-title>Domain settings</mat-card-title>
-    <mat-card-subtitle>Configure the URL settings and domain name.</mat-card-subtitle>
+  <p class="mat-body-1">Domain settings</p>
+  <mat-card class="card table-border-radius">
     <mat-card-content>
       <p>
         You must manually configure the domains that you have connected with your <a
@@ -82,7 +80,7 @@
       </p>
       <div class="row">
         <div class="col">
-          <button mat-raised-button
+          <button mat-flat-button
                   color="accent"
                   (click)="addDomain()">Add domain</button>
         </div>
