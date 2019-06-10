@@ -22,7 +22,7 @@
 
     <div class="wrap">
       <div class="edit-content">
-        <mat-card>
+        <mat-card class="table-border-radius">
           <mat-card-content>
             <div formGroupName="dataForm">
               <div class="row"
@@ -114,7 +114,7 @@
       </div>
       <div class="edit-metadata"
            [ngClass]="{'open-dialog': metaDataDialog}">
-        <mat-card>
+        <mat-card class="table-border-radius">
           <mat-card-content>
             <mat-form-field *ngIf="document.standalone"
                             class="full-width">
