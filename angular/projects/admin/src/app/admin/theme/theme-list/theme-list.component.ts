@@ -18,7 +18,7 @@ export class ThemeListComponent {
   lastVisible: firebase.firestore.DocumentSnapshot;
 
   offset = new BehaviorSubject(null);
-  infinite: Observable<any[]>;
+  themeDocs: Observable<any[]>;
 
   constructor(
     private readonly router: Router,
@@ -31,7 +31,7 @@ export class ThemeListComponent {
         return { ...acc, ...batch };
       }, {})
     );
-    this.infinite = batchMap.pipe(map(v => Object.values(v)));
+    this.themeDocs = batchMap.pipe(map(v => Object.values(v)));
   }
 
   getBatch(lastVisible: firebase.firestore.DocumentSnapshot) {
@@ -48,14 +48,13 @@ export class ThemeListComponent {
       );
   }
 
-  async nextBatch(e, id: string) {
+  async nextBatch(id: string) {
     if (this.theEnd) {
       return;
     }
 
     const end = this.viewport.getRenderedRange().end;
     const total = this.viewport.getDataLength();
-    console.log(`${end}, '>=', ${total}`);
     if (end === total) {
       this.lastVisible = await this.themeService.getReference(id);
       this.offset.next(this.lastVisible);

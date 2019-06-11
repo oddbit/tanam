@@ -56,7 +56,7 @@ export class ThemeService {
       });
   }
 
-  getThemes(lastVisible?): Observable<Theme[]> {
+  getThemes(lastVisible?: firebase.firestore.DocumentSnapshot): Observable<Theme[]> {
     return this.siteCollection.collection<Theme>('themes', ref =>
       ref
         .limit(10)
