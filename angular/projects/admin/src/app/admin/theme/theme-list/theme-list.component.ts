@@ -1,28 +1,68 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort } from '@angular/material';
-import { Router } from '@angular/router';
+import { Component, ViewChild } from '@angular/core';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { map, tap, scan, mergeMap, throttleTime } from 'rxjs/operators';
 import { ThemeService } from '../../../services/theme.service';
-import { ThemeListDataSource } from './theme-list-datasource';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'tanam-theme-list',
   templateUrl: './theme-list.component.html',
   styleUrls: ['./theme-list.component.scss']
 })
-export class ThemeListComponent implements OnInit {
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  dataSource: ThemeListDataSource;
+export class ThemeListComponent {
+  @ViewChild(CdkVirtualScrollViewport)
+  viewport: CdkVirtualScrollViewport;
+
+  theEnd = false;
+  lastVisible: firebase.firestore.DocumentSnapshot;
+
+  offset = new BehaviorSubject(null);
+  themeDocs: Observable<any[]>;
 
   constructor(
     private readonly router: Router,
     private readonly themeService: ThemeService,
-  ) { }
+  ) {
+    const batchMap = this.offset.pipe(
+      throttleTime(500),
+      mergeMap(n => this.getBatch(n)),
+      scan((acc, batch) => {
+        return { ...acc, ...batch };
+      }, {})
+    );
+    this.themeDocs = batchMap.pipe(map(v => Object.values(v)));
+  }
 
-  displayedColumns = ['title', 'updated'];
+  getBatch(lastVisible: firebase.firestore.DocumentSnapshot) {
+    return this.themeService.getThemes(lastVisible)
+      .pipe(
+        tap(arr => (arr.length ? false : (this.theEnd = true))),
+        map(arr => {
+          return arr.reduce((acc, cur) => {
+            const id = cur.id;
+            const data = cur;
+            return { ...acc, [id]: data };
+          }, {});
+        })
+      );
+  }
 
-  ngOnInit() {
-    this.dataSource = new ThemeListDataSource(this.themeService, this.paginator, this.sort);
+  async nextBatch(id: string) {
+    if (this.theEnd) {
+      return;
+    }
+
+    const end = this.viewport.getRenderedRange().end;
+    const total = this.viewport.getDataLength();
+    if (end === total) {
+      this.lastVisible = await this.themeService.getReference(id);
+      this.offset.next(this.lastVisible);
+    }
+  }
+
+  trackByIdx(i: number) {
+    return i;
   }
 
   editTheme(themeId: string) {

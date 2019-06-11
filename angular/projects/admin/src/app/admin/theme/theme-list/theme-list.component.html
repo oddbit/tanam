@@ -1,37 +1,22 @@
-<div class="mat-elevation-z8">
-  <table mat-table
-         class="full-width-table"
-         [dataSource]="dataSource"
-         matSort
-         aria-label="Elements">
+<ng-container *ngIf="themeDocs | async as themes">
 
-    <ng-container matColumnDef="title">
-      <th mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header>Title</th>
-      <td mat-cell
-          *matCellDef="let row">{{row.title}}</td>
-    </ng-container>
-    <ng-container matColumnDef="updated">
-      <th mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header>Last update</th>
-      <td mat-cell
-          *matCellDef="let row">{{row.updated?.toDate() | date:'medium'}}</td>
-    </ng-container>
+  <mat-card>
+    <cdk-virtual-scroll-viewport itemSize="70"
+                                 (scrolledIndexChange)="nextBatch(themes[themes.length - 1].id)">
+      <mat-nav-list>
+        <mat-list-item *cdkVirtualFor="let theme of themes; let i = index; trackBy: trackByIdx"
+                       (click)="editTheme(theme.id)">
+          <mat-icon color="primary"
+                    mat-list-icon>style</mat-icon>
+          <h4 mat-line>{{theme.title}}</h4>
+          <p mat-line>{{theme.description}}</p>
+          <small class="updated">Updated: <br /> {{theme.updated?.toDate() | date:'medium'}}</small>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+        <mat-progress-bar *ngIf="!theEnd"
+                          mode="indeterminate"></mat-progress-bar>
+      </mat-nav-list>
+    </cdk-virtual-scroll-viewport>
+  </mat-card>
 
-    <tr mat-header-row
-        *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row
-        class="clickable-table-row"
-        *matRowDef="let row; columns: displayedColumns;"
-        (click)="editTheme(row.id)"></tr>
-  </table>
-
-  <mat-paginator #paginator
-                 [length]="dataSource.data?.length"
-                 [pageIndex]="0"
-                 [pageSize]="50"
-                 [pageSizeOptions]="[25, 50, 100, 250]">
-  </mat-paginator>
-</div>
+</ng-container>

@@ -56,8 +56,13 @@ export class ThemeService {
       });
   }
 
-  getThemes(): Observable<Theme[]> {
-    return this.siteCollection.collection<Theme>('themes').valueChanges();
+  getThemes(lastVisible?: firebase.firestore.DocumentSnapshot): Observable<Theme[]> {
+    return this.siteCollection.collection<Theme>('themes', ref =>
+      ref
+        .limit(10)
+        .orderBy('updated')
+        .startAfter(lastVisible)
+    ).valueChanges();
   }
 
   getTheme(themeId: string): Observable<Theme> {
@@ -78,5 +83,13 @@ export class ThemeService {
       .collection<Theme>('themes')
       .doc(themeId)
       .delete();
+  }
+
+  getReference(id: string) {
+    if (!id) {
+      return;
+    }
+    return this.siteCollection
+      .collection('themes').doc(id).ref.get();
   }
 }
