@@ -1,10 +1,19 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { Theme } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
 import { UserThemeAssetService } from './user-theme-asset.service';
+
+export interface ThemeQueryOptions {
+  limit?: number;
+  orderBy?: {
+    field: string,
+    sortOrder: 'asc' | 'desc',
+  };
+  startAt?: firebase.firestore.DocumentSnapshot;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -56,13 +65,25 @@ export class ThemeService {
       });
   }
 
-  getThemes(lastVisible?: firebase.firestore.DocumentSnapshot): Observable<Theme[]> {
-    return this.siteCollection.collection<Theme>('themes', ref =>
-      ref
-        .limit(10)
-        .orderBy('updated')
-        .startAfter(lastVisible)
-    ).valueChanges();
+  getThemes(queryOpts: ThemeQueryOptions): Observable<Theme[]> {
+
+    const queryFn = (ref: CollectionReference) => {
+      let query: any;
+      if (queryOpts.orderBy) {
+        query = ref.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
+      }
+
+      if (queryOpts.limit) {
+        query = ref.limit(queryOpts.limit);
+      }
+
+      if (queryOpts.startAt) {
+        query = ref.startAfter(queryOpts.startAt);
+      }
+
+      return query;
+    };
+    return this.siteCollection.collection<Theme>('themes', queryFn).valueChanges();
   }
 
   getTheme(themeId: string): Observable<Theme> {
