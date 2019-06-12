@@ -8,6 +8,7 @@ import { DocumentEditComponent } from './document-edit/document-edit.component';
 import { DocumentListComponent } from './document-list/document-list.component';
 import { DocumentOverviewComponent } from './document-overview/document-overview.component';
 import { MatInputModule } from '@angular/material';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { MatInputModule } from '@angular/material';
     FormModule,
     ComponentsModule,
     MatInputModule,
+    ScrollingModule
   ],
   exports: [
     DocumentEditComponent,
