@@ -49,7 +49,7 @@ export class DocumentListComponent implements OnInit, OnDestroy {
         mergeMap(n => this.getBatch(n)),
         scan((acc, batch) => ({ ...acc, ...batch })),
       );
-      this.documents = batchMap.pipe(map(v => Object.values(v)));
+      this.documents = batchMap.pipe(map(v => Object.values(v).sort(this.sortEntry)));
     }));
   }
 
@@ -105,5 +105,12 @@ export class DocumentListComponent implements OnInit, OnDestroy {
     this.snackBar.open('Success', 'Dismiss', {
       duration: 2000
     });
+  }
+
+  sortEntry(a: Document, b: Document) {
+    const dateA = a.updated.toDate().getTime();
+    const dateB = b.updated.toDate().getTime();
+    // order by updated, sort by ascending
+    return dateB - dateA;
   }
 }
