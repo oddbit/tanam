@@ -12,7 +12,7 @@ export interface ThemeQueryOptions {
     field: string,
     sortOrder: 'asc' | 'desc',
   };
-  startAt?: firebase.firestore.DocumentSnapshot;
+  startAfter?: firebase.firestore.DocumentSnapshot;
 }
 
 @Injectable({
@@ -77,8 +77,8 @@ export class ThemeService {
         query = ref.limit(queryOpts.limit);
       }
 
-      if (queryOpts.startAt) {
-        query = ref.startAfter(queryOpts.startAt);
+      if (queryOpts.startAfter) {
+        query = ref.startAfter(queryOpts.startAfter);
       }
 
       return query;
