@@ -67,7 +67,10 @@ export class DocumentListComponent implements OnInit, OnDestroy {
         sortOrder: 'desc'
       }
     }).pipe(
-      tap(arr => (arr.length < this.batch ? (this.isLastDocument = true) : false)),
+      tap(arr => arr.length < this.batch
+        ? (this.isLastDocument = true)
+        : (this.isLastDocument = false)
+      ),
       map(arr => arr.reduce(
         (previousValue, currentValue) => ({ ...previousValue, [currentValue.id]: currentValue }),
         {}
