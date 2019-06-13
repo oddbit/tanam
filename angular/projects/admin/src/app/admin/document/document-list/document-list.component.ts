@@ -113,7 +113,7 @@ export class DocumentListComponent implements OnInit, OnDestroy {
   sortEntry(a: Document, b: Document) {
     const dateA = a.updated.toDate().getTime();
     const dateB = b.updated.toDate().getTime();
-    // order by updated, sort by ascending
+    // order by updated, sort by descending
     return dateB - dateA;
   }
 }
