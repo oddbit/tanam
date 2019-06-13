@@ -1,7 +1,19 @@
+cdk-virtual-scroll-viewport {
+  height: 65vh;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 8px;
+  }
+}
+
 .wrapper {
   display: flex;
   flex-wrap: wrap;
-  margin: 10px 0;
 }
 
 .card {
@@ -10,6 +22,7 @@
   margin: 1%;
   box-sizing: border-box;
   overflow: hidden;
+
   @media screen and (max-width: 600px) {
     min-width: 48%;
     margin: 1%;
@@ -20,6 +33,7 @@
   position: relative;
   padding-top: 100%;
   margin: 16px -16px -16px -16px !important;
+
   img {
     position: absolute;
     top: 0;
@@ -32,6 +46,7 @@
 .mat-card-content {
   margin-bottom: 0;
   overflow: hidden;
+
   p {
     overflow: hidden;
     text-overflow: ellipsis;
