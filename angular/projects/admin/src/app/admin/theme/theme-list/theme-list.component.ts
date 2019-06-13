@@ -35,7 +35,12 @@ export class ThemeListComponent {
   }
 
   getBatch(lastVisible: firebase.firestore.DocumentSnapshot) {
-    return this.themeService.getThemes(lastVisible)
+    return this.themeService.getThemes({
+      limit: 10, startAfter: lastVisible, orderBy: {
+        field: 'updated',
+        sortOrder: 'desc'
+      }
+    })
       .pipe(
         tap(arr => (arr.length ? false : (this.theEnd = true))),
         map(arr => {

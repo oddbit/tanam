@@ -24,7 +24,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   langOptions = languageOptions;
   analyticsName = '';
   readonly siteName$: Observable<string> = this.siteSettingsService.getSiteName();
-  readonly themes$: Observable<Theme[]> = this.themeService.getThemes();
+  readonly themes$: Observable<Theme[]> = this.themeService.getThemes({ orderBy: { field: 'updated', sortOrder: 'desc' } });
   readonly settingsForm: FormGroup = this.formBuilder.group({
     title: [null, [Validators.required]],
     theme: [null, [Validators.required]],
