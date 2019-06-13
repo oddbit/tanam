@@ -19,11 +19,11 @@ export class DocumentListComponent implements OnInit, OnDestroy {
 
   @ViewChild(CdkVirtualScrollViewport)
   viewport: CdkVirtualScrollViewport;
-  batch = 9;
+  batch = 20;
   isLastDocument = false;
   offset: BehaviorSubject<any>;
   isLoading = false;
-  bottomViewportOffset = 300;
+  bottomViewportOffset = 500;
   documents: Observable<any[]>;
   lastVisible: firebase.firestore.DocumentSnapshot;
   documentType: DocumentType;
