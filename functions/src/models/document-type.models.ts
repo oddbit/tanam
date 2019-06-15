@@ -40,3 +40,12 @@ export interface DocumentType {
   updated: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
   created: any; // firebase.firestore.Timestamp | firebase.firestore.FieldValue
 }
+
+export interface DocumentTypeQueryOptions {
+  limit?: number;
+  orderBy?: {
+    field: string,
+    sortOrder: 'asc' | 'desc',
+  };
+  startAfter?: firebase.firestore.DocumentSnapshot;
+}
