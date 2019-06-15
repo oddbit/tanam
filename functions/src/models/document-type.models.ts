@@ -47,5 +47,5 @@ export interface DocumentTypeQueryOptions {
     field: string,
     sortOrder: 'asc' | 'desc',
   };
-  startAfter?: firebase.firestore.DocumentSnapshot;
+  startAfter?: any; // firebase.firestore.DocumentSnapshot
 }
