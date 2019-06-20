@@ -34,3 +34,12 @@ export interface ThemeTemplateQueryOptions {
   };
   startAfter?: any; // firebase.firestore.DocumentSnapshot
 }
+
+export interface ThemeAssetQueryOptions {
+  limit?: number;
+  orderBy?: {
+    field: string,
+    sortOrder: 'asc' | 'desc',
+  };
+  startAfter?: any; // firebase.firestore.DocumentSnapshot
+}
