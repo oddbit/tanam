@@ -5,6 +5,7 @@ import { TanamFile } from 'tanam-models';
 import { UserFileService } from '../../../services/user-file.service';
 import { DialogService } from '../../../services/dialog.service';
 import { IPageInfo } from 'ngx-virtual-scroller';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'tanam-media-grid',
@@ -23,7 +24,8 @@ export class MediaGridComponent {
 
   constructor(
     private readonly fileService: UserFileService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private snackBar: MatSnackBar,
   ) { }
 
   async fetchMore(event: IPageInfo) {
@@ -90,8 +92,14 @@ export class MediaGridComponent {
       icon: 'warning'
     }).afterClosed().subscribe(async res => {
       if (res === 'yes') {
+        this.snackBar.open('Deleting file...', 'Dismiss', {
+          duration: 2000
+        });
         await this.fileService.remove(file);
         this.items = this.items.filter(item => item.id !== file.id);
+        this.snackBar.open('File Deleted', 'Dismiss', {
+          duration: 2000
+        });
       }
     });
   }
