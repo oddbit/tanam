@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, CollectionReference, Query } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { DocumentType, SiteInformation } from 'tanam-models';
+import { DocumentType, SiteInformation, DocumentTypeQueryOptions } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -18,10 +17,31 @@ export class DocumentTypeService {
   ) { }
 
 
-  getDocumentTypes(): Observable<DocumentType[]> {
+  getDocumentTypes(queryOpts?: DocumentTypeQueryOptions): Observable<DocumentType[]> {
+    const queryFn = (ref: CollectionReference) => {
+      if (queryOpts) {
+        let query: Query = ref;
+        if (queryOpts.orderBy) {
+          query = query.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
+        }
+        if (queryOpts.startAfter) {
+          query = query.startAfter(queryOpts.startAfter);
+        }
+        if (queryOpts.limit) {
+          query = query.limit(queryOpts.limit);
+        }
+        return query;
+      }
+      return ref;
+    };
     return this.siteCollection
-      .collection<DocumentType>('document-types')
-      .valueChanges();
+      .collection<DocumentType>('document-types', queryFn).valueChanges();
+  }
+
+  getReference(documentTypeId: string) {
+    return this.siteCollection
+      .collection('document-types').doc<DocumentType>(documentTypeId)
+      .ref.get();
   }
 
   getDocumentType(documentTypeId: string): Observable<DocumentType> {
