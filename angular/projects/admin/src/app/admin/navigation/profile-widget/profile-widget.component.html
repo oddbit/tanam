@@ -26,6 +26,7 @@
                 mat-flat-button
                 color="primary"
                 (click)="logout()">LOGOUT</button>
+        <mat-slide-toggle (click)="toggleTheme($event)">Theme: {{theme}}</mat-slide-toggle>
       </div>
     </div>
   </ng-template>
