@@ -11,7 +11,7 @@ import { ThemeTemplateDialogCreateComponent } from './theme-template-dialog-crea
 import {
   ThemeTemplateDialogListTemplateComponent
 } from './theme-template-dialog-list-template/theme-template-dialog-list-template.component';
-import { ScrollingModule } from '@angular/cdk/scrolling';
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 @NgModule({
   declarations: [
@@ -27,7 +27,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     AppFirebaseModule,
     AppMaterialModule,
     ComponentsModule,
-    ScrollingModule,
+    VirtualScrollerModule,
   ],
   exports: [
     ThemeTemplateEditComponent,

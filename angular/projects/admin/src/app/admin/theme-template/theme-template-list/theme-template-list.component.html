@@ -1,27 +1,26 @@
-<div class="mat-elevation-z8"
-     *ngIf="templates | async as docs">
+<div class="mat-elevation-z8">
   <mat-card class="card">
     <mat-card-content>
-      <cdk-virtual-scroll-viewport *ngIf="docs.length; else empty"
-                                   itemSize="80"
-                                   (scrolledIndexChange)="nextBatch(docs[docs.length - 1]?.id)">
-        <ul>
-          <li *cdkVirtualFor="let doc of docs; trackBy: trackByIdx;"
-              (click)="editTemplate(doc.id)">
+      <ul>
+        <virtual-scroller #scroll
+                          [items]="items"
+                          (vsEnd)="fetchMore($event)"
+                          [enableUnequalChildrenSizes]="true">
+          <li *ngFor="let item of scroll.viewPortItems"
+              (click)="editTemplate(item.id)">
             <div class="main-content">
               <div class="content-wrapper">
-                <h4 class="mat-h2 document-title">{{doc.title}}</h4>
-                <p>Selector: <code>{{doc.selector}}</code></p>
-                <p class="mat-body-1">Last updated {{doc.updated?.toDate() | date:'medium'}}</p>
+                <h4 class="mat-h2 document-title">{{item.title}}</h4>
+                <p>Selector: <code>{{item.selector}}</code></p>
+                <p class="mat-body-1">Last updated {{item.updated?.toDate() | date:'medium'}}</p>
               </div>
             </div>
             <mat-divider></mat-divider>
           </li>
-          <mat-progress-bar *ngIf="!isLastDocument"
-                            mode="indeterminate"></mat-progress-bar>
-        </ul>
-      </cdk-virtual-scroll-viewport>
-
+        </virtual-scroller>
+        <mat-progress-bar *ngIf="isLoading"
+                          mode="indeterminate"></mat-progress-bar>
+      </ul>
       <ng-template #empty>
         <h2 class="mat-h2 empty">No Content</h2>
       </ng-template>

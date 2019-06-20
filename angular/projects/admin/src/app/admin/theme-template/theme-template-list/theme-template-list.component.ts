@@ -1,10 +1,10 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, Subscription, BehaviorSubject } from 'rxjs';
-import { Theme } from 'tanam-models';
+import { Observable, Subscription } from 'rxjs';
+import { Theme, ThemeTemplate } from 'tanam-models';
 import { ThemeTemplateService } from '../../../services/theme-template.service';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { map, tap, scan, mergeMap, throttleTime, take } from 'rxjs/operators';
+import { map, tap, take } from 'rxjs/operators';
+import { IPageInfo } from 'ngx-virtual-scroller';
 
 @Component({
   selector: 'tanam-theme-template-list',
@@ -14,15 +14,10 @@ import { map, tap, scan, mergeMap, throttleTime, take } from 'rxjs/operators';
 export class ThemeTemplateListComponent implements OnInit, OnDestroy {
   @Input() theme$: Observable<Theme>;
 
-  @ViewChild(CdkVirtualScrollViewport)
-  viewport: CdkVirtualScrollViewport;
-  batch = 20;
-  isLastDocument = false;
-  offset: BehaviorSubject<any>;
-  isLoading = false;
-  bottomViewportOffset = 500;
-  templates: Observable<any[]>;
-  lastVisible: firebase.firestore.DocumentSnapshot;
+  items: ThemeTemplate[] = [];
+  limit = 20;
+  isLoading: boolean;
+  isLastItem: boolean;
   theme: Theme;
 
   private _subscriptions: Subscription[] = [];
@@ -35,16 +30,7 @@ export class ThemeTemplateListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._subscriptions.push(this.theme$.subscribe(theme => {
       this.theme = theme;
-      this.isLastDocument = false;
-      this.isLoading = false;
-      this.offset = new BehaviorSubject(null);
-
-      const batchMap = this.offset.pipe(
-        throttleTime(500),
-        mergeMap(n => this.getBatch(n)),
-        scan((acc, batch) => ({ ...acc, ...batch })),
-      );
-      this.templates = batchMap.pipe(map(v => Object.values(v)));
+      this.fetchItems(null);
     }));
   }
 
@@ -58,40 +44,54 @@ export class ThemeTemplateListComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(url);
   }
 
-  getBatch(lastVisible: firebase.firestore.DocumentSnapshot) {
-    return this.themeTemplateService.getTemplatesForTheme(this.theme.id, {
+  async fetchMore(event: IPageInfo) {
+    if (event.endIndex === -1 || event.endIndex !== this.items.length - 1 || this.isLastItem) {
+      return;
+    }
+    this.isLoading = true;
+    const lastItem = this.items.length > 0 ? this.items[this.items.length - 1].id : null;
+    let lastVisible = null;
+    if (lastItem) {
+      lastVisible = await this.themeTemplateService.getReference(this.theme.id, lastItem);
+    }
+    this.fetchItems(lastVisible);
+  }
+
+  fetchItems(lastVisible: firebase.firestore.DocumentSnapshot) {
+    this.isLoading = true;
+    this.themeTemplateService.getTemplatesForTheme(this.theme.id, {
       startAfter: lastVisible,
-      limit: this.batch,
+      limit: this.limit,
       orderBy: {
         field: 'title',
         sortOrder: 'asc'
       }
     }).pipe(
-      tap(arr => arr.length < this.batch
-        ? (this.isLastDocument = true)
-        : (this.isLastDocument = false)
-      ),
-      map(arr => arr.reduce(
-        (previousValue, currentValue) => ({ ...previousValue, [currentValue.id]: currentValue }),
-        {}
-      )),
-    );
-  }
-
-  async nextBatch(id: string) {
-    if (this.isLastDocument) {
-      return;
-    }
-    const scrollOffset = this.viewport.measureScrollOffset('bottom');
-    if (scrollOffset <= this.bottomViewportOffset && !this.isLoading) {
-      this.isLoading = true;
-      this.lastVisible = await this.themeTemplateService.getReference(this.theme.id, id);
-      this.offset.next(this.lastVisible);
+      tap(items => {
+        if (!items.length || items.length < this.limit) {
+          this.isLastItem = true;
+        }
+      }),
+      map(items => {
+        const mergedItems = [...this.items, ...items];
+        return mergedItems.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
+      }),
+      map(v => Object.values(v).sort(this.sortItems))
+    ).subscribe((items: ThemeTemplate[]) => {
+      this.items = [...items];
       this.isLoading = false;
-    }
+    });
   }
 
-  trackByIdx(i: number) {
-    return i;
+  sortItems(a: ThemeTemplate, b: ThemeTemplate) {
+    const itemA = a.title.toLowerCase();
+    const itemB = b.title.toLowerCase();
+    if (itemA < itemB) {
+      return -1;
+    } else if (itemA > itemB) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 }
