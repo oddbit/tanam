@@ -1,31 +1,25 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { UserThemeAssetService } from '../../../services/user-theme-asset.service';
 import { TanamFile } from '../../../../../../../../functions/src/models';
 import { ActivatedRoute } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { map, tap, scan, mergeMap, throttleTime } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { IPageInfo } from 'ngx-virtual-scroller';
+import { map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'tanam-theme-asset-list',
   templateUrl: './theme-asset-list.component.html',
   styleUrls: ['./theme-asset-list.component.scss']
 })
-export class ThemeAssetListComponent implements OnInit {
+export class ThemeAssetListComponent {
   readonly themeId = this.route.snapshot.paramMap.get('themeId');
   uploadTasks: { [key: string]: Observable<number> } = {};
-
-  @ViewChild(CdkVirtualScrollViewport)
-  viewport: CdkVirtualScrollViewport;
-  batch = 20;
-  isLastDocument = false;
-  offset: BehaviorSubject<any>;
-  isLoading = false;
-  bottomViewportOffset = 500;
-  assets: Observable<any[]>;
-  lastVisible: firebase.firestore.DocumentSnapshot;
+  items: TanamFile[] = [];
+  limit = 20;
+  isLoading: boolean;
+  isLastItem: boolean;
   deletedAssetId: string = null;
 
   constructor(
@@ -35,22 +29,48 @@ export class ThemeAssetListComponent implements OnInit {
     private snackBar: MatSnackBar
   ) { }
 
-  ngOnInit() {
-    this.offset = new BehaviorSubject(null);
+  async fetchMore(event: IPageInfo) {
+    if (event.endIndex !== this.items.length - 1 || this.isLastItem) {
+      return;
+    }
+    this.isLoading = true;
+    const lastItem = this.items.length > 0 ? this.items[this.items.length - 1].id : null;
+    let lastVisible = null;
+    if (lastItem) {
+      lastVisible = await this.themeAssetService.getReference(this.themeId, lastItem);
+    }
+    this.fetchItems(lastVisible);
+  }
 
-    const batchMap = this.offset.pipe(
-      throttleTime(500),
-      mergeMap(n => this.getBatch(n)),
-      scan((acc, batch) => {
-        const assets = { ...acc, ...batch };
-        if (this.deletedAssetId) {
-          delete assets[this.deletedAssetId];
-          this.deletedAssetId = null;
+  fetchItems(lastVisible: firebase.firestore.DocumentSnapshot) {
+    this.themeAssetService.getThemeAssets(this.themeId, {
+      startAfter: lastVisible,
+      limit: this.limit,
+      orderBy: {
+        field: 'updated',
+        sortOrder: 'desc'
+      }
+    }).pipe(
+      tap(assets => {
+        if (!assets.length || assets.length < this.limit) {
+          this.isLastItem = true;
         }
-        return assets;
       }),
-    );
-    this.assets = batchMap.pipe(map(v => Object.values(v).sort(this.sortAssets)));
+      map(assets => {
+        const mergedassets = [...this.items, ...assets];
+        return mergedassets.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
+      }),
+      map(v => Object.values(v).sort(this.sortFiles))
+    ).subscribe((items: TanamFile[]) => {
+      this.items = [...items];
+      this.isLoading = false;
+    });
+  }
+
+  sortFiles(a: TanamFile, b: TanamFile) {
+    const fileA = a.updated.toDate();
+    const fileB = b.updated.toDate();
+    return fileB - fileA;
   }
 
   uploadSingleFile(event) {
@@ -78,7 +98,10 @@ export class ThemeAssetListComponent implements OnInit {
         this.snackBar.open('Deleting..', 'Dismiss', { duration: 2000 });
         this.deletedAssetId = file.id;
         await this.themeAssetService.deleteThemeAsset(file, this.themeId);
-        this.snackBar.open('Deleted', 'Dismiss', { duration: 2000 });
+        this.items = this.items.filter(item => item.id !== file.id);
+        this.snackBar.open('File Deleted', 'Dismiss', {
+          duration: 2000
+        });
       }
     });
   }
@@ -93,43 +116,6 @@ export class ThemeAssetListComponent implements OnInit {
       buttons: ['ok'],
       icon: 'info'
     });
-  }
-
-  getBatch(lastVisible: firebase.firestore.DocumentSnapshot) {
-    return this.themeAssetService.getThemeAssets(this.themeId, {
-      startAfter: lastVisible,
-      limit: this.batch,
-      orderBy: {
-        field: 'title',
-        sortOrder: 'asc'
-      }
-    }).pipe(
-      tap(arr => arr.length < this.batch
-        ? (this.isLastDocument = true)
-        : (this.isLastDocument = false)
-      ),
-      map(arr => arr.reduce(
-        (previousValue, currentValue) => ({ ...previousValue, [currentValue.id]: currentValue }),
-        {}
-      )),
-    );
-  }
-
-  async nextBatch(id: string) {
-    if (this.isLastDocument) {
-      return;
-    }
-    const scrollOffset = this.viewport.measureScrollOffset('bottom');
-    if (scrollOffset <= this.bottomViewportOffset && !this.isLoading) {
-      this.isLoading = true;
-      this.lastVisible = await this.themeAssetService.getReference(this.themeId, id);
-      this.offset.next(this.lastVisible);
-      this.isLoading = false;
-    }
-  }
-
-  trackByIdx(i: number) {
-    return i;
   }
 
   sortAssets(a: TanamFile, b: TanamFile) {
