@@ -5,6 +5,7 @@ import { AppMaterialModule } from '../../app-material.module';
 import { ComponentsModule } from '../components/components.module';
 import { MediaGridComponent } from './media-grid/media-grid.component';
 import { MediaComponent } from './media.component';
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { MediaComponent } from './media.component';
     AppFirebaseModule,
     AppMaterialModule,
     ComponentsModule,
+    VirtualScrollerModule,
   ],
   exports: [
     MediaComponent,
