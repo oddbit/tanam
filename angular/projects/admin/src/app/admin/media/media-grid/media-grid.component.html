@@ -1,34 +1,34 @@
-<ng-container *ngIf="infinite | async as files">
-  <cdk-virtual-scroll-viewport itemSize="59"
-                               (scrolledIndexChange)="nextBatch(files[files.length - 1].id)">
-    <div class="wrapper">
-      <mat-card class="card"
-                *cdkVirtualFor="let file of files; let i = index; trackBy: trackByIdx">
-        <mat-card-content class="mat-card-content">
-          <p [matTooltip]="file.title">{{file.title}}</p>
-          <mat-menu #menu="matMenu"
-                    xPosition="before">
-            <button mat-menu-item
-                    (click)="showDetails(file)">Details</button>
-            <button mat-menu-item
-                    (click)="remove(file)">
-              Remove</button>
-          </mat-menu>
-          <button mat-icon-button
-                  class="more-button"
-                  [matMenuTriggerFor]="menu"
-                  aria-label="Toggle menu">
-            <mat-icon>more_vert</mat-icon>
-          </button>
-        </mat-card-content>
-        <div mat-card-image
-             class="img-wrapper">
-          <img [src]="(getDownloadUrl(file) | async) || placeHolder"
-               [alt]="file.title">
-        </div>
-      </mat-card>
-      <mat-progress-bar *ngIf="!theEnd"
-                        mode="indeterminate"></mat-progress-bar>
-    </div>
-  </cdk-virtual-scroll-viewport>
-</ng-container>
+<div id="media-files">
+  <virtual-scroller #scroll
+                    [items]="items"
+                    (vsEnd)="fetchMore($event)"
+                    [enableUnequalChildrenSizes]="true">
+    <mat-card class="card"
+              *ngFor="let file of scroll.viewPortItems">
+      <mat-card-content class="mat-card-content">
+        <p [matTooltip]="file.title">{{file.title}}</p>
+        <mat-menu #menu="matMenu"
+                  xPosition="before">
+          <button mat-menu-item
+                  (click)="showDetails(file)">Details</button>
+          <button mat-menu-item
+                  (click)="remove(file)">
+            Remove</button>
+        </mat-menu>
+        <button mat-icon-button
+                class="more-button"
+                [matMenuTriggerFor]="menu"
+                aria-label="Toggle menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </mat-card-content>
+      <div mat-card-image
+           class="img-wrapper">
+        <img [src]="(getDownloadUrl(file) | async) || placeHolder"
+             [alt]="file.title">
+      </div>
+    </mat-card>
+  </virtual-scroller>
+  <mat-progress-bar *ngIf="isLoading"
+                    mode="indeterminate"></mat-progress-bar>
+</div>

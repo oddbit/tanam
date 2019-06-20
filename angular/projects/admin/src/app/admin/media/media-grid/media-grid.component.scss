@@ -1,31 +1,33 @@
-cdk-virtual-scroll-viewport {
+virtual-scroller {
+  width: 100%;
   height: 65vh;
-
   &::-webkit-scrollbar {
     width: 5px;
   }
-
   &::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 8px;
   }
 }
 
-.wrapper {
-  display: flex;
+::ng-deep #media-files .scrollable-content {
+  display: inline-flex;
   flex-wrap: wrap;
+  align-items: flex-start;
+  height: inherit;
+  width: inherit;
 }
 
 .card {
-  flex: 0 0 calc(20% - 16px);
-  min-width: 23%;
-  margin: 1%;
+  flex: 0 0 calc(20% - 32px);
+  min-width: calc(20% - 32px);
+  margin: 16px;
   box-sizing: border-box;
   overflow: hidden;
 
   @media screen and (max-width: 600px) {
     min-width: 48%;
-    margin: 1%;
+    margin: 16px;
   }
 }
 

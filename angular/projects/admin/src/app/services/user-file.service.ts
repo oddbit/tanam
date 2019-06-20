@@ -2,18 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
-import { FileType, TanamFile } from 'tanam-models';
+import { FileType, TanamFile, MediaFilesQueryOptions } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
-
-
-export interface UserFileQueryOptions {
-  limit?: number;
-  orderBy?: {
-    field: string,
-    sortOrder: 'asc' | 'desc',
-  };
-  startAt?: firebase.firestore.DocumentSnapshot;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -34,22 +24,22 @@ export class UserFileService {
       .valueChanges();
   }
 
-  getFiles(fileType: FileType, queryOpts: UserFileQueryOptions): Observable<TanamFile[]> {
+  getFiles(fileType: FileType, queryOpts?: MediaFilesQueryOptions): Observable<TanamFile[]> {
     const queryFn = (ref: CollectionReference) => {
-      let query = ref.where('fileType', '==', fileType);
-      if (queryOpts.orderBy) {
-        query = query.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
+      if (queryOpts) {
+        let query = ref.where('fileType', '==', fileType);
+        if (queryOpts.orderBy) {
+          query = query.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
+        }
+        if (queryOpts.limit) {
+          query = query.limit(queryOpts.limit);
+        }
+        if (queryOpts.startAfter) {
+          query = query.startAfter(queryOpts.startAfter);
+        }
+        return query;
       }
-
-      if (queryOpts.limit) {
-        query = query.limit(queryOpts.limit);
-      }
-
-      if (queryOpts.startAt) {
-        query = query.startAfter(queryOpts.startAt);
-      }
-
-      return query;
+      return ref;
     };
     return this.siteCollection.collection<TanamFile>('files', queryFn).valueChanges();
   }
@@ -71,10 +61,7 @@ export class UserFileService {
   }
 
   getReference(id: string) {
-    if (!id) {
-      return;
-    }
     return this.siteCollection
-      .collection('files').doc(id).ref.get();
+      .collection('files').doc<TanamFile>(id).ref.get();
   }
 }
