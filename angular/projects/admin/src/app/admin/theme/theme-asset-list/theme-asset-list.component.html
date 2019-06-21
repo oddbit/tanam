@@ -18,8 +18,7 @@
   </mat-progress-bar>
 </section>
 
-<div class="mat-elevation-z8"
-     *ngIf="assets | async as docs">
+<div class="mat-elevation-z8">
   <mat-card class="card">
     <mat-card-content>
       <div class="header-wrapper">
@@ -29,34 +28,35 @@
         <h4 class="mat-body-2 flex-2">Last Update</h4>
         <h4 class="mat-body-2 flex-1">Action</h4>
       </div>
-      <cdk-virtual-scroll-viewport *ngIf="docs.length; else empty"
-                                   itemSize="72"
-                                   (scrolledIndexChange)="nextBatch(docs[docs.length - 1]?.id)">
-        <ul>
-          <li *cdkVirtualFor="let doc of docs; trackBy: trackByIdx;">
+      <ul>
+        <virtual-scroller #scroll
+                          [items]="items"
+                          (vsEnd)="fetchMore($event)"
+                          [enableUnequalChildrenSizes]="true">
+          <li *ngFor="let file of scroll.viewPortItems">
             <div class="main-content">
-              <p class="mat-body-1 flex-3">{{doc.title}}</p>
-              <p class="mat-body-1 flex-2">{{doc.bytes}}</p>
-              <p class="mat-body-1 flex-2">{{doc.fileType}}</p>
-              <p class="mat-body-1 flex-2">{{doc.updated?.toDate() | date:'medium'}}</p>
+              <p class="mat-body-1 flex-3">{{file.title}}</p>
+              <p class="mat-body-1 flex-2">{{file.bytes}}</p>
+              <p class="mat-body-1 flex-2">{{file.fileType}}</p>
+              <p class="mat-body-1 flex-2">{{file.updated?.toDate() | date:'medium'}}</p>
               <div class="actions flex-1">
                 <button mat-icon-button>
                   <mat-icon aria-label="Detail File"
-                            (click)="detailFile(doc)">info</mat-icon>
+                            (click)="detailFile(file)">info</mat-icon>
                 </button>
                 <button mat-icon-button>
                   <mat-icon aria-label="Delete file"
                             color="warn"
-                            (click)="deleteFile(doc)">delete</mat-icon>
+                            (click)="deleteFile(file)">delete</mat-icon>
                 </button>
               </div>
             </div>
             <mat-divider></mat-divider>
           </li>
-          <mat-progress-bar *ngIf="!isLastDocument"
+          <mat-progress-bar *ngIf="!isLastItem"
                             mode="indeterminate"></mat-progress-bar>
-        </ul>
-      </cdk-virtual-scroll-viewport>
+        </virtual-scroller>
+      </ul>
 
       <ng-template #empty>
         <h2 class="mat-h2 empty">No Content</h2>
