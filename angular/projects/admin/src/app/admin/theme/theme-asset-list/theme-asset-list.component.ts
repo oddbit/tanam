@@ -57,8 +57,8 @@ export class ThemeAssetListComponent {
         }
       }),
       map(assets => {
-        const mergedassets = [...this.items, ...assets];
-        return mergedassets.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
+        const mergedAssets = [...this.items, ...assets];
+        return mergedAssets.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
       }),
       map(v => Object.values(v).sort(this.sortFiles))
     ).subscribe((items: TanamFile[]) => {
