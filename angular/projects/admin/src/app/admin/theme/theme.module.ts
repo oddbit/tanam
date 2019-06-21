@@ -10,6 +10,7 @@ import { ThemeListComponent } from './theme-list/theme-list.component';
 import { ThemeOverviewComponent } from './theme-overview/theme-overview.component';
 import { ThemeAssetListComponent } from './theme-asset-list/theme-asset-list.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     AppMaterialModule,
     AdminRoutingModule,
     ComponentsModule,
-    ScrollingModule
+    ScrollingModule,
+    VirtualScrollerModule
   ],
   exports: [
     ThemeOverviewComponent,
