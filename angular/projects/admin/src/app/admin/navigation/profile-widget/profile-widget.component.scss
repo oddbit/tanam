@@ -15,6 +15,10 @@
   }
 }
 
+.theme-toolbar {
+  margin-bottom: -8px;
+}
+
 ::ng-deep .mat-menu-panel.mat-menu-user-on-nav {
   max-width: 350px !important;
 }
