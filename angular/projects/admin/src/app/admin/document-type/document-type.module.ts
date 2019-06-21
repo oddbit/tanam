@@ -9,7 +9,7 @@ import { DocumentTypeFormComponent } from './document-type-form/document-type-fo
 import { DocumentTypeListComponent } from './document-type-list/document-type-list.component';
 import { DocumentTypeOverviewComponent } from './document-type-overview/document-type-overview.component';
 import { DocumentTypeDialogCreateComponent } from './document-type-dialog-create/document-type-dialog-create.component';
-import { ScrollingModule } from '@angular/cdk/scrolling';
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 @NgModule({
   declarations: [
@@ -25,7 +25,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     AppMaterialModule,
     AdminRoutingModule,
     ComponentsModule,
-    ScrollingModule,
+    VirtualScrollerModule
   ],
   exports: [
     DocumentTypeEditComponent,
