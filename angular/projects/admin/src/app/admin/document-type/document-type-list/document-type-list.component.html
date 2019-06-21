@@ -2,11 +2,12 @@
   <mat-card class="card">
     <mat-card-content>
       <ul>
-          <virtual-scroller #scroll
-                            [items]="items"
-                            (vsEnd)="fetchMore($event)"
-                            [enableUnequalChildrenSizes]="true">
-          <li *ngFor="let file of scroll.viewPortItems">
+        <virtual-scroller #scroll
+                          [items]="items"
+                          (vsEnd)="fetchMore($event)"
+                          [enableUnequalChildrenSizes]="true">
+          <li *ngFor="let file of scroll.viewPortItems"
+              (click)="editDocumentType(file.id)">
             <div class="main-content">
               <div class="content-wrapper">
                 <h4 class="mat-h2 document-title">{{file.title}}</h4>
@@ -18,7 +19,7 @@
           <mat-progress-bar *ngIf="!isLastItem"
                             mode="indeterminate"></mat-progress-bar>
         </virtual-scroller>
-        </ul>
+      </ul>
 
       <ng-template #empty>
         <h2 class="mat-h2 empty">No Content Type</h2>
