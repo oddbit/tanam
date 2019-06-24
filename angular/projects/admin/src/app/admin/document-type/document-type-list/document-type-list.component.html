@@ -1,12 +1,12 @@
-<div class="mat-elevation-z8"
-     *ngIf="documentTypes | async as docs">
+<div class="mat-elevation-z8">
   <mat-card class="card">
     <mat-card-content>
-      <cdk-virtual-scroll-viewport *ngIf="docs.length; else empty"
-                                   itemSize="80"
-                                   (scrolledIndexChange)="nextBatch(docs[docs.length - 1]?.id)">
-        <ul>
-          <li *cdkVirtualFor="let doc of docs; trackBy: trackByIdx;"
+      <ul>
+        <virtual-scroller #scroll
+                          [items]="items"
+                          (vsEnd)="fetchMore($event)"
+                          [enableUnequalChildrenSizes]="true">
+          <li *ngFor="let doc of scroll.viewPortItems"
               (click)="editDocumentType(doc.id)">
             <div class="main-content">
               <div class="content-wrapper">
@@ -16,10 +16,10 @@
             </div>
             <mat-divider></mat-divider>
           </li>
-          <mat-progress-bar *ngIf="!isLastDocument"
+          <mat-progress-bar *ngIf="isLoading"
                             mode="indeterminate"></mat-progress-bar>
-        </ul>
-      </cdk-virtual-scroll-viewport>
+        </virtual-scroller>
+      </ul>
 
       <ng-template #empty>
         <h2 class="mat-h2 empty">No Content Type</h2>
