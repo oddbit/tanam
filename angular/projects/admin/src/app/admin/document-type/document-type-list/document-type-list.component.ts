@@ -44,8 +44,8 @@ export class DocumentTypeListComponent {
       startAfter: lastVisible,
       limit: this.limit,
       orderBy: {
-        field: 'updated',
-        sortOrder: 'desc'
+        field: 'title',
+        sortOrder: 'asc'
       }
     }).pipe(
       tap(assets => {
@@ -57,16 +57,22 @@ export class DocumentTypeListComponent {
         const mergedassets = [...this.items, ...assets];
         return mergedassets.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
       }),
-      map(v => Object.values(v).sort(this.sortFiles))
+      map(v => Object.values(v).sort(this.sortItems))
     ).subscribe((items: DocumentType[]) => {
       this.items = [...items];
       this.isLoading = false;
     });
   }
 
-  sortFiles(a: DocumentType, b: DocumentType) {
-    const fileA = a.updated.toDate();
-    const fileB = b.updated.toDate();
-    return fileB - fileA;
+  sortItems(a: DocumentType, b: DocumentType) {
+    const itemA = a.title.toLowerCase();
+    const itemB = b.title.toLowerCase();
+    if (itemA > itemB) {
+      return 1;
+    } else if (itemA < itemB) {
+      return -1;
+    } else {
+      return 0;
+    }
   }
 }
