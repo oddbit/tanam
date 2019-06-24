@@ -31,7 +31,7 @@ service firebase.storage {
       }
 
       function isAtLeastManager() {
-        return isSuperAdmin() || hasUserRole("manager");
+        return isSuperAdmin() || hasUserRole("admin");
       }
 
       function isPublisher() {
