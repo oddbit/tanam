@@ -47,8 +47,8 @@ export class ThemeAssetListComponent {
       startAfter: lastVisible,
       limit: this.limit,
       orderBy: {
-        field: 'updated',
-        sortOrder: 'desc'
+        field: 'title',
+        sortOrder: 'asc'
       }
     }).pipe(
       tap(assets => {
@@ -60,17 +60,11 @@ export class ThemeAssetListComponent {
         const mergedAssets = [...this.items, ...assets];
         return mergedAssets.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
       }),
-      map(v => Object.values(v).sort(this.sortFiles))
+      map(v => Object.values(v).sort(this.sortAssets))
     ).subscribe((items: TanamFile[]) => {
       this.items = [...items];
       this.isLoading = false;
     });
-  }
-
-  sortFiles(a: TanamFile, b: TanamFile) {
-    const fileA = a.updated.toDate();
-    const fileB = b.updated.toDate();
-    return fileB - fileA;
   }
 
   uploadSingleFile(event) {
