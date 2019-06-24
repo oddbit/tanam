@@ -12,6 +12,7 @@ import { DocumentReferenceComponent } from './document-reference/document-refere
 import { TextboxRichComponent } from './textbox-rich/textbox-rich.component';
 import { FilePickerComponent } from './file-picker/file-picker.component';
 import { FilePickerDialogComponent } from './file-picker/file-picker-dialog/file-picker-dialog.component';
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { FilePickerDialogComponent } from './file-picker/file-picker-dialog/file
     MatDatetimepickerModule,
     MatMomentDatetimeModule,
     FormsModule,
+    VirtualScrollerModule,
   ],
   exports: [
     TextboxRichComponent,

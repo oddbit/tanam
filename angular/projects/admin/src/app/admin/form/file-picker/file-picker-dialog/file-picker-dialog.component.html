@@ -1,18 +1,24 @@
 <h1 mat-dialog-title>Choose File</h1>
 <div mat-dialog-content>
-  <mat-grid-list cols="3"
-                 rowHeight="200px">
-    <mat-grid-tile *ngFor="let file of files$ | async"
-                   (click)="selectFile(file)"
-                   [ngClass]="{focus: file.id === selectedFile.id}"
-                   [matTooltip]="file.title">
-
-      <div *ngIf="(getDownloadUrl(file) | async) as imageUrl">
-        <img [src]="imageUrl"
-             [alt]="file.title" />
-      </div>
-    </mat-grid-tile>
-  </mat-grid-list>
+  <div id="media-files">
+    <virtual-scroller #scroll
+                      [items]="items"
+                      (vsEnd)="fetchMore($event)"
+                      [enableUnequalChildrenSizes]="true">
+      <mat-card class="card"
+                *ngFor="let file of scroll.viewPortItems"
+                (click)="selectFile(file)"
+                [ngClass]="{focus: file.id === selectedFile.id}">
+        <div mat-card-image
+             class="img-wrapper">
+          <img [src]="(getDownloadUrl(file) | async) || placeHolder"
+               [alt]="file.title">
+        </div>
+      </mat-card>
+    </virtual-scroller>
+    <mat-progress-bar *ngIf="isLoading"
+                      mode="indeterminate"></mat-progress-bar>
+  </div>
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button
