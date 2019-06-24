@@ -1,14 +1,9 @@
-.updated {
-  width: 30%;
-}
-
-cdk-virtual-scroll-viewport {
+virtual-scroller {
+  width: 100%;
   height: 50vh;
-
   &::-webkit-scrollbar {
     width: 5px;
   }
-
   &::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 8px;
