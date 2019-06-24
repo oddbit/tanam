@@ -1,12 +1,12 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
-import { Observable, Subscription, BehaviorSubject } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { DocumentType, Document, DocumentStatus } from 'tanam-models';
 import { DocumentService } from '../../../services/document.service';
 import { TaskService } from '../../../services/task.service';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { map, tap, scan, mergeMap, throttleTime } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
+import { IPageInfo } from 'ngx-virtual-scroller';
 
 @Component({
   selector: 'tanam-document-list',
@@ -17,15 +17,10 @@ export class DocumentListComponent implements OnInit, OnDestroy {
   @Input() documentType$: Observable<DocumentType>;
   @Input() status: DocumentStatus;
 
-  @ViewChild(CdkVirtualScrollViewport)
-  viewport: CdkVirtualScrollViewport;
-  batch = 20;
-  isLastDocument = false;
-  offset: BehaviorSubject<any>;
-  isLoading = false;
-  bottomViewportOffset = 500;
-  documents: Observable<any[]>;
-  lastVisible: firebase.firestore.DocumentSnapshot;
+  items: Document[] = [];
+  limit = 20;
+  isLoading: boolean;
+  isLastItem: boolean;
   documentType: DocumentType;
 
   private _subscriptions: Subscription[] = [];
@@ -40,59 +35,16 @@ export class DocumentListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._subscriptions.push(this.documentType$.subscribe((documentType) => {
       this.documentType = documentType;
-      this.isLastDocument = false;
+      this.items = [];
       this.isLoading = false;
-      this.offset = new BehaviorSubject(null);
+      this.isLastItem = false;
 
-      const batchMap = this.offset.pipe(
-        throttleTime(500),
-        mergeMap(n => this.getBatch(n)),
-        scan((acc, batch) => ({ ...acc, ...batch })),
-      );
-      this.documents = batchMap.pipe(map(v => Object.values(v).sort(this.sortEntry)));
+      this.fetchItems(null);
     }));
   }
 
   ngOnDestroy() {
     this._subscriptions.filter(s => !!s && !s.closed).forEach(s => s.unsubscribe());
-  }
-
-  getBatch(lastVisible: firebase.firestore.DocumentSnapshot) {
-    return this.documentService.query(this.documentType.id, {
-      startAfter: lastVisible,
-      limit: this.batch,
-      status: this.status,
-      orderBy: {
-        field: 'updated',
-        sortOrder: 'desc'
-      }
-    }).pipe(
-      tap(arr => arr.length < this.batch
-        ? (this.isLastDocument = true)
-        : (this.isLastDocument = false)
-      ),
-      map(arr => arr.reduce(
-        (previousValue, currentValue) => ({ ...previousValue, [currentValue.id]: currentValue }),
-        {}
-      )),
-    );
-  }
-
-  async nextBatch(id: string) {
-    if (this.isLastDocument) {
-      return;
-    }
-    const scrollOffset = this.viewport.measureScrollOffset('bottom');
-    if (scrollOffset <= this.bottomViewportOffset && !this.isLoading) {
-      this.isLoading = true;
-      this.lastVisible = await this.documentService.getReference(id);
-      this.offset.next(this.lastVisible);
-      this.isLoading = false;
-    }
-  }
-
-  trackByIdx(i: number) {
-    return i;
   }
 
   editEntry(documentId: string) {
@@ -107,6 +59,45 @@ export class DocumentListComponent implements OnInit, OnDestroy {
     await this.taskService.updateCache(document.url);
     this.snackBar.open('Success', 'Dismiss', {
       duration: 2000
+    });
+  }
+
+  async fetchMore(event: IPageInfo) {
+    if (event.endIndex === -1 || event.endIndex !== this.items.length - 1 || this.isLastItem) {
+      return;
+    }
+    this.isLoading = true;
+    const lastItem = this.items.length > 0 ? this.items[this.items.length - 1].id : null;
+    let lastVisible = null;
+    if (lastItem) {
+      lastVisible = await this.documentService.getReference(lastItem);
+    }
+    this.fetchItems(lastVisible);
+  }
+
+  fetchItems(lastVisible: firebase.firestore.DocumentSnapshot) {
+    this.documentService.query(this.documentType.id, {
+      startAfter: lastVisible,
+      limit: this.limit,
+      status: this.status,
+      orderBy: {
+        field: 'updated',
+        sortOrder: 'desc'
+      }
+    }).pipe(
+      tap(items => {
+        if (!items.length || items.length < this.limit) {
+          this.isLastItem = true;
+        }
+      }),
+      map(items => {
+        const mergedItems = [...this.items, ...items];
+        return mergedItems.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
+      }),
+      map(v => Object.values(v).sort(this.sortEntry))
+    ).subscribe((items: Document[]) => {
+      this.items = [...items];
+      this.isLoading = false;
     });
   }
 

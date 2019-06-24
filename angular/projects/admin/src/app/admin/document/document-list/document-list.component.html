@@ -1,52 +1,54 @@
-<div class="mat-elevation-z8"
-     *ngIf="documents | async as docs">
-  <mat-card class="card">
-    <mat-card-content>
-      <cdk-virtual-scroll-viewport *ngIf="docs.length; else empty"
-                                   itemSize="80"
-                                   (scrolledIndexChange)="nextBatch(docs[docs.length - 1]?.id)">
-        <ul>
-          <li *cdkVirtualFor="let doc of docs; trackBy: trackByIdx;"
-              (click)="editEntry(doc.id)">
-            <div class="main-content">
-              <div class="content-wrapper">
-                <h4 class="mat-h2 document-title">{{doc.title}}</h4>
-                <p class="mat-body-1">Last updated {{doc.updated?.toDate() | date:'medium'}}</p>
-              </div>
-              <div class="actions">
-                <button mat-icon-button
-                        (click)="$event.stopPropagation()"
-                        [matMenuTriggerFor]="menu"
-                        class="action-menu-btn">
-                  <mat-icon>more_vert</mat-icon>
+<mat-card class="table">
+  <mat-card-content>
+    <div class="header-wrapper">
+      <h4 class="mat-caption flex-2">Title</h4>
+      <h4 class="mat-caption flex-1">URL</h4>
+      <h4 class="mat-caption flex-1">Last Update</h4>
+      <h4 class="mat-caption flex-1"></h4>
+    </div>
+    <ul>
+      <virtual-scroller #scroll
+                        [items]="items"
+                        (vsEnd)="fetchMore($event)"
+                        [enableUnequalChildrenSizes]="true">
+        <li *ngFor="let item of scroll.viewPortItems">
+          <div class="main-content"
+               (click)="editEntry(item.id)">
+            <p class="mat-body-1 flex-2">{{item.title}}</p>
+            <p class="mat-body-1 flex-1">{{item.url}}</p>
+            <p class="mat-body-1 flex-1">{{item.updated?.toDate() | date:'medium'}}</p>
+            <div class="actions flex-1">
+              <button mat-icon-button
+                      (click)="$event.stopPropagation()"
+                      [matMenuTriggerFor]="menu"
+                      class="action-menu-btn">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu"
+                        xPosition="before">
+                <a mat-menu-item
+                   *ngIf="item.standalone"
+                   href="{{item.url}}"
+                   target="_blank">
+                  <mat-icon>launch</mat-icon>
+                  <span>Open page</span>
+                </a>
+                <button mat-menu-item
+                        (click)="rebuildEntry(item)">
+                  <mat-icon>refresh</mat-icon>
+                  <span>Rebuild</span>
                 </button>
-                <mat-menu #menu="matMenu"
-                          xPosition="before">
-                  <a mat-menu-item
-                     *ngIf="doc.standalone"
-                     href="{{doc.url}}"
-                     target="_blank">
-                    <mat-icon>launch</mat-icon>
-                    <span>Open page</span>
-                  </a>
-                  <button mat-menu-item
-                          (click)="rebuildEntry(doc)">
-                    <mat-icon>refresh</mat-icon>
-                    <span>Rebuild</span>
-                  </button>
-                </mat-menu>
-              </div>
+              </mat-menu>
             </div>
-            <mat-divider></mat-divider>
-          </li>
-          <mat-progress-bar *ngIf="!isLastDocument"
-                            mode="indeterminate"></mat-progress-bar>
-        </ul>
-      </cdk-virtual-scroll-viewport>
-
-      <ng-template #empty>
-        <h2 class="mat-h2 empty">No Content</h2>
-      </ng-template>
-    </mat-card-content>
-  </mat-card>
-</div>
+          </div>
+          <mat-divider></mat-divider>
+        </li>
+      </virtual-scroller>
+    </ul>
+    <mat-progress-bar *ngIf="isLoading"
+                      mode="indeterminate"></mat-progress-bar>
+    <ng-template #empty>
+      <h2 class="mat-h2 empty">No Content</h2>
+    </ng-template>
+  </mat-card-content>
+</mat-card>
