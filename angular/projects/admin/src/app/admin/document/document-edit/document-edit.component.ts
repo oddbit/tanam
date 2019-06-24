@@ -42,6 +42,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   private readonly _subscriptions: Subscription[] = [];
   private _rootSlug: string;
   private _documentType: string;
+  private _documentRevision: number;
   metaDataDialog = false;
 
   constructor(
@@ -66,6 +67,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     this._subscriptions.push(combinedDocumentData$.subscribe(([documentType, document]) => {
       this._setStateProcessing(true);
       const documentStatusDefault = documentType.documentStatusDefault === 'published' ? true : false;
+      this._documentRevision = document.revision;
       this.documentForm.patchValue({
         title: document.title,
         url: document.url || '/',
@@ -190,7 +192,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
 
   private _onTitleChange(title: string) {
     this.documentForm.controls['title'].setValue(title);
-    if (!!title && !this.documentForm.get('published').value) {
+    if (!!title && this._documentRevision === 0) {
       // Only auto slugify title if document has't been published before
       this.documentForm.controls['url'].setValue(`${this._rootSlug}/${this._slugify(title)}`);
     }

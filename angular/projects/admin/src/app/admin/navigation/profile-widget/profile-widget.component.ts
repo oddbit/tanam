@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { AppAuthService } from '../../../services/app-auth.service';
 import { tap } from 'rxjs/operators';
+import { AdminTheme } from '../../../../../../../../functions/src/models';
 
 @Component({
   selector: 'tanam-profile-widget',
@@ -10,6 +11,7 @@ import { tap } from 'rxjs/operators';
 })
 export class ProfileWidgetComponent implements OnInit {
   currentUser$ = this.userService.getCurrentUser().pipe(tap(() => this._reloaduser()));
+  theme: AdminTheme;
 
   constructor(
     private readonly userService: UserService,
@@ -17,10 +19,19 @@ export class ProfileWidgetComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.currentUser$.subscribe(user => {
+      this.theme = user.prefs.theme;
+    });
   }
 
   logout() {
     this.appAuthService.logOut();
+  }
+
+  toggleTheme(e) {
+    e.stopPropagation();
+    this.theme = this.theme === 'dark' ? 'light' : 'dark';
+    this.userService.setUserTheme(this.theme);
   }
 
   private async _reloaduser() {

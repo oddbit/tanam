@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, CollectionReference, Query } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { TanamFile } from '../../../../../../functions/src/models';
-import { Observable, of } from 'rxjs';
+import { TanamFile, ThemeAssetQueryOptions } from '../../../../../../functions/src/models';
+import { Observable } from 'rxjs';
 import { AppConfigService } from './app-config.service';
 
 @Injectable({
@@ -24,11 +24,35 @@ export class UserThemeAssetService {
     return storageRef.put(file).percentageChanges();
   }
 
-  getThemeAssets(themeId: string): Observable <TanamFile[]> {
+  getThemeAssets(themeId: string, queryOpts?: ThemeAssetQueryOptions): Observable<TanamFile[]> {
+    const queryFn = (ref: CollectionReference) => {
+      if (queryOpts) {
+        let query: Query = ref;
+        if (queryOpts.orderBy) {
+          query = query.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
+        }
+        if (queryOpts.startAfter) {
+          query = query.startAfter(queryOpts.startAfter);
+        }
+        if (queryOpts.limit) {
+          query = query.limit(queryOpts.limit);
+        }
+        return query;
+      }
+      return ref;
+    };
+
     return this.siteCollection
       .collection('themes').doc(themeId)
-      .collection<TanamFile>('assets')
+      .collection<TanamFile>('assets', queryFn)
       .valueChanges();
+  }
+
+  getReference(themeId: string, assetId: string) {
+    return this.siteCollection
+      .collection('themes').doc(themeId)
+      .collection<TanamFile>('assets').doc(assetId)
+      .ref.get();
   }
 
   deleteThemeAsset(file: TanamFile, themeId: string) {

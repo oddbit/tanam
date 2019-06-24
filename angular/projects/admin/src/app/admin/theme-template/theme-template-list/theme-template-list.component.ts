@@ -1,11 +1,10 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort } from '@angular/material';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { Theme } from 'tanam-models';
+import { Theme, ThemeTemplate } from 'tanam-models';
 import { ThemeTemplateService } from '../../../services/theme-template.service';
-import { ThemeTemplateListDataSource } from './theme-template-list-datasource';
-import { take } from 'rxjs/operators';
+import { map, tap, take } from 'rxjs/operators';
+import { IPageInfo } from 'ngx-virtual-scroller';
 
 @Component({
   selector: 'tanam-theme-template-list',
@@ -15,10 +14,12 @@ import { take } from 'rxjs/operators';
 export class ThemeTemplateListComponent implements OnInit, OnDestroy {
   @Input() theme$: Observable<Theme>;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  items: ThemeTemplate[] = [];
+  limit = 20;
+  isLoading: boolean;
+  isLastItem: boolean;
+  theme: Theme;
 
-  dataSource: ThemeTemplateListDataSource;
   private _subscriptions: Subscription[] = [];
 
   constructor(
@@ -26,12 +27,10 @@ export class ThemeTemplateListComponent implements OnInit, OnDestroy {
     private readonly themeTemplateService: ThemeTemplateService,
   ) { }
 
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['title', 'selector', 'updated'];
-
   ngOnInit() {
     this._subscriptions.push(this.theme$.subscribe(theme => {
-      this.dataSource = new ThemeTemplateListDataSource(theme, this.paginator, this.sort, this.themeTemplateService);
+      this.theme = theme;
+      this.fetchItems(null);
     }));
   }
 
@@ -43,5 +42,56 @@ export class ThemeTemplateListComponent implements OnInit, OnDestroy {
     const theme = await this.theme$.pipe(take(1)).toPromise();
     const url = `/_/admin/theme/${theme.id}/templates/${templateId}`;
     this.router.navigateByUrl(url);
+  }
+
+  async fetchMore(event: IPageInfo) {
+    if (event.endIndex === -1 || event.endIndex !== this.items.length - 1 || this.isLastItem) {
+      return;
+    }
+    this.isLoading = true;
+    const lastItem = this.items.length > 0 ? this.items[this.items.length - 1].id : null;
+    let lastVisible = null;
+    if (lastItem) {
+      lastVisible = await this.themeTemplateService.getReference(this.theme.id, lastItem);
+    }
+    this.fetchItems(lastVisible);
+  }
+
+  fetchItems(lastVisible: firebase.firestore.DocumentSnapshot) {
+    this.isLoading = true;
+    this.themeTemplateService.getTemplatesForTheme(this.theme.id, {
+      startAfter: lastVisible,
+      limit: this.limit,
+      orderBy: {
+        field: 'title',
+        sortOrder: 'asc'
+      }
+    }).pipe(
+      tap(items => {
+        if (!items.length || items.length < this.limit) {
+          this.isLastItem = true;
+        }
+      }),
+      map(items => {
+        const mergedItems = [...this.items, ...items];
+        return mergedItems.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
+      }),
+      map(v => Object.values(v).sort(this.sortItems))
+    ).subscribe((items: ThemeTemplate[]) => {
+      this.items = [...items];
+      this.isLoading = false;
+    });
+  }
+
+  sortItems(a: ThemeTemplate, b: ThemeTemplate) {
+    const itemA = a.title.toLowerCase();
+    const itemB = b.title.toLowerCase();
+    if (itemA < itemB) {
+      return -1;
+    } else if (itemA > itemB) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 }

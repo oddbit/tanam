@@ -13,7 +13,7 @@ import { tap } from 'rxjs/operators';
 export class FilePickerDialogComponent {
   uploadTasks: { [key: string]: Observable<number> } = {};
   selectedFile = '';
-  readonly files$: Observable<TanamFile[]> = this.fileService.getFiles('image');
+  readonly files$: Observable<TanamFile[]> = this.fileService.getFiles('image', {});
   private readonly _downloadUrls = {};
 
   constructor(

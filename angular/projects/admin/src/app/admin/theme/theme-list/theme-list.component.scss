@@ -1,7 +1,11 @@
-.full-width-table {
+virtual-scroller {
   width: 100%;
-}
-
-.clickable-table-row {
-  cursor: pointer;
+  height: 50vh;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 8px;
+  }
 }

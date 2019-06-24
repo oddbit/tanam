@@ -12,7 +12,7 @@ export interface DocumentTypeQueryOptions {
     sortOrder: 'asc' | 'desc',
   };
   status?: DocumentStatus;
-  startAt?: firebase.firestore.DocumentSnapshot;
+  startAfter?: firebase.firestore.DocumentSnapshot;
 }
 
 @Injectable({
@@ -102,30 +102,24 @@ export class DocumentService {
     documentTypeId: string,
     queryOpts: DocumentTypeQueryOptions = {}
   ): Observable<Document[]> {
-
     const queryFn = (ref: CollectionReference) => {
       let query = ref.where('documentType', '==', documentTypeId);
       if (queryOpts.status) {
         query = query.where('status', '==', queryOpts.status);
       }
-
       if (queryOpts.orderBy) {
         query = query.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
       }
-
-      if (queryOpts.startAt) {
-        query = query.startAfter(queryOpts.startAt);
+      if (queryOpts.startAfter) {
+        query = query.startAfter(queryOpts.startAfter);
       }
-
       if (queryOpts.limit) {
         query = query.limit(queryOpts.limit);
       }
-
       return query;
     };
-
     return this.siteCollection
-    .collection<Document>('documents', queryFn).valueChanges();
+      .collection<Document>('documents', queryFn).valueChanges();
   }
 
   getReference(id: string) {

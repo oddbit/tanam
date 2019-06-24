@@ -11,6 +11,19 @@
     <tanam-action-button buttonType='create'
                          (click)='createNewTemplateDialog(theme)'></tanam-action-button>
   </tanam-context-actions>
+
+  <div>
+    <tanam-page-title pageTitle="{{ theme.title }} theme overview"></tanam-page-title>
+    <mat-card class="card">
+      <mat-card-title-group>
+        <mat-card-title>
+        </mat-card-title>
+      </mat-card-title-group>
+      <mat-card-content>
+        <p *ngIf="theme.description">{{ theme.description }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
 <p class="mat-body-1">Templates</p>
 <tanam-theme-template-list [theme$]="theme$"></tanam-theme-template-list>
