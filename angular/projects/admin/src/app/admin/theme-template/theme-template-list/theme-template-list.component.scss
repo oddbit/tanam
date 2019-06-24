@@ -5,3 +5,69 @@
 .clickable-table-row {
   cursor: pointer;
 }
+
+.table {
+  padding: 0;
+
+  virtual-scroller {
+    width: 100%;
+    height: 50vh;
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 8px;
+    }
+  }
+
+  .flex-1 {
+    flex: 1;
+  }
+  .flex-2 {
+    flex: 2;
+  }
+  .flex-3 {
+    flex: 3;
+  }
+
+  .header-wrapper {
+    display: flex;
+    width: 100%;
+    height: 56px;
+    padding: 0 29px 0 24px;
+    border-bottom: 1px solid rgba(0,0,0,0.15);
+    box-sizing: border-box;
+    .mat-caption {
+      display: flex;
+      align-items: center;
+      opacity: 0.6;
+      font-weight: 500;
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    li {
+      cursor: pointer;
+      .main-content {
+        height: 48px;
+        padding: 0 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        p {
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  .empty {
+    padding: 24px;
+    text-align: center;
+    opacity: 0.5;
+  }
+}
