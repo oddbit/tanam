@@ -1,24 +1,25 @@
-<div class="title-table">
-  <h3 class="mat-h3">File Assets</h3>
-  <button mat-stroked-button
-          (click)="fileInput.click()">
-    <mat-icon>file_upload</mat-icon>
-    Upload File
-  </button>
-  <input #fileInput
-         type="file"
-         (change)="uploadSingleFile($event)"
-         style="display:none;" />
-</div>
-<section *ngFor="let uploadTasks of uploadTasks | keyvalue">
-  <strong>{{uploadTasks.key}}</strong>
-  <mat-progress-bar color="accent"
-                    mode="determinate"
-                    [value]="uploadTasks.value | async">
-  </mat-progress-bar>
-</section>
+<p class="mat-body-1">Theme Assets</p>
+<div class="mat-elevation-z2 table-border-radius wrapper relative">
+  <div class="title-table">
+    <button mat-flat-button
+            color="primary"
+            (click)="fileInput.click()">
+      <mat-icon>file_upload</mat-icon>
+      Upload File
+    </button>
+    <input #fileInput
+           type="file"
+           (change)="uploadSingleFile($event)"
+           style="display:none;" />
+  </div>
+  <section *ngFor="let uploadTasks of uploadTasks | keyvalue">
+    <p class="mat-body-1 fileupload-name">{{uploadTasks.key}}</p>
+    <mat-progress-bar color="primary"
+                      mode="determinate"
+                      [value]="uploadTasks.value | async">
+    </mat-progress-bar>
+  </section>
 
-<div class="mat-elevation-z8">
   <mat-card class="card">
     <mat-card-content>
       <div class="header-wrapper">

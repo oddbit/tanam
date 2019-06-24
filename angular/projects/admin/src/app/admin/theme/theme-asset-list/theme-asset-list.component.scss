@@ -1,3 +1,7 @@
+.wrapper {
+  margin-bottom: 48px;
+}
+
 virtual-scroller {
   width: 100%;
   height: 50vh;
@@ -10,27 +14,29 @@ virtual-scroller {
   }
 }
 
+.title-table {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  button {
+    margin-left: auto;
+  }
+}
+
 .relative {
   position: relative;
 }
 
-.actions-wrapper {
-  display: flex;
-  justify-content: flex-end;
-}
-
 .fileupload-name {
   position: absolute;
-  top: 16px;
+  top: 4px;
   left: 24px;
-}
-
-.action-column {
-  text-align: right;
 }
 
 .card {
   padding: 0;
+  border-radius: 0;
   .flex-1 {
     flex: 1;
   }
@@ -47,8 +53,13 @@ virtual-scroller {
     display: flex;
     width: 100%;
     padding: 0 29px 0 24px;
+    height: 56px;
     border-bottom: 1px solid rgba(0,0,0,0.15);
     box-sizing: border-box;
+    .mat-body-2 {
+      display: flex;
+      align-items: center;
+    }
   }
   ul {
     list-style: none;
@@ -59,7 +70,8 @@ virtual-scroller {
     cursor: pointer;
   }
   .main-content {
-    padding: 16px 24px;
+    height: 48px;
+    padding: 0 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
