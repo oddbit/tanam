@@ -32,7 +32,8 @@
       </div>
     </mat-card>
   </ng-template>
-  <mat-toolbar class="theme-toolbar">
-    <mat-slide-toggle (click)="toggleTheme($event)">{{theme}} theme</mat-slide-toggle>
+  <mat-toolbar>
+    <mat-slide-toggle (click)="toggleTheme($event)"
+                      class="mat-body-1 theme-toggler">{{theme}} theme</mat-slide-toggle>
   </mat-toolbar>
 </mat-menu>

@@ -15,10 +15,6 @@
   }
 }
 
-.theme-toolbar {
-  margin-bottom: -8px;
-}
-
 ::ng-deep .mat-menu-panel.mat-menu-user-on-nav {
   max-width: 350px !important;
   .mat-menu-content:not(:empty) {
@@ -46,4 +42,8 @@
       margin: 20px 0px;
     }
   }
+}
+
+.theme-toggler {
+  text-transform: capitalize;
 }
