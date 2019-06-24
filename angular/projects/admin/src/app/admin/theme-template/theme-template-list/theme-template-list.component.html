@@ -10,7 +10,8 @@
                         [items]="items"
                         (vsEnd)="fetchMore($event)"
                         [enableUnequalChildrenSizes]="true">
-        <li *ngFor="let item of scroll.viewPortItems">
+        <li *ngFor="let item of scroll.viewPortItems"
+            (click)="editTemplate(item.id)">
           <div class="main-content">
             <p class="mat-body-1 flex-2">{{item.title}}</p>
             <p class="mat-body-1 flex-1">{{item.selector}}</p>
