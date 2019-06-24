@@ -13,7 +13,7 @@ import { Theme } from '../../../../../../../../functions/src/models';
 export class ThemeListComponent {
 
   items: Theme[] = [];
-  limit = 5;
+  limit = 20;
   isLoading: boolean;
   isLastItem: boolean;
 
