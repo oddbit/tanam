@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { map, tap, scan, mergeMap, throttleTime } from 'rxjs/operators';
+import { map, tap} from 'rxjs/operators';
 import { ThemeService } from '../../../services/theme.service';
 import { Router } from '@angular/router';
+import { IPageInfo } from 'ngx-virtual-scroller';
+import { Theme } from '../../../../../../../../functions/src/models';
 
 @Component({
   selector: 'tanam-theme-list',
@@ -11,63 +11,59 @@ import { Router } from '@angular/router';
   styleUrls: ['./theme-list.component.scss']
 })
 export class ThemeListComponent {
-  @ViewChild(CdkVirtualScrollViewport)
-  viewport: CdkVirtualScrollViewport;
 
-  theEnd = false;
-  lastVisible: firebase.firestore.DocumentSnapshot;
-
-  offset = new BehaviorSubject(null);
-  themeDocs: Observable<any[]>;
+  items: Theme[] = [];
+  limit = 20;
+  isLoading: boolean;
+  isLastItem: boolean;
 
   constructor(
     private readonly router: Router,
     private readonly themeService: ThemeService,
-  ) {
-    const batchMap = this.offset.pipe(
-      throttleTime(500),
-      mergeMap(n => this.getBatch(n)),
-      scan((acc, batch) => {
-        return { ...acc, ...batch };
-      }, {})
-    );
-    this.themeDocs = batchMap.pipe(map(v => Object.values(v)));
+  ) {}
+
+  async fetchMore(event: IPageInfo) {
+    if (event.endIndex !== this.items.length - 1 || this.isLastItem) {
+      return;
+    }
+    this.isLoading = true;
+    const lastItem = this.items.length > 0 ? this.items[this.items.length - 1].id : null;
+    let lastVisible = null;
+    if (lastItem) {
+      lastVisible = await this.themeService.getReference(lastItem);
+    }
+    this.fetchItems(lastVisible);
   }
 
-  getBatch(lastVisible: firebase.firestore.DocumentSnapshot) {
-    return this.themeService.getThemes({
-      limit: 10, startAfter: lastVisible, orderBy: {
+  fetchItems(lastVisible: firebase.firestore.DocumentSnapshot) {
+    this.themeService.getThemes({
+      startAfter: lastVisible,
+      limit: this.limit,
+      orderBy: {
         field: 'updated',
         sortOrder: 'desc'
       }
-    })
-      .pipe(
-        tap(arr => (arr.length ? false : (this.theEnd = true))),
-        map(arr => {
-          return arr.reduce((acc, cur) => {
-            const id = cur.id;
-            const data = cur;
-            return { ...acc, [id]: data };
-          }, {});
-        })
-      );
+    }).pipe(
+      tap(items => {
+        if (!items.length || items.length < this.limit) {
+          this.isLastItem = true;
+        }
+      }),
+      map(items => {
+        const mergedItems = [...this.items, ...items];
+        return mergedItems.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
+      }),
+      map(v => Object.values(v).sort(this.sortEntry))
+    ).subscribe((items: Theme[]) => {
+      this.items = [...items];
+      this.isLoading = false;
+    });
   }
 
-  async nextBatch(id: string) {
-    if (this.theEnd) {
-      return;
-    }
-
-    const end = this.viewport.getRenderedRange().end;
-    const total = this.viewport.getDataLength();
-    if (end === total) {
-      this.lastVisible = await this.themeService.getReference(id);
-      this.offset.next(this.lastVisible);
-    }
-  }
-
-  trackByIdx(i: number) {
-    return i;
+  sortEntry(a: Theme, b: Theme) {
+    const dateA = a.updated.toDate().getTime();
+    const dateB = b.updated.toDate().getTime();
+    return dateA - dateB;
   }
 
   editTheme(themeId: string) {

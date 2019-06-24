@@ -1,22 +1,22 @@
-<ng-container *ngIf="themeDocs | async as themes">
-
+<ng-container>
   <mat-card>
-    <cdk-virtual-scroll-viewport itemSize="70"
-                                 (scrolledIndexChange)="nextBatch(themes[themes.length - 1].id)">
-      <mat-nav-list>
-        <mat-list-item *cdkVirtualFor="let theme of themes; let i = index; trackBy: trackByIdx"
-                       (click)="editTheme(theme.id)">
+    <mat-nav-list>
+      <virtual-scroller #scroll
+                        [items]="items"
+                        (vsEnd)="fetchMore($event)"
+                        [enableUnequalChildrenSizes]="true">
+        <mat-list-item *ngFor="let item of scroll.viewPortItems"
+                       (click)="editTheme(item.id)">
           <mat-icon color="primary"
                     mat-list-icon>style</mat-icon>
-          <h4 mat-line>{{theme.title}}</h4>
-          <p mat-line>{{theme.description}}</p>
-          <small class="updated">Updated: <br /> {{theme.updated?.toDate() | date:'medium'}}</small>
+          <h4 mat-line>{{item.title}}</h4>
+          <p mat-line>{{item.description}}</p>
+          <small class="updated">Updated: <br /> {{item.updated?.toDate() | date:'medium'}}</small>
           <mat-divider></mat-divider>
         </mat-list-item>
-        <mat-progress-bar *ngIf="!theEnd"
-                          mode="indeterminate"></mat-progress-bar>
-      </mat-nav-list>
-    </cdk-virtual-scroll-viewport>
+      </virtual-scroller>
+    </mat-nav-list>
+    <mat-progress-bar *ngIf="isLoading"
+                      mode="indeterminate"></mat-progress-bar>
   </mat-card>
-
 </ng-container>
