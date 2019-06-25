@@ -43,12 +43,12 @@
           </div>
           <mat-divider></mat-divider>
         </li>
+        <ng-container *ngIf="!items.length">
+          <h2 class="mat-h2 empty">No Content</h2>
+        </ng-container>
       </virtual-scroller>
     </ul>
     <mat-progress-bar *ngIf="isLoading"
                       mode="indeterminate"></mat-progress-bar>
-    <ng-template #empty>
-      <h2 class="mat-h2 empty">No Content</h2>
-    </ng-template>
   </mat-card-content>
 </mat-card>
