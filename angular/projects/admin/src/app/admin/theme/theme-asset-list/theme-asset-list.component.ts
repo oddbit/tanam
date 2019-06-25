@@ -1,27 +1,26 @@
-import {Component, OnInit, ViewChild, Input} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource, MatSnackBar} from '@angular/material';
+import { Component } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { UserThemeAssetService } from '../../../services/user-theme-asset.service';
-import { ThemeAssetListDataSource } from './theme-asset-list-datasource';
-import {  TanamFile } from '../../../../../../../../functions/src/models';
+import { TanamFile } from '../../../../../../../../functions/src/models';
 import { ActivatedRoute } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { IPageInfo } from 'ngx-virtual-scroller';
+import { map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'tanam-theme-asset-list',
   templateUrl: './theme-asset-list.component.html',
   styleUrls: ['./theme-asset-list.component.scss']
 })
-export class ThemeAssetListComponent implements OnInit {
+export class ThemeAssetListComponent {
   readonly themeId = this.route.snapshot.paramMap.get('themeId');
   uploadTasks: { [key: string]: Observable<number> } = {};
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  displayedColumns: string[] = ['title', 'size', 'type', 'updated', 'action'];
-  dataSource: ThemeAssetListDataSource;
-
+  items: TanamFile[] = [];
+  limit = 20;
+  isLoading: boolean;
+  isLastItem: boolean;
+  deletedAssetId: string = null;
 
   constructor(
     private readonly themeAssetService: UserThemeAssetService,
@@ -30,9 +29,42 @@ export class ThemeAssetListComponent implements OnInit {
     private snackBar: MatSnackBar
   ) { }
 
-  ngOnInit() {
-    console.log(this.themeId);
-    this.dataSource = new ThemeAssetListDataSource(this.themeId, this.themeAssetService, this.paginator, this.sort);
+  async fetchMore(event: IPageInfo) {
+    if (event.endIndex !== this.items.length - 1 || this.isLastItem) {
+      return;
+    }
+    this.isLoading = true;
+    const lastItem = this.items.length > 0 ? this.items[this.items.length - 1].id : null;
+    let lastVisible = null;
+    if (lastItem) {
+      lastVisible = await this.themeAssetService.getReference(this.themeId, lastItem);
+    }
+    this.fetchItems(lastVisible);
+  }
+
+  fetchItems(lastVisible: firebase.firestore.DocumentSnapshot) {
+    this.themeAssetService.getThemeAssets(this.themeId, {
+      startAfter: lastVisible,
+      limit: this.limit,
+      orderBy: {
+        field: 'title',
+        sortOrder: 'asc'
+      }
+    }).pipe(
+      tap(assets => {
+        if (!assets.length || assets.length < this.limit) {
+          this.isLastItem = true;
+        }
+      }),
+      map(assets => {
+        const mergedAssets = [...this.items, ...assets];
+        return mergedAssets.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
+      }),
+      map(v => Object.values(v).sort(this.sortAssets))
+    ).subscribe((items: TanamFile[]) => {
+      this.items = [...items];
+      this.isLoading = false;
+    });
   }
 
   uploadSingleFile(event) {
@@ -57,9 +89,13 @@ export class ThemeAssetListComponent implements OnInit {
       icon: 'warning'
     }).afterClosed().subscribe(async res => {
       if (res === 'yes') {
-        this.snackBar.open('Deleting..', 'Dismiss', {duration: 2000});
+        this.snackBar.open('Deleting..', 'Dismiss', { duration: 2000 });
+        this.deletedAssetId = file.id;
         await this.themeAssetService.deleteThemeAsset(file, this.themeId);
-        this.snackBar.open('Deleted', 'Dismiss', {duration: 2000});
+        this.items = this.items.filter(item => item.id !== file.id);
+        this.snackBar.open('File Deleted', 'Dismiss', {
+          duration: 2000
+        });
       }
     });
   }
@@ -74,5 +110,16 @@ export class ThemeAssetListComponent implements OnInit {
       buttons: ['ok'],
       icon: 'info'
     });
+  }
+
+  sortAssets(a: TanamFile, b: TanamFile) {
+    const titleA = a.title.toLowerCase();
+    const titleB = b.title.toLowerCase();
+    if (titleA > titleB) {
+      return 1;
+    } else if (titleA < titleB) {
+      return -1;
+    }
+    return 0;
   }
 }

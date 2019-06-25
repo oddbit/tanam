@@ -8,6 +8,7 @@ import { DocumentEditComponent } from './document-edit/document-edit.component';
 import { DocumentListComponent } from './document-list/document-list.component';
 import { DocumentOverviewComponent } from './document-overview/document-overview.component';
 import { MatInputModule } from '@angular/material';
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,8 @@ import { MatInputModule } from '@angular/material';
     FormModule,
     ComponentsModule,
     MatInputModule,
+    VirtualScrollerModule,
+
   ],
   exports: [
     DocumentEditComponent,

@@ -1,5 +1,34 @@
-mat-grid-tile {
-  cursor: pointer;
+virtual-scroller {
+  width: 100%;
+  height: 65vh;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 8px;
+  }
+}
+
+::ng-deep #media-files .scrollable-content {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  height: inherit;
+  width: inherit;
+}
+
+.card {
+  flex: 0 0 calc(22.9% - 32px);
+  min-width: calc(22.9% - 32px);
+  margin: 5px;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  @media screen and (max-width: 600px) {
+    min-width: 48%;
+    margin: 16px;
+  }
 }
 
 .focus {
@@ -7,11 +36,28 @@ mat-grid-tile {
   box-sizing: border-box;
 }
 
-img {
-  position: absolute;
-  top: 0;
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-  left: 0;
+.img-wrapper {
+  position: relative;
+  padding-top: 100%;
+  margin-bottom: -16px !important;
+  img {
+    position: absolute;
+    top: 0;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.mat-card-content {
+  margin-bottom: 0;
+  overflow: hidden;
+
+  p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 0;
+    padding-right: 16px;
+  }
 }

@@ -1,45 +1,31 @@
-<div *ngIf="dataSource"
-     class="mat-elevation-z8">
-  <table mat-table
-         class="full-width-table"
-         [dataSource]="dataSource"
-         matSort
-         aria-label="Elements">
+<mat-card class="table">
+  <mat-card-content>
+    <div class="header-wrapper">
+      <h4 class="mat-caption flex-2">Title</h4>
+      <h4 class="mat-caption flex-1">Selector</h4>
+      <h4 class="mat-caption flex-1">Update</h4>
+    </div>
+    <ul>
+      <virtual-scroller #scroll
+                        [items]="items"
+                        (vsEnd)="fetchMore($event)"
+                        [enableUnequalChildrenSizes]="true">
+        <li *ngFor="let item of scroll.viewPortItems"
+            (click)="editTemplate(item.id)">
+          <div class="main-content">
+            <p class="mat-body-1 flex-2">{{item.title}}</p>
+            <p class="mat-body-1 flex-1">{{item.selector}}</p>
+            <p class="mat-body-1 flex-1">{{item.updated?.toDate() | date:'medium'}}</p>
+          </div>
+          <mat-divider></mat-divider>
+        </li>
+      </virtual-scroller>
+    </ul>
+    <mat-progress-bar *ngIf="isLoading"
+                      mode="indeterminate"></mat-progress-bar>
 
-    <ng-container matColumnDef="title">
-      <th mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header>Title</th>
-      <td mat-cell
-          *matCellDef="let row">{{row.title}}</td>
-    </ng-container>
-    <ng-container matColumnDef="selector">
-      <th mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header>Selector</th>
-      <td mat-cell
-          *matCellDef="let row"><code>{{row.selector}}</code></td>
-    </ng-container>
-    <ng-container matColumnDef="updated">
-      <th mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header>Last update</th>
-      <td mat-cell
-          *matCellDef="let row">{{row.updated.toDate() | date:'medium'}}</td>
-    </ng-container>
-
-    <tr mat-header-row
-        *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row
-        class="clickable-table-row"
-        *matRowDef="let row; columns: displayedColumns;"
-        (click)="editTemplate(row.id)"></tr>
-  </table>
-
-  <mat-paginator #paginator
-                 [length]="dataSource.data?.length"
-                 [pageIndex]="0"
-                 [pageSize]="100"
-                 [pageSizeOptions]="[100]">
-  </mat-paginator>
-</div>
+    <ng-template #empty>
+      <h2 class="mat-h2 empty">No Content</h2>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

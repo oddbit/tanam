@@ -1,10 +1,19 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { Theme } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
 import { UserThemeAssetService } from './user-theme-asset.service';
+
+export interface ThemeQueryOptions {
+  limit?: number;
+  orderBy?: {
+    field: string,
+    sortOrder: 'asc' | 'desc',
+  };
+  startAfter?: firebase.firestore.DocumentSnapshot;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -56,8 +65,25 @@ export class ThemeService {
       });
   }
 
-  getThemes(): Observable<Theme[]> {
-    return this.siteCollection.collection<Theme>('themes').valueChanges();
+  getThemes(queryOpts: ThemeQueryOptions): Observable<Theme[]> {
+
+    const queryFn = (ref: CollectionReference) => {
+      let query: any;
+      if (queryOpts.orderBy) {
+        query = ref.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
+      }
+
+      if (queryOpts.limit) {
+        query = ref.limit(queryOpts.limit);
+      }
+
+      if (queryOpts.startAfter) {
+        query = ref.startAfter(queryOpts.startAfter);
+      }
+
+      return query;
+    };
+    return this.siteCollection.collection<Theme>('themes', queryFn).valueChanges();
   }
 
   getTheme(themeId: string): Observable<Theme> {
@@ -78,5 +104,13 @@ export class ThemeService {
       .collection<Theme>('themes')
       .doc(themeId)
       .delete();
+  }
+
+  getReference(id: string) {
+    if (!id) {
+      return;
+    }
+    return this.siteCollection
+      .collection('themes').doc(id).ref.get();
   }
 }
