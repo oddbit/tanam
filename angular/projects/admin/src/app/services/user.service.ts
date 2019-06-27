@@ -4,7 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, CollectionReference, Query } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { AdminTheme, ADMIN_THEMES, TanamUser, UserRole, TanamUserInvited } from 'tanam-models';
+import { AdminTheme, ADMIN_THEMES, TanamUser, UserRole, TanamUserInvited, UserQueryOptions } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
 
@@ -84,7 +84,7 @@ export class UserService {
     });
   }
 
-  getUsers(queryOpts: any) {
+  getUsers(queryOpts: UserQueryOptions) {
     const queryFn = (ref: CollectionReference) => {
       if (queryOpts) {
         let query: Query = ref;
@@ -105,7 +105,7 @@ export class UserService {
       .collection<TanamUser>('users', queryFn).valueChanges();
   }
 
-  getUserInvited(queryOpts: any) {
+  getUserInvited(queryOpts: UserQueryOptions) {
     const queryFn = (ref: CollectionReference) => {
       if (queryOpts) {
         let query: Query = ref;

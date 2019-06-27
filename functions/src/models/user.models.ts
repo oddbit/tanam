@@ -23,3 +23,12 @@ export interface TanamUserInvited {
   uid: string;
   updated: any;
 }
+
+export interface UserQueryOptions {
+  limit?: number;
+  orderBy?: {
+    field: string,
+    sortOrder: 'asc' | 'desc',
+  };
+  startAfter?: any; // firebase.firestore.DocumentSnapshot
+}
