@@ -9,6 +9,7 @@ export interface UserPrefs {
 
 export interface TanamUser {
   uid: string;
+  email: string;
   name: string;
   roles: UserRole[];
   prefs: UserPrefs;
