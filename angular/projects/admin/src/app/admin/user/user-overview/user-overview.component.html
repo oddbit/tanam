@@ -3,28 +3,6 @@
     <tanam-user-list></tanam-user-list>
   </mat-tab>
   <mat-tab label="Invited">
-    <mat-card>
-      <mat-list dense>
-        <mat-list-item>
-          <img matListAvatar
-               src="https://picsum.photos/200">
-          <h4 mat-line>Putu Deta</h4>
-          <p mat-line>deta@oddbit.id</p>
-          <mat-form-field>
-            <mat-label>Role</mat-label>
-            <mat-select value="admin">
-              <mat-option value="admin">Admin</mat-option>
-              <mat-option value="superAdmin">Super Admin</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <button mat-icon-button
-                  color="warn"
-                  class="btn-delete">
-            <mat-icon>delete</mat-icon>
-          </button>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-      </mat-list>
-    </mat-card>
+    <tanam-user-invited></tanam-user-invited>
   </mat-tab>
 </mat-tab-group>
