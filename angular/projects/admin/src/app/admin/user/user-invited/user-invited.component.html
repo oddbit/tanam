@@ -1,8 +1,13 @@
 <mat-card>
-    <mat-list dense>
-      <mat-list-item>
+  <mat-list dense>
+    <virtual-scroller #scroll
+                      [items]="items"
+                      (vsEnd)="fetchMore($event)"
+                      [enableUnequalChildrenSizes]="true">
+      <mat-list-item *ngFor="let item of scroll.viewPortItems">
         <mat-icon matListIcon>account_circle</mat-icon>
-        <h4 mat-line>deta@oddbit.id</h4>
+        <h4 mat-line><b>{{item.email}}</b></h4>
+        <p mat-line>Invited on {{item.updated?.toDate() | date:'medium'}}</p>
         <mat-form-field>
           <mat-label>Role</mat-label>
           <mat-select value="admin">
@@ -11,11 +16,23 @@
           </mat-select>
         </mat-form-field>
         <button mat-icon-button
-                color="warn"
-                class="btn-delete">
-          <mat-icon>delete</mat-icon>
+                [matMenuTriggerFor]="menu"
+                class="btn-menu">
+          <mat-icon>more_vert</mat-icon>
         </button>
+        <mat-menu #menu="matMenu"
+                  xPosition="before">
+          <button mat-menu-item>
+            <mat-icon>autorenew</mat-icon>
+            <span>Resend Invitation</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon color="warn">delete</mat-icon>
+            <span>Delete</span>
+          </button>
+        </mat-menu>
         <mat-divider></mat-divider>
       </mat-list-item>
-    </mat-list>
-  </mat-card>
+    </virtual-scroller>
+  </mat-list>
+</mat-card>

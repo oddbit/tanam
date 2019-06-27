@@ -15,3 +15,11 @@ export interface TanamUser {
   prefs: UserPrefs;
   photoUrl?: string;
 }
+
+export interface TanamUserInvited {
+  email: string;
+  invited: any;
+  role: UserRole;
+  uid: string;
+  updated: any;
+}
