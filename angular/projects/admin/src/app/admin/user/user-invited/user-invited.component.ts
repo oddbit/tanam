@@ -35,7 +35,7 @@ export class UserInvitedComponent {
   fetchItems(lastVisible: firebase.firestore.DocumentSnapshot) {
     this.isLoading = true;
     this.userService.getUserInvited({
-      startAter: lastVisible
+      startAfter: lastVisible
     })
     .pipe(
       tap(items => {
