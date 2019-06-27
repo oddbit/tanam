@@ -35,7 +35,7 @@ export class UserListComponent  {
   fetchItems(lastVisible: firebase.firestore.DocumentSnapshot) {
     this.isLoading = true;
     this.userService.getUsers({
-      startAter: lastVisible
+      startAfter: lastVisible
     })
     .pipe(
       tap(items => {
