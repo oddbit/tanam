@@ -1,0 +1,29 @@
+<mat-card>
+    <mat-list dense>
+      <virtual-scroller #scroll
+                        [items]="items"
+                        (vsEnd)="fetchMore($event)"
+                        [enableUnequalChildrenSizes]="true">
+        <mat-list-item *ngFor="let item of scroll.viewPortItems">
+          <img matListAvatar
+               src="{{item.photoUrl || 'assets/icons/tanam-icon.svg'}}">
+          <h4 mat-line><b>{{item.name}}</b></h4>
+          <p mat-line>{{item.email}}</p>
+          <mat-form-field>
+            <mat-label>Role</mat-label>
+            <mat-select value="admin">
+              <mat-option value="admin">Admin</mat-option>
+              <mat-option value="superAdmin">Super Admin</mat-option>
+              <mat-option value="publisher">Publisher</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-icon-button
+                  color="warn"
+                  class="btn-delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <mat-divider></mat-divider>
+        </mat-list-item>
+      </virtual-scroller>
+    </mat-list>
+  </mat-card>

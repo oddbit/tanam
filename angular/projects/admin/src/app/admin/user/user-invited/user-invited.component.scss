@@ -1,0 +1,15 @@
+.btn-menu {
+  margin-left: 50px;
+}
+
+virtual-scroller {
+  width: 100%;
+  height: 55vh;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 8px;
+  }
+}

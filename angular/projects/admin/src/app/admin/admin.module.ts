@@ -17,6 +17,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { SettingsModule } from './settings/settings.module';
 import { ThemeTemplateModule } from './theme-template/theme-template.module';
 import { ThemeModule } from './theme/theme.module';
+import { UserModule } from './user/user.module';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { ThemeModule } from './theme/theme.module';
     ThemeModule,
     FormModule,
     ComponentsModule,
+    UserModule
   ]
 })
 export class AdminModule { }
