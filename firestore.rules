@@ -34,6 +34,14 @@ service cloud.firestore {
         allow write: if isAtLeastAdmin();
       }
 
+      match /users/{document=**} {
+        allow read, write: if isAtLeastAdmin();
+      }
+
+       match /user-roles/{document=**} {
+        allow read, write: if isAtLeastAdmin();
+      }
+
       match /users/{userId} {
         allow read: if isSignedInAs(userId);
         allow write: if isSignedInAs(userId);

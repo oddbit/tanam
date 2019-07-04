@@ -18,6 +18,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ThemeEditComponent } from './theme/theme-edit/theme-edit.component';
 import { ThemeOverviewComponent } from './theme/theme-overview/theme-overview.component';
+import { UserOverviewComponent } from './user/user-overview/user-overview.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,11 @@ const routes: Routes = [
           {
             path: 'dashboard',
             component: DashboardComponent,
+          },
+          {
+            path: 'users',
+            component: UserOverviewComponent,
+            canActivate: [AdminGuard],
           },
           {
             path: 'settings',

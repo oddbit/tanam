@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { FirebaseApp } from '@angular/fire';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, CollectionReference, Query } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { AdminTheme, ADMIN_THEMES, TanamUser, UserRole } from 'tanam-models';
+import { AdminTheme, ADMIN_THEMES, TanamUser, UserRole, TanamUserInvited, UserQueryOptions } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
 
@@ -82,5 +82,55 @@ export class UserService {
     this.getUserTheme().subscribe(val => {
       this.overlayContainer.getContainerElement().classList.add(val);
     });
+  }
+
+  getUsers(queryOpts: UserQueryOptions) {
+    const queryFn = (ref: CollectionReference) => {
+      if (queryOpts) {
+        let query: Query = ref;
+        if (queryOpts.orderBy) {
+          query = query.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
+        }
+        if (queryOpts.startAfter) {
+          query = query.startAfter(queryOpts.startAfter);
+        }
+        if (queryOpts.limit) {
+          query = query.limit(queryOpts.limit);
+        }
+        return query;
+      }
+      return ref;
+    };
+    return this.siteCollection
+      .collection<TanamUser>('users', queryFn).valueChanges();
+  }
+
+  getUserInvited(queryOpts: UserQueryOptions) {
+    const queryFn = (ref: CollectionReference) => {
+      if (queryOpts) {
+        let query: Query = ref;
+        if (queryOpts.orderBy) {
+          query = query.orderBy(queryOpts.orderBy.field, queryOpts.orderBy.sortOrder);
+        }
+        if (queryOpts.startAfter) {
+          query = query.startAfter(queryOpts.startAfter);
+        }
+        if (queryOpts.limit) {
+          query = query.limit(queryOpts.limit);
+        }
+        return query;
+      }
+      return ref;
+    };
+    return this.siteCollection
+      .collection<TanamUserInvited>('user-roles', queryFn).valueChanges();
+  }
+
+  getReference(id: string) {
+    if (!id) {
+      return;
+    }
+    return this.siteCollection
+      .collection('users').doc(id).ref.get();
   }
 }
