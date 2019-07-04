@@ -37,27 +37,20 @@ export class UserInvitedComponent {
     this.userService.getUserInvited({
       startAfter: lastVisible
     })
-    .pipe(
-      tap(items => {
-        if (!items.length || items.length < this.limit) {
-          this.isLastItem = true;
-        }
-      }),
-      map(items => {
-        const mergedItems = [...this.items, ...items];
-        return mergedItems.reduce((acc, cur) => ({ ...acc, [cur.uid]: cur }), {});
-      }),
-      map(v => Object.values(v).sort(this.sortItems))
-    ).subscribe((items: any) => {
-      this.items = [...items];
-      this.isLoading = false;
-    });
+      .pipe(
+        tap(items => {
+          if (!items.length || items.length < this.limit) {
+            this.isLastItem = true;
+          }
+        }),
+        map(items => {
+          const mergedItems = [...this.items, ...items];
+          return mergedItems.reduce((acc, cur) => ({ ...acc, [cur.email]: cur }), {});
+        }),
+        map(v => Object.values(v))
+      ).subscribe((items: any) => {
+        this.items = [...items];
+        this.isLoading = false;
+      });
   }
-
-  sortItems(a: any, b: any) {
-    const dateA = a.updated.toDate().getTime();
-    const dateB = b.updated.toDate().getTime();
-    return dateB - dateA;
-  }
-
 }

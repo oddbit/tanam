@@ -7,6 +7,8 @@ import { map, tap } from 'rxjs/operators';
 import { AdminTheme, ADMIN_THEMES, TanamUser, UserRole, TanamUserInvited, UserQueryOptions } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
+import { UserInvited } from '../admin/user/user-invite-dialog/user-invite-dialog.component';
+import * as firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
@@ -124,6 +126,16 @@ export class UserService {
     };
     return this.siteCollection
       .collection<TanamUserInvited>('user-roles', queryFn).valueChanges();
+  }
+
+  inviteUser(val: UserInvited) {
+    return this.siteCollection
+      .collection('user-roles').add({
+        email: val.email,
+        role: val.role,
+        invited: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp()
+      });
   }
 
   getReference(id: string) {

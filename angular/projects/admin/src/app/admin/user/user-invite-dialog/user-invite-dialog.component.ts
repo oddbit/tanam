@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
+import { UserService } from '../../../services/user.service';
+
+export interface UserInvited {
+  email: string;
+  role: string;
+}
 
 @Component({
   selector: 'tanam-user-invite-dialog',
@@ -16,16 +22,16 @@ export class UserInviteDialogComponent {
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private readonly userService: UserService
   ) { }
 
-  addUser() {
+  async addUser() {
     this.snackBar.open('Sending Invitation', 'Dismiss', {
       duration: 2000,
     });
     const formData = this.addUserForm.value;
-    console.log(formData.email);
-    console.log(formData.role);
+    await this.userService.inviteUser(formData);
     this.snackBar.open('Sent', 'Dismiss', {
       duration: 2000,
     });
