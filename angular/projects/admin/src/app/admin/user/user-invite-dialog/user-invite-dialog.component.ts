@@ -17,7 +17,7 @@ export class UserInviteDialogComponent {
 
   readonly addUserForm: FormGroup = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
-    role: ['Admin', [Validators.required]]
+    role: ['admin', [Validators.required]]
   });
 
   constructor(
