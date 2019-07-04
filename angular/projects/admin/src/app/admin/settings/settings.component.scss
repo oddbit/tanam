@@ -1,5 +1,9 @@
 .card {
-  margin-bottom: 30px;
+  margin-bottom: 16px;
+}
+
+.site-information {
+  margin-bottom: 48px;
 }
 
 .full-width {
@@ -20,13 +24,31 @@
   margin-right: 0;
 }
 
-
 .mat-radio-button {
   margin: 5px 0;
 }
 
-.settings-form {
-  margin-top: 5%;
-  margin-bottom: 5%;
+.language-row {
+  align-items: center;
+  .field {
+    width: auto;
+    flex: 1;
+  }
+  .action {
+    height: 40px;
+    margin-left: 24px;
+  }
 }
 
+.table-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.domain-row {
+  align-items: center;
+
+  .flex-1 {
+    flex: 1;
+  }
+}

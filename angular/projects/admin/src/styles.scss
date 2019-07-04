@@ -16,7 +16,7 @@ $tanam-admin-theme:   mat-light-theme($tanam-admin-primary, $tanam-admin-accent,
 
 @include angular-material-theme($tanam-admin-theme);
 
-$tanam-admin-dark-primary: mat-palette($mat-blue-grey);
+$tanam-admin-dark-primary: mat-palette($mat-green, 600);
 $tanam-admin-dark-accent:  mat-palette($mat-amber, A200, A100, A400);
 $tanam-admin-dark-warn:    mat-palette($mat-deep-orange);
 $tanam-admin-dark-theme:   mat-dark-theme($tanam-admin-dark-primary, $tanam-admin-dark-accent, $tanam-admin-dark-warn);
@@ -41,4 +41,39 @@ body, html {
 
 body {
   margin: 0;
+}
+
+.mat-toolbar-row,
+.mat-toolbar-single-row {
+  height: 56px !important;
+}
+.mat-toolbar-multiple-rows {
+  min-height: 56px !important;
+}
+
+.container {
+  padding: 0 16px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.primary-color {
+  color: mat-color($tanam-admin-primary) !important;
+}
+
+.primary-background {
+  background-color: mat-color($tanam-admin-primary) !important;
+}
+
+.table-border-radius {
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.table-header {
+  padding: 8px 24px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  background: rgba(0,0,0,0.02);
 }

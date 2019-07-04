@@ -1,66 +1,66 @@
-<div class="title-table">
-  <h3 class="mat-h3">File Assets</h3>
-  <button mat-stroked-button
-          (click)="fileInput.click()">
-    <mat-icon>file_upload</mat-icon>
-    Upload File
-  </button>
-  <input #fileInput
-         type="file"
-         (change)="uploadSingleFile($event)"
-         style="display:none;" />
-</div>
-<section *ngFor="let uploadTasks of uploadTasks | keyvalue">
-  <strong>{{uploadTasks.key}}</strong>
-  <mat-progress-bar color="accent"
-                    mode="determinate"
-                    [value]="uploadTasks.value | async">
-  </mat-progress-bar>
-</section>
+<p class="mat-body-1">Theme Assets</p>
+<div class="mat-elevation-z2 table-border-radius wrapper relative">
+  <div class="title-table">
+    <button mat-flat-button
+            color="primary"
+            (click)="fileInput.click()">
+      <mat-icon>file_upload</mat-icon>
+      Upload File
+    </button>
+    <input #fileInput
+           type="file"
+           (change)="uploadSingleFile($event)"
+           style="display:none;" />
+  </div>
+  <section *ngFor="let uploadTasks of uploadTasks | keyvalue">
+    <p class="mat-body-1 fileupload-name">{{uploadTasks.key}}</p>
+    <mat-progress-bar color="primary"
+                      mode="determinate"
+                      [value]="uploadTasks.value | async">
+    </mat-progress-bar>
+  </section>
 
-<div class="mat-elevation-z8">
-  <mat-card class="card">
+  <mat-card class="table">
     <mat-card-content>
       <div class="header-wrapper">
-        <h4 class="mat-body-2 flex-3">Title</h4>
-        <h4 class="mat-body-2 flex-2">Size (bytes)</h4>
-        <h4 class="mat-body-2 flex-2">Type</h4>
-        <h4 class="mat-body-2 flex-2">Last Update</h4>
-        <h4 class="mat-body-2 flex-1">Action</h4>
+        <h4 class="mat-caption flex-3">Title</h4>
+        <h4 class="mat-caption flex-2">Size (bytes)</h4>
+        <h4 class="mat-caption flex-2">Type</h4>
+        <h4 class="mat-caption flex-2">Last Update</h4>
+        <h4 class="mat-caption flex-1">Action</h4>
       </div>
       <ul>
         <virtual-scroller #scroll
                           [items]="items"
                           (vsEnd)="fetchMore($event)"
                           [enableUnequalChildrenSizes]="true">
-          <li *ngFor="let file of scroll.viewPortItems">
+          <li *ngFor="let item of scroll.viewPortItems">
             <div class="main-content">
-              <p class="mat-body-1 flex-3">{{file.title}}</p>
-              <p class="mat-body-1 flex-2">{{file.bytes}}</p>
-              <p class="mat-body-1 flex-2">{{file.fileType}}</p>
-              <p class="mat-body-1 flex-2">{{file.updated?.toDate() | date:'medium'}}</p>
+              <p class="mat-body-1 flex-3">{{item.title}}</p>
+              <p class="mat-body-1 flex-2">{{item.bytes}}</p>
+              <p class="mat-body-1 flex-2">{{item.fileType}}</p>
+              <p class="mat-body-1 flex-2">{{item.updated?.toDate() | date:'medium'}}</p>
               <div class="actions flex-1">
                 <button mat-icon-button>
                   <mat-icon aria-label="Detail File"
-                            (click)="detailFile(file)">info</mat-icon>
+                            (click)="detailFile(item)">info</mat-icon>
                 </button>
                 <button mat-icon-button>
-                  <mat-icon aria-label="Delete file"
+                  <mat-icon aria-label="Delete item"
                             color="warn"
-                            (click)="deleteFile(file)">delete</mat-icon>
+                            (click)="deleteFile(item)">delete</mat-icon>
                 </button>
               </div>
             </div>
             <mat-divider></mat-divider>
           </li>
-          <mat-progress-bar *ngIf="!isLastItem"
-                            mode="indeterminate"></mat-progress-bar>
+          <ng-container *ngIf="!items.length">
+            <h2 class="mat-h2 empty">No Content</h2>
+          </ng-container>
         </virtual-scroller>
       </ul>
-
-      <ng-template #empty>
-        <h2 class="mat-h2 empty">No Content</h2>
-      </ng-template>
+      <mat-progress-bar *ngIf="isLoading"
+                        mode="indeterminate"></mat-progress-bar>
     </mat-card-content>
   </mat-card>
 </div>

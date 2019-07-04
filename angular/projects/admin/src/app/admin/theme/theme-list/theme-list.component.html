@@ -1,22 +1,32 @@
-<ng-container>
-  <mat-card>
-    <mat-nav-list>
-      <virtual-scroller #scroll
-                        [items]="items"
-                        (vsEnd)="fetchMore($event)"
-                        [enableUnequalChildrenSizes]="true">
-        <mat-list-item *ngFor="let item of scroll.viewPortItems"
-                       (click)="editTheme(item.id)">
-          <mat-icon color="primary"
-                    mat-list-icon>style</mat-icon>
-          <h4 mat-line>{{item.title}}</h4>
-          <p mat-line>{{item.description}}</p>
-          <small class="updated">Updated: <br /> {{item.updated?.toDate() | date:'medium'}}</small>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-      </virtual-scroller>
-    </mat-nav-list>
-    <mat-progress-bar *ngIf="isLoading"
-                      mode="indeterminate"></mat-progress-bar>
+<div class="mat-elevation-z2 table-border-radius">
+  <mat-card class="table">
+    <mat-card-content>
+      <div class="header-wrapper">
+        <h4 class="mat-caption flex-1">Title</h4>
+        <h4 class="mat-caption flex-1">Description</h4>
+        <h4 class="mat-caption flex-1">Last Update</h4>
+      </div>
+      <ul>
+        <virtual-scroller #scroll
+                          [items]="items"
+                          (vsEnd)="fetchMore($event)"
+                          [enableUnequalChildrenSizes]="true">
+          <li *ngFor="let item of scroll.viewPortItems">
+            <div class="main-content"
+                 (click)="editTheme(item.id)">
+              <p class="mat-body-1 flex-1">{{item.title}}</p>
+              <p class="mat-body-1 flex-1">{{item.description}}</p>
+              <p class="mat-body-1 flex-1">{{item.updated?.toDate() | date:'medium'}}</p>
+            </div>
+            <mat-divider></mat-divider>
+          </li>
+          <ng-container *ngIf="!items.length">
+            <h2 class="mat-h2 empty">No Content</h2>
+          </ng-container>
+        </virtual-scroller>
+      </ul>
+      <mat-progress-bar *ngIf="isLoading"
+                        mode="indeterminate"></mat-progress-bar>
+    </mat-card-content>
   </mat-card>
-</ng-container>
+</div>

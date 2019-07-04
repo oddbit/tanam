@@ -10,10 +10,8 @@
                          (click)='saveTheme()'></tanam-action-button>
   </tanam-context-actions>
 
-  <mat-card class="shipping-card">
-    <mat-card-header>
-      <mat-card-title>Edit {{ theme?.title }} theme</mat-card-title>
-    </mat-card-header>
+  <p class="mat-body-1">Theme Information</p>
+  <mat-card class="shipping-card mat-elevation-z2 table-border-radius">
     <mat-card-content>
       <mat-form-field class="full-width">
         <input matInput
@@ -31,7 +29,7 @@
           Description is <strong>required</strong>
         </mat-error>
       </mat-form-field>
-      <tanam-theme-asset-list></tanam-theme-asset-list>
     </mat-card-content>
   </mat-card>
+  <tanam-theme-asset-list></tanam-theme-asset-list>
 </form>

@@ -1,3 +1,8 @@
-.breadcrumbs {
-  display: block
+#breadcrumbs {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb {
+  font-size: 0.8em;
 }

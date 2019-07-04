@@ -6,6 +6,7 @@ import { NavigationListItemComponent } from './navigation-list-item/navigation-l
 import { NavigationComponent } from './navigation.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { ProfileWidgetComponent } from './profile-widget/profile-widget.component';
+import { NavigationHeaderComponent } from './navigation-header/navigation-header.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { ProfileWidgetComponent } from './profile-widget/profile-widget.componen
     NavigationComponent,
     NotificationsComponent,
     ProfileWidgetComponent,
+    NavigationHeaderComponent,
   ],
   imports: [
     CommonModule,

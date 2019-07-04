@@ -11,14 +11,14 @@
                          title="Edit template"
                          (click)='editTemplate()'></tanam-action-button>
   </tanam-context-actions>
-  <mat-card class="document-type-static-card ct-information">
-    <mat-card-header>
-      <mat-card-title>Content type information</mat-card-title>
-    </mat-card-header>
+
+  <p class="mat-body-1">Content type information</p>
+  <mat-card class="document-type-static-card ct-information table-border-radius">
     <mat-card-content>
       <div class="row">
         <div class="col slider-toogle">
           <mat-slide-toggle formControlName="standalone"
+                            color="primary"
                             matTooltip="Standalone means this content type will be accessed as a page">Standalone
           </mat-slide-toggle>
         </div>
@@ -35,7 +35,7 @@
           </mat-form-field>
         </div>
         <div class="col">
-          <mat-form-field>
+          <mat-form-field class="full-width">
             <mat-label>Default document status</mat-label>
             <mat-select formControlName="documentStatusDefault">
               <mat-option value="published">
@@ -88,7 +88,7 @@
             <textarea matInput
                       cdkTextareaAutosize
                       #autosize="cdkTextareaAutosize"
-                      cdkAutosizeMinRows="4"
+                      cdkAutosizeMinRows="1"
                       cdkAutosizeMaxRows="10"
                       placeholder="Description"
                       formControlName="description"></textarea>
@@ -200,6 +200,4 @@
       </div>
     </div>
   </section>
-
-
 </form>

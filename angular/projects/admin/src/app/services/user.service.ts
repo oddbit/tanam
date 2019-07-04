@@ -25,10 +25,10 @@ export class UserService {
   getCurrentUser(): Observable<TanamUser> {
     const firebaseUser = this.fireAuth.auth.currentUser;
     return this.getUser(firebaseUser.uid)
-    .pipe(map(user => {
-      user.photoUrl = user.photoUrl || firebaseUser.photoURL;
-      return user;
-    }));
+      .pipe(map(user => {
+        user.photoUrl = user.photoUrl || firebaseUser.photoURL;
+        return user;
+      }));
   }
 
   getUser(uid: string): Observable<TanamUser> {
@@ -72,11 +72,11 @@ export class UserService {
     });
   }
 
-  overlayTheme () {
+  overlayTheme() {
     const overlayContainerClasses = this.overlayContainer.getContainerElement().classList;
     const themeClassesToRemove = Array.from(overlayContainerClasses).filter((item: string) => item.includes('-theme'));
     if (themeClassesToRemove.length) {
-       overlayContainerClasses.remove(...themeClassesToRemove);
+      overlayContainerClasses.remove(...themeClassesToRemove);
     }
 
     this.getUserTheme().subscribe(val => {

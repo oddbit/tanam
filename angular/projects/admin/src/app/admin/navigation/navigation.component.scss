@@ -2,13 +2,17 @@
   height: 100%;
 }
 
+.main-drawer.mat-drawer-side {
+  border-right: none;
+}
+
 :host ::ng-deep .sidenav-container .mat-drawer-inner-container {
   overflow: hidden;
 }
 
 :host ::ng-deep .sidenav-container .mat-list-base {
   padding: 0;
-  height: calc(100% - (64px * 2));
+  height: calc(100% - (56px * 2));
   overflow: auto;
   @media only screen and (max-width: 600px) {
     height: calc(100% - (56px * 2));
@@ -27,23 +31,47 @@
 
 /* Handle */
 :host ::ng-deep .sidenav-container .mat-list-base::-webkit-scrollbar-thumb {
-  background: #888;
+  background: rgba(0,0,0,0.36);
   border-radius: 8px;
 }
 
 /* Handle on hover */
 :host ::ng-deep .sidenav-container .mat-list-base::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: rgba(0,0,0,0.5);
 }
 
 .expanded-nav {
-  width: 200px;
+  min-width: 250px;
+}
+
+.header-side-nav {
+  .logo {
+    padding: 0 4px;
+  }
+  .text-padding {
+    padding-left: 10px;
+  }
 }
 
 .header-side-nav , .mat-toolbar.mat-primary{
   position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 3;
+}
+
+.list-item-group {
+  margin-bottom: 20px;
+}
+
+.divider {
+  border-top-color: rgba(0,0,0,0.15);
+  margin-bottom: 20px;
+}
+
+.subheader {
+  font-size: 15px !important;
+  height: auto !important;
+  line-height: auto !important;
 }
 
 .expand-toolbar {
@@ -55,7 +83,7 @@
 }
 
 .admin-container {
-  margin: 4%;
+  margin: 40px 40px 0 40px;
 }
 
 .fill-remaining-space {
@@ -68,11 +96,8 @@
 
 .sub-toolbar {
   position: sticky;
-  top: 64px;
+  top: 56px;
   z-index: 2;
-  @media only screen and (max-width: 600px) {
-    top: 56px;
-  }
 }
 
 .sub-toolbar-spacer {
@@ -81,4 +106,32 @@
 
 .notifications {
   width: 400px;
+}
+
+.view-web-link {
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  span {
+    margin-left: 8px;
+  }
+  &:hover {
+    color: rgba(255,255,255,0.8);
+  }
+}
+
+.header-action-wrapper {
+  position: sticky;
+  z-index: 3;
+  top: 56px;
+}
+
+#breadcrumbs {
+  display: flex;
+  align-items: center;
+}
+
+.chevron-center {
+  justify-content: center;
 }
