@@ -3,6 +3,8 @@ import { IPageInfo } from 'ngx-virtual-scroller';
 import { UserService } from '../../../services/user.service';
 import { tap, map } from 'rxjs/operators';
 import { TanamUserInvited } from '../../../../../../../../functions/src/models';
+import { DialogService } from '../../../services/dialog.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'tanam-user-invited',
@@ -17,6 +19,8 @@ export class UserInvitedComponent {
 
   constructor(
     private readonly userService: UserService,
+    private dialogService: DialogService,
+    private snackBar: MatSnackBar
   ) { }
 
   async fetchMore(event: IPageInfo) {
@@ -24,7 +28,7 @@ export class UserInvitedComponent {
       return;
     }
     this.isLoading = true;
-    const lastItem = this.items.length > 0 ? this.items[this.items.length - 1].uid : null;
+    const lastItem = this.items.length > 0 ? this.items[this.items.length - 1].email : null;
     let lastVisible = null;
     if (lastItem) {
       lastVisible = await this.userService.getReference(lastItem);
@@ -52,5 +56,25 @@ export class UserInvitedComponent {
         this.items = [...items];
         this.isLoading = false;
       });
+  }
+
+  deleteInvitedUser(user: TanamUserInvited) {
+    this.dialogService.openDialogConfirm({
+      title: 'Delete File',
+      message: `Are you sure to delete "${user.email}" ?`,
+      buttons: ['cancel', 'yes'],
+      icon: 'warning'
+    }).afterClosed().subscribe(async res => {
+      if (res === 'yes') {
+        this.snackBar.open('Deleting file...', 'Dismiss', {
+          duration: 2000
+        });
+        await this.userService.removeInvitedUser(user);
+        this.items = this.items.filter(item => item.email !== user.email);
+        this.snackBar.open('File Deleted', 'Dismiss', {
+          duration: 2000
+        });
+      }
+    });
   }
 }

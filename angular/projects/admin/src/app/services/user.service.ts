@@ -128,14 +128,18 @@ export class UserService {
       .collection<TanamUserInvited>('user-roles', queryFn).valueChanges();
   }
 
-  inviteUser(val: UserInvited) {
+  inviteUser(user: UserInvited) {
     return this.siteCollection
-      .collection('user-roles').add({
-        email: val.email,
-        role: val.role,
+      .collection('user-roles').doc(user.email).set({
+        email: user.email,
+        role: user.role,
         invited: firebase.firestore.FieldValue.serverTimestamp(),
         updated: firebase.firestore.FieldValue.serverTimestamp()
       });
+  }
+
+  removeInvitedUser(user: TanamUserInvited) {
+    return this.siteCollection.collection('user-roles').doc(user.email).delete();
   }
 
   getReference(id: string) {
