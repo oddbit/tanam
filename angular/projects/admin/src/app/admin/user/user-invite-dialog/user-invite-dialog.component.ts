@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialogRef } from '@angular/material';
 import { UserService } from '../../../services/user.service';
 
 export interface UserInvited {
@@ -23,7 +23,8 @@ export class UserInviteDialogComponent {
   constructor(
     private readonly formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private dialogRef: MatDialogRef<UserInviteDialogComponent>,
   ) { }
 
   async addUser() {
@@ -32,6 +33,7 @@ export class UserInviteDialogComponent {
     });
     const formData = this.addUserForm.value;
     await this.userService.inviteUser(formData);
+    this.dialogRef.close();
     this.snackBar.open('Sent', 'Dismiss', {
       duration: 2000,
     });
