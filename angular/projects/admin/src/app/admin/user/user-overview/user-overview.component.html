@@ -1,13 +1,18 @@
-<button mat-raised-button
-        (click)="openDialogAddUser()">
-  <mat-icon>add</mat-icon>
-  Add user
-</button>
-<mat-tab-group>
-  <mat-tab label="Users">
-    <tanam-user-list></tanam-user-list>
-  </mat-tab>
-  <mat-tab label="Invited">
-    <tanam-user-invited></tanam-user-invited>
-  </mat-tab>
-</mat-tab-group>
+<mat-card>
+  <div class="title">
+    <button mat-raised-button
+            color="primary"
+            (click)="openDialogAddUser()">
+      <mat-icon>add</mat-icon>
+      Add user
+    </button>
+  </div>
+  <mat-tab-group>
+    <mat-tab label="Users">
+      <tanam-user-list></tanam-user-list>
+    </mat-tab>
+    <mat-tab label="Invited">
+      <tanam-user-invited></tanam-user-invited>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>
