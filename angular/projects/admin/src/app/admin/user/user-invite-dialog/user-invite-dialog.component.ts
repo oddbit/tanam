@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar, MatDialogRef } from '@angular/material';
 import { UserService } from '../../../services/user.service';
+import { UserRole } from '../../../../../../../../functions/src/models';
 
 @Component({
   selector: 'tanam-user-invite-dialog',
@@ -9,10 +10,10 @@ import { UserService } from '../../../services/user.service';
   styleUrls: ['./user-invite-dialog.component.scss']
 })
 export class UserInviteDialogComponent {
-
+  private readonly defaultRole: UserRole = 'admin';
   readonly addUserForm: FormGroup = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
-    role: ['admin', [Validators.required]]
+    role: [this.defaultRole, [Validators.required]]
   });
 
   constructor(
