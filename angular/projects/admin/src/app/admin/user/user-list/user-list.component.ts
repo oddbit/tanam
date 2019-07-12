@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IPageInfo } from 'ngx-virtual-scroller';
 import { UserService } from '../../../services/user.service';
 import { tap, map } from 'rxjs/operators';
-import { TanamUser } from '../../../../../../../../functions/src/models';
+import { TanamUser, UserRole } from '../../../../../../../../functions/src/models';
 @Component({
   selector: 'tanam-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss']
 })
-export class UserListComponent  {
-
+export class UserListComponent {
+  @Input() defaultRole: UserRole;
+  @Input() roles: [];
   items: TanamUser[] = [];
   limit = 20;
   isLoading: boolean;
@@ -37,21 +38,21 @@ export class UserListComponent  {
     this.userService.getUsers({
       startAfter: lastVisible
     })
-    .pipe(
-      tap(items => {
-        if (!items.length || items.length < this.limit) {
-          this.isLastItem = true;
-        }
-      }),
-      map(items => {
-        const mergedItems = [...this.items, ...items];
-        return mergedItems.reduce((acc, cur) => ({ ...acc, [cur.name]: cur }), {});
-      }),
-      map(v => Object.values(v).sort(this.sortItems))
-    ).subscribe((items: any) => {
-      this.items = [...items];
-      this.isLoading = false;
-    });
+      .pipe(
+        tap(items => {
+          if (!items.length || items.length < this.limit) {
+            this.isLastItem = true;
+          }
+        }),
+        map(items => {
+          const mergedItems = [...this.items, ...items];
+          return mergedItems.reduce((acc, cur) => ({ ...acc, [cur.name]: cur }), {});
+        }),
+        map(v => Object.values(v).sort(this.sortItems))
+      ).subscribe((items: any) => {
+        this.items = [...items];
+        this.isLoading = false;
+      });
   }
 
   sortItems(a: any, b: any) {

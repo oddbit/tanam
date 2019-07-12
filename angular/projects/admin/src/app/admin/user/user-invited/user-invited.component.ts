@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IPageInfo } from 'ngx-virtual-scroller';
 import { UserService } from '../../../services/user.service';
 import { tap, map } from 'rxjs/operators';
-import { TanamUserInvited } from '../../../../../../../../functions/src/models';
+import { TanamUserInvited, UserRole } from '../../../../../../../../functions/src/models';
 import { DialogService } from '../../../services/dialog.service';
 import { MatSnackBar } from '@angular/material';
 
@@ -12,6 +12,9 @@ import { MatSnackBar } from '@angular/material';
   styleUrls: ['./user-invited.component.scss']
 })
 export class UserInvitedComponent {
+  @Input() defaultRole: UserRole;
+  @Input() roles: [];
+
   items: TanamUserInvited[] = [];
   limit = 20;
   isLoading: boolean;
