@@ -1,8 +1,8 @@
 import * as admin from 'firebase-admin';
-import { TanamFile, Document, SiteInformation } from '../models';
+import { Document, TanamFile } from '../models';
+import { TanamHttpRequest } from '../models/http_request.model';
 import * as siteInfoService from '../services/site-info.service';
 
-const siteCollection = () => admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
 
 export async function getFavicon() {
     const contentFile = await admin.storage().bucket().file('/tanam/favicon.ico');
@@ -14,11 +14,12 @@ export async function getFavicon() {
     return fileContent;
 }
 
-export async function geThemeAssetsFile(filePath: string) {
-    console.log(`[geThemeAssetsFile] ${JSON.stringify({ filePath })}`);
-    const siteInfo = await siteInfoService.getSiteInfo();
+export async function geThemeAssetsFile(request: TanamHttpRequest, filePath: string) {
+    console.log(`[geThemeAssetsFile] ${JSON.stringify({ filePath, request })}`);
+    const siteInfo = await siteInfoService.getSiteInfoFromDomain(request.hostname);
 
-    const fileQuery = await siteCollection()
+    const fileQuery = await admin.firestore()
+        .collection('tanam').doc(siteInfo.id)
         .collection('themes').doc(siteInfo.theme)
         .collection('assets').where('title', '==', filePath)
         .limit(1)
@@ -31,9 +32,11 @@ export async function geThemeAssetsFile(filePath: string) {
     return fileQuery.docs[0].data() as TanamFile;
 }
 
-export async function getUserFile(fileId: string) {
-    console.log(`[getUserFile] ${JSON.stringify({ fileId })}`);
-    const doc = await siteCollection()
+export async function getUserFile(request: TanamHttpRequest, fileId: string) {
+    console.log(`[getUserFile] ${JSON.stringify({ fileId, request })}`);
+    const siteInfo = await siteInfoService.getSiteInfoFromDomain(request.hostname);
+    const doc = await await admin.firestore()
+        .collection('tanam').doc(siteInfo.id)
         .collection('files').doc(fileId)
         .get();
 
@@ -55,9 +58,11 @@ export async function getFileContents(storagePath: string) {
     return fileContent;
 }
 
-export async function getSitemap() {
-    const siteInfo = (await siteCollection().get()).data() as SiteInformation;
-    const documentsQuery = await siteCollection()
+export async function getSitemap(request: TanamHttpRequest) {
+    const siteInfo = await siteInfoService.getSiteInfoFromDomain(request.hostname);
+
+    const documentsQuery = await admin.firestore()
+        .collection('tanam').doc(siteInfo.id)
         .collection('documents')
         .get();
 

@@ -1,27 +1,28 @@
-class TanamHttpRequest {
-  public readonly language;
+export class TanamHttpRequest {
+  public readonly language: string;
 
   constructor(
-    public readonly hostname,
-    public readonly url,
-    public readonly params,
+    public readonly hostname: string,
+    public readonly url: string,
+    public readonly query: any,
   ) {
-    this.language = params.lang || 'en';
+    this.language = query.lang || 'en';
+    this.url = `/${url}`.replace(/\/+/g, '/'); // Normalize the URL
   }
 
   static fromExpressRequest(req) {
     return new TanamHttpRequest(
       req.headers['x-forwarded-host'],
-      req.url.replace(/^\//, ''), // Remove leading slash
-      {...req.params},
+      req.url,
+      { ...req.query },
     );
   }
 
   get fullyQualifiedUrl() {
-    return this.hostname + '/' + this.url;
+    return this.hostname + this.url;
   }
 
   toString() {
-    return `${TanamHttpRequest.name}(${this.hostname}/${this.url})`;
+    return `${TanamHttpRequest.name}(${this.fullyQualifiedUrl})`;
   }
 }

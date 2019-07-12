@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { Document, DocumentField, DocumentStatus, DocumentType, SiteInformation } from '../models';
+import { Document, DocumentField, DocumentStatus, DocumentType, ISiteInformation } from '../models';
 import * as taskService from '../services/task.service';
 
 export const onCreateDocumentRequestRendering = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onCreate(async (snap, context) => {

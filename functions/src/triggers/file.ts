@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { TanamFile, SiteInformation } from '../models';
+import { TanamFile, ISiteInformation } from '../models';
 import * as taskService from '../services/task.service';
 
 export const onDeleteUserFile = functions.firestore.document('tanam/{siteId}/files/{fileId}').onDelete(async (snap, context) => {
@@ -28,7 +28,7 @@ export const onCreateThemeAssetsFile = functions.firestore.document('tanam/{site
     const themeId = context.params.themeId;
     console.log(`Creating file in ${JSON.stringify({ siteId, themeId })}`)
 
-    const siteInfo = (await admin.firestore().collection('tanam').doc(siteId).get()).data() as SiteInformation;
+    const siteInfo = (await admin.firestore().collection('tanam').doc(siteId).get()).data() as ISiteInformation;
     console.log(`Active theme: ${siteInfo.theme}`);
 
     if (siteInfo.theme !== themeId) {
@@ -45,7 +45,7 @@ export const onUpdateThemeAssetsFile = functions.firestore.document('tanam/{site
     const themeId = context.params.themeId;
     console.log(`Updating file in ${JSON.stringify({ siteId, themeId })}`)
 
-    const siteInfo = (await admin.firestore().collection('tanam').doc(siteId).get()).data() as SiteInformation;
+    const siteInfo = (await admin.firestore().collection('tanam').doc(siteId).get()).data() as ISiteInformation;
     console.log(`Active theme: ${siteInfo.theme}`);
 
     if (siteInfo.theme !== themeId) {
@@ -62,7 +62,7 @@ export const onDeleteThemeAssetsFile = functions.firestore.document('tanam/{site
     const themeId = context.params.themeId;
     console.log(`Deleting file in ${JSON.stringify({ siteId, themeId })}`)
 
-    const siteInfo = (await admin.firestore().collection('tanam').doc(siteId).get()).data() as SiteInformation;
+    const siteInfo = (await admin.firestore().collection('tanam').doc(siteId).get()).data() as ISiteInformation;
     console.log(`Active theme: ${siteInfo.theme}`);
 
     if (siteInfo.theme !== themeId) {

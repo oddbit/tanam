@@ -22,6 +22,10 @@
     ],
     "rewrites": [
       {
+        "source": "favicon.ico",
+        "function": "_/assets/favicon.ico"
+      },
+      {
         "source": "**",
         "function": "tanam"
       }

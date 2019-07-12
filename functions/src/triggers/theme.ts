@@ -1,12 +1,12 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { Document, SiteInformation, TanamFile } from '../models';
+import { Document, ISiteInformation, TanamFile } from '../models';
 import * as taskService from '../services/task.service';
 
 export const onUpdateActiveTheme = functions.firestore.document('tanam/{siteId}').onUpdate(async (change, context) => {
   const siteId = context.params.siteId;
-  const siteInfoBefore = change.before.data() as SiteInformation;
-  const siteInfoAfter = change.after.data() as SiteInformation;
+  const siteInfoBefore = change.before.data() as ISiteInformation;
+  const siteInfoAfter = change.after.data() as ISiteInformation;
   if (siteInfoBefore.theme === siteInfoAfter.theme) {
     console.log(`Active theme is unchanged. Nothing to do.`);
     return null;
@@ -109,7 +109,7 @@ export const onWriteTemplateUpdateCache = functions.firestore.document('tanam/{s
   const templateId = context.params.themeId;
   console.log(`Writing to template ${JSON.stringify({ siteId, themeId, templateId })}`)
 
-  const siteInfo = (await admin.firestore().collection('tanam').doc(siteId).get()).data() as SiteInformation;
+  const siteInfo = (await admin.firestore().collection('tanam').doc(siteId).get()).data() as ISiteInformation;
   console.log(`Active theme: ${siteInfo.theme}`);
 
   if (siteInfo.theme !== themeId) {

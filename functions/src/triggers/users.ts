@@ -1,13 +1,11 @@
 import { MD5 } from 'crypto-js';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import * as configService from '../services/config.service';
 import * as siteService from '../services/site-info.service';
 
+// noinspection JSUnusedGlobalSymbols
 export const createUser = functions.auth.user().onCreate(async (firebaseUser) => {
-  const tanamConfig = configService.getConfig();
-
-  const tanamConfigRole = tanamConfig.users ? tanamConfig.users[firebaseUser.email] : null;
+  const tanamConfigRole = null;
   const envRole = firebaseUser.email === process.env.TANAM_OWNER ? 'superAdmin' : null;
   const initialRole = envRole || tanamConfigRole;
 
@@ -22,7 +20,7 @@ export const createUser = functions.auth.user().onCreate(async (firebaseUser) =>
     roles: !!initialRole ? [initialRole] : [],
   };
 
-  console.log(`Creating account: ${JSON.stringify({ user })}`);
+  console.log(`Creating account: ${JSON.stringify({user})}`);
   return Promise.all([
     siteService.initializeSite(),
     admin.firestore()
@@ -33,14 +31,16 @@ export const createUser = functions.auth.user().onCreate(async (firebaseUser) =>
   ]);
 });
 
+// noinspection JSUnusedGlobalSymbols
 export const deleteUser = functions.auth.user().onDelete(firebaseUser => {
-  console.log(`Deleting account: ${JSON.stringify({ firebaseUser })}`);
+  console.log(`Deleting account: ${JSON.stringify({firebaseUser})}`);
   return admin.firestore()
     .collection('tanam').doc(process.env.GCLOUD_PROJECT)
     .collection('users').doc(firebaseUser.uid)
     .delete();
 });
 
+// noinspection JSUnusedGlobalSymbols
 export const updateAuthRoles = functions.firestore.document('tanam/{siteId}/users/{uid}').onUpdate((change, context) => {
   const uid = context.params.uid;
   const userBefore = change.before.data();
@@ -50,15 +50,15 @@ export const updateAuthRoles = functions.firestore.document('tanam/{siteId}/user
 
   if (userBefore.roles.length !== userAfter.roles.length
     || userBefore.roles.some((role: string) => userAfter.roles.indexOf(role) === -1)) {
-    promises.push(setUserRoleToAuth({ uid: uid, roles: userAfter.roles as string[] }));
+    promises.push(setUserRoleToAuth({uid: uid, roles: userAfter.roles as string[]}));
   }
 
   return Promise.all(promises);
 });
 
 
-function setUserRoleToAuth({ uid, roles }: { uid: string, roles: string[] }) {
-  const customClaims = { tanam: { [process.env.GCLOUD_PROJECT]: roles } };
-  console.log(`[setUserRoleToAuth] ${JSON.stringify({ uid, customClaims })}`);
+function setUserRoleToAuth({uid, roles}: { uid: string, roles: string[] }) {
+  const customClaims = {tanam: {[process.env.GCLOUD_PROJECT]: roles}};
+  console.log(`[setUserRoleToAuth] ${JSON.stringify({uid, customClaims})}`);
   return admin.auth().setCustomUserClaims(uid, customClaims);
 }

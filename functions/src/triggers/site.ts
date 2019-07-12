@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { SiteInformation } from '../models/settings.models';
+import { ISiteInformation } from '../models/settings.models';
 import { initializeSite } from '../services/site-info.service';
 
 export const registerHost = functions.database.ref('tanam/{siteId}/domains/{hash}').onCreate(async (snap) => {
@@ -12,7 +12,7 @@ export const registerHost = functions.database.ref('tanam/{siteId}/domains/{hash
     const siteInfoDoc = admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
     promises.push(admin.firestore().runTransaction(async (trx) => {
         const trxDoc = await trx.get(siteInfoDoc);
-        const trxSettings = trxDoc.data() as SiteInformation;
+        const trxSettings = trxDoc.data() as ISiteInformation;
         trxSettings.domains = trxSettings.domains || [];
         if (trxSettings.domains.indexOf(host) === -1) {
             console.log(`Discovered adding '${host}' to domain configuration`);
