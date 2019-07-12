@@ -71,7 +71,7 @@ export class UserInvitedComponent {
         });
         await this.userService.removeInvitedUser(user);
         this.items = this.items.filter(item => item.email !== user.email);
-        this.snackBar.open('File Deleted', 'Dismiss', {
+        this.snackBar.open('User role deleted', 'Dismiss', {
           duration: 2000
         });
       }
