@@ -4,17 +4,17 @@
   },
   "functions": {
     "predeploy": [
-      "npm --prefix functions run build",
-      "npm --prefix functions run package"
+      "npm --prefix \"$RESOURCE_DIR\" run lint",
+      "npm --prefix \"$RESOURCE_DIR\" run build"
     ],
-    "source": "dist"
+    "source": "functions"
   },
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "public": "public",
+    "public": "angular/dist",
     "ignore": [
       "firebase.json",
       "**/.*",

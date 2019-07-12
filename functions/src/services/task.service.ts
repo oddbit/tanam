@@ -9,7 +9,7 @@ async function makeCacheTask(siteId: string, path: string, action: 'create' | 'u
         return null;
     }
     console.log(`[makeCacheTask] ${JSON.stringify({ siteId, path, action })}`);
-    return cacheQueueRef(siteId).child('cache').child(action).push(path);
+    return cacheQueueRef(siteId).child('cache').child(action).push(path).then(() => null);
 }
 
 export const createCache = (siteId: string, path: string) => makeCacheTask(siteId, path, 'create');

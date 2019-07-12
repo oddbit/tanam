@@ -1,49 +1,59 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TanamConfig } from 'tanam-models';
+
+interface FirebaseWebConfig {
+  projectId: string;
+  appId: string;
+  databaseURL: string;
+  storageBucket: string;
+  locationId: string;
+  apiKey: string;
+  authDomain: string;
+  messagingSenderId: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppConfigService {
-  private static readonly CONFIG_FILE = '/assets/tanam.config.json';
-  private _appConfig: TanamConfig;
+  private static readonly CONFIG_FILE = '/_/assets/firebase.web.json';
+  private _firebaseConfig: FirebaseWebConfig;
 
   constructor(
     private readonly http: HttpClient,
-  ) { }
+  ) {
+  }
 
-  get appConfig() {
-    return this._appConfig;
+  get firebaseConfig() {
+    return this._firebaseConfig;
   }
 
   get siteId() {
-    return this._appConfig.firebaseApp.projectId;
+    return this._firebaseConfig.projectId;
   }
 
   async loadConfig() {
     console.log('Requesting app config async from assets.');
     const config = await this.http.get(AppConfigService.CONFIG_FILE).toPromise();
-    this._appConfig = config as TanamConfig;
+    this._firebaseConfig = config as FirebaseWebConfig;
 
     if (!config) {
       throw new Error(`No config found at: ${AppConfigService.CONFIG_FILE}`);
     }
 
-    this._ensureMandatoryFields(this._appConfig, ['firebaseApp']);
-    this._ensureMandatoryFields(this._appConfig.firebaseApp, [
+    const mandatoryFields = [
+      'projectId',
+      'appId',
+      'databaseURL',
+      'storageBucket',
+      'locationId',
       'apiKey',
       'authDomain',
-      'databaseURL',
-      'projectId',
-      'storageBucket',
       'messagingSenderId',
-    ]);
-  }
+    ];
+    const missingFields = mandatoryFields
+      .filter(prop => !this._firebaseConfig.hasOwnProperty(prop));
 
-
-  private _ensureMandatoryFields(conf: any, fields: string[]) {
-    const missingFields = fields.filter(prop => !conf.hasOwnProperty(prop));
     if (missingFields.length > 0) {
       throw new Error(`Missing mandatory configuration fields ${JSON.stringify(missingFields)}`);
     }

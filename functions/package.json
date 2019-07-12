@@ -2,6 +2,7 @@
   "name": "tanam",
   "version": "0.21.0",
   "description": "Pluggable CMS for Firebase",
+  "main": "dist/index.js",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
   "scripts": {
     "build": "tsc -p .",
     "watch": "tsc -w -p .",
+    "emulator": "npm run build && firebase emulators:start",
     "serve": "npm run build && npm run package && firebase serve",
     "lint": "tslint --project tsconfig.json",
     "shell": "firebase functions:shell",

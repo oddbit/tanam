@@ -1,8 +1,8 @@
 import * as admin from 'firebase-admin';
 import { SiteInformation } from '../models';
-import { createDefaultDocuments } from '../services/document-type.service';
-import { createDefaultTemplates } from '../services/template.service';
-import { createDefaultTheme } from '../services/theme.service';
+import { createDefaultDocuments } from './document-type.service';
+import { createDefaultTemplates } from './template.service';
+import { createDefaultTheme } from './theme.service';
 
 export async function getSiteInfo() {
     const siteInfoDoc = await admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT).get();

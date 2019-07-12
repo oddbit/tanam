@@ -3,6 +3,7 @@ export * from './document-type';
 export * from './documents';
 export * from './file';
 export * from './site';
+export * from './ssr.functions';
 export * from './storage';
 export * from './theme';
 export * from './users';
