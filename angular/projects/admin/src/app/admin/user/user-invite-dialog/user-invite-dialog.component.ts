@@ -3,11 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar, MatDialogRef } from '@angular/material';
 import { UserService } from '../../../services/user.service';
 
-export interface UserInvited {
-  email: string;
-  role: string;
-}
-
 @Component({
   selector: 'tanam-user-invite-dialog',
   templateUrl: './user-invite-dialog.component.html',

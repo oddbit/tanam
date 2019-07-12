@@ -4,10 +4,9 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, CollectionReference, Query } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { AdminTheme, ADMIN_THEMES, TanamUser, UserRole, TanamUserInvited, UserQueryOptions } from 'tanam-models';
+import { AdminTheme, ADMIN_THEMES, TanamUser, UserRole, TanamUserInvited, UserQueryOptions, TanamUserInvitation } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { UserInvited } from '../admin/user/user-invite-dialog/user-invite-dialog.component';
 import * as firebase from 'firebase/app';
 
 @Injectable({
@@ -128,7 +127,7 @@ export class UserService {
       .collection<TanamUserInvited>('user-roles', queryFn).valueChanges();
   }
 
-  inviteUser(user: UserInvited) {
+  inviteUser(user: TanamUserInvitation) {
     return this.siteCollection
       .collection('user-roles').doc(user.email).set({
         email: user.email,
