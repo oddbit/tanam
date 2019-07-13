@@ -4,7 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, CollectionReference, Query } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { AdminTheme, ADMIN_THEMES, TanamUser, UserRole, TanamUserInvited, UserQueryOptions } from 'tanam-models';
+import { AdminTheme, ADMIN_THEMES, ITanamUser, UserRoleType, TanamUserInvited, UserQueryOptions } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
 
@@ -22,7 +22,7 @@ export class UserService {
     private overlayContainer: OverlayContainer
   ) { }
 
-  getCurrentUser(): Observable<TanamUser> {
+  getCurrentUser(): Observable<ITanamUser> {
     const firebaseUser = this.fireAuth.auth.currentUser;
     return this.getUser(firebaseUser.uid)
       .pipe(map(user => {
@@ -31,9 +31,9 @@ export class UserService {
       }));
   }
 
-  getUser(uid: string): Observable<TanamUser> {
+  getUser(uid: string): Observable<ITanamUser> {
     return this.siteCollection
-      .collection('users').doc<TanamUser>(uid)
+      .collection('users').doc<ITanamUser>(uid)
       .valueChanges();
   }
 
@@ -43,7 +43,7 @@ export class UserService {
       .pipe(tap(result => console.log(`[UserService:hasSomeRole] ${result}`)));
   }
 
-  hasRole(role: UserRole): Observable<boolean> {
+  hasRole(role: UserRoleType): Observable<boolean> {
     return this.getCurrentUser()
       .pipe(map(user => user.roles.indexOf(role) !== -1))
       .pipe(tap(result => console.log(`[UserService:hasRole] ${role}: ${result}`)));
@@ -52,7 +52,7 @@ export class UserService {
   getUserTheme(): Observable<string> {
     const firebaseUser = this.fireAuth.auth.currentUser;
     return this.siteCollection
-      .collection('users').doc<TanamUser>(firebaseUser.uid)
+      .collection('users').doc<ITanamUser>(firebaseUser.uid)
       .valueChanges()
       .pipe(map(tanamUser => !!tanamUser.prefs ? tanamUser.prefs : { theme: 'default' }))
       .pipe(map((prefs: { theme: AdminTheme }) => ADMIN_THEMES[prefs.theme] || ADMIN_THEMES['default']))
@@ -61,10 +61,10 @@ export class UserService {
 
   setUserTheme(theme: AdminTheme) {
     const firebaseUser = this.fireAuth.auth.currentUser;
-    const docRef = this.siteCollection.collection('users').doc<TanamUser>(firebaseUser.uid);
+    const docRef = this.siteCollection.collection('users').doc<ITanamUser>(firebaseUser.uid);
     return this.fbApp.firestore().runTransaction<void>(async (trx) => {
       const trxDoc = await trx.get(docRef.ref);
-      const trxUser = trxDoc.data() as TanamUser;
+      const trxUser = trxDoc.data() as ITanamUser;
 
       const prefs = { ...trxUser.prefs, theme };
 
@@ -102,7 +102,7 @@ export class UserService {
       return ref;
     };
     return this.siteCollection
-      .collection<TanamUser>('users', queryFn).valueChanges();
+      .collection<ITanamUser>('users', queryFn).valueChanges();
   }
 
   getUserInvited(queryOpts: UserQueryOptions) {

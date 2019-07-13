@@ -1,9 +1,19 @@
 import { DocumentType, TanamDocumentType } from './document-type.models';
-import * as admin from "firebase-admin";
-import { ITanamUserRole, TanamUserRole } from "./user.models";
+import * as admin from 'firebase-admin';
+import { ITanamUser, ITanamUserRole, TanamUser, TanamUserRole } from './user.models';
+
+export class AdminTanamUser extends TanamUser {
+  toJson(): ITanamUser {
+    const json = super.toJson();
+    json.updated = admin.firestore.FieldValue.serverTimestamp();
+    json.created = !!json.created
+      ? admin.firestore.Timestamp.fromDate(json.created)
+      : admin.firestore.FieldValue.serverTimestamp();
+    return json;
+  }
+}
 
 export class AdminTanamDocumentType extends TanamDocumentType {
-
   toJson(): DocumentType {
     const json = super.toJson();
     json.updated = admin.firestore.FieldValue.serverTimestamp();
@@ -15,7 +25,6 @@ export class AdminTanamDocumentType extends TanamDocumentType {
 }
 
 export class AdminTanamUserRole extends TanamUserRole {
-
   toJson(): ITanamUserRole {
     const json = super.toJson();
     json.updated = admin.firestore.FieldValue.serverTimestamp();

@@ -1,25 +1,27 @@
 import { AdminTheme } from './theme.models';
 
-export type UserRole = 'superAdmin' | 'admin' | 'publisher' | 'designer' | 'reviewer';
+export type UserRoleType = 'superAdmin' | 'admin' | 'publisher' | 'designer' | 'reviewer';
 
 export interface UserPrefs {
   theme: AdminTheme;
   language: string;
 }
 
-export interface TanamUser {
+export interface ITanamUser {
   uid: string;
   email: string;
   name: string;
-  roles: UserRole[];
+  roles: UserRoleType[];
   prefs: UserPrefs;
   photoUrl?: string;
+  created: Date | any; // firebase.firestore.FieldValue | firebase.firestore.TimeStamp
+  updated: Date | any;  // firebase.firestore.FieldValue | firebase.firestore.TimeStamp
 }
 
 export interface TanamUserInvited {
   email: string;
   invited: any;
-  role: UserRole;
+  role: UserRoleType;
   uid: string;
   updated: any;
 }
@@ -39,15 +41,53 @@ export interface ITanamUserRole {
   email: string;
   created: Date | any; // firebase.firestore.FieldValue | firebase.firestore.TimeStamp
   updated: Date | any;  // firebase.firestore.FieldValue | firebase.firestore.TimeStamp
-  role: UserRole;
+  role: UserRoleType;
 }
 
+
+export class TanamUser implements ITanamUser {
+  uid: string;
+  email: string;
+  name: string;
+  photoUrl: string;
+  prefs: UserPrefs;
+  roles: UserRoleType[];
+  created: Date | any; // firebase.firestore.FieldValue | firebase.firestore.TimeStamp
+  updated: Date | any;  // firebase.firestore.FieldValue | firebase.firestore.TimeStamp
+
+  constructor(json: ITanamUser) {
+    this.uid = json.uid;
+    this.email = json.email;
+    this.photoUrl = json.photoUrl;
+    this.prefs = json.prefs;
+    this.roles = !!json.roles ? json.roles.slice() : [];
+    this.created = json.created;
+    this.updated = json.updated;
+  }
+
+  toJson() {
+    return {
+      uid: this.uid,
+      email: this.email || null,
+      name: this.name || null,
+      photoUrl: this.photoUrl || null,
+      prefs: this.prefs || null,
+      roles: this.roles.slice(),
+      created: this.created,
+      updated: this.updated,
+    } as ITanamUser;
+  }
+
+  toString() {
+    return `${TanamUser.name}(${this.uid})`;
+  }
+}
 
 export class TanamUserRole implements ITanamUserRole {
   uid: string;
   name: string;
   email: string;
-  role: UserRole;
+  role: UserRoleType;
   created: Date | any;
   updated: Date | any;
 

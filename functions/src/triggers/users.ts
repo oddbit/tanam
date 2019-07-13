@@ -1,62 +1,113 @@
 import { MD5 } from 'crypto-js';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { AdminTanamUser, AdminTanamUserRole } from "../models/cloud-functions.models";
+import { ITanamUser, ITanamUserRole } from "../models";
 
 // noinspection JSUnusedGlobalSymbols
-export const createUser = functions.auth.user().onCreate(async (firebaseUser) => {
-  const tanamConfigRole = null;
-  const envRole = firebaseUser.email === process.env.TANAM_OWNER ? 'superAdmin' : null;
-  const initialRole = envRole || tanamConfigRole;
+export const onAccountCreate = functions.auth.user().onCreate(async (firebaseUser) => {
+  console.log(JSON.stringify({uid: firebaseUser.uid, email: firebaseUser.email}));
+  const batchWrite = admin.firestore().batch();
+  const siteIds = [];
 
   // Use gravatar as default if photoUrl isn't specified in user data
   // https://en.gravatar.com/site/implement/images/
   const gravatarHash = MD5(firebaseUser.email || firebaseUser.uid).toString().toLowerCase();
-  const user = {
+
+  const user = new AdminTanamUser({
     uid: firebaseUser.uid,
     name: firebaseUser.displayName || firebaseUser.email,
     email: firebaseUser.email,
     photoUrl: firebaseUser.photoURL || `https://www.gravatar.com/avatar/${gravatarHash}.jpg?s=1024&d=identicon`,
-    roles: !!initialRole ? [initialRole] : [],
-  };
+  } as ITanamUser);
 
-  console.log(`Creating account: ${JSON.stringify({user})}`);
-  return Promise.all([
-    admin.firestore()
-      .collection('tanam').doc(process.env.GCLOUD_PROJECT)
-      .collection('users').doc(firebaseUser.uid)
-      .set(user),
-    setUserRoleToAuth(user),
-  ]);
+  const result = await admin.firestore()
+    .collectionGroup('user-roles')
+    .where('email', '==', user.email)
+    .get();
+
+  for (const doc of result.docs) {
+    const siteId = doc.ref.parent.parent.id;
+    siteIds.push(siteId);
+
+    const role = new AdminTanamUserRole(doc.data() as ITanamUserRole);
+    role.uid = user.uid;
+    role.name = user.name;
+
+    console.log(JSON.stringify({siteId, role: role.toString()}));
+    batchWrite.update(doc.ref, role.toJson());
+  }
+
+  siteIds.forEach((siteId) => {
+    console.log(JSON.stringify({siteId, uid: user.uid}));
+    const ref = admin.firestore()
+      .collection('tanam').doc(siteId)
+      .collection('users').doc(user.uid);
+    batchWrite.set(ref, user.toJson());
+  });
+
+  return batchWrite.commit();
 });
 
 // noinspection JSUnusedGlobalSymbols
-export const deleteUser = functions.auth.user().onDelete(firebaseUser => {
+export const onAccountDelete = functions.auth.user().onDelete(async firebaseUser => {
   console.log(`Deleting account: ${JSON.stringify({firebaseUser})}`);
-  return admin.firestore()
-    .collection('tanam').doc(process.env.GCLOUD_PROJECT)
-    .collection('users').doc(firebaseUser.uid)
-    .delete();
+  const batchWrite = admin.firestore().batch();
+  const result = await admin.firestore()
+    .collectionGroup('user')
+    .where('uid', '==', firebaseUser.uid)
+    .get();
+
+  for (const doc of result.docs) {
+    console.log(`Deleting: ${doc.ref.path}`);
+    batchWrite.delete(doc.ref);
+  }
+
+  return batchWrite.commit();
 });
 
 // noinspection JSUnusedGlobalSymbols
-export const updateAuthRoles = functions.firestore.document('tanam/{siteId}/users/{uid}').onUpdate((change, context) => {
-  const uid = context.params.uid;
-  const userBefore = change.before.data();
-  const userAfter = change.after.data();
-
+export const onUserRoleChange = functions.firestore.document('tanam/{siteId}/user-roles/{roleId}').onWrite(async (change, context) => {
+  const siteId = context.params.siteId;
+  const siteRef = admin.firestore().collection('tanam').doc(siteId);
+  const roleBefore = change.before.exists ? new AdminTanamUserRole(change.before.data() as ITanamUserRole) : null;
+  const roleAfter = change.after.exists ? new AdminTanamUserRole(change.after.data() as ITanamUserRole) : null;
   const promises = [];
 
-  if (userBefore.roles.length !== userAfter.roles.length
-    || userBefore.roles.some((role: string) => userAfter.roles.indexOf(role) === -1)) {
-    promises.push(setUserRoleToAuth({uid: uid, roles: userAfter.roles as string[]}));
+  console.log(JSON.stringify({
+    userBefore: (roleBefore && roleBefore.toString()),
+    userAfter: (roleBefore && roleBefore.toString()),
+  }));
+
+  const uid = (roleBefore && roleBefore.uid) || (roleAfter && roleAfter.uid);
+  if (!uid) {
+    console.log(`There is no UID yet for this role. Nothing more to do.`);
+    return null;
   }
+
+  if ((roleBefore && roleBefore.role) === (roleAfter && roleAfter.role)) {
+    console.log(`Roles are unchanged. Nothing more to do.`);
+    return null;
+  }
+
+  const firebaseUser = await admin.auth().getUser(uid);
+  console.log(JSON.stringify({customClaimsBefore: firebaseUser.customClaims}));
+  const tanamClaims = firebaseUser.customClaims['tanam'] || {};
+  const roleResults = await siteRef.collection('user-roles').where('uid', '==', uid).get();
+  tanamClaims[siteId] = roleResults.docs.map(doc => new AdminTanamUserRole(doc.data() as ITanamUserRole).role);
+
+  const customClaims = {tanam: tanamClaims};
+  console.log(JSON.stringify({customClaimsAfter: customClaims}));
+  promises.push(admin.auth().setCustomUserClaims(uid, customClaims));
+
+  const userRef = siteRef.collection('users').doc(uid);
+  promises.push(admin.firestore().runTransaction(async (trx) => {
+    const trxUserDoc = await trx.get(userRef);
+    const trxUser = new AdminTanamUser(trxUserDoc.data() as ITanamUser);
+
+    return trx.set(userRef, trxUser.toJson());
+  }));
+
 
   return Promise.all(promises);
 });
-
-
-function setUserRoleToAuth({uid, roles}: { uid: string, roles: string[] }) {
-  const customClaims = {tanam: {[process.env.GCLOUD_PROJECT]: roles}};
-  console.log(`[setUserRoleToAuth] ${JSON.stringify({uid, customClaims})}`);
-  return admin.auth().setCustomUserClaims(uid, customClaims);
-}
