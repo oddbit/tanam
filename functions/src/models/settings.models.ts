@@ -1,5 +1,3 @@
-import { analytics } from 'firebase-functions';
-
 export interface ISiteInformation {
   id: string;
   title: string;
@@ -28,9 +26,9 @@ export class SiteInformation implements ISiteInformation {
     this.title = json.title || json.id;
     this.theme = json.theme || 'default';
     this.defaultLanguage = json.defaultLanguage || 'en';
-    this.languages = !!json.languages ? json.languages.slice() : ['en'];
+    this.languages = !!json.languages ? json.languages.slice() : [this.defaultLanguage];
     this.isCustomDomain = json.isCustomDomain === true;
-    this.domains = !!json.domains ? json.domains.slice() : [];
+    this.domains = !!json.domains ? json.domains.slice() : [json.primaryDomain];
     this.primaryDomain = json.primaryDomain || this.domains[0];
     this.analytics = json.analytics;
   }
@@ -38,12 +36,12 @@ export class SiteInformation implements ISiteInformation {
   toJson() {
     return {
       id: this.id,
-      title: this.title,
+      title: this.title || null,
       theme: this.theme,
       defaultLanguage: this.defaultLanguage,
       languages: this.languages.slice(),
       primaryDomain: this.primaryDomain || null,
-      domains: this.domains.slice(),
+      domains: this.domains.slice().filter(x => !!x),
       analytics: this.analytics || null,
     } as ISiteInformation;
   }

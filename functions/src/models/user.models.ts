@@ -32,3 +32,46 @@ export interface UserQueryOptions {
   };
   startAfter?: any; // firebase.firestore.DocumentSnapshot
 }
+
+export interface ITanamUserRole {
+  uid?: string;
+  name?: string;
+  email: string;
+  created: Date | any; // firebase.firestore.FieldValue | firebase.firestore.TimeStamp
+  updated: Date | any;  // firebase.firestore.FieldValue | firebase.firestore.TimeStamp
+  role: UserRole;
+}
+
+
+export class TanamUserRole implements ITanamUserRole {
+  uid: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  created: Date | any;
+  updated: Date | any;
+
+  constructor(json: ITanamUserRole) {
+    this.uid = json.uid;
+    this.name = json.name;
+    this.email = json.email;
+    this.role = json.role;
+    this.created = json.created;
+    this.updated = json.updated;
+  }
+
+  toJson(): ITanamUserRole {
+    return {
+      uid: this.uid || null,
+      name: this.name || null,
+      email: this.email,
+      role: this.role,
+      created: this.created,
+      updated: this.updated,
+    } as ITanamUserRole;
+  }
+
+  toString() {
+    return `${TanamUserRole.name}(${this.email}: ${this.role})`;
+  }
+}

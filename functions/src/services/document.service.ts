@@ -51,6 +51,7 @@ export async function getDocumentForRequest(request: TanamHttpRequest): Promise<
  * Once any of those documents are changed, the graph needs to be traversed until
  * all rippling changes have been re-rendered.
  *
+ * @param siteInfo The site that this dependency is added for
  * @param docId The ID of the document that is referring to other documents
  * @param references One or more document IDs that are being referred to in a document
  */
