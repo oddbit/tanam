@@ -37,6 +37,7 @@ function _makeRequest(action: 'PURGE' | 'GET', host: string, path: string) {
     });
 }
 
+// noinspection JSUnusedGlobalSymbols
 export const onCacheTaskCreated = functions.database.ref('tanam/{siteId}/tasks/cache/{action}/{taskId}').onCreate(async (snap, context) => {
     const siteId = context.params.siteId;
     const action = context.params.action;

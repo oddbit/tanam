@@ -3,6 +3,7 @@ import * as functions from 'firebase-functions';
 import { Document, ISiteInformation, TanamFile } from '../models';
 import * as taskService from '../services/task.service';
 
+// noinspection JSUnusedGlobalSymbols
 export const onUpdateActiveTheme = functions.firestore.document('tanam/{siteId}').onUpdate(async (change, context) => {
   const siteId = context.params.siteId;
   const siteInfoBefore = change.before.data() as ISiteInformation;
@@ -23,7 +24,7 @@ export const onUpdateActiveTheme = functions.firestore.document('tanam/{siteId}'
   console.log(`Clearing cache for ${oldAssetFiles.docs.length} assets in previous theme (${siteInfoBefore.theme}).`);
   for (const doc of oldAssetFiles.docs) {
     const file = doc.data() as TanamFile;
-    promises.push(taskService.deleteCache(siteId, `/_/theme/${encodeURIComponent(file.title)}`));
+    promises.push(taskService.cacheTask('delete', siteId, `/_/theme/${encodeURIComponent(file.title)}`));
   }
 
   const currentAssetFiles = await admin.firestore()
@@ -35,7 +36,7 @@ export const onUpdateActiveTheme = functions.firestore.document('tanam/{siteId}'
   console.log(`Heating cache for ${currentAssetFiles.docs.length} assets in current theme (${siteInfoAfter.theme}).`);
   for (const doc of currentAssetFiles.docs) {
     const file = doc.data() as TanamFile;
-    promises.push(taskService.createCache(siteId, `/_/theme/${encodeURIComponent(file.title)}`));
+    promises.push(taskService.cacheTask('create', siteId, `/_/theme/${encodeURIComponent(file.title)}`));
   }
 
   const publishedDocs = await admin.firestore()
@@ -47,12 +48,13 @@ export const onUpdateActiveTheme = functions.firestore.document('tanam/{siteId}'
   console.log(`Updating cache for ${publishedDocs.docs.length} published documents.`);
   for (const doc of publishedDocs.docs) {
     const document = doc.data() as Document;
-    promises.push(taskService.updateCache(siteId, document.url));
+    promises.push(taskService.cacheTask('update', siteId, document.url));
   }
 
   return Promise.all(promises);
 });
 
+// noinspection JSUnusedGlobalSymbols
 export const onDeleteThemeDeleteTemplates = functions.firestore.document('tanam/{siteId}/themes/{themeId}').onDelete(async (snap) => {
   console.log(`Deleting all templates for theme ${snap.data().title} (${snap.data().id})`);
   const templates = await snap.ref.collection('templates').get();
@@ -78,6 +80,7 @@ export const onDeleteThemeDeleteTemplates = functions.firestore.document('tanam/
   return Promise.all(promises);
 });
 
+// noinspection JSUnusedGlobalSymbols
 export const onDeleteThemeDeleteAssets = functions.firestore.document('tanam/{siteId}/themes/{themeId}').onDelete(async (snap) => {
   console.log(`Deleting all assets for theme ${snap.data().title} (${snap.data().id})`);
   const assets = await snap.ref.collection('assets').get();
@@ -103,11 +106,12 @@ export const onDeleteThemeDeleteAssets = functions.firestore.document('tanam/{si
   return Promise.all(promises);
 });
 
+// noinspection JSUnusedGlobalSymbols
 export const onWriteTemplateUpdateCache = functions.firestore.document('tanam/{siteId}/themes/{themeId}/templates/{templateId}').onWrite(async (change, context) => {
   const siteId = context.params.siteId;
   const themeId = context.params.themeId;
   const templateId = context.params.themeId;
-  console.log(`Writing to template ${JSON.stringify({ siteId, themeId, templateId })}`)
+  console.log(`Writing to template ${JSON.stringify({ siteId, themeId, templateId })}`);
 
   const siteInfo = (await admin.firestore().collection('tanam').doc(siteId).get()).data() as ISiteInformation;
   console.log(`Active theme: ${siteInfo.theme}`);
@@ -127,7 +131,7 @@ export const onWriteTemplateUpdateCache = functions.firestore.document('tanam/{s
   const promises = [];
   for (const doc of publishedDocs.docs) {
     const document = doc.data() as Document;
-    promises.push(taskService.updateCache(siteId, document.url));
+    promises.push(taskService.cacheTask('update', siteId, document.url));
   }
 
   return Promise.all(promises);

@@ -1,7 +1,8 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { DocumentType, ISiteInformation, ITanamUserRole, SiteInformation } from '../models';
-import * as models from "../models/cloud-functions.models";
+import * as models from '../models/cloud-functions.models';
+import * as taskService from '../services/task.service'
 
 // noinspection JSUnusedGlobalSymbols
 export const registerHost = functions.database.ref('tanam/{siteId}/domains/{hash}').onCreate(async (snap) => {
@@ -306,5 +307,16 @@ export const onNewTanamSite = functions.database.ref('tanam/new/{id}').onCreate(
     batchWrite.set(newSiteBaseRef.collection('user-roles').doc(), userRole.toJson());
   }
 
-  return batchWrite.commit();
+
+  // --------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
+  //
+  // Fetch the default theme
+  //
+
+
+  return Promise.all([
+    taskService.fetchThemeTask(newSiteData.id, 'https://github.com/oddbit/tanam-themes/default'),
+    batchWrite.commit(),
+  ]);
 });

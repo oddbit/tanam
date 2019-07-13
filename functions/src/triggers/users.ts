@@ -1,7 +1,6 @@
 import { MD5 } from 'crypto-js';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import * as siteService from '../services/site-info.service';
 
 // noinspection JSUnusedGlobalSymbols
 export const createUser = functions.auth.user().onCreate(async (firebaseUser) => {
@@ -22,7 +21,6 @@ export const createUser = functions.auth.user().onCreate(async (firebaseUser) =>
 
   console.log(`Creating account: ${JSON.stringify({user})}`);
   return Promise.all([
-    siteService.initializeSite(),
     admin.firestore()
       .collection('tanam').doc(process.env.GCLOUD_PROJECT)
       .collection('users').doc(firebaseUser.uid)
