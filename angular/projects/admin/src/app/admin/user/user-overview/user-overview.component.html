@@ -1,12 +1,9 @@
+<tanam-context-actions>
+  <tanam-action-button buttonType='create'
+                       title="Add User"
+                       (click)='openDialogAddUser()'></tanam-action-button>
+</tanam-context-actions>
 <mat-card>
-  <div class="title">
-    <button mat-raised-button
-            color="primary"
-            (click)="openDialogAddUser()">
-      <mat-icon>add</mat-icon>
-      Add user
-    </button>
-  </div>
   <mat-tab-group>
     <mat-tab label="Users">
       <tanam-user-list [roles]="roles"
