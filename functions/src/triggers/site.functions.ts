@@ -299,12 +299,14 @@ export const onNewTanamSite = functions.database.ref('tanam/new/{id}').onCreate(
   //
 
   for (const role in newSiteData.roles) {
+    const userRoleRef = newSiteBaseRef.collection('user-roles').doc();
     const userRole = new models.AdminTanamUserRole({
+      id: userRoleRef.id,
       role: role,
       email: newSiteData.roles[role],
     } as ITanamUserRole);
 
-    batchWrite.set(newSiteBaseRef.collection('user-roles').doc(), userRole.toJson());
+    batchWrite.set(userRoleRef, userRole.toJson());
   }
 
 

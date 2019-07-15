@@ -1,6 +1,6 @@
 import { AdminTheme } from './theme.models';
 
-export type UserRoleType = 'superAdmin' | 'admin' | 'publisher' | 'designer' | 'reviewer';
+export type TanamUserRoleType = 'superAdmin' | 'admin' | 'publisher' | 'designer' | 'reviewer';
 
 export interface UserPrefs {
   theme: AdminTheme;
@@ -11,19 +11,11 @@ export interface ITanamUser {
   uid: string;
   email: string;
   name: string;
-  roles: UserRoleType[];
+  roles: TanamUserRoleType[];
   prefs: UserPrefs;
   photoUrl?: string;
   created: Date | any; // firebase.firestore.FieldValue | firebase.firestore.TimeStamp
   updated: Date | any;  // firebase.firestore.FieldValue | firebase.firestore.TimeStamp
-}
-
-export interface TanamUserInvited {
-  email: string;
-  invited: any;
-  role: UserRoleType;
-  uid: string;
-  updated: any;
 }
 
 export interface UserQueryOptions {
@@ -36,14 +28,14 @@ export interface UserQueryOptions {
 }
 
 export interface ITanamUserRole {
+  id: string;
   uid?: string;
   name?: string;
   email: string;
   created: Date | any; // firebase.firestore.FieldValue | firebase.firestore.TimeStamp
   updated: Date | any;  // firebase.firestore.FieldValue | firebase.firestore.TimeStamp
-  role: UserRoleType;
+  role: TanamUserRoleType;
 }
-
 
 export class TanamUser implements ITanamUser {
   uid: string;
@@ -51,7 +43,7 @@ export class TanamUser implements ITanamUser {
   name: string;
   photoUrl: string;
   prefs: UserPrefs;
-  roles: UserRoleType[];
+  roles: TanamUserRoleType[];
   created: Date | any; // firebase.firestore.FieldValue | firebase.firestore.TimeStamp
   updated: Date | any;  // firebase.firestore.FieldValue | firebase.firestore.TimeStamp
 
@@ -84,10 +76,11 @@ export class TanamUser implements ITanamUser {
 }
 
 export class TanamUserRole implements ITanamUserRole {
+  id: string;
   uid: string;
   name: string;
   email: string;
-  role: UserRoleType;
+  role: TanamUserRoleType;
   created: Date | any;
   updated: Date | any;
 
@@ -102,6 +95,7 @@ export class TanamUserRole implements ITanamUserRole {
 
   toJson(): ITanamUserRole {
     return {
+      id: this.id,
       uid: this.uid || null,
       name: this.name || null,
       email: this.email,

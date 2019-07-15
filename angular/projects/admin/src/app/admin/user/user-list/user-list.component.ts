@@ -2,7 +2,12 @@ import { Component } from '@angular/core';
 import { IPageInfo } from 'ngx-virtual-scroller';
 import { UserService } from '../../../services/user.service';
 import { map, tap } from 'rxjs/operators';
-import { ITanamUser } from 'tanam-models/user.models';
+import { ITanamUser, TanamUserRoleType } from 'tanam-models/user.models';
+
+interface TanamRoleOptions {
+  value: TanamUserRoleType;
+  text: string;
+}
 
 @Component({
   selector: 'tanam-user-list',
@@ -10,11 +15,24 @@ import { ITanamUser } from 'tanam-models/user.models';
   styleUrls: ['./user-list.component.scss']
 })
 export class UserListComponent {
-
   constructor(
     private readonly userService: UserService,
   ) {
   }
+  readonly roles: TanamRoleOptions[] = [
+    {
+      value: 'admin',
+      text: 'Admin'
+    },
+    {
+      value: 'superAdmin',
+      text: 'Super Admin',
+    },
+    {
+      value: 'publisher',
+      text: 'Publisher'
+    }
+  ];
 
   items: ITanamUser[] = [];
   limit = 20;
@@ -67,5 +85,4 @@ export class UserListComponent {
       this.isLoading = false;
     });
   }
-
 }

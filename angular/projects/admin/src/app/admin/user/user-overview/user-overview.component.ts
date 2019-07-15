@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { UserInviteDialogComponent } from '../user-invite-dialog/user-invite-dialog.component';
 
 @Component({
   selector: 'tanam-user-overview',
@@ -7,4 +9,12 @@ import { Component } from '@angular/core';
 })
 export class UserOverviewComponent {
 
+  constructor(
+    private dialog: MatDialog
+  ) {
+  }
+
+  openDialogAddUser() {
+    this.dialog.open(UserInviteDialogComponent);
+  }
 }

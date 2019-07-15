@@ -4,7 +4,15 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, CollectionReference, Query } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { AdminTheme, ADMIN_THEMES, ITanamUser, UserRoleType, TanamUserInvited, UserQueryOptions } from 'tanam-models';
+import {
+  ADMIN_THEMES,
+  AdminTheme,
+  ITanamUserRole,
+  ITanamUser,
+  TanamUserRole,
+  TanamUserRoleType,
+  UserQueryOptions,
+} from 'tanam-models';
 import { AppConfigService } from './app-config.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
 
@@ -20,7 +28,8 @@ export class UserService {
     private readonly appConfig: AppConfigService,
     private readonly fbApp: FirebaseApp,
     private overlayContainer: OverlayContainer
-  ) { }
+  ) {
+  }
 
   getCurrentUser(): Observable<ITanamUser> {
     const firebaseUser = this.fireAuth.auth.currentUser;
@@ -37,13 +46,7 @@ export class UserService {
       .valueChanges();
   }
 
-  hasSomeRole(): Observable<boolean> {
-    return this.getCurrentUser()
-      .pipe(map(user => user.roles.length > 0))
-      .pipe(tap(result => console.log(`[UserService:hasSomeRole] ${result}`)));
-  }
-
-  hasRole(role: UserRoleType): Observable<boolean> {
+  hasRole(role: TanamUserRoleType): Observable<boolean> {
     return this.getCurrentUser()
       .pipe(map(user => user.roles.indexOf(role) !== -1))
       .pipe(tap(result => console.log(`[UserService:hasRole] ${role}: ${result}`)));
@@ -54,7 +57,7 @@ export class UserService {
     return this.siteCollection
       .collection('users').doc<ITanamUser>(firebaseUser.uid)
       .valueChanges()
-      .pipe(map(tanamUser => !!tanamUser.prefs ? tanamUser.prefs : { theme: 'default' }))
+      .pipe(map(tanamUser => !!tanamUser.prefs ? tanamUser.prefs : {theme: 'default'}))
       .pipe(map((prefs: { theme: AdminTheme }) => ADMIN_THEMES[prefs.theme] || ADMIN_THEMES['default']))
       .pipe(tap(theme => console.log(`[UserPrefsService:getAdminTheme] theme: ${theme}`)));
   }
@@ -66,9 +69,9 @@ export class UserService {
       const trxDoc = await trx.get(docRef.ref);
       const trxUser = trxDoc.data() as ITanamUser;
 
-      const prefs = { ...trxUser.prefs, theme };
+      const prefs = {...trxUser.prefs, theme};
 
-      trx.update(docRef.ref, { prefs });
+      trx.update(docRef.ref, {prefs});
     });
   }
 
@@ -105,7 +108,7 @@ export class UserService {
       .collection<ITanamUser>('users', queryFn).valueChanges();
   }
 
-  getUserInvited(queryOpts: UserQueryOptions) {
+  getUserRoles(queryOpts: UserQueryOptions): Observable<TanamUserRole[]> {
     const queryFn = (ref: CollectionReference) => {
       if (queryOpts) {
         let query: Query = ref;
@@ -123,7 +126,19 @@ export class UserService {
       return ref;
     };
     return this.siteCollection
-      .collection<TanamUserInvited>('user-roles', queryFn).valueChanges();
+      .collection<ITanamUserRole>('user-roles', queryFn)
+      .valueChanges()
+      .pipe(
+        map((roles) => roles.map((role) => new TanamUserRole(role))),
+      );
+  }
+
+  inviteUser(userRole: TanamUserRole) {
+    return this.siteCollection.collection('user-roles').doc(this.firestore.createId()).set(userRole.toJson());
+  }
+
+  deleteUserRole(userRole: ITanamUserRole) {
+    return this.siteCollection.collection('user-roles').doc(userRole.id).delete();
   }
 
   getReference(id: string) {
