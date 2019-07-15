@@ -85,20 +85,21 @@ export const onUserRoleChange = functions.firestore.document('tanam/{siteId}/use
     return null;
   }
 
-  if ((roleBefore && roleBefore.role) === (roleAfter && roleAfter.role)) {
-    console.log(`Roles are unchanged. Nothing more to do.`);
+  if (roleBefore && roleAfter && roleBefore.unchangedRoleAuth(roleAfter)) {
+    console.log(`Role auth is unchanged. Nothing more to do.`);
     return null;
   }
 
   const firebaseUser = await admin.auth().getUser(uid);
-  console.log(JSON.stringify({customClaimsBefore: firebaseUser.customClaims}));
-  const tanamClaims = firebaseUser.customClaims['tanam'] || {};
+  const customClaimsBefore = firebaseUser.customClaims || {};
+  console.log(JSON.stringify({customClaimsBefore}));
+  const tanamClaims = customClaimsBefore['tanam'] || {};
   const roleResults = await siteRef.collection('user-roles').where('uid', '==', uid).get();
   tanamClaims[siteId] = roleResults.docs.map(doc => new AdminTanamUserRole(doc.data() as ITanamUserRole).role);
 
-  const customClaims = {tanam: tanamClaims};
-  console.log(JSON.stringify({customClaimsAfter: customClaims}));
-  promises.push(admin.auth().setCustomUserClaims(uid, customClaims));
+  const customClaimsAfter = {tanam: tanamClaims};
+  console.log(JSON.stringify({customClaimsAfter}));
+  promises.push(admin.auth().setCustomUserClaims(uid, customClaimsAfter));
 
   const userRef = siteRef.collection('users').doc(uid);
   promises.push(admin.firestore().runTransaction(async (trx) => {

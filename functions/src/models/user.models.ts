@@ -1,4 +1,5 @@
 import { AdminTheme } from './theme.models';
+import { TanamBase } from "./base";
 
 export type TanamUserRoleType = 'superAdmin' | 'admin' | 'publisher' | 'designer' | 'reviewer';
 
@@ -50,11 +51,16 @@ export class TanamUser implements ITanamUser {
   constructor(json: ITanamUser) {
     this.uid = json.uid;
     this.email = json.email;
+    this.name = json.name;
     this.photoUrl = json.photoUrl;
     this.prefs = json.prefs;
     this.roles = !!json.roles ? json.roles.slice() : [];
-    this.created = json.created;
-    this.updated = json.updated;
+    this.created = !!json.created && !!json.created.toDate
+      ? json.created.toDate()
+      : json.created;
+    this.updated = !!json.updated && !!json.updated.toDate
+      ? json.updated.toDate()
+      : json.updated;
   }
 
   toJson() {
@@ -65,8 +71,8 @@ export class TanamUser implements ITanamUser {
       photoUrl: this.photoUrl || null,
       prefs: this.prefs || null,
       roles: this.roles.slice(),
-      created: this.created,
-      updated: this.updated,
+      created: this.created || null,
+      updated: this.updated || null,
     } as ITanamUser;
   }
 
@@ -75,7 +81,7 @@ export class TanamUser implements ITanamUser {
   }
 }
 
-export class TanamUserRole implements ITanamUserRole {
+export class TanamUserRole extends TanamBase implements ITanamUserRole {
   id: string;
   uid: string;
   name: string;
@@ -85,23 +91,32 @@ export class TanamUserRole implements ITanamUserRole {
   updated: Date | any;
 
   constructor(json: ITanamUserRole) {
+    super(json);
     this.uid = json.uid;
     this.name = json.name;
     this.email = json.email;
     this.role = json.role;
-    this.created = json.created;
-    this.updated = json.updated;
+  }
+
+  unchangedRoleAuth(otherRole: TanamUserRole) {
+    if (!otherRole) {
+      // Has different role if comparing to a null object
+      // Is not different if this role is not linked to a user since changes
+      // doesn't affect anything before connected to a user
+      return !this.uid;
+    }
+
+    return otherRole.uid === this.uid && otherRole.role === this.role;
   }
 
   toJson(): ITanamUserRole {
+    console.log(`[${TanamUserRole.name}.toJson]`);
     return {
-      id: this.id,
+      ...super.toJson(),
       uid: this.uid || null,
       name: this.name || null,
       email: this.email,
       role: this.role,
-      created: this.created,
-      updated: this.updated,
     } as ITanamUserRole;
   }
 

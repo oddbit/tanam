@@ -1,177 +1,27 @@
 {
-  "indexes": [
+  "indexes": [],
+  "fieldOverrides": [
     {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
+      "collectionGroup": "user-roles",
+      "fieldPath": "email",
+      "indexes": [
         {
-          "fieldPath": "dependencies",
-          "arrayConfig": "CONTAINS"
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION"
         },
         {
-          "fieldPath": "rendered",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "documentType",
-          "order": "ASCENDING"
+          "order": "DESCENDING",
+          "queryScope": "COLLECTION"
         },
         {
-          "fieldPath": "status",
-          "order": "ASCENDING"
+          "arrayConfig": "CONTAINS",
+          "queryScope": "COLLECTION"
         },
         {
-          "fieldPath": "published",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "documentType",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "title",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "documentType",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "title",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "documentType",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "updated",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "updated",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "updated",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "published",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "title",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "title",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "notifications",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "isRead",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "updated",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "files",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "fileType",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "updated",
-          "order": "DESCENDING"
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION_GROUP"
         }
       ]
     }
-  ],
-  "fieldOverrides": []
+  ]
 }

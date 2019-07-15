@@ -27,7 +27,7 @@ export const registerHost = functions.database.ref('tanam/{siteId}/domains/{hash
 });
 
 // noinspection JSUnusedGlobalSymbols
-export const onNewTanamSite = functions.database.ref('tanam/new/{id}').onCreate(async (snap) => {
+export const onNewTanamSite = functions.database.ref('tanam/_/new/{id}').onCreate(async (snap) => {
   const newSiteData = new models.AdminCreateSiteRequest(snap.val() as models.IAdminCreateSiteRequest);
   const batchWrite = admin.firestore().batch();
   const newSiteBaseRef = admin.firestore().collection('tanam').doc(newSiteData.id);
@@ -306,6 +306,7 @@ export const onNewTanamSite = functions.database.ref('tanam/new/{id}').onCreate(
       email: newSiteData.roles[role],
     } as ITanamUserRole);
 
+    console.log(`${userRole.toString()}: ${JSON.stringify(userRole.toJson())}`);
     batchWrite.set(userRoleRef, userRole.toJson());
   }
 
@@ -318,6 +319,7 @@ export const onNewTanamSite = functions.database.ref('tanam/new/{id}').onCreate(
 
 
   return Promise.all([
+    snap.ref.remove(),
     taskService.fetchThemeTask(newSiteData.id, 'https://github.com/oddbit/tanam-themes/default'),
     batchWrite.commit(),
   ]);

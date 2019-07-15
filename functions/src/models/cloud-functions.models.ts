@@ -87,7 +87,7 @@ export class AdminCreateSiteRequest implements IAdminCreateSiteRequest {
   readonly force: boolean;
 
   constructor(json: IAdminCreateSiteRequest) {
-    this.id = (json.id || json.name).replace(/\W/g, '');
+    this.id = (json.id || json.name).replace(/[^A-Za-z0-9_-]/g, '');
     this.name = json.name || json.id;
     this.domain = json.domain;
     this.roles = {...json.roles};

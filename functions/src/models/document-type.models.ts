@@ -84,7 +84,7 @@ export class TanamDocumentType implements DocumentType {
   }
 
   static withTitle(title: string): TanamDocumentType {
-    const id = title.replace(/\W/g, '');
+    const id = title.replace(/[^A-Za-z0-9_-]/g, '');
     return new TanamDocumentType({
       id: id,
       title: title,
