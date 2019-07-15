@@ -4,9 +4,10 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, CollectionReference, Query } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { AdminTheme, ADMIN_THEMES, TanamUser, UserRole, TanamUserInvited, UserQueryOptions } from 'tanam-models';
+import { AdminTheme, ADMIN_THEMES, TanamUser, UserRole, TanamUserInvited, UserQueryOptions, TanamUserInvitation } from 'tanam-models';
 import { AppConfigService } from './app-config.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
+import * as firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
@@ -124,6 +125,20 @@ export class UserService {
     };
     return this.siteCollection
       .collection<TanamUserInvited>('user-roles', queryFn).valueChanges();
+  }
+
+  inviteUser(user: TanamUserInvitation) {
+    return this.siteCollection
+      .collection('user-roles').doc(user.email).set({
+        email: user.email,
+        role: user.role,
+        invited: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp()
+      });
+  }
+
+  removeInvitedUser(user: TanamUserInvited) {
+    return this.siteCollection.collection('user-roles').doc(user.email).delete();
   }
 
   getReference(id: string) {

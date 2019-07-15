@@ -4,17 +4,22 @@ import { AppMaterialModule } from '../../app-material.module';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserInvitedComponent } from './user-invited/user-invited.component';
+import { UserInviteDialogComponent } from './user-invite-dialog/user-invite-dialog.component';
+import { ComponentsModule } from '../components/components.module';
 
 @NgModule({
   declarations: [
     UserOverviewComponent,
     UserListComponent,
-    UserInvitedComponent
+    UserInvitedComponent,
+    UserInviteDialogComponent
   ],
   imports: [
     AppMaterialModule,
-    VirtualScrollerModule
+    VirtualScrollerModule,
+    ComponentsModule
   ],
-  exports: [UserOverviewComponent]
+  exports: [UserOverviewComponent],
+  entryComponents: [UserInviteDialogComponent]
 })
 export class UserModule { }

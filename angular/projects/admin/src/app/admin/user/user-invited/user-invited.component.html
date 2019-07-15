@@ -11,9 +11,8 @@
         <mat-form-field>
           <mat-label>Role</mat-label>
           <mat-select value="admin">
-            <mat-option value="admin">Admin</mat-option>
-            <mat-option value="superAdmin">Super Admin</mat-option>
-            <mat-option value="publisher">Publisher</mat-option>
+            <mat-option *ngFor="let role of roles"
+                        value="{{roles.value}}">{{role.text}}</mat-option>
           </mat-select>
         </mat-form-field>
         <button mat-icon-button
@@ -27,7 +26,8 @@
             <mat-icon>autorenew</mat-icon>
             <span>Resend Invitation</span>
           </button>
-          <button mat-menu-item>
+          <button mat-menu-item
+                  (click)="deleteInvitedUser(item)">
             <mat-icon color="warn">delete</mat-icon>
             <span>Delete</span>
           </button>
