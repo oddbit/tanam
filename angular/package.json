@@ -1,11 +1,16 @@
 {
   "name": "tanam-angular",
+  "description": "Tanam CMS management application",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oddbit/tanam.git"
+  },
   "version": "0.0.1",
   "license": "Apache-2.0",
   "scripts": {
     "start": "ng serve admin",
-    "build": "ng build admin --outputHashing=all --deployUrl=/",
-    "build:prod": "ng build admin --prod=true --deployUrl=/",
+    "build": "ng build admin --outputHashing=all --deployUrl=/_/",
+    "build:prod": "ng build admin --prod=true --deployUrl=/_/",
     "test": "ng test admin",
     "lint": "ng lint admin",
     "e2e": "ng e2e admin",
@@ -80,8 +85,6 @@
     "tslib": "^1.9.3",
     "tslint": "~5.12.1",
     "typescript": "~3.2.4",
-    "utf-8-validate": "^5.0.2",
-    "webpack": "^4.29.0",
-    "webpack-cli": "^3.2.1"
+    "utf-8-validate": "^5.0.2"
   }
 }

@@ -1,0 +1,16 @@
+<tanam-page-title pageTitle="Manage Users"></tanam-page-title>
+<tanam-context-actions>
+  <tanam-action-button buttonType='create'
+                       title="Add User"
+                       (click)='openDialogAddUser()'></tanam-action-button>
+</tanam-context-actions>
+<mat-card>
+  <mat-tab-group>
+    <mat-tab label="Users">
+      <tanam-user-list></tanam-user-list>
+    </mat-tab>
+    <mat-tab label="Invited">
+      <tanam-user-invited></tanam-user-invited>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>

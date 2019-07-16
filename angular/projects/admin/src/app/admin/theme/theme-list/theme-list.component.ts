@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { map, tap} from 'rxjs/operators';
+import { Component } from '@angular/core';
+import { map, tap } from 'rxjs/operators';
 import { ThemeService } from '../../../services/theme.service';
 import { Router } from '@angular/router';
 import { IPageInfo } from 'ngx-virtual-scroller';
@@ -20,7 +20,7 @@ export class ThemeListComponent {
   constructor(
     private readonly router: Router,
     private readonly themeService: ThemeService,
-  ) {}
+  ) { }
 
   async fetchMore(event: IPageInfo) {
     if (event.endIndex !== this.items.length - 1 || this.isLastItem) {
@@ -40,8 +40,8 @@ export class ThemeListComponent {
       startAfter: lastVisible,
       limit: this.limit,
       orderBy: {
-        field: 'updated',
-        sortOrder: 'desc'
+        field: 'title',
+        sortOrder: 'asc'
       }
     }).pipe(
       tap(items => {
@@ -53,17 +53,23 @@ export class ThemeListComponent {
         const mergedItems = [...this.items, ...items];
         return mergedItems.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
       }),
-      map(v => Object.values(v).sort(this.sortEntry))
+      map(v => Object.values(v).sort(this.sortItems))
     ).subscribe((items: Theme[]) => {
       this.items = [...items];
       this.isLoading = false;
     });
   }
 
-  sortEntry(a: Theme, b: Theme) {
-    const dateA = a.updated.toDate().getTime();
-    const dateB = b.updated.toDate().getTime();
-    return dateA - dateB;
+  sortItems(a: Theme, b: Theme) {
+    const itemA = a.title.toLowerCase();
+    const itemB = b.title.toLowerCase();
+    if (itemA > itemB) {
+      return 1;
+    } else if (itemA < itemB) {
+      return -1;
+    } else {
+      return 0;
+    }
   }
 
   editTheme(themeId: string) {

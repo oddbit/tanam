@@ -1,5 +1,15 @@
+import {
+  AfterViewInit,
+  ApplicationRef,
+  Component,
+  ComponentFactoryResolver,
+  Injector,
+  OnDestroy,
+  ViewChild,
+  Input,
+  OnInit
+} from '@angular/core';
 import { CdkPortal, DomPortalHost } from '@angular/cdk/portal';
-import { AfterViewInit, ApplicationRef, Component, ComponentFactoryResolver, Injector, OnDestroy, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'tanam-breadcrumbs',
@@ -10,6 +20,7 @@ export class BreadcrumbsComponent implements AfterViewInit, OnDestroy {
   @ViewChild(CdkPortal)
   private portal: CdkPortal;
   private host: DomPortalHost;
+  @Input() title: string;
 
   constructor(
     private componentFactoryReslover: ComponentFactoryResolver,
@@ -31,4 +42,5 @@ export class BreadcrumbsComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.host.detach();
   }
+
 }

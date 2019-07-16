@@ -18,9 +18,9 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./page-title.component.scss']
 })
 export class PageTitleComponent implements AfterViewInit, OnDestroy, OnChanges {
-
-  @Input()
-  pageTitle: string;
+  @Input() pageTitle: string;
+  @Input() description: string;
+  @Input() hide = false;
 
   @ViewChild(CdkPortal)
   private portal: CdkPortal;

@@ -1,5 +1,10 @@
 <ng-container *cdkPortal>
-  <span class="page-title">
-    {{ pageTitle }}
-  </span>
+  <div *ngIf="!hide"
+       class="wrapper">
+    <h1 class="mat-h1 page-title">
+      {{pageTitle}}
+    </h1>
+    <p *ngIf="description"
+       class="mat-body description">{{description}}</p>
+  </div>
 </ng-container>

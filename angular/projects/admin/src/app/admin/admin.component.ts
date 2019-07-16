@@ -18,9 +18,9 @@ export class AdminComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly userService: UserService,
     private readonly appAuthService: AppAuthService,
-    ) {
-      userService.overlayTheme();
-    }
+  ) {
+    userService.overlayTheme();
+  }
 
   ngOnInit() {
     this.authSubscription = this.appAuthService.isLoggedIn().subscribe(isLoggedIn => {

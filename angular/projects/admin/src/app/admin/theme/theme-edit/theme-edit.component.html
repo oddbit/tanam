@@ -1,9 +1,9 @@
-<tanam-breadcrumbs>
-    <tanam-breadcrumb routerLink="/_/admin/themes">Themes</tanam-breadcrumb>
-</tanam-breadcrumbs>
-
 <div *ngIf="(theme$ | async) as theme">
-    <tanam-page-title pageTitle="Edit {{ theme.title }} theme"></tanam-page-title>
+  <tanam-page-title pageTitle="{{ theme.title }} | Edit Theme"></tanam-page-title>
+  <tanam-breadcrumbs title="Edit">
+    <tanam-breadcrumb routerLink="/_/admin/themes">Themes</tanam-breadcrumb>
+    <tanam-breadcrumb routerLink="/_/admin/theme/{{theme.id}}">{{theme.title}}</tanam-breadcrumb>
+  </tanam-breadcrumbs>
 </div>
 
 <tanam-theme-form [themeId]="themeId"

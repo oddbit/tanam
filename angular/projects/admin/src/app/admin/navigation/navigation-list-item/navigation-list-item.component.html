@@ -1,7 +1,10 @@
 <a *ngIf="id !== 'page'"
    mat-list-item
    routerLink="{{routerLink}}"
-   routerLinkActive="active">
-  <mat-icon mat-list-icon>{{icon}}</mat-icon>
-  <span *ngIf="isExpanded">{{title}}</span>
+   routerLinkActive="active primary-color"
+   class="nav-list-item">
+  <mat-icon mat-list-icon
+            class="icon">{{icon}}</mat-icon>
+  <span *ngIf="isExpanded"
+        class="mat-body-2 title">{{title}}</span>
 </a>

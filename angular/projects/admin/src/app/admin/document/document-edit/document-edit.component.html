@@ -1,26 +1,28 @@
-<tanam-breadcrumbs *ngIf="(documentType$ | async) as documentType">
-  <tanam-breadcrumb routerLink="/_/admin/type/{{ documentType.id }}">{{ documentType.title }}</tanam-breadcrumb>
-</tanam-breadcrumbs>
-
 <div *ngIf="(document$ | async) as document">
-  <tanam-page-title pageTitle="{{ document.title }}"></tanam-page-title>
-  <tanam-context-actions>
-    <tanam-action-button buttonType='delete'
-                         (click)='deleteEntry()'></tanam-action-button>
-    <tanam-action-button buttonType='save'
-                         disabled={{documentForm.pristine}}
-                         (click)='documentForm.pristine? "" : saveEntry()'></tanam-action-button>
-    <tanam-action-button buttonType='saveAndClose'
-                         disabled={{documentForm.pristine}}
-                         (click)='documentForm.pristine? "" : saveEntry(true)'></tanam-action-button>
-  </tanam-context-actions>
+  <div *ngIf="(documentType$ | async) as documentType">
+    <tanam-page-title pageTitle="{{document.revision === 0 ? 'New' : 'Edit'}} {{documentType.title}} Content">
+    </tanam-page-title>
+    <tanam-breadcrumbs title="{{document.title || 'New'}}">
+      <tanam-breadcrumb routerLink="/_/admin/type/{{ documentType.id }}">{{ documentType.title }}</tanam-breadcrumb>
+    </tanam-breadcrumbs>
+    <tanam-context-actions>
+      <tanam-action-button buttonType='delete'
+                           (click)='deleteEntry()'></tanam-action-button>
+      <tanam-action-button buttonType='save'
+                           disabled={{documentForm.pristine}}
+                           (click)='documentForm.pristine? "" : saveEntry()'></tanam-action-button>
+      <tanam-action-button buttonType='saveAndClose'
+                           disabled={{documentForm.pristine}}
+                           (click)='documentForm.pristine? "" : saveEntry(true)'></tanam-action-button>
+    </tanam-context-actions>
+  </div>
 
   <form [formGroup]="documentForm"
         novalidate>
 
     <div class="wrap">
       <div class="edit-content">
-        <mat-card>
+        <mat-card class="table-border-radius">
           <mat-card-content>
             <div formGroupName="dataForm">
               <div class="row"
@@ -112,9 +114,10 @@
       </div>
       <div class="edit-metadata"
            [ngClass]="{'open-dialog': metaDataDialog}">
-        <mat-card>
+        <mat-card class="table-border-radius">
           <mat-card-content>
-            <mat-form-field *ngIf="document.standalone" class="full-width">
+            <mat-form-field *ngIf="document.standalone"
+                            class="full-width">
               <input matInput
                      placeholder="Slug"
                      formControlName="url">
@@ -131,7 +134,8 @@
                 </mat-slide-toggle>
               </div>
             </div>
-            <mat-form-field *ngIf="document.standalone" class="full-width canonical-field">
+            <mat-form-field *ngIf="document.standalone"
+                            class="full-width canonical-field">
               <input matInput
                      placeholder="Canonical URL"
                      formControlName="canonicalUrl">

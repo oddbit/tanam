@@ -4,6 +4,7 @@ import * as sharp from 'sharp';
 import { TanamFile } from '../models';
 import { SHA1 } from 'crypto-js';
 
+// noinspection JSUnusedGlobalSymbols
 export const onUserImageUpload = functions.storage.object().onFinalize(async (storageObject) => {
   const regexNameMatch = storageObject.name.match(/^\/?tanam\/(.*)\/upload\//);
   if (!regexNameMatch) {
@@ -73,6 +74,7 @@ export const onUserImageUpload = functions.storage.object().onFinalize(async (st
 });
 
 
+// noinspection JSUnusedGlobalSymbols
 export const onThemeAssetsFileUpload = functions.storage.object().onFinalize(async (storageObject) => {
   const regexNameMatch = storageObject.name.match(/^\/?tanam\/(.*)\/themes\//);
 
@@ -80,7 +82,7 @@ export const onThemeAssetsFileUpload = functions.storage.object().onFinalize(asy
     console.log(`Not an upload asset file task: ${storageObject.name} (${storageObject.contentType})`);
     return null;
   }
-  console.log('[UploadAssetFiles]' + JSON.stringify(storageObject))
+  console.log('[UploadAssetFiles]' + JSON.stringify(storageObject));
   const objectNameArr = storageObject.name.split('/');
   const themeId = objectNameArr[3];
 

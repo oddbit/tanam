@@ -2,6 +2,7 @@
                        autosize>
   <mat-sidenav #drawer
                [ngClass]="{'expanded-nav': isExpanded}"
+               class="main-drawer"
                fixedInViewport="true"
                [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
                [mode]="(isHandset$ | async) ? 'over' : 'side'"
@@ -9,49 +10,64 @@
     <mat-toolbar class="header-side-nav">
       <img class="logo"
            src="assets/icons/tanam-icon.svg"
-           height="25"
-           style="margin-right:10px" /> <b>{{isExpanded? 'Tanam':''}}</b>
+           height="24" />
+      <span [ngClass]="{'text-padding': isExpanded}">{{isExpanded ? 'Tanam' : null}}</span>
     </mat-toolbar>
-    <mat-nav-list>
-      <tanam-navigation-list-item routerLink="/_/admin/dashboard"
-                                  icon="dashboard"
-                                  [isExpanded]="isExpanded"
-                                  title="Dashboard"></tanam-navigation-list-item>
-      <h3 mat-subheader
-          *ngIf="isExpanded">Content</h3>
-      <mat-divider *ngIf="!isExpanded"></mat-divider>
-      <tanam-navigation-list-item *ngFor="let documentType of documentTypes$ | async"
-                                  [id]="documentType.id"
-                                  routerLink="/_/admin/type/{{documentType.id}}"
-                                  icon="{{documentType.icon}}"
-                                  [isExpanded]="isExpanded"
-                                  title="{{documentType.title}}"></tanam-navigation-list-item>
-
-      <h3 mat-subheader
-          *ngIf="isExpanded">Manage</h3>
-      <mat-divider *ngIf="!isExpanded"></mat-divider>
-      <tanam-navigation-list-item routerLink="/_/admin/type/page/overview"
-                                  icon="chrome_reader_mode"
-                                  [isExpanded]="isExpanded"
-                                  title="Pages"></tanam-navigation-list-item>
-      <tanam-navigation-list-item routerLink="/_/admin/media"
-                                  icon="image"
-                                  [isExpanded]="isExpanded"
-                                  title="Media files"></tanam-navigation-list-item>
-      <tanam-navigation-list-item routerLink="/_/admin/types"
-                                  icon="library_books"
-                                  [isExpanded]="isExpanded"
-                                  title="Content"></tanam-navigation-list-item>
-      <tanam-navigation-list-item routerLink="/_/admin/themes"
-                                  icon="web"
-                                  [isExpanded]="isExpanded"
-                                  title="Themes"></tanam-navigation-list-item>
-      <tanam-navigation-list-item routerLink="/_/admin/settings"
-                                  icon="settings"
-                                  [isExpanded]="isExpanded"
-                                  title="Settings"></tanam-navigation-list-item>
+    <mat-nav-list dense>
+      <div class="list-item-group">
+        <tanam-navigation-list-item routerLink="/_/admin/dashboard"
+                                    icon="dashboard"
+                                    [isExpanded]="isExpanded"
+                                    class="dashboard"
+                                    title="Dashboard"></tanam-navigation-list-item>
+      </div>
+      <mat-divider *ngIf="!isExpanded"
+                   class="divider"></mat-divider>
+      <div class="list-item-group">
+        <h3 mat-subheader
+            *ngIf="isExpanded"
+            class="subheader">Content</h3>
+        <tanam-navigation-list-item *ngFor="let documentType of documentTypes$ | async"
+                                    [id]="documentType.id"
+                                    routerLink="/_/admin/type/{{documentType.id}}"
+                                    icon="{{documentType.icon}}"
+                                    [isExpanded]="isExpanded"
+                                    title="{{documentType.title}}"></tanam-navigation-list-item>
+      </div>
+      <mat-divider *ngIf="!isExpanded"
+                   class="divider"></mat-divider>
+      <div class="list-item-group">
+        <h3 mat-subheader
+            *ngIf="isExpanded"
+            class="subheader">Manage</h3>
+        <tanam-navigation-list-item routerLink="/_/admin/type/page/overview"
+                                    icon="chrome_reader_mode"
+                                    [isExpanded]="isExpanded"
+                                    title="Pages"></tanam-navigation-list-item>
+        <tanam-navigation-list-item routerLink="/_/admin/media"
+                                    icon="image"
+                                    [isExpanded]="isExpanded"
+                                    title="Media files"></tanam-navigation-list-item>
+        <tanam-navigation-list-item routerLink="/_/admin/types"
+                                    icon="library_books"
+                                    [isExpanded]="isExpanded"
+                                    title="Content"></tanam-navigation-list-item>
+        <tanam-navigation-list-item routerLink="/_/admin/themes"
+                                    icon="web"
+                                    [isExpanded]="isExpanded"
+                                    title="Themes"></tanam-navigation-list-item>
+        <tanam-navigation-list-item routerLink="/_/admin/users"
+                                    icon="group"
+                                    [isExpanded]="isExpanded"
+                                    title="Users"></tanam-navigation-list-item>
+        <tanam-navigation-list-item routerLink="/_/admin/settings"
+                                    icon="settings"
+                                    [isExpanded]="isExpanded"
+                                    title="Settings"></tanam-navigation-list-item>
+      </div>
     </mat-nav-list>
-    <mat-toolbar class="expand-toolbar">
+    <mat-toolbar class="expand-toolbar"
+                 [ngClass]="{'chevron-center': !isExpanded}">
       <mat-icon class="togglerMiniNav"
                 (click)="toggleMiniNav()">{{isExpanded? 'chevron_left':'chevron_right'}}</mat-icon>
     </mat-toolbar>
@@ -65,9 +81,13 @@
               *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>
-        {{ siteName$ | async }}
-      </span>
+      <a *ngIf="siteLink$ | async as siteLink"
+         href="https://{{siteLink}}"
+         target="_blank"
+         class="mat-body view-web-link">
+        <mat-icon>public</mat-icon>
+        <span>View website</span>
+      </a>
 
       <!-- This fills the remaining space of the current row -->
       <span class="fill-remaining-space"></span>
@@ -77,13 +97,14 @@
       </button>
       <tanam-profile-widget></tanam-profile-widget>
     </mat-toolbar>
-    <mat-toolbar class="sub-toolbar">
-      <mat-toolbar-row>
-        <div id="breadcrumbs"></div>
-        <div id="page-title"></div>
-        <span class="sub-toolbar-spacer"></span>
-        <div id="context-actions"></div>
-      </mat-toolbar-row>
+    <tanam-navigation-header>
+      <div id="page-title"></div>
+    </tanam-navigation-header>
+    <mat-toolbar id="header-action"
+                 class="header-action-wrapper">
+      <div id="breadcrumbs"></div>
+      <div class="spacer"></div>
+      <div id="context-actions"></div>
     </mat-toolbar>
     <!-- Add Content Here -->
     <div class="admin-container">

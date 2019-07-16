@@ -3,11 +3,15 @@ import { Component, OnInit, Input } from '@angular/core';
 export type ActionButtonType = 'delete' | 'save' | 'create' | 'cancel' | 'upload' | 'editTemplate';
 
 
-export type ActionButtonColor = 'primary' | 'warn';
+export type ActionButtonColor = 'primary' | 'warn' | 'white';
 const BUTTON_COLORS: { [key: string]: ActionButtonColor } = {
   delete: 'warn',
+  edit: 'primary',
+  create: 'primary',
   save: 'primary',
-  cancel: 'warn',
+  upload: 'primary',
+  cancel: 'white',
+  saveAndClose: 'primary'
 };
 
 const BUTTON_TITLES = {

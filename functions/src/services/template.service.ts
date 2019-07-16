@@ -1,29 +1,32 @@
 import * as admin from 'firebase-admin';
-import { SiteInformation, ThemeTemplate } from '../models';
+import { ISiteInformation, ThemeTemplate, SiteInformation } from '../models';
+import { TanamHttpRequest } from '../models/http_request.model';
 
-const siteCollection = () => admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
-
-export async function getTemplate404() {
-  const siteInfo = (await siteCollection().get()).data() as SiteInformation;
+export async function getTemplates(siteInfo: SiteInformation) {
   console.log(`[getTemplates] Finding templates for theme: ${siteInfo.theme}`);
-  const templateSnap = await siteCollection()
-    .collection('themes').doc(siteInfo.theme)
-    .collection('templates').doc('http404')
-    .get();
-  console.log(`[getTemplates] get http404 template: ${JSON.stringify(templateSnap.data())}`);
-  return templateSnap.data();
-}
-
-export async function getTemplates() {
-  const siteInfo = (await siteCollection().get()).data() as SiteInformation;
-  console.log(`[getTemplates] Finding templates for theme: ${siteInfo.theme}`);
-  const templatesSnap = await siteCollection()
+  const templatesSnap = await admin.firestore()
+    .collection('tanam').doc(siteInfo.id)
     .collection('themes').doc(siteInfo.theme)
     .collection('templates')
     .get();
 
   console.log(`[getTemplates] Number of templates found: ${templatesSnap.docs.length}`);
   return templatesSnap.docs.map(doc => doc.data() as ThemeTemplate);
+}
+
+export async function getErrorTemplate(siteInfo: SiteInformation, errorTemplate: 'http404' | 'http500' | 'error') {
+  console.log(`[document.service.getErrorTemplate] ${JSON.stringify({ siteInfo, errorTemplate })}`);
+  const doc = await admin.firestore()
+    .collection('tanam').doc(siteInfo.id)
+    .collection('themes').doc(siteInfo.theme)
+    .collection('templates').doc(errorTemplate)
+    .get();
+
+  if (!doc.exists) {
+    return null;
+  }
+
+  return doc.data() as ThemeTemplate;
 }
 
 export async function createDefaultTemplates() {

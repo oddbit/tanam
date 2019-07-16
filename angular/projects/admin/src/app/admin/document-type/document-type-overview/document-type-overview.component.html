@@ -1,22 +1,9 @@
-<tanam-page-title pageTitle="Content Types"></tanam-page-title>
+<tanam-page-title pageTitle="Content Types"
+                  description='Content types are defining the type of posts that you can make on your site.'>
+</tanam-page-title>
 <tanam-context-actions>
   <tanam-action-button buttonType='create'
                        (click)="createNewTypeDialog()"></tanam-action-button>
 </tanam-context-actions>
-
-<mat-card class="create-document-type-card">
-  <mat-card-content>
-    <p>
-      Content types are defining the type of posts that you can make on your site. The predefined types are
-      <a routerLink="/_/admin/types/page">page</a> and
-      <a routerLink="/_/admin/types/blog">blog</a> which are the most common types.
-    </p>
-    <p>
-      You can create and define your own types for different type of content such as "events" etc.
-      The "slug" part of the type will be prefixing your post in the url so that all related posts
-      are grouped together.
-    </p>
-  </mat-card-content>
-</mat-card>
 
 <tanam-document-type-list></tanam-document-type-list>
