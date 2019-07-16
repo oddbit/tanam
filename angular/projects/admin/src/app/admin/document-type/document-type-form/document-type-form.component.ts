@@ -2,13 +2,14 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { DocumentField, DocumentType, DocumentFieldFormElement, DocumentFieldValidator } from 'tanam-models';
+import { DocumentFieldFormElement, DocumentFieldValidator, ITanamDocumentField } from 'tanam-models';
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { SiteService } from '../../../services/site.service';
 import { documentTypeMaterialIcons } from './document-type-form.icons';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { DialogService } from '../../../services/dialog.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { AngularTanamDocumentType } from '../../../app.models';
 
 interface FieldType {
   type: DocumentFieldFormElement;
@@ -21,7 +22,7 @@ interface FieldType {
   styleUrls: ['./document-type-form.component.scss']
 })
 export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() documentType: DocumentType;
+  @Input() documentType: AngularTanamDocumentType;
   @Input() onCancelRoute: string;
 
   themeId: string;
@@ -40,15 +41,15 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     indexTitle: [0]
   });
   readonly fieldTypes: FieldType[] = [
-    { type: 'input-text', title: 'Single line of text' },
-    { type: 'input-number', title: 'Input number on a line' },
-    { type: 'textbox-plain', title: 'Box of plain text' },
-    { type: 'textbox-rich', title: 'Rich text editor' },
-    { type: 'date', title: 'Date picker' },
-    { type: 'date-time', title: 'Date and time picker' },
-    { type: 'document-reference', title: 'Document reference' },
-    { type: 'image', title: 'Image' },
-    { type: 'slide-toggle', title: 'Slide toggle value for yes/no' },
+    {type: 'input-text', title: 'Single line of text'},
+    {type: 'input-number', title: 'Input number on a line'},
+    {type: 'textbox-plain', title: 'Box of plain text'},
+    {type: 'textbox-rich', title: 'Rich text editor'},
+    {type: 'date', title: 'Date picker'},
+    {type: 'date-time', title: 'Date and time picker'},
+    {type: 'document-reference', title: 'Document reference'},
+    {type: 'image', title: 'Image'},
+    {type: 'slide-toggle', title: 'Slide toggle value for yes/no'},
   ];
   readonly validators: DocumentFieldValidator[] = ['required'];
 
@@ -61,11 +62,12 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     private readonly siteSettingsService: SiteService,
     private snackBar: MatSnackBar,
     private dialogService: DialogService
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     console.log(`[ngOnInit] documentTypeId: ${JSON.stringify(this.documentType.id)}`);
-    this._subscriptions.push(this.siteSettingsService.getSiteInfo().subscribe(settings => {
+    this._subscriptions.push(this.siteSettingsService.getCurrentSite().subscribe(settings => {
       this.themeId = settings.theme;
     }));
   }
@@ -111,8 +113,8 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     this.router.navigateByUrl(`/_/admin/theme/${this.themeId}/templates/${this.documentTypeForm.controls['slug'].value}`);
   }
 
-  addField(field?: DocumentField, index?: number, scroll?: boolean) {
-    const val = field ? field : { type: 'input-text' } as DocumentField;
+  addField(field?: ITanamDocumentField, index?: number, scroll?: boolean) {
+    const val = field ? field : {type: 'input-text'} as ITanamDocumentField;
     console.log(val);
     const fields: any = {
       type: [val.type, Validators.required],
@@ -162,9 +164,9 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
       icon: 'warning'
     }).afterClosed().subscribe(async res => {
       if (res === 'yes') {
-        this.snackBar.open('Deleting..', 'Dismiss', { duration: 2000 });
+        this.snackBar.open('Deleting..', 'Dismiss', {duration: 2000});
         await this.documentTypeService.delete(this.documentType.id);
-        this.snackBar.open('Deleted', 'Dismiss', { duration: 2000 });
+        this.snackBar.open('Deleted', 'Dismiss', {duration: 2000});
         this.cancelEditing();
       }
     });
@@ -181,7 +183,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async save() {
-    this.snackBar.open('Saving..', 'Dismiss', { duration: 2000 });
+    this.snackBar.open('Saving..', 'Dismiss', {duration: 2000});
     const formData = this.documentTypeForm.value;
 
     // ===== Deprecated, no longer need use this loop
@@ -194,26 +196,24 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
     // =====
 
     if (this.fieldForms.length === 0) {
-      this.snackBar.open('You must declare at least 1 field', 'Dismiss', { duration: 2000 });
+      this.snackBar.open('You must declare at least 1 field', 'Dismiss', {duration: 2000});
       return;
     }
 
     if (this.documentTypeForm.invalid) {
-      this.snackBar.open('Form has errors', 'Dismiss', { duration: 2000 });
+      this.snackBar.open('Form has errors', 'Dismiss', {duration: 2000});
       return;
     }
 
-    await this.documentTypeService.save({
-      id: this.documentType.id,
-      title: formData.title,
-      slug: formData.slug || '',
-      icon: formData.icon,
-      description: formData.description,
-      fields: this.fieldForms.value,
-      standalone: formData.standalone,
-      documentStatusDefault: formData.documentStatusDefault
-    } as DocumentType);
-    this.snackBar.open('Saved', 'Dismiss', { duration: 2000 });
+    this.documentType.title = formData.title;
+    this.documentType.slug = formData.slug;
+    this.documentType.icon = formData.icon;
+    this.documentType.description = formData.description;
+    this.documentType.fields = this.fieldForms.value;
+    this.documentType.standalone = formData.standalone;
+    this.documentType.documentStatusDefault = formData.documentStatusDefault;
+    await this.documentTypeService.save(this.documentType);
+    this.snackBar.open('Saved', 'Dismiss', {duration: 2000});
   }
 
   rearrangeField(event: CdkDragDrop<string[]>) {
@@ -225,7 +225,7 @@ export class DocumentTypeFormComponent implements OnInit, OnDestroy, OnChanges {
 
     // move selected title to top
     moveItemInArray(this.fieldForms.controls, i, 0);
-    this.snackBar.open('Title changed', 'Dismiss', { duration: 2000 });
+    this.snackBar.open('Title changed', 'Dismiss', {duration: 2000});
     console.log(this.documentTypeForm.controls['indexTitle']);
   }
 }

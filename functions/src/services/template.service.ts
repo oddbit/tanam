@@ -1,8 +1,8 @@
 import * as admin from 'firebase-admin';
-import { ISiteInformation, ThemeTemplate, SiteInformation } from '../models';
+import { ITanamSite, ThemeTemplate, TanamSite } from '../models';
 import { TanamHttpRequest } from '../models/http_request.model';
 
-export async function getTemplates(siteInfo: SiteInformation) {
+export async function getTemplates(siteInfo: TanamSite) {
   console.log(`[getTemplates] Finding templates for theme: ${siteInfo.theme}`);
   const templatesSnap = await admin.firestore()
     .collection('tanam').doc(siteInfo.id)
@@ -14,7 +14,7 @@ export async function getTemplates(siteInfo: SiteInformation) {
   return templatesSnap.docs.map(doc => doc.data() as ThemeTemplate);
 }
 
-export async function getErrorTemplate(siteInfo: SiteInformation, errorTemplate: 'http404' | 'http500' | 'error') {
+export async function getErrorTemplate(siteInfo: TanamSite, errorTemplate: 'http404' | 'http500' | 'error') {
   console.log(`[document.service.getErrorTemplate] ${JSON.stringify({ siteInfo, errorTemplate })}`);
   const doc = await admin.firestore()
     .collection('tanam').doc(siteInfo.id)

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IPageInfo } from 'ngx-virtual-scroller';
 import { UserService } from '../../../services/user.service';
 import { map, tap } from 'rxjs/operators';
-import { ITanamUser, TanamUserRoleType } from 'tanam-models/user.models';
+import { TanamUser, TanamUserRoleType } from 'tanam-models/user.models';
 
 interface TanamRoleOptions {
   value: TanamUserRoleType;
@@ -19,6 +19,7 @@ export class UserListComponent {
     private readonly userService: UserService,
   ) {
   }
+
   readonly roles: TanamRoleOptions[] = [
     {
       value: 'admin',
@@ -34,7 +35,7 @@ export class UserListComponent {
     }
   ];
 
-  items: ITanamUser[] = [];
+  items: TanamUser[] = [];
   limit = 20;
   isLoading: boolean;
   isLastItem: boolean;

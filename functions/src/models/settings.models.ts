@@ -1,5 +1,6 @@
-export interface ISiteInformation {
-  id: string;
+import { ITanamBase, TanamBase } from './base';
+
+export interface ITanamSite extends ITanamBase {
   title: string;
   theme: string;
   defaultLanguage: string;
@@ -10,8 +11,7 @@ export interface ISiteInformation {
   analytics: string;
 }
 
-export class SiteInformation implements ISiteInformation {
-  readonly id: string;
+export class TanamSite extends TanamBase implements ITanamSite {
   title: string;
   theme: string;
   defaultLanguage: string;
@@ -21,8 +21,8 @@ export class SiteInformation implements ISiteInformation {
   domains: string[];
   analytics: string;
 
-  constructor(json: ISiteInformation) {
-    this.id = json.id;
+  constructor(json: ITanamSite) {
+    super(json);
     this.title = json.title || json.id;
     this.theme = json.theme || 'default';
     this.defaultLanguage = json.defaultLanguage || 'en';
@@ -35,7 +35,7 @@ export class SiteInformation implements ISiteInformation {
 
   toJson() {
     return {
-      id: this.id,
+      ...super.toJson(),
       title: this.title || null,
       theme: this.theme,
       defaultLanguage: this.defaultLanguage,
@@ -43,10 +43,10 @@ export class SiteInformation implements ISiteInformation {
       primaryDomain: this.primaryDomain || null,
       domains: this.domains.slice().filter(x => !!x),
       analytics: this.analytics || null,
-    } as ISiteInformation;
+    } as ITanamSite;
   }
 
   toString() {
-    return `${SiteInformation.name}(${this.id})`;
+    return `${TanamSite.name}(${this.id})`;
   }
 }

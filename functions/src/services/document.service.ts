@@ -1,9 +1,9 @@
 import * as admin from 'firebase-admin';
-import { Document, SiteInformation } from '../models';
+import { ITanamDocument, TanamSite } from '../models';
 import * as siteInfoService from './site-info.service';
 import { TanamHttpRequest } from '../models/http_request.model';
 
-export async function getDocumentById(docId: string): Promise<Document> {
+export async function getDocumentById(docId: string): Promise<ITanamDocument> {
   console.log(`[document.service.getDocumentById] ID: ${docId}`);
 
   const querySnap = await admin.firestore()
@@ -14,10 +14,10 @@ export async function getDocumentById(docId: string): Promise<Document> {
     .get();
 
   console.log(`[document.service.getDocumentById] Number of query results: ${querySnap.docs.length}`);
-  return querySnap.empty ? null : querySnap.docs[0].data() as Document;
+  return querySnap.empty ? null : querySnap.docs[0].data() as ITanamDocument;
 }
 
-export async function getDocumentForRequest(request: TanamHttpRequest): Promise<Document> {
+export async function getDocumentForRequest(request: TanamHttpRequest): Promise<ITanamDocument> {
   console.log(`[document.service.getDocumentByUrl] ${request.toString()}`);
   const siteInfo = await siteInfoService.getSiteInfoFromDomain(request.hostname);
   if (!siteInfo) {
@@ -37,7 +37,7 @@ export async function getDocumentForRequest(request: TanamHttpRequest): Promise<
     return null;
   }
 
-  return querySnap.docs[0].data() as Document;
+  return querySnap.docs[0].data() as ITanamDocument;
 }
 
 
@@ -55,10 +55,10 @@ export async function getDocumentForRequest(request: TanamHttpRequest): Promise<
  * @param docId The ID of the document that is referring to other documents
  * @param references One or more document IDs that are being referred to in a document
  */
-export async function addDependency(siteInfo: SiteInformation, docId: string, references: string | string[]) {
+export async function addDependency(siteInfo: TanamSite, docId: string, references: string | string[]) {
   console.log(`[addDependency] ${JSON.stringify({ docId, references })}`);
   return admin.firestore()
     .collection('tanam').doc(siteInfo.id)
     .collection('documents').doc(docId)
-    .update({ dependencies: admin.firestore.FieldValue.arrayUnion(...references), } as Document);
+    .update({ dependencies: admin.firestore.FieldValue.arrayUnion(...references), } as ITanamDocument);
 }

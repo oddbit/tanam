@@ -28,10 +28,6 @@ export class AppConfigService {
     return this._firebaseConfig;
   }
 
-  get siteId() {
-    return this._firebaseConfig.projectId;
-  }
-
   async loadConfig() {
     console.log('Requesting app config async from assets.');
     const config = await this.http.get(AppConfigService.CONFIG_FILE).toPromise();

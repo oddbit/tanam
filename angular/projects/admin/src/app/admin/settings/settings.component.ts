@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
-import { SiteInformation, Theme } from 'tanam-models';
+import { TanamSite, Theme } from 'tanam-models';
 import { SiteService } from '../../services/site.service';
 import { ThemeService } from '../../services/theme.service';
 import { MatDialog, MatSnackBar } from '@angular/material';
@@ -48,7 +48,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.settingsSubscription = this.siteSettingsService.getSiteInfo().subscribe(settings => {
+    this.settingsSubscription = this.siteSettingsService.getCurrentSite().subscribe(settings => {
       console.log(`[SettingsSiteComponent] site settings: ${JSON.stringify(settings)}`);
       while (this.domainsFormArray.length > 0) {
         this.domainsFormArray.removeAt(0);
@@ -159,7 +159,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       primaryDomain: formData.primaryDomain,
       analytics: formData.analytics.trim().toUpperCase(),
       domains: formData.domains.map((domain: any) => domain['name']),
-    } as SiteInformation);
+    } as TanamSite);
     this.snackBar.open('Settings saved', 'Dismiss', {
       duration: 2000,
     });

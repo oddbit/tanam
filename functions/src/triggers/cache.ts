@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import * as https from 'https';
-import { ISiteInformation, SiteInformation } from '../models';
+import { ITanamSite, TanamSite } from '../models';
 
 /**
  * Send a request to either purge or heat the CDN
@@ -47,7 +47,7 @@ export const onCacheTaskCreated = functions.database.ref('tanam/{siteId}/tasks/c
     const promises: Promise<any>[] = [snap.ref.remove()];
 
     const doc = await admin.firestore().collection('tanam').doc(siteId).get();
-    const siteInfo = new SiteInformation(doc.data() as ISiteInformation);
+    const siteInfo = new TanamSite(doc.data() as ITanamSite);
 
     if (action === 'update') {
         console.log(`Purge cache and wait for all to finish: ${JSON.stringify(siteInfo.domains)}`);

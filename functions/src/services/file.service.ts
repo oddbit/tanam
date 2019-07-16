@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import { Document, TanamFile } from '../models';
+import { ITanamDocument, TanamFile } from '../models';
 import { TanamHttpRequest } from '../models/http_request.model';
 import * as siteInfoService from '../services/site-info.service';
 
@@ -68,7 +68,7 @@ export async function getSitemap(request: TanamHttpRequest) {
 
     const entries = [];
     documentsQuery.forEach(doc => {
-        const document = doc.data() as Document;
+        const document = doc.data() as ITanamDocument;
         const url = document.url;
         const updated = document.updated.toDate();
         const created = document.created.toDate();

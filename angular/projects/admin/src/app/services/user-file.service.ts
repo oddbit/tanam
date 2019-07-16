@@ -2,26 +2,30 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
-import { FileType, TanamFile, MediaFilesQueryOptions } from 'tanam-models';
-import { AppConfigService } from './app-config.service';
+import { FileType, MediaFilesQueryOptions, TanamFile, TanamSite } from 'tanam-models';
+import { SiteService } from './site.service';
+import { switchMap, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserFileService {
-  readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
-  readonly siteStorage = this.fireStorage.ref(`/tanam/${this.appConfig.siteId}`);
-
   constructor(
     private readonly firestore: AngularFirestore,
     private readonly fireStorage: AngularFireStorage,
-    private readonly appConfig: AppConfigService,
-  ) { }
+    private readonly siteService: SiteService,
+  ) {
+  }
 
   getFile(id: string): Observable<TanamFile> {
-    return this.siteCollection
-      .collection('files').doc<TanamFile>(id)
-      .valueChanges();
+    return this.siteService.getCurrentSite().pipe(
+      switchMap((site) =>
+        this.firestore
+          .collection('tanam').doc(site.id)
+          .collection('files').doc<TanamFile>(id)
+          .valueChanges()
+      ),
+    );
   }
 
   getFiles(fileType: FileType, queryOpts?: MediaFilesQueryOptions): Observable<TanamFile[]> {
@@ -41,7 +45,15 @@ export class UserFileService {
       }
       return ref;
     };
-    return this.siteCollection.collection<TanamFile>('files', queryFn).valueChanges();
+
+    return this.siteService.getCurrentSite().pipe(
+      switchMap((site) =>
+        this.firestore
+          .collection('tanam').doc(site.id)
+          .collection<TanamFile>('files', queryFn)
+          .valueChanges()
+      ),
+    );
   }
 
   getDownloadUrl(file: TanamFile, variant?: 'large' | 'medium' | 'small'): Observable<string> {
@@ -50,18 +62,32 @@ export class UserFileService {
   }
 
   upload(file: File): Observable<number> {
-    const storageRef = this.siteStorage.child(`upload/${file.name}`);
-    return storageRef.put(file).percentageChanges();
+    return this.siteService.getCurrentSite().pipe(
+      switchMap((site) =>
+        this.fireStorage
+          .ref(`/tanam/${site.id}`)
+          .child(`upload/${file.name}`)
+          .put(file).percentageChanges()
+      ),
+    );
   }
 
-  remove(file: TanamFile) {
-    return this.siteCollection.collection('files').doc(file.id).delete().then(res => {
-      console.log('File deleted');
-    });
+  async remove(file: TanamFile) {
+    const tanamSite = await this._currentSite;
+    return this.firestore
+      .collection('tanam').doc(tanamSite.id)
+      .collection('files').doc(file.id)
+      .delete();
   }
 
-  getReference(id: string) {
-    return this.siteCollection
+  async getReference(id: string) {
+    const tanamSite = await this._currentSite;
+    return this.firestore
+      .collection('tanam').doc(tanamSite.id)
       .collection('files').doc<TanamFile>(id).ref.get();
+  }
+
+  get _currentSite(): Promise<TanamSite> {
+    return this.siteService.getCurrentSite().pipe(take(1)).toPromise();
   }
 }

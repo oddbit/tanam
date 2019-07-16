@@ -1,6 +1,6 @@
 import { QuerySnapshot } from '@google-cloud/firestore';
 import * as admin from 'firebase-admin';
-import { Document, DocumentContext, PageContext, SiteContext, SiteInformation } from '../models';
+import { ITanamDocument, DocumentContext, PageContext, SiteContext, TanamSite } from '../models';
 import { TanamHttpRequest } from '../models/http_request.model';
 import * as documentService from './document.service';
 import * as siteInfoService from './site-info.service';
@@ -64,7 +64,7 @@ export async function queryPageContext(domain: string, documentType: string, que
   const result = [];
   for (const doc of querySnap.docs) {
     console.log(`[queryPageContext] ${JSON.stringify(doc.data())}`);
-    result.push(await _toContext(siteInfo, doc.data() as Document));
+    result.push(await _toContext(siteInfo, doc.data() as ITanamDocument));
   }
   console.log(`[queryPageContextResult] ${JSON.stringify(result)}`)
 
@@ -89,7 +89,7 @@ export async function getPageContextForRequest(request: TanamHttpRequest): Promi
   return _toContext(siteInfo, document[0]);
 }
 
-async function _toContext(siteInfo: SiteInformation, document: Document) {
+async function _toContext(siteInfo: TanamSite, document: ITanamDocument) {
   if (!document) {
     return null;
   }
@@ -101,7 +101,7 @@ async function _toContext(siteInfo: SiteInformation, document: Document) {
     .update({
       dependencies: [],
       rendered: admin.firestore.FieldValue.serverTimestamp(),
-    } as Document);
+    } as ITanamDocument);
 
   const siteContext: SiteContext = {
     domain: siteInfo.primaryDomain,

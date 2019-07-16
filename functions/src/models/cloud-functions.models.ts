@@ -1,4 +1,4 @@
-import { DocumentType, TanamDocumentType } from './document-type.models';
+import { ITanamDocumentType, TanamDocumentType } from './document-type.models';
 import * as admin from 'firebase-admin';
 import { ITanamUser, ITanamUserRole, TanamUser, TanamUserRole } from './user.models';
 
@@ -14,7 +14,7 @@ export class AdminTanamUser extends TanamUser {
 }
 
 export class AdminTanamDocumentType extends TanamDocumentType {
-  toJson(): DocumentType {
+  toJson(): ITanamDocumentType {
     const json = super.toJson();
     json.updated = admin.firestore.FieldValue.serverTimestamp();
     json.created = !!json.created

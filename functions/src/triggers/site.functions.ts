@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { DocumentType, ISiteInformation, ITanamUserRole, SiteInformation } from '../models';
+import { ITanamDocumentType, ITanamSite, ITanamUserRole, TanamSite } from '../models';
 import * as models from '../models/cloud-functions.models';
 import * as taskService from '../services/task.service'
 
@@ -14,7 +14,7 @@ export const registerHost = functions.database.ref('tanam/{siteId}/domains/{hash
   const siteInfoDoc = admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
   promises.push(admin.firestore().runTransaction(async (trx) => {
     const trxDoc = await trx.get(siteInfoDoc);
-    const trxSettings = trxDoc.data() as ISiteInformation;
+    const trxSettings = trxDoc.data() as ITanamSite;
     trxSettings.domains = trxSettings.domains || [];
     if (trxSettings.domains.indexOf(host) === -1) {
       console.log(`Discovered adding '${host}' to domain configuration`);
@@ -44,12 +44,12 @@ export const onNewTanamSite = functions.database.ref('tanam/_/new/{id}').onCreat
   // Create the site
   //
 
-  const tanamSite = new SiteInformation({
+  const tanamSite = new TanamSite({
     id: newSiteData.id,
     primaryDomain: newSiteData.domain,
     defaultLanguage: newSiteData.language,
     title: newSiteData.name,
-  } as ISiteInformation);
+  } as ITanamSite);
   batchWrite.set(newSiteBaseRef, tanamSite.toJson());
 
   // --------------------------------------------------------------------------
@@ -83,7 +83,7 @@ export const onNewTanamSite = functions.database.ref('tanam/_/new/{id}').onCreat
           validators: ['required'],
         },
       ],
-    } as DocumentType),
+    } as ITanamDocumentType),
 
     new models.AdminTanamDocumentType({
       id: 'blog',
@@ -121,7 +121,7 @@ export const onNewTanamSite = functions.database.ref('tanam/_/new/{id}').onCreat
           validators: ['required'],
         },
       ],
-    } as DocumentType),
+    } as ITanamDocumentType),
 
 
     new models.AdminTanamDocumentType({
@@ -172,7 +172,7 @@ export const onNewTanamSite = functions.database.ref('tanam/_/new/{id}').onCreat
           validators: ['required'],
         },
       ],
-    } as DocumentType),
+    } as ITanamDocumentType),
 
 
     new models.AdminTanamDocumentType({
@@ -234,7 +234,7 @@ export const onNewTanamSite = functions.database.ref('tanam/_/new/{id}').onCreat
           validators: ['url'],
         },
       ],
-    } as DocumentType),
+    } as ITanamDocumentType),
 
     new models.AdminTanamDocumentType({
       id: 'author',
@@ -283,7 +283,7 @@ export const onNewTanamSite = functions.database.ref('tanam/_/new/{id}').onCreat
           validators: [],
         },
       ],
-    } as DocumentType),
+    } as ITanamDocumentType),
   ];
 
   documentTypes.forEach((documentType) => {

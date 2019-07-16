@@ -1,4 +1,4 @@
-import { DocumentType } from "../models";
+import { ITanamDocumentType } from "../models";
 import { AdminTanamDocumentType } from "../models/cloud-functions.models";
 import * as admin from "firebase-admin";
 
@@ -8,5 +8,5 @@ export async function getDocumentTypes(tanamSiteId: string): Promise<AdminTanamD
     .collection('document-types')
     .get();
 
-  return result.docs.map(doc => new AdminTanamDocumentType(doc.data() as DocumentType));
+  return result.docs.map(doc => new AdminTanamDocumentType(doc.data() as ITanamDocumentType));
 }

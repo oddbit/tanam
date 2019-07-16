@@ -1,13 +1,13 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { Document, ISiteInformation, TanamFile } from '../models';
+import { ITanamDocument, ITanamSite, TanamFile } from '../models';
 import * as taskService from '../services/task.service';
 
 // noinspection JSUnusedGlobalSymbols
 export const onUpdateActiveTheme = functions.firestore.document('tanam/{siteId}').onUpdate(async (change, context) => {
   const siteId = context.params.siteId;
-  const siteInfoBefore = change.before.data() as ISiteInformation;
-  const siteInfoAfter = change.after.data() as ISiteInformation;
+  const siteInfoBefore = change.before.data() as ITanamSite;
+  const siteInfoAfter = change.after.data() as ITanamSite;
   if (siteInfoBefore.theme === siteInfoAfter.theme) {
     console.log(`Active theme is unchanged. Nothing to do.`);
     return null;
@@ -47,7 +47,7 @@ export const onUpdateActiveTheme = functions.firestore.document('tanam/{siteId}'
 
   console.log(`Updating cache for ${publishedDocs.docs.length} published documents.`);
   for (const doc of publishedDocs.docs) {
-    const document = doc.data() as Document;
+    const document = doc.data() as ITanamDocument;
     promises.push(taskService.cacheTask('update', siteId, document.url));
   }
 
@@ -113,7 +113,7 @@ export const onWriteTemplateUpdateCache = functions.firestore.document('tanam/{s
   const templateId = context.params.themeId;
   console.log(`Writing to template ${JSON.stringify({ siteId, themeId, templateId })}`);
 
-  const siteInfo = (await admin.firestore().collection('tanam').doc(siteId).get()).data() as ISiteInformation;
+  const siteInfo = (await admin.firestore().collection('tanam').doc(siteId).get()).data() as ITanamSite;
   console.log(`Active theme: ${siteInfo.theme}`);
 
   if (siteInfo.theme !== themeId) {
@@ -130,7 +130,7 @@ export const onWriteTemplateUpdateCache = functions.firestore.document('tanam/{s
   console.log(`Updating cache for ${publishedDocs.docs.length} published documents.`);
   const promises = [];
   for (const doc of publishedDocs.docs) {
-    const document = doc.data() as Document;
+    const document = doc.data() as ITanamDocument;
     promises.push(taskService.cacheTask('update', siteId, document.url));
   }
 

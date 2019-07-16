@@ -1,27 +1,31 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference, Query } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { TanamFile, ThemeAssetQueryOptions } from '../../../../../../functions/src/models';
+import { TanamFile, TanamSite, ThemeAssetQueryOptions } from '../../../../../../functions/src/models';
 import { Observable } from 'rxjs';
-import { AppConfigService } from './app-config.service';
+import { SiteService } from './site.service';
+import { switchMap, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserThemeAssetService {
-  readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
-  readonly siteStorage = this.fireStorage.ref(`/tanam/${this.appConfig.siteId}`);
-
   constructor(
     private readonly firestore: AngularFirestore,
-    private readonly appConfig: AppConfigService,
     private readonly fireStorage: AngularFireStorage,
-  ) { }
+    private readonly siteService: SiteService,
+  ) {
+  }
 
   uploadThemeAsset(file: File, themeId: string): Observable<number> {
-    console.log(file);
-    const storageRef = this.siteStorage.child(`themes/${themeId}/${file.name}`);
-    return storageRef.put(file).percentageChanges();
+    return this.siteService.getCurrentSite().pipe(
+      switchMap((site) =>
+        this.fireStorage
+          .ref(`/tanam/${site.id}`)
+          .child(`themes/${themeId}/${file.name}`)
+          .put(file).percentageChanges()
+      ),
+    );
   }
 
   getThemeAssets(themeId: string, queryOpts?: ThemeAssetQueryOptions): Observable<TanamFile[]> {
@@ -42,26 +46,37 @@ export class UserThemeAssetService {
       return ref;
     };
 
-    return this.siteCollection
-      .collection('themes').doc(themeId)
-      .collection<TanamFile>('assets', queryFn)
-      .valueChanges();
+    return this.siteService.getCurrentSite().pipe(
+      switchMap((site) =>
+        this.firestore
+          .collection('tanam').doc(site.id)
+          .collection('themes').doc(themeId)
+          .collection<TanamFile>('assets', queryFn)
+          .valueChanges()
+      ),
+    );
   }
 
-  getReference(themeId: string, assetId: string) {
-    return this.siteCollection
+  async getReference(themeId: string, assetId: string) {
+    const tanamSite = await this._currentSite;
+    return this.firestore
+      .collection('tanam').doc(tanamSite.id)
       .collection('themes').doc(themeId)
       .collection<TanamFile>('assets').doc(assetId)
       .ref.get();
   }
 
-  deleteThemeAsset(file: TanamFile, themeId: string) {
-    console.log(file.id);
-    console.log(themeId);
-    return this.siteCollection
+  async deleteThemeAsset(file: TanamFile, themeId: string) {
+    const tanamSite = await this._currentSite;
+    return this.firestore
+      .collection('tanam').doc(tanamSite.id)
       .collection('themes').doc(themeId)
       .collection<TanamFile>('assets')
       .doc(file.id)
       .delete();
+  }
+
+  get _currentSite(): Promise<TanamSite> {
+    return this.siteService.getCurrentSite().pipe(take(1)).toPromise();
   }
 }

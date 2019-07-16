@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { Document, DocumentStatus, DocumentType } from 'tanam-models';
-import { AppConfigService } from './app-config.service';
+import { DocumentStatus, ITanamDocument, TanamSite } from 'tanam-models';
+import { SiteService } from './site.service';
+import { map, switchMap, take } from 'rxjs/operators';
+import { AngularTanamDocument } from '../app.models';
 
 export interface DocumentTypeQueryOptions {
   limit?: number;
@@ -19,89 +21,55 @@ export interface DocumentTypeQueryOptions {
   providedIn: 'root'
 })
 export class DocumentService {
-  readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
 
   constructor(
     private readonly firestore: AngularFirestore,
-    private readonly appConfig: AppConfigService,
-  ) { }
-
-  private static _normalizeUrl(url: string): string {
-    return `/${url}`.replace(/\/+/g, '/');
+    private readonly siteService: SiteService,
+  ) {
   }
 
-  getNewId() {
-    return this.firestore.createId();
+  async save(document: AngularTanamDocument) {
+    const tanamSite = await this._currentSite;
+    return this.firestore
+      .collection('tanam').doc(tanamSite.id)
+      .collection('documents').doc(document.id)
+      .set(document);
   }
 
-  async create(documentType: DocumentType, id: string = this.firestore.createId()) {
-    return this.siteCollection
-      .collection('documents').doc<Document>(id)
-      .set({
-        id: id,
-        documentType: documentType.id,
-        title: '',
-        url: DocumentService._normalizeUrl(`/${documentType.slug}/${id}`),
-        revision: 0,
-        standalone: documentType.standalone,
-        status: documentType.documentStatusDefault,
-        data: {},
-        tags: [],
-        updated: firebase.firestore.FieldValue.serverTimestamp(),
-        created: firebase.firestore.FieldValue.serverTimestamp(),
-      } as Document);
-  }
-
-  update(document: Document) {
-    if (!document.id) {
-      throw new Error('Document ID must be provided as an attribute when updating an document.');
-    }
-
-    if (!document.published) {
-      document.status = 'unpublished';
-    } else if (document.published.toMillis() > Date.now()) {
-      document.status = 'scheduled';
-    } else {
-      document.status = 'published';
-    }
-
-    document.url = DocumentService._normalizeUrl(document.url || '/');
-    document.published = document.published || null;
-    document.updated = firebase.firestore.FieldValue.serverTimestamp();
-    document.revision = firebase.firestore.FieldValue.increment(1);
-
-    if (document.data) {
-      for (const key in document.data) {
-        if (document.data[key] === undefined) {
-          // Make sure that values are not accidentally of type undefined if not provided
-          document.data[key] = null;
-        }
-      }
-    }
-
-    this.siteCollection.collection<Document>('documents').doc(document.id).update(document);
-  }
-
-  delete(documentId: string) {
+  async delete(documentId: string) {
     if (!documentId) {
       throw new Error('Document ID must be provided as an attribute when deleting an document.');
     }
-    console.log(documentId);
-    return this.siteCollection
-      .collection<Document>('documents').doc(documentId)
-      .delete();
+    const doc = await this.firestore
+      .collectionGroup<ITanamDocument>('documents', (ref) =>
+        ref.where('id', '==', documentId).limit(1)
+      )
+      .snapshotChanges()
+      .pipe(
+        take(1),
+        map((docs) => !!docs[0] ? docs[0].payload.doc : null),
+      )
+      .toPromise();
+
+
+    return !!doc ? doc.ref.delete() : null;
   }
 
-  get(documentId: string): Observable<Document> {
-    return this.siteCollection
-      .collection('documents').doc<Document>(documentId)
-      .valueChanges();
+  get(documentId: string): Observable<AngularTanamDocument> {
+    return this.firestore
+      .collectionGroup<ITanamDocument>('documents', (ref) =>
+        ref.where('id', '==', documentId).limit(1)
+      )
+      .valueChanges()
+      .pipe(
+        map(docs => !!docs[0] ? new AngularTanamDocument(docs[0]) : null),
+      );
   }
 
   query(
     documentTypeId: string,
     queryOpts: DocumentTypeQueryOptions = {}
-  ): Observable<Document[]> {
+  ): Observable<ITanamDocument[]> {
     const queryFn = (ref: CollectionReference) => {
       let query = ref.where('documentType', '==', documentTypeId);
       if (queryOpts.status) {
@@ -118,16 +86,31 @@ export class DocumentService {
       }
       return query;
     };
-    return this.siteCollection
-      .collection<Document>('documents', queryFn).valueChanges();
+
+
+    return this.siteService.getCurrentSite().pipe(
+      switchMap((site) =>
+        this.firestore
+          .collection('tanam').doc(site.id)
+          .collection<AngularTanamDocument>('documents', queryFn)
+          .valueChanges()
+          .pipe(map((docs) =>
+            docs.map((doc) => new AngularTanamDocument(doc)))
+          ),
+      )
+    );
   }
 
-  getReference(id: string) {
-    if (!id) {
-      return;
-    }
-    return this.siteCollection
-      .collection<Document>('documents').doc(id)
+  async getReference(id: string) {
+    const currentSite = await this._currentSite;
+    return this.firestore
+      .collection('tanam').doc(currentSite.id)
+      .collection<ITanamDocument>('documents').doc(id)
       .ref.get();
+  }
+
+
+  get _currentSite(): Promise<TanamSite> {
+    return this.siteService.getCurrentSite().pipe(take(1)).toPromise();
   }
 }

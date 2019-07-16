@@ -1,13 +1,13 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { Document, DocumentField, DocumentStatus } from '../models';
+import { ITanamDocument, ITanamDocumentField, DocumentStatus } from '../models';
 import * as taskService from '../services/task.service';
 import * as documentTypeService from '../services/document-type.service';
 
 // noinspection JSUnusedGlobalSymbols
 export const onCreateDocumentRequestRendering = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onCreate(async (snap, context) => {
   const siteId = context.params.siteId;
-  const document = snap.data() as Document;
+  const document = snap.data() as ITanamDocument;
 
   if (!document.standalone || document.status !== 'published') {
     console.log(`The document is not published and standalone and is not managed by cache. Do nothing.`);
@@ -21,7 +21,7 @@ export const onCreateDocumentRequestRendering = functions.firestore.document('ta
 export const onDeleteDocumentCleanUp = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onDelete(async (snap, context) => {
   const siteId = context.params.siteId;
   const documentId = context.params.documentId;
-  const document = snap.data() as Document;
+  const document = snap.data() as ITanamDocument;
 
   const referencingDocs = await admin.firestore()
     .collection('tanam').doc(siteId)
@@ -41,8 +41,8 @@ export const onDeleteDocumentCleanUp = functions.firestore.document('tanam/{site
 export const onUpdateDocumentRequestRendering = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onUpdate(async (change, context) => {
   const siteId = context.params.siteId;
   const documentId = context.params.documentId;
-  const entryBefore = change.before.data() as Document;
-  const entryAfter = change.after.data() as Document;
+  const entryBefore = change.before.data() as ITanamDocument;
+  const entryAfter = change.after.data() as ITanamDocument;
 
   if (['data', 'title', 'url', 'tags', 'standalone', 'status', 'published'].every(key =>
     JSON.stringify(entryBefore[key]) === JSON.stringify(entryAfter[key])
@@ -64,7 +64,7 @@ export const onUpdateDocumentRequestRendering = functions.firestore.document('ta
   promises.push(taskService.cacheTask('update', siteId, entryAfter.url));
 
   for (const doc of referencingDocs.docs) {
-    const referringDocument = doc.data() as Document;
+    const referringDocument = doc.data() as ITanamDocument;
     console.log(`Referenced by document id=${referringDocument.id}, url=${referringDocument.url}`);
     promises.push(taskService.cacheTask('update', siteId, referringDocument.url));
   }
@@ -75,8 +75,8 @@ export const onUpdateDocumentRequestRendering = functions.firestore.document('ta
 // noinspection JSUnusedGlobalSymbols
 export const updateDocumentStatusCounter = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onWrite((change, context) => {
   const siteId = context.params.siteId;
-  const entryBefore = change.before.data() || {} as Document;
-  const entryAfter = change.after.data() || {} as Document;
+  const entryBefore = change.before.data() || {} as ITanamDocument;
+  const entryAfter = change.after.data() || {} as ITanamDocument;
 
   if (change.before.exists && change.after.exists && entryAfter.status === entryBefore.status) {
     console.log(`Document status unchanged. No counters updated.`);
@@ -102,7 +102,7 @@ export const updateDocumentStatusCounter = functions.firestore.document('tanam/{
 
 // noinspection JSUnusedGlobalSymbols
 export const saveRevision = functions.firestore.document('tanam/{siteId}/documents/{documentId}').onUpdate((change) => {
-  const entryBefore = change.before.data() as Document;
+  const entryBefore = change.before.data() as ITanamDocument;
   console.log(`Saving revision ${entryBefore.revision} of ${change.before.ref.path}`);
   return change.before.ref.collection('revisions').doc(`${entryBefore.id}+${entryBefore.revision}`).set(entryBefore);
 });
@@ -150,7 +150,7 @@ export const deleteFieldReferences = functions.firestore.document('tanam/{siteId
 
   for (const documentType of documentTypeDocs) {
     const fieldNames = documentType.fields
-      .filter((field: DocumentField) => field.type === 'image' || field.type === 'document-reference')
+      .filter((field: ITanamDocumentField) => field.type === 'image' || field.type === 'document-reference')
       .map(field => field.key);
 
     console.log(`Document type "${documentType.id}" has ${fieldNames.length} file references`);
@@ -194,7 +194,7 @@ export const publishScheduledDocuments = functions.pubsub.schedule('every 5 minu
 
   const promises = [];
   for (const doc of unpublishedDocuments.docs) {
-    promises.push(doc.ref.update({status: 'published' as DocumentStatus} as Document));
+    promises.push(doc.ref.update({status: 'published' as DocumentStatus} as ITanamDocument));
   }
 
   return Promise.all(promises);

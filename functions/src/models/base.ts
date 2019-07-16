@@ -9,7 +9,7 @@ export abstract class TanamBase implements ITanamBase {
   created: Date | any;
   updated: Date | any;
 
-  constructor(json: ITanamBase) {
+  protected constructor(json: ITanamBase) {
     this.id = json.id;
     this.created = !!json.created && !!json.created.toDate
       ? json.created.toDate()

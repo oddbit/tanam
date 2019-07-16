@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { DocumentType, Document, DocumentStatus } from 'tanam-models';
+import { ITanamDocumentType, ITanamDocument, DocumentStatus } from 'tanam-models';
 import { DocumentService } from '../../../services/document.service';
 import { TaskService } from '../../../services/task.service';
 import { map, tap } from 'rxjs/operators';
@@ -14,14 +14,14 @@ import { IPageInfo } from 'ngx-virtual-scroller';
   styleUrls: ['./document-list.component.scss']
 })
 export class DocumentListComponent implements OnInit, OnDestroy {
-  @Input() documentType$: Observable<DocumentType>;
+  @Input() documentType$: Observable<ITanamDocumentType>;
   @Input() status: DocumentStatus;
 
-  items: Document[] = [];
+  items: ITanamDocument[] = [];
   limit = 20;
   isLoading: boolean;
   isLastItem: boolean;
-  documentType: DocumentType;
+  documentType: ITanamDocumentType;
 
   private _subscriptions: Subscription[] = [];
 
@@ -52,7 +52,7 @@ export class DocumentListComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(url);
   }
 
-  async rebuildEntry(document: Document) {
+  async rebuildEntry(document: ITanamDocument) {
     this.snackBar.open('Rebuilding...', 'Dismiss', {
       duration: 5000
     });
@@ -95,13 +95,13 @@ export class DocumentListComponent implements OnInit, OnDestroy {
         return mergedItems.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
       }),
       map(v => Object.values(v).sort(this.sortEntry))
-    ).subscribe((items: Document[]) => {
+    ).subscribe((items: ITanamDocument[]) => {
       this.items = [...items];
       this.isLoading = false;
     });
   }
 
-  sortEntry(a: Document, b: Document) {
+  sortEntry(a: ITanamDocument, b: ITanamDocument) {
     const dateA = a.updated.toDate().getTime();
     const dateB = b.updated.toDate().getTime();
     // order by updated, sort by descending
