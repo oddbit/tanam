@@ -1,5 +1,3 @@
-import { ITanamUserRole } from "./user.models";
-
 export interface ITanamBase {
   id: string;
   created: Date | any;
@@ -11,7 +9,7 @@ export abstract class TanamBase implements ITanamBase {
   created: Date | any;
   updated: Date | any;
 
-  constructor(json : ITanamBase) {
+  constructor(json: ITanamBase) {
     this.id = json.id;
     this.created = !!json.created && !!json.created.toDate
       ? json.created.toDate()
@@ -26,7 +24,7 @@ export abstract class TanamBase implements ITanamBase {
       id: this.id,
       created: this.created || null,
       updated: this.updated || null,
-    } as ITanamUserRole;
+    } as ITanamBase;
   }
 
 }

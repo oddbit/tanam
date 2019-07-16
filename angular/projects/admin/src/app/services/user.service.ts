@@ -7,8 +7,9 @@ import { map, tap } from 'rxjs/operators';
 import {
   ADMIN_THEMES,
   AdminTheme,
-  ITanamUserRole,
   ITanamUser,
+  ITanamUserRole,
+  TanamUser,
   TanamUserRole,
   TanamUserRoleType,
   UserQueryOptions,
@@ -31,7 +32,7 @@ export class UserService {
   ) {
   }
 
-  getCurrentUser(): Observable<ITanamUser> {
+  getCurrentUser(): Observable<TanamUser> {
     const firebaseUser = this.fireAuth.auth.currentUser;
     return this.getUser(firebaseUser.uid)
       .pipe(map(user => {
@@ -40,10 +41,11 @@ export class UserService {
       }));
   }
 
-  getUser(uid: string): Observable<ITanamUser> {
+  getUser(uid: string): Observable<TanamUser> {
     return this.siteCollection
       .collection('users').doc<ITanamUser>(uid)
-      .valueChanges();
+      .valueChanges()
+      .pipe(map((user) => new TanamUser(user)));
   }
 
   hasRole(role: TanamUserRoleType): Observable<boolean> {
@@ -105,7 +107,11 @@ export class UserService {
       return ref;
     };
     return this.siteCollection
-      .collection<ITanamUser>('users', queryFn).valueChanges();
+      .collection<ITanamUser>('users', queryFn)
+      .valueChanges()
+      .pipe(
+        map((users) => users.map((user) => new TanamUser(user))),
+      );
   }
 
   getUserRoles(queryOpts: UserQueryOptions): Observable<TanamUserRole[]> {
@@ -134,7 +140,10 @@ export class UserService {
   }
 
   inviteUser(userRole: TanamUserRole) {
-    return this.siteCollection.collection('user-roles').doc(this.firestore.createId()).set(userRole.toJson());
+    userRole.id = userRole.id || this.firestore.createId();
+    return this.siteCollection
+      .collection('user-roles').doc(userRole.id)
+      .set(userRole.toJson());
   }
 
   deleteUserRole(userRole: ITanamUserRole) {
