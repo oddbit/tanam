@@ -42,14 +42,13 @@ export class AppConfigService {
     }
 
     const mandatoryFields = [
-      'projectId',
-      'appId',
-      'databaseURL',
-      'storageBucket',
-      'locationId',
       'apiKey',
       'authDomain',
+      'databaseURL',
+      'projectId',
+      'storageBucket',
       'messagingSenderId',
+      'appId',
     ];
     const missingFields = mandatoryFields
       .filter(prop => !this._firebaseConfig.hasOwnProperty(prop));
