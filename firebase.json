@@ -14,13 +14,17 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "public": "public",
+    "public": "angular/dist",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
     "rewrites": [
+      {
+        "source": "favicon.ico",
+        "function": "_/assets/favicon.ico"
+      },
       {
         "source": "**",
         "function": "tanam"
