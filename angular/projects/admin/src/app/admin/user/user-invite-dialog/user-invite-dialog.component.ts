@@ -1,8 +1,13 @@
-import { Component, Input, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
 import { UserService } from '../../../services/user.service';
-import { UserRole } from '../../../../../../../../functions/src/models';
+import { ITanamUserRole, TanamUserRole, TanamUserRoleType } from 'tanam-models/user.models';
+
+interface DialogRoleOption {
+  value: TanamUserRoleType;
+  text: string;
+}
 
 @Component({
   selector: 'tanam-user-invite-dialog',
@@ -10,8 +15,21 @@ import { UserRole } from '../../../../../../../../functions/src/models';
   styleUrls: ['./user-invite-dialog.component.scss']
 })
 export class UserInviteDialogComponent {
-  readonly defaultRole: UserRole = this.data.defaultRole;
-  readonly roles: [] = this.data.roles;
+  readonly defaultRole: TanamUserRoleType = 'admin';
+  readonly roles: DialogRoleOption[] = [
+    {
+      value: 'admin',
+      text: 'Admin'
+    },
+    {
+      value: 'superAdmin',
+      text: 'Super Admin',
+    },
+    {
+      value: 'publisher',
+      text: 'Publisher'
+    }
+  ];
 
   readonly addUserForm: FormGroup = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
@@ -24,14 +42,14 @@ export class UserInviteDialogComponent {
     private snackBar: MatSnackBar,
     private readonly userService: UserService,
     private dialogRef: MatDialogRef<UserInviteDialogComponent>,
-  ) { }
+  ) {
+  }
 
   async addUser() {
     this.snackBar.open('Sending Invitation', 'Dismiss', {
       duration: 2000,
     });
-    const formData = this.addUserForm.value;
-    await this.userService.inviteUser(formData);
+    await this.userService.inviteUser(new TanamUserRole(this.addUserForm.value as ITanamUserRole));
     this.dialogRef.close();
     this.snackBar.open('Sent', 'Dismiss', {
       duration: 2000,

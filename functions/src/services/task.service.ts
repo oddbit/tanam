@@ -1,17 +1,17 @@
-
 import * as admin from 'firebase-admin';
 
 const taskQueueRef = (siteId) => admin.database().ref('tanam').child(siteId).child('tasks');
-const cacheQueueRef = (siteId) => taskQueueRef(siteId);
 
-async function makeCacheTask(siteId: string, path: string, action: 'create' | 'update' | 'delete') {
-    if (!path) {
-        return null;
-    }
-    console.log(`[makeCacheTask] ${JSON.stringify({ siteId, path, action })}`);
-    return cacheQueueRef(siteId).child('cache').child(action).push(path);
+export type TanamTaskQueueAction = 'create' | 'update' | 'delete';
+
+export async function cacheTask(action: TanamTaskQueueAction, siteId: string, path: string): Promise<void> {
+  if (!path) {
+    return null;
+  }
+  console.log(`[makeCacheTask] ${JSON.stringify({siteId, path, action})}`);
+  return taskQueueRef(siteId).child('cache').child(action).push(path).then(() => null);
 }
 
-export const createCache = (siteId: string, path: string) => makeCacheTask(siteId, path, 'create');
-export const updateCache = (siteId: string, path: string) => makeCacheTask(siteId, path, 'update');
-export const deleteCache = (siteId: string, path: string) => makeCacheTask(siteId, path, 'delete');
+export function fetchThemeTask(siteId: string, url: string): Promise<void> {
+  return taskQueueRef(siteId).child('get-theme').push(url).then(() => null);
+}
