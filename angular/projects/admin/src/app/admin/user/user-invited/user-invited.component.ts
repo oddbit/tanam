@@ -63,18 +63,18 @@ export class UserInvitedComponent {
 
   deleteInvitedUser(user: TanamUserInvited) {
     this.dialogService.openDialogConfirm({
-      title: 'Delete File',
+      title: 'Delete User',
       message: `Are you sure to delete "${user.email}" ?`,
       buttons: ['cancel', 'yes'],
       icon: 'warning'
     }).afterClosed().subscribe(async res => {
       if (res === 'yes') {
-        this.snackBar.open('Deleting file...', 'Dismiss', {
+        this.snackBar.open('Deleting User...', 'Dismiss', {
           duration: 2000
         });
         await this.userService.removeInvitedUser(user);
         this.items = this.items.filter(item => item.email !== user.email);
-        this.snackBar.open('User role deleted', 'Dismiss', {
+        this.snackBar.open('User deleted', 'Dismiss', {
           duration: 2000
         });
       }
