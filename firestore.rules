@@ -11,7 +11,7 @@ service cloud.firestore {
 
       match /documents/{documentId} {
         allow read: if hasAnyRole();
-        allow write: if isAtLeastAdmin();
+        allow write: if isPublisher();
 
         match /revisions/{revisionId} {
           allow read: if hasAnyRole();
@@ -38,7 +38,7 @@ service cloud.firestore {
         allow read, write: if isAtLeastAdmin();
       }
 
-       match /user-roles/{document=**} {
+       match /user-roles/{roleId} {
         allow read, write: if isAtLeastAdmin();
       }
 
