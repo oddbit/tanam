@@ -1,8 +1,26 @@
 import { ITanamDocumentType, TanamDocumentType } from './document-type.models';
 import * as admin from 'firebase-admin';
 import { ITanamUser, ITanamUserRole, TanamUser, TanamUserRole } from './user.models';
+import { MD5 } from 'crypto-js';
 
 export class AdminTanamUser extends TanamUser {
+
+  static fromFirebaseUser(firebaseUser: admin.auth.UserRecord) {
+    // Use gravatar as default if photoUrl isn't specified in user data
+    // https://en.gravatar.com/site/implement/images/
+    const gravatarHash = MD5(firebaseUser.email || firebaseUser.uid)
+      .toString()
+      .toLowerCase();
+
+    const gravatar = `https://www.gravatar.com/avatar/${gravatarHash}.jpg?s=1024&d=identicon`;
+    return new AdminTanamUser({
+      id: firebaseUser.uid,
+      name: firebaseUser.displayName || firebaseUser.email,
+      email: firebaseUser.email,
+      photoUrl: firebaseUser.photoURL || gravatar,
+    } as ITanamUser);
+  }
+
   toJson(): ITanamUser {
     const json = super.toJson();
     json.updated = admin.firestore.FieldValue.serverTimestamp();
@@ -25,6 +43,14 @@ export class AdminTanamDocumentType extends TanamDocumentType {
 }
 
 export class AdminTanamUserRole extends TanamUserRole {
+
+
+  setFirebaseUser(firebaseUser: admin.auth.UserRecord) {
+    this.email = firebaseUser.email;
+    this.uid = firebaseUser.uid;
+    this.name = firebaseUser.displayName;
+  }
+
   toJson(): ITanamUserRole {
     const json = super.toJson();
     json.updated = admin.firestore.FieldValue.serverTimestamp();

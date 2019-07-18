@@ -6,10 +6,11 @@ import { SiteService } from '../../services/site.service';
 import { ThemeService } from '../../services/theme.service';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import {
-  SettingsDialogManageLanguagesComponent,
-  LanguageOptions
+  LanguageOptions,
+  SettingsDialogManageLanguagesComponent
 } from './settings-dialog-manage-languages/settings-dialog-manage-languages.component';
 import { languageOptions } from './settings.languages';
+import { AppAuthService } from '../../services/app-auth.service';
 
 // https://stackoverflow.com/a/26987741/7967164
 const REGEX_DOMAIN = '^(((?!-))(xn--|_{1,1})?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$';
@@ -24,7 +25,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   langOptions = languageOptions;
   analyticsName = '';
   readonly siteName$: Observable<string> = this.siteSettingsService.getSiteName();
-  readonly themes$: Observable<Theme[]> = this.themeService.getThemes({ orderBy: { field: 'updated', sortOrder: 'desc' } });
+  readonly themes$: Observable<Theme[]> = this.themeService.getThemes({orderBy: {field: 'updated', sortOrder: 'desc'}});
   readonly settingsForm: FormGroup = this.formBuilder.group({
     title: [null, [Validators.required]],
     theme: [null, [Validators.required]],
@@ -40,12 +41,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
   private settingsSubscription: Subscription;
 
   constructor(
+    private readonly authService: AppAuthService,
     private readonly siteSettingsService: SiteService,
     private readonly themeService: ThemeService,
     private readonly formBuilder: FormBuilder,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.settingsSubscription = this.siteSettingsService.getCurrentSite().subscribe(settings => {
@@ -130,7 +133,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         });
 
         if (!result.languages.includes(this.settingsForm.value.defaultLanguage)) {
-          this.settingsForm.patchValue({ defaultLanguage: result.languages[0] });
+          this.settingsForm.patchValue({defaultLanguage: result.languages[0]});
         }
       }
     });
@@ -144,6 +147,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
     if (this.settingsSubscription && !this.settingsSubscription.closed) {
       this.settingsSubscription.unsubscribe();
     }
+  }
+
+  logout() {
+    return this.authService.logOut();
   }
 
   async saveSettings() {

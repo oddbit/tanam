@@ -8,7 +8,7 @@
   "version": "0.0.1",
   "license": "Apache-2.0",
   "scripts": {
-    "start": "ng serve admin",
+    "start": "ng serve admin  --deployUrl=/_/",
     "build": "ng build admin --outputHashing=all --deployUrl=/_/",
     "build:prod": "ng build admin --prod=true --deployUrl=/_/",
     "test": "ng test admin",

@@ -6,4 +6,5 @@ export * from './site.functions';
 export * from './ssr.functions';
 export * from './storage';
 export * from './theme';
+export * from './user-roles.functions';
 export * from './users';

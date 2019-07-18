@@ -1,6 +1,5 @@
 import * as admin from 'firebase-admin';
-import { ITanamSite, ThemeTemplate, TanamSite } from '../models';
-import { TanamHttpRequest } from '../models/http_request.model';
+import { TanamSite, ThemeTemplate } from '../models';
 
 export async function getTemplates(siteInfo: TanamSite) {
   console.log(`[getTemplates] Finding templates for theme: ${siteInfo.theme}`);
@@ -15,7 +14,7 @@ export async function getTemplates(siteInfo: TanamSite) {
 }
 
 export async function getErrorTemplate(siteInfo: TanamSite, errorTemplate: 'http404' | 'http500' | 'error') {
-  console.log(`[document.service.getErrorTemplate] ${JSON.stringify({ siteInfo, errorTemplate })}`);
+  console.log(`[document.service.getErrorTemplate] ${JSON.stringify({siteInfo, errorTemplate})}`);
   const doc = await admin.firestore()
     .collection('tanam').doc(siteInfo.id)
     .collection('themes').doc(siteInfo.theme)
@@ -138,7 +137,7 @@ export async function createDefaultTemplates() {
         `,
   };
 
-  console.log(`[createDefaultTemplates] ${JSON.stringify({ blog, event, location, author, page }, null, 2)}`);
+  console.log(`[createDefaultTemplates] ${JSON.stringify({blog, event, location, author, page}, null, 2)}`);
 
   return Promise.all([
     templatesCollection.doc(blog.id).set(blog),
