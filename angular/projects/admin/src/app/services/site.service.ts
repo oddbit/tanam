@@ -1,10 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ITanamSite } from 'tanam-models';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
 import { AngularTanamSite } from '../app.models';
+import { AppAuthService } from './app-auth.service';
+import { fromPromise } from 'rxjs/internal-compatibility';
 
 @Injectable({
   providedIn: 'root'
@@ -13,19 +15,32 @@ export class SiteService {
   constructor(
     @Inject(DOCUMENT) private readonly document: Document,
     private readonly firestore: AngularFirestore,
+    private readonly authService: AppAuthService,
   ) {
+  }
+
+  private getAvailableSites(): Observable<AngularTanamSite[]> {
+    return fromPromise(this.authService.getCustomClaims())
+      .pipe(switchMap((customClaims) => {
+        const tanamSites = Object.keys(customClaims['tanam'] || {});
+        console.log(`[getAvailableSites] ${JSON.stringify({tanamSites})}`);
+        return combineLatest(tanamSites.map((siteId) =>
+          this.firestore.collection('tanam').doc<ITanamSite>(siteId)
+            .valueChanges()
+            .pipe(map((info) => new AngularTanamSite(info)))
+        ));
+      }));
   }
 
   getCurrentSite(): Observable<AngularTanamSite> {
     const domain = document.location.hostname;
-    console.log(`[getSiteInfo] ${domain}`);
-    return this.firestore
-      .collection<ITanamSite>('tanam', (ref) =>
-        ref.where('domains', 'array-contains', domain).limit(1),
-      )
-      .valueChanges()
+    console.log(`[getSiteInfo] ${JSON.stringify({domain})}`);
+    return this.getAvailableSites()
       .pipe(
-        map((info) => new AngularTanamSite(info[0])),
+        map(sites => sites.filter(site => site.domains.indexOf(domain) >= 0)),
+        map(sites => sites[0] || null),
+        filter(site => !!site),
+        tap(site => console.log(`[getCurrentSite] ${JSON.stringify({site})}`)),
       );
   }
 
