@@ -9,13 +9,10 @@
              src="{{item.photoUrl || 'assets/icons/tanam-icon.svg'}}">
         <h4 mat-line><b>{{item.name}}</b></h4>
         <p mat-line>{{item.email}}</p>
-        <mat-form-field>
-          <mat-label>Role</mat-label>
-          <mat-select value="admin">
-            <mat-option *ngFor="let role of roles"
-                        value="{{roles.value}}">{{role.text}}</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <tanam-user-role-selector
+                                  [id]="item.uid"
+                                  [role]="item.roles[0]">
+        </tanam-user-role-selector>
         <button mat-icon-button
                 color="warn"
                 class="btn-delete">
