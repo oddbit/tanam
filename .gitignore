@@ -8,3 +8,4 @@ dist/
 .firebaserc
 
 tanam.config.json
+firebase.web.json
