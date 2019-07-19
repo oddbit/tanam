@@ -42,7 +42,7 @@ export class UserRoleSelectorComponent {
   ) { }
 
   async onRoleChange(role: UserRole) {
-    this.snackBar.open('Updating role..', 'Dismiss', { duration: 2000 });
+    this.snackBar.open('Updating Role..', 'Dismiss', { duration: 2000 });
     await this.userService.updateUser(this.id, role);
     this.snackBar.open('Role Updated', 'Dismiss', { duration: 2000 });
   }

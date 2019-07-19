@@ -22,6 +22,7 @@ export interface TanamUserInvited {
   role: UserRole;
   updated: any;
   uid?: string;
+  id: string
 }
 
 export interface TanamUserInvitation {

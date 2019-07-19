@@ -8,6 +8,7 @@ import { AdminTheme, ADMIN_THEMES, TanamUser, UserRole, TanamUserInvited, UserQu
 import { AppConfigService } from './app-config.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import * as firebase from 'firebase/app';
+import { SiteService } from './site.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,8 @@ export class UserService {
     private readonly firestore: AngularFirestore,
     private readonly appConfig: AppConfigService,
     private readonly fbApp: FirebaseApp,
-    private overlayContainer: OverlayContainer
+    private overlayContainer: OverlayContainer,
+    private readonly siteSettingsService: SiteService,
   ) { }
 
   getCurrentUser(): Observable<TanamUser> {
@@ -129,6 +131,7 @@ export class UserService {
 
   inviteUser(user: TanamUserInvitation) {
     const id = this.firestore.createId();
+    this.sendUserInvitation(user.email);
     return this.siteCollection
       .collection('user-roles').doc(id).set({
         id: id,
@@ -147,7 +150,21 @@ export class UserService {
   }
 
   removeInvitedUser(user: TanamUserInvited) {
-    return this.siteCollection.collection('user-roles').doc(user.email).delete();
+    return this.siteCollection.collection('user-roles').doc(user.id).delete();
+  }
+
+  sendUserInvitation(email: string) {
+    this.siteSettingsService.getSiteInfo().subscribe(settings => {
+      console.log(settings.primaryDomain);
+      const actionCodeSettings = {
+        url: `https://${settings.primaryDomain}/_/login`,
+        handleCodeInApp: true,
+      };
+      firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
+      .catch(function(error) {
+        console.log(error);
+      });
+    });
   }
 
   getReference(id: string) {

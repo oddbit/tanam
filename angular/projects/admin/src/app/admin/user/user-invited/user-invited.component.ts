@@ -52,7 +52,7 @@ export class UserInvitedComponent {
         }),
         map(items => {
           const mergedItems = [...this.items, ...items];
-          return mergedItems.reduce((acc, cur) => ({ ...acc, [cur.email]: cur }), {});
+          return mergedItems.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
         }),
         map(v => Object.values(v))
       ).subscribe((items: any) => {
@@ -73,7 +73,7 @@ export class UserInvitedComponent {
           duration: 2000
         });
         await this.userService.removeInvitedUser(user);
-        this.items = this.items.filter(item => item.email !== user.email);
+        this.items = this.items.filter(item => item.id !== user.id);
         this.snackBar.open('User deleted', 'Dismiss', {
           duration: 2000
         });
