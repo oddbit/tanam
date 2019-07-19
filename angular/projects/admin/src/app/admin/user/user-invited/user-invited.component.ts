@@ -61,6 +61,16 @@ export class UserInvitedComponent {
       });
   }
 
+  async resendUserInvitation(user: TanamUserInvited) {
+    this.snackBar.open('Sending Invitation', 'Dismiss', {
+      duration: 2000,
+    });
+    await this.userService.sendUserInvitation(user.email);
+    this.snackBar.open('Sent', 'Dismiss', {
+      duration: 2000,
+    });
+  }
+
   deleteInvitedUser(user: TanamUserInvited) {
     this.dialogService.openDialogConfirm({
       title: 'Delete User',
