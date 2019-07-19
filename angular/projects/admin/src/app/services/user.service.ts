@@ -130,12 +130,19 @@ export class UserService {
   inviteUser(user: TanamUserInvitation) {
     const id = this.firestore.createId();
     return this.siteCollection
-      .collection('user-roles').add({
+      .collection('user-roles').doc(id).set({
         id: id,
         email: user.email,
         role: user.role,
         invited: firebase.firestore.FieldValue.serverTimestamp(),
         updated: firebase.firestore.FieldValue.serverTimestamp()
+      });
+  }
+
+  updateUser(id: string, role: UserRole) {
+    return this.siteCollection
+      .collection('user-roles').doc(id).update({
+        role: role
       });
   }
 
