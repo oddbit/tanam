@@ -19,7 +19,7 @@ export interface TanamUser {
 export interface TanamUserInvited {
   email: string;
   invited: firebase.firestore.Timestamp | Date;
-  role: UserRole;
+  roles: UserRole[];
   updated: any;
   uid?: string;
   id: string
@@ -27,7 +27,7 @@ export interface TanamUserInvited {
 
 export interface TanamUserInvitation {
   email: string;
-  role: UserRole;
+  roles: UserRole[];
 }
 
 export interface UserQueryOptions {

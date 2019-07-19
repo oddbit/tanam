@@ -8,8 +8,8 @@ import { UserService } from '../../services/user.service';
   template: `
   <mat-form-field>
     <mat-label>Role</mat-label>
-    <mat-select value="{{role}}" (selectionChange)="onRoleChange($event.value)">
-      <mat-option *ngFor="let role of roles"
+    <mat-select [value]="roles" (selectionChange)="onRoleChange($event.value)" multiple>
+      <mat-option *ngFor="let role of rolesOption"
                   value="{{role.value}}">{{role.text}}</mat-option>
     </mat-select>
   </mat-form-field>
@@ -18,10 +18,10 @@ import { UserService } from '../../services/user.service';
 })
 export class UserRoleSelectorComponent {
 
-  @Input() role: string;
+  @Input() roles: UserRole[];
   @Input() id: string;
 
-  readonly roles = [
+  readonly rolesOption = [
     {
       value: 'admin',
       text: 'Admin'
@@ -41,9 +41,9 @@ export class UserRoleSelectorComponent {
     private readonly userService: UserService
   ) { }
 
-  async onRoleChange(role: UserRole) {
+  async onRoleChange(roles: UserRole[]) {
     this.snackBar.open('Updating Role..', 'Dismiss', { duration: 2000 });
-    await this.userService.updateUser(this.id, role);
+    await this.userService.updateUser(this.id, roles);
     this.snackBar.open('Role Updated', 'Dismiss', { duration: 2000 });
   }
 

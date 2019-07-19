@@ -9,9 +9,8 @@
              src="{{item.photoUrl || 'assets/icons/tanam-icon.svg'}}">
         <h4 mat-line><b>{{item.name}}</b></h4>
         <p mat-line>{{item.email}}</p>
-        <tanam-user-role-selector
-                                  [id]="item.uid"
-                                  [role]="item.roles[0]">
+        <tanam-user-role-selector [id]="item.uid"
+                                  [roles]="item.roles">
         </tanam-user-role-selector>
         <button mat-icon-button
                 color="warn"

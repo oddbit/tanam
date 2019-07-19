@@ -136,16 +136,16 @@ export class UserService {
       .collection('user-roles').doc(id).set({
         id: id,
         email: user.email,
-        role: user.role,
+        roles: user.roles,
         invited: firebase.firestore.FieldValue.serverTimestamp(),
         updated: firebase.firestore.FieldValue.serverTimestamp()
       });
   }
 
-  updateUser(id: string, role: UserRole) {
+  updateUser(id: string, roles: UserRole[]) {
     return this.siteCollection
       .collection('user-roles').doc(id).update({
-        role: role
+        roles: roles
       });
   }
 
