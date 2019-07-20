@@ -157,13 +157,13 @@
             <mat-form-field class="full-width">
               <input matInput
                      placeholder="Created"
-                     value="{{ document.created?.toDate() | date:'yyyy-MM-dd HH:mm' }}"
+                     value="{{ document.created | date:'yyyy-MM-dd HH:mm' }}"
                      disabled>
             </mat-form-field>
             <mat-form-field class="full-width">
               <input matInput
                      placeholder="Updated"
-                     value="{{ document.updated?.toDate() | date:'yyyy-MM-dd HH:mm' }}"
+                     value="{{ document.updated | date:'yyyy-MM-dd HH:mm' }}"
                      disabled>
             </mat-form-field>
           </mat-card-content>

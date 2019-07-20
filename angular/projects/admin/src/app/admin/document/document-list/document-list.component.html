@@ -16,7 +16,7 @@
                (click)="editEntry(item.id)">
             <p class="mat-body-1 flex-2">{{item.title}}</p>
             <p class="mat-body-1 flex-1">{{item.url}}</p>
-            <p class="mat-body-1 flex-1">{{item.updated?.toDate() | date:'medium'}}</p>
+            <p class="mat-body-1 flex-1">{{item.updated | date:'medium'}}</p>
             <div class="actions flex-1">
               <button mat-icon-button
                       (click)="$event.stopPropagation()"

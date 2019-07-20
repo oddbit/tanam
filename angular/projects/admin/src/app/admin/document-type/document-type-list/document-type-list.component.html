@@ -16,7 +16,7 @@
                  (click)="editDocumentType(item.id)">
               <p class="mat-body-1 flex-1">{{item.title}}</p>
               <p class="mat-body-1 flex-1">{{item.id}}</p>
-              <p class="mat-body-1 flex-1">{{item.updated?.toDate() | date:'medium'}}</p>
+              <p class="mat-body-1 flex-1">{{item.updated | date:'medium'}}</p>
             </div>
             <mat-divider></mat-divider>
           </li>
