@@ -1,7 +1,7 @@
-import { ITanamDocumentType, TanamDocumentType } from './document-type.models';
 import * as admin from 'firebase-admin';
-import { ITanamUser, ITanamUserRole, TanamUser, TanamUserRole } from './user.models';
+import { ITanamUser, ITanamUserInvite, TanamUser, TanamUserInvite as TanamUserInvite } from './user.models';
 import { MD5 } from 'crypto-js';
+import { TanamDocumentType, ITanamDocumentType } from './document-type.models';
 
 export class AdminTanamUser extends TanamUser {
 
@@ -38,26 +38,6 @@ export class AdminTanamDocumentType extends TanamDocumentType {
     json.created = !!json.created
       ? admin.firestore.Timestamp.fromDate(json.created)
       : admin.firestore.FieldValue.serverTimestamp();
-    return json;
-  }
-}
-
-export class AdminTanamUserRole extends TanamUserRole {
-
-
-  setFirebaseUser(firebaseUser: admin.auth.UserRecord) {
-    this.email = firebaseUser.email;
-    this.uid = firebaseUser.uid;
-    this.name = firebaseUser.displayName;
-  }
-
-  toJson(): ITanamUserRole {
-    const json = super.toJson();
-    json.updated = admin.firestore.FieldValue.serverTimestamp();
-    json.created = !!json.created
-      ? admin.firestore.Timestamp.fromDate(json.created)
-      : admin.firestore.FieldValue.serverTimestamp();
-
     return json;
   }
 }
@@ -116,7 +96,7 @@ export class AdminCreateSiteRequest implements IAdminCreateSiteRequest {
     this.id = (json.id || json.name).replace(/[^A-Za-z0-9_-]/g, '');
     this.name = json.name || json.id;
     this.domain = json.domain;
-    this.roles = {...json.roles};
+    this.roles = { ...json.roles };
     this.language = json.language || 'en';
     this.force = json.force === true;
   }

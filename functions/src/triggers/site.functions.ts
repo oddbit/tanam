@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { ITanamDocumentType, ITanamSite, ITanamUserRole, TanamSite } from '../models';
+import { ITanamDocumentType, ITanamSite, ITanamUserInvite, TanamSite, TanamUserInvite } from '../models';
 import * as models from '../models/cloud-functions.models';
 import * as taskService from '../services/task.service'
 
@@ -300,11 +300,11 @@ export const onNewTanamSite = functions.database.ref('tanam/_/new/{id}').onCreat
 
   for (const role in newSiteData.roles) {
     const userRoleRef = newSiteBaseRef.collection('user-roles').doc();
-    const userRole = new models.AdminTanamUserRole({
+    const userRole = new TanamUserInvite({
       id: userRoleRef.id,
       role: role,
       email: newSiteData.roles[role],
-    } as ITanamUserRole);
+    } as ITanamUserInvite);
 
     console.log(`${userRole.toString()}: ${JSON.stringify(userRole.toJson())}`);
     batchWrite.set(userRoleRef, userRole.toJson());

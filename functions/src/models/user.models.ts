@@ -25,11 +25,9 @@ export interface UserQueryOptions {
   startAfter?: any; // firebase.firestore.DocumentSnapshot
 }
 
-export interface ITanamUserRole extends ITanamBase {
-  uid?: string;
-  name?: string;
-  email: string;
+export interface ITanamUserInvite extends ITanamBase {
   role: TanamUserRoleType;
+  email: string;
 }
 
 export class TanamUser extends TanamBase implements ITanamUser {
@@ -71,43 +69,26 @@ export class TanamUser extends TanamBase implements ITanamUser {
   }
 }
 
-export class TanamUserRole extends TanamBase implements ITanamUserRole {
-  uid: string;
-  name: string;
-  email: string;
+export class TanamUserInvite extends TanamBase implements ITanamUserInvite {
   role: TanamUserRoleType;
+  email: string;
 
-  constructor(json: ITanamUserRole) {
+  constructor(json: ITanamUserInvite) {
     super(json);
-    this.uid = json.uid;
-    this.name = json.name;
-    this.email = json.email;
     this.role = json.role;
+    this.email = json.email;
   }
 
-  unchangedRoleAuth(otherRole: TanamUserRole) {
-    if (!otherRole) {
-      // Has different role if comparing to a null object
-      // Is not different if this role is not linked to a user since changes
-      // doesn't affect anything before connected to a user
-      return !this.uid;
-    }
-
-    return otherRole.uid === this.uid && otherRole.role === this.role;
-  }
-
-  toJson(): ITanamUserRole {
-    console.log(`[${TanamUserRole.name}.toJson]`);
+  toJson(): ITanamUserInvite {
+    console.log(`[${TanamUserInvite.name}.toJson]`);
     return {
       ...super.toJson(),
-      uid: this.uid || null,
-      name: this.name || null,
       email: this.email,
       role: this.role,
-    } as ITanamUserRole;
+    } as ITanamUserInvite;
   }
 
   toString() {
-    return `${TanamUserRole.name}(${this.email}: ${this.role})`;
+    return `${TanamUserInvite.name}(${this.email}: ${this.role})`;
   }
 }
