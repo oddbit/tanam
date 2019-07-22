@@ -1,3 +1,5 @@
+import { TanamHttpRequest } from './http_request.model';
+
 /**
  * Document context is the object that is passed into the template and can be accessed via the `document` attribute.
  *
@@ -64,6 +66,7 @@ export interface SiteContext {
  * This is the root object for any template.
  */
 export interface PageContext {
-  document: DocumentContext;
+  document?: DocumentContext;
+  request?: TanamHttpRequest;
   site: SiteContext;
 }

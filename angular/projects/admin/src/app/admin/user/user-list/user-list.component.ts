@@ -1,24 +1,56 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { IPageInfo } from 'ngx-virtual-scroller';
 import { UserService } from '../../../services/user.service';
-import { tap, map } from 'rxjs/operators';
-import { TanamUser, UserRole } from '../../../../../../../../functions/src/models';
+import { map, tap } from 'rxjs/operators';
+import { TanamUser, TanamUserRoleType } from 'tanam-models/user.models';
+
+interface TanamRoleOptions {
+  value: TanamUserRoleType;
+  text: string;
+}
+
 @Component({
   selector: 'tanam-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss']
 })
 export class UserListComponent {
-  @Input() defaultRole: UserRole;
-  @Input() roles: [];
+  constructor(
+    private readonly userService: UserService,
+  ) {
+  }
+
+  readonly roles: TanamRoleOptions[] = [
+    {
+      value: 'admin',
+      text: 'Admin'
+    },
+    {
+      value: 'superAdmin',
+      text: 'Super Admin',
+    },
+    {
+      value: 'publisher',
+      text: 'Publisher'
+    }
+  ];
+
   items: TanamUser[] = [];
   limit = 20;
   isLoading: boolean;
   isLastItem: boolean;
 
-  constructor(
-    private readonly userService: UserService,
-  ) { }
+  static sortItems(a: any, b: any) {
+    const itemA = a.name.toLowerCase();
+    const itemB = b.name.toLowerCase();
+    if (itemA < itemB) {
+      return -1;
+    } else if (itemA > itemB) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 
   async fetchMore(event: IPageInfo) {
     if (event.endIndex !== this.items.length - 1 || this.isLastItem) {
@@ -46,24 +78,12 @@ export class UserListComponent {
         }),
         map(items => {
           const mergedItems = [...this.items, ...items];
-          return mergedItems.reduce((acc, cur) => ({ ...acc, [cur.name]: cur }), {});
+          return mergedItems.reduce((acc, cur) => ({...acc, [cur.name]: cur}), {});
         }),
-        map(v => Object.values(v).sort(this.sortItems))
+        map(v => Object.values(v).sort(UserListComponent.sortItems))
       ).subscribe((items: any) => {
-        this.items = [...items];
-        this.isLoading = false;
-      });
-  }
-
-  sortItems(a: any, b: any) {
-    const itemA = a.name.toLowerCase();
-    const itemB = b.name.toLowerCase();
-    if (itemA < itemB) {
-      return -1;
-    } else if (itemA > itemB) {
-      return 1;
-    } else {
-      return 0;
-    }
+      this.items = [...items];
+      this.isLoading = false;
+    });
   }
 }

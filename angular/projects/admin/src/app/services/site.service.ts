@@ -1,51 +1,62 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { SiteInformation } from 'tanam-models';
-import { AppConfigService } from './app-config.service';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { ITanamSite } from 'tanam-models';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { DOCUMENT } from '@angular/common';
+import { AngularTanamSite } from '../app.models';
+import { AppAuthService } from './app-auth.service';
+import { fromPromise } from 'rxjs/internal-compatibility';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SiteService {
-  private readonly projectId = this.firestore.firestore.app.options['projectId'];
-  readonly siteCollection = this.firestore.collection('tanam').doc<SiteInformation>(this.appConfig.siteId);
-
   constructor(
+    @Inject(DOCUMENT) private readonly document: Document,
     private readonly firestore: AngularFirestore,
-    private readonly appConfig: AppConfigService,
-  ) { }
+    private readonly authService: AppAuthService,
+  ) {
+  }
 
-  getSiteInfo(): Observable<SiteInformation> {
-    return this.firestore.collection('tanam').doc<SiteInformation>(this.appConfig.siteId).valueChanges();
+  private getAvailableSites(): Observable<AngularTanamSite[]> {
+    return fromPromise(this.authService.getCustomClaims())
+      .pipe(switchMap((customClaims) => {
+        const tanamSites = Object.keys(customClaims['tanam'] || {});
+        console.log(`[getAvailableSites] ${JSON.stringify({tanamSites})}`);
+        return combineLatest(tanamSites.map((siteId) =>
+          this.firestore.collection('tanam').doc<ITanamSite>(siteId)
+            .valueChanges()
+            .pipe(map((info) => new AngularTanamSite(info)))
+        ));
+      }));
+  }
+
+  getCurrentSite(): Observable<AngularTanamSite> {
+    const domain = document.location.hostname;
+    console.log(`[getSiteInfo] ${JSON.stringify({domain})}`);
+    return this.getAvailableSites()
+      .pipe(
+        map(sites => sites.filter(site => site.domains.indexOf(domain) >= 0)),
+        map(sites => sites[0] || null),
+        filter(site => !!site),
+        tap(site => console.log(`[getCurrentSite] ${JSON.stringify({site})}`)),
+      );
   }
 
   getSiteName(): Observable<string> {
-    return this.getSiteInfo().pipe(map(settings => settings.title));
+    return this.getCurrentSite().pipe(map(settings => settings.title));
   }
 
   getTheme(): Observable<string> {
-    return this.getSiteInfo().pipe(map(settings => settings.theme));
+    return this.getCurrentSite().pipe(map(settings => settings.theme));
   }
 
   getPrimaryDomain(): Observable<string> {
-    return this.getSiteInfo().pipe(map(settings => settings.primaryDomain));
+    return this.getCurrentSite().pipe(map(settings => settings.primaryDomain));
   }
 
-  save(settings: SiteInformation) {
-    console.log(`[SettingsDomainComponent:saveSiteSettings] ${JSON.stringify(settings, null, 2)}`);
-
-    settings.domains = settings.domains.filter(domain => domain.indexOf('.firebaseapp.com') === -1);
-    settings.domains.splice(0, 0, `${this.projectId}.firebaseapp.com`);
-
-    // Custom domain is flagged if the primary domain isn't the default hosting
-    if (settings.primaryDomain) {
-      settings.isCustomDomain = settings.primaryDomain.indexOf('.firebaseapp.com') === -1 ||
-                                settings.primaryDomain.indexOf('.web.app') === -1;
-    }
-
-
-    return this.firestore.collection('tanam').doc(this.appConfig.siteId).update(settings);
+  save(site: AngularTanamSite) {
+    return this.firestore.collection('tanam').doc(site.id).set(site.toJson());
   }
 }

@@ -10,12 +10,12 @@ import { DocumentTypeService } from '../../../services/document-type.service';
 })
 export class DocumentTypeEditComponent {
   documentType$ = this.route.paramMap.pipe(
-    switchMap(params => this.cts.getDocumentType(params.get('typeId'))),
+    switchMap(params => this.documentTypeService.getDocumentType(params.get('typeId'))),
     filter(documentType => documentType.id !== 'page')
   );
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly cts: DocumentTypeService,
+    private readonly documentTypeService: DocumentTypeService,
   ) { }
 }

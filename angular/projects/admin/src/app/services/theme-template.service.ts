@@ -2,29 +2,36 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference, Query } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { ThemeTemplate, Theme, DocumentType, ThemeTemplateQueryOptions } from 'tanam-models';
-import { AppConfigService } from './app-config.service';
+import { TanamSite, Theme, ThemeTemplate, ThemeTemplateQueryOptions } from 'tanam-models';
+import { switchMap, take } from 'rxjs/operators';
+import { SiteService } from './site.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ThemeTemplateService {
-  readonly siteCollection = this.firestore.collection('tanam').doc(this.appConfig.siteId);
-
   constructor(
+    private readonly siteService: SiteService,
     private readonly firestore: AngularFirestore,
-    private readonly appConfig: AppConfigService,
-  ) { }
-
-  getTemplate(theme: string, template: string): Observable<ThemeTemplate> {
-    return this.siteCollection
-      .collection('themes').doc(theme)
-      .collection('templates').doc<ThemeTemplate>(template)
-      .valueChanges();
+  ) {
   }
 
-  getReference(themeId: string, templateId: string) {
-    return this.siteCollection
+  getTemplate(theme: string, template: string): Observable<ThemeTemplate> {
+    return this.siteService.getCurrentSite().pipe(
+      switchMap((site) =>
+        this.firestore
+          .collection('tanam').doc(site.id)
+          .collection('themes').doc(theme)
+          .collection('templates').doc<ThemeTemplate>(template)
+          .valueChanges(),
+      )
+    );
+  }
+
+  async getReference(themeId: string, templateId: string) {
+    const currentSite = await this._currentSite;
+    return this.firestore
+      .collection('tanam').doc(currentSite.id)
       .collection('themes').doc(themeId)
       .collection('templates').doc(templateId)
       .ref.get();
@@ -47,14 +54,21 @@ export class ThemeTemplateService {
       }
       return ref;
     };
-    return this.siteCollection
-      .collection('themes').doc(theme)
-      .collection<ThemeTemplate>('templates', queryFn)
-      .valueChanges();
+
+    return this.siteService.getCurrentSite().pipe(
+      switchMap((site) =>
+        this.firestore
+          .collection('tanam').doc(site.id)
+          .collection<ThemeTemplate>('templates', queryFn)
+          .valueChanges(),
+      )
+    );
   }
 
   async createTemplateInTheme(theme: Theme, title: string, selector: string) {
-    const templatesCollection = this.siteCollection
+    const currentSite = await this._currentSite;
+    const templatesCollection = this.firestore
+      .collection('tanam').doc(currentSite.id)
       .collection('themes').doc(theme.id)
       .collection('templates');
 
@@ -70,27 +84,32 @@ export class ThemeTemplateService {
     return templatesCollection.doc(template.id).set(template);
   }
 
-  saveTemplate(template: ThemeTemplate, themeId: string) {
+  async saveTemplate(template: ThemeTemplate, themeId: string) {
     template.updated = firebase.firestore.FieldValue.serverTimestamp();
-    return this.siteCollection
-      .collection('themes')
-      .doc(themeId)
-      .collection('templates')
-      .doc<ThemeTemplate>(template.id)
+    const currentSite = await this._currentSite;
+    return this.firestore
+      .collection('tanam').doc(currentSite.id)
+      .collection('themes').doc(themeId)
+      .collection('templates').doc<ThemeTemplate>(template.id)
       .update(template);
   }
 
-  deleteTemplate(templateId: string, themeId: string) {
+  async deleteTemplate(templateId: string, themeId: string) {
     console.log(templateId);
     console.log(themeId);
     if (!templateId && themeId) {
       throw new Error('Template ID and Theme id must be provided as an attribute when deleting a template.');
     }
-    return this.siteCollection
-      .collection('themes')
-      .doc(themeId)
-      .collection('templates')
-      .doc(templateId)
+
+    const currentSite = await this._currentSite;
+    return this.firestore
+      .collection('tanam').doc(currentSite.id)
+      .collection('themes').doc(themeId)
+      .collection('templates').doc(templateId)
       .delete();
+  }
+
+  get _currentSite(): Promise<TanamSite> {
+    return this.siteService.getCurrentSite().pipe(take(1)).toPromise();
   }
 }

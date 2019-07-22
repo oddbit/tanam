@@ -1,15 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
-import { SiteInformation, Theme } from 'tanam-models';
+import { TanamSite, Theme } from 'tanam-models';
 import { SiteService } from '../../services/site.service';
 import { ThemeService } from '../../services/theme.service';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import {
-  SettingsDialogManageLanguagesComponent,
-  LanguageOptions
+  LanguageOptions,
+  SettingsDialogManageLanguagesComponent
 } from './settings-dialog-manage-languages/settings-dialog-manage-languages.component';
 import { languageOptions } from './settings.languages';
+import { AppAuthService } from '../../services/app-auth.service';
 
 // https://stackoverflow.com/a/26987741/7967164
 const REGEX_DOMAIN = '^(((?!-))(xn--|_{1,1})?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$';
@@ -24,7 +25,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   langOptions = languageOptions;
   analyticsName = '';
   readonly siteName$: Observable<string> = this.siteSettingsService.getSiteName();
-  readonly themes$: Observable<Theme[]> = this.themeService.getThemes({ orderBy: { field: 'updated', sortOrder: 'desc' } });
+  readonly themes$: Observable<Theme[]> = this.themeService.getThemes({orderBy: {field: 'updated', sortOrder: 'desc'}});
   readonly settingsForm: FormGroup = this.formBuilder.group({
     title: [null, [Validators.required]],
     theme: [null, [Validators.required]],
@@ -40,15 +41,17 @@ export class SettingsComponent implements OnInit, OnDestroy {
   private settingsSubscription: Subscription;
 
   constructor(
+    private readonly authService: AppAuthService,
     private readonly siteSettingsService: SiteService,
     private readonly themeService: ThemeService,
     private readonly formBuilder: FormBuilder,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
-    this.settingsSubscription = this.siteSettingsService.getSiteInfo().subscribe(settings => {
+    this.settingsSubscription = this.siteSettingsService.getCurrentSite().subscribe(settings => {
       console.log(`[SettingsSiteComponent] site settings: ${JSON.stringify(settings)}`);
       while (this.domainsFormArray.length > 0) {
         this.domainsFormArray.removeAt(0);
@@ -130,7 +133,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         });
 
         if (!result.languages.includes(this.settingsForm.value.defaultLanguage)) {
-          this.settingsForm.patchValue({ defaultLanguage: result.languages[0] });
+          this.settingsForm.patchValue({defaultLanguage: result.languages[0]});
         }
       }
     });
@@ -146,6 +149,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
   }
 
+  logout() {
+    return this.authService.logOut();
+  }
+
   async saveSettings() {
     const formData = this.settingsForm.value;
     const languages = this.languages.map(lang => lang.id);
@@ -159,7 +166,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       primaryDomain: formData.primaryDomain,
       analytics: formData.analytics.trim().toUpperCase(),
       domains: formData.domains.map((domain: any) => domain['name']),
-    } as SiteInformation);
+    } as TanamSite);
     this.snackBar.open('Settings saved', 'Dismiss', {
       duration: 2000,
     });

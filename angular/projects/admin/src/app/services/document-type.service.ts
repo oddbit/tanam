@@ -1,23 +1,32 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, CollectionReference, Query } from '@angular/fire/firestore';
-import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { DocumentType, SiteInformation, DocumentTypeQueryOptions } from 'tanam-models';
-import { AppConfigService } from './app-config.service';
+import { DocumentTypeQueryOptions, ITanamDocumentType, TanamSite } from 'tanam-models';
+import { SiteService } from './site.service';
+import { AngularTanamDocumentType } from '../app.models';
+import { map, switchMap, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DocumentTypeService {
-  readonly siteCollection = this.firestore.collection('tanam').doc<SiteInformation>(this.appConfig.siteId);
 
   constructor(
     private readonly firestore: AngularFirestore,
-    private readonly appConfig: AppConfigService,
-  ) { }
+    private readonly siteService: SiteService,
+  ) {
+  }
+
+  async getReference(id: string) {
+    const currentSite = await this._currentSite;
+    return this.firestore
+      .collection('tanam').doc(currentSite.id)
+      .collection<ITanamDocumentType>('document-types').doc(id)
+      .ref.get();
+  }
 
 
-  getDocumentTypes(queryOpts?: DocumentTypeQueryOptions): Observable<DocumentType[]> {
+  getDocumentTypes(queryOpts?: DocumentTypeQueryOptions): Observable<AngularTanamDocumentType[]> {
     const queryFn = (ref: CollectionReference) => {
       if (queryOpts) {
         let query: Query = ref;
@@ -34,64 +43,55 @@ export class DocumentTypeService {
       }
       return ref;
     };
-    return this.siteCollection
-      .collection<DocumentType>('document-types', queryFn).valueChanges();
+
+    return this.siteService.getCurrentSite().pipe(
+      switchMap((site) =>
+        this.firestore
+          .collection('tanam').doc(site.id)
+          .collection<ITanamDocumentType>('document-types', queryFn)
+          .valueChanges()
+          .pipe(map((types) =>
+            types.map((type) => new AngularTanamDocumentType(type)))
+          ),
+      )
+    );
   }
 
-  getReference(documentTypeId: string) {
-    return this.siteCollection
-      .collection('document-types').doc<DocumentType>(documentTypeId)
-      .ref.get();
-  }
-
-  getDocumentType(documentTypeId: string): Observable<DocumentType> {
+  getDocumentType(documentTypeId: string): Observable<AngularTanamDocumentType> {
     console.log(`getDocumentType documentType: ${documentTypeId}`);
 
-    return this.siteCollection
-      .collection('document-types').doc<DocumentType>(documentTypeId)
-      .valueChanges();
+    return this.siteService.getCurrentSite().pipe(
+      switchMap((site) =>
+        this.firestore
+          .collection('tanam').doc(site.id)
+          .collection('document-types').doc<ITanamDocumentType>(documentTypeId)
+          .valueChanges()
+          .pipe(map(data => new AngularTanamDocumentType(data))),
+      )
+    );
   }
 
-  async createWithTitle(id: string, title: string) {
-    const docRef = this.siteCollection.collection('document-types').doc(id);
-    return docRef.set({
-      id: id,
-      title: title,
-      description: '',
-      slug: id,
-      template: null,
-      standalone: true,
-      documentStatusDefault: 'published',
-      icon: 'cloud',
-      fields: [],
-      documentCount: {
-        published: 0,
-        unpublished: 0,
-        scheduled: 0,
-      },
-      updated: firebase.firestore.FieldValue.serverTimestamp(),
-      created: firebase.firestore.FieldValue.serverTimestamp(),
-    } as DocumentType);
+  async save(documentType: AngularTanamDocumentType) {
+    const tanamSite = await this._currentSite;
+    return this.firestore
+      .collection('tanam').doc(tanamSite.id)
+      .collection('document-types').doc(documentType.id)
+      .set(documentType.toJson());
   }
 
-  save(documentType: DocumentType) {
-    const doc = this.siteCollection.collection('document-types').doc(documentType.id);
-    documentType = {
-      ...documentType,
-      updated: firebase.firestore.FieldValue.serverTimestamp(),
-    };
-
-    console.log(`[DocumentTypeService:saveDocumentType] ${JSON.stringify(documentType, null, 2)}`);
-    return doc.update(documentType);
-  }
-
-  delete(documentTypeId: string) {
+  async delete(documentTypeId: string) {
     if (!documentTypeId) {
       throw new Error('Document ID must be provided as an attribute when deleting an document.');
     }
-    console.log(documentTypeId);
-    return this.siteCollection
-      .collection<Document>('document-types').doc(documentTypeId)
+
+    const tanamSite = await this._currentSite;
+    return this.firestore
+      .collection('tanam').doc(tanamSite.id)
+      .collection('document-types').doc(documentTypeId)
       .delete();
+  }
+
+  get _currentSite(): Promise<TanamSite> {
+    return this.siteService.getCurrentSite().pipe(take(1)).toPromise();
   }
 }

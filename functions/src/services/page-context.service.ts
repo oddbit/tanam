@@ -1,7 +1,9 @@
 import { QuerySnapshot } from '@google-cloud/firestore';
 import * as admin from 'firebase-admin';
-import { Document, DocumentContext, PageContext, SiteContext, SiteInformation } from '../models';
+import { ITanamDocument, DocumentContext, PageContext, SiteContext, TanamSite } from '../models';
+import { TanamHttpRequest } from '../models/http_request.model';
 import * as documentService from './document.service';
+import * as siteInfoService from './site-info.service';
 import * as systemNotificationService from './system-message.service';
 export interface DocumentQueryOptions {
   limit?: number;
@@ -10,8 +12,6 @@ export interface DocumentQueryOptions {
     sortOrder: 'asc' | 'desc',
   };
 }
-
-const siteCollection = () => admin.firestore().collection('tanam').doc(process.env.GCLOUD_PROJECT);
 
 function _normalizeData(data: any) {
   const normalizedData = { ...data };
@@ -28,19 +28,21 @@ function _normalizeData(data: any) {
   return normalizedData;
 }
 
-export async function queryPageContext(documentTypeId: string, queryOpts: DocumentQueryOptions = {}) {
-  console.log(`[queryPageContext] ${documentTypeId}, query=${JSON.stringify(queryOpts)}`);
+export async function queryPageContext(domain: string, documentType: string, queryOpts: DocumentQueryOptions = {}) {
+  console.log(`[queryPageContext] ${JSON.stringify({ documentType, queryOpts })}`);
   const orderByField = queryOpts.orderBy && queryOpts.orderBy.field || 'updated';
   const sortOrder = queryOpts.orderBy && queryOpts.orderBy.sortOrder || 'desc';
   const limit = queryOpts.limit || 20;
 
   console.log(`[queryPageContext] effective query ${JSON.stringify({ orderByField, sortOrder, limit })}`);
+  const siteInfo = await siteInfoService.getSiteInfoFromDomain(domain);
   let querySnap: QuerySnapshot;
   try {
-    querySnap = await siteCollection()
+    querySnap = await admin.firestore()
+      .collection('tanam').doc(siteInfo.id)
       .collection('documents')
       .where('status', '==', 'published')
-      .where('documentType', '==', documentTypeId)
+      .where('documentType', '==', documentType)
       .orderBy(orderByField, sortOrder)
       .limit(limit)
       .get();
@@ -62,7 +64,7 @@ export async function queryPageContext(documentTypeId: string, queryOpts: Docume
   const result = [];
   for (const doc of querySnap.docs) {
     console.log(`[queryPageContext] ${JSON.stringify(doc.data())}`);
-    result.push(await _toContext(doc.data() as Document));
+    result.push(await _toContext(siteInfo, doc.data() as ITanamDocument));
   }
   console.log(`[queryPageContextResult] ${JSON.stringify(result)}`)
 
@@ -72,34 +74,35 @@ export async function queryPageContext(documentTypeId: string, queryOpts: Docume
 export async function getPageContextById(docId: string) {
   console.log(`[getPageContextById] ${JSON.stringify(docId)}`);
   const doc = await documentService.getDocumentById(docId);
-  return !!doc ? _toContext(doc) : null;
+  const siteInfo = await siteInfoService.getSiteInfoFromDocumentId(docId);
+  return !!doc ? _toContext(siteInfo, doc) : null;
 }
 
-export async function getPageContextByUrl(url: string): Promise<PageContext> {
-  console.log(`[getPageContextByUrl] ${JSON.stringify(url)}`);
-  const documents = await documentService.getDocumentByUrl(url || '/');
-  console.log(`[getPageContextByUrl] Number of query results: ${documents.length}`);
-  if (documents.length === 0) {
-    const page404 = await documentService.getDocument404();
-    return _toContext(page404[0]);
+export async function getPageContextForRequest(request: TanamHttpRequest): Promise<PageContext> {
+  console.log(`[getPageContextByUrl] ${request.toString()}`);
+  const document = await documentService.getDocumentForRequest(request);
+  if (!document) {
+    return null;
   }
-  return _toContext(documents[0]);
+
+  const siteInfo = await siteInfoService.getSiteInfoFromDomain(request.hostname);
+  return _toContext(siteInfo, document[0]);
 }
 
-async function _toContext(document: Document) {
+async function _toContext(siteInfo: TanamSite, document: ITanamDocument) {
   if (!document) {
     return null;
   }
 
   // Run update operation in parallel while doing preparing the context data
-  const updatePromise = siteCollection()
+  const updatePromise = admin.firestore()
+    .collection('tanam').doc(siteInfo.id)
     .collection('documents').doc(document.id)
     .update({
       dependencies: [],
       rendered: admin.firestore.FieldValue.serverTimestamp(),
-    } as Document);
+    } as ITanamDocument);
 
-  const siteInfo = (await siteCollection().get()).data() as SiteInformation;
   const siteContext: SiteContext = {
     domain: siteInfo.primaryDomain,
     analytics: siteInfo.analytics,

@@ -1,64 +1,56 @@
-import { MD5 } from 'crypto-js';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import * as configService from '../services/config.service';
-import * as siteService from '../services/site-info.service';
+import { AdminTanamUser, AdminTanamUserRole } from "../models/cloud-functions.models";
+import { ITanamUserRole } from "../models";
 
-export const createUser = functions.auth.user().onCreate(async (firebaseUser) => {
-  const tanamConfig = configService.getConfig();
+// noinspection JSUnusedGlobalSymbols
+export const onAccountCreate = functions.auth.user().onCreate(async (firebaseUser) => {
+  console.log(JSON.stringify({uid: firebaseUser.uid, email: firebaseUser.email}));
+  const batchWrite = admin.firestore().batch();
+  const siteIds = [];
 
-  const tanamConfigRole = tanamConfig.users ? tanamConfig.users[firebaseUser.email] : null;
-  const envRole = firebaseUser.email === process.env.TANAM_OWNER ? 'superAdmin' : null;
-  const initialRole = envRole || tanamConfigRole;
+  const tanamUser = AdminTanamUser.fromFirebaseUser(firebaseUser);
+  const result = await admin.firestore()
+    .collectionGroup('user-roles')
+    .where('email', '==', tanamUser.email)
+    .get();
 
-  // Use gravatar as default if photoUrl isn't specified in user data
-  // https://en.gravatar.com/site/implement/images/
-  const gravatarHash = MD5(firebaseUser.email || firebaseUser.uid).toString().toLowerCase();
-  const user = {
-    uid: firebaseUser.uid,
-    name: firebaseUser.displayName || firebaseUser.email,
-    email: firebaseUser.email,
-    photoUrl: firebaseUser.photoURL || `https://www.gravatar.com/avatar/${gravatarHash}.jpg?s=1024&d=identicon`,
-    roles: !!initialRole ? [initialRole] : [],
-  };
+  for (const doc of result.docs) {
+    const siteId = doc.ref.parent.parent.id;
+    siteIds.push(siteId);
 
-  console.log(`Creating account: ${JSON.stringify({ user })}`);
-  return Promise.all([
-    siteService.initializeSite(),
-    admin.firestore()
-      .collection('tanam').doc(process.env.GCLOUD_PROJECT)
-      .collection('users').doc(firebaseUser.uid)
-      .set(user),
-    setUserRoleToAuth(user),
-  ]);
-});
+    const role = new AdminTanamUserRole(doc.data() as ITanamUserRole);
+    role.uid = tanamUser.id;
+    role.name = tanamUser.name;
 
-export const deleteUser = functions.auth.user().onDelete(firebaseUser => {
-  console.log(`Deleting account: ${JSON.stringify({ firebaseUser })}`);
-  return admin.firestore()
-    .collection('tanam').doc(process.env.GCLOUD_PROJECT)
-    .collection('users').doc(firebaseUser.uid)
-    .delete();
-});
-
-export const updateAuthRoles = functions.firestore.document('tanam/{siteId}/users/{uid}').onUpdate((change, context) => {
-  const uid = context.params.uid;
-  const userBefore = change.before.data();
-  const userAfter = change.after.data();
-
-  const promises = [];
-
-  if (userBefore.roles.length !== userAfter.roles.length
-    || userBefore.roles.some((role: string) => userAfter.roles.indexOf(role) === -1)) {
-    promises.push(setUserRoleToAuth({ uid: uid, roles: userAfter.roles as string[] }));
+    console.log(JSON.stringify({siteId, role: role.toString()}));
+    batchWrite.update(doc.ref, role.toJson());
   }
 
-  return Promise.all(promises);
+  siteIds.forEach((siteId) => {
+    console.log(JSON.stringify({siteId, uid: tanamUser.uid}));
+    const ref = admin.firestore()
+      .collection('tanam').doc(siteId)
+      .collection('users').doc(tanamUser.uid);
+    batchWrite.set(ref, tanamUser.toJson());
+  });
+
+  return batchWrite.commit();
 });
 
+// noinspection JSUnusedGlobalSymbols
+export const onAccountDelete = functions.auth.user().onDelete(async firebaseUser => {
+  console.log(`Deleting account: ${JSON.stringify({firebaseUser})}`);
+  const batchWrite = admin.firestore().batch();
+  const result = await admin.firestore()
+    .collectionGroup('user')
+    .where('uid', '==', firebaseUser.uid)
+    .get();
 
-function setUserRoleToAuth({ uid, roles }: { uid: string, roles: string[] }) {
-  const customClaims = { tanam: { [process.env.GCLOUD_PROJECT]: roles } };
-  console.log(`[setUserRoleToAuth] ${JSON.stringify({ uid, customClaims })}`);
-  return admin.auth().setCustomUserClaims(uid, customClaims);
-}
+  for (const doc of result.docs) {
+    console.log(`Deleting: ${doc.ref.path}`);
+    batchWrite.delete(doc.ref);
+  }
+
+  return batchWrite.commit();
+});

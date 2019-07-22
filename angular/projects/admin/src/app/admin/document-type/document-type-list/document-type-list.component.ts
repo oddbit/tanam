@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { map, tap } from 'rxjs/operators';
-import { DocumentType } from '../../../../../../../../functions/src/models';
+import { ITanamDocumentType } from '../../../../../../../../functions/src/models';
 import { IPageInfo } from 'ngx-virtual-scroller';
 
 @Component({
@@ -11,7 +11,7 @@ import { IPageInfo } from 'ngx-virtual-scroller';
   styleUrls: ['./document-type-list.component.scss']
 })
 export class DocumentTypeListComponent {
-  items: DocumentType[] = [];
+  items: ITanamDocumentType[] = [];
   limit = 20;
   isLoading: boolean;
   isLastItem: boolean;
@@ -58,13 +58,13 @@ export class DocumentTypeListComponent {
         return mergedassets.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
       }),
       map(v => Object.values(v).sort(this.sortItems))
-    ).subscribe((items: DocumentType[]) => {
+    ).subscribe((items: ITanamDocumentType[]) => {
       this.items = [...items];
       this.isLoading = false;
     });
   }
 
-  sortItems(a: DocumentType, b: DocumentType) {
+  sortItems(a: ITanamDocumentType, b: ITanamDocumentType) {
     const itemA = a.title.toLowerCase();
     const itemB = b.title.toLowerCase();
     if (itemA > itemB) {

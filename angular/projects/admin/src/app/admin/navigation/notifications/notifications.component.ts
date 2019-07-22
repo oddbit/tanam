@@ -9,7 +9,7 @@ import { NotificationsService } from '../../../services/notifications.service';
   styleUrls: ['./notifications.component.scss']
 })
 export class NotificationsComponent implements OnInit {
-  notifications$ = this.notificationService.getNofifications();
+  notifications$ = this.notificationService.getNotifications();
   filterSelected = 'all';
 
   constructor(
@@ -52,9 +52,9 @@ export class NotificationsComponent implements OnInit {
 
   filterNotifications(event) {
     if (event.value === 'all') {
-      this.notifications$ = this.notificationService.getNofifications();
+      this.notifications$ = this.notificationService.getNotifications();
     } else {
-      this.notifications$ = this.notificationService.getUnreadNofifications();
+      this.notifications$ = this.notificationService.getUnreadNotifications();
     }
   }
 }

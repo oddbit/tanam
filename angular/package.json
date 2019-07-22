@@ -1,11 +1,16 @@
 {
   "name": "tanam-angular",
+  "description": "Tanam CMS management application",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oddbit/tanam.git"
+  },
   "version": "0.0.1",
   "license": "Apache-2.0",
   "scripts": {
-    "start": "ng serve admin",
-    "build": "ng build admin --outputHashing=all --deployUrl=/",
-    "build:prod": "ng build admin --prod=true --deployUrl=/",
+    "start": "ng serve admin  --deployUrl=/_/",
+    "build": "ng build admin --outputHashing=all --deployUrl=/_/",
+    "build:prod": "ng build admin --prod=true --deployUrl=/_/",
     "test": "ng test admin",
     "lint": "ng lint admin",
     "e2e": "ng e2e admin",
@@ -25,7 +30,7 @@
     "@angular/common": "~7.2.2",
     "@angular/compiler": "^7.2.2",
     "@angular/core": "~7.2.2",
-    "@angular/fire": "^5.1.2",
+    "@angular/fire": "^5.2.1",
     "@angular/forms": "~7.2.2",
     "@angular/http": "~7.2.2",
     "@angular/material": "~7.3.0",
@@ -42,9 +47,10 @@
     "@nguniversal/express-engine": "^7.1.0",
     "@nguniversal/module-map-ngfactory-loader": "7.1.0",
     "@types/hammerjs": "^2.0.36",
+    "component": "^1.1.0",
     "core-js": "^2.6.3",
     "express": "^4.16.4",
-    "firebase": "^5.10.0",
+    "firebase": "^5.11.1",
     "hammerjs": "^2.0.8",
     "moment": "^2.24.0",
     "ngx-virtual-scroller": "^3.0.2",
@@ -56,7 +62,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.12.3",
     "@angular-devkit/build-ng-packagr": "~0.12.3",
-    "@angular/cli": "~7.2.3",
+    "@angular/cli": "~7.3.9",
     "@angular/compiler-cli": "^7.2.8",
     "@angular/language-service": "~7.2.2",
     "@types/jasmine": "~3.3.8",
@@ -80,8 +86,6 @@
     "tslib": "^1.9.3",
     "tslint": "~5.12.1",
     "typescript": "~3.2.4",
-    "utf-8-validate": "^5.0.2",
-    "webpack": "^4.29.0",
-    "webpack-cli": "^3.2.1"
+    "utf-8-validate": "^5.0.2"
   }
 }

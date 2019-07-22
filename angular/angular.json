@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/admin",
+            "outputPath": "dist/_",
             "index": "projects/admin/src/index.html",
             "main": "projects/admin/src/main.ts",
             "polyfills": "projects/admin/src/polyfills.ts",
@@ -42,7 +42,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "deployUrl": "/",
+              "deployUrl": "/_/",
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,

@@ -5,79 +5,9 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "dependencies",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "rendered",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
           "fieldPath": "documentType",
           "order": "ASCENDING"
         },
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "published",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "documentType",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "title",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "documentType",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "title",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "documentType",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "updated",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
         {
           "fieldPath": "status",
           "order": "ASCENDING"
@@ -93,12 +23,12 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "status",
+          "fieldPath": "documentType",
           "order": "ASCENDING"
         },
         {
           "fieldPath": "updated",
-          "order": "ASCENDING"
+          "order": "DESCENDING"
         }
       ]
     },
@@ -113,48 +43,6 @@
         {
           "fieldPath": "published",
           "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "title",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "documents",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "title",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "notifications",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "isRead",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "updated",
-          "order": "DESCENDING"
         }
       ]
     },
@@ -173,5 +61,50 @@
       ]
     }
   ],
-  "fieldOverrides": []
+  "fieldOverrides": [
+    {
+      "collectionGroup": "user",
+      "fieldPath": "uid",
+      "indexes": [
+        {
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION"
+        },
+        {
+          "order": "DESCENDING",
+          "queryScope": "COLLECTION"
+        },
+        {
+          "arrayConfig": "CONTAINS",
+          "queryScope": "COLLECTION"
+        },
+        {
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION_GROUP"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "user-roles",
+      "fieldPath": "email",
+      "indexes": [
+        {
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION"
+        },
+        {
+          "order": "DESCENDING",
+          "queryScope": "COLLECTION"
+        },
+        {
+          "arrayConfig": "CONTAINS",
+          "queryScope": "COLLECTION"
+        },
+        {
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION_GROUP"
+        }
+      ]
+    }
+  ]
 }

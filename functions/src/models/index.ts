@@ -1,4 +1,3 @@
-export * from './app-config.models';
 export * from './document.models';
 export * from './document-type.models';
 export * from './dynamic-page.models';

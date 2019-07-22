@@ -29,7 +29,7 @@ import { AppConfigService } from './services/app-config.service';
     {
       provide: FirebaseOptionsToken,
       deps: [AppConfigService],
-      useFactory: (appConfigService: AppConfigService) => appConfigService.appConfig.firebaseApp,
+      useFactory: (appConfigService: AppConfigService) => appConfigService.firebaseConfig,
     },
   ],
 })

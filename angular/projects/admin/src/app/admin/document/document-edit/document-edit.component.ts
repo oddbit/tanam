@@ -2,8 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
-import { switchMap, take, filter } from 'rxjs/operators';
-import { DocumentStatus } from 'tanam-models';
+import { filter, switchMap, take } from 'rxjs/operators';
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { DocumentService } from '../../../services/document.service';
 import { SiteService } from '../../../services/site.service';
@@ -17,6 +16,30 @@ import { DialogService } from '../../../services/dialog.service';
   styleUrls: ['./document-edit.component.scss']
 })
 export class DocumentEditComponent implements OnInit, OnDestroy {
+
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly formBuilder: FormBuilder,
+    private readonly siteService: SiteService,
+    private readonly documentService: DocumentService,
+    private readonly documentTypeService: DocumentTypeService,
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private dialogService: DialogService
+  ) {
+  }
+
+  get dataForm() {
+    return this.documentForm.get('dataForm') as FormGroup;
+  }
+
+  get isScheduled(): boolean {
+    return this.documentForm.value.published && this.documentForm.value.published.toMillis() > Date.now();
+  }
+
+  get isPublished(): boolean {
+    return !!this.documentForm.value.published;
+  }
   readonly richTextEditorConfig = {
     // toolbar: ['heading', '|', 'bold', 'italic', '|', 'bulletedList', 'numberedList'],
   };
@@ -45,19 +68,14 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   private _documentRevision: number;
   metaDataDialog = false;
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly formBuilder: FormBuilder,
-    private readonly siteService: SiteService,
-    private readonly documentService: DocumentService,
-    private readonly documentTypeService: DocumentTypeService,
-    private router: Router,
-    private snackBar: MatSnackBar,
-    private dialogService: DialogService
-  ) { }
-
-  get dataForm() {
-    return this.documentForm.get('dataForm') as FormGroup;
+  private static _slugify(text: string) {
+    return text
+      .toString()
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w\-]+/g, '')
+      .replace(/^-+/, '')
+      .replace(/-+$/, '');
   }
 
   ngOnInit() {
@@ -66,7 +84,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     const combinedDocumentData$ = combineLatest(this.documentType$, this.document$);
     this._subscriptions.push(combinedDocumentData$.subscribe(([documentType, document]) => {
       this._setStateProcessing(true);
-      const documentStatusDefault = documentType.documentStatusDefault === 'published' ? true : false;
+      const documentStatusDefault = documentType.documentStatusDefault === 'published';
       this._documentRevision = document.revision;
       this.documentForm.patchValue({
         title: document.title,
@@ -103,14 +121,6 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     this._subscriptions.filter(s => !!s && !s.closed).forEach(s => s.unsubscribe());
   }
 
-  get isScheduled(): boolean {
-    return this.documentForm.value.published && this.documentForm.value.published.toMillis() > Date.now();
-  }
-
-  get isPublished(): boolean {
-    return !!this.documentForm.value.published;
-  }
-
   async deleteEntry() {
     this.dialogService.openDialogConfirm({
       title: 'Delete Document',
@@ -139,7 +149,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     document.data = this.dataForm.value;
     document.canonicalUrl = formData.canonicalUrl || '';
     this._setStateProcessing(true);
-    await this.documentService.update(document);
+    await this.documentService.save(document);
     this._setStateProcessing(false);
     this._snackbar('Saved');
     if (closeAfterSave === true) {
@@ -169,17 +179,6 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     return this.documentForm.enable();
   }
 
-  private _slugify(text: string) {
-    return text
-      .toString()
-      .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w\-]+/g, '')
-      .replace(/\-\-+/g, '-')
-      .replace(/^-+/, '')
-      .replace(/-+$/, '');
-  }
-
   private _navigateBack() {
     this.router.navigateByUrl(`/_/admin/type/${this._documentType}/overview`);
   }
@@ -194,12 +193,12 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     this.documentForm.controls['title'].setValue(title);
     if (!!title && this._documentRevision === 0) {
       // Only auto slugify title if document has't been published before
-      this.documentForm.controls['url'].setValue(`${this._rootSlug}/${this._slugify(title)}`);
+      this.documentForm.controls['url'].setValue(`${this._rootSlug}/${DocumentEditComponent._slugify(title)}`);
     }
   }
 
   private _onDocumentStatusChange(publishStatus: boolean) {
-    console.log(JSON.stringify({ status: publishStatus }));
+    console.log(JSON.stringify({status: publishStatus}));
     const publishedTimestamp = publishStatus ? firestore.Timestamp.now() : null;
     this.documentForm.controls['published'].setValue(publishedTimestamp);
   }

@@ -4,7 +4,7 @@ import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional,
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { MatFormFieldControl, MatSelectChange } from '@angular/material';
 import { Observable, Subject } from 'rxjs';
-import { Document, DocumentStatus } from 'tanam-models';
+import { ITanamDocument, DocumentStatus } from 'tanam-models';
 import { DocumentService } from '../../../services/document.service';
 
 @Component({
@@ -33,7 +33,7 @@ export class DocumentReferenceComponent implements MatFormFieldControl<string>, 
   autofilled?: boolean;
 
   stateChanges = new Subject<void>();
-  documentOptions$: Observable<Document[]>;
+  documentOptions$: Observable<ITanamDocument[]>;
 
   private _required = false;
   private _disabled = false;

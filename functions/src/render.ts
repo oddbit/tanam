@@ -1,10 +1,11 @@
 import * as cheerio from 'cheerio';
 import * as dust from 'dustjs-helpers';
-import { PageContext } from './models';
+import { PageContext, DocumentContext } from './models';
 import * as documentContextService from './services/page-context.service';
 import * as documentService from './services/document.service';
 import * as siteInfoService from './services/site-info.service';
 import * as templateService from './services/template.service';
+import { TanamHttpRequest } from './models/http_request.model';
 
 dust.isDebug = true;
 
@@ -26,49 +27,48 @@ dust.helpers.debugDump = (chunk, context, bodies, params) => {
 }
 
 dust.helpers.document = async (chunk, context, bodies, params) => {
-  console.log(`[dust.helpers.document] Getting document id: ${JSON.stringify(params.id)}`);
-  if (!params.document) {
-    console.error(`[dust.helpers.document] Missing reference parameter "document"`);
-    throw new Error(`Dust helper must declare referencing context ID.`);
+  const requestedId: string = params.id; // The document ID to fetch
+  const documentContext: DocumentContext = context.get('document');
+  const siteContext = context.get('site');
+
+  console.log(`[dust.helpers.document] ${JSON.stringify({ requestedId })}`);
+  if (!requestedId) {
+    console.error(`[dust.helpers.document] Missing reference parameter "id"`);
+    return chunk.write(dust.helpers.setError(`Dust helper must specify a document ID.`));
   }
 
-  const pageContext = await documentContextService.getPageContextById(params.id);
-  await documentService.addDependency(params.document.id, pageContext.document.id);
-  return pageContext;
+  const siteInfo = await siteInfoService.getSiteInfoFromDomain(siteContext.domain);
+  const requestedPageContext = await documentContextService.getPageContextById(requestedId);
+  await documentService.addDependency(siteInfo, documentContext.id, requestedPageContext.document.id);
+  return requestedPageContext;
 }
 
 dust.helpers.documents = async (chunk, context, bodies, params) => {
-  console.log(`[dust.helpers.documents] Getting documents: ${JSON.stringify({
-    limit: params.limit,
-    documentType: params.documentType,
-    orderBy: params.orderBy,
-    sortOrder: params.sortOrder
-  })}`);
-  if (!params.document) {
-    console.error(`[dust.helpers.document] Missing reference parameter "document"`);
-    throw new Error(`Dust helper must declare referencing context ID.`);
-  }
-
-  const pageContexts = await documentContextService.queryPageContext(params.documentType, {
+  const siteContext = context.get('site');
+  const queryOpts = {
     limit: params.limit,
     orderBy: {
       field: params.orderBy,
       sortOrder: params.sortOrder,
     },
-  });
+  };
 
+  console.log(`[dust.helpers.documents] ${JSON.stringify({ queryOpts, siteContext })}`);
+  const siteInfo = await siteInfoService.getSiteInfoFromDomain(siteContext.domain);
+  const requestedPageContexts = await documentContextService.queryPageContext(siteContext.domain, params.documentType, queryOpts);
   try {
-    await documentService.addDependency(params.document.id, pageContexts.map(pageContext => pageContext.document.id));
-    console.log(`[addDependencySuccess] Success`)
+    const dependecies = requestedPageContexts.map(ctx => ctx.document.id);
+    await documentService.addDependency(siteInfo, params.document.id, dependecies);
+    console.log(`[dust.helpers.documents] Success`);
   } catch (error) {
-    console.warn(`[addDependencyError] ${JSON.stringify(error)}`)
+    console.warn(`[dust.helpers.documents] Failed to add dependecies ${JSON.stringify(error)}`)
   }
-  console.log(`[pageContextsResult] ${JSON.stringify(pageContexts)}`)
-  return pageContexts;
+  return requestedPageContexts;
 }
 
-export async function compileTemplate(context: PageContext) {
-  const templates = await templateService.getTemplates();
+async function compileTemplate(context: PageContext) {
+  const siteInfo = await siteInfoService.getSiteInfoFromDomain(context.site.domain);
+  const templates = await templateService.getTemplates(siteInfo);
   console.log(`[renderTemplate] Theme has ${templates.length} templates.`);
 
   for (const template of templates) {
@@ -94,13 +94,17 @@ export async function compileTemplate(context: PageContext) {
   });
 }
 
-export async function renderPage404() {
+export async function renderErrorPage(request: TanamHttpRequest, error: 'http404' | 'http500' | 'error') {
+  console.log(`[renderErrorPage] ${JSON.stringify({ request, error })}`);
+  const siteInfo = await siteInfoService.getSiteInfoFromDomain(request.hostname);
   return new Promise<string>(async (resolve, reject) => {
-    const template = await templateService.getTemplate404();
+    const template = await templateService.getErrorTemplate(siteInfo, error);
     if (!template) {
-      console.log(`[compileTemplate404] template http404 not found`);
-      reject();
+      // TODO: Implement default error templates
+      resolve(`Error ${error}: ${request.fullyQualifiedUrl}`);
+      return;
     }
+
     const source = dust.compile(template.template, template.id);
     dust.register(template.id, dust.loadSource(source));
     dust.render('http404', {}, (err: any, out: string) => {
@@ -117,7 +121,7 @@ export async function renderPage404() {
 }
 
 export async function renderPage(context: PageContext): Promise<string> {
-  const siteInfo = await siteInfoService.getSiteInfo();
+  const siteInfo = await siteInfoService.getSiteInfoFromDomain(context.site.domain);
   const template = await compileTemplate(context);
   if (!template) {
     console.error(`No template rendered for document ${context.document.id}`);
