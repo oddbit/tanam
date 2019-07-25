@@ -182,6 +182,15 @@ export class UserService {
       .set(userInvite.toJson());
   }
 
+  async updateUserRoles(id: string, collection: string, roles: TanamUserRoleType[]) {
+    const tanamSite = await this._currentSite;
+    return this.firestore
+      .collection('tanam').doc(tanamSite.id)
+      .collection(collection).doc(id).update({
+        roles: roles
+      });
+  }
+
   async deleteUserInviteds(userRole: ITanamUserInvite) {
     const tanamSite = await this._currentSite;
     return this.firestore

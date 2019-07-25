@@ -20,6 +20,7 @@ export class UserRoleSelectorComponent {
 
   @Input() roles: TanamUserRoleType;
   @Input() id: string;
+  @Input() collection: string;
 
   readonly rolesOption = [
     {
@@ -41,9 +42,9 @@ export class UserRoleSelectorComponent {
     private readonly userService: UserService
   ) { }
 
-  async onRoleChange(roles: TanamUserRoleType) {
+  async onRoleChange(roles: TanamUserRoleType[]) {
     this.snackBar.open('Updating Role..', 'Dismiss', { duration: 2000 });
-    // await this.userService.updateUser(this.id, roles);
+    await this.userService.updateUserRoles(this.id, this.collection, roles);
     this.snackBar.open('Role Updated', 'Dismiss', { duration: 2000 });
   }
 

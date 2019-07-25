@@ -10,7 +10,8 @@
         <h4 mat-line><b>{{item.name}}</b></h4>
         <p mat-line>{{item.email}}</p>
         <tanam-user-role-selector [id]="item.uid"
-                                  [roles]="item.roles">
+                                  [roles]="item.roles"
+                                  collection="users">
         </tanam-user-role-selector>
         <button mat-icon-button
                 color="warn"

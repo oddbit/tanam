@@ -9,7 +9,8 @@
         <h4 mat-line><b>{{item.email}}</b></h4>
         <p mat-line>Invited on {{item.updated?.toDate() | date:'medium'}}</p>
         <tanam-user-role-selector [id]="item.id"
-                                  [roles]="item.roles">
+                                  [roles]="item.roles"
+                                  collection="user-invites">
         </tanam-user-role-selector>
         <button mat-icon-button
                 [matMenuTriggerFor]="menu"
