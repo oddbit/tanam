@@ -175,6 +175,7 @@ export class UserService {
 
   async inviteUser(userInvite: TanamUserInvite) {
     const tanamSite = await this._currentSite;
+    this.sendUserInvitation(userInvite);
     userInvite.id = userInvite.email;
     return this.firestore
       .collection('tanam').doc(tanamSite.id)
@@ -197,6 +198,20 @@ export class UserService {
       .collection('tanam').doc(tanamSite.id)
       .collection('user-invites')
       .doc(userRole.email).delete();
+  }
+
+  async sendUserInvitation(userInvite: TanamUserInvite) {
+    const tanamSite = await this._currentSite;
+    this.siteService.getCurrentSite().subscribe(settings => {
+      const actionCodeSettings = {
+        url: `https://${settings.primaryDomain}/_/login`,
+        handleCodeInApp: true,
+      };
+      firebase.auth().sendSignInLinkToEmail(userInvite.email, actionCodeSettings)
+        .catch(function (error) {
+          console.log(error);
+        });
+    });
   }
 
   async getReference(id: string) {
