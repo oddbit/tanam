@@ -1,3 +1,5 @@
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 import { Injectable } from '@angular/core';
 import { FirebaseApp } from '@angular/fire';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -8,10 +10,10 @@ import {
   ADMIN_THEMES,
   AdminTheme,
   ITanamUser,
-  ITanamUserRole,
+  ITanamUserInvite,
   TanamSite,
   TanamUser,
-  TanamUserRole,
+  TanamUserInvite,
   TanamUserRoleType,
   UserQueryOptions,
 } from 'tanam-models';
@@ -71,7 +73,7 @@ export class UserService {
           .collection('users').doc<ITanamUser>(firebaseUser.uid)
           .valueChanges()
           .pipe(
-            map(tanamUser => !!tanamUser.prefs ? tanamUser.prefs : {theme: 'default'}),
+            map(tanamUser => !!tanamUser.prefs ? tanamUser.prefs : { theme: 'default' }),
             map((prefs: { theme: AdminTheme }) => ADMIN_THEMES[prefs.theme] || ADMIN_THEMES['default']),
             tap(theme => console.log(`[UserPrefsService:getAdminTheme] theme: ${theme}`)),
           )
@@ -90,9 +92,9 @@ export class UserService {
       const trxDoc = await trx.get(docRef.ref);
       const trxUser = trxDoc.data() as ITanamUser;
 
-      const prefs = {...trxUser.prefs, theme};
+      const prefs = { ...trxUser.prefs, theme };
 
-      trx.update(docRef.ref, {prefs});
+      trx.update(docRef.ref, { prefs });
     });
   }
 
@@ -140,7 +142,7 @@ export class UserService {
     );
   }
 
-  getUserRoles(queryOpts: UserQueryOptions): Observable<TanamUserRole[]> {
+  getUserInviteds(queryOpts: UserQueryOptions): Observable<TanamUserInvite[]> {
     const queryFn = (ref: CollectionReference) => {
       if (queryOpts) {
         let query: Query = ref;
@@ -162,30 +164,29 @@ export class UserService {
       switchMap((site) =>
         this.firestore
           .collection('tanam').doc(site.id)
-          .collection<ITanamUserRole>('user-roles', queryFn)
+          .collection<ITanamUserInvite>('user-invites', queryFn)
           .valueChanges()
           .pipe(
-            map((roles) => roles.map((role) => new TanamUserRole(role))),
+            map((roles) => roles.map((role) => new TanamUserInvite(role))),
           )
       ),
     );
   }
 
-  async inviteUser(userRole: TanamUserRole) {
-    userRole.id = userRole.id || this.firestore.createId();
+  async inviteUser(userInvite: TanamUserInvite) {
     const tanamSite = await this._currentSite;
     return this.firestore
       .collection('tanam').doc(tanamSite.id)
-      .collection('user-roles').doc(userRole.id)
-      .set(userRole.toJson());
+      .collection('user-invites').doc(userInvite.email)
+      .set(userInvite.toJson());
   }
 
-  async deleteUserRole(userRole: ITanamUserRole) {
+  async deleteUserInviteds(userRole: ITanamUserInvite) {
     const tanamSite = await this._currentSite;
     return this.firestore
       .collection('tanam').doc(tanamSite.id)
-      .collection('user-roles')
-      .doc(userRole.id).delete();
+      .collection('user-invites')
+      .doc(userRole.email).delete();
   }
 
   async getReference(id: string) {

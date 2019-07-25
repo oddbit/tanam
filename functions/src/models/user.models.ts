@@ -26,7 +26,7 @@ export interface UserQueryOptions {
 }
 
 export interface ITanamUserInvite extends ITanamBase {
-  role: TanamUserRoleType;
+  roles: TanamUserRoleType[];
   email: string;
 }
 
@@ -70,25 +70,34 @@ export class TanamUser extends TanamBase implements ITanamUser {
 }
 
 export class TanamUserInvite extends TanamBase implements ITanamUserInvite {
-  role: TanamUserRoleType;
+  roles: TanamUserRoleType[];
   email: string;
 
   constructor(json: ITanamUserInvite) {
     super(json);
-    this.role = json.role;
+    this.roles = json.roles;
     this.email = json.email;
   }
 
   toJson(): ITanamUserInvite {
     console.log(`[${TanamUserInvite.name}.toJson]`);
-    return {
+
+    const json = {
       ...super.toJson(),
       email: this.email,
-      role: this.role,
+      roles: this.roles,
     } as ITanamUserInvite;
+
+    for (const key in json) {
+      if (json.hasOwnProperty(key)) {
+        json[key] = typeof json[key] === "undefined" ? null : json[key];
+      }
+    }
+
+    return json;
   }
 
   toString() {
-    return `${TanamUserInvite.name}(${this.email}: ${this.role})`;
+    return `${TanamUserInvite.name}(${this.email}: ${this.roles})`;
   }
 }

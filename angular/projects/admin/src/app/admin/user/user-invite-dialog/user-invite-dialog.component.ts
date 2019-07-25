@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
 import { UserService } from '../../../services/user.service';
-import { ITanamUserRole, TanamUserRole, TanamUserRoleType } from 'tanam-models/user.models';
+import { ITanamUserInvite, TanamUserInvite, TanamUserRoleType } from 'tanam-models/user.models';
 
 interface DialogRoleOption {
   value: TanamUserRoleType;
@@ -49,7 +49,7 @@ export class UserInviteDialogComponent {
     this.snackBar.open('Sending Invitation', 'Dismiss', {
       duration: 2000,
     });
-    await this.userService.inviteUser(new TanamUserRole(this.addUserForm.value as ITanamUserRole));
+    await this.userService.inviteUser(new TanamUserInvite(this.addUserForm.value as ITanamUserInvite));
     this.dialogRef.close();
     this.snackBar.open('Sent', 'Dismiss', {
       duration: 2000,

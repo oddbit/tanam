@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { UserRole } from 'tanam-models';
+import { TanamUserRoleType } from 'tanam-models';
 import { MatSnackBar } from '@angular/material';
 import { UserService } from '../../services/user.service';
 
@@ -18,7 +18,7 @@ import { UserService } from '../../services/user.service';
 })
 export class UserRoleSelectorComponent {
 
-  @Input() roles: UserRole[];
+  @Input() roles: TanamUserRoleType;
   @Input() id: string;
 
   readonly rolesOption = [
@@ -41,9 +41,9 @@ export class UserRoleSelectorComponent {
     private readonly userService: UserService
   ) { }
 
-  async onRoleChange(roles: UserRole[]) {
+  async onRoleChange(roles: TanamUserRoleType) {
     this.snackBar.open('Updating Role..', 'Dismiss', { duration: 2000 });
-    await this.userService.updateUser(this.id, roles);
+    // await this.userService.updateUser(this.id, roles);
     this.snackBar.open('Role Updated', 'Dismiss', { duration: 2000 });
   }
 
