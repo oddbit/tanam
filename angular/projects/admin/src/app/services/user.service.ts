@@ -175,6 +175,7 @@ export class UserService {
 
   async inviteUser(userInvite: TanamUserInvite) {
     const tanamSite = await this._currentSite;
+    userInvite.id = userInvite.email;
     return this.firestore
       .collection('tanam').doc(tanamSite.id)
       .collection('user-invites').doc(userInvite.email)
