@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IPageInfo } from 'ngx-virtual-scroller';
 import { UserService } from '../../../services/user.service';
 import { map, tap } from 'rxjs/operators';
-import { ITanamUserInvite, TanamUserRoleType } from 'tanam-models/user.models';
+import { ITanamUserInvite, TanamUserRoleType, TanamUserInvite } from 'tanam-models/user.models';
 import { DialogService } from '../../../services/dialog.service';
 import { MatSnackBar } from '@angular/material';
 
@@ -94,6 +94,16 @@ export class UserInvitedComponent {
           duration: 2000
         });
       }
+    });
+  }
+
+  async resendUserInvitation(user: TanamUserInvite) {
+    this.snackBar.open('Sending Invitation', 'Dismiss', {
+      duration: 2000,
+    });
+    await this.userService.sendUserInvitation(user);
+    this.snackBar.open('Sent', 'Dismiss', {
+      duration: 2000,
     });
   }
 }
