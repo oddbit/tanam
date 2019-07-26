@@ -6,7 +6,7 @@
                       [enableUnequalChildrenSizes]="true">
       <mat-list-item *ngFor="let item of scroll.viewPortItems">
         <img matListAvatar
-             src="{{item.photoUrl || 'assets/icons/tanam-icon.svg'}}">
+             src="{{item.photoUrl || '_/assets/icons/tanam-icon.svg'}}">
         <h4 mat-line><b>{{item.name}}</b></h4>
         <p mat-line>{{item.email}}</p>
         <tanam-user-role-selector [id]="item.uid"
