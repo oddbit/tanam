@@ -175,12 +175,21 @@ export class UserService {
 
   async inviteUser(userInvite: TanamUserInvite) {
     const tanamSite = await this._currentSite;
-    this.sendUserInvitation(userInvite);
-    userInvite.id = userInvite.email;
     return this.firestore
       .collection('tanam').doc(tanamSite.id)
-      .collection('user-invites').doc(userInvite.email)
-      .set(userInvite.toJson());
+      .collection('users').ref.where('email', '==', userInvite.email)
+      .get().then(async users => {
+        if (users.size > 0) {
+          return 'userAlreadyCreated';
+        }
+        this.sendUserInvitation(userInvite);
+        userInvite.id = userInvite.email;
+        await this.firestore
+          .collection('tanam').doc(tanamSite.id)
+          .collection('user-invites').doc(userInvite.email)
+          .set(userInvite.toJson());
+        return 'userInvited';
+      });
   }
 
   async updateUserRoles(id: string, collection: string, roles: TanamUserRoleType[]) {

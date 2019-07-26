@@ -49,11 +49,17 @@ export class UserInviteDialogComponent {
     this.snackBar.open('Sending Invitation', 'Dismiss', {
       duration: 2000,
     });
-    await this.userService.inviteUser(new TanamUserInvite(this.addUserForm.value as ITanamUserInvite));
-    this.dialogRef.close();
-    this.snackBar.open('Sent', 'Dismiss', {
-      duration: 2000,
-    });
+    const userStatus = await this.userService.inviteUser(new TanamUserInvite(this.addUserForm.value as ITanamUserInvite));
+    if (userStatus === 'userInvited') {
+      this.dialogRef.close();
+      this.snackBar.open('Sent', 'Dismiss', {
+        duration: 2000,
+      });
+    } else if (userStatus === 'userAlreadyCreated') {
+      this.snackBar.open('User already created', 'Dismiss', {
+        duration: 2000,
+      });
+    }
   }
 
 }
