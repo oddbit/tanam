@@ -8,10 +8,11 @@ export async function cacheTask(action: TanamTaskQueueAction, siteId: string, pa
   if (!path) {
     return null;
   }
-  console.log(`[makeCacheTask] ${JSON.stringify({siteId, path, action})}`);
+  console.log(`[makeCacheTask] ${JSON.stringify({ siteId, path, action })}`);
   return taskQueueRef(siteId).child('cache').child(action).push(path).then(() => null);
 }
 
-export function fetchThemeTask(siteId: string, url: string): Promise<void> {
-  return taskQueueRef(siteId).child('get-theme').push(url).then(() => null);
+export async function fetchThemeTask(siteId: string, url: string): Promise<void> {
+  await taskQueueRef(siteId).child('get-theme').push(url);
+  return null;
 }
