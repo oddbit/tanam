@@ -298,17 +298,15 @@ export const onNewTanamSite = functions.database.ref('tanam/_/new/{id}').onCreat
   // Create initial user roles
   //
 
-  for (const role in newSiteData.roles) {
-    const userRoleRef = newSiteBaseRef.collection('user-roles').doc();
-    const userRole = new TanamUserInvite({
-      id: userRoleRef.id,
-      role: role,
-      email: newSiteData.roles[role],
-    } as ITanamUserInvite);
+  const userRoleRef = newSiteBaseRef.collection('user-invites').doc(newSiteData.superAdmin);
+  const userRole = new TanamUserInvite({
+    id: userRoleRef.id,
+    roles: ['superAdmin'],
+    email: newSiteData.superAdmin,
+  } as ITanamUserInvite);
 
-    console.log(`${userRole.toString()}: ${JSON.stringify(userRole.toJson())}`);
-    batchWrite.set(userRoleRef, userRole.toJson());
-  }
+  console.log(`${userRole.toString()}: ${JSON.stringify(userRole.toJson())}`);
+  batchWrite.set(userRoleRef, userRole.toJson());
 
 
   // --------------------------------------------------------------------------

@@ -61,15 +61,10 @@ export interface IAdminCreateSiteRequest {
   domain: string;
 
   /**
-   * A key/value map of roles as keys and email addresses as values
-   *
-   * e.g.
-   * {
-   *     'superAdmin': 'jane.deer@example.com',
-   *     'admin': 'john.doe@example.com',
-   * }
+   * Mandatory to have an initial super admin email to invite.
+   * Value must be a valid email.
    */
-  roles: { [key: string]: string };
+  superAdmin: string;
 
   /**
    * The default language to use for content that is being created by user
@@ -88,7 +83,7 @@ export class AdminCreateSiteRequest implements IAdminCreateSiteRequest {
   readonly id: string;
   readonly name: string;
   readonly domain: string;
-  readonly roles: { [key: string]: string };
+  readonly superAdmin: string;
   readonly language: string;
   readonly force: boolean;
 
@@ -96,7 +91,7 @@ export class AdminCreateSiteRequest implements IAdminCreateSiteRequest {
     this.id = (json.id || json.name).replace(/[^A-Za-z0-9_-]/g, '');
     this.name = json.name || json.id;
     this.domain = json.domain;
-    this.roles = { ...json.roles };
+    this.superAdmin = json.superAdmin;
     this.language = json.language || 'en';
     this.force = json.force === true;
   }
