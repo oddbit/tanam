@@ -15,6 +15,8 @@ interface DialogRoleOption {
   styleUrls: ['./user-invite-dialog.component.scss']
 })
 export class UserInviteDialogComponent {
+  buttonSendIsLoading = false;
+
   readonly defaultRole: TanamUserRoleType = 'admin';
   readonly roles: DialogRoleOption[] = [
     {
@@ -46,6 +48,7 @@ export class UserInviteDialogComponent {
   }
 
   async addUser() {
+    this.buttonSendIsLoading = true;
     this.snackBar.open('Sending Invitation', 'Dismiss', {
       duration: 2000,
     });
@@ -55,10 +58,12 @@ export class UserInviteDialogComponent {
       this.snackBar.open('Sent', 'Dismiss', {
         duration: 2000,
       });
+      this.buttonSendIsLoading = false;
     } else if (userStatus === 'userAlreadyCreated') {
       this.snackBar.open('User already created', 'Dismiss', {
         duration: 2000,
       });
+      this.buttonSendIsLoading = false;
     }
   }
 

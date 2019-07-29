@@ -15,7 +15,8 @@
     </mat-form-field>
     <mat-form-field class="full-width">
       <mat-label>Role</mat-label>
-      <mat-select formControlName="roles" multiple>
+      <mat-select formControlName="roles"
+                  multiple>
         <mat-option *ngFor="let role of roles"
                     value="{{role.value}}">{{role.text}}</mat-option>
       </mat-select>
@@ -25,6 +26,6 @@
 <div mat-dialog-actions>
   <button mat-raised-button
           color="primary"
-          disabled={{!addUserForm.valid}}
+          [disabled]='!addUserForm.valid || buttonSendIsLoading'
           (click)="addUser()">Send Invitation</button>
 </div>
