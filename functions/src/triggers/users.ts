@@ -21,7 +21,7 @@ export const onAccountCreate = functions.auth.user().onCreate(async (firebaseUse
   for (const doc of invites.docs) {
     const siteId = doc.ref.parent.parent.id;
     const role = new TanamUserInvite(doc.data() as ITanamUserInvite);
-    siteRoles[siteId] = [role.role];
+    siteRoles[siteId] = role.roles;
   }
 
   console.log(JSON.stringify({ siteRoles }));
@@ -34,8 +34,14 @@ export const onAccountCreate = functions.auth.user().onCreate(async (firebaseUse
 
     batchWrite.set(ref, {
       ...tanamUser.toJson(),
-      roles: !!siteRoles[siteId] || [],
+      roles: siteRoles[siteId] || [],
     });
+
+    const userInviteRef = admin.firestore()
+      .collection('tanam').doc(siteId)
+      .collection('user-invites').doc(tanamUser.email);
+
+    batchWrite.delete(userInviteRef)
   });
 
   return Promise.all([
