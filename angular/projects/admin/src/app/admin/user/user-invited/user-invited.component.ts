@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { IPageInfo } from 'ngx-virtual-scroller';
 import { UserService } from '../../../services/user.service';
 import { map, tap } from 'rxjs/operators';
-import { ITanamUserInvite, TanamUserRoleType, TanamUserInvite } from 'tanam-models/user.models';
+import { ITanamUserInvite, TanamUserRoleType } from 'tanam-models/user.models';
 import { DialogService } from '../../../services/dialog.service';
 import { MatSnackBar } from '@angular/material';
+import { AngularUserInvite } from '../../../app.models';
 
 interface TanamRoleOptions {
   value: TanamUserRoleType;
@@ -32,7 +33,7 @@ export class UserInvitedComponent {
     }
   ];
 
-  items: ITanamUserInvite[] = [];
+  items: AngularUserInvite[] = [];
   limit = 20;
   isLoading: boolean;
   isLastItem: boolean;
@@ -77,10 +78,10 @@ export class UserInvitedComponent {
       });
   }
 
-  deleteInvitedUser(userRole: ITanamUserInvite) {
+  deleteInvitedUser(userInvited: AngularUserInvite) {
     this.dialogService.openDialogConfirm({
       title: 'Delete File',
-      message: `Are you sure to delete "${userRole.email} (${userRole.roles})" ?`,
+      message: `Are you sure to delete "${userInvited.email} (${userInvited.roles})" ?`,
       buttons: ['cancel', 'yes'],
       icon: 'warning'
     }).afterClosed().subscribe(async res => {
@@ -88,8 +89,8 @@ export class UserInvitedComponent {
         this.snackBar.open('Deleting role...', 'Dismiss', {
           duration: 2000
         });
-        await this.userService.deleteUserInviteds(userRole);
-        this.items = this.items.filter(item => item.id !== userRole.id);
+        await this.userService.deleteUserInviteds(userInvited);
+        this.items = this.items.filter(item => item.id !== userInvited.id);
         this.snackBar.open('User role deleted', 'Dismiss', {
           duration: 2000
         });
@@ -97,11 +98,11 @@ export class UserInvitedComponent {
     });
   }
 
-  async resendUserInvitation(user: TanamUserInvite) {
+  async resendUserInvitation(user: AngularUserInvite) {
     this.snackBar.open('Sending Invitation', 'Dismiss', {
       duration: 2000,
     });
-    await this.userService.sendUserInvitation(user);
+    await this.userService.sendUserInvitation(new AngularUserInvite(user));
     this.snackBar.open('Sent', 'Dismiss', {
       duration: 2000,
     });

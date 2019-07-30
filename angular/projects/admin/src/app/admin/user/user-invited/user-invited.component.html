@@ -7,7 +7,7 @@
       <mat-list-item *ngFor="let item of scroll.viewPortItems">
         <mat-icon matListIcon>account_circle</mat-icon>
         <h4 mat-line><b>{{item.email}}</b></h4>
-        <p mat-line>Invited on {{item.updated?.toDate() | date:'medium'}}</p>
+        <p mat-line>Invited on {{item.updated}}</p>
         <tanam-user-role-selector [id]="item.id"
                                   [roles]="item.roles"
                                   collection="user-invites">

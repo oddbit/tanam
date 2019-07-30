@@ -20,6 +20,7 @@ import {
 import { AppConfigService } from './app-config.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { SiteService } from './site.service';
+import { AngularUserInvite } from '../app.models';
 
 @Injectable({
   providedIn: 'root'
@@ -173,7 +174,7 @@ export class UserService {
     );
   }
 
-  async inviteUser(userInvite: TanamUserInvite) {
+  async inviteUser(userInvite: AngularUserInvite) {
     const tanamSite = await this._currentSite;
     return this.firestore
       .collection('tanam').doc(tanamSite.id)
@@ -209,7 +210,7 @@ export class UserService {
       .doc(userRole.email).delete();
   }
 
-  async sendUserInvitation(userInvite: TanamUserInvite) {
+  async sendUserInvitation(userInvite: AngularUserInvite) {
     const tanamSite = await this._currentSite;
     this.siteService.getCurrentSite().subscribe(settings => {
       const actionCodeSettings = {

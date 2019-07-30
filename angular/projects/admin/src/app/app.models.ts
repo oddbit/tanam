@@ -14,8 +14,19 @@ export class AngularTanamSite extends models.TanamSite {
 }
 
 
-export class AngularTanamUser extends models.TanamUser {
+export class AngularUserInvite extends models.TanamUserInvite {
+  toJson(): models.ITanamUserInvite {
+    const json = super.toJson();
+    json.updated = firebase.firestore.FieldValue.serverTimestamp();
+    json.created = !!json.created
+      ? firebase.firestore.Timestamp.fromDate(json.created)
+      : firebase.firestore.FieldValue.serverTimestamp();
+    return json;
+  }
+}
 
+
+export class AngularTanamUser extends models.TanamUser {
   toJson(): models.ITanamUser {
     const json = super.toJson();
     json.updated = firebase.firestore.FieldValue.serverTimestamp();
