@@ -20,7 +20,7 @@ import {
 import { AppConfigService } from './app-config.service';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { SiteService } from './site.service';
-import { AngularUserInvite } from '../app.models';
+import { AngularUserInvite, AngularTanamUser } from '../app.models';
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +57,14 @@ export class UserService {
           )
       ),
     );
+  }
+
+  async deleteUser(user: AngularTanamUser) {
+    const tanamSite = await this._currentSite;
+    return this.firestore
+      .collection('tanam').doc(tanamSite.id)
+      .collection('users')
+      .doc(user.id || user.uid).delete();
   }
 
   hasRole(role: TanamUserRoleType): Observable<boolean> {

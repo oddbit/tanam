@@ -3,6 +3,9 @@ import { IPageInfo } from 'ngx-virtual-scroller';
 import { UserService } from '../../../services/user.service';
 import { map, tap } from 'rxjs/operators';
 import { TanamUser, TanamUserRoleType } from 'tanam-models/user.models';
+import { AngularTanamUser } from '../../../app.models';
+import { DialogService } from '../../../services/dialog.service';
+import { MatSnackBar } from '@angular/material';
 
 interface TanamRoleOptions {
   value: TanamUserRoleType;
@@ -17,6 +20,8 @@ interface TanamRoleOptions {
 export class UserListComponent {
   constructor(
     private readonly userService: UserService,
+    private dialogService: DialogService,
+    private snackBar: MatSnackBar
   ) {
   }
 
@@ -78,12 +83,29 @@ export class UserListComponent {
         }),
         map(items => {
           const mergedItems = [...this.items, ...items];
-          return mergedItems.reduce((acc, cur) => ({...acc, [cur.name]: cur}), {});
+          return mergedItems.reduce((acc, cur) => ({ ...acc, [cur.name]: cur }), {});
         }),
         map(v => Object.values(v).sort(UserListComponent.sortItems))
       ).subscribe((items: any) => {
-      this.items = [...items];
-      this.isLoading = false;
+        this.items = [...items];
+        this.isLoading = false;
+      });
+  }
+
+  deleteUser(user: AngularTanamUser) {
+    console.log(user);
+    this.dialogService.openDialogConfirm({
+      title: 'Delete Content Type',
+      message: `Are you sure to delete user "${user.email}" ?`,
+      buttons: ['cancel', 'yes'],
+      icon: 'warning'
+    }).afterClosed().subscribe(async res => {
+      if (res === 'yes') {
+        this.snackBar.open('Deleting..', 'Dismiss', { duration: 2000 });
+        await this.userService.deleteUser(new AngularTanamUser(user));
+        this.items = this.items.filter(item => item.id !== user.id);
+        this.snackBar.open('Deleted', 'Dismiss', { duration: 2000 });
+      }
     });
   }
 }
