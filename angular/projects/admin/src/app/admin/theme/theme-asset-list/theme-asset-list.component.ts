@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserThemeAssetService } from '../../../services/user-theme-asset.service';
 import { TanamFile } from '../../../../../../../../functions/src/models';
 import { ActivatedRoute } from '@angular/router';
@@ -15,7 +15,7 @@ import { map, tap } from 'rxjs/operators';
 })
 export class ThemeAssetListComponent {
   readonly themeId = this.route.snapshot.paramMap.get('themeId');
-  uploadTasks: { [key: string]: Observable<number> } = {};
+  uploadTasks: { [key: string]: Observable<number | unknown> } = {};
   items: TanamFile[] = [];
   limit = 20;
   isLoading: boolean;

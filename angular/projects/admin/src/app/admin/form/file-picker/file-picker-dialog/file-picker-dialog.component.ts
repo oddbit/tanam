@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { MatDialogRef, MatSnackBar } from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { TanamFile } from 'tanam-models';
 import { UserFileService } from '../../../../services/user-file.service';
@@ -12,7 +13,7 @@ import { IPageInfo } from 'ngx-virtual-scroller';
   styleUrls: ['./file-picker-dialog.component.scss']
 })
 export class FilePickerDialogComponent {
-  uploadTasks: { [key: string]: Observable<number> } = {};
+  uploadTasks: { [key: string]: Observable<unknown> } = {};
   selectedFile = '';
   private readonly _downloadUrls = {};
   readonly placeHolder = 'https://dummyimage.com/1x1/cccccc/000000.png&text=+';

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { TanamUserRoleType } from 'tanam-models';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../../services/user.service';
 
 @Component({

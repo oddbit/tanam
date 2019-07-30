@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../admin/components/dialog/dialog.component';
 
 type DialogButton = 'ok' | 'yes' | 'no' | 'cancel';

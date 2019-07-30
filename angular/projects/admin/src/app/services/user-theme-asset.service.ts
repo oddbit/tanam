@@ -17,7 +17,7 @@ export class UserThemeAssetService {
   ) {
   }
 
-  uploadThemeAsset(file: File, themeId: string): Observable<number> {
+  uploadThemeAsset(file: File, themeId: string): Observable<number | unknown> {
     return this.siteService.getCurrentSite().pipe(
       switchMap((site) =>
         this.fireStorage

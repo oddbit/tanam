@@ -22,7 +22,7 @@ export class PageTitleComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Input() description: string;
   @Input() hide = false;
 
-  @ViewChild(CdkPortal)
+  @ViewChild(CdkPortal, { static: false })
   private portal: CdkPortal;
   private host: DomPortalHost;
 

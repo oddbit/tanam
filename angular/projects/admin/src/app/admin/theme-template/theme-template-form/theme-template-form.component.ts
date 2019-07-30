@@ -4,7 +4,8 @@ import { Subscription } from 'rxjs';
 import { ThemeTemplate } from 'tanam-models';
 import { ThemeTemplateService } from '../../../services/theme-template.service';
 import { Router } from '@angular/router';
-import { MatSnackBar, MatDialog,  } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogService } from '../../../services/dialog.service';
 import {
   ThemeTemplateDialogListTemplateComponent

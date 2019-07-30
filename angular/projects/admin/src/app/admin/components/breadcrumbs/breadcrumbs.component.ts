@@ -17,7 +17,7 @@ import { CdkPortal, DomPortalHost } from '@angular/cdk/portal';
   styleUrls: ['./breadcrumbs.component.scss']
 })
 export class BreadcrumbsComponent implements AfterViewInit, OnDestroy {
-  @ViewChild(CdkPortal)
+  @ViewChild(CdkPortal, { static: false })
   private portal: CdkPortal;
   private host: DomPortalHost;
   @Input() title: string;

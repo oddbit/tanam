@@ -6,7 +6,7 @@ import { Theme } from 'tanam-models';
 import { ThemeService } from '../../../services/theme.service';
 import { DialogService } from '../../../services/dialog.service';
 import { SiteService } from '../../../services/site.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'tanam-theme-form',

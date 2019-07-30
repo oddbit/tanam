@@ -24,7 +24,7 @@ export class TextboxRichComponent implements MatFormFieldControl<string>, Contro
 
   @HostBinding('attr.aria-describedby') describedBy = '';
   @HostBinding() id = `textbox-rich-${TextboxRichComponent._nextId++}`;
-  @ViewChild('container', { read: ElementRef }) container: ElementRef;
+  @ViewChild('container', { read: ElementRef, static: false }) container: ElementRef;
 
   @Input() editorConfig: any;
 

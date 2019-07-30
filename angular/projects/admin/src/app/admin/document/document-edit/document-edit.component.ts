@@ -7,7 +7,7 @@ import { DocumentTypeService } from '../../../services/document-type.service';
 import { DocumentService } from '../../../services/document.service';
 import { SiteService } from '../../../services/site.service';
 import { firestore } from 'firebase/app';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogService } from '../../../services/dialog.service';
 
 @Component({

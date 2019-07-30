@@ -3,7 +3,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { DocumentTypeDialogCreateComponent } from '../../document-type/document-type-dialog-create/document-type-dialog-create.component';
 import { Router } from '@angular/router';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ThemeTemplateService } from '../../../services/theme-template.service';
 
 @Component({

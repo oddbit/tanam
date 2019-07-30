@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { UserFileService } from '../../services/user-file.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'tanam-media',
@@ -10,9 +10,9 @@ import { MatSnackBar } from '@angular/material';
   styleUrls: ['./media.component.scss']
 })
 export class MediaComponent implements OnInit {
-  uploadTasks: { [key: string]: Observable<number> } = {};
+  uploadTasks: { [key: string]: Observable<number | unknown> } = {};
 
-  @ViewChild('fileInput')
+  @ViewChild('fileInput', { static: false })
   fileInputVariable: ElementRef;
 
   constructor(

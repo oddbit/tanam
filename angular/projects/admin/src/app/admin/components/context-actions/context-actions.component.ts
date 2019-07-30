@@ -7,7 +7,7 @@ import { AfterViewInit, ApplicationRef, Component, ComponentFactoryResolver, Inj
   styleUrls: ['./context-actions.component.scss']
 })
 export class ContextActionsComponent implements AfterViewInit, OnDestroy {
-  @ViewChild(CdkPortal)
+  @ViewChild(CdkPortal, { static: false })
   private portal: CdkPortal;
   private host: DomPortalHost;
 

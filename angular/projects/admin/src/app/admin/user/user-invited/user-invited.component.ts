@@ -4,7 +4,7 @@ import { UserService } from '../../../services/user.service';
 import { map, tap } from 'rxjs/operators';
 import { ITanamUserInvite, TanamUserRoleType } from 'tanam-models/user.models';
 import { DialogService } from '../../../services/dialog.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AngularUserInvite } from '../../../app.models';
 
 interface TanamRoleOptions {

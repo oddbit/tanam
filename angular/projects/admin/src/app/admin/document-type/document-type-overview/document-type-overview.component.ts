@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DocumentTypeDialogCreateComponent } from '../document-type-dialog-create/document-type-dialog-create.component';
 
 @Component({

@@ -5,7 +5,7 @@ import { TanamFile } from 'tanam-models';
 import { UserFileService } from '../../../services/user-file.service';
 import { DialogService } from '../../../services/dialog.service';
 import { IPageInfo } from 'ngx-virtual-scroller';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'tanam-media-grid',

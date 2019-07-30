@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Theme } from 'tanam-models';
 import { ThemeService } from '../../../services/theme.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ThemeTemplateDialogCreateComponent } from '../theme-template-dialog-create/theme-template-dialog-create.component';
 
 @Component({

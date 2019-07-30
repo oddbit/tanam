@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatDatepickerModule } from '@angular/material';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { MatDatetimepickerModule } from '@mat-datetimepicker/core';

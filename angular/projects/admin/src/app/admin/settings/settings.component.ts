@@ -4,7 +4,8 @@ import { Observable, Subscription } from 'rxjs';
 import { TanamSite, Theme } from 'tanam-models';
 import { SiteService } from '../../services/site.service';
 import { ThemeService } from '../../services/theme.service';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   LanguageOptions,
   SettingsDialogManageLanguagesComponent

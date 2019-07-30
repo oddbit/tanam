@@ -61,14 +61,15 @@ export class UserFileService {
     return this.fireStorage.ref(filePath).getDownloadURL();
   }
 
-  upload(file: File): Observable<number> {
+  upload(file: File) {
     return this.siteService.getCurrentSite().pipe(
       switchMap((site) =>
         this.fireStorage
           .ref(`/tanam/${site.id}`)
           .child(`upload/${file.name}`)
-          .put(file).percentageChanges()
-      ),
+          .put(file)
+          .percentageChanges()
+      )
     );
   }
 

@@ -6,7 +6,7 @@ import { DocumentFieldFormElement, DocumentFieldValidator, ITanamDocumentField }
 import { DocumentTypeService } from '../../../services/document-type.service';
 import { SiteService } from '../../../services/site.service';
 import { documentTypeMaterialIcons } from './document-type-form.icons';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogService } from '../../../services/dialog.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { AngularTanamDocumentType } from '../../../app.models';

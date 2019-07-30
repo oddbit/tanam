@@ -7,7 +7,7 @@ import { NavigationComponent } from './navigation.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { ProfileWidgetComponent } from './profile-widget/profile-widget.component';
 import { NavigationHeaderComponent } from './navigation-header/navigation-header.component';
-import { ProjectSwitcherComponent } from './project-switcher/project-switcher.component';
+// import { ProjectSwitcherComponent } from './project-switcher/project-switcher.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +16,7 @@ import { ProjectSwitcherComponent } from './project-switcher/project-switcher.co
     NotificationsComponent,
     ProfileWidgetComponent,
     NavigationHeaderComponent,
-    ProjectSwitcherComponent,
+    // ProjectSwitcherComponent,
   ],
   imports: [
     CommonModule,

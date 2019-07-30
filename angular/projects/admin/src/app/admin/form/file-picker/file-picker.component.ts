@@ -7,7 +7,7 @@ import { Observable, Subject, Subscription } from 'rxjs';
 import { FileType, TanamFile } from 'tanam-models';
 import { UserFileService } from '../../../services/user-file.service';
 import { FilePickerDialogComponent } from './file-picker-dialog/file-picker-dialog.component';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { tap } from 'rxjs/operators';
 
 @Component({
