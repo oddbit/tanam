@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { IPageInfo } from 'ngx-virtual-scroller';
 import { UserService } from '../../../services/user.service';
 import { map, tap } from 'rxjs/operators';
-import { ITanamUserRole, TanamUserRoleType } from 'tanam-models/user.models';
+import { ITanamUserInvite, TanamUserRoleType } from 'tanam-models/user.models';
 import { DialogService } from '../../../services/dialog.service';
 import { MatSnackBar } from '@angular/material';
+import { AngularUserInvite } from '../../../app.models';
 
 interface TanamRoleOptions {
   value: TanamUserRoleType;
@@ -32,7 +33,7 @@ export class UserInvitedComponent {
     }
   ];
 
-  items: ITanamUserRole[] = [];
+  items: AngularUserInvite[] = [];
   limit = 20;
   isLoading: boolean;
   isLastItem: boolean;
@@ -59,7 +60,7 @@ export class UserInvitedComponent {
 
   fetchItems(lastVisible) {
     this.isLoading = true;
-    this.userService.getUserRoles({startAfter: lastVisible})
+    this.userService.getUserInviteds({ startAfter: lastVisible })
       .pipe(
         tap(items => {
           if (!items.length || items.length < this.limit) {
@@ -68,19 +69,19 @@ export class UserInvitedComponent {
         }),
         map(items => {
           const mergedItems = [...this.items, ...items];
-          return mergedItems.reduce((acc, cur) => ({...acc, [cur.email]: cur}), {});
+          return mergedItems.reduce((acc, cur) => ({ ...acc, [cur.email]: cur }), {});
         }),
         map(v => Object.values(v))
       ).subscribe((items: any) => {
-      this.items = [...items];
-      this.isLoading = false;
-    });
+        this.items = [...items];
+        this.isLoading = false;
+      });
   }
 
-  deleteInvitedUser(userRole: ITanamUserRole) {
+  deleteInvitedUser(userInvited: AngularUserInvite) {
     this.dialogService.openDialogConfirm({
       title: 'Delete File',
-      message: `Are you sure to delete "${userRole.email} (${userRole.role})" ?`,
+      message: `Are you sure to delete "${userInvited.email} (${userInvited.roles})" ?`,
       buttons: ['cancel', 'yes'],
       icon: 'warning'
     }).afterClosed().subscribe(async res => {
@@ -88,12 +89,22 @@ export class UserInvitedComponent {
         this.snackBar.open('Deleting role...', 'Dismiss', {
           duration: 2000
         });
-        await this.userService.deleteUserRole(userRole);
-        this.items = this.items.filter(item => item.id !== userRole.id);
+        await this.userService.deleteUserInviteds(userInvited);
+        this.items = this.items.filter(item => item.id !== userInvited.id);
         this.snackBar.open('User role deleted', 'Dismiss', {
           duration: 2000
         });
       }
+    });
+  }
+
+  async resendUserInvitation(user: AngularUserInvite) {
+    this.snackBar.open('Sending Invitation', 'Dismiss', {
+      duration: 2000,
+    });
+    await this.userService.sendUserInvitation(new AngularUserInvite(user));
+    this.snackBar.open('Sent', 'Dismiss', {
+      duration: 2000,
     });
   }
 }

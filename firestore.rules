@@ -38,8 +38,8 @@ service cloud.firestore {
         allow read, write: if isAtLeastAdmin();
       }
 
-       match /user-roles/{roleId} {
-        allow read, write: if isAtLeastAdmin();
+       match /user-invites/{document=**} {
+        allow read, write: if isSuperAdmin();
       }
 
       match /users/{userId} {

@@ -6,13 +6,15 @@ import { UserListComponent } from './user-list/user-list.component';
 import { UserInvitedComponent } from './user-invited/user-invited.component';
 import { UserInviteDialogComponent } from './user-invite-dialog/user-invite-dialog.component';
 import { ComponentsModule } from '../components/components.module';
+import { UserRoleSelectorComponent } from './user-role-selector.component';
 
 @NgModule({
   declarations: [
     UserOverviewComponent,
     UserListComponent,
     UserInvitedComponent,
-    UserInviteDialogComponent
+    UserInviteDialogComponent,
+    UserRoleSelectorComponent
   ],
   imports: [
     AppMaterialModule,

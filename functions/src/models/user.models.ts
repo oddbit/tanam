@@ -25,11 +25,9 @@ export interface UserQueryOptions {
   startAfter?: any; // firebase.firestore.DocumentSnapshot
 }
 
-export interface ITanamUserRole extends ITanamBase {
-  uid?: string;
-  name?: string;
+export interface ITanamUserInvite extends ITanamBase {
+  roles: TanamUserRoleType[];
   email: string;
-  role: TanamUserRoleType;
 }
 
 export class TanamUser extends TanamBase implements ITanamUser {
@@ -71,43 +69,35 @@ export class TanamUser extends TanamBase implements ITanamUser {
   }
 }
 
-export class TanamUserRole extends TanamBase implements ITanamUserRole {
-  uid: string;
-  name: string;
+export class TanamUserInvite extends TanamBase implements ITanamUserInvite {
+  roles: TanamUserRoleType[];
   email: string;
-  role: TanamUserRoleType;
 
-  constructor(json: ITanamUserRole) {
+  constructor(json: ITanamUserInvite) {
     super(json);
-    this.uid = json.uid;
-    this.name = json.name;
+    this.roles = json.roles;
     this.email = json.email;
-    this.role = json.role;
   }
 
-  unchangedRoleAuth(otherRole: TanamUserRole) {
-    if (!otherRole) {
-      // Has different role if comparing to a null object
-      // Is not different if this role is not linked to a user since changes
-      // doesn't affect anything before connected to a user
-      return !this.uid;
+  toJson(): ITanamUserInvite {
+    console.log(`[${TanamUserInvite.name}.toJson]`);
+
+    const json = {
+      ...super.toJson(),
+      email: this.email,
+      roles: this.roles,
+    } as ITanamUserInvite;
+
+    for (const key in json) {
+      if (json.hasOwnProperty(key)) {
+        json[key] = typeof json[key] === "undefined" ? null : json[key];
+      }
     }
 
-    return otherRole.uid === this.uid && otherRole.role === this.role;
-  }
-
-  toJson(): ITanamUserRole {
-    console.log(`[${TanamUserRole.name}.toJson]`);
-    return {
-      ...super.toJson(),
-      uid: this.uid || null,
-      name: this.name || null,
-      email: this.email,
-      role: this.role,
-    } as ITanamUserRole;
+    return json;
   }
 
   toString() {
-    return `${TanamUserRole.name}(${this.email}: ${this.role})`;
+    return `${TanamUserInvite.name}(${this.email}: ${this.roles})`;
   }
 }

@@ -2,7 +2,8 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
 import { UserService } from '../../../services/user.service';
-import { ITanamUserRole, TanamUserRole, TanamUserRoleType } from 'tanam-models/user.models';
+import { TanamUserRoleType } from 'tanam-models/user.models';
+import { AngularUserInvite } from '../../../app.models';
 
 interface DialogRoleOption {
   value: TanamUserRoleType;
@@ -15,6 +16,8 @@ interface DialogRoleOption {
   styleUrls: ['./user-invite-dialog.component.scss']
 })
 export class UserInviteDialogComponent {
+  buttonSendIsLoading = false;
+
   readonly defaultRole: TanamUserRoleType = 'admin';
   readonly roles: DialogRoleOption[] = [
     {
@@ -33,7 +36,7 @@ export class UserInviteDialogComponent {
 
   readonly addUserForm: FormGroup = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
-    role: [this.defaultRole, [Validators.required]]
+    roles: [[this.defaultRole], [Validators.required]]
   });
 
   constructor(
@@ -46,14 +49,23 @@ export class UserInviteDialogComponent {
   }
 
   async addUser() {
+    this.buttonSendIsLoading = true;
     this.snackBar.open('Sending Invitation', 'Dismiss', {
       duration: 2000,
     });
-    await this.userService.inviteUser(new TanamUserRole(this.addUserForm.value as ITanamUserRole));
-    this.dialogRef.close();
-    this.snackBar.open('Sent', 'Dismiss', {
-      duration: 2000,
-    });
+    const userStatus = await this.userService.inviteUser(new AngularUserInvite(this.addUserForm.value));
+    if (userStatus === 'userInvited') {
+      this.dialogRef.close();
+      this.snackBar.open('Sent', 'Dismiss', {
+        duration: 2000,
+      });
+      this.buttonSendIsLoading = false;
+    } else if (userStatus === 'userAlreadyCreated') {
+      this.snackBar.open('User already created', 'Dismiss', {
+        duration: 2000,
+      });
+      this.buttonSendIsLoading = false;
+    }
   }
 
 }
