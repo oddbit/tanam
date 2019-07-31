@@ -34,6 +34,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   get isScheduled(): boolean {
+    console.log(Date.parse(this.documentForm.value.published));
     return this.documentForm.value.published && this.documentForm.value.published.toMillis() > Date.now();
   }
 
@@ -81,7 +82,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._setStateProcessing(true);
     this._subscriptions.push(this.documentForm.get('publishStatus').valueChanges.subscribe((v) => this._onDocumentStatusChange(v)));
-    const combinedDocumentData$ = combineLatest(this.documentType$, this.document$);
+    const combinedDocumentData$ = combineLatest([this.documentType$, this.document$]);
     this._subscriptions.push(combinedDocumentData$.subscribe(([documentType, document]) => {
       this._setStateProcessing(true);
       const documentStatusDefault = documentType.documentStatusDefault === 'published';
@@ -93,7 +94,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
         published: document.published,
         canonicalUrl: document.canonicalUrl
       });
-
+      console.log(document.published);
       this._rootSlug = documentType.slug;
       this._documentType = documentType.id;
       for (const field of documentType.fields) {
@@ -198,8 +199,8 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   private _onDocumentStatusChange(publishStatus: boolean) {
-    console.log(JSON.stringify({status: publishStatus}));
-    const publishedTimestamp = publishStatus ? firestore.Timestamp.now() : null;
+    console.log({ status: publishStatus });
+    const publishedTimestamp = publishStatus ? publishStatus : firestore.Timestamp.now();
     this.documentForm.controls['published'].setValue(publishedTimestamp);
   }
 }

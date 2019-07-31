@@ -33,7 +33,7 @@ export class DocumentService {
     return this.firestore
       .collection('tanam').doc(tanamSite.id)
       .collection('documents').doc(document.id)
-      .set(document);
+      .set(document.toJson());
   }
 
   async delete(documentId: string) {
@@ -56,14 +56,15 @@ export class DocumentService {
   }
 
   get(documentId: string): Observable<AngularTanamDocument> {
-    return this.firestore
-      .collectionGroup<ITanamDocument>('documents', (ref) =>
-        ref.where('id', '==', documentId).limit(1)
+    return this.siteService.getCurrentSite().pipe(
+      switchMap((site) =>
+        this.firestore
+          .collection('tanam').doc(site.id)
+          .collection('documents').doc<ITanamDocument>(documentId)
+          .valueChanges()
+          .pipe(map(data => new AngularTanamDocument(data))),
       )
-      .valueChanges()
-      .pipe(
-        map(docs => !!docs[0] ? new AngularTanamDocument(docs[0]) : null),
-      );
+    );
   }
 
   query(

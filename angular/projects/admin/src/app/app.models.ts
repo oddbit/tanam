@@ -57,6 +57,15 @@ export class AngularTanamDocument extends models.TanamDocument {
     });
   }
 
+  static fromDocumentType(documentType: AngularTanamDocumentType) {
+    return new AngularTanamDocument({
+      id: firebase.firestore().collection('-').doc().id,
+      documentType: documentType.id,
+      standalone: documentType.standalone,
+      status: documentType.documentStatusDefault,
+    } as ITanamDocument);
+  }
+
   toJson(): models.ITanamDocument {
     const json = super.toJson();
     json.revision = firebase.firestore.FieldValue.increment(1);
