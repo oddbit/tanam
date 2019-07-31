@@ -49,7 +49,10 @@ export class AppAuthService {
     return JSON.parse(AppAuthService.b64DecodeUnicode(idToken.split('.')[1]));
   }
 
-  reloadUser() {
+  async reloadUser() {
+    if (!this.fireAuth.auth.currentUser) {
+      return null;
+    }
     return this.fireAuth.auth.currentUser.reload();
   }
 }
