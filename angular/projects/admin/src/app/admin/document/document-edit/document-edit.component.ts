@@ -34,12 +34,17 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   get isScheduled(): boolean {
-    console.log(Date.parse(this.documentForm.value.published));
-    return this.documentForm.value.published && this.documentForm.value.published.toMillis() > Date.now();
+    const published = this.documentForm.value.published;
+    if (published) {
+      if (published.hasOwnProperty('nanoseconds')) {
+        return published.toMillis() > Date.now();
+      }
+      return published.getTime() > Date.now();
+    }
   }
 
   get isPublished(): boolean {
-    return !!this.documentForm.value.published;
+    return !!this.documentForm.value.publishStatus;
   }
   readonly richTextEditorConfig = {
     // toolbar: ['heading', '|', 'bold', 'italic', '|', 'bulletedList', 'numberedList'],
@@ -90,11 +95,12 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
       this.documentForm.patchValue({
         title: document.title,
         url: document.url || '/',
-        publishStatus: document.published === undefined ? documentStatusDefault : document.published,
+        publishStatus: document.published === null ? documentStatusDefault
+          : document.status !== 'unpublished' ? true : false,
         published: document.published,
         canonicalUrl: document.canonicalUrl
       });
-      console.log(document.published);
+      console.log(this.documentForm.value.publishStatus);
       this._rootSlug = documentType.slug;
       this._documentType = documentType.id;
       for (const field of documentType.fields) {
@@ -146,7 +152,7 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
     const document = await this.document$.pipe(take(1)).toPromise();
     document.title = formData.title;
     document.url = formData.url || '';
-    document.published = formData.published;
+    document.published = formData.publishStatus && formData.published ? formData.published : new Date();
     document.data = this.dataForm.value;
     document.canonicalUrl = formData.canonicalUrl || '';
     this._setStateProcessing(true);
@@ -199,8 +205,8 @@ export class DocumentEditComponent implements OnInit, OnDestroy {
   }
 
   private _onDocumentStatusChange(publishStatus: boolean) {
-    console.log({ status: publishStatus });
-    const publishedTimestamp = publishStatus ? publishStatus : firestore.Timestamp.now();
-    this.documentForm.controls['published'].setValue(publishedTimestamp);
+    if (!publishStatus) {
+      this.documentForm.controls['published'].setValue(null);
+    }
   }
 }

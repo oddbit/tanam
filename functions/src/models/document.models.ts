@@ -55,7 +55,7 @@ export class TanamDocument extends TanamBase implements ITanamDocument {
   get status() {
     if (!this.published) {
       return 'unpublished';
-    } else if (this.published.toMillis() > Date.now()) {
+    } else if (this.published > Date.now()) {
       return 'scheduled';
     } else {
       return 'published';

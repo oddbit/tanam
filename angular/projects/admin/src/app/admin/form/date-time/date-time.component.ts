@@ -129,8 +129,8 @@ export class DateTimeComponent implements MatFormFieldControl<firestore.Timestam
     this.describedBy = ids.join(' ');
   }
 
-  writeValue(timestamp: firestore.Timestamp): void {
-    this.timestamp = timestamp && timestamp.toDate();
+  writeValue(timestamp: Date): void {
+    this.timestamp = timestamp;
   }
 
   registerOnChange(callback: (val: firestore.Timestamp) => void): void {
