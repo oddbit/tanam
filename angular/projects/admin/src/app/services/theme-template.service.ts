@@ -59,6 +59,7 @@ export class ThemeTemplateService {
       switchMap((site) =>
         this.firestore
           .collection('tanam').doc(site.id)
+          .collection('themes').doc(theme)
           .collection<ThemeTemplate>('templates', queryFn)
           .valueChanges(),
       )
