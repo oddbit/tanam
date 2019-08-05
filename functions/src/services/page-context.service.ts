@@ -1,6 +1,6 @@
 import { QuerySnapshot } from '@google-cloud/firestore';
 import * as admin from 'firebase-admin';
-import { ITanamDocument, DocumentContext, PageContext, SiteContext, TanamSite } from '../models';
+import { ITanamDocument, DocumentContext, PageContext, SiteContext, TanamSite, TanamDocument } from '../models';
 import { TanamHttpRequest } from '../models/http_request.model';
 import * as documentService from './document.service';
 import * as siteInfoService from './site-info.service';
@@ -86,7 +86,7 @@ export async function getPageContextForRequest(request: TanamHttpRequest): Promi
   }
 
   const siteInfo = await siteInfoService.getSiteInfoFromDomain(request.hostname);
-  return _toContext(siteInfo, document[0]);
+  return _toContext(siteInfo, document);
 }
 
 async function _toContext(siteInfo: TanamSite, document: ITanamDocument) {
