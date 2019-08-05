@@ -1,17 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
-import { TanamSite, Theme } from 'tanam-models';
+import { Theme } from 'tanam-models';
 import { SiteService } from '../../services/site.service';
 import { ThemeService } from '../../services/theme.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {
-  LanguageOptions,
-  SettingsDialogManageLanguagesComponent
-} from './settings-dialog-manage-languages/settings-dialog-manage-languages.component';
+import { SettingsDialogManageLanguagesComponent } from './settings-dialog-manage-languages/settings-dialog-manage-languages.component';
 import { languageOptions } from './settings.languages';
 import { AppAuthService } from '../../services/app-auth.service';
+import { AngularTanamSite } from '../../app.models';
 
 // https://stackoverflow.com/a/26987741/7967164
 const REGEX_DOMAIN = '^(((?!-))(xn--|_{1,1})?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9\-]{1,61}|[a-z0-9-]{1,30}\.[a-z]{2,})$';
@@ -22,17 +20,22 @@ const REGEX_DOMAIN = '^(((?!-))(xn--|_{1,1})?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
-  languages: LanguageOptions[] = [];
+  get languages() {
+    return this.settingsForm.value.languages;
+  }
+
   langOptions = languageOptions;
   analyticsName = '';
   readonly siteName$: Observable<string> = this.siteSettingsService.getSiteName();
-  readonly themes$: Observable<Theme[]> = this.themeService.getThemes({orderBy: {field: 'updated', sortOrder: 'desc'}});
+  readonly themes$: Observable<Theme[]> = this.themeService.getThemes({ orderBy: { field: 'updated', sortOrder: 'desc' } });
   readonly settingsForm: FormGroup = this.formBuilder.group({
     title: [null, [Validators.required]],
     theme: [null, [Validators.required]],
     defaultLanguage: [null, [Validators.required]],
     primaryDomain: [null, [Validators.required]],
     analytics: [null],
+    languages: [null],
+    id: [null],
     domains: this.formBuilder.array([], [
       Validators.required,
       Validators.minLength(1),
@@ -73,16 +76,16 @@ export class SettingsComponent implements OnInit, OnDestroy {
       });
 
       this.settingsForm.patchValue({
+        id: settings.id,
         title: settings.title,
         theme: settings.theme,
         defaultLanguage: settings.defaultLanguage,
         primaryDomain: settings.primaryDomain,
         analytics: settings.analytics,
         domains: settings.domains,
-      });
-
-      this.languages = this.langOptions.filter(lang => {
-        return settings.languages.includes(lang.id);
+        languages: this.langOptions.filter(lang => {
+          return settings.languages.includes(lang.id);
+        })
       });
 
     });
@@ -113,7 +116,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     const removedDomain = this.getDomainNameAt(index);
     if (removedDomain === this.settingsForm.value.primaryDomain) {
-      // Removed the selected primary domain. Reset to default hosting as selected
       this.settingsForm.get('primaryDomain').setValue(this.getDomainNameAt(0));
     }
 
@@ -123,18 +125,18 @@ export class SettingsComponent implements OnInit, OnDestroy {
   dialogLanguage() {
     const dialogRef = this.dialog.open(SettingsDialogManageLanguagesComponent, {
       data: {
-        languages: this.languages.map(lang => lang.id),
+        languages: this.settingsForm.value.languages.map(lang => lang.id),
         defaultLanguage: this.settingsForm.value.defaultLanguage
       }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.status === 'submit') {
-        this.languages = this.langOptions.filter(lang => {
+        this.settingsForm.controls['languages'].setValue(this.langOptions.filter(lang => {
           return result.languages.includes(lang.id);
-        });
+        }));
 
         if (!result.languages.includes(this.settingsForm.value.defaultLanguage)) {
-          this.settingsForm.patchValue({defaultLanguage: result.languages[0]});
+          this.settingsForm.patchValue({ defaultLanguage: result.languages[0] });
         }
       }
     });
@@ -156,18 +158,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   async saveSettings() {
     const formData = this.settingsForm.value;
-    const languages = this.languages.map(lang => lang.id);
-    languages.splice(languages.indexOf(formData.defaultLanguage), 1);
-    languages.splice(0, 0, formData.defaultLanguage);
-    await this.siteSettingsService.save({
-      title: formData.title,
-      theme: formData.theme,
-      defaultLanguage: formData.defaultLanguage,
-      languages: languages,
-      primaryDomain: formData.primaryDomain,
-      analytics: formData.analytics.trim().toUpperCase(),
-      domains: formData.domains.map((domain: any) => domain['name']),
-    } as TanamSite);
+    await this.siteSettingsService.save(new AngularTanamSite({
+      ...formData,
+      languages: formData.languages.map((lang: any) => lang['id']),
+      domains: formData.domains.map((domain: any) => domain['name'])
+    }));
     this.snackBar.open('Settings saved', 'Dismiss', {
       duration: 2000,
     });

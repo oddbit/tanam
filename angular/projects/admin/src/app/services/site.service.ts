@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { ITanamSite } from 'tanam-models';
+import { ITanamSite, TanamSite } from 'tanam-models';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap, tap, take } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
 import { AngularTanamSite } from '../app.models';
 import { AppAuthService } from './app-auth.service';
@@ -23,7 +23,7 @@ export class SiteService {
     return fromPromise(this.authService.getCustomClaims())
       .pipe(switchMap((customClaims) => {
         const tanamSites = Object.keys(customClaims['tanam'] || {});
-        console.log(`[getAvailableSites] ${JSON.stringify({tanamSites})}`);
+        console.log(`[getAvailableSites] ${JSON.stringify({ tanamSites })}`);
         return combineLatest(tanamSites.map((siteId) =>
           this.firestore.collection('tanam').doc<ITanamSite>(siteId)
             .valueChanges()
@@ -34,13 +34,13 @@ export class SiteService {
 
   getCurrentSite(): Observable<AngularTanamSite> {
     const domain = document.location.hostname;
-    console.log(`[getSiteInfo] ${JSON.stringify({domain})}`);
+    console.log(`[getSiteInfo] ${JSON.stringify({ domain })}`);
     return this.getAvailableSites()
       .pipe(
         map(sites => sites.filter(site => site.domains.indexOf(domain) >= 0)),
         map(sites => sites[0] || null),
         filter(site => !!site),
-        tap(site => console.log(`[getCurrentSite] ${JSON.stringify({site})}`)),
+        tap(site => console.log(`[getCurrentSite] ${JSON.stringify({ site })}`)),
       );
   }
 
@@ -56,7 +56,12 @@ export class SiteService {
     return this.getCurrentSite().pipe(map(settings => settings.primaryDomain));
   }
 
-  save(site: AngularTanamSite) {
-    return this.firestore.collection('tanam').doc(site.id).set(site.toJson());
+  async save(site: AngularTanamSite) {
+    const tanamSite = await this._currentSite;
+    this.firestore.collection('tanam').doc(tanamSite.id).set(site.toJson());
+  }
+
+  get _currentSite(): Promise<TanamSite> {
+    return this.getCurrentSite().pipe(take(1)).toPromise();
   }
 }
