@@ -2,7 +2,6 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { ITanamUserInvite, TanamUserInvite, ITanamUser } from "../models";
 import { AdminTanamUser } from "../models/cloud-functions.models";
-import { user } from 'firebase-functions/lib/providers/auth';
 
 // noinspection JSUnusedGlobalSymbols
 export const onAccountCreate = functions.auth.user().onCreate(async (firebaseUser) => {

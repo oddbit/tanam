@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import { ITanamUser, ITanamUserInvite, TanamUser, TanamUserInvite as TanamUserInvite } from './user.models';
+import { ITanamUser, TanamUser } from './user.models';
 import { MD5 } from 'crypto-js';
 import { TanamDocumentType, ITanamDocumentType } from './document-type.models';
 

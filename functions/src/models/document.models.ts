@@ -1,5 +1,4 @@
 import { ITanamBase, TanamBase } from './base';
-import { TanamDocumentType } from './document-type.models';
 
 export type DocumentStatus = 'published' | 'unpublished' | 'scheduled';
 
