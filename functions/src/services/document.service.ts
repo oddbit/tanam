@@ -21,9 +21,11 @@ export async function getDocumentForRequest(request: TanamHttpRequest): Promise<
   console.log(`[document.service.getDocumentByUrl] ${request.toString()}`);
   const siteInfo = await siteInfoService.getSiteInfoFromDomain(request.hostname);
   if (!siteInfo) {
+    console.log(`No site found for hostname: ${JSON.stringify(request.hostname)}`);
     return null;
   }
 
+  console.log(`Getting published URL ${request.url} for ${siteInfo.toString()}`);
   const querySnap = await admin.firestore()
     .collection('tanam').doc(siteInfo.id)
     .collection('documents')
