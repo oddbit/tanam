@@ -1,0 +1,150 @@
+import { Component, Input, Optional, Self, ElementRef, HostBinding, ViewChild } from '@angular/core';
+import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { NgControl } from '@angular/forms';
+import { FocusMonitor } from '@angular/cdk/a11y';
+import { Subject } from 'rxjs';
+
+@Component({
+  selector: 'tanam-rich-textbox',
+  templateUrl: './rich-textbox.component.html',
+  styleUrls: ['./rich-textbox.component.scss']
+})
+export class RichTextboxComponent  {
+
+  private static _nextId = 0;
+
+  @HostBinding('attr.aria-describedby') describedBy = '';
+  @HostBinding() id = `textbox-rich-${RichTextboxComponent._nextId++}`;
+  @ViewChild('container', { read: ElementRef, static: false }) container: ElementRef;
+
+  @Input() editorConfig: any;
+
+  stateChanges = new Subject<void>();
+  controlType = 'textbox-rich';
+  shouldLabelFloat = true;
+
+  required: boolean;
+  errorState: boolean;
+  autofilled?: boolean;
+
+  // formEditor: CKEditor5.Editor = ClassicEditor;
+  editorData: string;
+
+  private _disabled = false;
+  private _focused = false;
+  private _placeholder: string;
+  private _onTouchedCallback: () => void;
+  private _onChangeCallback: (value: string) => void;
+
+  constructor(
+    @Optional() @Self() public ngControl: NgControl,
+    private readonly focusMonitor: FocusMonitor,
+    private readonly elementRef: ElementRef<HTMLElement>,
+  ) {
+    if (this.ngControl != null) {
+      this.ngControl.valueAccessor = this;
+    }
+
+    focusMonitor.monitor(elementRef.nativeElement, true).subscribe(origin => {
+      this.focused = !!origin;
+      this.stateChanges.next();
+    });
+  }
+
+  @Input()
+  get placeholder() {
+    return this._placeholder;
+  }
+  set placeholder(placeholder) {
+    this._placeholder = placeholder;
+    this.stateChanges.next();
+  }
+
+  get empty() {
+    return !this.editorData || this.editorData.trim().length === 0;
+  }
+
+  @Input()
+  get disabled() {
+    return this._disabled;
+  }
+  set disabled(flag) {
+    this._disabled = flag;
+    this.stateChanges.next();
+  }
+
+  @Input()
+  get value(): string {
+    if (!this.editorData || this.editorData.trim().length === 0) {
+      return null;
+    }
+
+    return this.editorData.trim();
+  }
+
+  set value(value: string) {
+    this.editorData = value || '';
+    this.stateChanges.next();
+  }
+
+  get focused() {
+    return this._focused;
+  }
+
+  set focused(flag: boolean) {
+    this._focused = coerceBooleanProperty(flag);
+    this._onTouchedCallback();
+  }
+
+  // ngOnDestroy() {
+  //   this.stateChanges.complete();
+  //   this.focusMonitor.stopMonitoring(this.elementRef.nativeElement);
+  // }
+
+  setDescribedByIds(ids: string[]) {
+    this.describedBy = ids.join(' ');
+  }
+
+  onContainerClick(event: MouseEvent): void {
+    this._onTouchedCallback();
+  }
+
+  writeValue(text: string): void {
+    this.editorData = text || '';
+  }
+
+  registerOnChange(callback: (val: any) => void): void {
+    this._onChangeCallback = callback;
+  }
+
+  registerOnTouched(callback: () => void): void {
+    this._onTouchedCallback = callback;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    // this.formEditor.isReadOnly = isDisabled;
+  }
+
+  onChange({ editor }: ChangeEvent) {
+    this._onChangeCallback(editor.getData());
+    this.stateChanges.next();
+  }
+
+  onChangeCk(event) {
+    console.log('onChange', event);
+  }
+
+  onEditorChange(event) {
+    console.log('onEditorChange', event);
+  }
+
+  onFileUploadRequest(event) {
+    console.log('onFileUploadRequest', event);
+  }
+
+  onFileUploadResponse(event) {
+    console.log('onFileUploadResponse', event);
+  }
+
+}

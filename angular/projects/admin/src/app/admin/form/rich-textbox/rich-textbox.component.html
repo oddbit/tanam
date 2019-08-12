@@ -1,0 +1,9 @@
+<ckeditor 
+  [(ngModel)]="ckeditorContent"
+  [readonly]="false"
+  (change)="onChange($event)"
+  (editorChange)="onEditorChangeCk2($event)"
+  (fileUploadRequest)="onFileUploadRequest($event)"
+  (fileUploadResponse)="onFileUploadResponse($event)"
+  debounce="500">
+</ckeditor>
