@@ -1,5 +1,4 @@
-import { Component, Input, Optional, Self, ElementRef, HostBinding, ViewChild } from '@angular/core';
-import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
+import { Component, Input, Optional, Self, ElementRef, HostBinding, ViewChild, OnDestroy } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { NgControl } from '@angular/forms';
 import { FocusMonitor } from '@angular/cdk/a11y';
@@ -10,7 +9,7 @@ import { Subject } from 'rxjs';
   templateUrl: './rich-textbox.component.html',
   styleUrls: ['./rich-textbox.component.scss']
 })
-export class RichTextboxComponent  {
+export class RichTextboxComponent implements OnDestroy  {
 
   private static _nextId = 0;
 
@@ -28,7 +27,6 @@ export class RichTextboxComponent  {
   errorState: boolean;
   autofilled?: boolean;
 
-  // formEditor: CKEditor5.Editor = ClassicEditor;
   editorData: string;
 
   private _disabled = false;
@@ -97,10 +95,10 @@ export class RichTextboxComponent  {
     this._onTouchedCallback();
   }
 
-  // ngOnDestroy() {
-  //   this.stateChanges.complete();
-  //   this.focusMonitor.stopMonitoring(this.elementRef.nativeElement);
-  // }
+  ngOnDestroy() {
+    this.stateChanges.complete();
+    this.focusMonitor.stopMonitoring(this.elementRef.nativeElement);
+  }
 
   setDescribedByIds(ids: string[]) {
     this.describedBy = ids.join(' ');
@@ -126,13 +124,9 @@ export class RichTextboxComponent  {
     // this.formEditor.isReadOnly = isDisabled;
   }
 
-  onChange({ editor }: ChangeEvent) {
-    this._onChangeCallback(editor.getData());
+  onChange(editor) {
+    this._onChangeCallback(editor);
     this.stateChanges.next();
-  }
-
-  onChangeCk(event) {
-    console.log('onChange', event);
   }
 
   onEditorChange(event) {
