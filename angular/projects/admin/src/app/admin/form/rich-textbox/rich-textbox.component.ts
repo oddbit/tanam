@@ -3,6 +3,9 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { NgControl } from '@angular/forms';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { Subject } from 'rxjs';
+import { FilePickerDialogComponent } from '../file-picker/file-picker-dialog/file-picker-dialog.component';
+import { MatDialogConfig, MatDialog } from '@angular/material';
+
 
 @Component({
   selector: 'tanam-rich-textbox',
@@ -16,6 +19,7 @@ export class RichTextboxComponent implements OnDestroy  {
   @HostBinding('attr.aria-describedby') describedBy = '';
   @HostBinding() id = `textbox-rich-${RichTextboxComponent._nextId++}`;
   @ViewChild('container', { read: ElementRef, static: false }) container: ElementRef;
+  @ViewChild('CkEditor', { read: ElementRef, static: false }) CkEditor: ElementRef;
 
   @Input() editorConfig: any;
 
@@ -39,6 +43,7 @@ export class RichTextboxComponent implements OnDestroy  {
     @Optional() @Self() public ngControl: NgControl,
     private readonly focusMonitor: FocusMonitor,
     private readonly elementRef: ElementRef<HTMLElement>,
+    private dialog: MatDialog
   ) {
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
@@ -141,4 +146,21 @@ export class RichTextboxComponent implements OnDestroy  {
     console.log('onFileUploadResponse', event);
   }
 
+  insert_name (event) {
+    // event.insertHtml('<img src=https://picsum.photos/id/237/200/300`/>', 'unfiltered_html');
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '800px';
+    const dialogRef = this.dialog.open(FilePickerDialogComponent, dialogConfig);
+
+
+    const subscription = dialogRef.afterClosed().subscribe(file => {
+      if (!!file) {
+        console.log(file);
+      }
+
+      if (!!subscription && !subscription.closed) {
+        subscription.unsubscribe();
+      }
+    });
+  }
 }
