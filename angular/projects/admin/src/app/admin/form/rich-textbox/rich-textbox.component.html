@@ -1,18 +1,20 @@
-<ckeditor 
-  #CkEditor
-  [(ngModel)]="editorData"
-  [readonly]="false"
-  (change)="onChange($event)"
-  (editorChange)="onEditorChange($event)"
-  (fileUploadRequest)="onFileUploadRequest($event)"
-  (fileUploadResponse)="onFileUploadResponse($event)"
-  debounce="500"
-  (ready)="OnReady($event)">
-  <ckbutton [name]="'saveButton'"
-      [command]="'insert_name'"
-      (click)="insert_name($event)"
-      [icon]="'https://picsum.photos/id/19/10/10'"
-      [label]="'Insert User Name'"
-      [toolbar]="'clipboard,1'">
-    </ckbutton>
-</ckeditor>
+<div class="editor">
+  <ckeditor 
+    #CkEditor
+    [(ngModel)]="editorData"
+    [readonly]="false"
+    (change)="onChange($event)"
+    (editorChange)="onEditorChange($event)"
+    (fileUploadRequest)="onFileUploadRequest($event)"
+    (fileUploadResponse)="onFileUploadResponse($event)"
+    debounce="500"
+    [config]="ckEditorConfig">
+    <ckbutton [name]="'saveButton'"
+        [command]="'insert_name'"
+        (click)="insert_name($event)"
+        [icon]="'https://picsum.photos/id/19/10/10'"
+        [label]="'Insert Image'"
+        [toolbar]="'clipboard,1'">
+      </ckbutton>
+  </ckeditor>
+</div>

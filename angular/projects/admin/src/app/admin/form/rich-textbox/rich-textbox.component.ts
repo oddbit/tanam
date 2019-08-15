@@ -1,10 +1,10 @@
-import { Component, Input, Optional, Self, ElementRef, HostBinding, ViewChild, OnDestroy } from '@angular/core';
+import { Component, Input, Optional, Self, ElementRef, HostBinding, ViewChild, OnDestroy, NgZone } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { NgControl } from '@angular/forms';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { Subject } from 'rxjs';
 import { FilePickerDialogComponent } from '../file-picker/file-picker-dialog/file-picker-dialog.component';
-import { MatDialogConfig, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 
 @Component({
@@ -32,18 +32,22 @@ export class RichTextboxComponent implements OnDestroy  {
   autofilled?: boolean;
 
   editorData: string;
+  ckEditorConfig = {
+    'removeButtons': 'Image',
+    'height': '300px'
+  };
 
   private _disabled = false;
   private _focused = false;
   private _placeholder: string;
   private _onTouchedCallback: () => void;
   private _onChangeCallback: (value: string) => void;
-
   constructor(
     @Optional() @Self() public ngControl: NgControl,
     private readonly focusMonitor: FocusMonitor,
     private readonly elementRef: ElementRef<HTMLElement>,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private _zone: NgZone, _elm: ElementRef
   ) {
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
@@ -147,20 +151,17 @@ export class RichTextboxComponent implements OnDestroy  {
   }
 
   insert_name (event) {
-    // event.insertHtml('<img src=https://picsum.photos/id/237/200/300`/>', 'unfiltered_html');
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '800px';
-    const dialogRef = this.dialog.open(FilePickerDialogComponent, dialogConfig);
+    this._zone.run(() => {
+      const dialogRef = this.dialog.open(FilePickerDialogComponent, {width: '800px'});
+      const subscription = dialogRef.afterClosed().subscribe(file => {
+        if (!!file) {
+          event.insertHtml(`<img src=https://tanam-e8e7d.firebaseapp.com/_/file/${file.id}?s=medium />`, 'unfiltered_html');
+        }
 
-
-    const subscription = dialogRef.afterClosed().subscribe(file => {
-      if (!!file) {
-        console.log(file);
-      }
-
-      if (!!subscription && !subscription.closed) {
-        subscription.unsubscribe();
-      }
+        if (!!subscription && !subscription.closed) {
+          subscription.unsubscribe();
+        }
+      });
     });
   }
 }
