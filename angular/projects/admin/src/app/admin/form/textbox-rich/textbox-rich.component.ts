@@ -9,16 +9,16 @@ import { SiteService } from '../../../services/site.service';
 
 
 @Component({
-  selector: 'tanam-rich-textbox',
-  templateUrl: './rich-textbox.component.html',
-  styleUrls: ['./rich-textbox.component.scss']
+  selector: 'tanam-textbox-rich',
+  templateUrl: './textbox-rich.component.html',
+  styleUrls: ['./textbox-rich.component.scss']
 })
-export class RichTextboxComponent implements OnDestroy  {
+export class TextboxRichComponent implements OnDestroy  {
 
   private static _nextId = 0;
 
   @HostBinding('attr.aria-describedby') describedBy = '';
-  @HostBinding() id = `textbox-rich-${RichTextboxComponent._nextId++}`;
+  @HostBinding() id = `textbox-rich-${TextboxRichComponent._nextId++}`;
   @ViewChild('container', { read: ElementRef, static: false }) container: ElementRef;
   @ViewChild('CkEditor', { read: ElementRef, static: false }) CkEditor: ElementRef;
 

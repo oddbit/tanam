@@ -11,7 +11,7 @@ import { DocumentReferenceComponent } from './document-reference/document-refere
 import { FilePickerComponent } from './file-picker/file-picker.component';
 import { FilePickerDialogComponent } from './file-picker/file-picker-dialog/file-picker-dialog.component';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
-import { RichTextboxComponent } from './rich-textbox/rich-textbox.component';
+import { TextboxRichComponent } from './textbox-rich/textbox-rich.component';
 import { CKEditorModule } from 'ng2-ckeditor';
 
 @NgModule({
@@ -20,7 +20,7 @@ import { CKEditorModule } from 'ng2-ckeditor';
     DocumentReferenceComponent,
     FilePickerComponent,
     FilePickerDialogComponent,
-    RichTextboxComponent,
+    TextboxRichComponent,
   ],
   imports: [
     CommonModule,
@@ -38,7 +38,7 @@ import { CKEditorModule } from 'ng2-ckeditor';
     DateTimeComponent,
     DocumentReferenceComponent,
     FilePickerComponent,
-    RichTextboxComponent
+    TextboxRichComponent
   ],
   entryComponents: [FilePickerDialogComponent]
 })

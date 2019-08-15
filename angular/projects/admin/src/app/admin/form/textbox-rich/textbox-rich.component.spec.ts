@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RichTextboxComponent } from './rich-textbox.component';
+import { TextboxRichComponent } from './textbox-rich.component';
 
-describe('RichTextboxComponent', () => {
-  let component: RichTextboxComponent;
-  let fixture: ComponentFixture<RichTextboxComponent>;
+describe('TextboxRichComponent', () => {
+  let component: TextboxRichComponent;
+  let fixture: ComponentFixture<TextboxRichComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RichTextboxComponent ]
+      declarations: [ TextboxRichComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RichTextboxComponent);
+    fixture = TestBed.createComponent(TextboxRichComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
