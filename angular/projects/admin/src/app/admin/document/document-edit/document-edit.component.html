@@ -51,15 +51,8 @@
                   </mat-form-field>
 
                   <!-- Textbox Rich -->
-                  <!-- <mat-form-field *ngSwitchCase="'textbox-rich'"
-                                  class="full-width"> -->
-                    <!-- <tanam-textbox-rich matInput
-                                        placeholder="{{field.title}}"
-                                        [editorConfig]="richTextEditorConfig"
-                                        formControlName="{{field.key}}"></tanam-textbox-rich> -->
-                    <tanam-rich-textbox *ngSwitchCase="'textbox-rich'" matInput placeholder="{{field.title}}"
-                                        formControlName="{{field.key}}"></tanam-rich-textbox>
-                  <!-- </mat-form-field> -->
+                  <tanam-rich-textbox *ngSwitchCase="'textbox-rich'" matInput placeholder="{{field.title}}"
+                                      formControlName="{{field.key}}"></tanam-rich-textbox>
 
 
                   <!-- Image Picker -->
