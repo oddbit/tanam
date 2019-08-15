@@ -5,6 +5,7 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 import { Subject } from 'rxjs';
 import { FilePickerDialogComponent } from '../file-picker/file-picker-dialog/file-picker-dialog.component';
 import { MatDialog } from '@angular/material';
+import { SiteService } from '../../../services/site.service';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class RichTextboxComponent implements OnDestroy  {
   stateChanges = new Subject<void>();
   controlType = 'textbox-rich';
   shouldLabelFloat = true;
+  siteLink$ = this.siteSettingsService.getPrimaryDomain();
 
   required: boolean;
   errorState: boolean;
@@ -47,7 +49,8 @@ export class RichTextboxComponent implements OnDestroy  {
     private readonly focusMonitor: FocusMonitor,
     private readonly elementRef: ElementRef<HTMLElement>,
     private dialog: MatDialog,
-    private _zone: NgZone, _elm: ElementRef
+    private _zone: NgZone, _elm: ElementRef,
+    private readonly siteSettingsService: SiteService,
   ) {
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
@@ -155,7 +158,11 @@ export class RichTextboxComponent implements OnDestroy  {
       const dialogRef = this.dialog.open(FilePickerDialogComponent, {width: '800px'});
       const subscription = dialogRef.afterClosed().subscribe(file => {
         if (!!file) {
-          event.insertHtml(`<img src=https://tanam-e8e7d.firebaseapp.com/_/file/${file.id}?s=medium />`, 'unfiltered_html');
+          event.insertHtml(`<img src=/_/file/${file.id}?s=medium />`, 'unfiltered_html');
+          // For localhost development -->
+          // this.siteLink$.subscribe(site => {
+            // event.insertHtml(`<img src=https://${site}/_/file/${file.id}?s=medium />`, 'unfiltered_html');
+          // })
         }
 
         if (!!subscription && !subscription.closed) {
