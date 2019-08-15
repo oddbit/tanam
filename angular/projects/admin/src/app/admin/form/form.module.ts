@@ -9,7 +9,6 @@ import { MatMomentDatetimeModule } from '@mat-datetimepicker/moment';
 import { AppMaterialModule } from '../../app-material.module';
 import { DateTimeComponent } from './date-time/date-time.component';
 import { DocumentReferenceComponent } from './document-reference/document-reference.component';
-import { TextboxRichComponent } from './textbox-rich/textbox-rich.component';
 import { FilePickerComponent } from './file-picker/file-picker.component';
 import { FilePickerDialogComponent } from './file-picker/file-picker-dialog/file-picker-dialog.component';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
@@ -18,7 +17,6 @@ import { CKEditorModule } from 'ng2-ckeditor';
 
 @NgModule({
   declarations: [
-    TextboxRichComponent,
     DateTimeComponent,
     DocumentReferenceComponent,
     FilePickerComponent,
@@ -38,7 +36,6 @@ import { CKEditorModule } from 'ng2-ckeditor';
     VirtualScrollerModule,
   ],
   exports: [
-    TextboxRichComponent,
     DateTimeComponent,
     DocumentReferenceComponent,
     FilePickerComponent,
