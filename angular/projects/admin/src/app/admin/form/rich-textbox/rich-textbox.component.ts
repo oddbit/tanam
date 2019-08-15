@@ -153,7 +153,7 @@ export class RichTextboxComponent implements OnDestroy  {
     console.log('onFileUploadResponse', event);
   }
 
-  insert_name (event) {
+  insert_image (event) {
     this._zone.run(() => {
       const dialogRef = this.dialog.open(FilePickerDialogComponent, {width: '800px'});
       const subscription = dialogRef.afterClosed().subscribe(file => {
