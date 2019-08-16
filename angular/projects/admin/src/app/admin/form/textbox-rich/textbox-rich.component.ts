@@ -132,10 +132,6 @@ export class TextboxRichComponent implements OnDestroy  {
     this._onTouchedCallback = callback;
   }
 
-  setDisabledState(isDisabled: boolean): void {
-    // this.formEditor.isReadOnly = isDisabled;
-  }
-
   onChange(editor) {
     this._onChangeCallback(editor);
     this.stateChanges.next();
@@ -159,10 +155,6 @@ export class TextboxRichComponent implements OnDestroy  {
       const subscription = dialogRef.afterClosed().subscribe(file => {
         if (!!file) {
           event.insertHtml(`<img src=/_/file/${file.id}?s=medium />`, 'unfiltered_html');
-          // For localhost development -->
-          // this.siteLink$.subscribe(site => {
-            // event.insertHtml(`<img src=https://${site}/_/file/${file.id}?s=medium />`, 'unfiltered_html');
-          // })
         }
 
         if (!!subscription && !subscription.closed) {
