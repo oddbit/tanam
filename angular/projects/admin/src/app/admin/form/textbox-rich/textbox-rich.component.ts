@@ -1,54 +1,56 @@
-import { FocusMonitor } from '@angular/cdk/a11y';
+import { Component, Input, Optional, Self, ElementRef, HostBinding, ViewChild, OnDestroy, NgZone } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { MatFormFieldControl } from '@angular/material/form-field';
-import { CKEditor5 } from '@ckeditor/ckeditor5-angular/ckeditor';
-import { ChangeEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { NgControl } from '@angular/forms';
+import { FocusMonitor } from '@angular/cdk/a11y';
 import { Subject } from 'rxjs';
+import { FilePickerDialogComponent } from '../file-picker/file-picker-dialog/file-picker-dialog.component';
+import { MatDialog } from '@angular/material';
+import { SiteService } from '../../../services/site.service';
+
 
 @Component({
   selector: 'tanam-textbox-rich',
   templateUrl: './textbox-rich.component.html',
-  styleUrls: ['./textbox-rich.component.scss'],
-  providers: [
-    {
-      provide: MatFormFieldControl,
-      useExisting: TextboxRichComponent,
-    },
-  ],
+  styleUrls: ['./textbox-rich.component.scss']
 })
-export class TextboxRichComponent implements MatFormFieldControl<string>, ControlValueAccessor, OnDestroy {
+export class TextboxRichComponent implements OnDestroy  {
+
   private static _nextId = 0;
 
   @HostBinding('attr.aria-describedby') describedBy = '';
   @HostBinding() id = `textbox-rich-${TextboxRichComponent._nextId++}`;
   @ViewChild('container', { read: ElementRef, static: false }) container: ElementRef;
+  @ViewChild('CkEditor', { read: ElementRef, static: false }) CkEditor: ElementRef;
 
   @Input() editorConfig: any;
 
   stateChanges = new Subject<void>();
   controlType = 'textbox-rich';
   shouldLabelFloat = true;
+  siteLink$ = this.siteSettingsService.getPrimaryDomain();
 
   required: boolean;
   errorState: boolean;
   autofilled?: boolean;
 
-  formEditor: CKEditor5.Editor = ClassicEditor;
   editorData: string;
+  ckEditorConfig = {
+    'removeButtons': 'Image',
+    'height': '300px'
+  };
 
   private _disabled = false;
   private _focused = false;
   private _placeholder: string;
   private _onTouchedCallback: () => void;
   private _onChangeCallback: (value: string) => void;
-
   constructor(
     @Optional() @Self() public ngControl: NgControl,
     private readonly focusMonitor: FocusMonitor,
     private readonly elementRef: ElementRef<HTMLElement>,
+    private dialog: MatDialog,
+    private _zone: NgZone, _elm: ElementRef,
+    private readonly siteSettingsService: SiteService,
   ) {
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
@@ -130,12 +132,35 @@ export class TextboxRichComponent implements MatFormFieldControl<string>, Contro
     this._onTouchedCallback = callback;
   }
 
-  setDisabledState(isDisabled: boolean): void {
-    this.formEditor.isReadOnly = isDisabled;
+  onChange(editor) {
+    this._onChangeCallback(editor);
+    this.stateChanges.next();
   }
 
-  onChange({ editor }: ChangeEvent) {
-    this._onChangeCallback(editor.getData());
-    this.stateChanges.next();
+  onEditorChange(event) {
+    console.log('onEditorChange', event);
+  }
+
+  onFileUploadRequest(event) {
+    console.log('onFileUploadRequest', event);
+  }
+
+  onFileUploadResponse(event) {
+    console.log('onFileUploadResponse', event);
+  }
+
+  insert_image (event) {
+    this._zone.run(() => {
+      const dialogRef = this.dialog.open(FilePickerDialogComponent, {width: '800px'});
+      const subscription = dialogRef.afterClosed().subscribe(file => {
+        if (!!file) {
+          event.insertHtml(`<img src=/_/file/${file.id}?s=medium />`, 'unfiltered_html');
+        }
+
+        if (!!subscription && !subscription.closed) {
+          subscription.unsubscribe();
+        }
+      });
+    });
   }
 }
