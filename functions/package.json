@@ -45,7 +45,7 @@
     "dustjs-linkedin": "^2.7.5",
     "firebase-admin": "^8.2.0",
     "firebase-functions": "^3.1.0",
-    "sharp": "^0.21.3"
+    "sharp": "^0.25.2"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.11",
