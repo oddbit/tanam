@@ -63,7 +63,7 @@ about the site and the currently rendered document.
 ```
 
 The `data` field consist of custom user data, as defined by the content type. While all the other
-fields are consistent and present for all documen types.
+fields are consistent and present for all document types.
 
 ## Types
 In the example above, `document.data.venue` is referring to another document that can be fetched
@@ -182,7 +182,7 @@ You can fetch a number of documents through simple query
 ```
 
 ### What's up with the curly-brackets-hash-dot-syntax?
-The `@documents` helper is returning an arrayn of documents, so the `{#.}` refers to the "current context"
+The `@documents` helper is returning an array of documents, so the `{#.}` refers to the "current context"
 and Dust will loop over it since it's an array. You can access the current index in the loop with the
 `$idx` variable or access a document at its index in the array with `[$idx]` syntax.
 
