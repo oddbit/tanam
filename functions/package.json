@@ -42,7 +42,7 @@
     "cheerio": "^1.0.0-rc.3",
     "crypto-js": "^3.1.9-1",
     "dustjs-helpers": "^1.7.4",
-    "dustjs-linkedin": "^2.7.5",
+    "dustjs-linkedin": "^3.0.0",
     "firebase-admin": "^8.2.0",
     "firebase-functions": "^3.1.0",
     "sharp": "^0.21.3"
