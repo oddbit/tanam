@@ -43,7 +43,7 @@
     "crypto-js": "^3.1.9-1",
     "dustjs-helpers": "^1.7.4",
     "dustjs-linkedin": "^2.7.5",
-    "firebase-admin": "^8.2.0",
+    "firebase-admin": "^11.4.1",
     "firebase-functions": "^3.1.0",
     "sharp": "^0.21.3"
   },
