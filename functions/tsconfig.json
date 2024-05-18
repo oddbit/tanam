@@ -1,22 +1,17 @@
 {
+  "compileOnSave": true,
+  "include": [
+    "src"
+  ],
   "compilerOptions": {
-    "lib": [
-      "es6"
-    ],
     "module": "commonjs",
     "noImplicitReturns": true,
-    "outDir": "dist",
-    "declaration": true,
+    "outDir": "lib",
     "sourceMap": true,
-    "target": "es6",
-    "baseUrl": "./"
-  },
-  "compileOnSave": true,
-  "typeRoots": [
-    "node_modules/@types"
-  ],
-  "include": [
-    "src",
-    "../models"
-  ]
+    "strict": true,
+    "target": "es2017",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": true
+  }
 }

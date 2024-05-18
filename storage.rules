@@ -1,50 +1,12 @@
+rules_version = '2';
+
+// Craft rules based on data in your Firestore database
+// allow write: if firestore.get(
+//    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
 service firebase.storage {
   match /b/{bucket}/o {
-    match /tanam/{siteId} {
-
-      match /images/{allPaths=**} {
-        allow read: if hasAnyRole();
-        allow write: if false;
-      }
-
-      match /themes/{allPaths=**} {
-        allow read: if hasAnyRole();
-        allow write: if isPublisher();
-      }
-
-      match /upload/{allPaths=**} {
-        allow read: if isPublisher();
-        allow create: if isPublisher();
-        allow update, delete: if false;
-      }
-
-      function hasUserRole(role) {
-        return isSignedIn() && role in request.auth.token.tanam[siteId];
-      }
-
-      function hasAnyRole() {
-        return isSignedIn() && request.auth.token.tanam[siteId].size() > 0;
-      }
-
-			function isSuperAdmin() {
-        return hasUserRole("superAdmin");
-      }
-
-      function isAtLeastManager() {
-        return isSuperAdmin() || hasUserRole("admin");
-      }
-
-      function isPublisher() {
-        return isAtLeastManager() || hasUserRole("publisher");
-      }
-    }
-
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    function isSignedInAs(uid) {
-      return isSignedIn() && request.auth.uid == uid;
+    match /{allPaths=**} {
+      allow read, write: if false;
     }
   }
 }

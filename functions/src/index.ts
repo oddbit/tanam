@@ -1,12 +1,48 @@
-import * as admin from 'firebase-admin';
-import * as functions from 'firebase-functions';
+import {generate} from "@genkit-ai/ai";
+import {configureGenkit} from "@genkit-ai/core";
+import {firebaseAuth} from "@genkit-ai/firebase/auth";
+import {onFlow} from "@genkit-ai/firebase/functions";
 
-admin.initializeApp();
+import * as z from "zod";
+import {firebase} from "@genkit-ai/firebase";
+import {ollama} from "genkitx-ollama";
 
-// noinspection JSUnusedGlobalSymbols
-export const heartbeat = functions.pubsub.schedule('every 1 minutes').onRun(() => {
-  console.log('lub-dub');
-  return null;
+configureGenkit({
+  plugins: [
+    firebase(),
+    ollama({
+      models: [{ name: 'gemma' }],
+      serverAddress: 'http://127.0.0.1:11434', // default ollama local address
+    }),
+  ],
+  logLevel: "debug",
+  enableTracingAndMetrics: true,
 });
 
-export * from './triggers';
+export const menuSuggestionFlow = onFlow(
+  {
+    name: "menuSuggestionFlow",
+    inputSchema: z.string(),
+    outputSchema: z.string(),
+    authPolicy: firebaseAuth((user) => {
+      if (!user.email_verified) {
+        throw new Error("Verified email required to run flow");
+      }
+    }),
+  },
+  async (subject) => {
+    const prompt =
+      `Suggest an item for the menu of a ${subject} themed restaurant`;
+
+    const llmResponse = await generate({
+      model: 'ollama/gemma',
+      prompt: prompt,
+      config: {
+        temperature: 1,
+      },
+    });
+
+    return llmResponse.text();
+  }
+);
+
