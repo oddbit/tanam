@@ -1,9 +1,12 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { SignOutWithGoogle } from "./components/SignOutWithGoogle";
+import { firebaseAuth } from "../../../../libs/firebase/config";
 
 const DropdownUser = () => {
+  const user = firebaseAuth.currentUser;
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
@@ -34,6 +37,10 @@ const DropdownUser = () => {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
+  // TODO: Update profile picture and name based on user data
+
+  console.log(user);
+
   return (
     <div className="relative">
       <Link
@@ -44,22 +51,23 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {user?.displayName}
           </span>
-          <span className="block text-xs">UX Designer</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
-          <Image
-            width={112}
-            height={112}
-            src={"/images/user/user-01.png"}
-            style={{
-              width: "auto",
-              height: "auto",
-            }}
-            alt="User"
-          />
+          {user?.photoURL && (
+            <Image
+              width={112}
+              height={112}
+              src={user?.photoURL}
+              style={{
+                width: "auto",
+                height: "auto",
+              }}
+              alt="User"
+            />
+          )}
         </span>
 
         <svg
