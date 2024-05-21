@@ -9,9 +9,10 @@ import SidebarLinkGroup from "./SidebarLinkGroup";
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
+  session?: string | null;
 }
 
-const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+const Sidebar = ({ sidebarOpen, setSidebarOpen, session }: SidebarProps) => {
   const pathname = usePathname();
 
   const trigger = useRef<any>(null);
@@ -616,6 +617,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 activeCondition={
                   pathname === "/auth" || pathname.includes("auth")
                 }
+                hide={session !== null && session !== undefined}
               >
                 {(handleClick, open) => {
                   return (
