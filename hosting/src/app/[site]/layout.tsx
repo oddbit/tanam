@@ -1,4 +1,5 @@
 "use client";
+
 import "jsvectormap/dist/css/jsvectormap.css";
 import "flatpickr/dist/flatpickr.min.css";
 import "@/css/satoshi.css";
@@ -6,19 +7,18 @@ import "@/css/style.css";
 import React, { useEffect, useState } from "react";
 import Loader from "@/components/common/Loader";
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+interface RootLayoutProps {
   children: React.ReactNode;
-}>) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  siteData: { title: string };
+}
+
+const RootLayout: React.FC<RootLayoutProps> = ({ children, siteData }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
-  // const pathname = usePathname();
-
   useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
-  }, []);
+    document.title = siteData?.title ?? "Tanam";
+    setLoading(false);
+  }, [siteData]);
 
   return (
     <html lang="en">
@@ -29,4 +29,6 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;
