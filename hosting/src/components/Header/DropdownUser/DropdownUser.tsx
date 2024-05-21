@@ -3,9 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { SignOutWithGoogle } from "./components/SignOutWithGoogle";
 
-const DropdownUser: FC<{
-  session?: string | null;
-}> = ({ session }) => {
+const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
@@ -163,7 +161,7 @@ const DropdownUser: FC<{
             </Link>
           </li>
         </ul>
-        <SignOutWithGoogle session={session} />
+        <SignOutWithGoogle />
       </div>
       {/* <!-- Dropdown End --> */}
     </div>

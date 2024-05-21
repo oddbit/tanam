@@ -1,21 +1,12 @@
 "use client";
-import { FC } from "react";
 import { removeSession } from "../../../../../actions/auth-action";
 import { signOutWithGoogle } from "../../../../../libs/firebase/auth";
 
-export const SignOutWithGoogle: FC<{
-  session?: string | null;
-}> = ({ session }) => {
+export const SignOutWithGoogle = () => {
   const handleSignOut = async () => {
     await signOutWithGoogle();
     await removeSession();
   };
-
-  console.log(session);
-
-  if (session === null || session === undefined) {
-    return <> </>;
-  }
 
   return (
     <button
