@@ -5,6 +5,7 @@ on:
       - main
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -12,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
+          cache: "npm"
           cache-dependency-path: |
             hosting/package-lock.json
 
@@ -30,7 +31,7 @@ jobs:
             ./hosting/.next/cache/
 
       - name: Build application
-        run: npm ci && npm install && npm run build
+        run: npm ci && npm run build
         working-directory: ./hosting
 
       - name: Upload build artifact
@@ -41,6 +42,7 @@ jobs:
           retention-days: 2
 
   deploy:
+    name: Deploy to Firebase Hosting
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -56,6 +58,10 @@ jobs:
       - name: Install global NPM tools
         run: |
           npm install -g firebase-tools@latest
+
+      - name: Install hosting dependencies
+        run: npm ci
+        working-directory: ./hosting
 
       - name: Download build artifact
         uses: actions/download-artifact@v4
