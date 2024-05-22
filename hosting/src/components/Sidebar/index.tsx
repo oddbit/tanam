@@ -117,9 +117,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <SidebarExpandableMenu
               icon={<FormsIcon />}
               title="Content"
-              isExpanded={pathname.includes("/document-types/")}
+              isExpanded={pathname.includes("/content/")}
               menuItems={documentTypes.map((doc) => ({
-                href: `/document-types/${doc.id}`,
+                href: `/content/${doc.id}`,
                 title: doc.title,
               }))}
             />
