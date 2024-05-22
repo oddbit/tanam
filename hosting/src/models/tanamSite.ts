@@ -8,7 +8,7 @@ export class TanamSite {
    *
    * @param {string} id Site ID
    * @param {string} title Site title
-   * @param {string} analytics Goolge Analytics tracking ID
+   * @param {string} analytics Google Analytics tracking ID
    * @param {Timestamp} createdAt Site creation date
    * @param Timestamp updatedAt Site last update date
    */
@@ -40,4 +40,3 @@ export class TanamSite {
     };
   }
 }
-
