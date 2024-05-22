@@ -20,7 +20,9 @@ jobs:
             ./hosting/node_modules/
             ./hosting/.next/cache/
 
-      - run: npm ci && npm run build
+      - run: npm ci && npm run build      
+        working-directory: ./hosting
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
