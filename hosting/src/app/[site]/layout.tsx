@@ -21,7 +21,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
       document.title = data?.title ?? "Tanam";
     });
     setLoading(false);
-  }, []);
+  }, [getSite]);
 
   return (
     <html lang="en">
