@@ -93,8 +93,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
           <SidebarMenuGroup title="MENU">
-            <SidebarMenuItem href="/" icon={<DashboardIcon />} title="Dashboard" />
-            <SidebarMenuItem href="/profile" icon={<ProfileIcon />} title="Profile" />
+            <SidebarMenuItem
+              href="/"
+              icon={<DashboardIcon />}
+              title="Dashboard"
+            />
+            <SidebarMenuItem
+              href="/profile"
+              icon={<ProfileIcon />}
+              title="Profile"
+            />
             <SidebarExpandableMenu
               icon={<FormsIcon />}
               title="Content"
@@ -116,7 +124,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
           {/* <!-- Others Group --> */}
           <SidebarMenuGroup title="OTHERS">
-            <SidebarMenuItem href="/chart" icon={<ChartIcon />} title="Charts" />
+            <SidebarMenuItem
+              href="/chart"
+              icon={<ChartIcon />}
+              title="Charts"
+            />
             <SidebarExpandableMenu
               icon={<AuthenticationIcon />}
               title="Authentication"
