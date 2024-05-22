@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
-import { getSiteData } from '../queries/site';
-import { TanamSite } from '../models/tanamSite';
+import { getSiteData } from "@/queries/site";
+import { TanamSite } from "@/models/tanamSite";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { site } = context.params as { site: string };
@@ -12,7 +12,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       notFound: true,
     };
   }
-  
+
   return {
     props: {
       siteData: siteData.toJson(),

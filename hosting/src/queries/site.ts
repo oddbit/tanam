@@ -1,15 +1,14 @@
-import {  doc, getDoc } from "firebase/firestore";
-import {useFirebase} from "../firebase";
-import { TanamSite } from '../models/tanamSite';
-
+import { doc, getDoc } from "firebase/firestore";
+import { useFirebase } from "@/firebase";
+import { TanamSite } from "@/models/tanamSite";
 
 /**
  * Get Tanam site information
- * 
+ *
  * @param {string} siteId Tanam site id
  * @returns {TanamSite | null} Tanam site data
  */
-export async function getSiteData(siteId: string): Promise<TanamSite | null>  {
+export async function getSiteData(siteId: string): Promise<TanamSite | null> {
   const { firestore } = useFirebase();
   const siteDoc = doc(firestore, "tanam", siteId);
   const siteSnapshot = await getDoc(siteDoc);
