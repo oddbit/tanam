@@ -5,7 +5,7 @@ import { TanamSite } from "../models/tanamSite";
 /**
  * Hook for Tanam site
  *
- * @param {stirng} site ID of the site
+ * @param {string} site ID of the site
  * @returns {Object} Tanam site hooks
  */
 export function useTanamSite(site: string) {
