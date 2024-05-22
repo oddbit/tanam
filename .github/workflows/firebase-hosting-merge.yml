@@ -30,7 +30,7 @@ jobs:
             ./hosting/.next/cache/
 
       - name: Build application
-        run: npm ci && npm run build
+        run: npm ci && npm install && npm run build
         working-directory: ./hosting
 
       - name: Upload build artifact
@@ -68,5 +68,5 @@ jobs:
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TANAM_TESTING }}
-          channelId: live
           projectId: tanam-testing
+          channelId: live
