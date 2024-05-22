@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { SignOutWithGoogle } from "./components/SignOutWithGoogle";
-import { firebaseAuth } from "../../../../libs/firebase/config";
+import { firebaseAuth } from "@//libs/firebase/config";
 
 const DropdownUser = () => {
   const user = firebaseAuth.currentUser;

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
-import Loader from "../common/Loader";
+import Loader from "@/components/common/Loader";
 
 export default function DefaultLayout({
   children,

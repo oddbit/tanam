@@ -1,7 +1,7 @@
 "use client";
 
 import { createSession } from "../../../../../actions/auth-action";
-import { signInWithGoogle } from "../../../../../libs/firebase/auth";
+import { signInWithGoogle } from "@/libs/firebase/auth";
 
 export const SignInWithGoogle = () => {
   const handleSignIn = async () => {
