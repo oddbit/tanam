@@ -36,7 +36,7 @@ jobs:
         working-directory: ./hosting
 
       - name: Linting files
-        run: npm lint --no-fix
+        run: npm run lint --no-fix
         working-directory: ./hosting
 
   build:
