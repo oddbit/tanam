@@ -5,8 +5,43 @@ permissions:
   contents: read
   pull-requests: write
 jobs:
+  code_check:
+    name: Code check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "npm"
+          cache-dependency-path: |
+            hosting/package-lock.json
+
+      - name: Install global NPM tools
+        run: |
+          npm install -g firebase-tools@latest
+
+      - name: Cache hosting build
+        uses: actions/cache@v4
+        id: cache-hosting
+        with:
+          key: ${CI_COMMIT_REF_SLUG}
+          path: |
+            ./hosting/node_modules/
+            ./hosting/.next/cache/
+
+      - name: Install dependency
+        run: npm install
+        working-directory: ./hosting
+
+      - name: Linting files
+        run: npm lint --no-fix
+        working-directory: ./hosting
+
   build:
     name: Build
+    needs: code_check
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
     steps:
