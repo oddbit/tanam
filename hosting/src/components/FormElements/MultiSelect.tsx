@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {useState, useEffect, useRef} from 'react';
 
 interface Option {
   value: string;
@@ -11,7 +11,7 @@ interface DropdownProps {
   id: string;
 }
 
-const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
+const MultiSelect: React.FC<DropdownProps> = ({id}) => {
   const [options, setOptions] = useState<Option[]>([]);
   const [selected, setSelected] = useState<number[]>([]);
   const [show, setShow] = useState(false);
@@ -27,7 +27,7 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
           newOptions.push({
             value: select.options[i].value,
             text: select.options[i].innerText,
-            selected: select.options[i].hasAttribute("selected"),
+            selected: select.options[i].hasAttribute('selected'),
           });
         }
         setOptions(newOptions);
@@ -79,18 +79,19 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
   };
 
   useEffect(() => {
-    const clickHandler = ({ target }: MouseEvent) => {
+    const clickHandler = ({target}: MouseEvent) => {
       if (!dropdownRef.current) return;
       if (
         !show ||
         dropdownRef.current.contains(target) ||
         trigger.current.contains(target)
-      )
+      ) {
         return;
+      }
       setShow(false);
     };
-    document.addEventListener("click", clickHandler);
-    return () => document.removeEventListener("click", clickHandler);
+    document.addEventListener('click', clickHandler);
+    return () => document.removeEventListener('click', clickHandler);
   });
 
   return (
@@ -185,7 +186,7 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
               <div className="w-full px-4">
                 <div
                   className={`max-h-select absolute left-0 top-full z-40 w-full overflow-y-auto rounded bg-white shadow dark:bg-form-input ${
-                    isOpen() ? "" : "hidden"
+                    isOpen() ? '' : 'hidden'
                   }`}
                   ref={dropdownRef}
                   onFocus={() => setShow(true)}
@@ -200,7 +201,7 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
                         >
                           <div
                             className={`relative flex w-full items-center border-l-2 border-transparent p-2 pl-2 ${
-                              option.selected ? "border-primary" : ""
+                              option.selected ? 'border-primary' : ''
                             }`}
                           >
                             <div className="flex w-full items-center">

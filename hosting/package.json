@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix"
   },
   "dependencies": {
     "apexcharts": "^3.45.2",
@@ -22,9 +23,13 @@
     "@types/node": "^20",
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.10.0",
+    "@typescript-eslint/parser": "^7.10.0",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
+    "eslint-config-google": "^0.14.0",
     "eslint-config-next": "14.1.0",
+    "eslint-plugin-react": "^7.34.1",
     "postcss": "^8",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",

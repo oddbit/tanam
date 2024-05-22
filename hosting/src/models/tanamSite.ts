@@ -1,4 +1,4 @@
-import { FieldValue, Timestamp, serverTimestamp } from "firebase/firestore";
+import {FieldValue, Timestamp, serverTimestamp} from 'firebase/firestore';
 
 /**
  * Tanam site model
@@ -26,22 +26,22 @@ export class TanamSite {
    * Static method to create TanamSite instance from Firestore JSON
    *
    * @param {any} json JSON from Firestore
-   * @returns {TanamSite} instance of TanamSite
+   * @return {TanamSite} instance of TanamSite
    */
   static fromJson(json: any): TanamSite {
     return new TanamSite(
-      json.id,
-      json.title,
-      json.analytics,
-      json.created || json.createdAt,
-      json.updated || json.updatedAt,
+        json.id,
+        json.title,
+        json.analytics,
+        json.created || json.createdAt,
+        json.updated || json.updatedAt,
     );
   }
 
   /**
    * Serialize TanamSite instance to Firestore JSON
    *
-   * @returns {any} JSON representation of TanamSite
+   * @return {any} JSON representation of TanamSite
    */
   toJson(): any {
     return {

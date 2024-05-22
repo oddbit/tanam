@@ -1,52 +1,52 @@
-import Link from "next/link";
-import Image from "next/image";
-import { Chat } from "@/types/chat";
+import Link from 'next/link';
+import Image from 'next/image';
+import {Chat} from '@/types/chat';
 
 const chatData: Chat[] = [
   {
-    avatar: "/images/user/user-01.png",
-    name: "Devid Heilo",
-    text: "How are you?",
+    avatar: '/images/user/user-01.png',
+    name: 'Devid Heilo',
+    text: 'How are you?',
     time: 12,
     textCount: 3,
     dot: 3,
   },
   {
-    avatar: "/images/user/user-02.png",
-    name: "Henry Fisher",
-    text: "Waiting for you!",
+    avatar: '/images/user/user-02.png',
+    name: 'Henry Fisher',
+    text: 'Waiting for you!',
     time: 12,
     textCount: 0,
     dot: 1,
   },
   {
-    avatar: "/images/user/user-04.png",
-    name: "Jhon Doe",
-    text: "What's up?",
+    avatar: '/images/user/user-04.png',
+    name: 'Jhon Doe',
+    text: 'What\'s up?',
     time: 32,
     textCount: 0,
     dot: 3,
   },
   {
-    avatar: "/images/user/user-05.png",
-    name: "Jane Doe",
-    text: "Great",
+    avatar: '/images/user/user-05.png',
+    name: 'Jane Doe',
+    text: 'Great',
     time: 32,
     textCount: 2,
     dot: 6,
   },
   {
-    avatar: "/images/user/user-01.png",
-    name: "Jhon Doe",
-    text: "How are you?",
+    avatar: '/images/user/user-01.png',
+    name: 'Jhon Doe',
+    text: 'How are you?',
     time: 32,
     textCount: 0,
     dot: 3,
   },
   {
-    avatar: "/images/user/user-03.png",
-    name: "Jhon Doe",
-    text: "How are you?",
+    avatar: '/images/user/user-03.png',
+    name: 'Jhon Doe',
+    text: 'How are you?',
     time: 32,
     textCount: 3,
     dot: 6,
@@ -74,13 +74,13 @@ const ChatCard = () => {
                 src={chat.avatar}
                 alt="User"
                 style={{
-                  width: "auto",
-                  height: "auto",
+                  width: 'auto',
+                  height: 'auto',
                 }}
               />
               <span
                 className={`absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-white ${
-                  chat.dot === 6 ? "bg-meta-6" : `bg-meta-${chat.dot}`
+                  chat.dot === 6 ? 'bg-meta-6' : `bg-meta-${chat.dot}`
                 } `}
               ></span>
             </div>
@@ -100,7 +100,7 @@ const ChatCard = () => {
               {chat.textCount !== 0 && (
                 <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary">
                   <span className="text-sm font-medium text-white">
-                    {" "}
+                    {' '}
                     {chat.textCount}
                   </span>
                 </div>

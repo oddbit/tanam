@@ -1,9 +1,9 @@
-import Link from "next/link";
-import DarkModeSwitcher from "@/components/Header/DarkModeSwitcher";
-import DropdownMessage from "@/components/Header/DropdownMessage";
-import DropdownNotification from "@/components/Header/DropdownNotification";
-import DropdownUser from "@/components/Header/DropdownUser";
-import Image from "next/image";
+import Link from 'next/link';
+import DarkModeSwitcher from '@/components/Header/DarkModeSwitcher';
+import DropdownMessage from '@/components/Header/DropdownMessage';
+import DropdownNotification from '@/components/Header/DropdownNotification';
+import DropdownUser from '@/components/Header/DropdownUser';
+import Image from 'next/image';
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
@@ -26,29 +26,29 @@ const Header = (props: {
               <span className="du-block absolute right-0 h-full w-full">
                 <span
                   className={`relative left-0 top-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-[0] duration-200 ease-in-out dark:bg-white ${
-                    !props.sidebarOpen && "!w-full delay-300"
+                    !props.sidebarOpen && '!w-full delay-300'
                   }`}
                 ></span>
                 <span
                   className={`relative left-0 top-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-150 duration-200 ease-in-out dark:bg-white ${
-                    !props.sidebarOpen && "delay-400 !w-full"
+                    !props.sidebarOpen && 'delay-400 !w-full'
                   }`}
                 ></span>
                 <span
                   className={`relative left-0 top-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-200 duration-200 ease-in-out dark:bg-white ${
-                    !props.sidebarOpen && "!w-full delay-500"
+                    !props.sidebarOpen && '!w-full delay-500'
                   }`}
                 ></span>
               </span>
               <span className="absolute right-0 h-full w-full rotate-45">
                 <span
                   className={`absolute left-2.5 top-0 block h-full w-0.5 rounded-sm bg-black delay-300 duration-200 ease-in-out dark:bg-white ${
-                    !props.sidebarOpen && "!h-0 !delay-[0]"
+                    !props.sidebarOpen && '!h-0 !delay-[0]'
                   }`}
                 ></span>
                 <span
                   className={`delay-400 absolute left-0 top-2.5 block h-0.5 w-full rounded-sm bg-black duration-200 ease-in-out dark:bg-white ${
-                    !props.sidebarOpen && "!h-0 !delay-200"
+                    !props.sidebarOpen && '!h-0 !delay-200'
                   }`}
                 ></span>
               </span>
@@ -60,7 +60,7 @@ const Header = (props: {
             <Image
               width={32}
               height={32}
-              src={"/images/logo/logo-icon.svg"}
+              src={'/images/logo/logo-icon.svg'}
               alt="Logo"
             />
           </Link>
