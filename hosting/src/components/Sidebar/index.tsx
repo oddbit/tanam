@@ -9,8 +9,6 @@ import { TanamDocumentType } from "../../models/TanamDocumentType";
 import { SidebarExpandableMenu } from "./SidebarExpandableMenu";
 import { SidebarMenuGroup } from "./SidebarMenuGroup";
 import { SidebarMenuItem } from "./SidebarMenuItem";
-import { AuthenticationIcon } from "./icons/AuthenticationIcon";
-import { ChartIcon } from "./icons/ChartIcon";
 import { DashboardIcon } from "./icons/DashboardIcon";
 import { FormsIcon } from "./icons/FormsIcon";
 import { ProfileIcon } from "./icons/ProfileIcon";
