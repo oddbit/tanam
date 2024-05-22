@@ -1,5 +1,5 @@
 "use client";
-import { removeSession } from "../../../../../actions/auth-action";
+import { removeSession } from "@/actions/auth-action";
 import { signOutWithGoogle } from "@/libs/firebase/auth";
 
 export const SignOutWithGoogle = () => {
