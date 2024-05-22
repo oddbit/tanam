@@ -5,8 +5,7 @@ import DefaultLayout from '@/components/Layouts/DefaultLayout';
 
 export const metadata: Metadata = {
   title: 'Next.js Buttons | TailAdmin - Next.js Dashboard Template',
-  description:
-    'This is Next.js Buttons page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template',
+  description: 'This is Next.js Buttons page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template',
 };
 
 const Buttons = () => {
@@ -17,9 +16,7 @@ const Buttons = () => {
       {/* <!-- Normal Button Items --> */}
       <div className="mb-10 rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
-          <h3 className="font-medium text-black dark:text-white">
-            Normal Button
-          </h3>
+          <h3 className="font-medium text-black dark:text-white">Normal Button</h3>
         </div>
 
         <div className="p-4 md:p-6 xl:p-9">
@@ -118,9 +115,7 @@ const Buttons = () => {
       {/* <!-- Button With Icon Items --> */}
       <div className="mb-10 rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
-          <h3 className="font-medium text-black dark:text-white">
-            Button With Icon
-          </h3>
+          <h3 className="font-medium text-black dark:text-white">Button With Icon</h3>
         </div>
 
         <div className="p-4 md:p-6 xl:p-9">

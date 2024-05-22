@@ -10,11 +10,7 @@ const DropdownDefault = () => {
   useEffect(() => {
     const clickHandler = ({target}: MouseEvent) => {
       if (!dropdown.current) return;
-      if (
-        !dropdownOpen ||
-        dropdown.current.contains(target) ||
-        trigger.current.contains(target)
-      ) {
+      if (!dropdownOpen || dropdown.current.contains(target) || trigger.current.contains(target)) {
         return;
       }
       setDropdownOpen(false);
@@ -35,11 +31,7 @@ const DropdownDefault = () => {
 
   return (
     <div className="relative flex">
-      <button
-        className="text-[#98A6AD] hover:text-body"
-        ref={trigger}
-        onClick={() => setDropdownOpen(!dropdownOpen)}
-      >
+      <button className="text-[#98A6AD] hover:text-body" ref={trigger} onClick={() => setDropdownOpen(!dropdownOpen)}>
         <svg
           className="fill-current"
           width="18"

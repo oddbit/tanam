@@ -33,6 +33,9 @@ module.exports = {
   },
 
   rules: {
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/jsx-filename-extension': [
       1,
@@ -40,12 +43,11 @@ module.exports = {
     ],
     'react/jsx-props-no-spreading': 'off',
     'react/prop-types': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
     'max-len': 'off',
     'require-jsdoc': 'off',
     'prettier/prettier': 'error',
+    'indent': ['error', 2],
+    'operator-linebreak': ['error', 'before'],
   },
 
   ignorePatterns: ['**/src/js/*'],

@@ -11,19 +11,11 @@ const SelectGroupTwo: React.FC = () => {
 
   return (
     <div>
-      <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-        Select Country
-      </label>
+      <label className="mb-3 block text-sm font-medium text-black dark:text-white">Select Country</label>
 
       <div className="relative z-20 bg-white dark:bg-form-input">
         <span className="absolute left-4 top-1/2 z-30 -translate-y-1/2">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g opacity="0.8">
               <path
                 fillRule="evenodd"
@@ -72,13 +64,7 @@ const SelectGroupTwo: React.FC = () => {
         </select>
 
         <span className="absolute right-4 top-1/2 z-10 -translate-y-1/2">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g opacity="0.8">
               <path
                 fillRule="evenodd"

@@ -5,10 +5,7 @@ const SwitcherTwo = () => {
 
   return (
     <div>
-      <label
-        htmlFor="toggle2"
-        className="flex cursor-pointer select-none items-center"
-      >
+      <label htmlFor="toggle2" className="flex cursor-pointer select-none items-center">
         <div className="relative">
           <input
             id="toggle2"

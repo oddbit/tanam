@@ -12,11 +12,7 @@ const DropdownUser = () => {
   useEffect(() => {
     const clickHandler = ({target}: MouseEvent) => {
       if (!dropdown.current) return;
-      if (
-        !dropdownOpen ||
-        dropdown.current.contains(target) ||
-        trigger.current.contains(target)
-      ) {
+      if (!dropdownOpen || dropdown.current.contains(target) || trigger.current.contains(target)) {
         return;
       }
       setDropdownOpen(false);
@@ -37,16 +33,9 @@ const DropdownUser = () => {
 
   return (
     <div className="relative">
-      <Link
-        ref={trigger}
-        onClick={() => setDropdownOpen(!dropdownOpen)}
-        className="flex items-center gap-4"
-        href="#"
-      >
+      <Link ref={trigger} onClick={() => setDropdownOpen(!dropdownOpen)} className="flex items-center gap-4" href="#">
         <span className="hidden text-right lg:block">
-          <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
-          </span>
+          <span className="block text-sm font-medium text-black dark:text-white">Thomas Anree</span>
           <span className="block text-xs">UX Designer</span>
         </span>
 
