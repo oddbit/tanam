@@ -14,6 +14,7 @@ export default function DefaultLayout({
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    // FIXME: Replace this timeout with actual data fetching
     setTimeout(() => setLoading(false), 2000);
   }, []);
 
