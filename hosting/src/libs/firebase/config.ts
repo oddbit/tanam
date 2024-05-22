@@ -1,5 +1,5 @@
 import { getAuth } from "firebase/auth";
-import { initializeApp, getApps } from "firebase/app";
+import { initializeApp } from "firebase/app";
 
 // Load .env variables
 const firebaseConfig = {
@@ -11,7 +11,6 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const firebaseApp =
-  getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+const firebaseApp = initializeApp(firebaseConfig);
 
 export const firebaseAuth = getAuth(firebaseApp);
