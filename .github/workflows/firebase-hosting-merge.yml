@@ -4,7 +4,7 @@ on:
     branches:
       - main
 jobs:
-  build_and_deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,7 +33,22 @@ jobs:
       - name: Build application
         run: npm ci && npm run build
         working-directory: ./hosting
-        
+              
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Cache hosting build
+        uses: actions/cache@v4
+        id: cache-hosting
+        with:
+          key: ${CI_COMMIT_REF_SLUG}
+          path: |
+            ./hosting/node_modules/
+            ./hosting/.next/cache/
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
