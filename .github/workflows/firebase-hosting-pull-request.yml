@@ -55,6 +55,8 @@ jobs:
           name: hosting
           
       - uses: FirebaseExtended/action-hosting-deploy@v0
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TANAM_TESTING }}
