@@ -1,12 +1,12 @@
 'use client';
-import jsVectorMap from 'jsvectormap';
+import JsVectorMap from 'jsvectormap';
 import 'jsvectormap/dist/css/jsvectormap.css';
 import React, {useEffect} from 'react';
 import '@/js/us-aea-en';
 
 const MapOne: React.FC = () => {
   useEffect(() => {
-    const mapOne = new jsVectorMap({
+    const mapOne = new JsVectorMap({
       selector: '#mapOne',
       map: 'us_aea_en',
       zoomButtons: true,
