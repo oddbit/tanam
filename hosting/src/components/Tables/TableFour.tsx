@@ -85,9 +85,9 @@ const TableFour: React.FC = () => {
           {brandData.map((brand, key) => (
             <div
               className={`grid grid-cols-3 sm:grid-cols-4 ${
-                key === brandData.length - 1 ?
-                  '' :
-                  'border-b border-stroke dark:border-strokedark'
+                key === brandData.length - 1
+                  ? ''
+                  : 'border-b border-stroke dark:border-strokedark'
               }`}
               key={key}
             >

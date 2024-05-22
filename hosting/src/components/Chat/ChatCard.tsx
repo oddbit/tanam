@@ -22,7 +22,7 @@ const chatData: Chat[] = [
   {
     avatar: '/images/user/user-04.png',
     name: 'Jhon Doe',
-    text: 'What\'s up?',
+    text: `"What's up?"`,
     time: 32,
     textCount: 0,
     dot: 3,

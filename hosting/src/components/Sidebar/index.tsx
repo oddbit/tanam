@@ -131,9 +131,9 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
-                          sidebarExpanded ?
-                            handleClick() :
-                            setSidebarExpanded(true);
+                          sidebarExpanded
+                            ? handleClick()
+                            : setSidebarExpanded(true);
                         }}
                       >
                         <svg
@@ -281,9 +281,9 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
-                          sidebarExpanded ?
-                            handleClick() :
-                            setSidebarExpanded(true);
+                          sidebarExpanded
+                            ? handleClick()
+                            : setSidebarExpanded(true);
                         }}
                       >
                         <svg
@@ -519,9 +519,9 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
-                          sidebarExpanded ?
-                            handleClick() :
-                            setSidebarExpanded(true);
+                          sidebarExpanded
+                            ? handleClick()
+                            : setSidebarExpanded(true);
                         }}
                       >
                         <svg
@@ -629,9 +629,9 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
-                          sidebarExpanded ?
-                            handleClick() :
-                            setSidebarExpanded(true);
+                          sidebarExpanded
+                            ? handleClick()
+                            : setSidebarExpanded(true);
                         }}
                       >
                         <svg

@@ -30,11 +30,11 @@ export class TanamSite {
    */
   static fromJson(json: any): TanamSite {
     return new TanamSite(
-        json.id,
-        json.title,
-        json.analytics,
-        json.created || json.createdAt,
-        json.updated || json.updatedAt,
+      json.id,
+      json.title,
+      json.analytics,
+      json.created || json.createdAt,
+      json.updated || json.updatedAt,
     );
   }
 
