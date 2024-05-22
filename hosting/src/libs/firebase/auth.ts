@@ -23,6 +23,7 @@ export async function signInWithGoogle() {
     return result.user.uid;
   } catch (error) {
     console.error("Error signing in with Google", error);
+    throw new Error("Google sign in failed");
   }
 }
 
