@@ -21,7 +21,6 @@ jobs:
       - name: Install global NPM tools
         run: |
           npm install -g firebase-tools@latest
-          firebase --version
 
       - name: Cache hosting build
         uses: actions/cache@v4
@@ -48,6 +47,17 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "npm"
+          cache-dependency-path: |
+            hosting/package-lock.json
+
+      - name: Install global NPM tools
+        run: |
+          npm install -g firebase-tools@latest
 
       - name: Download build artifact
         uses: actions/download-artifact@v4
