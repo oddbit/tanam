@@ -6,19 +6,22 @@ import "@/css/satoshi.css";
 import "@/css/style.css";
 import React, { useEffect, useState } from "react";
 import Loader from "@/components/common/Loader";
+import { useTanamSite } from "@/hooks/useTanamSite";
 
 interface RootLayoutProps {
   children: React.ReactNode;
-  siteData: { title: string };
 }
 
-const RootLayout: React.FC<RootLayoutProps> = ({ children, siteData }) => {
+const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true);
+  const { getSite } = useTanamSite("ruang-tempo");
 
   useEffect(() => {
-    document.title = siteData?.title ?? "Tanam";
+    getSite().then((data) => {
+      document.title = data?.title ?? "Tanam";
+    });
     setLoading(false);
-  }, [siteData]);
+  }, []);
 
   return (
     <html lang="en">
