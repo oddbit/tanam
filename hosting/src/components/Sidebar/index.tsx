@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useTanamDocumentTypes } from "../../hooks/useTanamDocumentTypes";
+import { TanamDocumentType } from "../../models/TanamDocumentType";
 import { SidebarExpandableMenu } from "./SidebarExpandableMenu";
 import { SidebarMenuGroup } from "./SidebarMenuGroup";
 import { SidebarMenuItem } from "./SidebarMenuItem";
@@ -21,15 +23,26 @@ interface SidebarProps {
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const pathname = usePathname() ?? "/";
+  const site = pathname.split("/")[1];
+  const [documentTypes, setDocumentTypes] = useState<TanamDocumentType[]>([]);
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
+  const { streamDocumentTypes } = useTanamDocumentTypes(site ?? "foo");
 
   let storedSidebarExpanded = "true";
 
   const [sidebarExpanded, setSidebarExpanded] = useState(
     storedSidebarExpanded === null ? false : storedSidebarExpanded === "true",
   );
+
+  // Get tanam document types
+  useEffect(() => {
+    const unsubscribe = streamDocumentTypes((documentTypes) => {
+      setDocumentTypes(documentTypes);
+    });
+    return () => unsubscribe();
+  }, [streamDocumentTypes]);
 
   // close on click outside
   useEffect(() => {
@@ -107,13 +120,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               icon={<FormsIcon />}
               title="Content"
               isExpanded={pathname.includes("/document-types/")}
-              menuItems={[
-                {
-                  href: "/document-types/articles",
-                  title: "Articles",
-                },
-                { href: "/document-types/event", title: "Events" },
-              ]}
+              menuItems={documentTypes.map((doc) => ({
+                href: `/document-types/${doc.id}`,
+                title: doc.title,
+              }))}
             />
             <SidebarMenuItem
               href="/settings"
