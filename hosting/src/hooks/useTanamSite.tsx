@@ -1,6 +1,6 @@
 import {firestore} from '@/firebase'; // this is from you export an initialize the app
 import {doc, getDoc} from 'firebase/firestore';
-import {TanamSite} from '../models/tanamSite';
+import {TanamSite} from '@/models/tanamSite';
 
 /**
  * Hook for Tanam site
