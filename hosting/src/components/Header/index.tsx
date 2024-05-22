@@ -1,8 +1,8 @@
 import Link from "next/link";
-import DarkModeSwitcher from "./DarkModeSwitcher";
-import DropdownMessage from "./DropdownMessage";
-import DropdownNotification from "./DropdownNotification";
-import DropdownUser from "./DropdownUser";
+import DarkModeSwitcher from "@/components/Header/DarkModeSwitcher";
+import DropdownMessage from "@/components/Header/DropdownMessage";
+import DropdownNotification from "@/components/Header/DropdownNotification";
+import DropdownUser from "@/components/Header/DropdownUser";
 import Image from "next/image";
 
 const Header = (props: {
