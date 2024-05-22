@@ -131,27 +131,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               title="Settings"
             />
           </SidebarMenuGroup>
-
-          {/* <!-- Others Group --> */}
-          <SidebarMenuGroup title="OTHERS">
-            <SidebarMenuItem
-              href="/chart"
-              icon={<ChartIcon />}
-              title="Charts"
-            />
-            <SidebarExpandableMenu
-              icon={<AuthenticationIcon />}
-              title="Authentication"
-              isExpanded={pathname === "/auth" || pathname.includes("auth")}
-              menuItems={[
-                {
-                  href: "/auth/signin",
-                  title: "Sign In",
-                },
-                { href: "/auth/signup", title: "Sign Up" },
-              ]}
-            />
-          </SidebarMenuGroup>
         </nav>
         {/* <!-- Sidebar Menu --> */}
       </div>
