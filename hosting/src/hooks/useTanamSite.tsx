@@ -30,5 +30,5 @@ export function useTanamSite(site: string) {
     return TanamSite.fromJson(data);
   }
 
-  return {getSite}
+  return {getSite};
 }
