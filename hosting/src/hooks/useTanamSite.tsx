@@ -18,7 +18,6 @@ export function useTanamSite(site: string) {
     const docRef = doc(firestore, "tanam", site);
     const snap = await getDoc(docRef);
 
-    console.log(JSON.stringify(snap.data(), null, 2));
     if (!snap.exists()) {
       return null;
     }
