@@ -3,21 +3,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
-import SidebarLinkGroup from "./SidebarLinkGroup";
-import { CalendarIcon } from "./icons/CalendarIcon";
-import { MenuItem } from "./MenuItem";
-import { ProfileIcon } from "./icons/ProfileIcon";
-import { FormsIcon } from "./icons/FormsIcon";
-import { CollapseExpandIcon } from "./icons/CollapseExpandIcon";
+import { useEffect, useRef, useState } from "react";
 import { SidebarExpandableMenu } from "./SidebarExpandableMenu";
-import { DashboardIcon } from "./icons/DashboardIcon";
-import { TableIcon } from "./icons/TableIcon";
-import { SettingsIcon } from "./icons/SettingsIcon";
-import { ChartIcon } from "./icons/ChartIcon";
-import { UIElementsIcon } from "./icons/UIElementsIcon";
-import { AuthenticationIcon } from "./icons/AuthenticationIcon";
 import { SidebarMenuGroup } from "./SidebarMenuGroup";
+import { SidebarMenuItem } from "./SidebarMenuItem";
+import { AuthenticationIcon } from "./icons/AuthenticationIcon";
+import { ChartIcon } from "./icons/ChartIcon";
+import { DashboardIcon } from "./icons/DashboardIcon";
+import { FormsIcon } from "./icons/FormsIcon";
+import { ProfileIcon } from "./icons/ProfileIcon";
+import { SettingsIcon } from "./icons/SettingsIcon";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -120,8 +115,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
           <SidebarMenuGroup title="MENU">
-            <MenuItem href="/" icon={<DashboardIcon />} title="Dashboard" />
-            <MenuItem href="/profile" icon={<ProfileIcon />} title="Profile" />
+            <SidebarMenuItem href="/" icon={<DashboardIcon />} title="Dashboard" />
+            <SidebarMenuItem href="/profile" icon={<ProfileIcon />} title="Profile" />
             <SidebarExpandableMenu
               icon={<FormsIcon />}
               title="Content"
@@ -134,7 +129,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 { href: "/document-types/event", title: "Events" },
               ]}
             />
-            <MenuItem
+            <SidebarMenuItem
               href="/settings"
               icon={<SettingsIcon />}
               title="Settings"
@@ -143,7 +138,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
           {/* <!-- Others Group --> */}
           <SidebarMenuGroup title="OTHERS">
-            <MenuItem href="/chart" icon={<ChartIcon />} title="Charts" />
+            <SidebarMenuItem href="/chart" icon={<ChartIcon />} title="Charts" />
             <SidebarExpandableMenu
               icon={<AuthenticationIcon />}
               title="Authentication"

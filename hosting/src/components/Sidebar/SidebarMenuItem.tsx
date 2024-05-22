@@ -2,13 +2,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-interface MenuItemProps {
+interface SidebarMenuProps {
   href: string;
   icon: React.ReactNode;
   title: string;
 }
 
-export function MenuItem({ href, icon, title }: MenuItemProps) {
+export function SidebarMenuItem({ href, icon, title }: SidebarMenuProps) {
   const pathname = usePathname() ?? "/";
 
   const isActive = pathname.includes(href);
