@@ -28,7 +28,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const sidebar = useRef<any>(null);
   const { streamDocumentTypes } = useTanamDocumentTypes(site ?? "foo");
 
-  let storedSidebarExpanded = "true";
+  const storedSidebarExpanded = "true";
 
   const [sidebarExpanded, setSidebarExpanded] = useState(
     storedSidebarExpanded === null ? false : storedSidebarExpanded === "true",
@@ -44,14 +44,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   // close on click outside
   useEffect(() => {
-    const clickHandler = ({ target }: MouseEvent) => {
+    const clickHandler = ({target}: MouseEvent) => {
       if (!sidebar.current || !trigger.current) return;
-      if (
-        !sidebarOpen ||
-        sidebar.current.contains(target) ||
-        trigger.current.contains(target)
-      )
+      if (!sidebarOpen || sidebar.current.contains(target) || trigger.current.contains(target)) {
         return;
+      }
       setSidebarOpen(false);
     };
     document.addEventListener("click", clickHandler);
@@ -60,7 +57,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   // close if the esc key is pressed
   useEffect(() => {
-    const keyHandler = ({ key }: KeyboardEvent) => {
+    const keyHandler = ({key}: KeyboardEvent) => {
       if (!sidebarOpen || key !== "Escape") return;
       setSidebarOpen(false);
     };
@@ -87,13 +84,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <Link href="/" className="flex items-center space-x-2">
-          <Image
-            width={32}
-            height={32}
-            src={"/images/logo/logo.svg"}
-            alt="Logo"
-            priority
-          />
+          <Image width={32} height={32} src={"/images/logo/logo.svg"} alt="Logo" priority />
           <h1 className="text-3xl font-bold leading-none">Tanam</h1>
         </Link>
       </div>
