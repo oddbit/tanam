@@ -18,16 +18,12 @@ jobs:
           cache-dependency-path: |
             hosting/package-lock.json
 
-      - name: Install dependency
-        run: npm install
-        working-directory: ./hosting
-
       - name: Linting files
-        run: npm run lint --no-fix
+        run: npm ci && npm run lint --no-fix
         working-directory: ./hosting
 
-  build:
-    name: Build
+  build_and_deploy:
+    name: Build and deploy
     needs: code_check
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
