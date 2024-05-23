@@ -1,4 +1,4 @@
-import {FieldValue, Timestamp, serverTimestamp} from 'firebase/firestore';
+import {FieldValue, Timestamp, serverTimestamp} from "firebase/firestore";
 
 /**
  * Tanam site model

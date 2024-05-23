@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React, {useEffect, useRef, useState} from 'react';
-import {usePathname} from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import SidebarLinkGroup from '@/components/Sidebar/SidebarLinkGroup';
+import React, {useEffect, useRef, useState} from "react";
+import {usePathname} from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import SidebarLinkGroup from "@/components/Sidebar/SidebarLinkGroup";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -17,10 +17,10 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
 
-  const storedSidebarExpanded = 'true';
+  const storedSidebarExpanded = "true";
 
   const [sidebarExpanded, setSidebarExpanded] = useState(
-    storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true',
+    storedSidebarExpanded === null ? false : storedSidebarExpanded === "true",
   );
 
   // close on click outside
@@ -32,26 +32,26 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
       }
       setSidebarOpen(false);
     };
-    document.addEventListener('click', clickHandler);
-    return () => document.removeEventListener('click', clickHandler);
+    document.addEventListener("click", clickHandler);
+    return () => document.removeEventListener("click", clickHandler);
   });
 
   // close if the esc key is pressed
   useEffect(() => {
     const keyHandler = ({key}: KeyboardEvent) => {
-      if (!sidebarOpen || key !== 'Escape') return;
+      if (!sidebarOpen || key !== "Escape") return;
       setSidebarOpen(false);
     };
-    document.addEventListener('keydown', keyHandler);
-    return () => document.removeEventListener('keydown', keyHandler);
+    document.addEventListener("keydown", keyHandler);
+    return () => document.removeEventListener("keydown", keyHandler);
   });
 
   useEffect(() => {
-    localStorage.setItem('sidebar-expanded', sidebarExpanded.toString());
+    localStorage.setItem("sidebar-expanded", sidebarExpanded.toString());
     if (sidebarExpanded) {
-      document.querySelector('body')?.classList.add('sidebar-expanded');
+      document.querySelector("body")?.classList.add("sidebar-expanded");
     } else {
-      document.querySelector('body')?.classList.remove('sidebar-expanded');
+      document.querySelector("body")?.classList.remove("sidebar-expanded");
     }
   }, [sidebarExpanded]);
 
@@ -59,13 +59,13 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
     <aside
       ref={sidebar}
       className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
-        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <Link href="/" className="flex items-center space-x-2">
-          <Image width={32} height={32} src={'/images/logo/logo.svg'} alt="Logo" priority />
+          <Image width={32} height={32} src={"/images/logo/logo.svg"} alt="Logo" priority />
           <h1 className="text-3xl font-bold leading-none">Tanam</h1>
         </Link>
 
@@ -102,14 +102,14 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
 
             <ul className="mb-6 flex flex-col gap-1.5">
               {/* <!-- Menu Item Dashboard --> */}
-              <SidebarLinkGroup activeCondition={pathname === '/' || pathname.includes('dashboard')}>
+              <SidebarLinkGroup activeCondition={pathname === "/" || pathname.includes("dashboard")}>
                 {(handleClick, open) => {
                   return (
                     <React.Fragment>
                       <Link
                         href="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === '/' || pathname.includes('dashboard')) && 'bg-graydark dark:bg-meta-4'
+                          (pathname === "/" || pathname.includes("dashboard")) && "bg-graydark dark:bg-meta-4"
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -143,7 +143,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                         </svg>
                         Dashboard
                         <svg
-                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && 'rotate-180'}`}
+                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && "rotate-180"}`}
                           width="20"
                           height="20"
                           viewBox="0 0 20 20"
@@ -159,13 +159,13 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                         </svg>
                       </Link>
                       {/* <!-- Dropdown Menu Start --> */}
-                      <div className={`translate transform overflow-hidden ${!open && 'hidden'}`}>
+                      <div className={`translate transform overflow-hidden ${!open && "hidden"}`}>
                         <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
                           <li>
                             <Link
                               href="/"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === '/' && 'text-white'
+                                pathname === "/" && "text-white"
                               }`}
                             >
                               eCommerce
@@ -185,7 +185,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                 <Link
                   href="/calendar"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('calendar') && 'bg-graydark dark:bg-meta-4'
+                    pathname.includes("calendar") && "bg-graydark dark:bg-meta-4"
                   }`}
                 >
                   <svg
@@ -211,7 +211,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                 <Link
                   href="/profile"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('profile') && 'bg-graydark dark:bg-meta-4'
+                    pathname.includes("profile") && "bg-graydark dark:bg-meta-4"
                   }`}
                 >
                   <svg
@@ -237,14 +237,14 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
               {/* <!-- Menu Item Profile --> */}
 
               {/* <!-- Menu Item Forms --> */}
-              <SidebarLinkGroup activeCondition={pathname === '/forms' || pathname.includes('forms')}>
+              <SidebarLinkGroup activeCondition={pathname === "/forms" || pathname.includes("forms")}>
                 {(handleClick, open) => {
                   return (
                     <React.Fragment>
                       <Link
                         href="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === '/forms' || pathname.includes('forms')) && 'bg-graydark dark:bg-meta-4'
+                          (pathname === "/forms" || pathname.includes("forms")) && "bg-graydark dark:bg-meta-4"
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -282,7 +282,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                         </svg>
                         Forms
                         <svg
-                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && 'rotate-180'}`}
+                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && "rotate-180"}`}
                           width="20"
                           height="20"
                           viewBox="0 0 20 20"
@@ -298,13 +298,13 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                         </svg>
                       </Link>
                       {/* <!-- Dropdown Menu Start --> */}
-                      <div className={`translate transform overflow-hidden ${!open && 'hidden'}`}>
+                      <div className={`translate transform overflow-hidden ${!open && "hidden"}`}>
                         <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
                           <li>
                             <Link
                               href="/forms/form-elements"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === '/forms/form-elements' && 'text-white'
+                                pathname === "/forms/form-elements" && "text-white"
                               }`}
                             >
                               Form Elements
@@ -314,7 +314,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                             <Link
                               href="/forms/form-layout"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === '/forms/form-layout' && 'text-white'
+                                pathname === "/forms/form-layout" && "text-white"
                               } `}
                             >
                               Form Layout
@@ -334,7 +334,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                 <Link
                   href="/tables"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('tables') && 'bg-graydark dark:bg-meta-4'
+                    pathname.includes("tables") && "bg-graydark dark:bg-meta-4"
                   }`}
                 >
                   <svg
@@ -367,7 +367,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                 <Link
                   href="/settings"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('settings') && 'bg-graydark dark:bg-meta-4'
+                    pathname.includes("settings") && "bg-graydark dark:bg-meta-4"
                   }`}
                 >
                   <svg
@@ -411,7 +411,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                 <Link
                   href="/chart"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('chart') && 'bg-graydark dark:bg-meta-4'
+                    pathname.includes("chart") && "bg-graydark dark:bg-meta-4"
                   }`}
                 >
                   <svg
@@ -444,14 +444,14 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
               {/* <!-- Menu Item Chart --> */}
 
               {/* <!-- Menu Item Ui Elements --> */}
-              <SidebarLinkGroup activeCondition={pathname === '/ui' || pathname.includes('ui')}>
+              <SidebarLinkGroup activeCondition={pathname === "/ui" || pathname.includes("ui")}>
                 {(handleClick, open) => {
                   return (
                     <React.Fragment>
                       <Link
                         href="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === '/ui' || pathname.includes('ui')) && 'bg-graydark dark:bg-meta-4'
+                          (pathname === "/ui" || pathname.includes("ui")) && "bg-graydark dark:bg-meta-4"
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -488,7 +488,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                         </svg>
                         UI Elements
                         <svg
-                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && 'rotate-180'}`}
+                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && "rotate-180"}`}
                           width="20"
                           height="20"
                           viewBox="0 0 20 20"
@@ -504,13 +504,13 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                         </svg>
                       </Link>
                       {/* <!-- Dropdown Menu Start --> */}
-                      <div className={`translate transform overflow-hidden ${!open && 'hidden'}`}>
+                      <div className={`translate transform overflow-hidden ${!open && "hidden"}`}>
                         <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
                           <li>
                             <Link
                               href="/ui/alerts"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === '/ui/alerts' && 'text-white'
+                                pathname === "/ui/alerts" && "text-white"
                               }`}
                             >
                               Alerts
@@ -520,7 +520,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                             <Link
                               href="/ui/buttons"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === '/ui/buttons' && 'text-white'
+                                pathname === "/ui/buttons" && "text-white"
                               }`}
                             >
                               Buttons
@@ -536,14 +536,14 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
               {/* <!-- Menu Item Ui Elements --> */}
 
               {/* <!-- Menu Item Auth Pages --> */}
-              <SidebarLinkGroup activeCondition={pathname === '/auth' || pathname.includes('auth')}>
+              <SidebarLinkGroup activeCondition={pathname === "/auth" || pathname.includes("auth")}>
                 {(handleClick, open) => {
                   return (
                     <React.Fragment>
                       <Link
                         href="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === '/auth' || pathname.includes('auth')) && 'bg-graydark dark:bg-meta-4'
+                          (pathname === "/auth" || pathname.includes("auth")) && "bg-graydark dark:bg-meta-4"
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -576,7 +576,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                         </svg>
                         Authentication
                         <svg
-                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && 'rotate-180'}`}
+                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && "rotate-180"}`}
                           width="20"
                           height="20"
                           viewBox="0 0 20 20"
@@ -592,13 +592,13 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                         </svg>
                       </Link>
                       {/* <!-- Dropdown Menu Start --> */}
-                      <div className={`translate transform overflow-hidden ${!open && 'hidden'}`}>
+                      <div className={`translate transform overflow-hidden ${!open && "hidden"}`}>
                         <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
                           <li>
                             <Link
                               href="/auth/signin"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === '/auth/signin' && 'text-white'
+                                pathname === "/auth/signin" && "text-white"
                               }`}
                             >
                               Sign In
@@ -608,7 +608,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                             <Link
                               href="/auth/signup"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === '/auth/signup' && 'text-white'
+                                pathname === "/auth/signup" && "text-white"
                               }`}
                             >
                               Sign Up

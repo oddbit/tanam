@@ -1,11 +1,11 @@
-import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
-import Image from 'next/image';
-import {Metadata} from 'next';
-import DefaultLayout from '@/components/Layouts/DefaultLayout';
+import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import Image from "next/image";
+import {Metadata} from "next";
+import DefaultLayout from "@/components/Layouts/DefaultLayout";
 
 export const metadata: Metadata = {
-  title: 'Next.js Settings | TailAdmin - Next.js Dashboard Template',
-  description: 'This is Next.js Settings page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template',
+  title: "Next.js Settings | TailAdmin - Next.js Dashboard Template",
+  description: "This is Next.js Settings page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
 };
 
 const Settings = () => {
@@ -211,7 +211,7 @@ const Settings = () => {
                 <form action="#">
                   <div className="mb-4 flex items-center gap-3">
                     <div className="h-14 w-14 rounded-full">
-                      <Image src={'/images/user/user-03.png'} width={55} height={55} alt="User" />
+                      <Image src={"/images/user/user-03.png"} width={55} height={55} alt="User" />
                     </div>
                     <div>
                       <span className="mb-1.5 text-black dark:text-white">Edit your photo</span>
