@@ -9,7 +9,7 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "prettier:fix": "prettier --write .",
-    "format": "prettier --write 'src/**/*.{js,ts,tsx,json,css,md}'"
+    "codecheck": "npm run lint:fix && npm run prettier:fix"
   },
   "dependencies": {
     "apexcharts": "^3.45.2",

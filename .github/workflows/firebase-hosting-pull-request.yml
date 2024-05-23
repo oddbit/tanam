@@ -20,8 +20,8 @@ jobs:
           cache-dependency-path: |
             hosting/package-lock.json
 
-      - name: Apply formatting and linting
-        run: npm ci && npm run lint:fix && npm run format
+      - name: Run code checking and formatting
+        run: npm ci && npm run codecheck
         working-directory: ./hosting
 
       - name: Ensure code is unchanged
