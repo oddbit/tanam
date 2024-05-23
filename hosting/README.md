@@ -26,7 +26,8 @@ NEXT_PUBLIC_FIREBASE_APP_ID=
 
 ### Github actions
 
-The `.env` file contents should be stored in a github secret as specified by the github actions deployment scripts. The `.env` file will be created during deployment.
+The `.env` file contents should be stored in a github varialbes as specified by
+the github actions deployment scripts.
 
 ## Get up and running
 
