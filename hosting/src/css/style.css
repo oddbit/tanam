@@ -5,145 +5,147 @@
 @tailwind utilities;
 
 @layer base {
-    body {
-        @apply relative z-1 bg-whiten font-satoshi text-base font-normal text-body;
-    }
+  body {
+    @apply relative z-1 bg-whiten font-satoshi text-base font-normal text-body;
+  }
 }
 
 @layer components {
 }
 
 @layer utilities {
-    /* Chrome, Safari and Opera */
-    .no-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 
-    .no-scrollbar {
-        -ms-overflow-style: none; /* IE and Edge */
-        scrollbar-width: none; /* Firefox */
-    }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 
-    .chat-height {
-        @apply h-[calc(100vh_-_8.125rem)] lg:h-[calc(100vh_-_5.625rem)];
-    }
+  .chat-height {
+    @apply h-[calc(100vh_-_8.125rem)] lg:h-[calc(100vh_-_5.625rem)];
+  }
 
-    .inbox-height {
-        @apply h-[calc(100vh_-_8.125rem)] lg:h-[calc(100vh_-_5.625rem)];
-    }
+  .inbox-height {
+    @apply h-[calc(100vh_-_8.125rem)] lg:h-[calc(100vh_-_5.625rem)];
+  }
 }
 
 /* third-party libraries CSS */
 
 .tableCheckbox:checked ~ div span {
-    @apply opacity-100;
+  @apply opacity-100;
 }
 
 .tableCheckbox:checked ~ div {
-    @apply border-primary bg-primary;
+  @apply border-primary bg-primary;
 }
 
 .apexcharts-legend-text {
-    @apply !text-body dark:!text-bodydark;
+  @apply !text-body dark:!text-bodydark;
 }
 
 .apexcharts-text {
-    @apply !fill-body dark:!fill-bodydark;
+  @apply !fill-body dark:!fill-bodydark;
 }
 
 .apexcharts-xcrosshairs {
-    @apply !fill-stroke dark:!fill-strokedark;
+  @apply !fill-stroke dark:!fill-strokedark;
 }
 
 .apexcharts-gridline {
-    @apply !stroke-stroke dark:!stroke-strokedark;
+  @apply !stroke-stroke dark:!stroke-strokedark;
 }
 
 .apexcharts-series.apexcharts-pie-series path {
-    @apply dark:!stroke-transparent;
+  @apply dark:!stroke-transparent;
 }
 
 .apexcharts-legend-series {
-    @apply !inline-flex gap-1.5;
+  @apply !inline-flex gap-1.5;
 }
 
 .apexcharts-tooltip.apexcharts-theme-light {
-    @apply dark:!border-strokedark dark:!bg-boxdark;
+  @apply dark:!border-strokedark dark:!bg-boxdark;
 }
 
 .apexcharts-tooltip.apexcharts-theme-light .apexcharts-tooltip-title {
-    @apply dark:!border-strokedark dark:!bg-meta-4;
+  @apply dark:!border-strokedark dark:!bg-meta-4;
 }
 
 .apexcharts-xaxistooltip,
 .apexcharts-yaxistooltip {
-    @apply dark:!border-meta-4 dark:!bg-meta-4 dark:!text-bodydark1;
+  @apply dark:!border-meta-4 dark:!bg-meta-4 dark:!text-bodydark1;
 }
 
 .apexcharts-xaxistooltip-bottom:after {
-    @apply !border-b-gray dark:!border-b-meta-4;
+  @apply !border-b-gray dark:!border-b-meta-4;
 }
 
 .apexcharts-xaxistooltip-bottom:before {
-    @apply !border-b-gray dark:!border-b-meta-4;
+  @apply !border-b-gray dark:!border-b-meta-4;
 }
 
 .apexcharts-xaxistooltip-bottom {
-    @apply !rounded !border-none !bg-gray !text-xs !font-medium !text-black dark:!text-white;
+  @apply !rounded !border-none !bg-gray !text-xs !font-medium !text-black dark:!text-white;
 }
 
 .apexcharts-tooltip-series-group {
-    @apply !pl-1.5;
+  @apply !pl-1.5;
 }
 
 .flatpickr-wrapper {
-    @apply w-full;
+  @apply w-full;
 }
 
 .flatpickr-months .flatpickr-prev-month:hover svg,
 .flatpickr-months .flatpickr-next-month:hover svg {
-    @apply !fill-primary;
+  @apply !fill-primary;
 }
 
 .flatpickr-calendar.arrowTop:before {
-    @apply dark:!border-b-boxdark;
+  @apply dark:!border-b-boxdark;
 }
 
 .flatpickr-calendar.arrowTop:after {
-    @apply dark:!border-b-boxdark;
+  @apply dark:!border-b-boxdark;
 }
 
 .flatpickr-calendar {
-    @apply !p-6 dark:!bg-boxdark dark:!text-bodydark dark:!shadow-8 2xsm:!w-auto;
+  @apply !p-6 dark:!bg-boxdark dark:!text-bodydark dark:!shadow-8 2xsm:!w-auto;
 }
 
 .flatpickr-day {
-    @apply dark:!text-bodydark dark:hover:!border-meta-4 dark:hover:!bg-meta-4;
+  @apply dark:!text-bodydark dark:hover:!border-meta-4 dark:hover:!bg-meta-4;
 }
 
 .flatpickr-months .flatpickr-prev-month,
 .flatpickr-months .flatpickr-next-month {
-    @apply !top-7 dark:!fill-white dark:!text-white;
+  @apply !top-7 dark:!fill-white dark:!text-white;
 }
 
 .flatpickr-months .flatpickr-prev-month.flatpickr-prev-month,
 .flatpickr-months .flatpickr-next-month.flatpickr-prev-month {
-    @apply !left-7;
+  @apply !left-7;
 }
 
 .flatpickr-months .flatpickr-prev-month.flatpickr-next-month,
 .flatpickr-months .flatpickr-next-month.flatpickr-next-month {
-    @apply !right-7;
+  @apply !right-7;
 }
 
 span.flatpickr-weekday,
 .flatpickr-months .flatpickr-month {
-    @apply dark:!fill-white dark:!text-white;
+  @apply dark:!fill-white dark:!text-white;
 }
 
 .flatpickr-day.inRange {
-    box-shadow: -5px 0 0 #f3f4f6, 5px 0 0 #f3f4f6 !important;
-    @apply dark:!shadow-7;
+  box-shadow:
+    -5px 0 0 #f3f4f6,
+    5px 0 0 #f3f4f6 !important;
+  @apply dark:!shadow-7;
 }
 
 .flatpickr-day.inRange,
@@ -158,14 +160,14 @@ span.flatpickr-weekday,
 .flatpickr-day:focus,
 .flatpickr-day.prevMonthDay:focus,
 .flatpickr-day.nextMonthDay:focus {
-    @apply !border-[#F3F4F6] !bg-[#F3F4F6] dark:!border-meta-4 dark:!bg-meta-4;
+  @apply !border-[#F3F4F6] !bg-[#F3F4F6] dark:!border-meta-4 dark:!bg-meta-4;
 }
 
 .flatpickr-day.selected,
 .flatpickr-day.startRange,
 .flatpickr-day.selected,
 .flatpickr-day.endRange {
-    @apply dark:!text-white;
+  @apply dark:!text-white;
 }
 
 .flatpickr-day.selected,
@@ -186,58 +188,58 @@ span.flatpickr-weekday,
 .flatpickr-day.selected.nextMonthDay,
 .flatpickr-day.startRange.nextMonthDay,
 .flatpickr-day.endRange.nextMonthDay {
-    background: #3c50e0;
-    @apply !border-primary !bg-primary hover:!border-primary hover:!bg-primary;
+  background: #3c50e0;
+  @apply !border-primary !bg-primary hover:!border-primary hover:!bg-primary;
 }
 
 .flatpickr-day.selected.startRange + .endRange:not(:nth-child(7n + 1)),
 .flatpickr-day.startRange.startRange + .endRange:not(:nth-child(7n + 1)),
 .flatpickr-day.endRange.startRange + .endRange:not(:nth-child(7n + 1)) {
-    box-shadow: -10px 0 0 #3c50e0;
+  box-shadow: -10px 0 0 #3c50e0;
 }
 
 .map-btn .jvm-zoom-btn {
-    @apply flex h-7.5 w-7.5 items-center justify-center rounded border border-stroke bg-white px-0 pb-0.5 pt-0 text-2xl leading-none text-body hover:border-primary hover:bg-primary hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-bodydark dark:hover:border-primary dark:hover:bg-primary dark:hover:text-white;
+  @apply flex h-7.5 w-7.5 items-center justify-center rounded border border-stroke bg-white px-0 pb-0.5 pt-0 text-2xl leading-none text-body hover:border-primary hover:bg-primary hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-bodydark dark:hover:border-primary dark:hover:bg-primary dark:hover:text-white;
 }
 
 .mapOne .jvm-zoom-btn {
-    @apply !bottom-0 !left-auto !top-auto;
+  @apply !bottom-0 !left-auto !top-auto;
 }
 
 .mapOne .jvm-zoom-btn.jvm-zoomin {
-    @apply !right-10;
+  @apply !right-10;
 }
 
 .mapOne .jvm-zoom-btn.jvm-zoomout {
-    @apply !right-0;
+  @apply !right-0;
 }
 
 .taskCheckbox:checked ~ .box span {
-    @apply opacity-100;
+  @apply opacity-100;
 }
 
 .taskCheckbox:checked ~ p {
-    @apply line-through;
+  @apply line-through;
 }
 
 .taskCheckbox:checked ~ .box {
-    @apply border-primary bg-primary dark:border-primary;
+  @apply border-primary bg-primary dark:border-primary;
 }
 
 .custom-input-date::-webkit-calendar-picker-indicator {
-    background: transparent;
+  background: transparent;
 }
 
 input[type="search"]::-webkit-search-cancel-button {
-    @apply appearance-none;
+  @apply appearance-none;
 }
 
 .custom-input-date::-webkit-calendar-picker-indicator {
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 20px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 20px;
 }
 
 [x-cloak] {
-    display: none !important;
+  display: none !important;
 }

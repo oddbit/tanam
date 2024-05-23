@@ -1,5 +1,5 @@
-import { ApexOptions } from "apexcharts";
-import React, { useState } from "react";
+import {ApexOptions} from "apexcharts";
+import React, {useState} from "react";
 import ReactApexChart from "react-apexcharts";
 
 const options: ApexOptions = {
@@ -83,20 +83,7 @@ const options: ApexOptions = {
   },
   xaxis: {
     type: "category",
-    categories: [
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-    ],
+    categories: ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
     axisBorder: {
       show: false,
     },
@@ -184,13 +171,7 @@ const ChartOne: React.FC = () => {
 
       <div>
         <div id="chartOne" className="-ml-5">
-          <ReactApexChart
-            options={options}
-            series={state.series}
-            type="area"
-            height={350}
-            width={"100%"}
-          />
+          <ReactApexChart options={options} series={state.series} type="area" height={350} width={"100%"} />
         </div>
       </div>
     </div>

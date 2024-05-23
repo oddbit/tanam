@@ -1,7 +1,7 @@
 "use client";
 
-import { createSession } from "@/actions/auth-action";
-import { signInWithGoogle } from "@/libs/firebase/auth";
+import {createSession} from "@/actions/auth-action";
+import {signInWithGoogle} from "@/libs/firebase/auth";
 
 export const SignUpWithGoogle = () => {
   const handleSignIn = async () => {
@@ -16,13 +16,7 @@ export const SignUpWithGoogle = () => {
       className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50"
     >
       <span>
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g clipPath="url(#clip0_191_13499)">
             <path
               d="M19.999 10.2217C20.0111 9.53428 19.9387 8.84788 19.7834 8.17737H10.2031V11.8884H15.8266C15.7201 12.5391 15.4804 13.162 15.1219 13.7195C14.7634 14.2771 14.2935 14.7578 13.7405 15.1328L13.7209 15.2571L16.7502 17.5568L16.96 17.5774C18.8873 15.8329 19.9986 13.2661 19.9986 10.2217"

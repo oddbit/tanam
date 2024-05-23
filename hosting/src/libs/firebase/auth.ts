@@ -1,11 +1,6 @@
-import {
-  type User,
-  GoogleAuthProvider,
-  signInWithPopup,
-  onAuthStateChanged as _onAuthStateChanged,
-} from "firebase/auth";
+import {type User, GoogleAuthProvider, signInWithPopup, onAuthStateChanged as _onAuthStateChanged} from "firebase/auth";
 
-import { firebaseAuth } from "./config";
+import {firebaseAuth} from "./config";
 
 export function onAuthStateChanged(callback: (authUser: User | null) => void) {
   return _onAuthStateChanged(firebaseAuth, callback);

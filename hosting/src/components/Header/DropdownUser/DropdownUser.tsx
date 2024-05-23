@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { SignOutWithGoogle } from "./components/SignOutWithGoogle";
-import { firebaseAuth } from "@//libs/firebase/config";
+import {SignOutWithGoogle} from "./components/SignOutWithGoogle";
+import {firebaseAuth} from "@//libs/firebase/config";
 
 const DropdownUser = () => {
   const user = firebaseAuth.currentUser;
@@ -13,14 +13,9 @@ const DropdownUser = () => {
 
   // close on click outside
   useEffect(() => {
-    const clickHandler = ({ target }: MouseEvent) => {
+    const clickHandler = ({target}: MouseEvent) => {
       if (!dropdown.current) return;
-      if (
-        !dropdownOpen ||
-        dropdown.current.contains(target) ||
-        trigger.current.contains(target)
-      )
-        return;
+      if (!dropdownOpen || dropdown.current.contains(target) || trigger.current.contains(target)) return;
       setDropdownOpen(false);
     };
     document.addEventListener("click", clickHandler);
@@ -29,7 +24,7 @@ const DropdownUser = () => {
 
   // close if the esc key is pressed
   useEffect(() => {
-    const keyHandler = ({ keyCode }: KeyboardEvent) => {
+    const keyHandler = ({keyCode}: KeyboardEvent) => {
       if (!dropdownOpen || keyCode !== 27) return;
       setDropdownOpen(false);
     };
@@ -43,16 +38,9 @@ const DropdownUser = () => {
 
   return (
     <div className="relative">
-      <Link
-        ref={trigger}
-        onClick={() => setDropdownOpen(!dropdownOpen)}
-        className="flex items-center gap-4"
-        href="#"
-      >
+      <Link ref={trigger} onClick={() => setDropdownOpen(!dropdownOpen)} className="flex items-center gap-4" href="#">
         <span className="hidden text-right lg:block">
-          <span className="block text-sm font-medium text-black dark:text-white">
-            {user?.displayName}
-          </span>
+          <span className="block text-sm font-medium text-black dark:text-white">{user?.displayName}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
