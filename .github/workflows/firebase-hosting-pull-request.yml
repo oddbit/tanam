@@ -52,7 +52,7 @@ jobs:
             ./hosting/.next/cache/
 
       - name: Set hosting environment
-        run: echo $HOSTING_ENV > hosting/.env && cat hosting/.env
+        run: echo $HOSTING_ENV > hosting/.env
 
       - name: Build application
         run: npm ci && npm install && npm run build
