@@ -1,15 +1,15 @@
 module.exports = {
   root: true,
 
-  parser: '@typescript-eslint/parser',
+  parser: "@typescript-eslint/parser",
 
   parserOptions: {
     ecmaVersion: 2021,
-    sourceType: 'module',
+    sourceType: "module",
     ecmaFeatures: {
       jsx: true,
     },
-    project: './tsconfig.json',
+    project: "./tsconfig.json",
   },
 
   env: {
@@ -17,38 +17,31 @@ module.exports = {
     es2021: true,
   },
 
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'google',
-  ],
+  extends: ["eslint:recommended", "plugin:react/recommended", "plugin:@typescript-eslint/recommended", "google"],
 
-  plugins: ['react', '@typescript-eslint', 'prettier'],
+  plugins: ["react", "@typescript-eslint", "prettier"],
 
   settings: {
     react: {
-      version: 'detect',
+      version: "detect",
     },
   },
 
   rules: {
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
-    'react/react-in-jsx-scope': 'off',
-    'react/jsx-filename-extension': [
-      1,
-      {extensions: ['.js', '.jsx', '.ts', '.tsx']},
-    ],
-    'react/jsx-props-no-spreading': 'off',
-    'react/prop-types': 'off',
-    'max-len': 'off',
-    'require-jsdoc': 'off',
-    'prettier/prettier': 'error',
-    'indent': ['error', 2],
-    'operator-linebreak': ['error', 'before'],
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-filename-extension": [1, {extensions: [".js", ".jsx", ".ts", ".tsx"]}],
+    "react/jsx-props-no-spreading": "off",
+    "react/prop-types": "off",
+    "max-len": "off",
+    "require-jsdoc": "off",
+    "prettier/prettier": "error",
+    indent: ["error", 2],
+    "operator-linebreak": ["error", "before"],
+    quotes: "off", // Use config quotes from prettier, so we turn off this rules to avoiding conflict between eslint and prettier
   },
 
-  ignorePatterns: ['**/src/js/*'],
+  ignorePatterns: ["**/src/js/*"],
 };
