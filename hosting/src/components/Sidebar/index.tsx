@@ -22,23 +22,13 @@ interface SidebarProps {
 const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
   const pathname = usePathname() ?? "/";
   const site = pathname.split("/")[1];
-  const [documentTypes, setDocumentTypes] = useState<TanamDocumentType[]>([]);
-
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
-  const {streamDocumentTypes} = useTanamDocumentTypes(site ?? "foo");
+  const {data: documentTypes} = useTanamDocumentTypes(site);
 
   const storedSidebarExpanded = "true";
 
   const [sidebarExpanded] = useState(storedSidebarExpanded === null ? false : storedSidebarExpanded === "true");
-
-  // Get tanam document types
-  useEffect(() => {
-    const unsubscribe = streamDocumentTypes((documentTypes) => {
-      setDocumentTypes(documentTypes);
-    });
-    return () => unsubscribe();
-  }, [streamDocumentTypes]);
 
   // close on click outside
   useEffect(() => {
