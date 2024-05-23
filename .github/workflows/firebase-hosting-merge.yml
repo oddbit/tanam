@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+env:
+  HOSTING_ENV: ${{ github.ref == 'refs/heads/main' && vars.HOSTING_ENV_PROD || vars.HOSTING_ENV_DEV  }}
 jobs:
   code_check:
     name: Code check
@@ -37,6 +39,13 @@ jobs:
           cache: "npm"
           cache-dependency-path: |
             hosting/package-lock.json
+
+      - name: Determine hosting environment
+        id: set-env
+        run: echo "HOSTING_ENV=${{ github.ref == 'refs/heads/main' && 'PROD' || 'DEV' }}" >> $GITHUB_ENV
+
+      - name: Set hosting environment
+        run: echo $HOSTING_ENV > hosting/.env && cat hosting/.env
 
       - name: Cache hosting build
         uses: actions/cache@v4

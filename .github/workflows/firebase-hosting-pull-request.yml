@@ -4,6 +4,8 @@ permissions:
   checks: write
   contents: read
   pull-requests: write
+env:
+  HOSTING_ENV: ${{ vars.HOSTING_ENV_DEV  }}
 jobs:
   code_check:
     name: Code check
@@ -48,6 +50,9 @@ jobs:
           path: |
             ./hosting/node_modules/
             ./hosting/.next/cache/
+
+      - name: Set hosting environment
+        run: echo $HOSTING_ENV > hosting/.env && cat hosting/.env
 
       - name: Build application
         run: npm ci && npm install && npm run build
