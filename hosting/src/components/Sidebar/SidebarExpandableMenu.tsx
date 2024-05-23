@@ -1,22 +1,17 @@
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import {usePathname} from "next/navigation";
+import React, {useState} from "react";
 import SidebarLinkGroup from "./SidebarLinkGroup";
-import { CollapseExpandIcon } from "./icons/CollapseExpandIcon";
+import {CollapseExpandIcon} from "./icons/CollapseExpandIcon";
 
 interface ExpandableMenuProps {
   icon: React.ReactNode;
   title: string;
-  menuItems: Array<{ href: string; title: string }>;
+  menuItems: Array<{href: string; title: string}>;
   isExpanded: boolean;
 }
 
-export function SidebarExpandableMenu({
-  icon,
-  title,
-  menuItems,
-  isExpanded,
-}: ExpandableMenuProps) {
+export function SidebarExpandableMenu({icon, title, menuItems, isExpanded}: ExpandableMenuProps) {
   const pathname = usePathname() ?? "/";
   const [isOpen, setIsOpen] = useState(isExpanded);
 
@@ -46,9 +41,7 @@ export function SidebarExpandableMenu({
             <CollapseExpandIcon isOpen={isOpen} />
           </Link>
           {/* <!-- Dropdown Menu Start --> */}
-          <div
-            className={`translate transform overflow-hidden ${!isOpen && "hidden"}`}
-          >
+          <div className={`translate transform overflow-hidden ${!isOpen && "hidden"}`}>
             <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
               {menuItems.map((item) => (
                 <li key={item.href}>

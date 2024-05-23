@@ -18,12 +18,7 @@ export function TableIcon() {
       </g>
       <defs>
         <clipPath id="clip0_130_9756">
-          <rect
-            width="18"
-            height="18"
-            fill="white"
-            transform="translate(0 0.052124)"
-          />
+          <rect width="18" height="18" fill="white" transform="translate(0 0.052124)" />
         </clipPath>
       </defs>
     </svg>

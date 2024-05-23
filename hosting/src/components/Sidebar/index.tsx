@@ -2,37 +2,35 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useTanamDocumentTypes } from "../../hooks/useTanamDocumentTypes";
-import { TanamDocumentType } from "../../models/TanamDocumentType";
-import { SidebarExpandableMenu } from "./SidebarExpandableMenu";
-import { SidebarMenuGroup } from "./SidebarMenuGroup";
-import { SidebarMenuItem } from "./SidebarMenuItem";
-import { DashboardIcon } from "./icons/DashboardIcon";
-import { FormsIcon } from "./icons/FormsIcon";
-import { ProfileIcon } from "./icons/ProfileIcon";
-import { SettingsIcon } from "./icons/SettingsIcon";
+import {usePathname} from "next/navigation";
+import {useEffect, useRef, useState} from "react";
+import {useTanamDocumentTypes} from "../../hooks/useTanamDocumentTypes";
+import {TanamDocumentType} from "../../models/TanamDocumentType";
+import {SidebarExpandableMenu} from "./SidebarExpandableMenu";
+import {SidebarMenuGroup} from "./SidebarMenuGroup";
+import {SidebarMenuItem} from "./SidebarMenuItem";
+import {DashboardIcon} from "./icons/DashboardIcon";
+import {FormsIcon} from "./icons/FormsIcon";
+import {ProfileIcon} from "./icons/ProfileIcon";
+import {SettingsIcon} from "./icons/SettingsIcon";
 
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
 }
 
-const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
   const pathname = usePathname() ?? "/";
   const site = pathname.split("/")[1];
   const [documentTypes, setDocumentTypes] = useState<TanamDocumentType[]>([]);
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
-  const { streamDocumentTypes } = useTanamDocumentTypes(site ?? "foo");
+  const {streamDocumentTypes} = useTanamDocumentTypes(site ?? "foo");
 
   const storedSidebarExpanded = "true";
 
-  const [sidebarExpanded, setSidebarExpanded] = useState(
-    storedSidebarExpanded === null ? false : storedSidebarExpanded === "true",
-  );
+  const [sidebarExpanded] = useState(storedSidebarExpanded === null ? false : storedSidebarExpanded === "true");
 
   // Get tanam document types
   useEffect(() => {
@@ -95,16 +93,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
           <SidebarMenuGroup title="MENU">
-            <SidebarMenuItem
-              href="/"
-              icon={<DashboardIcon />}
-              title="Dashboard"
-            />
-            <SidebarMenuItem
-              href="/profile"
-              icon={<ProfileIcon />}
-              title="Profile"
-            />
+            <SidebarMenuItem href="/" icon={<DashboardIcon />} title="Dashboard" />
+            <SidebarMenuItem href="/profile" icon={<ProfileIcon />} title="Profile" />
             <SidebarExpandableMenu
               icon={<FormsIcon />}
               title="Content"
@@ -114,11 +104,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 title: doc.title,
               }))}
             />
-            <SidebarMenuItem
-              href="/settings"
-              icon={<SettingsIcon />}
-              title="Settings"
-            />
+            <SidebarMenuItem href="/settings" icon={<SettingsIcon />} title="Settings" />
           </SidebarMenuGroup>
         </nav>
         {/* <!-- Sidebar Menu --> */}

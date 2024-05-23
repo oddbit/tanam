@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import {usePathname} from "next/navigation";
 import React from "react";
 
 interface SidebarMenuProps {
@@ -8,7 +8,7 @@ interface SidebarMenuProps {
   title: string;
 }
 
-export function SidebarMenuItem({ href, icon, title }: SidebarMenuProps) {
+export function SidebarMenuItem({href, icon, title}: SidebarMenuProps) {
   const pathname = usePathname() ?? "/";
 
   const isActive = pathname.includes(href);
