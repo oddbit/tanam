@@ -1,14 +1,13 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 
-import { Metadata } from "next";
+import {Metadata} from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import SelectGroupOne from "@/components/SelectGroup/SelectGroupOne";
 import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Next.js Form Layout | TailAdmin - Next.js Dashboard Template",
-  description:
-    "This is Next.js Form Layout page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
+  description: "This is Next.js Form Layout page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
 };
 
 const FormLayout = () => {
@@ -21,17 +20,13 @@ const FormLayout = () => {
           {/* <!-- Contact Form --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                Contact Form
-              </h3>
+              <h3 className="font-medium text-black dark:text-white">Contact Form</h3>
             </div>
             <form action="#">
               <div className="p-6.5">
                 <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                   <div className="w-full xl:w-1/2">
-                    <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                      First name
-                    </label>
+                    <label className="mb-3 block text-sm font-medium text-black dark:text-white">First name</label>
                     <input
                       type="text"
                       placeholder="Enter your first name"
@@ -40,9 +35,7 @@ const FormLayout = () => {
                   </div>
 
                   <div className="w-full xl:w-1/2">
-                    <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                      Last name
-                    </label>
+                    <label className="mb-3 block text-sm font-medium text-black dark:text-white">Last name</label>
                     <input
                       type="text"
                       placeholder="Enter your last name"
@@ -63,9 +56,7 @@ const FormLayout = () => {
                 </div>
 
                 <div className="mb-4.5">
-                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                    Subject
-                  </label>
+                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">Subject</label>
                   <input
                     type="text"
                     placeholder="Select subject"
@@ -76,9 +67,7 @@ const FormLayout = () => {
                 <SelectGroupOne />
 
                 <div className="mb-6">
-                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                    Message
-                  </label>
+                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">Message</label>
                   <textarea
                     rows={6}
                     placeholder="Type your message"
@@ -98,16 +87,12 @@ const FormLayout = () => {
           {/* <!-- Sign In Form --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                Sign In Form
-              </h3>
+              <h3 className="font-medium text-black dark:text-white">Sign In Form</h3>
             </div>
             <form action="#">
               <div className="p-6.5">
                 <div className="mb-4.5">
-                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                    Email
-                  </label>
+                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">Email</label>
                   <input
                     type="email"
                     placeholder="Enter your email address"
@@ -116,9 +101,7 @@ const FormLayout = () => {
                 </div>
 
                 <div>
-                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                    Password
-                  </label>
+                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">Password</label>
                   <input
                     type="password"
                     placeholder="Enter password"
@@ -129,11 +112,7 @@ const FormLayout = () => {
                 <div className="mb-5.5 mt-5 flex items-center justify-between">
                   <label htmlFor="formCheckbox" className="flex cursor-pointer">
                     <div className="relative pt-0.5">
-                      <input
-                        type="checkbox"
-                        id="formCheckbox"
-                        className="taskCheckbox sr-only"
-                      />
+                      <input type="checkbox" id="formCheckbox" className="taskCheckbox sr-only" />
                       <div className="box mr-3 flex h-5 w-5 items-center justify-center rounded border border-stroke dark:border-strokedark">
                         <span className="text-white opacity-0">
                           <svg
@@ -157,10 +136,7 @@ const FormLayout = () => {
                     <p>Remember me</p>
                   </label>
 
-                  <Link
-                    href="#"
-                    className="text-sm text-primary hover:underline"
-                  >
+                  <Link href="#" className="text-sm text-primary hover:underline">
                     Forget password?
                   </Link>
                 </div>
@@ -175,16 +151,12 @@ const FormLayout = () => {
           {/* <!-- Sign Up Form --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                Sign Up Form
-              </h3>
+              <h3 className="font-medium text-black dark:text-white">Sign Up Form</h3>
             </div>
             <form action="#">
               <div className="p-6.5">
                 <div className="mb-4.5">
-                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                    Name
-                  </label>
+                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">Name</label>
                   <input
                     type="text"
                     placeholder="Enter your full name"
@@ -193,9 +165,7 @@ const FormLayout = () => {
                 </div>
 
                 <div className="mb-4.5">
-                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                    Email
-                  </label>
+                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">Email</label>
                   <input
                     type="email"
                     placeholder="Enter your email address"
@@ -204,9 +174,7 @@ const FormLayout = () => {
                 </div>
 
                 <div className="mb-4.5">
-                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                    Password
-                  </label>
+                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">Password</label>
                   <input
                     type="password"
                     placeholder="Enter password"
@@ -215,9 +183,7 @@ const FormLayout = () => {
                 </div>
 
                 <div className="mb-5.5">
-                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                    Re-type Password
-                  </label>
+                  <label className="mb-3 block text-sm font-medium text-black dark:text-white">Re-type Password</label>
                   <input
                     type="password"
                     placeholder="Re-enter password"

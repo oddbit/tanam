@@ -1,11 +1,15 @@
-import { getApp } from "firebase/app";
-import { useRouter } from "next/router";
+import {initializeApp} from "firebase/app";
+import {getFirestore} from "firebase/firestore";
 
-const firebaseAppName = useRouter().query.__firebaseAppName;
-const appName = Array.isArray(firebaseAppName)
-  ? firebaseAppName[0]
-  : firebaseAppName;
+const firebaseConfig = {
+  apiKey: "AIzaSyDGYwmKdPdUXkO6abAaLf6BHL8vqqvzdvQ",
+  authDomain: "tanam-testing.firebaseapp.com",
+  databaseURL: "https://tanam-testing.firebaseio.com",
+  projectId: "tanam-testing",
+  storageBucket: "tanam-testing.appspot.com",
+  messagingSenderId: "33159958289",
+  appId: "1:33159958289:web:1056a48a098332d8fd46b0",
+};
 
-
-const firebaseApp = getApp(appName);
-export default firebaseApp;
+export const firebaseApp = initializeApp(firebaseConfig);
+export const firestore = getFirestore(firebaseApp);
