@@ -5,7 +5,6 @@ import Link from "next/link";
 import {usePathname} from "next/navigation";
 import {useEffect, useRef, useState} from "react";
 import {useTanamDocumentTypes} from "../../hooks/useTanamDocumentTypes";
-import {TanamDocumentType} from "../../models/TanamDocumentType";
 import {SidebarExpandableMenu} from "./SidebarExpandableMenu";
 import {SidebarMenuGroup} from "./SidebarMenuGroup";
 import {SidebarMenuItem} from "./SidebarMenuItem";
