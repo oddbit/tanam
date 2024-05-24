@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+env:
+  HOSTING_ENV: ${{ github.ref == 'refs/heads/main' && vars.HOSTING_ENV_PROD || vars.HOSTING_ENV_DEV  }}
 jobs:
   code_check:
     name: Code check
@@ -19,8 +21,8 @@ jobs:
           cache-dependency-path: |
             hosting/package-lock.json
 
-      - name: Apply formatting and linting
-        run: npm ci && npm run lint:fix && npm run format
+      - name: Run code checking and formatting
+        run: npm ci && npm run codecheck
         working-directory: ./hosting
 
       - name: Ensure code is unchanged
@@ -52,6 +54,9 @@ jobs:
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
+      - name: Set hosting environment
+        run: echo $HOSTING_ENV > hosting/.env
 
       - name: Build application
         run: npm ci && npm run build
