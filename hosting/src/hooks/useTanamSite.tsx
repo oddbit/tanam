@@ -1,34 +1,35 @@
-import {firestore} from "@/firebase"; // this is from you export an initialize the app
+import {useState, useEffect} from "react";
+import {firestore} from "@/firebase"; // this is from your export and initialize the app
 import {doc, getDoc} from "firebase/firestore";
 import {TanamSite} from "@/models/tanamSite";
 
-/**
- * Hook for Tanam site
- *
- * @param {stirng} site ID of the site
- * @return {Object} Tanam site hooks
- */
 export function useTanamSite(site: string) {
-  /**
-   * Get Tanam site data
-   *
-   * @return {Promise<TanamSite | null>} Tanam site data
-   */
-  async function getSite(): Promise<TanamSite | null> {
-    const docRef = doc(firestore, "tanam", site);
-    const snap = await getDoc(docRef);
+  const [siteData, setSiteData] = useState<TanamSite | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-    if (!snap.exists()) {
-      return null;
+  useEffect(() => {
+    async function fetchSiteData() {
+      try {
+        const docRef = doc(firestore, "tanam", site);
+        const snap = await getDoc(docRef);
+
+        if (snap.exists()) {
+          const data = {
+            ...snap.data(),
+            id: snap.id,
+          };
+          setSiteData(TanamSite.fromJson(data));
+        } else {
+          setError("Site not found");
+        }
+      } catch (err) {
+        console.error("Error fetching site data:", err);
+        setError("No permission to read site data or site not found");
+      }
     }
 
-    const data = {
-      ...snap.data(),
-      id: snap.id,
-    };
+    fetchSiteData();
+  }, [site]);
 
-    return TanamSite.fromJson(data);
-  }
-
-  return {getSite};
+  return {siteData, error};
 }
