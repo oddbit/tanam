@@ -6,7 +6,6 @@ import "@/css/style.css";
 import {useTanamSite} from "@/hooks/useTanamSite";
 import "flatpickr/dist/flatpickr.min.css";
 import "jsvectormap/dist/css/jsvectormap.css";
-import {usePathname} from "next/navigation";
 import React, {useEffect, useState} from "react";
 
 interface RootLayoutProps {
@@ -14,11 +13,9 @@ interface RootLayoutProps {
 }
 
 const RootLayout: React.FC<RootLayoutProps> = ({children}) => {
-  const pathname = usePathname() ?? "";
-  const site = pathname.split("/")[1];
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setError] = useState<string>("");
-  const {siteData, error} = useTanamSite(site ?? "foo");
+  const {siteData, error} = useTanamSite();
 
   useEffect(() => {
     if (siteData || error) {

@@ -1,13 +1,21 @@
 import {useState, useEffect} from "react";
-import {firestore} from "@/firebase"; // this is from your export and initialize the app
+import {firestore} from "@/firebase";
 import {doc, getDoc} from "firebase/firestore";
 import {TanamSite} from "@/models/tanamSite";
+import {useParams} from "next/navigation";
 
-export function useTanamSite(site: string) {
+export function useTanamSite() {
+  const {site} = useParams<{site: string}>() ?? {site: "-"};
   const [siteData, setSiteData] = useState<TanamSite | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!site) {
+      // TODO(Dennis): Redirect to default site
+      setError("No site parameter provided");
+      return;
+    }
+
     async function fetchSiteData() {
       try {
         const docRef = doc(firestore, "tanam", site);
