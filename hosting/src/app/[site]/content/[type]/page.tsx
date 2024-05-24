@@ -6,15 +6,18 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import {useTanamDocuments} from "@/hooks/useTanamDocuments";
 import Alerts from "@/components/common/Alerts";
 
-export default function ContentOverviewPage() {
-  const {data: documents, error} = useTanamDocuments();
+import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
+import Loader from "../../../../components/common/Loader";
 
+export default function ContentOverviewPage() {
+  const {data: documents, error: docsError} = useTanamDocuments();
+  const {data: documentType} = useTanamDocumentType();
   return (
     <DefaultLayout>
-      <Breadcrumb pageName="Tables" />
+      {documentType ? <Breadcrumb pageName={documentType.title} /> : <Loader />}
 
-      {error ? (
-        <Alerts type="error" title="Error fetching documents" message={error.message} />
+      {docsError ? (
+        <Alerts type="error" title="Error fetching documents" message={docsError.message} />
       ) : (
         <Table
           headers={["Id", "Created", "Status", "Actions"]}
