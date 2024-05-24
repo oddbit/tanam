@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+import type {Config} from "tailwindcss";
 import defaultTheme from "tailwindcss/defaultTheme";
 
 const config: Config = {
@@ -230,7 +230,7 @@ const config: Config = {
       content: {
         "icon-copy": 'url("../images/icon/icon-copy-alt.svg")',
       },
-      transitionProperty: { width: "width", stroke: "stroke" },
+      transitionProperty: {width: "width", stroke: "stroke"},
       borderWidth: {
         6: "6px",
         10: "10px",
@@ -240,8 +240,7 @@ const config: Config = {
         default: "0px 8px 13px -3px rgba(0, 0, 0, 0.07)",
         card: "0px 1px 3px rgba(0, 0, 0, 0.12)",
         "card-2": "0px 1px 2px rgba(0, 0, 0, 0.05)",
-        switcher:
-          "0px 2px 4px rgba(0, 0, 0, 0.2), inset 0px 2px 2px #FFFFFF, inset 0px -1px 1px rgba(0, 0, 0, 0.1)",
+        switcher: "0px 2px 4px rgba(0, 0, 0, 0.2), inset 0px 2px 2px #FFFFFF, inset 0px -1px 1px rgba(0, 0, 0, 0.1)",
         "switch-1": "0px 0px 5px rgba(0, 0, 0, 0.15)",
         1: "0px 1px 3px rgba(0, 0, 0, 0.08)",
         2: "0px 1px 4px rgba(0, 0, 0, 0.12)",
@@ -267,56 +266,54 @@ const config: Config = {
       },
       keyframes: {
         linspin: {
-          "100%": { transform: "rotate(360deg)" },
+          "100%": {transform: "rotate(360deg)"},
         },
         easespin: {
-          "12.5%": { transform: "rotate(135deg)" },
-          "25%": { transform: "rotate(270deg)" },
-          "37.5%": { transform: "rotate(405deg)" },
-          "50%": { transform: "rotate(540deg)" },
-          "62.5%": { transform: "rotate(675deg)" },
-          "75%": { transform: "rotate(810deg)" },
-          "87.5%": { transform: "rotate(945deg)" },
-          "100%": { transform: "rotate(1080deg)" },
+          "12.5%": {transform: "rotate(135deg)"},
+          "25%": {transform: "rotate(270deg)"},
+          "37.5%": {transform: "rotate(405deg)"},
+          "50%": {transform: "rotate(540deg)"},
+          "62.5%": {transform: "rotate(675deg)"},
+          "75%": {transform: "rotate(810deg)"},
+          "87.5%": {transform: "rotate(945deg)"},
+          "100%": {transform: "rotate(1080deg)"},
         },
         "left-spin": {
-          "0%": { transform: "rotate(130deg)" },
-          "50%": { transform: "rotate(-5deg)" },
-          "100%": { transform: "rotate(130deg)" },
+          "0%": {transform: "rotate(130deg)"},
+          "50%": {transform: "rotate(-5deg)"},
+          "100%": {transform: "rotate(130deg)"},
         },
         "right-spin": {
-          "0%": { transform: "rotate(-130deg)" },
-          "50%": { transform: "rotate(5deg)" },
-          "100%": { transform: "rotate(-130deg)" },
+          "0%": {transform: "rotate(-130deg)"},
+          "50%": {transform: "rotate(5deg)"},
+          "100%": {transform: "rotate(-130deg)"},
         },
         rotating: {
-          "0%, 100%": { transform: "rotate(360deg)" },
-          "50%": { transform: "rotate(0deg)" },
+          "0%, 100%": {transform: "rotate(360deg)"},
+          "50%": {transform: "rotate(0deg)"},
         },
         topbottom: {
-          "0%, 100%": { transform: "translate3d(0, -100%, 0)" },
-          "50%": { transform: "translate3d(0, 0, 0)" },
+          "0%, 100%": {transform: "translate3d(0, -100%, 0)"},
+          "50%": {transform: "translate3d(0, 0, 0)"},
         },
         bottomtop: {
-          "0%, 100%": { transform: "translate3d(0, 0, 0)" },
-          "50%": { transform: "translate3d(0, -100%, 0)" },
+          "0%, 100%": {transform: "translate3d(0, 0, 0)"},
+          "50%": {transform: "translate3d(0, -100%, 0)"},
         },
         line: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(100%)" },
+          "0%, 100%": {transform: "translateY(0)"},
+          "50%": {transform: "translateY(100%)"},
         },
         "line-revert": {
-          "0%, 100%": { transform: "translateY(100%)" },
-          "50%": { transform: "translateY(0)" },
+          "0%, 100%": {transform: "translateY(100%)"},
+          "50%": {transform: "translateY(0)"},
         },
       },
       animation: {
         linspin: "linspin 1568.2353ms linear infinite",
         easespin: "easespin 5332ms cubic-bezier(0.4, 0, 0.2, 1) infinite both",
-        "left-spin":
-          "left-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both",
-        "right-spin":
-          "right-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both",
+        "left-spin": "left-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both",
+        "right-spin": "right-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both",
         "ping-once": "ping 5s cubic-bezier(0, 0, 0.2, 1)",
         rotating: "rotating 30s linear infinite",
         topbottom: "topbottom 60s infinite alternate linear",

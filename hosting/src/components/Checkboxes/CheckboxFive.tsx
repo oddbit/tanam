@@ -1,14 +1,11 @@
-import { useState } from "react";
+import {useState} from "react";
 
 const CheckboxFive = () => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
   return (
     <div>
-      <label
-        htmlFor="checkboxLabelFive"
-        className="flex cursor-pointer select-none items-center"
-      >
+      <label htmlFor="checkboxLabelFive" className="flex cursor-pointer select-none items-center">
         <div className="relative">
           <input
             type="checkbox"
