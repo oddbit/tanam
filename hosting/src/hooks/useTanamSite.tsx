@@ -10,7 +10,7 @@ export function useTanamSite() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!!site) {
+    if (site) {
       fetchSiteData(site);
     } else {
       // TODO(Dennis): Redirect to default site ?

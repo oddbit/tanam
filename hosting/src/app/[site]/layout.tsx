@@ -36,10 +36,10 @@ const RootLayout: React.FC<RootLayoutProps> = ({children}) => {
 
   /**
    * Abstraction to simplify the rendering of the site content after loading
-   * @returns React.ReactNode - The site content to render
+   * @return {React.ReactNode} The site content to render
    */
   function getSiteContent(): React.ReactNode {
-    if (!!errorMessage) {
+    if (errorMessage) {
       return <div>{errorMessage}</div>;
     } else {
       return children;
