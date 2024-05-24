@@ -1,8 +1,8 @@
-import {useState, useEffect} from "react";
 import {firestore} from "@/firebase";
-import {collection, query, where, onSnapshot} from "firebase/firestore";
-import {useParams} from "next/navigation";
 import {TanamDocument} from "@/models/tanamDocument";
+import {collection, onSnapshot, query, where} from "firebase/firestore";
+import {useParams} from "next/navigation";
+import {useEffect, useState} from "react";
 
 interface UseTanamDocumentsResult {
   data: TanamDocument[];
