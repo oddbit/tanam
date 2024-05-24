@@ -1,5 +1,5 @@
 import {firestore} from "@/firebase";
-import {TanamDocument} from "@/models/tanamDocument";
+import {TanamDocument} from "@/models/TanamDocument";
 import {collection, onSnapshot, query, where} from "firebase/firestore";
 import {useParams} from "next/navigation";
 import {useEffect, useState} from "react";

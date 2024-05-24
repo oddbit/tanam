@@ -14,7 +14,6 @@ export class TanamDocument {
    * @param {string} id Document ID
    * @param {string | null} canonicalUrl Canonical URL of the document
    * @param {DocumentData} data Data of the document
-   * @param {Dependency[]} dependencies Dependencies of the document
    * @param {string} documentType Type of the document
    * @param {Timestamp} publishedAt Date when the document was published
    * @param {number} revision Revision number of the document

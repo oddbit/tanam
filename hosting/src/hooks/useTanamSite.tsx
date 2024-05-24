@@ -1,5 +1,5 @@
 import {firestore} from "@/firebase";
-import {TanamSite} from "@/models/tanamSite";
+import {TanamSite} from "@/models/TanamSite";
 import {doc, getDoc} from "firebase/firestore";
 import {useParams} from "next/navigation";
 import {useEffect, useState} from "react";
