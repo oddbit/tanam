@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import {Table, TableBody, TableHeader, TableRow, TableRowActions, TableRowLabel} from "@/components/Table";
+import {Table, TableRowActions, TableRowLabel} from "@/components/Table";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import {useTanamDocuments} from "@/hooks/useTanamDocuments";
 import Alerts from "@/components/common/Alerts";
@@ -16,35 +16,28 @@ export default function ContentOverviewPage() {
       {error ? (
         <Alerts type="error" title="Error fetching documents" message={error.message} />
       ) : (
-        <Table>
-          <TableHeader headers={["Id", "Created", "Status", "Actions"]} />
-          <TableBody>
-            {documents.map((document, key) => (
-              <TableRow
-                key={key}
-                columns={[
-                  <div key={`${document.id}-id`}>
-                    <h5 className="font-medium text-black dark:text-white">{document.id}</h5>
-                  </div>,
-                  <p key={`${document.id}-date`} className="text-black dark:text-white">
-                    {document.createdAt.toDate().toUTCString()}
-                  </p>,
-                  <TableRowLabel
-                    key={`${document.id}-status`}
-                    title={document.status}
-                    status={document.status === "published" ? "success" : "info"}
-                  />,
-                  <TableRowActions
-                    key={`${document.id}-actions`}
-                    onView={() => console.log("View", document)}
-                    onDelete={() => console.log("Delete", document)}
-                    onDownload={() => console.log("Download", document)}
-                  />,
-                ]}
-              />
-            ))}
-          </TableBody>
-        </Table>
+        <Table
+          headers={["Id", "Created", "Status", "Actions"]}
+          rows={documents.map((document, key) => [
+            <div key={`${document.id}-id`}>
+              <h5 className="font-medium text-black dark:text-white">{document.id}</h5>
+            </div>,
+            <p key={`${document.id}-date`} className="text-black dark:text-white">
+              {document.createdAt.toDate().toUTCString()}
+            </p>,
+            <TableRowLabel
+              key={`${document.id}-status`}
+              title={document.status}
+              status={document.status === "published" ? "success" : "info"}
+            />,
+            <TableRowActions
+              key={`${document.id}-actions`}
+              onView={() => console.log("View", document)}
+              onDelete={() => console.log("Delete", document)}
+              onDownload={() => console.log("Download", document)}
+            />,
+          ])}
+        />
       )}
     </DefaultLayout>
   );
