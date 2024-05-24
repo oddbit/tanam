@@ -23,15 +23,19 @@ export default function ContentOverviewPage() {
               <TableRow
                 key={key}
                 columns={[
-                  <div>
+                  <div key={`${document.id}-id`}>
                     <h5 className="font-medium text-black dark:text-white">{document.id}</h5>
                   </div>,
-                  <p className="text-black dark:text-white">{document.createdAt.toDate().toUTCString()}</p>,
+                  <p key={`${document.id}-date`} className="text-black dark:text-white">
+                    {document.createdAt.toDate().toUTCString()}
+                  </p>,
                   <TableRowLabel
+                    key={`${document.id}-status`}
                     title={document.status}
                     status={document.status === "published" ? "success" : "info"}
                   />,
                   <TableRowActions
+                    key={`${document.id}-actions`}
                     onView={() => console.log("View", document)}
                     onDelete={() => console.log("Delete", document)}
                     onDownload={() => console.log("Download", document)}
