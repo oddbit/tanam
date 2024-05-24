@@ -1,8 +1,8 @@
-import { firestore } from "@/firebase";
-import { TanamDocumentType } from "@/models/tanamDocumentType";
-import { collection, onSnapshot } from "firebase/firestore";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import {firestore} from "@/firebase";
+import {TanamDocumentType} from "@/models/tanamDocumentType";
+import {collection, onSnapshot} from "firebase/firestore";
+import {useParams} from "next/navigation";
+import {useEffect, useState} from "react";
 
 interface TanamDocumentTypeHook {
   data: TanamDocumentType[];
