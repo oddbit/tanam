@@ -9,10 +9,11 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "prettier:fix": "prettier --write .",
-    "format": "prettier --write 'src/**/*.{js,ts,tsx,json,css,md}'"
+    "codecheck": "npm run lint:fix && npm run prettier:fix"
   },
   "dependencies": {
     "apexcharts": "^3.45.2",
+    "dotenv": "^16.4.5",
     "firebase": "^10.12.0",
     "flatpickr": "^4.6.13",
     "jsvectormap": "^1.5.3",

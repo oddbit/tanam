@@ -4,22 +4,26 @@ permissions:
   checks: write
   contents: read
   pull-requests: write
+env:
+  HOSTING_ENV: ${{ vars.HOSTING_ENV_DEV  }}
 jobs:
   code_check:
     name: Code check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out code
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup node
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: "npm"
           cache-dependency-path: |
             hosting/package-lock.json
 
-      - name: Apply formatting and linting
-        run: npm ci && npm run lint:fix && npm run format
+      - name: Run code checking and formatting
+        run: npm ci && npm run codecheck
         working-directory: ./hosting
 
       - name: Ensure code is unchanged
@@ -31,26 +35,33 @@ jobs:
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out code
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup node
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: "npm"
           cache-dependency-path: |
             hosting/package-lock.json
 
-      - name: Cache hosting build
+      - name: Cache build
         uses: actions/cache@v4
-        id: cache-hosting
         with:
-          key: ${CI_COMMIT_REF_SLUG}
           path: |
-            ./hosting/node_modules/
-            ./hosting/.next/cache/
+            hosting/.next/cache
+          # Generate a new cache whenever packages or source files change.
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          # If source files changed but packages didn't, rebuild from a prior cache.
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
+      - name: Set hosting environment
+        run: echo $HOSTING_ENV > hosting/.env
 
       - name: Build application
-        run: npm ci && npm install && npm run build
+        run: npm ci && npm run build
         working-directory: ./hosting
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
