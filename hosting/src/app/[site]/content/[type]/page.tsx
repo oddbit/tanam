@@ -1,28 +1,47 @@
+"use client";
+import React from "react";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import TableOne from "@/components/Tables/TableOne";
-import TableThree from "@/components/Tables/TableThree";
-import TableTwo from "@/components/Tables/TableTwo";
-
-import {Metadata} from "next";
+import {Table, TableBody, TableHeader, TableRow, TableRowActions, TableRowLabel} from "@/components/Table";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
+import {useTanamDocuments} from "@/hooks/useTanamDocuments";
+import Alerts from "@/components/common/Alerts";
 
-export const metadata: Metadata = {
-  title: "Next.js Tables | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Tables page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
-};
+export default function ContentOverviewPage() {
+  const {data: documents, error} = useTanamDocuments();
 
-const TablesPage = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName="Tables" />
 
-      <div className="flex flex-col gap-10">
-        <TableOne />
-        <TableTwo />
-        <TableThree />
-      </div>
+      {error ? (
+        <Alerts type="error" title="Error fetching documents" message={error.message} />
+      ) : (
+        <Table>
+          <TableHeader headers={["Id", "Created", "Status", "Actions"]} />
+          <TableBody>
+            {documents.map((document, key) => (
+              <TableRow
+                key={key}
+                columns={[
+                  <div>
+                    <h5 className="font-medium text-black dark:text-white">{document.id}</h5>
+                  </div>,
+                  <p className="text-black dark:text-white">{document.createdAt.toDate().toUTCString()}</p>,
+                  <TableRowLabel
+                    title={document.status}
+                    status={document.status === "published" ? "success" : "info"}
+                  />,
+                  <TableRowActions
+                    onView={() => console.log("View", document)}
+                    onDelete={() => console.log("Delete", document)}
+                    onDownload={() => console.log("Download", document)}
+                  />,
+                ]}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </DefaultLayout>
   );
-};
-
-export default TablesPage;
+}
