@@ -17,7 +17,14 @@ module.exports = {
     es2021: true,
   },
 
-  extends: ["eslint:recommended", "plugin:react/recommended", "plugin:@typescript-eslint/recommended", "google"],
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "plugin:@next/next/recommended",
+    "google",
+  ],
 
   plugins: ["react", "@typescript-eslint", "prettier"],
 
