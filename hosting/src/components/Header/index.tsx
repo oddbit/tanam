@@ -2,7 +2,7 @@ import Link from "next/link";
 import DarkModeSwitcher from "@/components/Header/DarkModeSwitcher";
 import DropdownMessage from "@/components/Header/DropdownMessage";
 import DropdownNotification from "@/components/Header/DropdownNotification";
-import DropdownUser from "@/components/Header/DropdownUser";
+import DropdownUser from "@/components/Header/DropdownUser/DropdownUser";
 import Image from "next/image";
 
 const Header = (props: {sidebarOpen: string | boolean | undefined; setSidebarOpen: (arg0: boolean) => void}) => {
