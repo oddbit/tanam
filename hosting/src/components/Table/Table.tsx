@@ -26,9 +26,9 @@ interface TableProps {
  * ```
  *
  * @param {TableProps} param0 Table parameters
- * @returns
+ * @return {JSX.Element} Table component
  */
-export function Table({headers, rows}: TableProps) {
+export function Table({headers, rows}: TableProps): JSX.Element {
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="max-w-full overflow-x-auto">
