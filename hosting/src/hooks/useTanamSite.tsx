@@ -6,7 +6,7 @@ import {useParams} from "next/navigation";
 
 export function useTanamSite() {
   const {site} = useParams<{site: string}>() ?? {site: null};
-  const [siteData, setSiteData] = useState<TanamSite | null>(null);
+  const [data, setSiteData] = useState<TanamSite | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -39,5 +39,5 @@ export function useTanamSite() {
     }
   }
 
-  return {siteData, error};
+  return {data, error};
 }

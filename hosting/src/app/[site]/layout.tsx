@@ -15,7 +15,7 @@ interface RootLayoutProps {
 const RootLayout: React.FC<RootLayoutProps> = ({children}) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setError] = useState<string>("");
-  const {siteData, error} = useTanamSite();
+  const {data: siteData, error} = useTanamSite();
 
   useEffect(() => {
     if (siteData || error) {

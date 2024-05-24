@@ -12,6 +12,7 @@ import {DashboardIcon} from "./icons/DashboardIcon";
 import {FormsIcon} from "./icons/FormsIcon";
 import {ProfileIcon} from "./icons/ProfileIcon";
 import {SettingsIcon} from "./icons/SettingsIcon";
+import {useTanamSite} from "@/hooks/useTanamSite";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -20,10 +21,10 @@ interface SidebarProps {
 
 const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
   const pathname = usePathname() ?? "/";
-  const site = pathname.split("/")[1];
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
-  const {data: documentTypes} = useTanamDocumentTypes(site);
+  const {data: documentTypes} = useTanamDocumentTypes();
+  const {data: site} = useTanamSite();
 
   const storedSidebarExpanded = "true";
 
@@ -89,7 +90,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
               title="Content"
               isExpanded={pathname.includes("/content/")}
               menuItems={documentTypes.map((doc) => ({
-                href: `/content/${doc.id}`,
+                href: `/${site?.id}/content/${doc.id}`,
                 title: doc.title,
               }))}
             />

@@ -2,6 +2,7 @@ import {useState, useEffect} from "react";
 import {firestore} from "@/firebase";
 import {TanamDocumentType} from "@/models/TanamDocumentType";
 import {collection, onSnapshot} from "firebase/firestore";
+import {useParams} from "next/navigation";
 
 interface TanamDocumentTypeHook {
   data: TanamDocumentType[];
@@ -11,14 +12,19 @@ interface TanamDocumentTypeHook {
 /**
  * Hook to get a stream of Tanam document types
  *
- * @param {string} site ID of the site
  * @return {TanamDocumentTypeHook} Hook for document types subscription
  */
-export function useTanamDocumentTypes(site: string): TanamDocumentTypeHook {
+export function useTanamDocumentTypes(): TanamDocumentTypeHook {
+  const {site} = useParams<{site: string}>() ?? {site: null};
   const [data, setData] = useState<TanamDocumentType[]>([]);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    if (!site) {
+      setError(new Error("No site parameter provided"));
+      return;
+    }
+
     const collectionRef = collection(firestore, `tanam/${site}/document-types`);
 
     const unsubscribe = onSnapshot(
