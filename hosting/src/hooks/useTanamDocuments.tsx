@@ -16,18 +16,22 @@ interface UseTanamDocumentsResult {
  * @return {UseTanamDocumentsResult} Hook for documents subscription
  */
 export function useTanamDocuments(documentType?: string): UseTanamDocumentsResult {
-  const {site, content} = useParams<{site: string; content: string}>() ?? {site: null, content: null};
-  const type = documentType ?? content;
+  const {site, type: paramType} = useParams<{site: string; type: string}>() ?? {site: null, content: null};
+  const type = documentType ?? paramType;
   const [data, setData] = useState<TanamDocument[]>([]);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!site || !type) {
-      setError(new Error("Site or content parameter is missing"));
+    if (!site) {
+      setError(new Error("Site parameter is missing"));
+      return;
+    }
+    if (!type) {
+      setError(new Error("Content type parameter is missing"));
       return;
     }
 
-    const collectionRef = collection(firestore, "tanam/documents");
+    const collectionRef = collection(firestore, `tanam/${site}/documents`);
     const q = query(collectionRef, where("documentType", "==", type));
 
     const unsubscribe = onSnapshot(
@@ -48,7 +52,7 @@ export function useTanamDocuments(documentType?: string): UseTanamDocumentsResul
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [site, content]);
+  }, [site, type]);
 
   return {data, error};
 }
