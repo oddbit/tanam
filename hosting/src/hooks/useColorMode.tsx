@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import useLocalStorage from "./useLocalStorage";
+import {useEffect} from "react";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const useColorMode = () => {
   const [colorMode, setColorMode] = useLocalStorage("color-theme", "light");
@@ -8,9 +8,7 @@ const useColorMode = () => {
     const className = "dark";
     const bodyClass = window.document.body.classList;
 
-    colorMode === "dark"
-      ? bodyClass.add(className)
-      : bodyClass.remove(className);
+    colorMode === "dark" ? bodyClass.add(className) : bodyClass.remove(className);
   }, [colorMode]);
 
   return [colorMode, setColorMode];

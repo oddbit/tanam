@@ -3,32 +3,60 @@ on:
   push:
     branches:
       - main
+env:
+  HOSTING_ENV: ${{ github.ref == 'refs/heads/main' && vars.HOSTING_ENV_PROD || vars.HOSTING_ENV_DEV  }}
 jobs:
-  build:
-    name: Build and deploy
+  code_check:
+    name: Code check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out code
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup node
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: "npm"
           cache-dependency-path: |
             hosting/package-lock.json
 
-      - name: Install global NPM tools
-        run: |
-          npm install -g firebase-tools@latest
+      - name: Run code checking and formatting
+        run: npm ci && npm run codecheck
+        working-directory: ./hosting
 
-      - name: Cache hosting build
-        uses: actions/cache@v4
-        id: cache-hosting
+      - name: Ensure code is unchanged
+        run: git diff --exit-code
+
+  build_and_deploy:
+    name: Build and deploy
+    needs: code_check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
         with:
-          key: ${CI_COMMIT_REF_SLUG}
+          node-version: 18
+          cache: "npm"
+          cache-dependency-path: |
+            hosting/package-lock.json
+
+      - name: Cache build
+        uses: actions/cache@v4
+        with:
           path: |
-            ./hosting/node_modules/
-            ./hosting/.next/cache/
+            hosting/.next/cache
+          # Generate a new cache whenever packages or source files change.
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          # If source files changed but packages didn't, rebuild from a prior cache.
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
+      - name: Set hosting environment
+        run: echo $HOSTING_ENV > hosting/.env
 
       - name: Build application
         run: npm ci && npm run build

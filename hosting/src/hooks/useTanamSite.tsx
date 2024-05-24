@@ -1,34 +1,43 @@
-import { firestore } from "@/firebase"; // this is from you export an initialize the app
-import { doc, getDoc } from "firebase/firestore";
-import { TanamSite } from "../models/tanamSite";
+import {useState, useEffect} from "react";
+import {firestore} from "@/firebase";
+import {doc, getDoc} from "firebase/firestore";
+import {TanamSite} from "@/models/tanamSite";
+import {useParams} from "next/navigation";
 
-/**
- * Hook for Tanam site
- *
- * @param {string} site ID of the site
- * @returns {Object} Tanam site hooks
- */
-export function useTanamSite(site: string) {
-  /**
-   * Get Tanam site data
-   *
-   * @returns {Promise<TanamSite | null>} Tanam site data
-   */
-  async function getSite(): Promise<TanamSite | null> {
-    const docRef = doc(firestore, "tanam", site);
-    const snap = await getDoc(docRef);
+export function useTanamSite() {
+  const {site} = useParams<{site: string}>() ?? {site: null};
+  const [siteData, setSiteData] = useState<TanamSite | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-    if (!snap.exists()) {
-      return null;
+  useEffect(() => {
+    if (site) {
+      fetchSiteData(site);
+    } else {
+      // TODO(Dennis): Redirect to default site ?
+      setError("No site parameter provided");
+      return;
     }
+  }, [site]);
 
-    const data = {
-      ...snap.data(),
-      id: snap.id,
-    };
+  async function fetchSiteData(siteId: string) {
+    try {
+      const docRef = doc(firestore, "tanam", siteId);
+      const snap = await getDoc(docRef);
 
-    return TanamSite.fromJson(data);
+      if (snap.exists()) {
+        const data = {
+          ...snap.data(),
+          id: snap.id,
+        };
+        setSiteData(TanamSite.fromJson(data));
+      } else {
+        setError("Site not found");
+      }
+    } catch (err) {
+      console.error("Error fetching site data:", err);
+      setError("No permission to read site data or site not found");
+    }
   }
 
-  return { getSite };
+  return {siteData, error};
 }

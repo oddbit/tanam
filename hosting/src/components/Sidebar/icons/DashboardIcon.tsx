@@ -1,6 +1,6 @@
 import React from "react";
 
-export function DashboardIcon () {
+export function DashboardIcon() {
   return (
     <svg
       className="fill-current"

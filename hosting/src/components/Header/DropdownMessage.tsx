@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -11,14 +11,11 @@ const DropdownMessage = () => {
 
   // close on click outside
   useEffect(() => {
-    const clickHandler = ({ target }: MouseEvent) => {
+    const clickHandler = ({target}: MouseEvent) => {
       if (!dropdown.current) return;
-      if (
-        !dropdownOpen ||
-        dropdown.current.contains(target) ||
-        trigger.current.contains(target)
-      )
+      if (!dropdownOpen || dropdown.current.contains(target) || trigger.current.contains(target)) {
         return;
+      }
       setDropdownOpen(false);
     };
     document.addEventListener("click", clickHandler);
@@ -27,7 +24,7 @@ const DropdownMessage = () => {
 
   // close if the esc key is pressed
   useEffect(() => {
-    const keyHandler = ({ keyCode }: KeyboardEvent) => {
+    const keyHandler = ({keyCode}: KeyboardEvent) => {
       if (!dropdownOpen || keyCode !== 27) return;
       setDropdownOpen(false);
     };
@@ -114,9 +111,7 @@ const DropdownMessage = () => {
               </div>
 
               <div>
-                <h6 className="text-sm font-medium text-black dark:text-white">
-                  Mariya Desoja
-                </h6>
+                <h6 className="text-sm font-medium text-black dark:text-white">Mariya Desoja</h6>
                 <p className="text-sm">I like your confidence 💪</p>
                 <p className="text-xs">2min ago</p>
               </div>
@@ -141,9 +136,7 @@ const DropdownMessage = () => {
               </div>
 
               <div>
-                <h6 className="text-sm font-medium text-black dark:text-white">
-                  Robert Jhon
-                </h6>
+                <h6 className="text-sm font-medium text-black dark:text-white">Robert Jhon</h6>
                 <p className="text-sm">Can you share your offer?</p>
                 <p className="text-xs">10min ago</p>
               </div>
@@ -168,9 +161,7 @@ const DropdownMessage = () => {
               </div>
 
               <div>
-                <h6 className="text-sm font-medium text-black dark:text-white">
-                  Henry Dholi
-                </h6>
+                <h6 className="text-sm font-medium text-black dark:text-white">Henry Dholi</h6>
                 <p className="text-sm">I cam across your profile and...</p>
                 <p className="text-xs">1day ago</p>
               </div>
@@ -195,9 +186,7 @@ const DropdownMessage = () => {
               </div>
 
               <div>
-                <h6 className="text-sm font-medium text-black dark:text-white">
-                  Cody Fisher
-                </h6>
+                <h6 className="text-sm font-medium text-black dark:text-white">Cody Fisher</h6>
                 <p className="text-sm">I’m waiting for you response!</p>
                 <p className="text-xs">5days ago</p>
               </div>
@@ -222,9 +211,7 @@ const DropdownMessage = () => {
               </div>
 
               <div>
-                <h6 className="text-sm font-medium text-black dark:text-white">
-                  Mariya Desoja
-                </h6>
+                <h6 className="text-sm font-medium text-black dark:text-white">Mariya Desoja</h6>
                 <p className="text-sm">I like your confidence 💪</p>
                 <p className="text-xs">2min ago</p>
               </div>

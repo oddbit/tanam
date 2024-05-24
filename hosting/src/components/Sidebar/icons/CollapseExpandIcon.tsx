@@ -1,17 +1,11 @@
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React from "react";
-
 interface CollapseExpandIconProps {
   isOpen: boolean;
 }
 
-export function CollapseExpandIcon({ isOpen }: CollapseExpandIconProps) {
+export function CollapseExpandIcon({isOpen}: CollapseExpandIconProps) {
   return (
     <svg
-      className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
-        isOpen && "rotate-180"
-      }`}
+      className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${isOpen && "rotate-180"}`}
       width="20"
       height="20"
       viewBox="0 0 20 20"

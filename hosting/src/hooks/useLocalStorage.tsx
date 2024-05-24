@@ -1,12 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 
 type SetValue<T> = T | ((val: T) => T);
 
-function useLocalStorage<T>(
-  key: string,
-  initialValue: T,
-): [T, (value: SetValue<T>) => void] {
+function useLocalStorage<T>(key: string, initialValue: T): [T, (value: SetValue<T>) => void] {
   // State to store our value
   // Pass  initial state function to useState so logic is only executed once
   const [storedValue, setStoredValue] = useState(() => {
@@ -20,7 +17,7 @@ function useLocalStorage<T>(
       }
     } catch (error) {
       // If error also return initialValue
-      console.log(error);
+      console.error(error);
       return initialValue;
     }
   });
@@ -29,10 +26,7 @@ function useLocalStorage<T>(
   useEffect(() => {
     try {
       // Allow value to be a function so we have same API as useState
-      const valueToStore =
-        typeof storedValue === "function"
-          ? storedValue(storedValue)
-          : storedValue;
+      const valueToStore = typeof storedValue === "function" ? storedValue(storedValue) : storedValue;
       // Save state
       if (typeof window !== "undefined") {
         // browser code
@@ -40,7 +34,7 @@ function useLocalStorage<T>(
       }
     } catch (error) {
       // A more advanced implementation would handle the error case
-      console.log(error);
+      console.error(error);
     }
   }, [key, storedValue]);
 

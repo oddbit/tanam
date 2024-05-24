@@ -2,56 +2,40 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useTanamDocumentTypes } from "../../hooks/useTanamDocumentTypes";
-import { TanamDocumentType } from "../../models/TanamDocumentType";
-import { SidebarExpandableMenu } from "./SidebarExpandableMenu";
-import { SidebarMenuGroup } from "./SidebarMenuGroup";
-import { SidebarMenuItem } from "./SidebarMenuItem";
-import { DashboardIcon } from "./icons/DashboardIcon";
-import { FormsIcon } from "./icons/FormsIcon";
-import { ProfileIcon } from "./icons/ProfileIcon";
-import { SettingsIcon } from "./icons/SettingsIcon";
+import {usePathname} from "next/navigation";
+import {useEffect, useRef, useState} from "react";
+import {useTanamDocumentTypes} from "../../hooks/useTanamDocumentTypes";
+import {SidebarExpandableMenu} from "./SidebarExpandableMenu";
+import {SidebarMenuGroup} from "./SidebarMenuGroup";
+import {SidebarMenuItem} from "./SidebarMenuItem";
+import {DashboardIcon} from "./icons/DashboardIcon";
+import {FormsIcon} from "./icons/FormsIcon";
+import {ProfileIcon} from "./icons/ProfileIcon";
+import {SettingsIcon} from "./icons/SettingsIcon";
 
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
 }
 
-const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
   const pathname = usePathname() ?? "/";
   const site = pathname.split("/")[1];
-  const [documentTypes, setDocumentTypes] = useState<TanamDocumentType[]>([]);
-
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
-  const { streamDocumentTypes } = useTanamDocumentTypes(site ?? "foo");
+  const {data: documentTypes} = useTanamDocumentTypes(site);
 
-  let storedSidebarExpanded = "true";
+  const storedSidebarExpanded = "true";
 
-  const [sidebarExpanded, setSidebarExpanded] = useState(
-    storedSidebarExpanded === null ? false : storedSidebarExpanded === "true",
-  );
-
-  // Get tanam document types
-  useEffect(() => {
-    const unsubscribe = streamDocumentTypes((documentTypes) => {
-      setDocumentTypes(documentTypes);
-    });
-    return () => unsubscribe();
-  }, [streamDocumentTypes]);
+  const [sidebarExpanded] = useState(storedSidebarExpanded === null ? false : storedSidebarExpanded === "true");
 
   // close on click outside
   useEffect(() => {
-    const clickHandler = ({ target }: MouseEvent) => {
+    const clickHandler = ({target}: MouseEvent) => {
       if (!sidebar.current || !trigger.current) return;
-      if (
-        !sidebarOpen ||
-        sidebar.current.contains(target) ||
-        trigger.current.contains(target)
-      )
+      if (!sidebarOpen || sidebar.current.contains(target) || trigger.current.contains(target)) {
         return;
+      }
       setSidebarOpen(false);
     };
     document.addEventListener("click", clickHandler);
@@ -60,7 +44,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   // close if the esc key is pressed
   useEffect(() => {
-    const keyHandler = ({ key }: KeyboardEvent) => {
+    const keyHandler = ({key}: KeyboardEvent) => {
       if (!sidebarOpen || key !== "Escape") return;
       setSidebarOpen(false);
     };
@@ -87,13 +71,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <Link href="/" className="flex items-center space-x-2">
-          <Image
-            width={32}
-            height={32}
-            src={"/images/logo/logo.svg"}
-            alt="Logo"
-            priority
-          />
+          <Image width={32} height={32} src={"/images/logo/logo.svg"} alt="Logo" priority />
           <h1 className="text-3xl font-bold leading-none">Tanam</h1>
         </Link>
       </div>
@@ -104,16 +82,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
           <SidebarMenuGroup title="MENU">
-            <SidebarMenuItem
-              href="/"
-              icon={<DashboardIcon />}
-              title="Dashboard"
-            />
-            <SidebarMenuItem
-              href="/profile"
-              icon={<ProfileIcon />}
-              title="Profile"
-            />
+            <SidebarMenuItem href="/" icon={<DashboardIcon />} title="Dashboard" />
+            <SidebarMenuItem href="/profile" icon={<ProfileIcon />} title="Profile" />
             <SidebarExpandableMenu
               icon={<FormsIcon />}
               title="Content"
@@ -123,11 +93,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 title: doc.title,
               }))}
             />
-            <SidebarMenuItem
-              href="/settings"
-              icon={<SettingsIcon />}
-              title="Settings"
-            />
+            <SidebarMenuItem href="/settings" icon={<SettingsIcon />} title="Settings" />
           </SidebarMenuGroup>
         </nav>
         {/* <!-- Sidebar Menu --> */}
