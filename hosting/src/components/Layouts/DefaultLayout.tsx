@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 export default function DefaultLayout({children}: {children: React.ReactNode}) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
-    <>
+    <div className="l-default">
       {/* <!-- ===== Page Wrapper Start ===== --> */}
       <div className="flex h-screen overflow-hidden">
         {/* <!-- ===== Sidebar Start ===== --> */}
@@ -28,6 +28,6 @@ export default function DefaultLayout({children}: {children: React.ReactNode}) {
         {/* <!-- ===== Content Area End ===== --> */}
       </div>
       {/* <!-- ===== Page Wrapper End ===== --> */}
-    </>
+    </div>
   );
 }

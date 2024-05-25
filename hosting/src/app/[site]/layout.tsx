@@ -1,8 +1,8 @@
 "use client";
 
 import Loader from "@/components/common/Loader";
-import "@/css/satoshi.css";
-import "@/css/style.css";
+import "@/assets/css/satoshi.css";
+import "@/assets/css/style.css";
 import {useTanamSite} from "@/hooks/useTanamSite";
 import "flatpickr/dist/flatpickr.min.css";
 import "jsvectormap/dist/css/jsvectormap.css";
