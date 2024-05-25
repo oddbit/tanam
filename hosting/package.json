@@ -15,6 +15,7 @@
     "apexcharts": "^3.45.2",
     "dotenv": "^16.4.5",
     "firebase": "^10.12.0",
+    "firebaseui": "^6.1.0",
     "flatpickr": "^4.6.13",
     "jsvectormap": "^1.5.3",
     "next": "^14.2.3",
