@@ -10,7 +10,7 @@ import React, {useState, useEffect} from "react";
 export default function SiteDataLayout({children}: {children: React.ReactNode}) {
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setError] = useState<string>("");
-  const {siteData, error} = useTanamSite();
+  const {data: siteData, error} = useTanamSite();
 
   useEffect(() => {
     if (siteData || error) {

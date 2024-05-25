@@ -17,7 +17,14 @@ module.exports = {
     es2021: true,
   },
 
-  extends: ["eslint:recommended", "plugin:react/recommended", "plugin:@typescript-eslint/recommended", "google"],
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "plugin:@next/next/recommended",
+    "google",
+  ],
 
   plugins: ["react", "@typescript-eslint", "prettier"],
 
@@ -38,7 +45,7 @@ module.exports = {
     "max-len": "off",
     "require-jsdoc": "off",
     "prettier/prettier": "error",
-    indent: ["error", 2],
+    indent: ["error", 2, {SwitchCase: 1}],
     "operator-linebreak": ["error", "before"],
     quotes: "off", // Use config quotes from prettier, so we turn off this rules to avoiding conflict between eslint and prettier
   },
