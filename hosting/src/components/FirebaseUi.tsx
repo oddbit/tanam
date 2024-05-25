@@ -1,6 +1,6 @@
 "use client"
 import "@/assets/scss/layout-authentication.scss";
-import {useEffect, ReactNode} from 'react';
+import {useEffect} from 'react';
 import {useAuthentication} from "@/hooks/useAuthentication";
 
 interface FirebaseUiProps {
@@ -12,7 +12,7 @@ const FirebaseUi: React.FC<FirebaseUiProps> = ({isSignUp}) => {
 
   useEffect(() => {
     setIsSignup(isSignUp)
-    
+
     return () => {
       setIsSignup(false);
     }
