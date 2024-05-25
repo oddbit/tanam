@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import {firestore} from "@/firebase";
+import {firestore} from "@/plugins/firebase";
 import {TanamDocumentType} from "@/models/TanamDocumentType";
 import {collection, onSnapshot} from "firebase/firestore";
 

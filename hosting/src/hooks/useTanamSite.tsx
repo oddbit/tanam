@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import {firestore} from "@/firebase";
+import {firestore} from "@/plugins/firebase";
 import {doc, getDoc} from "firebase/firestore";
 import {TanamSite} from "@/models/tanamSite";
 import {useParams} from "next/navigation";
@@ -8,6 +8,8 @@ export function useTanamSite() {
   const {site} = useParams<{site: string}>() ?? {site: null};
   const [siteData, setSiteData] = useState<TanamSite | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  console.info('site :: ', site)
 
   useEffect(() => {
     if (site) {
@@ -24,11 +26,14 @@ export function useTanamSite() {
       const docRef = doc(firestore, "tanam", siteId);
       const snap = await getDoc(docRef);
 
+      console.info('fetchSiteData :: ', siteId)
+
       if (snap.exists()) {
         const data = {
           ...snap.data(),
           id: snap.id,
         };
+        console.info('data :: ', data)
         setSiteData(TanamSite.fromJson(data));
       } else {
         setError("Site not found");
