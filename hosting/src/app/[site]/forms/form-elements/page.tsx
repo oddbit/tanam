@@ -4,7 +4,7 @@ import CheckboxFour from "@/components/Checkboxes/CheckboxFour";
 import CheckboxOne from "@/components/Checkboxes/CheckboxOne";
 import CheckboxThree from "@/components/Checkboxes/CheckboxThree";
 import CheckboxTwo from "@/components/Checkboxes/CheckboxTwo";
-import {DatePickerOne, DatePickerTwo, FormGroup, Input, MultiSelect, Textarea} from "@/components/Form";
+import {DatePickerOne, DatePickerTwo, FormGroup, Input, MultiSelect, TextArea} from "@/components/Form";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import SelectGroupTwo from "@/components/SelectGroup/SelectGroupTwo";
 import SwitcherFour from "@/components/Switchers/SwitcherFour";
@@ -88,17 +88,17 @@ const FormElementsPage = () => {
         <div className="flex flex-col gap-9">
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke px-6.5 py-4 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">Textarea Fields</h3>
+              <h3 className="font-medium text-black dark:text-white">TextArea Fields</h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
               <FormGroup label="Default textarea">
-                <Textarea rows={6} placeholder="Default textarea" />
+                <TextArea rows={6} placeholder="Default textarea" />
               </FormGroup>
               <FormGroup label="Active textarea">
-                <Textarea rows={6} placeholder="Active textarea" />
+                <TextArea rows={6} placeholder="Active textarea" />
               </FormGroup>
               <FormGroup label="Disabled textarea">
-                <Textarea rows={6} placeholder="Disabled textarea" disabled />
+                <TextArea rows={6} placeholder="Disabled textarea" disabled />
               </FormGroup>
             </div>
           </div>

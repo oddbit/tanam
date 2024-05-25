@@ -7,4 +7,4 @@ export {Input} from "./Input";
 export {MultiSelect} from "./MultiSelect";
 export {Select} from "./Select";
 export {Switch} from "./Switch";
-export {Textarea} from "./Textarea";
+export {TextArea} from "./TextArea";

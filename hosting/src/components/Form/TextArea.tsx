@@ -8,7 +8,7 @@ interface TextareaProps {
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-export function Textarea({placeholder, rows, disabled = false, value, onChange}: TextareaProps) {
+export function TextArea({placeholder, rows, disabled = false, value, onChange}: TextareaProps) {
   return (
     <textarea
       placeholder={placeholder}

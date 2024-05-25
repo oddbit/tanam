@@ -1,5 +1,5 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import {FormGroup, Input, Textarea} from "@/components/Form";
+import {FormGroup, Input, TextArea} from "@/components/Form";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import {Metadata} from "next";
 import Link from "next/link";
@@ -40,7 +40,7 @@ const FormLayout = () => {
                 </FormGroup>
 
                 <FormGroup label="Message">
-                  <Textarea rows={6} placeholder="Type your message" />
+                  <TextArea rows={6} placeholder="Type your message" />
                 </FormGroup>
 
                 <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
