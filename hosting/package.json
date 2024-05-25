@@ -9,7 +9,7 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "prettier:fix": "prettier --write .",
-    "codecheck": "npm run lint:fix && npm run prettier:fix"
+    "codecheck": "npm run prettier:fix && npm run lint:fix"
   },
   "dependencies": {
     "apexcharts": "^3.45.2",
@@ -23,13 +23,14 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@next/eslint-plugin-next": "^14.2.3",
     "@types/node": "^20",
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.10.0",
     "@typescript-eslint/parser": "^7.10.0",
     "autoprefixer": "^10.0.1",
-    "eslint": "^8",
+    "eslint": "^8.57.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-next": "14.1.0",
     "eslint-config-prettier": "^9.1.0",

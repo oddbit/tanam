@@ -1,12 +1,12 @@
-import {useState, useEffect} from "react";
 import {firestore} from "@/firebase";
+import {TanamSite} from "@/models/TanamSite";
 import {doc, getDoc} from "firebase/firestore";
-import {TanamSite} from "@/models/tanamSite";
 import {useParams} from "next/navigation";
+import {useEffect, useState} from "react";
 
 export function useTanamSite() {
   const {site} = useParams<{site: string}>() ?? {site: null};
-  const [siteData, setSiteData] = useState<TanamSite | null>(null);
+  const [data, setSiteData] = useState<TanamSite | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -39,5 +39,5 @@ export function useTanamSite() {
     }
   }
 
-  return {siteData, error};
+  return {data, error};
 }
