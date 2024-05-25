@@ -38,10 +38,10 @@ module.exports = {
     "max-len": "off",
     "require-jsdoc": "off",
     "prettier/prettier": "error",
-    indent: ["error", 2],
+    "indent": ["error", 2],
     "operator-linebreak": ["error", "before"],
-    quotes: "off", // Use config quotes from prettier, so we turn off this rules to avoiding conflict between eslint and prettier
+    "quotes": "off", // Use config quotes from prettier, so we turn off this rules to avoiding conflict between eslint and prettier
   },
 
-  ignorePatterns: ["**/src/js/*"],
+  ignorePatterns: ["**/src/assets/js/*"],
 };
