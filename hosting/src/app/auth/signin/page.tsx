@@ -19,7 +19,7 @@ export default function SigninPage() {
           </div>
 
           <div className="authentication__wrapper-content">
-            <FirebaseUi />
+            <FirebaseUi isSignUp={false} />
           </div>
         </div>
       </section>
