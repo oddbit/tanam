@@ -1,14 +1,14 @@
 "use client"
 import "@/assets/scss/layout-authentication.scss";
 import {useEffect} from 'react';
-import {useAuthentication} from "@/hooks/useAuthentication";
+import {useFirebaseUi} from "@/hooks/useFirebaseUi";
 
 interface FirebaseUiProps {
   isSignUp: boolean;
 }
 
 const FirebaseUi: React.FC<FirebaseUiProps> = ({isSignUp}) => {
-  const {setIsSignup} = useAuthentication()
+  const {setIsSignup} = useFirebaseUi()
 
   useEffect(() => {
     setIsSignup(isSignUp)
