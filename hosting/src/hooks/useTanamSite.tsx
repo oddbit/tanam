@@ -9,8 +9,6 @@ export function useTanamSite() {
   const [siteData, setSiteData] = useState<TanamSite | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  console.info('site :: ', site)
-
   useEffect(() => {
     if (site) {
       fetchSiteData(site);
@@ -26,14 +24,11 @@ export function useTanamSite() {
       const docRef = doc(firestore, "tanam", siteId);
       const snap = await getDoc(docRef);
 
-      console.info('fetchSiteData :: ', siteId)
-
       if (snap.exists()) {
         const data = {
           ...snap.data(),
           id: snap.id,
         };
-        console.info('data :: ', data)
         setSiteData(TanamSite.fromJson(data));
       } else {
         setError("Site not found");
