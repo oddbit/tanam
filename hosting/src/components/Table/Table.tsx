@@ -16,13 +16,13 @@ interface TableProps {
  *      <div>{document.id}</div>,
  *      <p>{document.createdAt.toDate().toUTCString()}</p>,
  *      <TableRowLabel title={document.status} status={document.status === "published" ? "success" : "info"} />,
- *       <TableRowActions
- *         onView={() => console.log("View", document)}
- *         onDelete={() => console.log("Delete", document)}
- *         onDownload={() => console.log("Download", document)}
- *       />,
- *     ])}
- *   />
+ *      <TableRowActions
+ *        onView={() => console.log("View", document)}
+ *        onDelete={() => console.log("Delete", document)}
+ *        onDownload={() => console.log("Download", document)}
+ *      />,
+ *    ])}
+ *  />
  * ```
  *
  * @param {TableProps} param0 Table parameters
