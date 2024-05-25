@@ -1,8 +1,9 @@
+"use client";
 import flatpickr from "flatpickr";
 import {useEffect} from "react";
 import {FormGroup} from "./FormGroup";
 
-const DatePickerOne = () => {
+export function DatePickerOne() {
   useEffect(() => {
     // Init flatpickr
     flatpickr(".form-datepicker", {
@@ -37,6 +38,4 @@ const DatePickerOne = () => {
       </div>
     </FormGroup>
   );
-};
-
-export default DatePickerOne;
+}
