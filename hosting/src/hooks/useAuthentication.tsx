@@ -1,3 +1,4 @@
+"use client";
 import {useState, useEffect} from "react";
 import 'firebaseui/dist/firebaseui.css'
 import {auth as firebaseAuthUi} from "firebaseui"
@@ -11,9 +12,7 @@ export function useAuthentication() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (window) {
-      renderFirebaseUi()
-    }
+    renderFirebaseUi()
 
     return () => {
       setIsLoading(false)
@@ -22,6 +21,8 @@ export function useAuthentication() {
   })
 
   function renderFirebaseUi() {
+    if (!window || typeof window === 'undefined') return
+
     const selector = '#firebaseuiAuthContainer'
 
     firebaseUi.start(selector, {

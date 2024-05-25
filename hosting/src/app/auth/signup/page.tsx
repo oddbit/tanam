@@ -2,6 +2,7 @@ import "@/assets/scss/layout-authentication.scss";
 import {Metadata} from "next";
 import BlankLayout from "@/components/Layouts/BlankLayout";
 import FirebaseUi from "@/components/FirebaseUi";
+import ClientOnly from "@/components/ClientOnly";
 
 export const metadata: Metadata = {
   title: "Tanam | Signup",
@@ -19,7 +20,9 @@ export default function SigninPage() {
           </div>
 
           <div className="authentication__wrapper-content">
-            <FirebaseUi isSignUp={true} />
+            <ClientOnly>
+              <FirebaseUi isSignUp={true} />
+            </ClientOnly>
           </div>
         </div>
       </section>
