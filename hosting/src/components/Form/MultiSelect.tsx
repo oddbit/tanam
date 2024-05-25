@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef} from "react";
+import {FormGroup} from "./FormGroup";
 
 interface Option {
   value: string;
@@ -11,7 +12,7 @@ interface DropdownProps {
   id: string;
 }
 
-const MultiSelect: React.FC<DropdownProps> = ({id}) => {
+export const MultiSelect: React.FC<DropdownProps> = ({id}) => {
   const [options, setOptions] = useState<Option[]>([]);
   const [selected, setSelected] = useState<number[]>([]);
   const [show, setShow] = useState(false);
@@ -91,9 +92,8 @@ const MultiSelect: React.FC<DropdownProps> = ({id}) => {
   });
 
   return (
-    <div className="relative z-50">
-      <label className="mb-3 block text-sm font-medium text-black dark:text-white">Multiselect Dropdown</label>
-      <div>
+    <FormGroup label="Multiselect Dropdown">
+      <div className="relative z-50">
         <select className="hidden" id={id}>
           <option value="1">Option 2</option>
           <option value="2">Option 3</option>
@@ -201,8 +201,6 @@ const MultiSelect: React.FC<DropdownProps> = ({id}) => {
           </div>
         </div>
       </div>
-    </div>
+    </FormGroup>
   );
 };
-
-export default MultiSelect;
