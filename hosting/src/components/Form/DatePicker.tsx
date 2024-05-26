@@ -1,25 +1,67 @@
 "use client";
 import React, {useEffect} from "react";
 import flatpickr from "flatpickr";
+import {BaseOptions} from "flatpickr/dist/types/options";
 
 interface DatePickerProps {
+  /**
+   * The label for the date picker input.
+   * @param {string}
+   */
   label: string;
+  /**
+   * The placeholder for the date picker input.
+   * @param {string}
+   */
   placeholder: string;
+  /**
+   * The callback function to handle the date change event.
+   * @param {Function}
+   */
   onChange?: (date: Date) => void;
+  /**
+   * The style type for the date picker input.
+   * Options: "default" | "static" | "withArrows"
+   * @param {string}
+   */
+  styleType?: "default" | "static" | "withArrows";
 }
 
-export function DatePicker({label, placeholder, onChange}: DatePickerProps) {
-  useEffect(() => {
-    const fp = flatpickr(".form-datepicker", {
-      mode: "single",
-      dateFormat: "M j, Y",
-      onChange: (selectedDates) => {
-        if (onChange && selectedDates.length > 0) {
-          onChange(selectedDates[0]);
-        }
-      },
-    });
+/**
+ * DatePicker component with different style options.
+ * @param {DatePickerProps} props - The properties for the date picker component.
+ * @return {JSX.Element} The rendered date picker component.
+ */
+export function DatePicker({label, placeholder, onChange, styleType = "default"}: DatePickerProps) {
+  const config = {
+    mode: "single",
+    dateFormat: "M j, Y",
+    onChange: (selectedDates: Date[]) => {
+      if (onChange && selectedDates.length > 0) {
+        onChange(selectedDates[0]);
+      }
+    },
+  } as Partial<BaseOptions>;
 
+  function getFlatPickr() {
+    switch (styleType) {
+      case "static":
+        return flatpickr(".form-datepicker", {...config, static: true, monthSelectorType: "static"});
+      case "withArrows":
+        return flatpickr(".form-datepicker", {
+          ...config,
+          static: true,
+          monthSelectorType: "static",
+          prevArrow: `<svg className="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>`,
+          nextArrow: `<svg className="fill-current" width="7" height="11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>`,
+        });
+      default:
+        return flatpickr(".form-datepicker", config);
+    }
+  }
+
+  useEffect(() => {
+    const fp = getFlatPickr();
     return () => {
       if (Array.isArray(fp)) {
         fp.forEach((el) => el.destroy());
@@ -27,7 +69,7 @@ export function DatePicker({label, placeholder, onChange}: DatePickerProps) {
         fp.destroy();
       }
     };
-  }, [onChange]);
+  }, [onChange, styleType]);
 
   return (
     <div>

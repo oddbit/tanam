@@ -1,12 +1,10 @@
 import React from "react";
 import ContentCard from "@/components/Containers/ContentCard";
-import {Checkbox, FormGroup, Input, MultiSelect, RadioButton, Switcher, TextArea} from "@/components/Form";
+import {Checkbox, DatePicker, FormGroup, Input, MultiSelect, RadioButton, Switcher, TextArea} from "@/components/Form";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import {Metadata} from "next";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import SelectGroupTwo from "@/components/SelectGroup/SelectGroupTwo";
-import {DatePickerOne} from "@/components/Form/DatePickerOne";
-import {DatePickerTwo} from "@/components/Form/DatePickerTwo";
 
 export const metadata: Metadata = {
   title: "Next.js Form Elements | TailAdmin - Next.js Dashboard Template",
@@ -39,8 +37,8 @@ function FormElementsPage() {
         </ContentCard>
 
         <ContentCard title="Time and date">
-          <DatePickerOne />
-          <DatePickerTwo />
+          <DatePicker label="Date picker" placeholder="mm/dd/yyyy" styleType="default" />
+          <DatePicker label="Select date" placeholder="mm/dd/yyyy" styleType="withArrows" />
         </ContentCard>
 
         <ContentCard title="File upload">
