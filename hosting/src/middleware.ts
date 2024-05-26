@@ -13,12 +13,9 @@ export default function middleware(request: NextRequest) {
   const siteId = "tanam-testing"
 
   if (token && EXCEPT_PAGE.includes(request.nextUrl.pathname)) {
+    if (request.nextUrl.pathname === `${ROOT_ROUTE}${siteId}`) return
+    
     const absoluteURL = new URL(`${ROOT_ROUTE}${siteId}`, request.nextUrl.origin);
-    return NextResponse.redirect(absoluteURL.toString());
-  }
-
-  if (!token && EXCEPT_PAGE.includes(request.nextUrl.pathname)) {
-    const absoluteURL = new URL(SIGN_IN_ROUTE, request.nextUrl.origin);
     return NextResponse.redirect(absoluteURL.toString());
   }
 
