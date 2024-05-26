@@ -1,6 +1,6 @@
-"use client"
+"use client";
 import "@/assets/scss/layout-authentication.scss";
-import {useEffect} from 'react';
+import {useEffect} from "react";
 import {useFirebaseUi} from "@/hooks/useFirebaseUi";
 
 interface FirebaseUiProps {
@@ -8,14 +8,14 @@ interface FirebaseUiProps {
 }
 
 const FirebaseUi: React.FC<FirebaseUiProps> = ({isSignUp}) => {
-  const {setIsSignup} = useFirebaseUi()
+  const {setIsSignup} = useFirebaseUi();
 
   useEffect(() => {
-    setIsSignup(isSignUp)
+    setIsSignup(isSignUp);
 
     return () => {
       setIsSignup(false);
-    }
+    };
   });
 
   return (
@@ -23,6 +23,6 @@ const FirebaseUi: React.FC<FirebaseUiProps> = ({isSignUp}) => {
       <div id="firebaseuiAuthContainer" />
     </>
   );
-}
+};
 
-export default FirebaseUi
+export default FirebaseUi;

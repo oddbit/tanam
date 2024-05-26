@@ -1,12 +1,12 @@
-"use client"
+"use client";
 import "@/assets/scss/layout-authentication.scss";
 import {useAuthentication} from "@/hooks/useAuthentication";
 
 const AuthUser: React.FC = () => {
-  const {authState, signout} = useAuthentication()
+  const {authState, signout} = useAuthentication();
 
   function actionSignout() {
-    signout()
+    signout();
   }
 
   return (
@@ -22,6 +22,6 @@ const AuthUser: React.FC = () => {
       </button>
     </>
   );
-}
+};
 
-export default AuthUser
+export default AuthUser;

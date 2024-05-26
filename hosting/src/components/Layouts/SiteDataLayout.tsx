@@ -41,9 +41,5 @@ export default function SiteDataLayout({children}: {children: React.ReactNode}) 
     }
   }
 
-  return (
-    <div>
-      {loading ? <Loader /> : getSiteContent()}
-    </div>
-  );
+  return <div>{loading ? <Loader /> : getSiteContent()}</div>;
 }
