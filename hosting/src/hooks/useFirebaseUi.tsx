@@ -26,7 +26,7 @@ export function useFirebaseUi() {
     const selector = '#firebaseuiAuthContainer'
 
     firebaseUi.start(selector, {
-      signInSuccessUrl: window.location.origin,
+      signInSuccessUrl: `${window.location.origin}/tanam-testing`,
       signInOptions: [
         {
           provider: EmailAuthProvider.PROVIDER_ID,

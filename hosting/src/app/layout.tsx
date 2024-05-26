@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import {AuthUserProvider} from '@/contexts/AuthUserContext';
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -8,11 +9,17 @@ interface RootLayoutProps {
 
 const RootLayout: React.FC<RootLayoutProps> = ({children}) => {
   return (
-    <html lang="en">
-      <body suppressHydrationWarning={true}>
-        <div className="dark:bg-boxdark-2 dark:text-bodydark">{children}</div>
-      </body>
-    </html>
+    <>
+      <AuthUserProvider>
+        <html lang="en">
+          <body suppressHydrationWarning={true}>
+            <div className="dark:bg-boxdark-2 dark:text-bodydark">
+              {children}
+            </div>
+          </body>
+        </html>
+      </AuthUserProvider>
+    </>
   );
 };
 

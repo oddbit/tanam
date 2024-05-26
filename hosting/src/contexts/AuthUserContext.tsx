@@ -1,3 +1,4 @@
+"use client";
 import {IdTokenResult, UserInfo} from "firebase/auth";
 import React, {createContext, useContext, useState} from 'react';
 
