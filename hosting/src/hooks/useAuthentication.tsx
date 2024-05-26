@@ -44,9 +44,8 @@ export function useAuthentication() {
   async function onAuthenticate(user: User) {
     try {
       const idTokenResult = await user.getIdTokenResult();
+      
       createSession(idTokenResult.token)
-
-      console.info('onAuthenticate :: ', idTokenResult)
 
       setAuthState({
         ...authState,

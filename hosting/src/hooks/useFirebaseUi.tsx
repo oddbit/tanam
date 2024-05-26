@@ -3,11 +3,13 @@ import {useState, useEffect} from "react";
 import "firebaseui/dist/firebaseui.css";
 import {auth as firebaseAuthUi} from "firebaseui";
 import {firebaseAuth} from "@/plugins/firebase";
-import {EmailAuthProvider, GoogleAuthProvider} from "firebase/auth";
+import {EmailAuthProvider, GoogleAuthProvider, AuthCredential} from "firebase/auth";
+import {useAuthUserState} from "@/contexts/AuthUserContext";
 
 const firebaseUi = new firebaseAuthUi.AuthUI(firebaseAuth);
 
 export function useFirebaseUi() {
+  const {state: authState, setState: setAuthState} = useAuthUserState();
   const [isSignUp, setIsSignup] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -40,9 +42,15 @@ export function useFirebaseUi() {
       popupMode: true,
       signInFlow: "popup",
       callbacks: {
-        signInSuccessWithAuthResult: ({credential}) => {
-          // Set credential after signin success
-          console.info("signInSuccessWithAuthResult :: ", credential);
+        signInSuccessWithAuthResult: ({credential}: {credential: AuthCredential}) => {
+          const authCredential = credential.toJSON()
+
+          setAuthState({
+            ...authState,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            accessToken: authCredential?.accessToken || null
+          });
 
           return true;
         },
