@@ -1,40 +1,51 @@
 "use client";
 import {useState} from "react";
 
-type RadioButtonStyle = "filled" | "bordered";
-
 interface RadioButtonProps {
   label: string;
-  styleType?: RadioButtonStyle;
-  checked?: boolean;
-  onChange?: (checked: boolean) => void;
+  style?: "filled" | "outline";
+  defaultChecked?: boolean;
 }
 
-export function RadioButton({label, styleType = "filled", checked = false, onChange}: RadioButtonProps) {
-  const [isChecked, setIsChecked] = useState<boolean>(checked);
+export function RadioButton({label, style = "filled", defaultChecked = false}: RadioButtonProps) {
+  const [isChecked, setIsChecked] = useState<boolean>(defaultChecked);
 
-  const handleChange = () => {
-    const newChecked = !isChecked;
-    setIsChecked(newChecked);
-    if (onChange) {
-      onChange(newChecked);
+  const getRadioButtonStyle = () => {
+    switch (style) {
+      case "filled":
+        return (
+          <div
+            className={`box mr-4 flex h-5 w-5 items-center justify-center rounded-full border border-primary ${isChecked && "!border-4"}`}
+          >
+            <span className="h-2.5 w-2.5 rounded-full bg-white dark:bg-transparent"></span>
+          </div>
+        );
+      case "outline":
+        return (
+          <div
+            className={`mr-4 flex h-5 w-5 items-center justify-center rounded-full border ${isChecked && "border-primary"}`}
+          >
+            <span className={`h-2.5 w-2.5 rounded-full bg-transparent ${isChecked && "!bg-primary"}`}></span>
+          </div>
+        );
+      default:
+        return null;
     }
   };
 
   return (
     <div>
-      <label htmlFor="radioButtonLabel" className="flex cursor-pointer select-none items-center">
+      <label className="flex cursor-pointer select-none items-center">
         <div className="relative">
-          <input type="radio" id="radioButtonLabel" className="sr-only" onChange={handleChange} />
-          <div
-            className={`box mr-4 flex h-5 w-5 items-center justify-center rounded-full border border-primary ${
-              isChecked && (styleType === "filled" ? "!border-4" : "")
-            }`}
-          >
-            <span
-              className={`h-2.5 w-2.5 rounded-full bg-white dark:bg-transparent ${isChecked && (styleType === "bordered" ? "!bg-primary" : "")}`}
-            ></span>
-          </div>
+          <input
+            type="radio"
+            className="sr-only"
+            onChange={() => {
+              setIsChecked(!isChecked);
+            }}
+            defaultChecked={defaultChecked}
+          />
+          {getRadioButtonStyle()}
         </div>
         {label}
       </label>
