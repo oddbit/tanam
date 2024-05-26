@@ -5,7 +5,7 @@ import React from "react";
 import {useAuthentication} from "@/hooks/useAuthentication";
 
 export default function BlankLayout({children}: {children: React.ReactNode}) {
-  useAuthentication()
+  useAuthentication();
 
   return (
     <>

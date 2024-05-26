@@ -43,13 +43,13 @@ export function useFirebaseUi() {
       signInFlow: "popup",
       callbacks: {
         signInSuccessWithAuthResult: ({credential}: {credential: AuthCredential}) => {
-          const authCredential = credential.toJSON()
+          const authCredential = credential.toJSON();
 
           setAuthState({
             ...authState,
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            accessToken: authCredential?.accessToken || null
+            accessToken: authCredential?.accessToken || null,
           });
 
           return true;

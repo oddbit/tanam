@@ -113,7 +113,10 @@ const Header = (props: {sidebarOpen: string | boolean | undefined; setSidebarOpe
           </ul>
 
           {/* <!-- User Area --> */}
-          <DropdownUser displayName={authState.userInfo?.displayName ?? ''} avatar={authState.userInfo?.photoURL ?? ''} />
+          <DropdownUser
+            displayName={authState.userInfo?.displayName ?? ""}
+            avatar={authState.userInfo?.photoURL ?? ""}
+          />
           {/* <!-- User Area --> */}
         </div>
       </div>

@@ -35,7 +35,7 @@ export function useAuthentication() {
   async function signout() {
     try {
       await firebaseAuth.signOut();
-      removeSession()
+      removeSession();
     } catch (error) {
       console.error(error);
     }
@@ -50,8 +50,8 @@ export function useAuthentication() {
         token: idTokenResult,
         userInfo: user.toJSON() as UserInfo,
       });
-      
-      await createSession(idTokenResult.token)
+
+      await createSession(idTokenResult.token);
     } catch (error) {
       console.error(error);
     }

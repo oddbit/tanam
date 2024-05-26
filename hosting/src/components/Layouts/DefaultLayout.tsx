@@ -6,7 +6,7 @@ import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 
 export default function DefaultLayout({children}: {children: React.ReactNode}) {
-  useAuthentication()
+  useAuthentication();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

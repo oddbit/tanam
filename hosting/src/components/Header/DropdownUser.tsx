@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-const DropdownUser = ({displayName, avatar}: {displayName: string, avatar: string}) => {
+const DropdownUser = ({displayName, avatar}: {displayName: string; avatar: string}) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -151,7 +151,10 @@ const DropdownUser = ({displayName, avatar}: {displayName: string, avatar: strin
             </Link>
           </li>
         </ul>
-        <Link href="/auth/signout" className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <Link
+          href="/auth/signout"
+          className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+        >
           <svg
             className="fill-current"
             width="22"
