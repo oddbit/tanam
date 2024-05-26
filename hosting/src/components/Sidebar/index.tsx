@@ -8,7 +8,6 @@ import {useTanamDocumentTypes} from "../../hooks/useTanamDocumentTypes";
 import {SidebarExpandableMenu} from "./SidebarExpandableMenu";
 import {SidebarMenuGroup} from "./SidebarMenuGroup";
 import {SidebarMenuItem} from "./SidebarMenuItem";
-import {DashboardIcon} from "./icons/DashboardIcon";
 import {FormsIcon} from "./icons/FormsIcon";
 import {ProfileIcon} from "./icons/ProfileIcon";
 import {SettingsIcon} from "./icons/SettingsIcon";
@@ -83,7 +82,11 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
         <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
           <SidebarMenuGroup title="MENU">
-            <SidebarMenuItem href="/" icon={<DashboardIcon />} title="Dashboard" />
+            <SidebarMenuItem
+              href="/"
+              icon={<Image width={18} height={18} alt="Dashboard" src={"/icons/sidebar/dashboard-icon.svg"} />}
+              title="Dashboard"
+            />
             <SidebarMenuItem href="/profile" icon={<ProfileIcon />} title="Profile" />
             <SidebarExpandableMenu
               icon={<FormsIcon />}
