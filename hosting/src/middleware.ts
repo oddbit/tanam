@@ -1,5 +1,5 @@
 import {type NextRequest, NextResponse} from "next/server";
-import {ROOT_ROUTE, SIGN_IN_ROUTE, SIGN_UP_ROUTE, SESSION_COOKIE_NAME, SIGN_OUT_ROUTE} from "@/constants"
+import {ROOT_ROUTE, SIGN_IN_ROUTE, SIGN_UP_ROUTE, SESSION_COOKIE_NAME} from "@/constants"
 
 const EXCEPT_PAGE = [
   ROOT_ROUTE,
