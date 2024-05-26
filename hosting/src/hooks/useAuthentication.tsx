@@ -44,14 +44,14 @@ export function useAuthentication() {
   async function onAuthenticate(user: User) {
     try {
       const idTokenResult = await user.getIdTokenResult();
-      
-      createSession(idTokenResult.token)
 
       setAuthState({
         ...authState,
         token: idTokenResult,
         userInfo: user.toJSON() as UserInfo,
       });
+      
+      await createSession(idTokenResult.token)
     } catch (error) {
       console.error(error);
     }
