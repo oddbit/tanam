@@ -13,7 +13,7 @@ interface DropdownProps {
   id: string;
 }
 
-export const MultiSelect: React.FC<DropdownProps> = ({id}) => {
+export function MultiSelect({id}: DropdownProps) {
   const [options, setOptions] = useState<Option[]>([]);
   const [selected, setSelected] = useState<number[]>([]);
   const [show, setShow] = useState(false);
@@ -204,4 +204,4 @@ export const MultiSelect: React.FC<DropdownProps> = ({id}) => {
       </div>
     </FormGroup>
   );
-};
+}
