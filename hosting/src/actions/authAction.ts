@@ -5,6 +5,7 @@ import {redirect} from "next/navigation";
 import {SIGN_IN_ROUTE, SESSION_COOKIE_NAME} from "@/constants";
 
 export async function createSession(token: string) {
+  console.info('createSession :: ', token)
   cookies().set(SESSION_COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
