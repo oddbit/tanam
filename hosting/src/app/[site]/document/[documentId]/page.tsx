@@ -1,5 +1,5 @@
 "use client";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import PageHeader from "@/components/common/PageHeader";
 import ContentCard from "@/components/Containers/ContentCard";
 import {
   Checkbox,
@@ -29,18 +29,21 @@ const DocumentDetailsPage = () => {
   const renderFormElement = (field: TanamDocumentField, value: any) => {
     switch (field.type) {
       case "input-text":
+      case "text-line":
         return (
           <FormGroup label={field.title} disabled={viewMode}>
             <Input type="text" disabled={viewMode} placeholder={field.title} value={value || ""} />
           </FormGroup>
         );
       case "textbox-rich":
+      case "text-rich":
         return (
           <FormGroup disabled={viewMode} label={field.title}>
             <TextArea disabled={viewMode} rows={6} placeholder={field.title} value={value || ""} />
           </FormGroup>
         );
       case "datepicker":
+      case "date":
         return (
           <DatePicker
             disabled={viewMode}
@@ -67,7 +70,7 @@ const DocumentDetailsPage = () => {
   if (docError || typeError) {
     return (
       <DefaultLayout>
-        <Breadcrumb pageName={documentType?.titleSingular ?? "Document details"} />
+        <PageHeader pageName={documentType?.titleSingular ?? "Document details"} />
         <Notification
           type="error"
           title="Error loading document"
@@ -80,7 +83,7 @@ const DocumentDetailsPage = () => {
   return (
     <DefaultLayout>
       <Suspense fallback={<Loader />}>
-        {documentType ? <Breadcrumb pageName={documentType.titleSingular} /> : <Loader />}
+        {documentType ? <PageHeader pageName={documentType.titleSingular} /> : <Loader />}
       </Suspense>
       {documentType && document && (
         <div className="grid grid-cols-1 gap-9">

@@ -13,7 +13,7 @@ import {
 } from "@/components/Form";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import {Metadata} from "next";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import PageHeader from "@/components/common/PageHeader";
 
 export const metadata: Metadata = {
   title: "Next.js Form Elements | TailAdmin - Next.js Dashboard Template",
@@ -29,7 +29,7 @@ const FormElementsPage = () => {
 
   return (
     <DefaultLayout>
-      <Breadcrumb pageName="FormElements" />
+      <PageHeader pageName="FormElements" />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
         <ContentCard title="Input Fields">

@@ -1,4 +1,4 @@
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import PageHeader from "@/components/common/PageHeader";
 import Image from "next/image";
 import {Metadata} from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
@@ -13,7 +13,7 @@ const Profile = () => {
   return (
     <DefaultLayout>
       <div className="mx-auto max-w-242.5">
-        <Breadcrumb pageName="Profile" />
+        <PageHeader pageName="Profile" />
 
         <div className="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
           <div className="relative z-20 h-35 md:h-65">
