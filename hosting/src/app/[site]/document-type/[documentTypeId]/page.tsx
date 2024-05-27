@@ -1,5 +1,5 @@
 "use client";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import PageHeader from "@/components/common/PageHeader";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import {Table, TableRowActions, TableRowLabel} from "@/components/Table";
 import Loader from "@/components/common/Loader";
@@ -23,7 +23,7 @@ export default function DocumentTypeDocumentsPage() {
   return (
     <DefaultLayout>
       <Suspense fallback={<Loader />}>
-        {documentType ? <Breadcrumb pageName={documentType.titlePlural} /> : <Loader />}
+        {documentType ? <PageHeader pageName={documentType.titlePlural} /> : <Loader />}
       </Suspense>
 
       {docsError ? (

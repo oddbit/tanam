@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import PageHeader from "@/components/common/PageHeader";
 import {Metadata} from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const Buttons = () => {
   return (
     <DefaultLayout>
-      <Breadcrumb pageName="Buttons" />
+      <PageHeader pageName="Buttons" />
 
       {/* <!-- Normal Button Items --> */}
       <div className="mb-10 rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">

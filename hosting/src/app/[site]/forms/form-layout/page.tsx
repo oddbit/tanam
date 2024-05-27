@@ -1,4 +1,4 @@
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import PageHeader from "@/components/common/PageHeader";
 import ContentCard from "@/components/Containers/ContentCard";
 import {FormGroup, Input, TextArea} from "@/components/Form";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const FormLayout = () => {
   return (
     <DefaultLayout>
-      <Breadcrumb pageName="FormLayout" />
+      <PageHeader pageName="FormLayout" />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
         <div className="flex flex-col gap-9">
