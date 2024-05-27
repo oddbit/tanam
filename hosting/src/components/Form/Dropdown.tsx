@@ -1,5 +1,6 @@
 "use client";
 import React, {useState, useEffect, useRef} from "react";
+import Image from "next/image";
 
 interface Option {
   value: string;
@@ -35,6 +36,14 @@ export function Dropdown({
   const dropdownRef = useRef<any>(null);
   const trigger = useRef<any>(null);
 
+  useEffect(() => {
+    // Initialize selected options
+    const initialSelected = initialOptions
+      .map((option, index) => (option.selected ? index : -1))
+      .filter((index) => index !== -1);
+    setSelected(initialSelected);
+  }, [initialOptions]);
+
   const open = () => {
     setShow(true);
   };
@@ -45,59 +54,78 @@ export function Dropdown({
 
   const select = (index: number) => {
     const newOptions = [...options];
-    if (multiselect) {
-      newOptions[index].selected = !newOptions[index].selected;
-      setSelected(newOptions.filter((option) => option.selected).map((option, i) => i));
-    } else {
-      newOptions.forEach((option, i) => (option.selected = i === index));
+
+    if (!multiselect) {
+      // Single select logic
       setSelected([index]);
-      setShow(false);
+      newOptions.forEach((option, idx) => (option.selected = idx === index));
+    } else {
+      // Multiselect logic
+      if (!newOptions[index].selected) {
+        newOptions[index].selected = true;
+        setSelected([...selected, index]);
+      } else {
+        const selectedIndex = selected.indexOf(index);
+        if (selectedIndex !== -1) {
+          newOptions[index].selected = false;
+          setSelected(selected.filter((i) => i !== index));
+        }
+      }
     }
+
     setOptions(newOptions);
+    setShow(false);
   };
 
   const remove = (index: number) => {
     const newOptions = [...options];
-    newOptions[index].selected = false;
-    setSelected(newOptions.filter((option) => option.selected).map((option, i) => i));
-    setOptions(newOptions);
+    const selectedIndex = selected.indexOf(index);
+
+    if (selectedIndex !== -1) {
+      newOptions[index].selected = false;
+      setSelected(selected.filter((i) => i !== index));
+      setOptions(newOptions);
+    }
   };
 
   const selectedValues = () => {
-    return selected.map((index) => options[index].value);
+    return selected.map((option) => options[option].value);
   };
 
   useEffect(() => {
     const clickHandler = ({target}: MouseEvent) => {
-      if (!dropdownRef.current || !show || dropdownRef.current.contains(target) || trigger.current.contains(target)) {
+      if (!dropdownRef.current) return;
+      if (!show || dropdownRef.current.contains(target) || trigger.current.contains(target)) {
         return;
       }
       setShow(false);
     };
     document.addEventListener("click", clickHandler);
     return () => document.removeEventListener("click", clickHandler);
-  }, [show]);
+  });
 
   return (
-    <div className={`relative z-50 ${disabled ? "cursor-not-allowed opacity-50" : ""}`}>
+    <div className={`relative ${disabled ? "cursor-not-allowed opacity-50" : ""}`}>
       <select className="hidden" id={id} disabled={disabled}>
         {options.map((option, index) => (
-          <option key={index} value={option.value}>
+          <option key={index} value={option.value} selected={option.selected}>
             {option.text}
           </option>
         ))}
       </select>
 
       <div className="flex flex-col items-center">
-        <input name="values" type="hidden" value={selectedValues().join(",")} />
-        <div className="relative z-20 inline-block w-full">
+        <input name="values" type="hidden" defaultValue={selectedValues()} />
+        <div className="relative inline-block w-full">
           <div className="relative flex flex-col items-center">
             <div ref={trigger} onClick={open} className="w-full">
               <div className="mb-2 flex rounded border border-stroke py-2 pl-3 pr-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input">
                 {iconSrc && (
-                  <img src={iconSrc} alt="Icon" className="absolute left-4 top-1/2 transform -translate-y-1/2" />
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                    <Image src={iconSrc} alt="Icon" width={20} height={20} />
+                  </div>
                 )}
-                <div className="flex flex-auto flex-wrap gap-3 pl-10">
+                <div className="flex flex-auto flex-wrap gap-3 ml-8">
                   {selected.map((index) => (
                     <div
                       key={index}
@@ -134,9 +162,7 @@ export function Dropdown({
                       <input
                         placeholder={placeholder}
                         className="h-full w-full appearance-none bg-transparent p-1 px-2 outline-none"
-                        value={selectedValues().join(",")}
                         disabled={disabled}
-                        readOnly
                       />
                     </div>
                   )}
@@ -168,13 +194,15 @@ export function Dropdown({
                   isOpen() ? "" : "hidden"
                 }`}
                 ref={dropdownRef}
+                onFocus={() => setShow(true)}
+                onBlur={() => setShow(false)}
               >
                 <div className="flex w-full flex-col">
                   {options.map((option, index) => (
                     <div key={index}>
                       <div
                         className="w-full cursor-pointer rounded-t border-b border-stroke hover:bg-primary/5 dark:border-form-strokedark"
-                        onClick={(event) => !disabled && select(index)}
+                        onClick={() => !disabled && select(index)}
                       >
                         <div
                           className={`relative flex w-full items-center border-l-2 border-transparent p-2 pl-2 ${
