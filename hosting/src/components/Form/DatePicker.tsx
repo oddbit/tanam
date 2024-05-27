@@ -6,6 +6,7 @@ import {BaseOptions} from "flatpickr/dist/types/options";
 interface DatePickerProps {
   label: string;
   placeholder: string;
+  defaultValue?: Date;
   onChange?: (date: Date) => void;
   styleType?: "default" | "static" | "withArrows";
   disabled?: boolean;
@@ -16,10 +17,18 @@ interface DatePickerProps {
  * @param {DatePickerProps} props - The properties for the date picker component.
  * @return {JSX.Element} The rendered date picker component.
  */
-export function DatePicker({label, placeholder, onChange, styleType = "default", disabled = false}: DatePickerProps) {
+export function DatePicker({
+  label,
+  placeholder,
+  defaultValue,
+  onChange,
+  styleType = "default",
+  disabled = false,
+}: DatePickerProps) {
   const config = {
     mode: "single",
     dateFormat: "M j, Y",
+    defaultDate: defaultValue,
     onChange: (selectedDates: Date[]) => {
       if (onChange && selectedDates.length > 0) {
         onChange(selectedDates[0]);
@@ -53,7 +62,7 @@ export function DatePicker({label, placeholder, onChange, styleType = "default",
         fp.destroy();
       }
     };
-  }, [onChange, styleType]);
+  }, [onChange, styleType, defaultValue]);
 
   return (
     <div className={`mb-4.5 ${disabled && "cursor-not-allowed opacity-50"}`}>

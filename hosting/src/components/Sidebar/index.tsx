@@ -90,8 +90,8 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
               title="Content"
               isExpanded={pathname.includes("/content/")}
               menuItems={documentTypes.map((doc) => ({
-                href: `/${site?.id}/content/${doc.id}`,
-                title: doc.title,
+                href: `/${site?.id}/document-type/${doc.id}`,
+                title: doc.titleSingular,
               }))}
             />
             <SidebarMenuItem href="/settings" icon={<SettingsIcon />} title="Settings" />
