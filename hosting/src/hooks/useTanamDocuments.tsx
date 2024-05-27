@@ -1,6 +1,6 @@
-import {firestore} from "@/plugins/firebase";
 import {TanamDocument} from "@/models/TanamDocument";
-import {collection, doc, onSnapshot, query, where} from "firebase/firestore";
+import {firestore} from "@/plugins/firebase";
+import {collection, doc, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
 import {useParams} from "next/navigation";
 import {useEffect, useState} from "react";
 
@@ -56,6 +56,67 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
     // Cleanup subscription on unmount
     return () => unsubscribe();
   }, [site, type]);
+
+  return {data, error};
+}
+
+type RecentField = "createdAt" | "updatedAt" | "publishedAt";
+/**
+ * Hook to get a stream of documents of a specific content type
+ *
+ * @param {RecentField} recentField Optional limit of documents to fetch (default to 10).
+ * @param {number} numResults Optional limit of documents to fetch (default to 10).
+ * @param {string?} documentTypeId Optional document type (default to content parameter from URL).
+ * @return {UseTanamDocumentsResult} Hook for documents subscription
+ */
+export function useTanamRecentDocuments(
+  recentField: RecentField,
+  numResults = 10,
+  documentTypeId?: string,
+): UseTanamDocumentsResult {
+  const {site} = useParams<{site: string}>() ?? {
+    site: null,
+  };
+  const [data, setData] = useState<TanamDocument[]>([]);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    if (!site) {
+      setError(new Error("Site parameter is missing"));
+      return;
+    }
+
+    const collectionRef = collection(firestore, `tanam/${site}/documents`);
+    const queryConstraints = [];
+    if (documentTypeId) {
+      queryConstraints.push(where("documentType", "==", documentTypeId));
+    }
+
+    queryConstraints.push(orderBy(recentField, "desc"));
+    queryConstraints.push(limit(numResults));
+
+    const q = query(collectionRef, ...queryConstraints);
+
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        console.log("Numm docs: ", snapshot.docs.length);
+        const documents = snapshot.docs.map((doc) =>
+          TanamDocument.fromJson({
+            id: doc.id,
+            ...doc.data(),
+          }),
+        );
+        setData(documents);
+      },
+      (err) => {
+        setError(err);
+      },
+    );
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, [site]);
 
   return {data, error};
 }
