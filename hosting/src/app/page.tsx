@@ -1,5 +1,3 @@
-import "@/assets/css/satoshi.css";
-import "@/assets/css/style.css";
 import "@/assets/scss/layout-landing-page.scss";
 import {Metadata} from "next";
 import Image from "next/image";
