@@ -21,6 +21,12 @@ export const metadata: Metadata = {
 };
 
 const FormElementsPage = () => {
+  const dropdownOptions = [
+    {value: "USA", text: "USA"},
+    {value: "UK", text: "UK"},
+    {value: "Canada", text: "Canada"},
+  ];
+
   return (
     <DefaultLayout>
       <Breadcrumb pageName="FormElements" />
@@ -79,26 +85,17 @@ const FormElementsPage = () => {
         </ContentCard>
 
         <ContentCard title="Select input">
-          <Dropdown
-            id="singleSelect"
-            label="Select Country"
-            options={[
-              {value: "USA", text: "USA", selected: false},
-              {value: "UK", text: "UK", selected: false},
-              {value: "Canada", text: "Canada", selected: false},
-            ]}
-          />
-          <Dropdown
-            id="multiSelect"
-            label="Multiselect Dropdown"
-            multiselect={true}
-            options={[
-              {value: "1", text: "Option 1", selected: false},
-              {value: "2", text: "Option 2", selected: false},
-              {value: "3", text: "Option 3", selected: false},
-              {value: "4", text: "Option 4", selected: false},
-            ]}
-          />
+          <FormGroup label="Select Country">
+            <Dropdown
+              id="countrySelect"
+              options={dropdownOptions}
+              iconSrc="/icons/globe.svg"
+              placeholder="Select a country"
+            />
+          </FormGroup>
+          <FormGroup label="Multiselect Dropdown">
+            <Dropdown id="multiSelect" options={dropdownOptions} multiselect placeholder="Select options" />
+          </FormGroup>
         </ContentCard>
       </div>
     </DefaultLayout>
