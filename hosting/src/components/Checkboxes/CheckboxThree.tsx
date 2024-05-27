@@ -1,4 +1,5 @@
 import {useState} from "react";
+import Image from "next/image";
 
 const CheckboxThree = () => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -21,14 +22,7 @@ const CheckboxThree = () => {
             }`}
           >
             <span className={`text-primary opacity-0 ${isChecked && "!opacity-100"}`}>
-              <svg
-                className="h-3.5 w-3.5 stroke-current"
-                fill="none"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
+              <Image width={10} height={6} alt="Icon Close" src={"/icons/sidebar/icon-checked-x.svg"} />
             </span>
           </div>
         </div>

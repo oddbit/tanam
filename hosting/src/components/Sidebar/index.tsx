@@ -8,9 +8,9 @@ import {useTanamDocumentTypes} from "../../hooks/useTanamDocumentTypes";
 import {SidebarExpandableMenu} from "./SidebarExpandableMenu";
 import {SidebarMenuGroup} from "./SidebarMenuGroup";
 import {SidebarMenuItem} from "./SidebarMenuItem";
-import {FormsIcon} from "./icons/FormsIcon";
+// import {FormsIcon} from "./icons/FormsIcon";
 import {ProfileIcon} from "./icons/ProfileIcon";
-import {SettingsIcon} from "./icons/SettingsIcon";
+// import {SettingsIcon} from "./icons/SettingsIcon";
 import {useTanamSite} from "@/hooks/useTanamSite";
 
 interface SidebarProps {
@@ -89,7 +89,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
             />
             <SidebarMenuItem href="/profile" icon={<ProfileIcon />} title="Profile" />
             <SidebarExpandableMenu
-              icon={<FormsIcon />}
+              icon={<Image width={18} height={18} alt="Forms Icon" src={"/icons/sidebar/forms-icon.svg"} />}
               title="Content"
               isExpanded={pathname.includes("/content/")}
               menuItems={documentTypes.map((doc) => ({
@@ -97,7 +97,11 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                 title: doc.title,
               }))}
             />
-            <SidebarMenuItem href="/settings" icon={<SettingsIcon />} title="Settings" />
+            <SidebarMenuItem
+              href="/settings"
+              icon={<Image width={18} height={18} alt="Icon Settings" src={"/icons/sidebar/settings-icon.svg"} />}
+              title="Settings"
+            />
           </SidebarMenuGroup>
         </nav>
         {/* <!-- Sidebar Menu --> */}
