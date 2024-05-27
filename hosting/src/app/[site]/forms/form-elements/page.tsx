@@ -3,18 +3,17 @@ import ContentCard from "@/components/Containers/ContentCard";
 import {
   FormGroup,
   Input,
-  MultiSelect,
   TextArea,
   DatePicker,
   FileUpload,
   Switcher,
   RadioButton,
   Checkbox,
+  Dropdown,
 } from "@/components/Form";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import {Metadata} from "next";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import SelectGroupTwo from "@/components/SelectGroup/SelectGroupTwo";
 
 export const metadata: Metadata = {
   title: "Next.js Form Elements | TailAdmin - Next.js Dashboard Template",
@@ -80,8 +79,26 @@ const FormElementsPage = () => {
         </ContentCard>
 
         <ContentCard title="Select input">
-          <SelectGroupTwo />
-          <MultiSelect id="multiSelect" />
+          <Dropdown
+            id="singleSelect"
+            label="Select Country"
+            options={[
+              {value: "USA", text: "USA", selected: false},
+              {value: "UK", text: "UK", selected: false},
+              {value: "Canada", text: "Canada", selected: false},
+            ]}
+          />
+          <Dropdown
+            id="multiSelect"
+            label="Multiselect Dropdown"
+            multiselect={true}
+            options={[
+              {value: "1", text: "Option 1", selected: false},
+              {value: "2", text: "Option 2", selected: false},
+              {value: "3", text: "Option 3", selected: false},
+              {value: "4", text: "Option 4", selected: false},
+            ]}
+          />
         </ContentCard>
       </div>
     </DefaultLayout>

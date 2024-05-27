@@ -11,39 +11,33 @@ interface Option {
 
 interface DropdownProps {
   id: string;
+  label: string;
+  multiselect?: boolean;
+  options: Option[];
   disabled?: boolean;
 }
 
 /**
- * MultiSelect component for selecting multiple options.
- * @param {DropdownProps} props - The properties for the multi-select component.
- * @return {JSX.Element} The rendered multi-select component.
+ * Dropdown component for single-select and multi-select.
+ * @param {DropdownProps} props - The properties for the dropdown component.
+ * @returns {JSX.Element} The rendered dropdown component.
  */
-export function MultiSelect({id, disabled = false}: DropdownProps) {
-  const [options, setOptions] = useState<Option[]>([]);
+export function Dropdown({
+  id,
+  label,
+  multiselect = false,
+  options: initialOptions,
+  disabled = false,
+}: DropdownProps): JSX.Element {
+  const [options, setOptions] = useState<Option[]>(initialOptions);
   const [selected, setSelected] = useState<number[]>([]);
   const [show, setShow] = useState(false);
   const dropdownRef = useRef<any>(null);
   const trigger = useRef<any>(null);
 
   useEffect(() => {
-    const loadOptions = () => {
-      const select = document.getElementById(id) as HTMLSelectElement | null;
-      if (select) {
-        const newOptions: Option[] = [];
-        for (let i = 0; i < select.options.length; i++) {
-          newOptions.push({
-            value: select.options[i].value,
-            text: select.options[i].innerText,
-            selected: select.options[i].hasAttribute("selected"),
-          });
-        }
-        setOptions(newOptions);
-      }
-    };
-
-    loadOptions();
-  }, [id]);
+    setOptions(initialOptions);
+  }, [initialOptions]);
 
   const open = () => {
     setShow(true);
@@ -54,24 +48,36 @@ export function MultiSelect({id, disabled = false}: DropdownProps) {
   };
 
   const select = (index: number, event: React.MouseEvent) => {
+    if (disabled) return;
+
     const newOptions = [...options];
 
-    if (!newOptions[index].selected) {
-      newOptions[index].selected = true;
-      newOptions[index].element = event.currentTarget as HTMLElement;
-      setSelected([...selected, index]);
-    } else {
-      const selectedIndex = selected.indexOf(index);
-      if (selectedIndex !== -1) {
-        newOptions[index].selected = false;
-        setSelected(selected.filter((i) => i !== index));
+    if (multiselect) {
+      if (!newOptions[index].selected) {
+        newOptions[index].selected = true;
+        newOptions[index].element = event.currentTarget as HTMLElement;
+        setSelected([...selected, index]);
+      } else {
+        const selectedIndex = selected.indexOf(index);
+        if (selectedIndex !== -1) {
+          newOptions[index].selected = false;
+          setSelected(selected.filter((i) => i !== index));
+        }
       }
+    } else {
+      newOptions.forEach((option, idx) => {
+        option.selected = idx === index;
+      });
+      setSelected([index]);
+      setShow(false);
     }
 
     setOptions(newOptions);
   };
 
   const remove = (index: number) => {
+    if (disabled) return;
+
     const newOptions = [...options];
     const selectedIndex = selected.indexOf(index);
 
@@ -99,13 +105,14 @@ export function MultiSelect({id, disabled = false}: DropdownProps) {
   });
 
   return (
-    <FormGroup label="Multiselect Dropdown" disabled={disabled}>
+    <FormGroup label={label} disabled={disabled}>
       <div className={`relative z-50 ${disabled && "cursor-not-allowed opacity-50"}`}>
         <select className="hidden" id={id} disabled={disabled}>
-          <option value="1">Option 2</option>
-          <option value="2">Option 3</option>
-          <option value="3">Option 4</option>
-          <option value="4">Option 5</option>
+          {options.map((option, index) => (
+            <option key={index} value={option.value}>
+              {option.text}
+            </option>
+          ))}
         </select>
 
         <div className="flex flex-col items-center">
@@ -121,18 +128,14 @@ export function MultiSelect({id, disabled = false}: DropdownProps) {
                         className="my-1.5 flex items-center justify-center rounded border-[.5px] border-stroke bg-gray px-2.5 py-1.5 text-sm font-medium dark:border-strokedark dark:bg-white/30"
                       >
                         <div className="max-w-full flex-initial">{options[index].text}</div>
-                        <div className="flex flex-auto flex-row-reverse">
-                          <div
-                            onClick={() => !disabled && remove(index)}
-                            className="cursor-pointer pl-2 hover:text-danger"
-                          >
+                        {multiselect && (
+                          <div onClick={() => remove(index)} className="cursor-pointer pl-2 hover:text-danger">
                             <svg
                               className="fill-current"
                               role="button"
                               width="12"
                               height="12"
-                              viewBox="0 0
-                              12 12"
+                              viewBox="0 0 12 12"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
                             >
@@ -144,7 +147,7 @@ export function MultiSelect({id, disabled = false}: DropdownProps) {
                               ></path>
                             </svg>
                           </div>
-                        </div>
+                        )}
                       </div>
                     ))}
                     {selected.length === 0 && (
@@ -193,7 +196,7 @@ export function MultiSelect({id, disabled = false}: DropdownProps) {
                       <div key={index}>
                         <div
                           className="w-full cursor-pointer rounded-t border-b border-stroke hover:bg-primary/5 dark:border-form-strokedark"
-                          onClick={(event) => !disabled && select(index, event)}
+                          onClick={(event) => select(index, event)}
                         >
                           <div
                             className={`relative flex w-full items-center border-l-2 border-transparent p-2 pl-2 ${
