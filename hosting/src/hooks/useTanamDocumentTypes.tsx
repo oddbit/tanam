@@ -62,7 +62,10 @@ export function useTanamDocumentTypes(): TanamDocumentTypeHook {
  * @return {SingleTanamDocumentTypeHook} Hook for single document type subscription
  */
 export function useTanamDocumentType(documentTypeId?: string): SingleTanamDocumentTypeHook {
-  const {site, type: paramType} = useParams<{site: string; type: string}>() ?? {site: null, type: null};
+  const {site, documentTypeId: paramType} = useParams<{site: string; documentTypeId: string}>() ?? {
+    site: null,
+    documentTypeId: null,
+  };
   const typeId = documentTypeId ?? paramType;
   const [data, setData] = useState<TanamDocumentType | null>(null);
   const [error, setError] = useState<Error | null>(null);
@@ -73,7 +76,7 @@ export function useTanamDocumentType(documentTypeId?: string): SingleTanamDocume
       return;
     }
     if (!typeId) {
-      setError(new Error("Document type ID parameter is missing"));
+      setData(null);
       return;
     }
 
