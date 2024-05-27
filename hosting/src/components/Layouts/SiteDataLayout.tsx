@@ -1,18 +1,13 @@
 "use client";
-
-import Loader from "@/components/common/Loader";
-import "@/css/satoshi.css";
-import "@/css/style.css";
-import {useTanamSite} from "@/hooks/useTanamSite";
+import "@/assets/css/satoshi.css";
+import "@/assets/css/style.css";
 import "flatpickr/dist/flatpickr.min.css";
 import "jsvectormap/dist/css/jsvectormap.css";
-import React, {useEffect, useState} from "react";
+import Loader from "@/components/common/Loader";
+import {useTanamSite} from "@/hooks/useTanamSite";
+import React, {useState, useEffect} from "react";
 
-interface RootLayoutProps {
-  children: React.ReactNode;
-}
-
-const RootLayout: React.FC<RootLayoutProps> = ({children}) => {
+export default function SiteDataLayout({children}: {children: React.ReactNode}) {
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setError] = useState<string>("");
   const {data: siteData, error} = useTanamSite();
@@ -46,13 +41,5 @@ const RootLayout: React.FC<RootLayoutProps> = ({children}) => {
     }
   }
 
-  return (
-    <html lang="en">
-      <body suppressHydrationWarning={true}>
-        <div className="dark:bg-boxdark-2 dark:text-bodydark">{loading ? <Loader /> : getSiteContent()}</div>
-      </body>
-    </html>
-  );
-};
-
-export default RootLayout;
+  return <div>{loading ? <Loader /> : getSiteContent()}</div>;
+}

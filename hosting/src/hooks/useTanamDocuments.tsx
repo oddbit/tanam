@@ -1,4 +1,4 @@
-import {firestore} from "@/firebase";
+import {firestore} from "@/plugins/firebase";
 import {TanamDocument} from "@/models/TanamDocument";
 import {collection, doc, onSnapshot, query, where} from "firebase/firestore";
 import {useParams} from "next/navigation";

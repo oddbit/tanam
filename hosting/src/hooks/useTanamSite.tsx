@@ -1,8 +1,8 @@
-import {firestore} from "@/firebase";
+import {useState, useEffect} from "react";
+import {firestore} from "@/plugins/firebase";
 import {TanamSite} from "@/models/TanamSite";
 import {doc, getDoc} from "firebase/firestore";
 import {useParams} from "next/navigation";
-import {useEffect, useState} from "react";
 
 export function useTanamSite() {
   const {site} = useParams<{site: string}>() ?? {site: null};
