@@ -8,6 +8,11 @@ interface TextareaProps {
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
+/**
+ * TextArea component for text area input fields.
+ * @param {TextareaProps} props - The properties for the text area component.
+ * @return {JSX.Element} The rendered text area component.
+ */
 export function TextArea({placeholder, rows, disabled = false, value, onChange}: TextareaProps) {
   return (
     <textarea

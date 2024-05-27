@@ -4,27 +4,11 @@ import flatpickr from "flatpickr";
 import {BaseOptions} from "flatpickr/dist/types/options";
 
 interface DatePickerProps {
-  /**
-   * The label for the date picker input.
-   * @param {string}
-   */
   label: string;
-  /**
-   * The placeholder for the date picker input.
-   * @param {string}
-   */
   placeholder: string;
-  /**
-   * The callback function to handle the date change event.
-   * @param {Function}
-   */
   onChange?: (date: Date) => void;
-  /**
-   * The style type for the date picker input.
-   * Options: "default" | "static" | "withArrows"
-   * @param {string}
-   */
   styleType?: "default" | "static" | "withArrows";
+  disabled?: boolean;
 }
 
 /**
@@ -32,7 +16,7 @@ interface DatePickerProps {
  * @param {DatePickerProps} props - The properties for the date picker component.
  * @return {JSX.Element} The rendered date picker component.
  */
-export function DatePicker({label, placeholder, onChange, styleType = "default"}: DatePickerProps) {
+export function DatePicker({label, placeholder, onChange, styleType = "default", disabled = false}: DatePickerProps) {
   const config = {
     mode: "single",
     dateFormat: "M j, Y",
@@ -72,12 +56,13 @@ export function DatePicker({label, placeholder, onChange, styleType = "default"}
   }, [onChange, styleType]);
 
   return (
-    <div>
+    <div className={`mb-4.5 ${disabled && "cursor-not-allowed opacity-50"}`}>
       <label className="mb-3 block text-sm font-medium text-black dark:text-white">{label}</label>
       <div className="relative">
         <input
           className="form-datepicker w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           placeholder={placeholder}
+          disabled={disabled}
         />
         <div className="pointer-events-none absolute inset-0 left-auto right-5 flex items-center">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">

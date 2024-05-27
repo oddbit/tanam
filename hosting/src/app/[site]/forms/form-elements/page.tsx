@@ -1,6 +1,16 @@
 import React from "react";
 import ContentCard from "@/components/Containers/ContentCard";
-import {Checkbox, DatePicker, FormGroup, Input, MultiSelect, RadioButton, Switcher, TextArea} from "@/components/Form";
+import {
+  FormGroup,
+  Input,
+  MultiSelect,
+  TextArea,
+  DatePicker,
+  FileUpload,
+  Switcher,
+  RadioButton,
+  Checkbox,
+} from "@/components/Form";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import {Metadata} from "next";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
@@ -11,7 +21,7 @@ export const metadata: Metadata = {
   description: "This is Next.js Form Elements page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
 };
 
-function FormElementsPage() {
+const FormElementsPage = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName="FormElements" />
@@ -33,7 +43,6 @@ function FormElementsPage() {
           <Switcher style="default" />
           <Switcher style="rounded" />
           <Switcher style="withCheck" />
-          <Switcher style="default" />
         </ContentCard>
 
         <ContentCard title="Time and date">
@@ -43,16 +52,10 @@ function FormElementsPage() {
 
         <ContentCard title="File upload">
           <FormGroup label="Attach file">
-            <input
-              type="file"
-              className="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter file:px-5 file:py-3 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
-            />
+            <FileUpload label="Choose File" />
           </FormGroup>
           <FormGroup label="Attach file">
-            <input
-              type="file"
-              className="w-full rounded-md border border-stroke p-3 outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-[#EEEEEE] file:px-2.5 file:py-1 file:text-sm focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-strokedark dark:file:bg-white/30 dark:file:text-white"
-            />
+            <FileUpload label="Choose File" />
           </FormGroup>
         </ContentCard>
 
@@ -69,11 +72,11 @@ function FormElementsPage() {
         </ContentCard>
 
         <ContentCard title="Checkbox and radio">
-          <Checkbox label="Checkbox Text" style="filled" />
-          <Checkbox label="Checkbox Text" style="checkmark" />
-          <Checkbox label="Checkbox Text" style="xmark" />
-          <RadioButton label="Checkbox Text" style="filled" />
-          <RadioButton label="Checkbox Text" style="outline" />
+          <Checkbox style="checkmark" />
+          <Checkbox style="xmark" />
+          <Checkbox style="filled" />
+          <RadioButton style="filled" label="Filled Radio" />
+          <RadioButton style="outline" label="Outline Radio" />
         </ContentCard>
 
         <ContentCard title="Select input">
@@ -83,6 +86,6 @@ function FormElementsPage() {
       </div>
     </DefaultLayout>
   );
-}
+};
 
 export default FormElementsPage;

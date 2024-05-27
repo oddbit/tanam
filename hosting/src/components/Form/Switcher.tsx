@@ -4,9 +4,15 @@ import {useState} from "react";
 interface SwitcherProps {
   style?: "default" | "rounded" | "withCheck";
   defaultChecked?: boolean;
+  disabled?: boolean;
 }
 
-export function Switcher({style = "default", defaultChecked = false}: SwitcherProps) {
+/**
+ * Switcher component with different style options.
+ * @param {SwitcherProps} props - The properties for the switcher component.
+ * @return {JSX.Element} The rendered switcher component.
+ */
+export function Switcher({style = "default", defaultChecked = false, disabled = false}: SwitcherProps) {
   const [enabled, setEnabled] = useState<boolean>(defaultChecked);
 
   const getSwitcherStyle = () => {
@@ -78,16 +84,15 @@ export function Switcher({style = "default", defaultChecked = false}: SwitcherPr
   };
 
   return (
-    <div>
+    <div className={`flex items-center mb-2 ${disabled && "cursor-not-allowed opacity-50"}`}>
       <label className="flex cursor-pointer select-none items-center">
         <div className="relative">
           <input
             type="checkbox"
             className="sr-only"
-            onChange={() => {
-              setEnabled(!enabled);
-            }}
+            onChange={() => !disabled && setEnabled(!enabled)}
             defaultChecked={defaultChecked}
+            disabled={disabled}
           />
           {getSwitcherStyle()}
         </div>

@@ -8,6 +8,11 @@ interface InputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+/**
+ * Input component for text input fields.
+ * @param {InputProps} props - The properties for the input component.
+ * @return {JSX.Element} The rendered input component.
+ */
 export function Input({type, placeholder, disabled = false, value, onChange}: InputProps) {
   return (
     <input

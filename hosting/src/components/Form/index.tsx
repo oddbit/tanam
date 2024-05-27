@@ -6,6 +6,5 @@ export {Input} from "./Input";
 export {MultiSelect} from "./MultiSelect";
 export {RadioButton} from "./RadioButton";
 export {Select} from "./Select";
-export {Switch} from "./Switch";
 export {Switcher} from "./Switcher";
 export {TextArea} from "./TextArea";

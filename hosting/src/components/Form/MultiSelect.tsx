@@ -11,9 +11,15 @@ interface Option {
 
 interface DropdownProps {
   id: string;
+  disabled?: boolean;
 }
 
-export function MultiSelect({id}: DropdownProps) {
+/**
+ * MultiSelect component for selecting multiple options.
+ * @param {DropdownProps} props - The properties for the multi-select component.
+ * @return {JSX.Element} The rendered multi-select component.
+ */
+export function MultiSelect({id, disabled = false}: DropdownProps) {
   const [options, setOptions] = useState<Option[]>([]);
   const [selected, setSelected] = useState<number[]>([]);
   const [show, setShow] = useState(false);
@@ -93,9 +99,9 @@ export function MultiSelect({id}: DropdownProps) {
   });
 
   return (
-    <FormGroup label="Multiselect Dropdown">
-      <div className="relative z-50">
-        <select className="hidden" id={id}>
+    <FormGroup label="Multiselect Dropdown" disabled={disabled}>
+      <div className={`relative z-50 ${disabled && "cursor-not-allowed opacity-50"}`}>
+        <select className="hidden" id={id} disabled={disabled}>
           <option value="1">Option 2</option>
           <option value="2">Option 3</option>
           <option value="3">Option 4</option>
@@ -116,13 +122,17 @@ export function MultiSelect({id}: DropdownProps) {
                       >
                         <div className="max-w-full flex-initial">{options[index].text}</div>
                         <div className="flex flex-auto flex-row-reverse">
-                          <div onClick={() => remove(index)} className="cursor-pointer pl-2 hover:text-danger">
+                          <div
+                            onClick={() => !disabled && remove(index)}
+                            className="cursor-pointer pl-2 hover:text-danger"
+                          >
                             <svg
                               className="fill-current"
                               role="button"
                               width="12"
                               height="12"
-                              viewBox="0 0 12 12"
+                              viewBox="0 0
+                              12 12"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
                             >
@@ -143,6 +153,7 @@ export function MultiSelect({id}: DropdownProps) {
                           placeholder="Select an option"
                           className="h-full w-full appearance-none bg-transparent p-1 px-2 outline-none"
                           defaultValue={selectedValues()}
+                          disabled={disabled}
                         />
                       </div>
                     )}
@@ -152,6 +163,7 @@ export function MultiSelect({id}: DropdownProps) {
                       type="button"
                       onClick={open}
                       className="h-6 w-6 cursor-pointer outline-none focus:outline-none"
+                      disabled={disabled}
                     >
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g opacity="0.8">
@@ -181,7 +193,7 @@ export function MultiSelect({id}: DropdownProps) {
                       <div key={index}>
                         <div
                           className="w-full cursor-pointer rounded-t border-b border-stroke hover:bg-primary/5 dark:border-form-strokedark"
-                          onClick={(event) => select(index, event)}
+                          onClick={(event) => !disabled && select(index, event)}
                         >
                           <div
                             className={`relative flex w-full items-center border-l-2 border-transparent p-2 pl-2 ${
