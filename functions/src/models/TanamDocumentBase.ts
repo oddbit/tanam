@@ -1,10 +1,8 @@
-// tanamDocumentBase.ts
 interface DocumentData {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
-export interface ITanamDocumentBase<TimestampType> {
-  id: string;
+export interface ITanamDocument<TimestampType> {
   data: DocumentData;
   documentType: string;
   publishedAt: TimestampType;
@@ -15,8 +13,8 @@ export interface ITanamDocumentBase<TimestampType> {
 }
 
 export abstract class TanamDocumentBase<TimestampType, FieldValueType> {
-  constructor(json: ITanamDocumentBase<TimestampType>) {
-    this.id = json.id;
+  constructor(id: string, json: ITanamDocument<TimestampType>) {
+    this.id = id;
     this.data = json.data;
     this.documentType = json.documentType;
     this.publishedAt = json.publishedAt;
@@ -35,9 +33,9 @@ export abstract class TanamDocumentBase<TimestampType, FieldValueType> {
   public readonly createdAt: TimestampType;
   public readonly updatedAt: TimestampType;
 
-  abstract getServerTimestamp(): FieldValueType;
+  protected abstract getServerTimestamp(): FieldValueType;
 
-  toJson(): any {
+  toJson(): object {
     return {
       data: this.data,
       documentType: this.documentType,

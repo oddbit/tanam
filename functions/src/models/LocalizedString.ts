@@ -1,6 +1,6 @@
-import { LanguageCode } from "@/definitions/LanguageCode";
+import {LanguageCode} from "../definitions/LanguageCode";
 
-export type Translations = { [key in LanguageCode]?: string | null };
+export type Translations = {[key in LanguageCode]?: string | null};
 
 export const DEFAULT_LANGUAGE = LanguageCode.English;
 
@@ -36,11 +36,7 @@ export class LocalizedString {
    * Get the translated string value from the languages that were provided
    */
   get translated(): string {
-    return (
-      this.translations[this.language] ??
-      this.translations[DEFAULT_LANGUAGE] ??
-      this.anyTranslation
-    );
+    return this.translations[this.language] ?? this.translations[DEFAULT_LANGUAGE] ?? this.anyTranslation;
   }
 
   /**
@@ -74,6 +70,6 @@ export class LocalizedString {
    * @return {Translations} JSON representation of the localized string
    */
   toJson(): Translations {
-    return this.translations;
+    return {...this.translations};
   }
 }

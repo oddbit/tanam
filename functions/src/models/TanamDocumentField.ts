@@ -1,8 +1,9 @@
-import { LocalizedString } from "./LocalizedString";
+import {LocalizedString} from "./LocalizedString";
 
-interface ITanamDocumentField {
-  key: string;
+export interface ITanamDocumentField {
+  weight: number;
   title: LocalizedString;
+  description: LocalizedString;
   type: string;
   validators: string[] | null;
 }
@@ -14,44 +15,35 @@ export class TanamDocumentField {
   /**
    * Constructor.
    *
+   * @param {string} id Field ID
    * @param {ITanamDocumentField} json JSON representation of the field
    */
-  constructor(json: ITanamDocumentField) {
-    this.key = json.key;
+  constructor(id: string, json: ITanamDocumentField) {
+    this.id = id;
+    this.weight = json.weight;
     this.title = json.title;
+    this.description = json.description;
     this.type = json.type;
     this.validators = json.validators;
   }
 
-  public readonly key: string;
-  public readonly title: LocalizedString;
+  public id: string;
+  public weight: number;
+  public title: LocalizedString;
+  public description: LocalizedString;
   public readonly type: string;
   public readonly validators: string[] | null;
-
-  /**
-   * Static factory constructor.
-   *
-   * @param {any} json JSON representation of the field
-   * @return {TanamDocumentField} Document field instance
-   */
-  static fromJson(json: any): TanamDocumentField {
-    return new TanamDocumentField({
-      key: json.key,
-      title: new LocalizedString(json.title), // Assuming LocalizedString has a constructor that accepts JSON
-      type: json.type,
-      validators: json.validators,
-    });
-  }
 
   /**
    * Serialize to JSON for Firestore.
    *
    * @return {any} JSON representation of the document field
    */
-  toJson(): any {
+  toJson(): object {
     return {
-      key: this.key,
+      weight: this.weight,
       title: this.title.toJson(),
+      description: this.description.toJson(),
       type: this.type,
       validators: this.validators,
     };

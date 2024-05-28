@@ -9,6 +9,7 @@ module.exports = {
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
+    "plugin:prettier/recommended",
     "google",
     "plugin:@typescript-eslint/recommended",
   ],
@@ -21,13 +22,14 @@ module.exports = {
     "/lib/**/*", // Ignore built files.
     "/generated/**/*", // Ignore generated files.
   ],
-  plugins: [
-    "@typescript-eslint",
-    "import",
-  ],
+  plugins: ["@typescript-eslint", "import", "prettier"],
   rules: {
-    "quotes": ["error", "double"],
+    quotes: "off", // Use config from prettier
+    "max-len": "off",
+    "require-jsdoc": "off",
     "import/no-unresolved": 0,
-    "indent": ["error", 2],
+    indent: ["error", 2, {SwitchCase: 1}],
+    "operator-linebreak": ["error", "before"],
+    "prettier/prettier": "error",
   },
 };

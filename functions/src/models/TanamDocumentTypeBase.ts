@@ -1,26 +1,23 @@
-import { LocalizedString } from "@/models/LocalizedString";
-import { TanamDocumentField } from "@/models/TanamDocumentField";
+import {LocalizedString} from "./LocalizedString";
 
 export interface ITanamDocumentType<TimestampType> {
-  id: string;
   titleSingular: LocalizedString;
   titlePlural: LocalizedString;
-  documentTitleField: string;
-  fields: TanamDocumentField[];
   description: LocalizedString;
+  documentTitleField: string;
+  isEnabled: boolean;
   createdAt: TimestampType;
   updatedAt: TimestampType;
 }
 
-
-export abstract class TanamDocumentTypeBase<TimestampType> {
-  constructor(json: ITanamDocumentType<TimestampType>) {
-    this.id = json.id;
+export abstract class TanamDocumentTypeBase<TimestampType, FieldValueType> {
+  constructor(id: string, json: ITanamDocumentType<TimestampType>) {
+    this.id = id;
     this.titleSingular = json.titleSingular;
+    this.description = json.description;
     this.titlePlural = json.titlePlural;
     this.documentTitleField = json.documentTitleField;
-    this.fields = json.fields;
-    this.description = json.description;
+    this.isEnabled = !!json.isEnabled;
     this.createdAt = json.createdAt;
     this.updatedAt = json.updatedAt;
   }
@@ -28,22 +25,21 @@ export abstract class TanamDocumentTypeBase<TimestampType> {
   public readonly id: string;
   public titleSingular: LocalizedString;
   public titlePlural: LocalizedString;
-  public documentTitleField: string;
-  public fields: TanamDocumentField[];
   public description: LocalizedString;
+  public documentTitleField: string;
+  public isEnabled: boolean;
   public readonly createdAt: TimestampType;
   public readonly updatedAt: TimestampType;
 
-  abstract getServerTimestamp(): TimestampType;
+  protected abstract getServerTimestamp(): FieldValueType;
 
-  toJson(): any {
+  toJson(): object {
     return {
-      id: this.id,
-      titleSingular: this.titleSingular,
-      titlePlural: this.titlePlural,
-      documentTitleField: this.documentTitleField,
-      fields: this.fields.map((field) => field.toJson()),
+      titleSingular: this.titleSingular.toJson(),
+      titlePlural: this.titlePlural.toJson(),
       description: this.description.toJson(),
+      documentTitleField: this.documentTitleField,
+      isEnabled: !!this.isEnabled,
       createdAt: this.createdAt,
       updatedAt: this.getServerTimestamp(),
     };
