@@ -1,25 +1,22 @@
 // hosting/src/app/[site]/document-type/page.tsx
 "use client";
-import React, {useState} from "react";
+import {Button} from "@/components/Button";
+import ContentCard from "@/components/Containers/ContentCard";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import {Table, TableRowActions, TableRowLabel} from "@/components/Table";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
-import {useTanamDocumentTypes} from "@/hooks/useTanamDocumentTypes";
 import {useCreateDocumentType} from "@/hooks/useCreateDocumentType";
+import {useTanamDocumentTypes} from "@/hooks/useTanamDocumentTypes";
+import {getDocumentTypeArticle, getDocumentTypePerson} from "@/utils/documentTypeGenerator";
 import {useRouter} from "next/navigation";
 import {Suspense} from "react";
-import ContentCard from "@/components/Containers/ContentCard";
-import {Button} from "@/components/Button";
-import {getDocumentTypeArticle, getDocumentTypePerson} from "@/utils/documentTypeGenerator";
 
 export default function DocumentTypeDocumentsPage() {
   const {data: documentTypes, error: typesError} = useTanamDocumentTypes();
   const {createType, error: createError} = useCreateDocumentType();
   const router = useRouter();
-
-  const showCreateButton = !documentTypes.some((type) => type.id === "article");
 
   const handleCreateArticle = async () => {
     const {data, fields} = getDocumentTypeArticle();
