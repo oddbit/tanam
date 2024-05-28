@@ -5,7 +5,7 @@ import Link from "next/link";
 import {usePathname} from "next/navigation";
 import {useEffect, useRef, useState} from "react";
 import {useTanamDocumentTypes} from "../../hooks/useTanamDocumentTypes";
-import {SidebarExpandableMenu} from "./SidebarExpandableMenu";
+import {SidebarExpandableMenu, SidebarExpandableMenuSubItem} from "./SidebarExpandableMenu";
 import {SidebarMenuGroup} from "./SidebarMenuGroup";
 import {SidebarMenuItem} from "./SidebarMenuItem";
 import {DashboardIcon} from "./icons/DashboardIcon";
@@ -85,15 +85,15 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
           <SidebarMenuGroup title="MENU">
             <SidebarMenuItem href="/" icon={<DashboardIcon />} title="Dashboard" />
             <SidebarMenuItem href="/profile" icon={<ProfileIcon />} title="Profile" />
-            <SidebarExpandableMenu
-              icon={<FormsIcon />}
-              title="Content"
-              isExpanded={pathname.includes("/content/")}
-              menuItems={documentTypes.map((doc) => ({
-                href: `/${site?.id}/document-type/${doc.id}`,
-                title: doc.titleSingular,
-              }))}
-            />
+            <SidebarExpandableMenu icon={<FormsIcon />} title="Content" isExpanded={pathname.includes("/content/")}>
+              {documentTypes.map((docType) => (                
+                <SidebarExpandableMenuSubItem
+                  key={docType.id}
+                  href={`/${site?.id}/document-type/${docType.id}`}
+                  title={docType.titlePlural.translated}
+                />
+              ))}
+            </SidebarExpandableMenu>
             <SidebarMenuItem href="/settings" icon={<SettingsIcon />} title="Settings" />
           </SidebarMenuGroup>
         </nav>
