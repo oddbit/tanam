@@ -16,8 +16,7 @@ interface UseTanamDocumentsResult {
  * @return {UseTanamDocumentsResult} Hook for documents subscription
  */
 export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsResult {
-  const {site, documentTypeId: paramType} = useParams<{site: string; documentTypeId: string}>() ?? {
-    site: null,
+  const {documentTypeId: paramType} = useParams<{documentTypeId: string}>() ?? {
     documentTypeId: null,
   };
   const type = documentTypeId ?? paramType;
@@ -25,16 +24,12 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!site) {
-      setError(new Error("Site parameter is missing"));
-      return;
-    }
     if (!type) {
       setError(new Error("Content type parameter is missing"));
       return;
     }
 
-    const collectionRef = collection(firestore, `tanam/${site}/documents`);
+    const collectionRef = collection(firestore, `tanam-documents`);
     const q = query(collectionRef, where("documentType", "==", type));
 
     const unsubscribe = onSnapshot(
@@ -50,7 +45,7 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [site, type]);
+  }, [type]);
 
   return {data, error};
 }
@@ -67,21 +62,17 @@ interface UseTanamDocumentResult {
  * @return {UseTanamDocumentsResult} Hook for document subscription
  */
 export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
-  const {site, documentId: paramId} = useParams<{site: string; documentId: string}>() ?? {site: null, documentId: null};
+  const {documentId: paramId} = useParams<{documentId: string}>() ?? {documentId: null};
   const id = documentId ?? paramId;
   const [data, setData] = useState<TanamDocumentClient | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!site) {
-      setError(new Error("Site parameter is missing"));
-      return;
-    }
     if (!id) {
       setError(new Error("Document id parameter is missing"));
       return;
     }
-    const docRef = doc(firestore, "tanam", site, "documents", id);
+    const docRef = doc(firestore, "tanam-documents", id);
     const unsubscribe = onSnapshot(
       docRef,
       (snapshot) => {
@@ -94,7 +85,7 @@ export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [site, paramId]);
+  }, [id]);
 
   return {data, error};
 }
