@@ -35,7 +35,7 @@ export function useCreateDocumentType(): CreateDocumentTypeHook {
    *
    * @param {TanamDocumentTypeClient} type - The document type to be created.
    * @param {TanamDocumentField[]} fields - An array of fields to be added under the document type.
-   * @returns {Promise<void>} - A promise that resolves when the batch operation completes
+   * @return {Promise<void>} - A promise that resolves when the batch operation completes
    * successfully. If any operation in the batch fails, the promise will be rejected.
    */
   const createType = async (type: TanamDocumentTypeClient, fields: TanamDocumentField[]): Promise<void> => {

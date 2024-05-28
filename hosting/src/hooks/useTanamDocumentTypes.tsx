@@ -24,7 +24,7 @@ export function useTanamDocumentTypes(): TanamDocumentTypeHook {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const collectionRef = collection(firestore, `tanam-types`);
+    const collectionRef = collection(firestore, "tanam-types");
 
     const unsubscribe = onSnapshot(
       collectionRef,
