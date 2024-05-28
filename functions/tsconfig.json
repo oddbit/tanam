@@ -12,6 +12,9 @@
     "target": "es2017",
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    } 
   }
 }
