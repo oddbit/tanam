@@ -31,13 +31,16 @@ export default function DocumentTypeDocumentsPage() {
     await createType(data, fields);
   };
 
+  const hasArticleType = documentTypes.some((type) => type.id === "article");
+  const hasPersonType = documentTypes.some((type) => type.id === "person");
+
   return (
     <DefaultLayout>
       <PageHeader pageName="Content types" />
-      {showCreateButton && (
+      {(!hasArticleType || !hasPersonType) && (
         <ContentCard>
-          <Button onClick={handleCreateArticle} title={"Create Article Type"} />
-          <Button onClick={handleCreatePerson} title={"Create Person Type"} />
+          {!hasArticleType && <Button onClick={handleCreateArticle} title="Create Article Type" />}
+          {!hasPersonType && <Button onClick={handleCreatePerson} title="Create Person Type" />}
         </ContentCard>
       )}
       {typesError && <Notification type="error" title="Error fetching document types" message={typesError.message} />}
