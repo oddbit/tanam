@@ -10,7 +10,7 @@ export interface ITanamDocumentType<TimestampType> {
   updatedAt: TimestampType;
 }
 
-export abstract class TanamDocumentTypeBase<TimestampType, FieldValueType> {
+export abstract class TanamDocumentType<TimestampType, FieldValueType> {
   constructor(id: string, json: ITanamDocumentType<TimestampType>) {
     this.id = id;
     this.titleSingular = json.titleSingular;

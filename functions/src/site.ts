@@ -2,7 +2,7 @@ import {Timestamp} from "firebase-admin/firestore";
 import {logger} from "firebase-functions/v2";
 import {onDocumentCreated} from "firebase-functions/v2/firestore";
 import {TanamSiteAdmin} from "./models/TanamSiteAdmin";
-import {ITanamSite} from "./models/TanamSiteBase";
+import {ITanamSite} from "./models/TanamSite";
 import {getDocumentTypeArticle, getDocumentTypePerson} from "./utils/documentTypeGenerator";
 
 export const bootstrapNewSite = onDocumentCreated("tanam/{siteId}", async (event) => {
@@ -17,7 +17,7 @@ export const bootstrapNewSite = onDocumentCreated("tanam/{siteId}", async (event
   logger.debug("New site created", {data, siteId});
 
   // Normalize the site data
-  const site = new TanamSiteAdmin(siteId, {...data, createdAt: Timestamp.now()} as ITanamSite<Timestamp>);
+  const site = TanamSiteAdmin.fromFirestore(snapshot);
   const siteJson = site.toJson();
   logger.debug("Normalized site data", {siteJson});
   promises.push(snapshot.ref.set(siteJson));

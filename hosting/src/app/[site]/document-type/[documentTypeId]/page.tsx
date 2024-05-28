@@ -23,7 +23,7 @@ export default function DocumentTypeDocumentsPage() {
   return (
     <DefaultLayout>
       <Suspense fallback={<Loader />}>
-        {documentType ? <PageHeader pageName={documentType.titlePlural} /> : <Loader />}
+        {documentType ? <PageHeader pageName={documentType.titlePlural.translated} /> : <Loader />}
       </Suspense>
 
       {docsError ? (

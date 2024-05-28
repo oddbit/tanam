@@ -1,11 +1,11 @@
+import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {firestore} from "@/plugins/firebase";
-import {TanamDocument} from "@/models/TanamDocument";
 import {collection, doc, onSnapshot, query, where} from "firebase/firestore";
 import {useParams} from "next/navigation";
 import {useEffect, useState} from "react";
 
 interface UseTanamDocumentsResult {
-  data: TanamDocument[];
+  data: TanamDocumentClient[];
   error: Error | null;
 }
 
@@ -21,7 +21,7 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
     documentTypeId: null,
   };
   const type = documentTypeId ?? paramType;
-  const [data, setData] = useState<TanamDocument[]>([]);
+  const [data, setData] = useState<TanamDocumentClient[]>([]);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
@@ -40,12 +40,7 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
-        const documents = snapshot.docs.map((doc) =>
-          TanamDocument.fromJson({
-            id: doc.id,
-            ...doc.data(),
-          }),
-        );
+        const documents = snapshot.docs.map((doc) => TanamDocumentClient.fromFirestore(doc));
         setData(documents);
       },
       (err) => {
@@ -61,7 +56,7 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
 }
 
 interface UseTanamDocumentResult {
-  data: TanamDocument | null;
+  data: TanamDocumentClient | null;
   error: Error | null;
 }
 
@@ -74,7 +69,7 @@ interface UseTanamDocumentResult {
 export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
   const {site, documentId: paramId} = useParams<{site: string; documentId: string}>() ?? {site: null, documentId: null};
   const id = documentId ?? paramId;
-  const [data, setData] = useState<TanamDocument | null>(null);
+  const [data, setData] = useState<TanamDocumentClient | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
@@ -90,12 +85,7 @@ export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
     const unsubscribe = onSnapshot(
       docRef,
       (snapshot) => {
-        setData(
-          TanamDocument.fromJson({
-            id: snapshot.id,
-            ...snapshot.data(),
-          }),
-        );
+        setData(TanamDocumentClient.fromFirestore(snapshot));
       },
       (err) => {
         setError(err);

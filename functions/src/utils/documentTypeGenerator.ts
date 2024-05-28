@@ -2,7 +2,7 @@ import {Timestamp} from "firebase-admin/firestore";
 import {LocalizedString} from "../models/LocalizedString";
 import {TanamDocumentField} from "../models/TanamDocumentField";
 import {TanamDocumentTypeAdmin} from "../models/TanamDocumentTypeAdmin";
-import {ITanamDocumentType} from "../models/TanamDocumentTypeBase";
+import {ITanamDocumentType} from "../models/TanamDocumentType";
 
 export interface IDocumentTypeDataResult {
   data: TanamDocumentTypeAdmin;

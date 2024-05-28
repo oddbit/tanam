@@ -1,12 +1,13 @@
-import {useState, useEffect} from "react";
+import {TanamSiteClient} from "@/models/TanamSiteClient";
 import {firestore} from "@/plugins/firebase";
-import {TanamSite} from "@/models/TanamSite";
-import {doc, getDoc} from "firebase/firestore";
+import {ITanamSite} from "@functions/models/TanamSite";
+import {Timestamp, doc, getDoc} from "firebase/firestore";
 import {useParams} from "next/navigation";
+import {useEffect, useState} from "react";
 
 export function useTanamSite() {
   const {site} = useParams<{site: string}>() ?? {site: null};
-  const [data, setSiteData] = useState<TanamSite | null>(null);
+  const [data, setSiteData] = useState<TanamSiteClient | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -25,11 +26,8 @@ export function useTanamSite() {
       const snap = await getDoc(docRef);
 
       if (snap.exists()) {
-        const data = {
-          ...snap.data(),
-          id: snap.id,
-        };
-        setSiteData(TanamSite.fromJson(data));
+        const data = snap.data() as ITanamSite<Timestamp>;
+        setSiteData(TanamSiteClient.fromFirestore(snap));
       } else {
         setError("Site not found");
       }
