@@ -16,8 +16,7 @@ interface TanamDocumentFieldHook {
  * @return {TanamDocumentFieldHook} Hook for document types subscription
  */
 export function useTanamDocumentFields(documentTypeId?: string): TanamDocumentFieldHook {
-  const {site, documentTypeId: paramType} = useParams<{site: string; documentTypeId: string}>() ?? {
-    site: null,
+  const {documentTypeId: paramType} = useParams<{documentTypeId: string}>() ?? {
     documentTypeId: null,
   };
   const type = documentTypeId ?? paramType;
@@ -25,16 +24,12 @@ export function useTanamDocumentFields(documentTypeId?: string): TanamDocumentFi
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!site) {
-      setError(new Error("No site parameter provided"));
-      return;
-    }
     if (!type) {
       setError(new Error("Content type parameter is missing"));
       return;
     }
 
-    const collectionRef = collection(firestore, `tanam/${site}/document-types/${type}/fields`);
+    const collectionRef = collection(firestore, `tanam-types/${type}/fields`);
 
     const unsubscribe = onSnapshot(
       collectionRef,
@@ -51,7 +46,7 @@ export function useTanamDocumentFields(documentTypeId?: string): TanamDocumentFi
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [site]);
+  }, [type]);
 
   return {data, error};
 }

@@ -12,7 +12,6 @@ import {DashboardIcon} from "./icons/DashboardIcon";
 import {FormsIcon} from "./icons/FormsIcon";
 import {ProfileIcon} from "./icons/ProfileIcon";
 import {SettingsIcon} from "./icons/SettingsIcon";
-import {useTanamSite} from "@/hooks/useTanamSite";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -24,7 +23,6 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
   const {data: documentTypes} = useTanamDocumentTypes();
-  const {data: site} = useTanamSite();
 
   const storedSidebarExpanded = "true";
 
@@ -86,10 +84,10 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
             <SidebarMenuItem href="/" icon={<DashboardIcon />} title="Dashboard" />
             <SidebarMenuItem href="/profile" icon={<ProfileIcon />} title="Profile" />
             <SidebarExpandableMenu icon={<FormsIcon />} title="Content" isExpanded={pathname.includes("/content/")}>
-              {documentTypes.map((docType) => (                
+              {documentTypes.map((docType) => (
                 <SidebarExpandableMenuSubItem
                   key={docType.id}
-                  href={`/${site?.id}/document-type/${docType.id}`}
+                  href={`/document-type/${docType.id}`}
                   title={docType.titlePlural.translated}
                 />
               ))}

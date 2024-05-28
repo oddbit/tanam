@@ -1,23 +1,21 @@
-import {Timestamp} from "firebase-admin/firestore";
-import {LocalizedString} from "../models/LocalizedString";
-import {TanamDocumentField} from "../models/TanamDocumentField";
-import {TanamDocumentTypeAdmin} from "../models/TanamDocumentTypeAdmin";
-import {ITanamDocumentType} from "../models/TanamDocumentType";
+import {TanamDocumentTypeClient} from "@/models/TanamDocumentTypeClient";
+import {LocalizedString} from "@functions/models/LocalizedString";
+import {TanamDocumentField} from "@functions/models/TanamDocumentField";
+import {ITanamDocumentType} from "@functions/models/TanamDocumentType";
+import {Timestamp} from "firebase/firestore";
 
 export interface IDocumentTypeDataResult {
-  data: TanamDocumentTypeAdmin;
+  data: TanamDocumentTypeClient;
   fields: TanamDocumentField[];
 }
 
 export function getDocumentTypeArticle(): IDocumentTypeDataResult {
-  const data = new TanamDocumentTypeAdmin("article", {
+  const data = new TanamDocumentTypeClient("article", {
     titleSingular: new LocalizedString({en: "Article"}),
     titlePlural: new LocalizedString({en: "Articles"}),
     description: new LocalizedString({en: "Article such as a blog post or a published article."}),
     isEnabled: true,
     documentTitleField: "title",
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
   } as ITanamDocumentType<Timestamp>);
 
   const fields: TanamDocumentField[] = [
@@ -70,14 +68,12 @@ export function getDocumentTypeArticle(): IDocumentTypeDataResult {
 }
 
 export function getDocumentTypePerson(): IDocumentTypeDataResult {
-  const data = new TanamDocumentTypeAdmin("person", {
+  const data = new TanamDocumentTypeClient("person", {
     titleSingular: new LocalizedString({en: "Person"}),
     titlePlural: new LocalizedString({en: "People"}),
     description: new LocalizedString({en: "People such as authors, contributors, and staff members."}),
     isEnabled: true,
     documentTitleField: "name",
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
   } as ITanamDocumentType<Timestamp>);
 
   const fields: TanamDocumentField[] = [
