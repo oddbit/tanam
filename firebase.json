@@ -6,7 +6,7 @@
   "functions": [
     {
       "source": "functions",
-      "codebase": "default",
+      "codebase": "tanam",
       "ignore": [
         "node_modules",
         ".git",
@@ -45,7 +45,7 @@
       "port": 8080
     },
     "hosting": {
-      "port": 5000
+      "port": 5080
     },
     "pubsub": {
       "port": 8085

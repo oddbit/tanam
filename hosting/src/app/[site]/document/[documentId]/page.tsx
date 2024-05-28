@@ -1,5 +1,4 @@
 "use client";
-import PageHeader from "@/components/common/PageHeader";
 import ContentCard from "@/components/Containers/ContentCard";
 import {
   Checkbox,
@@ -15,15 +14,18 @@ import {
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
+import PageHeader from "@/components/common/PageHeader";
+import {useTanamDocumentFields} from "@/hooks/useTanamDocumentFields";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {useTanamDocument} from "@/hooks/useTanamDocuments";
-import {TanamDocumentField} from "@/models/TanamDocumentField";
+import {TanamDocumentField} from "@functions/models/TanamDocumentField";
 import {Timestamp} from "firebase/firestore";
 import {Suspense} from "react";
 
 const DocumentDetailsPage = () => {
   const {data: document, error: docError} = useTanamDocument();
   const {data: documentType, error: typeError} = useTanamDocumentType(document?.documentType);
+  const {data: documentFields, error: fieldsError} = useTanamDocumentFields(document?.documentType);
   const viewMode = true;
 
   const renderFormElement = (field: TanamDocumentField, value: any) => {
@@ -31,15 +33,15 @@ const DocumentDetailsPage = () => {
       case "input-text":
       case "text-line":
         return (
-          <FormGroup label={field.title} disabled={viewMode}>
-            <Input type="text" disabled={viewMode} placeholder={field.title} value={value || ""} />
+          <FormGroup label={field.title.translated} disabled={viewMode}>
+            <Input type="text" disabled={viewMode} placeholder={field.title.translated} value={value || ""} />
           </FormGroup>
         );
       case "textbox-rich":
       case "text-rich":
         return (
-          <FormGroup disabled={viewMode} label={field.title}>
-            <TextArea disabled={viewMode} rows={6} placeholder={field.title} value={value || ""} />
+          <FormGroup disabled={viewMode} label={field.title.translated}>
+            <TextArea disabled={viewMode} rows={6} placeholder={field.title.translated} value={value || ""} />
           </FormGroup>
         );
       case "datepicker":
@@ -47,30 +49,30 @@ const DocumentDetailsPage = () => {
         return (
           <DatePicker
             disabled={viewMode}
-            label={field.title}
+            label={field.title.translated}
             placeholder="mm/dd/yyyy"
             defaultValue={(value as Timestamp).toDate()}
           />
         );
       case "file-upload":
-        return <FileUpload disabled={viewMode} label={field.title} />;
+        return <FileUpload disabled={viewMode} label={field.title.translated} />;
       case "switcher":
         return <Switcher disabled={viewMode} defaultChecked={value} />;
       case "radio":
-        return <RadioButton disabled={viewMode} label={field.title} />;
+        return <RadioButton disabled={viewMode} label={field.title.translated} />;
       case "checkbox":
         return <Checkbox />;
       case "dropdown":
-        return <Dropdown disabled={viewMode} options={[]} placeholder={field.title} id={""} />;
+        return <Dropdown disabled={viewMode} options={[]} placeholder={field.title.translated} id={""} />;
       default:
         return null;
     }
   };
 
-  if (docError || typeError) {
+  if (docError || typeError || fieldsError) {
     return (
       <DefaultLayout>
-        <PageHeader pageName={documentType?.titleSingular ?? "Document details"} />
+        <PageHeader pageName={documentType?.titleSingular.translated ?? "Document details"} />
         <Notification
           type="error"
           title="Error loading document"
@@ -83,12 +85,14 @@ const DocumentDetailsPage = () => {
   return (
     <DefaultLayout>
       <Suspense fallback={<Loader />}>
-        {documentType ? <PageHeader pageName={documentType.titleSingular} /> : <Loader />}
+        {documentType ? <PageHeader pageName={documentType.titleSingular.translated} /> : <Loader />}
       </Suspense>
       {documentType && document && (
         <div className="grid grid-cols-1 gap-9">
-          <ContentCard key={document.id} title={document.data[documentType.documentTitleField]}>
-            {documentType.fields.map((field) => renderFormElement(field, document.data[field.key]))}
+          <ContentCard key={document.id} title={document.data[documentType.documentTitleField] as string}>
+            <Suspense fallback={<Loader />}>
+              {documentFields.map((field) => renderFormElement(field, document.data[field.id]))}
+            </Suspense>
           </ContentCard>
         </div>
       )}
