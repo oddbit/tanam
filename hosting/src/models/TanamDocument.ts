@@ -49,13 +49,13 @@ export class TanamDocument {
       json.canonicalUrl,
       json.data,
       json.documentType,
-      json.published.toDate(),
+      json.publishedAt || json.published,
       json.revision,
       json.standalone,
       json.status,
       json.tags,
-      json.created || json.createdAt,
-      json.updated || json.updatedAt,
+      json.createdAt || json.created,
+      json.updatedAt || json.updated,
     );
   }
 
@@ -69,12 +69,12 @@ export class TanamDocument {
       canonicalUrl: this.canonicalUrl,
       data: this.data,
       documentType: this.documentType,
-      published: this.publishedAt,
+      publishedAt: this.publishedAt,
       revision: this.revision,
       standalone: this.standalone,
       status: this.status,
       tags: this.tags,
-      created: this.createdAt,
+      createdAt: this.createdAt,
       updatedAt: serverTimestamp() as FieldValue,
     };
   }
