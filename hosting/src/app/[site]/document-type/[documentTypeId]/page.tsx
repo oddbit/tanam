@@ -1,23 +1,21 @@
 "use client";
-import PageHeader from "@/components/common/PageHeader";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import {Table, TableRowActions, TableRowLabel} from "@/components/Table";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
+import PageHeader from "@/components/common/PageHeader";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {useTanamDocuments} from "@/hooks/useTanamDocuments";
-import {useTanamSite} from "@/hooks/useTanamSite";
 import {useRouter} from "next/navigation";
 import {Suspense} from "react";
 
 export default function DocumentTypeDocumentsPage() {
   const {data: documents, error: docsError} = useTanamDocuments();
-  const {data: tanamSite} = useTanamSite();
   const {data: documentType} = useTanamDocumentType();
   const router = useRouter();
 
   const handleView = (documentId: string) => {
-    router.push(`/${tanamSite?.id}/document/${documentId}`);
+    router.push(`/tanam-documents/${documentId}`);
   };
 
   return (
