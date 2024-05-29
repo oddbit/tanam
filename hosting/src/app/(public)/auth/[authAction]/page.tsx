@@ -1,19 +1,13 @@
+"use client";
 import "@/assets/scss/layout-authentication.scss";
 import ClientOnly from "@/components/ClientOnly";
 import FirebaseUi from "@/components/FirebaseUi";
-import {Metadata} from "next";
 import Image from "next/image";
-import {useRouter} from "next/router";
-
-export const metadata: Metadata = {
-  title: "Tanam | Authentication",
-  description: "Authentication in Tanam",
-};
+import {usePathname} from "next/navigation";
 
 export default function AuthPage() {
-  const router = useRouter();
-  const {authAction} = router.query;
-  const isSignUp = authAction === "signup";
+  const pathname = usePathname() ?? "/";
+  const isSignUp = pathname === "/auth/signup";
 
   return (
     <>
