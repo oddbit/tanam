@@ -1,24 +1,23 @@
 "use client";
 
+import {useAuthentication} from "@/hooks/useAuthentication";
 import React from "react";
-import {AuthUserProvider} from "@/contexts/AuthUserContext";
 
 interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-const RootLayout: React.FC<RootLayoutProps> = ({children}) => {
+export default function RootLayout({children}: RootLayoutProps) {
+  const {authUser} = useAuthentication();
+  //
   return (
     <>
-      <AuthUserProvider>
-        <html lang="en">
-          <body suppressHydrationWarning={true}>
-            <div className="dark:bg-boxdark-2 dark:text-bodydark">{children}</div>
-          </body>
-        </html>
-      </AuthUserProvider>
+      <html lang="en">
+        <body suppressHydrationWarning={true}></body>
+        <div className="dark:bg-boxdark-2 dark:text-bodydark">
+          <div className="dark:bg-boxdark-2 dark:text-bodydark">{children}</div>
+        </div>
+      </html>
     </>
   );
-};
-
-export default RootLayout;
+}

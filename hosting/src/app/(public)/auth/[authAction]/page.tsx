@@ -3,11 +3,16 @@ import "@/assets/scss/layout-authentication.scss";
 import ClientOnly from "@/components/ClientOnly";
 import FirebaseUi from "@/components/FirebaseUi";
 import Image from "next/image";
-import {usePathname} from "next/navigation";
+import {notFound, useParams} from "next/navigation";
 
 export default function AuthPage() {
-  const pathname = usePathname() ?? "/";
-  const isSignUp = pathname === "/auth/signup";
+  const {authAction} = useParams();
+  const isSignUp = authAction === "signup";
+  const isSignIn = authAction === "signin";
+
+  if (!isSignUp && !isSignIn) {
+    return notFound();
+  }
 
   return (
     <>

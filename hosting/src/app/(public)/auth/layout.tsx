@@ -1,6 +1,5 @@
 "use client";
 
-import PublicOnlyRestriction from "@/components/Auth/PublicOnlyRestriction";
 import React from "react";
 
 interface PublicLayoutProps {
@@ -8,5 +7,5 @@ interface PublicLayoutProps {
 }
 
 export default function PublicLayout({children}: PublicLayoutProps) {
-  return <PublicOnlyRestriction>{children}</PublicOnlyRestriction>;
+  return <>{children}</>;
 }

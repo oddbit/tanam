@@ -1,24 +1,18 @@
 "use client";
 import {firebaseAuth} from "@/plugins/firebase";
-import {useState, useEffect} from "react";
-import {useAuthUserState} from "@/contexts/AuthUserContext";
-import {User, UserInfo} from "firebase/auth";
+import {User} from "firebase/auth";
+import {useEffect, useState} from "react";
 
 export function useAuthentication() {
-  const {state: authState, setState: setAuthState} = useAuthUserState();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
+  const [authUser, setUser] = useState<User | null>(null);
+  const [isSignedIn, setIsSignedIn] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
-      console.log("[onAuthStateChanged] user", user);
-      setIsLoading(true);
-      if (user) {
-        await onAuthenticate(user);
-      } else {
-        onDeauthenticate();
-      }
-      setIsLoading(false);
+    const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
+      console.log("[onAuthStateChanged]", {user});
+      setUser(user);
+      setIsSignedIn(!!user);
     });
 
     // Cleanup subscription on unmount
@@ -26,47 +20,19 @@ export function useAuthentication() {
   }, []);
 
   async function signout() {
+    console.log("[signout]");
     try {
       await firebaseAuth.signOut();
-      onDeauthenticate();
     } catch (error) {
       setError(error as Error);
     }
-  }
-
-  async function onAuthenticate(user: User) {
-    try {
-      console.log("[onAuthenticate] user", user);
-      const idTokenResult = await user.getIdTokenResult();
-
-      setAuthState({
-        isSignedIn: true,
-        token: idTokenResult,
-        accessToken: idTokenResult.token,
-        refreshToken: user.refreshToken,
-        userInfo: user.toJSON() as UserInfo,
-      });
-    } catch (error) {
-      setError(error as Error);
-    }
-  }
-
-  function onDeauthenticate() {
-    setAuthState({
-      isSignedIn: false,
-      token: null,
-      accessToken: null,
-      refreshToken: null,
-      userInfo: null,
-    });
   }
 
   return {
-    isLoading,
+    isSignedIn,
+    authUser,
     error,
-    authState,
     signout,
-    setIsLoading,
     setError,
   };
 }

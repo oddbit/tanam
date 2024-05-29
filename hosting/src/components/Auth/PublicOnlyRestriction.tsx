@@ -1,29 +1,19 @@
-import Loader from "@/components/common/Loader";
-import {useAuthUserState} from "@/contexts/AuthUserContext";
-import {useRouter} from "next/navigation";
-import {Suspense, useEffect} from "react";
+"use client";
+import {useAuthentication} from "@/hooks/useAuthentication";
 
 interface PublicOnlyRestrictionProps {
   children: React.ReactNode;
+  rejected: React.ReactNode;
+  loading?: React.ReactNode;
 }
 
-export default function PublicOnlyRestriction({children}: PublicOnlyRestrictionProps) {
-  const {state} = useAuthUserState();
-  const router = useRouter();
+export default function PublicOnlyRestriction({children, rejected, loading}: PublicOnlyRestrictionProps) {
+  const {isSignedIn} = useAuthentication();
+  const isLoading = isSignedIn === null;
 
-  useEffect(() => {
-    if (state.userInfo) {
-      router.replace("/");
-    }
-  }, [state.userInfo, router]);
-
-  if (state.userInfo) {
-    return (
-      <Suspense fallback={<Loader />}>
-        <Loader />
-      </Suspense>
-    );
+  if (isLoading) {
+    return <>{loading ?? rejected}</>;
   }
 
-  return <>{children}</>;
+  return isSignedIn ? <>{rejected}</> : <>{children}</>;
 }
