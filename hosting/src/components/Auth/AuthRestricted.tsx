@@ -1,8 +1,7 @@
 "use client";
-
 import Loader from "@/components/common/Loader";
 import {useAuthUserState} from "@/contexts/AuthUserContext";
-import {useRouter} from "next/router";
+import {useRouter} from "next/navigation";
 import {Suspense, useEffect} from "react";
 
 interface AuthRestrictedProps {
@@ -14,18 +13,14 @@ export default function AuthRestricted({children}: AuthRestrictedProps) {
   const router = useRouter();
 
   useEffect(() => {
-    if (!state) {
-      router.replace("/auth/");
+    if (!state.isSignedIn) {
+      router.replace("/");
     }
-  }, [state, router]);
+  }, [state.isSignedIn, router]);
 
-  if (!state.userInfo) {
-    return (
-      <Suspense fallback={<Loader />}>
-        <Loader />
-      </Suspense>
-    );
+  if (!state.isSignedIn) {
+    return <Loader />;
   }
 
-  return <>{children}</>;
+  return <Suspense fallback={<Loader />}>{children}</Suspense>;
 }

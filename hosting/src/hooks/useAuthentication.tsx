@@ -14,7 +14,6 @@ export function useAuthentication() {
 
     return () => {
       setIsLoading(false);
-      resetState();
     };
   }, []);
 
@@ -24,7 +23,7 @@ export function useAuthentication() {
         if (user) {
           await onAuthenticate(user);
         } else {
-          resetState();
+          onDeauthenticate();
         }
       });
     });
@@ -32,33 +31,38 @@ export function useAuthentication() {
 
   async function signout() {
     try {
-      console.log("Signing out...");
       await firebaseAuth.signOut();
+      setAuthState({
+        isSignedIn: false,
+        token: null,
+        accessToken: null,
+        refreshToken: null,
+        userInfo: null,
+      });
     } catch (error) {
       setError(error as Error);
-      console.error(error);
     }
   }
 
   async function onAuthenticate(user: User) {
     try {
-      console.log("onAuthenticate", user);
       const idTokenResult = await user.getIdTokenResult();
 
       setAuthState({
-        ...authState,
+        isSignedIn: true,
         token: idTokenResult,
+        accessToken: idTokenResult.token,
+        refreshToken: user.refreshToken,
         userInfo: user.toJSON() as UserInfo,
       });
     } catch (error) {
       setError(error as Error);
-      console.error(error);
     }
   }
 
-  function resetState() {
-    console.log("Resetting state...");
+  function onDeauthenticate() {
     setAuthState({
+      isSignedIn: false,
       token: null,
       accessToken: null,
       refreshToken: null,
@@ -72,7 +76,6 @@ export function useAuthentication() {
     authState,
     initAuth,
     signout,
-    resetState,
     setIsLoading,
     setError,
   };

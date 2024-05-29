@@ -1,8 +1,9 @@
 "use client";
 
+import AuthRestricted from "@/components/Auth/AuthRestricted";
+import CmsLayout from "@/components/Layouts/CmsLayout";
 import {AuthUserProvider} from "@/contexts/AuthUserContext";
 import React from "react";
-import CmsLayout from "../../components/Layouts/CmsLayout";
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;
@@ -11,7 +12,9 @@ interface ProtectedLayoutProps {
 export default function ProtectedLayout({children}: ProtectedLayoutProps) {
   return (
     <AuthUserProvider>
-      <CmsLayout>{children}</CmsLayout>
+      <AuthRestricted>
+        <CmsLayout>{children}</CmsLayout>
+      </AuthRestricted>
     </AuthUserProvider>
   );
 }

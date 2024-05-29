@@ -1,5 +1,6 @@
 "use client";
 import {IdTokenResult, UserInfo} from "firebase/auth";
+import {useRouter} from "next/navigation";
 import React, {createContext, useContext, useState} from "react";
 
 export interface IAuthUser {
@@ -10,6 +11,7 @@ export interface IAuthUser {
 }
 
 export interface AuthUserState {
+  isSignedIn: boolean;
   token: IdTokenResult | null;
   accessToken: string | null;
   refreshToken: string | null;
@@ -21,7 +23,9 @@ const AuthUserStateContext = createContext<
 >(undefined);
 
 export const AuthUserProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
+  const router = useRouter();
   const [state, setState] = useState<AuthUserState>({
+    isSignedIn: false,
     token: null,
     accessToken: null,
     refreshToken: null,
