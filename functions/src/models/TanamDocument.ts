@@ -2,7 +2,7 @@ interface DocumentData {
   [key: string]: unknown;
 }
 
-export type TanamPublishStatus =  "published" | "unpublished" | "scheduled";
+export type TanamPublishStatus = "published" | "unpublished" | "scheduled";
 
 export interface ITanamDocument<TimestampType> {
   data: DocumentData;
