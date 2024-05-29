@@ -1,10 +1,10 @@
 "use client";
-import {useState, useEffect} from "react";
-import "firebaseui/dist/firebaseui.css";
-import {auth as firebaseAuthUi} from "firebaseui";
-import {firebaseAuth} from "@/plugins/firebase";
-import {EmailAuthProvider, GoogleAuthProvider, AuthCredential} from "firebase/auth";
 import {useAuthUserState} from "@/contexts/AuthUserContext";
+import {firebaseAuth} from "@/plugins/firebase";
+import {AuthCredential, EmailAuthProvider, GoogleAuthProvider} from "firebase/auth";
+import {auth as firebaseAuthUi} from "firebaseui";
+import "firebaseui/dist/firebaseui.css";
+import {useEffect, useState} from "react";
 
 const firebaseUi = new firebaseAuthUi.AuthUI(firebaseAuth);
 
@@ -28,7 +28,7 @@ export function useFirebaseUi() {
     const selector = "#firebaseuiAuthContainer";
 
     firebaseUi.start(selector, {
-      signInSuccessUrl: `${window.location.origin}/tanam-testing`,
+      signInSuccessUrl: "/",
       signInOptions: [
         {
           provider: EmailAuthProvider.PROVIDER_ID,
