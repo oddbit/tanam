@@ -2,67 +2,58 @@
 import {firebaseAuth} from "@/plugins/firebase";
 import {useState, useEffect} from "react";
 import {useAuthUserState} from "@/contexts/AuthUserContext";
-import {createSession, removeSession} from "@/actions/authAction";
 import {User, UserInfo} from "firebase/auth";
 
 export function useAuthentication() {
   const {state: authState, setState: setAuthState} = useAuthUserState();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    initAuth();
-
-    return () => {
+    const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
+      console.log("[onAuthStateChanged] user", user);
+      setIsLoading(true);
+      if (user) {
+        await onAuthenticate(user);
+      } else {
+        onDeauthenticate();
+      }
       setIsLoading(false);
-      resetState();
-    };
-  }, []);
-
-  async function initAuth() {
-    await new Promise(() => {
-      firebaseAuth.onAuthStateChanged(async (user) => {
-        if (user) {
-          onAuthenticate(user);
-        }
-
-        if (!user) {
-          onDeauthenticate();
-        }
-      });
     });
-  }
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
 
   async function signout() {
     try {
       await firebaseAuth.signOut();
-      removeSession();
+      onDeauthenticate();
     } catch (error) {
-      console.error(error);
+      setError(error as Error);
     }
   }
 
   async function onAuthenticate(user: User) {
     try {
+      console.log("[onAuthenticate] user", user);
       const idTokenResult = await user.getIdTokenResult();
 
       setAuthState({
-        ...authState,
+        isSignedIn: true,
         token: idTokenResult,
+        accessToken: idTokenResult.token,
+        refreshToken: user.refreshToken,
         userInfo: user.toJSON() as UserInfo,
       });
-
-      await createSession(idTokenResult.token);
     } catch (error) {
-      console.error(error);
+      setError(error as Error);
     }
   }
 
-  async function onDeauthenticate() {
-    resetState();
-  }
-
-  function resetState() {
+  function onDeauthenticate() {
     setAuthState({
+      isSignedIn: false,
       token: null,
       accessToken: null,
       refreshToken: null,
@@ -72,11 +63,10 @@ export function useAuthentication() {
 
   return {
     isLoading,
+    error,
     authState,
-
-    initAuth,
     signout,
-    resetState,
     setIsLoading,
+    setError,
   };
 }
