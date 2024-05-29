@@ -10,35 +10,25 @@ export function useAuthentication() {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    initAuth();
-
-    return () => {
+    const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
+      console.log("[onAuthStateChanged] user", user);
+      setIsLoading(true);
+      if (user) {
+        await onAuthenticate(user);
+      } else {
+        onDeauthenticate();
+      }
       setIsLoading(false);
-    };
-  }, []);
-
-  async function initAuth() {
-    await new Promise(() => {
-      firebaseAuth.onAuthStateChanged(async (user) => {
-        if (user) {
-          await onAuthenticate(user);
-        } else {
-          onDeauthenticate();
-        }
-      });
     });
-  }
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
 
   async function signout() {
     try {
       await firebaseAuth.signOut();
-      setAuthState({
-        isSignedIn: false,
-        token: null,
-        accessToken: null,
-        refreshToken: null,
-        userInfo: null,
-      });
+      onDeauthenticate();
     } catch (error) {
       setError(error as Error);
     }
@@ -46,6 +36,7 @@ export function useAuthentication() {
 
   async function onAuthenticate(user: User) {
     try {
+      console.log("[onAuthenticate] user", user);
       const idTokenResult = await user.getIdTokenResult();
 
       setAuthState({
@@ -74,7 +65,6 @@ export function useAuthentication() {
     isLoading,
     error,
     authState,
-    initAuth,
     signout,
     setIsLoading,
     setError,

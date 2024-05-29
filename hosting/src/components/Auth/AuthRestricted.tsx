@@ -2,25 +2,29 @@
 import Loader from "@/components/common/Loader";
 import {useAuthUserState} from "@/contexts/AuthUserContext";
 import {useRouter} from "next/navigation";
-import {Suspense, useEffect} from "react";
+import {useEffect} from "react";
+import {useAuthentication} from "@/hooks/useAuthentication";
 
 interface AuthRestrictedProps {
   children: React.ReactNode;
 }
 
 export default function AuthRestricted({children}: AuthRestrictedProps) {
-  const {state} = useAuthUserState();
+  useAuthentication(); // Hook to set up the auth state
+
+  const {authState} = useAuthentication();
   const router = useRouter();
 
   useEffect(() => {
-    if (!state.isSignedIn) {
+    console.log("state", authState);
+    if (authState.isSignedIn === false) {
       router.replace("/");
     }
-  }, [state.isSignedIn, router]);
+  }, [authState, router]);
 
-  if (!state.isSignedIn) {
+  if (!authState) {
     return <Loader />;
   }
 
-  return <Suspense fallback={<Loader />}>{children}</Suspense>;
+  return <>{children}</>;
 }
