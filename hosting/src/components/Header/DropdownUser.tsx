@@ -3,24 +3,49 @@ import Link from "next/link";
 import Image from "next/image";
 import {useAuthentication} from "@/hooks/useAuthentication";
 
-const DropdownUser = ({displayName, avatar}: {displayName: string; avatar: string}) => {
+interface DropdownUserProps {
+  displayName: string;
+  avatar: string;
+}
+
+interface DropdownItemProps {
+  href: string;
+  icon: string;
+  label: string;
+}
+
+function DropdownItem({href, icon, label}: DropdownItemProps) {
+  return (
+    <li>
+      <Link
+        href={href}
+        className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+      >
+        <Image src={icon} className="fill-current" width={22} height={22} alt={label} />
+        {label}
+      </Link>
+    </li>
+  );
+}
+
+export default function DropdownUser({displayName, avatar}: DropdownUserProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const trigger = useRef<any>(null);
-  const dropdown = useRef<any>(null);
+  const trigger = useRef<HTMLAnchorElement>(null);
+  const dropdown = useRef<HTMLDivElement>(null);
   const {signout} = useAuthentication();
 
   // close on click outside
   useEffect(() => {
     const clickHandler = ({target}: MouseEvent) => {
-      if (!dropdown.current) return;
-      if (!dropdownOpen || dropdown.current.contains(target) || trigger.current.contains(target)) {
+      if (!dropdown.current || !trigger.current) return;
+      if (!dropdownOpen || dropdown.current.contains(target as Node) || trigger.current.contains(target as Node)) {
         return;
       }
       setDropdownOpen(false);
     };
     document.addEventListener("click", clickHandler);
     return () => document.removeEventListener("click", clickHandler);
-  });
+  }, [dropdownOpen]);
 
   // close if the esc key is pressed
   useEffect(() => {
@@ -30,7 +55,7 @@ const DropdownUser = ({displayName, avatar}: {displayName: string; avatar: strin
     };
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
-  });
+  }, [dropdownOpen]);
 
   return (
     <div className="relative">
@@ -50,11 +75,11 @@ const DropdownUser = ({displayName, avatar}: {displayName: string; avatar: strin
           />
         </span>
 
-        <img
+        <Image
           src="/icons/dropdown-arrow.svg"
           className="hidden fill-current sm:block"
-          width="12"
-          height="8"
+          width={12}
+          height={8}
           alt="Dropdown Arrow"
         />
       </Link>
@@ -64,7 +89,9 @@ const DropdownUser = ({displayName, avatar}: {displayName: string; avatar: strin
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${dropdownOpen ? "block" : "hidden"}`}
+        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${
+          dropdownOpen ? "block" : "hidden"
+        }`}
       >
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
           <DropdownItem href="/profile" icon="/icons/profile.svg" label="My Profile" />
@@ -74,25 +101,11 @@ const DropdownUser = ({displayName, avatar}: {displayName: string; avatar: strin
           onClick={signout}
           className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
         >
-          <img src="/icons/sign-out.svg" className="fill-current" width="22" height="22" alt="Log Out" />
+          <Image src="/icons/sign-out.svg" className="fill-current" width={22} height={22} alt="Log Out" />
           Log Out
         </button>
       </div>
       {/* <!-- Dropdown End --> */}
     </div>
   );
-};
-
-const DropdownItem = ({href, icon, label}: {href: string; icon: string; label: string}) => (
-  <li>
-    <Link
-      href={href}
-      className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-    >
-      <img src={icon} className="fill-current" width="22" height="22" alt={label} />
-      {label}
-    </Link>
-  </li>
-);
-
-export default DropdownUser;
+}
