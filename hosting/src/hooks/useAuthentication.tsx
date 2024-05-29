@@ -2,7 +2,6 @@
 import {firebaseAuth} from "@/plugins/firebase";
 import {useState, useEffect} from "react";
 import {useAuthUserState} from "@/contexts/AuthUserContext";
-import {createSession, removeSession} from "@/actions/authAction";
 import {User, UserInfo} from "firebase/auth";
 
 export function useAuthentication() {
@@ -35,7 +34,6 @@ export function useAuthentication() {
   async function signout() {
     try {
       await firebaseAuth.signOut();
-      removeSession();
     } catch (error) {
       console.error(error);
     }
@@ -50,8 +48,6 @@ export function useAuthentication() {
         token: idTokenResult,
         userInfo: user.toJSON() as UserInfo,
       });
-
-      await createSession(idTokenResult.token);
     } catch (error) {
       console.error(error);
     }
