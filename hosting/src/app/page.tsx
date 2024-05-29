@@ -1,11 +1,20 @@
-import ECommerce from "@/components/Dashboard/E-commerce";
-import {Metadata} from "next";
+"use client";
+import {useAuthentication} from "@/hooks/useAuthentication";
+import {redirect} from "next/navigation";
+import {Suspense} from "react";
+import Loader from "../components/common/Loader";
 
-export const metadata: Metadata = {
-  title: "Next.js E-commerce Dashboard | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Home for TailAdmin Dashboard Template",
-};
+export default function HomePage() {
+  const {isSignedIn} = useAuthentication();
 
-export default function Home() {
-  return <p>Yes</p>;
+  if (isSignedIn) {
+    redirect("/dashboard");
+  }
+
+  return (
+    <Suspense fallback={<Loader />}>
+      <h1>Tanam CMS</h1>
+      <p>Login etc</p>
+    </Suspense>
+  );
 }
