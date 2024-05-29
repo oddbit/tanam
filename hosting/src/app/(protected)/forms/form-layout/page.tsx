@@ -1,7 +1,6 @@
 import PageHeader from "@/components/common/PageHeader";
 import ContentCard from "@/components/Containers/ContentCard";
 import {FormGroup, Input, TextArea} from "@/components/Form";
-import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import {Metadata} from "next";
 import Link from "next/link";
 
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
 
 const FormLayout = () => {
   return (
-    <DefaultLayout>
+    <>
       <PageHeader pageName="FormLayout" />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
@@ -121,7 +120,7 @@ const FormLayout = () => {
           </ContentCard>
         </div>
       </div>
-    </DefaultLayout>
+    </>
   );
 };
 

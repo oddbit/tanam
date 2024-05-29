@@ -1,19 +1,17 @@
-import React from "react";
 import ContentCard from "@/components/Containers/ContentCard";
 import {
+  Checkbox,
+  DatePicker,
+  Dropdown,
+  FileUpload,
   FormGroup,
   Input,
-  TextArea,
-  DatePicker,
-  FileUpload,
-  Switcher,
   RadioButton,
-  Checkbox,
-  Dropdown,
+  Switcher,
+  TextArea,
 } from "@/components/Form";
-import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import {Metadata} from "next";
 import PageHeader from "@/components/common/PageHeader";
+import {Metadata} from "next";
 
 export const metadata: Metadata = {
   title: "Next.js Form Elements | TailAdmin - Next.js Dashboard Template",
@@ -28,7 +26,7 @@ const FormElementsPage = () => {
   ];
 
   return (
-    <DefaultLayout>
+    <>
       <PageHeader pageName="FormElements" />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
@@ -98,7 +96,7 @@ const FormElementsPage = () => {
           </FormGroup>
         </ContentCard>
       </div>
-    </DefaultLayout>
+    </>
   );
 };
 

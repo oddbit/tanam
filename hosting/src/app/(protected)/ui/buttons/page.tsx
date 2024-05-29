@@ -1,7 +1,6 @@
-import Link from "next/link";
 import PageHeader from "@/components/common/PageHeader";
 import {Metadata} from "next";
-import DefaultLayout from "@/components/Layouts/DefaultLayout";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Next.js Buttons | TailAdmin - Next.js Dashboard Template",
@@ -10,7 +9,7 @@ export const metadata: Metadata = {
 
 const Buttons = () => {
   return (
-    <DefaultLayout>
+    <>
       <PageHeader pageName="Buttons" />
 
       {/* <!-- Normal Button Items --> */}
@@ -466,7 +465,7 @@ const Buttons = () => {
           </div>
         </div>
       </div>
-    </DefaultLayout>
+    </>
   );
 };
 

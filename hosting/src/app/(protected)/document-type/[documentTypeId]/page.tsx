@@ -1,5 +1,4 @@
 "use client";
-import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import {Table, TableRowActions, TableRowLabel} from "@/components/Table";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
@@ -19,7 +18,7 @@ export default function DocumentTypeDocumentsPage() {
   };
 
   return (
-    <DefaultLayout>
+    <>
       <Suspense fallback={<Loader />}>
         {documentType ? <PageHeader pageName={documentType.titlePlural.translated} /> : <Loader />}
       </Suspense>
@@ -52,6 +51,6 @@ export default function DocumentTypeDocumentsPage() {
           />
         </Suspense>
       )}
-    </DefaultLayout>
+    </>
   );
 }

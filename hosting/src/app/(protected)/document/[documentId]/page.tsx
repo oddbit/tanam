@@ -11,7 +11,6 @@ import {
   Switcher,
   TextArea,
 } from "@/components/Form";
-import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
@@ -71,19 +70,19 @@ const DocumentDetailsPage = () => {
 
   if (docError || typeError || fieldsError) {
     return (
-      <DefaultLayout>
+      <>
         <PageHeader pageName={documentType?.titleSingular.translated ?? "Document details"} />
         <Notification
           type="error"
           title="Error loading document"
           message={docError?.message || typeError?.message || "Unknown error"}
         />
-      </DefaultLayout>
+      </>
     );
   }
 
   return (
-    <DefaultLayout>
+    <>
       <Suspense fallback={<Loader />}>
         {documentType ? <PageHeader pageName={documentType.titleSingular.translated} /> : <Loader />}
       </Suspense>
@@ -96,7 +95,7 @@ const DocumentDetailsPage = () => {
           </ContentCard>
         </div>
       )}
-    </DefaultLayout>
+    </>
   );
 };
 

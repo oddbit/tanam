@@ -8,7 +8,7 @@ import "flatpickr/dist/flatpickr.min.css";
 import "jsvectormap/dist/css/jsvectormap.css";
 import React, {useState} from "react";
 
-export default function DefaultLayout({children}: {children: React.ReactNode}) {
+export default function CmsLayout({children}: {children: React.ReactNode}) {
   useAuthentication();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);

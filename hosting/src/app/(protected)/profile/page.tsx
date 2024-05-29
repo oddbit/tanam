@@ -1,7 +1,6 @@
 import PageHeader from "@/components/common/PageHeader";
-import Image from "next/image";
 import {Metadata} from "next";
-import DefaultLayout from "@/components/Layouts/DefaultLayout";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -11,7 +10,7 @@ export const metadata: Metadata = {
 
 const Profile = () => {
   return (
-    <DefaultLayout>
+    <>
       <div className="mx-auto max-w-242.5">
         <PageHeader pageName="Profile" />
 
@@ -249,7 +248,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-    </DefaultLayout>
+    </>
   );
 };
 

@@ -2,7 +2,6 @@
 "use client";
 import {Button} from "@/components/Button";
 import ContentCard from "@/components/Containers/ContentCard";
-import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import {Table, TableRowActions, TableRowLabel} from "@/components/Table";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
@@ -32,7 +31,7 @@ export default function DocumentTypeDocumentsPage() {
   const hasPersonType = documentTypes.some((type) => type.id === "person");
 
   return (
-    <DefaultLayout>
+    <>
       <PageHeader pageName="Content types" />
       {(!hasArticleType || !hasPersonType) && (
         <ContentCard>
@@ -67,6 +66,6 @@ export default function DocumentTypeDocumentsPage() {
           ])}
         />
       </Suspense>
-    </DefaultLayout>
+    </>
   );
 }
