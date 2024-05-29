@@ -7,6 +7,7 @@ import {User, UserInfo} from "firebase/auth";
 export function useAuthentication() {
   const {state: authState, setState: setAuthState} = useAuthUserState();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     initAuth();
@@ -21,11 +22,9 @@ export function useAuthentication() {
     await new Promise(() => {
       firebaseAuth.onAuthStateChanged(async (user) => {
         if (user) {
-          onAuthenticate(user);
-        }
-
-        if (!user) {
-          onDeauthenticate();
+          await onAuthenticate(user);
+        } else {
+          resetState();
         }
       });
     });
@@ -33,14 +32,17 @@ export function useAuthentication() {
 
   async function signout() {
     try {
+      console.log("Signing out...");
       await firebaseAuth.signOut();
     } catch (error) {
+      setError(error as Error);
       console.error(error);
     }
   }
 
   async function onAuthenticate(user: User) {
     try {
+      console.log("onAuthenticate", user);
       const idTokenResult = await user.getIdTokenResult();
 
       setAuthState({
@@ -49,15 +51,13 @@ export function useAuthentication() {
         userInfo: user.toJSON() as UserInfo,
       });
     } catch (error) {
+      setError(error as Error);
       console.error(error);
     }
   }
 
-  async function onDeauthenticate() {
-    resetState();
-  }
-
   function resetState() {
+    console.log("Resetting state...");
     setAuthState({
       token: null,
       accessToken: null,
@@ -68,11 +68,12 @@ export function useAuthentication() {
 
   return {
     isLoading,
+    error,
     authState,
-
     initAuth,
     signout,
     resetState,
     setIsLoading,
+    setError,
   };
 }
