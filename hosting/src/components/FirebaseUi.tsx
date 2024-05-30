@@ -1,6 +1,6 @@
 "use client";
 import "@/assets/scss/layout-authentication.scss";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {useFirebaseUi} from "@/hooks/useFirebaseUi";
 
 interface FirebaseUiProps {
