@@ -22,7 +22,7 @@ const nextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       "@shared/models": path.resolve(__dirname, "./../functions-ts/src/models/shared"),
-      "@shared/definitions": path.resolve(__dirname, "./../functions-ts/src/definitions")
+      "@shared/definitions": path.resolve(__dirname, "./../functions-ts/src/definitions"),
     };
 
     return config;
