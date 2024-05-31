@@ -32,10 +32,6 @@ export function useFirebaseUi() {
       privacyPolicyUrl: "https://github.com/oddbit/tanam/blob/main/docs/privacy-policy.md",
       signInOptions: [
         {
-          provider: EmailAuthProvider.PROVIDER_ID,
-          fullLabel: isSignUp ? "Sign up with email" : "Sign in with email",
-        },
-        {
           provider: GoogleAuthProvider.PROVIDER_ID,
           fullLabel: isSignUp ? "Sign up with Google" : "Sign in with Google",
         },
