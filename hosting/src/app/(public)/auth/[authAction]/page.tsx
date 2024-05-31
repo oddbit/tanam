@@ -1,18 +1,29 @@
 "use client";
 import "@/assets/scss/layout-authentication.scss";
 import ClientOnly from "@/components/ClientOnly";
-import FirebaseUi from "@/components/FirebaseUi";
+import {useFirebaseUi} from "@/hooks/useFirebaseUi";
 import Image from "next/image";
 import {notFound, useParams} from "next/navigation";
+import {useEffect} from "react";
 
 export default function AuthPage() {
   const {authAction} = useParams();
+  const {setIsSignup} = useFirebaseUi();
+
   const isSignUp = authAction === "signup";
   const isSignIn = authAction === "signin";
 
   if (!isSignUp && !isSignIn) {
     return notFound();
   }
+
+  useEffect(() => {
+    setIsSignup(isSignUp);
+
+    return () => {
+      setIsSignup(false);
+    };
+  });
 
   return (
     <>
@@ -27,7 +38,7 @@ export default function AuthPage() {
 
           <div className="authentication__wrapper-content">
             <ClientOnly>
-              <FirebaseUi isSignUp={isSignUp} />
+              <div id="firebaseuiAuthContainer" />
             </ClientOnly>
           </div>
         </div>
