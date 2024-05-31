@@ -27,6 +27,9 @@ export function useFirebaseUi() {
 
     firebaseUi.start(selector, {
       signInSuccessUrl: "/",
+      siteName: "Tanam CMS",
+      tosUrl: "https://github.com/oddbit/tanam/blob/main/docs/tos.md",
+      privacyPolicyUrl: "https://github.com/oddbit/tanam/blob/main/docs/privacy-policy.md",
       signInOptions: [
         {
           provider: EmailAuthProvider.PROVIDER_ID,
