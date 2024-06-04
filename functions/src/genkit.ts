@@ -27,9 +27,11 @@ export const menuSuggestionFlow = onFlow(
     inputSchema: z.string(),
     outputSchema: z.string(),
     authPolicy: firebaseAuth((user) => {
-      if (!user.email_verified) {
-        throw new Error("Verified email required to run flow");
-      }
+      console.log("User", user);
+      // Place for custom auth policies such as checking custom claims
+      // if (!user.email_verified) {
+      //   throw new Error("Verified email required to run flow");
+      // }
     }),
   },
   async (subject) => {
