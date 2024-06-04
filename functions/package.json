@@ -1,19 +1,20 @@
 {
   "main": "lib/index.js",
   "scripts": {
-    "start": "npm run shell",
+    "codecheck": "npm run prettier:fix && npm run lint:fix",
     "compile": "tsc",
     "build": "tsc",
     "build:clean": "rm -rf ./lib",
     "build:watch": "tsc --watch",
+    "deploy": "firebase deploy --only functions",
+    "genkit:start": "genkit start --open",
     "lint": "eslint --ext .ts .",
     "lint:fix": "npm run lint --fix",
+    "logs": "firebase functions:log",
     "prettier:fix": "prettier --write .",
-    "codecheck": "npm run prettier:fix && npm run lint:fix",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
-    "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "start": "npm run shell"
   },
   "name": "functions",
   "engines": {
