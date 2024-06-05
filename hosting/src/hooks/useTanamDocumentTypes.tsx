@@ -1,16 +1,16 @@
-import {firestore} from "@/firebase";
-import {TanamDocumentType} from "@/models/TanamDocumentType";
+import {TanamDocumentTypeClient} from "@/models/TanamDocumentTypeClient";
+import {firestore} from "@/plugins/firebase";
 import {collection, doc, onSnapshot} from "firebase/firestore";
 import {useParams} from "next/navigation";
 import {useEffect, useState} from "react";
 
 interface TanamDocumentTypeHook {
-  data: TanamDocumentType[];
+  data: TanamDocumentTypeClient[];
   error: Error | null;
 }
 
 interface SingleTanamDocumentTypeHook {
-  data: TanamDocumentType | null;
+  data: TanamDocumentTypeClient | null;
   error: Error | null;
 }
 
@@ -20,27 +20,17 @@ interface SingleTanamDocumentTypeHook {
  * @return {TanamDocumentTypeHook} Hook for document types subscription
  */
 export function useTanamDocumentTypes(): TanamDocumentTypeHook {
-  const {site} = useParams<{site: string}>() ?? {site: null};
-  const [data, setData] = useState<TanamDocumentType[]>([]);
+  const [data, setData] = useState<TanamDocumentTypeClient[]>([]);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!site) {
-      setError(new Error("No site parameter provided"));
-      return;
-    }
-
-    const collectionRef = collection(firestore, `tanam/${site}/document-types`);
+    const collectionRef = collection(firestore, "tanam-types");
 
     const unsubscribe = onSnapshot(
       collectionRef,
       (snapshot) => {
-        const documentTypes = snapshot.docs.map((doc) =>
-          TanamDocumentType.fromJson({
-            id: doc.id,
-            ...doc.data(),
-          }),
-        );
+        const documentTypes = snapshot.docs.map((doc) => TanamDocumentTypeClient.fromFirestore(doc));
+        console.log(documentTypes);
         setData(documentTypes);
       },
       (err) => {
@@ -50,7 +40,7 @@ export function useTanamDocumentTypes(): TanamDocumentTypeHook {
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [site]);
+  });
 
   return {data, error};
 }
@@ -62,28 +52,26 @@ export function useTanamDocumentTypes(): TanamDocumentTypeHook {
  * @return {SingleTanamDocumentTypeHook} Hook for single document type subscription
  */
 export function useTanamDocumentType(documentTypeId?: string): SingleTanamDocumentTypeHook {
-  const {site, type: paramType} = useParams<{site: string; type: string}>() ?? {site: null, type: null};
+  const {documentTypeId: paramType} = useParams<{documentTypeId: string}>() ?? {
+    documentTypeId: null,
+  };
   const typeId = documentTypeId ?? paramType;
-  const [data, setData] = useState<TanamDocumentType | null>(null);
+  const [data, setData] = useState<TanamDocumentTypeClient | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!site) {
-      setError(new Error("No site parameter provided"));
-      return;
-    }
     if (!typeId) {
-      setError(new Error("Document type ID parameter is missing"));
+      setData(null);
       return;
     }
 
-    const docRef = doc(firestore, `tanam/${site}/document-types`, typeId);
+    const docRef = doc(firestore, `tanam-types`, typeId);
 
     const unsubscribe = onSnapshot(
       docRef,
       (doc) => {
         if (doc.exists()) {
-          setData(TanamDocumentType.fromJson({id: doc.id, ...doc.data()}));
+          setData(TanamDocumentTypeClient.fromFirestore(doc));
         } else {
           setError(new Error("Document type not found"));
         }
@@ -95,7 +83,7 @@ export function useTanamDocumentType(documentTypeId?: string): SingleTanamDocume
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [site, typeId]);
+  }, [typeId]);
 
   return {data, error};
 }

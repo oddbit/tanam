@@ -1,0 +1,11 @@
+.l-landing-page {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+
+  & .landing-page {
+    &__title {
+      font-size: 3rem;
+    }
+  }
+}

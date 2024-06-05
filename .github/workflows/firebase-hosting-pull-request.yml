@@ -21,8 +21,13 @@ jobs:
           cache: "npm"
           cache-dependency-path: |
             hosting/package-lock.json
+            functions/package-lock.json
 
-      - name: Run code checking and formatting
+      - name: Run code checking and formatting (functions)
+        run: npm ci && npm run codecheck
+        working-directory: ./functions
+
+      - name: Run code checking and formatting (hosting)
         run: npm ci && npm run codecheck
         working-directory: ./hosting
 
@@ -45,6 +50,7 @@ jobs:
           cache: "npm"
           cache-dependency-path: |
             hosting/package-lock.json
+            functions/package-lock.json
 
       - name: Cache build
         uses: actions/cache@v4
@@ -60,7 +66,11 @@ jobs:
       - name: Set hosting environment
         run: echo $HOSTING_ENV > hosting/.env
 
-      - name: Build application
+      - name: Build functions code
+        run: npm ci && npm run build
+        working-directory: ./functions
+
+      - name: Build web application
         run: npm ci && npm run build
         working-directory: ./hosting
 

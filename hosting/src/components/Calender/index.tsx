@@ -1,9 +1,9 @@
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import PageHeader from "@/components/common/PageHeader";
 
 const Calendar = () => {
   return (
     <div className="mx-auto max-w-7xl">
-      <Breadcrumb pageName="Calendar" />
+      <PageHeader pageName="Calendar" />
 
       {/* <!-- ====== Calendar Section Start ====== --> */}
       <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">

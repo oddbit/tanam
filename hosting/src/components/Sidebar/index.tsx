@@ -5,13 +5,14 @@ import Link from "next/link";
 import {usePathname} from "next/navigation";
 import {useEffect, useRef, useState} from "react";
 import {useTanamDocumentTypes} from "../../hooks/useTanamDocumentTypes";
-import {SidebarExpandableMenu} from "./SidebarExpandableMenu";
+import {SidebarExpandableMenu, SidebarExpandableMenuSubItem} from "./SidebarExpandableMenu";
 import {SidebarMenuGroup} from "./SidebarMenuGroup";
 import {SidebarMenuItem} from "./SidebarMenuItem";
-// import {FormsIcon} from "./icons/FormsIcon";
+import {FormsIcon} from "./icons/FormsIcon";
 import {ProfileIcon} from "./icons/ProfileIcon";
 // import {SettingsIcon} from "./icons/SettingsIcon";
-import {useTanamSite} from "@/hooks/useTanamSite";
+// import {useTanamSite} from "@/hooks/useTanamSite";
+import {SettingsIcon} from "./icons/SettingsIcon";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -23,7 +24,6 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
   const {data: documentTypes} = useTanamDocumentTypes();
-  const {data: site} = useTanamSite();
 
   const storedSidebarExpanded = "true";
 
@@ -88,20 +88,16 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
               title="Dashboard"
             />
             <SidebarMenuItem href="/profile" icon={<ProfileIcon />} title="Profile" />
-            <SidebarExpandableMenu
-              icon={<Image width={18} height={18} alt="Forms Icon" src={"/icons/sidebar/forms-icon.svg"} />}
-              title="Content"
-              isExpanded={pathname.includes("/content/")}
-              menuItems={documentTypes.map((doc) => ({
-                href: `/${site?.id}/content/${doc.id}`,
-                title: doc.title,
-              }))}
-            />
-            <SidebarMenuItem
-              href="/settings"
-              icon={<Image width={18} height={18} alt="Icon Settings" src={"/icons/sidebar/settings-icon.svg"} />}
-              title="Settings"
-            />
+            <SidebarExpandableMenu icon={<FormsIcon />} title="Content" isExpanded={pathname.includes("/content/")}>
+              {documentTypes.map((docType) => (
+                <SidebarExpandableMenuSubItem
+                  key={docType.id}
+                  href={`/document-type/${docType.id}`}
+                  title={docType.titlePlural.translated}
+                />
+              ))}
+            </SidebarExpandableMenu>
+            <SidebarMenuItem href="/settings" icon={<SettingsIcon />} title="Settings" />
           </SidebarMenuGroup>
         </nav>
         {/* <!-- Sidebar Menu --> */}

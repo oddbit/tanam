@@ -15,6 +15,7 @@
     "apexcharts": "^3.45.2",
     "dotenv": "^16.4.5",
     "firebase": "^10.12.0",
+    "firebaseui": "^6.1.0",
     "flatpickr": "^4.6.13",
     "jsvectormap": "^1.5.3",
     "next": "^14.2.3",
@@ -24,7 +25,7 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.2.3",
-    "@types/node": "^20",
+    "@types/node": "^18.19.33",
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.10.0",
@@ -39,7 +40,8 @@
     "postcss": "^8",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
+    "sass": "^1.77.2",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "5.1"
   }
 }

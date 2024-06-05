@@ -19,34 +19,6 @@ service cloud.firestore {
         }
       }
 
-      match /files/{fileId} {
-        allow read: if hasAnyRole();
-        allow write: if isPublisher();
-      }
-
-			match /notifications/{notificationId} {
-        allow read: if isAtLeastAdmin();
-        allow write: if isAtLeastAdmin();
-      }
-
-      match /themes/{document=**} {
-        allow read: if hasAnyRole();
-        allow write: if isAtLeastAdmin();
-      }
-
-      match /users/{document=**} {
-        allow read, write: if isAtLeastAdmin();
-      }
-
-       match /user-invites/{document=**} {
-        allow read, write: if isSuperAdmin();
-      }
-
-      match /users/{userId} {
-        allow read: if isSignedInAs(userId);
-        allow write: if isSignedInAs(userId);
-      }
-
       function hasUserRole(role) {
         return isSignedIn() && role in request.auth.token.tanam[siteId];
       }
