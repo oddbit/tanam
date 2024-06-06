@@ -1,8 +1,10 @@
 import {noAuth, onFlow} from "@genkit-ai/firebase/functions";
 
-import {prompt} from "@genkit-ai/dotprompt";
+import {generate} from "@genkit-ai/ai";
+import {geminiPro} from "@genkit-ai/googleai";
 import {logger} from "firebase-functions/v2";
-import {inputSchema, outputSchema} from "./schemas";
+import {generatePrompt} from "./prompt";
+import {InputSchema, OutputSchema} from "./schemas";
 
 /**
  * Generate an article from the given audio and article URLs.
@@ -11,23 +13,22 @@ import {inputSchema, outputSchema} from "./schemas";
 export const generateArticleFlow = onFlow(
   {
     name: "generateArticleFlow",
-    inputSchema,
-    outputSchema,
+    inputSchema: InputSchema,
+    outputSchema: OutputSchema,
     authPolicy: noAuth(),
   },
   async (inputData) => {
     logger.debug("generateArticle", {inputData});
-    const generateArticlePrompt = await prompt("generateArticlePrompt", {});
-    const validatedInput = inputSchema.parse(inputData);
 
-    const llmResponse = await generateArticlePrompt.generate({
-      input: {
-        contentAudio: validatedInput.contentAudio,
-        styleSources: validatedInput.styleSources,
-        minuteRead: validatedInput.minuteRead,
+    const llmResponse = await generate({
+      model: geminiPro,
+      config: {
+        temperature: 0.3,
       },
+      // tools: [urlToMarkdown],
+      prompt: generatePrompt(InputSchema.parse(inputData)),
     });
 
-    return outputSchema.parse(llmResponse.data);
+    return llmResponse.text();
   },
 );
