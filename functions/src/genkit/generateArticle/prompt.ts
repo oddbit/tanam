@@ -10,6 +10,9 @@ export const generateArticlePrompt = defineDotprompt(
     input: {schema: inputSchema},
     output: {schema: outputSchema},
     tools: [urlToMarkdown],
+    config: {
+      temperature: 0.3,
+    },
   },
   `
 {{role "system"}}

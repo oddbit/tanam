@@ -8,22 +8,22 @@ import {inputSchema, outputSchema} from "./schemas";
  * Generate an article from the given audio and article URLs.
  *
  */
-export const generateArticle = onFlow(
+export const generateArticleFlow = onFlow(
   {
-    name: "generateArticle_flow",
+    name: "generateArticleFlow",
     inputSchema,
     outputSchema,
     authPolicy: noAuth(),
   },
   async (inputData) => {
     logger.debug("generateArticle", {inputData});
-    const generateArticlePrompt = await prompt("generateArticle_prompt", {});
+    const generateArticlePrompt = await prompt("generateArticlePrompt", {});
     const validatedInput = inputSchema.parse(inputData);
 
     const llmResponse = await generateArticlePrompt.generate({
       input: {
-        audioUrl: validatedInput.audioUrl,
-        articleUrls: validatedInput.articleUrls,
+        contentAudio: validatedInput.contentAudio,
+        styleSources: validatedInput.styleSources,
         minuteRead: validatedInput.minuteRead,
       },
     });

@@ -1,11 +1,12 @@
-import * as z from "zod";
+import {z} from "zod";
 
 /**
  * Input schema for the generateArticle flow.
  */
 export const inputSchema = z.object({
-  audioUrl: z.string().url().describe("The URL of the audio file to generate the article from"),
-  articleUrls: z.array(z.string().url()).describe("The URLs of the articles to generate the content from"),
+  contentAudio: z.string().url().describe("The URL of the audio file to generate the article from"),
+  contentSource: z.string().optional().describe("Text or URL that contain information on what to write"),
+  styleSources: z.array(z.string()).describe("Texts or URLs of sources that indicate the writing style"),
   minuteRead: z
     .number()
     .min(1)
