@@ -27,13 +27,14 @@ async function fetchAndConvertToMarkdown(url: string): Promise<string> {
     const $ = cheerio.load(data);
 
     // Extract the main content of the website
+    const articleTitle = $("title").html() || "";
     const articleContent = $("body").html() || "";
 
     // Convert the HTML content to Markdown
     const turndownService = new TurndownService();
     const markdown = turndownService.turndown(articleContent);
 
-    return markdown;
+    return `# ${articleTitle}\n\n${markdown}`;
   } catch (error) {
     console.error(`Error fetching or converting content from ${url}:`, error);
     return "";
