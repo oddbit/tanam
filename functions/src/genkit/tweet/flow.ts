@@ -1,10 +1,7 @@
 import {noAuth, onFlow} from "@genkit-ai/firebase/functions";
+import {prompt} from "@genkit-ai/dotprompt";
 
-import {generate} from "@genkit-ai/ai";
-import {logger} from "firebase-functions/v2";
-import {generatePrompt} from "./prompt";
 import {InputSchema, OutputSchema} from "./schemas";
-import {geminiPro} from "@genkit-ai/googleai";
 
 /**
  * Generate an article from the given audio and article URLs.
@@ -18,15 +15,9 @@ export const tweetFlow = onFlow(
     authPolicy: noAuth(),
   },
   async (inputData) => {
-    logger.debug("tweet", {inputData});
-    const llmResponse = await generate({
-      model: geminiPro,
-      prompt: generatePrompt(InputSchema.parse(inputData)),
-      output: {
-        format: "json",
-      },
-    });
+    const llmPrompt = await prompt("tweetPrompt");
+    const llmResponse = await llmPrompt.generate({input: inputData});
 
-    return llmResponse.output();
+    return OutputSchema.parse(llmResponse.output());
   },
 );
