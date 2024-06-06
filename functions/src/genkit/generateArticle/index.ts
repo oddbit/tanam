@@ -1,2 +1,2 @@
 export * from "./flow";
-export * from "./dotprompt";
+export * from "./prompt";

@@ -2,6 +2,7 @@ import {defineTool} from "@genkit-ai/ai";
 import axios from "axios";
 import cheerio from "cheerio";
 import TurndownService from "turndown";
+import sanitizeHtml from "sanitize-html";
 import * as z from "zod";
 
 export const urlToMarkdown = defineTool(
@@ -21,19 +22,28 @@ export const urlToMarkdown = defineTool(
  * @param {string} url - The URL of the article to fetch.
  * @returns {Promise<string>} - The Markdown representation of the article content.
  */
-async function fetchAndConvertToMarkdown(url: string): Promise<string> {
+export async function fetchAndConvertToMarkdown(url: string): Promise<string> {
   try {
     const {data} = await axios.get<string>(url);
     const $ = cheerio.load(data);
 
     // Extract the main content of the website
-    const articleTitle = $("title").html() || "";
+    const articleTitle = $("title").text() || "";
     const articleContent = $("body").html() || "";
 
-    // Convert the HTML content to Markdown
-    const turndownService = new TurndownService();
-    const markdown = turndownService.turndown(articleContent);
+    // Sanitize the HTML content to remove unnecessary tags and attributes
+    const sanitizedContent = sanitizeHtml(articleContent, {
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
+      allowedAttributes: {
+        ...sanitizeHtml.defaults.allowedAttributes,
+        img: ["src", "alt"],
+      },
+      allowedSchemes: ["http", "https", "data"],
+    });
 
+    // Convert the sanitized HTML content to Markdown
+    const turndownService = new TurndownService();
+    const markdown = turndownService.turndown(sanitizedContent);
     return `# ${articleTitle}\n\n${markdown}`;
   } catch (error) {
     console.error(`Error fetching or converting content from ${url}:`, error);

@@ -18,10 +18,8 @@ export const InputSchema = z.object({
 /**
  * Output schema for the generateArticle flow.
  */
-// export const OutputSchema = z
-//   .object({
-//     title: z.string().describe("The title of the generated article"),
-//     content: z.string().describe("The content of the generated article"),
-//   })
-//   .describe("The generated article content");
-export const OutputSchema = z.string().describe("The content of the generated article");
+export const OutputSchema = z
+  .object({
+    title: z.string().describe("The title of the generated article"),
+    content: z.string().describe("The content of the generated article"),
+  });
