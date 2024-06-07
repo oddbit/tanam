@@ -2,7 +2,6 @@ import Link from "next/link";
 import {usePathname} from "next/navigation";
 import React, {useState} from "react";
 import SidebarLinkGroup from "./SidebarLinkGroup";
-import Image from "next/image";
 
 interface ExpandableMenuProps {
   icon: React.ReactNode;
@@ -35,12 +34,8 @@ export function SidebarExpandableMenu({icon, title, children, isExpanded}: Expan
           >
             {icon}
             {title}
-            <Image
-              width={20}
-              height={20}
-              alt="Collapse Expand Icon"
-              src={"/icons/sidebar/collapse-expand-icon.svg"}
-              className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${isOpen && "rotate-180"}`}
+            <span
+              className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current i-ic-baseline-expand-more w-[25px] h-[25px] ${isOpen && "rotate-180"}`}
             />
           </Link>
           <div className={`translate transform overflow-hidden ${!isOpen && "hidden"}`}>

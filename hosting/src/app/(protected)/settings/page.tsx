@@ -27,9 +27,7 @@ const Settings = () => {
                         Full Name
                       </label>
                       <div className="relative">
-                        <span className="absolute left-4.5 top-4">
-                          <Image width={20} height={20} alt="Cheked" src={"/icons/sidebar/icon-user.svg"} />
-                        </span>
+                        <span className="absolute left-4 top-3 i-ic-outline-person w-[24px] h-[24px]" />
                         <input
                           className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                           type="text"
@@ -49,9 +47,7 @@ const Settings = () => {
                         Phone Number
                       </label>
                       <div className="relative">
-                        <span className="absolute left-4.5 top-4">
-                          <Image width={20} height={20} alt="phone" src={"/icons/sidebar/phone-icon.svg"} />
-                        </span>
+                        <span className="absolute left-4 top-4 i-ic-round-phone w-[22px] h-[22px]" />
                         <input
                           className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                           type="text"
@@ -69,9 +65,8 @@ const Settings = () => {
                       Email Address
                     </label>
                     <div className="relative">
-                      <span className="absolute left-4.5 top-4">
-                        <Image width={20} height={20} alt="phone" src={"/icons/sidebar/email-icon.svg"} />
-                      </span>
+                      <span className="absolute left-4 top-4 i-ic-round-mail-outline w-[22px] h-[22px]" />
+
                       <input
                         className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                         type="email"
@@ -102,9 +97,7 @@ const Settings = () => {
                       BIO
                     </label>
                     <div className="relative">
-                      <span className="absolute left-4.5 top-4">
-                        <Image width={20} height={20} alt="Phone" src={"/icons/sidebar/write-icon.svg"} />
-                      </span>
+                      <span className="absolute left-4 top-4 i-ic-baseline-edit-note w-[25px] h-[25px]" />
                       <textarea
                         className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                         name="bio"
@@ -164,9 +157,7 @@ const Settings = () => {
                       className="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
                     />
                     <div className="flex flex-col items-center justify-center space-y-3">
-                      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-stroke bg-white dark:border-strokedark dark:bg-boxdark">
-                        <Image width={20} height={20} alt="phone" src={"/icons/sidebar/icon-upload.svg"} />
-                      </span>
+                      <span className="i-ic-outline-file-upload text-primary h-[28px] w-[28px]" />
                       <p>
                         <span className="text-primary">Click to upload</span> or drag and drop
                       </p>

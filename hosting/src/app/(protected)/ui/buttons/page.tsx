@@ -1,7 +1,6 @@
 import PageHeader from "@/components/common/PageHeader";
 import {Metadata} from "next";
 // import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -125,9 +124,7 @@ const Buttons = () => {
               href="#"
               className="inline-flex items-center justify-center gap-2.5 bg-primary px-10 py-4 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
             >
-              <span>
-                <Image width={20} height={20} alt="Icon Email" src={"/icons/sidebar/email-icon-white.svg"} />
-              </span>
+              <span className="i-ic-outline-email w-[22px] h-[22px] text-white" />
               Button With Icon
             </Link>
 
@@ -135,9 +132,7 @@ const Buttons = () => {
               href="#"
               className="inline-flex items-center justify-center gap-2.5 bg-meta-3 px-10 py-4 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
             >
-              <span>
-                <Image width={20} height={20} alt="Icon Email" src={"/icons/sidebar/email-icon-white.svg"} />
-              </span>
+              <span className="i-ic-outline-email w-[22px] h-[22px] text-white" />
               Button With Icon
             </Link>
 
@@ -145,9 +140,7 @@ const Buttons = () => {
               href="#"
               className="inline-flex items-center justify-center gap-2.5 bg-black px-10 py-4 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
             >
-              <span>
-                <Image width={20} height={20} alt="Icon Email" src={"/icons/sidebar/email-icon-white.svg"} />
-              </span>
+              <span className="i-ic-outline-email w-[22px] h-[22px] text-white" />
               Button With Icon
             </Link>
 
@@ -155,9 +148,7 @@ const Buttons = () => {
               href="#"
               className="inline-flex items-center justify-center gap-2.5 border border-primary px-10 py-4 text-center font-medium text-primary hover:bg-opacity-90 lg:px-8 xl:px-10"
             >
-              <span>
-                <Image width={20} height={20} alt="Icon Email Purple" src={"/icons/sidebar/email-icon-purple.svg"} />
-              </span>
+              <span className="i-ic-outline-email w-[22px] h-[22px] text-primary" />
               Button With Icon
             </Link>
           </div>
@@ -167,9 +158,7 @@ const Buttons = () => {
               href="#"
               className="inline-flex items-center justify-center gap-2.5 rounded-md bg-primary px-10 py-4 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
             >
-              <span>
-                <Image width={20} height={20} alt="Icon Trolley" src={"/icons/sidebar/icon-trolley-white.svg"} />
-              </span>
+              <span className="i-ic-outline-shopping-cart w-[22px] h-[22px] text-white" />
               Button With Icon
             </Link>
 
@@ -177,9 +166,7 @@ const Buttons = () => {
               href="#"
               className="inline-flex items-center justify-center gap-2.5 rounded-md bg-meta-3 px-10 py-4 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
             >
-              <span>
-                <Image width={20} height={20} alt="Icon Trolley" src={"/icons/sidebar/icon-trolley-white.svg"} />
-              </span>
+              <span className="i-ic-outline-shopping-cart w-[22px] h-[22px] text-white" />
               Button With Icon
             </Link>
 
@@ -187,9 +174,7 @@ const Buttons = () => {
               href="#"
               className="inline-flex items-center justify-center gap-2.5 rounded-md bg-black px-10 py-4 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
             >
-              <span>
-                <Image width={20} height={20} alt="Icon Trolley" src={"/icons/sidebar/icon-trolley-white.svg"} />
-              </span>
+              <span className="i-ic-outline-shopping-cart w-[22px] h-[22px] text-white" />
               Button With Icon
             </Link>
 
@@ -197,9 +182,7 @@ const Buttons = () => {
               href="#"
               className="inline-flex items-center justify-center gap-2.5 rounded-md border border-primary px-10 py-4 text-center font-medium text-primary hover:bg-opacity-90 lg:px-8 xl:px-10"
             >
-              <span>
-                <Image width={20} height={20} alt="Icon Trolley" src={"/icons/sidebar/icon-trolley-purple.svg"} />
-              </span>
+              <span className="i-ic-outline-shopping-cart w-[22px] h-[22px] text-primary" />
               Button With Icon
             </Link>
           </div>
@@ -209,9 +192,7 @@ const Buttons = () => {
               href="#"
               className="inline-flex items-center justify-center gap-2.5 rounded-full bg-primary px-10 py-4 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
             >
-              <span>
-                <Image width={20} height={20} alt="Icon Person" src={"/icons/sidebar/icon-person-white.svg"} />
-              </span>
+              <span className="i-ic-baseline-person-add-alt w-[22px] h-[22px] text-white" />
               Button With Icon
             </Link>
 
@@ -219,9 +200,7 @@ const Buttons = () => {
               href="#"
               className="inline-flex items-center justify-center gap-2.5 rounded-full bg-meta-3 px-10 py-4 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
             >
-              <span>
-                <Image width={20} height={20} alt="Icon Person" src={"/icons/sidebar/icon-person-white.svg"} />
-              </span>
+              <span className="i-ic-baseline-person-add-alt w-[22px] h-[22px] text-white" />
               Button With Icon
             </Link>
 
@@ -229,9 +208,7 @@ const Buttons = () => {
               href="#"
               className="inline-flex items-center justify-center gap-2.5 rounded-full bg-black px-10 py-4 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
             >
-              <span>
-                <Image width={20} height={20} alt="Icon Person" src={"/icons/sidebar/icon-person-white.svg"} />
-              </span>
+              <span className="i-ic-baseline-person-add-alt w-[22px] h-[22px] text-white" />
               Button With Icon
             </Link>
 
@@ -239,9 +216,7 @@ const Buttons = () => {
               href="#"
               className="inline-flex items-center justify-center gap-2.5 rounded-full border border-primary px-10 py-4 text-center font-medium text-primary hover:bg-opacity-90 lg:px-8 xl:px-10"
             >
-              <span>
-                <Image width={20} height={20} alt="Icon Person" src={"/icons/sidebar/icon-person-purple.svg"} />
-              </span>
+              <span className="i-ic-baseline-person-add-alt w-[22px] h-[22px] text-primary" />
               Button With Icon
             </Link>
           </div>

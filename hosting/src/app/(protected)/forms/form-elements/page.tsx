@@ -87,12 +87,18 @@ const FormElementsPage = () => {
             <Dropdown
               id="countrySelect"
               options={dropdownOptions}
-              iconSrc="/icons/globe.svg"
+              icon="i-ri-global-line"
               placeholder="Select a country"
             />
           </FormGroup>
           <FormGroup label="Multiselect Dropdown">
-            <Dropdown id="multiSelect" options={dropdownOptions} multiselect placeholder="Select options" />
+            <Dropdown
+              icon="i-ri-global-line"
+              id="multiSelect"
+              options={dropdownOptions}
+              multiselect
+              placeholder="Select options"
+            />
           </FormGroup>
         </ContentCard>
       </div>

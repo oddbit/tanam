@@ -8,11 +8,6 @@ import {useTanamDocumentTypes} from "../../hooks/useTanamDocumentTypes";
 import {SidebarExpandableMenu, SidebarExpandableMenuSubItem} from "./SidebarExpandableMenu";
 import {SidebarMenuGroup} from "./SidebarMenuGroup";
 import {SidebarMenuItem} from "./SidebarMenuItem";
-import {FormsIcon} from "./icons/FormsIcon";
-import {ProfileIcon} from "./icons/ProfileIcon";
-// import {SettingsIcon} from "./icons/SettingsIcon";
-// import {useTanamSite} from "@/hooks/useTanamSite";
-import {SettingsIcon} from "./icons/SettingsIcon";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -84,11 +79,19 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
           <SidebarMenuGroup title="MENU">
             <SidebarMenuItem
               href="/"
-              icon={<Image width={18} height={18} alt="Dashboard" src={"/icons/sidebar/dashboard-icon.svg"} />}
+              icon={<span className="i-ic-outline-dashboard w-[24px] h-[24px]" />}
               title="Dashboard"
             />
-            <SidebarMenuItem href="/profile" icon={<ProfileIcon />} title="Profile" />
-            <SidebarExpandableMenu icon={<FormsIcon />} title="Content" isExpanded={pathname.includes("/content/")}>
+            <SidebarMenuItem
+              href="/profile"
+              icon={<span className="i-ic-baseline-person-outline  w-[24px] h-[24px]" />}
+              title="Profile"
+            />
+            <SidebarExpandableMenu
+              icon={<span className="i-ic-twotone-format-indent-decrease w-[24px] h-[24px]" />}
+              title="Content"
+              isExpanded={pathname.includes("/content/")}
+            >
               {documentTypes.map((docType) => (
                 <SidebarExpandableMenuSubItem
                   key={docType.id}
@@ -97,7 +100,11 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                 />
               ))}
             </SidebarExpandableMenu>
-            <SidebarMenuItem href="/settings" icon={<SettingsIcon />} title="Settings" />
+            <SidebarMenuItem
+              href="/settings"
+              icon={<span className="i-ic-outline-settings w-[24px] h-[24px]" />}
+              title="Settings"
+            />
           </SidebarMenuGroup>
         </nav>
         {/* <!-- Sidebar Menu --> */}

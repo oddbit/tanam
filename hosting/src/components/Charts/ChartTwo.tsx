@@ -1,7 +1,6 @@
 import {ApexOptions} from "apexcharts";
 import React, {useState} from "react";
 import ReactApexChart from "react-apexcharts";
-import Image from "next/image";
 
 const options: ApexOptions = {
   colors: ["#3C50E0", "#80CAEE"],
@@ -111,9 +110,7 @@ const ChartTwo: React.FC = () => {
                 Last Week
               </option>
             </select>
-            <span className="absolute right-3 top-1/2 z-10 -translate-y-1/2">
-              <Image width={10} height={6} alt="Collapse Icon" src={"/icons/sidebar/collapse-icon-grey.svg"} />
-            </span>
+            <span className="absolute right-3 top-1/2 z-10 -translate-y-1/2 i-ic-round-keyboard-arrow-down w-[20px] h-[20px]" />
           </div>
         </div>
       </div>

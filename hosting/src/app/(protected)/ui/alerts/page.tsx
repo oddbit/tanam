@@ -1,7 +1,6 @@
 import PageHeader from "@/components/common/PageHeader";
 import {Metadata} from "next";
 // import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Next.js Alerts | TailAdmin - Next.js Dashboard Template",
@@ -19,7 +18,7 @@ const Alerts = () => {
           {/* <!-- Alerts Item --> */}
           <div className="flex w-full border-l-6 border-warning bg-warning bg-opacity-[15%] px-7 py-8 shadow-md dark:bg-[#1B1B24] dark:bg-opacity-30 md:p-9">
             <div className="mr-5 flex h-9 w-9 items-center justify-center rounded-lg bg-warning bg-opacity-30">
-              <Image width={19} height={16} alt="Icon Alerts" src={"/icons/sidebar/alerts-icon.svg"} />
+              <span className="i-ic-round-warning w-[22px] h-[22px] text-warning" />
             </div>
             <div className="w-full">
               <h5 className="mb-3 text-lg font-semibold text-[#9D5425]">Attention needed</h5>
@@ -32,7 +31,7 @@ const Alerts = () => {
           {/* <!-- Alerts Item --> */}
           <div className="flex w-full border-l-6 border-[#34D399] bg-[#34D399] bg-opacity-[15%] px-7 py-8 shadow-md dark:bg-[#1B1B24] dark:bg-opacity-30 md:p-9">
             <div className="mr-5 flex h-9 w-full max-w-[36px] items-center justify-center rounded-lg bg-[#34D399]">
-              <Image width={16} height={12} alt="Checked Icon" src={"/icons/sidebar/checked-icon.svg"} />
+              <span className="i-ic-round-check w-[22px] h-[22px] text-white" />
             </div>
             <div className="w-full">
               <h5 className="mb-3 text-lg font-semibold text-black dark:text-[#34D399] ">Message Sent Successfully</h5>
@@ -44,7 +43,7 @@ const Alerts = () => {
           {/* <!-- Alerts Item --> */}
           <div className="flex w-full border-l-6 border-[#F87171] bg-[#F87171] bg-opacity-[15%] px-7 py-8 shadow-md dark:bg-[#1B1B24] dark:bg-opacity-30 md:p-9">
             <div className="mr-5 flex h-9 w-full max-w-[36px] items-center justify-center rounded-lg bg-[#F87171]">
-              <Image width={13} height={13} alt="Icon Close" src={"/icons/sidebar/icon-close.svg"} />
+              <span className="i-ic-baseline-close w-[22px] h-[22px] text-white" />
             </div>
             <div className="w-full">
               <h5 className="mb-3 font-semibold text-[#B45454]">There were 1 errors with your submission</h5>

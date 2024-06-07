@@ -1,4 +1,5 @@
 import {useEffect, useRef, useState} from "react";
+import {clsx} from "clsx";
 import Link from "next/link";
 import Image from "next/image";
 import {useAuthentication} from "@/hooks/useAuthentication";
@@ -21,7 +22,7 @@ function DropdownItem({href, icon, label}: DropdownItemProps) {
         href={href}
         className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
       >
-        <Image src={icon} className="fill-current" width={22} height={22} alt={label} />
+        <span className={clsx("w-[20px] h-[20px]", icon)} />
         {label}
       </Link>
     </li>
@@ -74,14 +75,7 @@ export default function DropdownUser({displayName, avatar}: DropdownUserProps) {
             alt="User"
           />
         </span>
-
-        <Image
-          src="/icons/dropdown-arrow.svg"
-          className="hidden fill-current sm:block"
-          width={12}
-          height={8}
-          alt="Dropdown Arrow"
-        />
+        <span className="i-ic-round-keyboard-arrow-down w-[20px] h-[20px]" />
       </Link>
 
       {/* <!-- Dropdown Start --> */}
@@ -94,14 +88,14 @@ export default function DropdownUser({displayName, avatar}: DropdownUserProps) {
         }`}
       >
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
-          <DropdownItem href="/profile" icon="/icons/profile.svg" label="My Profile" />
-          <DropdownItem href="/settings" icon="/icons/settings.svg" label="Account Settings" />
+          <DropdownItem href="/profile" icon="i-ic-baseline-person-outline" label="My Profile" />
+          <DropdownItem href="/settings" icon="i-ic-outline-settings" label="Account Settings" />
         </ul>
         <button
           onClick={signout}
           className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
         >
-          <Image src="/icons/sign-out.svg" className="fill-current" width={22} height={22} alt="Log Out" />
+          <span className="i-ic-outline-logout w-[20px] h-[20px]" />
           Log Out
         </button>
       </div>
