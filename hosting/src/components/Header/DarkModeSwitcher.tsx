@@ -16,8 +16,8 @@ const DarkModeSwitcher = () => {
         style="default"
         defaultChecked={colorMode === "dark"}
         onChange={handleColorModeToggle}
-        onIcon="/icons/moon-filled.svg"
-        offIcon="/icons/sun-filled.svg"
+        onIcon="i-ri-moon-clear-fill text-white"
+        offIcon="i-ri-sun-line"
       />
     </li>
   );

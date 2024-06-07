@@ -45,7 +45,7 @@ const FormElementsPage = () => {
         <ContentCard title="Toggle switch input">
           <Switcher />
           <Switcher style="rounded" />
-          <Switcher onIcon="/icons/check.svg" offIcon="/icons/close.svg" />
+          <Switcher onIcon="i-ic-round-check" offIcon="i-ic-round-close" />
         </ContentCard>
 
         <ContentCard title="Time and date">
