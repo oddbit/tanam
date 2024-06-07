@@ -15,6 +15,5 @@ configureGenkit({
   enableTracingAndMetrics: true,
 });
 
-export * from "./generateArticle";
-export * from "./tweet";
+export * from "./use-cases";
 export * from "./tools";

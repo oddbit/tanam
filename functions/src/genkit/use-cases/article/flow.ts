@@ -2,7 +2,7 @@ import {prompt} from "@genkit-ai/dotprompt";
 import {noAuth, onFlow} from "@genkit-ai/firebase/functions";
 import {InputSchema, OutputSchema} from "./schemas";
 import {z} from "zod";
-import {fetchAndConvertToMarkdown} from "../tools";
+import {fetchAndConvertToMarkdown} from "../../tools";
 
 /**
  * Generate an article from the given audio and article URLs.
