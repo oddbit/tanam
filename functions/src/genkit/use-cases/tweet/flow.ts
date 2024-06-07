@@ -1,6 +1,7 @@
-import {noAuth, onFlow} from "@genkit-ai/firebase/functions";
 import {prompt} from "@genkit-ai/dotprompt";
+import {onFlow} from "@genkit-ai/firebase/functions";
 
+import {isSignedInAuthPolicy} from "../../authPolicies";
 import {InputSchema, OutputSchema} from "./schemas";
 
 /**
@@ -12,7 +13,7 @@ export const tweetFlow = onFlow(
     name: "tweetFlow",
     inputSchema: InputSchema,
     outputSchema: OutputSchema,
-    authPolicy: noAuth(),
+    authPolicy: isSignedInAuthPolicy,
   },
   async (inputData) => {
     const llmPrompt = await prompt("tweetPrompt");
