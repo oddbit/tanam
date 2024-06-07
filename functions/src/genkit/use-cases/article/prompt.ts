@@ -7,8 +7,13 @@ export const generateArticlePrompt = defineDotprompt(
     name: "generateArticlePrompt",
     model: geminiPro,
     input: {schema: InputSchemaArticle},
-    output: {schema: OutputSchemaArticle},
-    // tools: [urlToMarkdown], // Doesn't seem to be working
+    output: {
+      format: "json",
+      schema: OutputSchemaArticle,
+    },
+    // TODO: Fix usage of tools in dotprompt
+    // FAILED_PRECONDITION: Generation resulted in no candidates matching provided output schema.
+    // tools: [contentFromUrl], // Somehow the process is causing error if this is used
     config: {
       temperature: 0.3,
     },
@@ -31,6 +36,10 @@ article is located. Use the text if provided and download content using the prov
 the content is in a URL.
 
 # General Rules
+- **Tools:**
+    - When fetching content from a URL, do not follow URLs in that result
+    - Replace the URL with the content fetched from the URL
+
 - **Format:** 
     - Write the output article in markdown format.
     - Use markdown comments to indicate where you suggest the author to insert examples, quotes, 
@@ -68,32 +77,33 @@ code blocks, images or similar.
  content in the generation of the article.
  - The author may provide multiple URLs to learn about the style of writing.
 
- # Output
- - Return the output as a JSON object.
- - Put the plain text title in the \`title\` field 
- - Put the article markdown content in the \`content\` field.
-
+ 
 {{role "user"}}
 
 # Request 
+Write an article that is about {{minuteRead}} minute read.
+
 {{#if contentAudio}}
 Listen to the following recording ({{media url=contentAudio}}) as a source of 
 inspiration for the article.
 {{/if}}
 
-{{#if contentSource}}
-Use the following source of information to write in the article: 
-{{contentSource}}
-{{/if}}
+## Transcript
+{{transcript}}
 
-Write an article that is about {{minuteRead}} minute read.
+# Style inspiration
+Use the following styleSources for the style of writing
 
-Use the following styleSources for the style of writing: 
+## Style references URLs
+{{#each styleSourceUrls~}}
+- {{this}}
+{{/each~}}
+
+## Style reference articles
 {{#each styleSources}}
 
-(Start of source)
-{{this}} 
-(End of source)
+### {{this.title}} 
+{{this.content}}
 
 {{/each}}
 `,

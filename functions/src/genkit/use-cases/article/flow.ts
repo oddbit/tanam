@@ -1,9 +1,8 @@
 import {prompt} from "@genkit-ai/dotprompt";
 import {onFlow} from "@genkit-ai/firebase/functions";
-import {z} from "zod";
 import {isSignedInAuthPolicy} from "../../authPolicies";
-import {fetchAndConvertToMarkdown} from "../../tools";
 import {InputSchemaArticle, InputSchemaArticleType, OutputSchemaArticle, OutputSchemaArticleType} from "./schemas";
+import { fetchContent } from '../../tools';
 
 /**
  * Generates an article from the given audio and article URLs.
@@ -42,18 +41,16 @@ export const generateArticleFlow = onFlow(
  */
 export async function generateArticleLlm(inputData: InputSchemaArticleType): Promise<OutputSchemaArticleType> {
   const llmPrompt = await prompt("generateArticlePrompt");
+  
+  // TODO: Check if model is supporting audio input otherwise fetch and convert audio to text
 
-  // Manually fetching URLs since the `urlToMarkdown` tool does not seem
-  // to be working when using in the prompt
-  const contentSources: string[] = [];
-  for (const source of inputData.styleSources || []) {
-    if (z.string().url().safeParse(source).success) {
-      const content = await fetchAndConvertToMarkdown(source);
-      contentSources.push(content);
-    }
-  }
-  inputData.styleSources = contentSources;
+  // for (const url of inputData.styleSourceUrls ?? []) {
+  //   const content = await fetchContent(url);
+  //   inputData.styleSources.push(content);
+  // }
 
   const llmResponse = await llmPrompt.generate({input: inputData});
+  console.log(llmResponse.toJSON());
+  
   return OutputSchemaArticle.parse(llmResponse.output());
 }
