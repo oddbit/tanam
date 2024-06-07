@@ -1,6 +1,5 @@
 import PageHeader from "@/components/common/PageHeader";
 import {Metadata} from "next";
-// import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Link from "next/link";
 
 export const metadata: Metadata = {
