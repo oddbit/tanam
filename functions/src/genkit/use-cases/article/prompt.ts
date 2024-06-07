@@ -1,13 +1,13 @@
 import {defineDotprompt} from "@genkit-ai/dotprompt";
 import {geminiPro} from "@genkit-ai/googleai";
-import {InputSchema, OutputSchema} from "./schemas";
+import {InputSchemaArticle, OutputSchemaArticle} from "./schemas";
 
 export const generateArticlePrompt = defineDotprompt(
   {
     name: "generateArticlePrompt",
     model: geminiPro,
-    input: {schema: InputSchema},
-    output: {schema: OutputSchema},
+    input: {schema: InputSchemaArticle},
+    output: {schema: OutputSchemaArticle},
     // tools: [urlToMarkdown], // Doesn't seem to be working
     config: {
       temperature: 0.3,
