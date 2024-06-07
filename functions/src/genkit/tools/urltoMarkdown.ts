@@ -1,8 +1,8 @@
 import {defineTool} from "@genkit-ai/ai";
 import axios from "axios";
-import cheerio from "cheerio";
-import TurndownService from "turndown";
+import {load} from "cheerio";
 import sanitizeHtml from "sanitize-html";
+import TurndownService from "turndown";
 import * as z from "zod";
 
 export const urlToMarkdown = defineTool(
@@ -12,20 +12,18 @@ export const urlToMarkdown = defineTool(
     inputSchema: z.string(),
     outputSchema: z.string().describe("A Markdown representation of the fetched content"),
   },
-  async (url) => {
-    return await fetchAndConvertToMarkdown(url);
-  },
+  (url) => fetchAndConvertToMarkdown(url),
 );
 
 /**
  * Fetch the HTML content from the given URL and convert it to Markdown.
  * @param {string} url - The URL of the article to fetch.
- * @returns {Promise<string>} - The Markdown representation of the article content.
+ * @return {Promise<string>} - The Markdown representation of the article content.
  */
 export async function fetchAndConvertToMarkdown(url: string): Promise<string> {
   try {
     const {data} = await axios.get<string>(url);
-    const $ = cheerio.load(data);
+    const $ = load(data);
 
     // Extract the main content of the website
     const articleTitle = $("title").text() || "";
