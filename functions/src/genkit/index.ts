@@ -8,7 +8,18 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 configureGenkit({
-  plugins: [firebase(), googleAI({apiKey: process.env.GOOGLE_GENAI_API_KEY}), dotprompt()],
+  plugins: [
+    firebase({
+      flowStateStore: {
+        collection: "tanam-genkit-flowstate",
+      },
+      traceStore: {
+        collection: "tanam-genkit-traces",
+      },
+    }),
+    googleAI({apiKey: process.env.GOOGLE_GENAI_API_KEY}),
+    dotprompt(),
+  ],
   logLevel: "debug",
   flowStateStore: "firebase",
   traceStore: "firebase",
@@ -17,3 +28,4 @@ configureGenkit({
 
 export * from "./use-cases";
 export * from "./tools";
+export * from "./trigger";
