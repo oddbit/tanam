@@ -6,5 +6,4 @@ export * from "./LocalizedString";
 export * from "./TanamDocument";
 export * from "./TanamDocumentField";
 export * from "./TanamDocumentType";
-export * from "./GenAiRequest";
 export * from "./TanamDocumentData";

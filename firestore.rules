@@ -6,10 +6,6 @@ service cloud.firestore {
       allow write: if isAtLeastAdmin();
     }
 
-    match /tanam-genai/{typeId} {
-      allow create: if hasAnyRole();
-    }
-
     match /tanam-documents/{documentId} {
       allow read: if hasAnyRole();
       allow write: if isPublisher();
