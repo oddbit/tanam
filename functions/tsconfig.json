@@ -1,8 +1,6 @@
 {
   "compileOnSave": true,
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "compilerOptions": {
     "module": "commonjs",
     "noImplicitReturns": true,
@@ -14,9 +12,7 @@
     "esModuleInterop": true,
     "noUnusedLocals": true,
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     }
   }
 }
