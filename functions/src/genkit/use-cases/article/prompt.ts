@@ -39,7 +39,6 @@ the content is in a URL.
 - **Tools:**
     - When fetching content from a URL, do not follow URLs in that result
     - Replace the URL with the content fetched from the URL
-
 - **Format:** 
     - Write the output article in markdown format.
     - Use markdown comments to indicate where you suggest the author to insert examples, quotes, 
@@ -73,6 +72,7 @@ code blocks, images or similar.
  - Learn about the authors choice of tone if it is formal, casual, playful, serious, humourous etc.
  - Exclude code samples from your consideration of the author's style of writing.
  - Exclude quotes or other sections of text that seems to be quote like or verbatim words
+ - Exclude anything that looks like comments, reviews on the article or page content
  - Only use the style of writing from the content in the provided URLs. Do not use any of its 
  content in the generation of the article.
  - The author may provide multiple URLs to learn about the style of writing.

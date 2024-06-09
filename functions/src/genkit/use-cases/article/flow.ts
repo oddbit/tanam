@@ -2,7 +2,7 @@ import {prompt} from "@genkit-ai/dotprompt";
 import {onFlow} from "@genkit-ai/firebase/functions";
 import {isSignedInAuthPolicy} from "../../authPolicies";
 import {InputSchemaArticle, InputSchemaArticleType, OutputSchemaArticle, OutputSchemaArticleType} from "./schemas";
-import { fetchContent } from '../../tools';
+import {fetchContent} from "../../tools";
 
 /**
  * Generates an article from the given audio and article URLs.
@@ -41,16 +41,16 @@ export const generateArticleFlow = onFlow(
  */
 export async function generateArticleLlm(inputData: InputSchemaArticleType): Promise<OutputSchemaArticleType> {
   const llmPrompt = await prompt("generateArticlePrompt");
-  
+
   // TODO: Check if model is supporting audio input otherwise fetch and convert audio to text
 
-  // for (const url of inputData.styleSourceUrls ?? []) {
-  //   const content = await fetchContent(url);
-  //   inputData.styleSources.push(content);
-  // }
+  for (const url of inputData.styleSourceUrls ?? []) {
+    const content = await fetchContent(url);
+    inputData.styleSources.push(content);
+  }
 
   const llmResponse = await llmPrompt.generate({input: inputData});
   console.log(llmResponse.toJSON());
-  
+
   return OutputSchemaArticle.parse(llmResponse.output());
 }
