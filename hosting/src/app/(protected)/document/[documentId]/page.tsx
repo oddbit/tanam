@@ -19,64 +19,84 @@ import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {useTanamDocument} from "@/hooks/useTanamDocuments";
 import {TanamDocumentField} from "@functions/models/TanamDocumentField";
 import {Timestamp} from "firebase/firestore";
-import {Suspense} from "react";
+import {Suspense, useEffect, useState} from "react";
 
 const DocumentDetailsPage = () => {
-  const {data: document, error: docError} = useTanamDocument();
+  const {data: document, error: documentError} = useTanamDocument();
   const {data: documentType, error: typeError} = useTanamDocumentType(document?.documentType);
   const {data: documentFields, error: fieldsError} = useTanamDocumentFields(document?.documentType);
-  const viewMode = true;
+
+  const [readonlyMode] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    setError(documentError ?? typeError ?? fieldsError);
+  }, [documentError]);
 
   const renderFormElement = (field: TanamDocumentField, value: any) => {
+    const formgroupKey = `formgroup-${field.id}`;
+    const inputKey = `input-${field.id}`;
     switch (field.type) {
       case "input-text":
       case "text-line":
         return (
-          <FormGroup label={field.title.translated} disabled={viewMode}>
-            <Input type="text" disabled={viewMode} placeholder={field.title.translated} value={value || ""} />
+          <FormGroup key={formgroupKey} label={field.title.translated} disabled={readonlyMode}>
+            <Input
+              key={inputKey}
+              type="text"
+              disabled={readonlyMode}
+              placeholder={field.title.translated}
+              value={value || ""}
+            />
           </FormGroup>
         );
+      case "html":
       case "textbox-rich":
       case "text-rich":
         return (
-          <FormGroup disabled={viewMode} label={field.title.translated}>
-            <TextArea disabled={viewMode} rows={6} placeholder={field.title.translated} value={value || ""} />
+          <FormGroup key={`formgroup-${field.id}`} disabled={readonlyMode} label={field.title.translated}>
+            <TextArea
+              key={inputKey}
+              disabled={readonlyMode}
+              rows={6}
+              placeholder={field.title.translated}
+              value={value || ""}
+            />
           </FormGroup>
         );
       case "datepicker":
       case "date":
         return (
           <DatePicker
-            disabled={viewMode}
+            key={inputKey}
+            disabled={readonlyMode}
             label={field.title.translated}
             placeholder="mm/dd/yyyy"
             defaultValue={(value as Timestamp).toDate()}
           />
         );
       case "file-upload":
-        return <FileUpload disabled={viewMode} label={field.title.translated} />;
+        return <FileUpload key={inputKey} disabled={readonlyMode} label={field.title.translated} />;
       case "switcher":
-        return <Switcher disabled={viewMode} defaultChecked={value} />;
+        return <Switcher key={inputKey} disabled={readonlyMode} defaultChecked={value} />;
       case "radio":
-        return <RadioButton disabled={viewMode} label={field.title.translated} />;
+        return <RadioButton key={inputKey} disabled={readonlyMode} label={field.title.translated} />;
       case "checkbox":
-        return <Checkbox />;
+        return <Checkbox key={inputKey} />;
       case "dropdown":
-        return <Dropdown disabled={viewMode} options={[]} placeholder={field.title.translated} id={""} />;
+        return (
+          <Dropdown key={inputKey} disabled={readonlyMode} options={[]} placeholder={field.title.translated} id={""} />
+        );
       default:
         return null;
     }
   };
 
-  if (docError || typeError || fieldsError) {
+  if (error) {
     return (
       <>
         <PageHeader pageName={documentType?.titleSingular.translated ?? "Document details"} />
-        <Notification
-          type="error"
-          title="Error loading document"
-          message={docError?.message || typeError?.message || "Unknown error"}
-        />
+        <Notification type="error" title="Error loading document" message={error?.message || "Unknown error"} />
       </>
     );
   }

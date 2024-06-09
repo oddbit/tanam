@@ -30,7 +30,7 @@ export function useTanamDocumentTypes(): TanamDocumentTypeHook {
       collectionRef,
       (snapshot) => {
         const documentTypes = snapshot.docs.map((doc) => TanamDocumentTypeClient.fromFirestore(doc));
-        console.log(documentTypes);
+        console.log(`Received ${documentTypes.length} document types`);
         setData(documentTypes);
       },
       (err) => {
@@ -40,7 +40,7 @@ export function useTanamDocumentTypes(): TanamDocumentTypeHook {
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  });
+  }, []);
 
   return {data, error};
 }
@@ -55,11 +55,11 @@ export function useTanamDocumentType(documentTypeId?: string): SingleTanamDocume
   const {documentTypeId: paramType} = useParams<{documentTypeId: string}>() ?? {
     documentTypeId: null,
   };
-  const typeId = documentTypeId ?? paramType;
   const [data, setData] = useState<TanamDocumentTypeClient | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    const typeId = documentTypeId ?? paramType;
     if (!typeId) {
       setData(null);
       return;
@@ -83,7 +83,7 @@ export function useTanamDocumentType(documentTypeId?: string): SingleTanamDocume
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [typeId]);
+  }, [documentTypeId, paramType]);
 
   return {data, error};
 }

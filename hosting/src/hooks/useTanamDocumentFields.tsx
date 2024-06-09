@@ -19,11 +19,11 @@ export function useTanamDocumentFields(documentTypeId?: string): TanamDocumentFi
   const {documentTypeId: paramType} = useParams<{documentTypeId: string}>() ?? {
     documentTypeId: null,
   };
-  const type = documentTypeId ?? paramType;
   const [data, setData] = useState<TanamDocumentField[]>([]);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    const type = documentTypeId ?? paramType;
     if (!type) {
       setError(new Error("Content type parameter is missing"));
       return;
@@ -46,7 +46,7 @@ export function useTanamDocumentFields(documentTypeId?: string): TanamDocumentFi
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [type]);
+  }, [documentTypeId, paramType]);
 
   return {data, error};
 }
