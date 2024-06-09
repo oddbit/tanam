@@ -1,7 +1,6 @@
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {firestore} from "@/plugins/firebase";
 import {collection, doc, onSnapshot, query, where} from "firebase/firestore";
-import {useParams} from "next/navigation";
 import {useEffect, useState} from "react";
 
 interface UseTanamDocumentsResult {
@@ -12,25 +11,21 @@ interface UseTanamDocumentsResult {
 /**
  * Hook to get a stream of documents of a specific content type
  *
- * @param {string?} documentTypeId Optional document type (default to content parameter from URL).
+ * @param {string?} documentTypeId Document type
  * @return {UseTanamDocumentsResult} Hook for documents subscription
  */
 export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsResult {
-  const {documentTypeId: paramType} = useParams<{documentTypeId: string}>() ?? {
-    documentTypeId: null,
-  };
   const [data, setData] = useState<TanamDocumentClient[]>([]);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const type = documentTypeId ?? paramType;
-    if (!type) {
+    if (!documentTypeId) {
       setError(new Error("Content type parameter is missing"));
       return;
     }
 
     const collectionRef = collection(firestore, `tanam-documents`);
-    const q = query(collectionRef, where("documentType", "==", type));
+    const q = query(collectionRef, where("documentType", "==", documentTypeId));
 
     const unsubscribe = onSnapshot(
       q,
@@ -45,7 +40,7 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [documentTypeId, paramType]);
+  }, [documentTypeId]);
 
   return {data, error};
 }
@@ -58,21 +53,19 @@ interface UseTanamDocumentResult {
 /**
  * Hook to get a subscription for a single document
  *
- * @param {string?} documentId Optional document id (default to content parameter from URL).
+ * @param {string?} documentId Document id
  * @return {UseTanamDocumentsResult} Hook for document subscription
  */
 export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
-  const {documentId: paramId} = useParams<{documentId: string}>() ?? {documentId: null};
   const [data, setData] = useState<TanamDocumentClient | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const docId = documentId ?? paramId;
-    if (!docId) {
+    if (!documentId) {
       setError(new Error("Document id parameter is missing"));
       return;
     }
-    const docRef = doc(firestore, "tanam-documents", docId);
+    const docRef = doc(firestore, "tanam-documents", documentId);
     const unsubscribe = onSnapshot(
       docRef,
       (snapshot) => {
@@ -85,7 +78,7 @@ export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [documentId, paramId]);
+  }, [documentId]);
 
   return {data, error};
 }

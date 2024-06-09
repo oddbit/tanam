@@ -19,15 +19,23 @@ import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {useTanamDocument} from "@/hooks/useTanamDocuments";
 import {TanamDocumentField} from "@functions/models/TanamDocumentField";
 import {Timestamp} from "firebase/firestore";
+import {useParams, useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
 
 const DocumentDetailsPage = () => {
-  const {data: document, error: documentError} = useTanamDocument();
-  const {data: documentType, error: typeError} = useTanamDocumentType(document?.documentType);
-  const {data: documentFields, error: fieldsError} = useTanamDocumentFields(document?.documentType);
+  const router = useRouter();
+  const {documentTypeId, documentId} = useParams<{documentTypeId: string, documentId: string}>() ?? {};
+  const {data: document, error: documentError} = useTanamDocument(documentId);
+  const {data: documentType, error: typeError} = useTanamDocumentType(documentTypeId);
+  const {data: documentFields, error: fieldsError} = useTanamDocumentFields(documentTypeId);
 
   const [readonlyMode] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
+
+  if (!!document?.documentType && document?.documentType !== documentTypeId) {
+    router.push(`/document-type/${document?.documentType}/${document?.id}`);
+    return <Loader />;
+  }
 
   useEffect(() => {
     setError(documentError ?? typeError ?? fieldsError);

@@ -1,17 +1,15 @@
 "use client";
-import {DocumentTypeGenericList} from "@/components/DocumentType/DocumentTypeGenericList";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {useTanamDocuments} from "@/hooks/useTanamDocuments";
 import {Suspense} from "react";
-import {useParams} from "next/navigation";
+import {DocumentTypeGenericList} from "../../../../components/DocumentType/DocumentTypeGenericList";
 
 export default function DocumentTypeDocumentsPage() {
-  const {documentTypeId} = useParams<{documentTypeId: string}>() ?? {};
-  const {data: documents, error: docsError} = useTanamDocuments(documentTypeId);
-  const {data: documentType} = useTanamDocumentType(documentTypeId);
+  const {data: documentType} = useTanamDocumentType("article");
+  const {data: documents, error: docsError} = useTanamDocuments("article");
 
   return (
     <>
