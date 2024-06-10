@@ -45,7 +45,7 @@ const FormElementsPage = () => {
         <ContentCard title="Toggle switch input">
           <Switcher />
           <Switcher style="rounded" />
-          <Switcher onIcon="/icons/check.svg" offIcon="/icons/close.svg" />
+          <Switcher onIcon="i-ic-round-check" offIcon="i-ic-round-close" />
         </ContentCard>
 
         <ContentCard title="Time and date">
@@ -87,12 +87,18 @@ const FormElementsPage = () => {
             <Dropdown
               id="countrySelect"
               options={dropdownOptions}
-              iconSrc="/icons/globe.svg"
+              icon="i-ri-global-line"
               placeholder="Select a country"
             />
           </FormGroup>
           <FormGroup label="Multiselect Dropdown">
-            <Dropdown id="multiSelect" options={dropdownOptions} multiselect placeholder="Select options" />
+            <Dropdown
+              icon="i-ri-global-line"
+              id="multiSelect"
+              options={dropdownOptions}
+              multiselect
+              placeholder="Select options"
+            />
           </FormGroup>
         </ContentCard>
       </div>

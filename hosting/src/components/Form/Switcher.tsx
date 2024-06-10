@@ -1,6 +1,6 @@
 "use client";
 import {useState} from "react";
-import Image from "next/image";
+import {clsx} from "clsx";
 
 interface SwitcherProps {
   style?: "default" | "rounded";
@@ -43,9 +43,7 @@ export function Switcher({
                 enabled ? "translate-x-full" : ""
               }`}
             >
-              {onIcon && offIcon && (
-                <Image src={enabled ? onIcon : offIcon} alt={enabled ? "On" : "Off"} width={16} height={16} />
-              )}
+              {onIcon && offIcon && <span className={clsx("w-[16px] h-[16px]", enabled ? onIcon : offIcon)} />}
             </div>
           </>
         );
@@ -63,9 +61,7 @@ export function Switcher({
                 enabled ? "translate-x-full" : ""
               }`}
             >
-              {onIcon && offIcon && (
-                <Image src={enabled ? onIcon : offIcon} alt={enabled ? "On" : "Off"} width={16} height={16} />
-              )}
+              {onIcon && offIcon && <span className={clsx("w-[16px] h-[16px]", enabled ? onIcon : offIcon)} />}
             </div>
           </>
         );

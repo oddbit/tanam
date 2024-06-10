@@ -1,6 +1,6 @@
 "use client";
 import React, {useState, useEffect, useRef} from "react";
-import Image from "next/image";
+import {clsx} from "clsx";
 
 interface Option {
   value: string;
@@ -13,7 +13,7 @@ interface DropdownProps {
   options: Option[];
   disabled?: boolean;
   multiselect?: boolean;
-  iconSrc?: string;
+  icon?: string;
   placeholder?: string;
 }
 
@@ -27,7 +27,7 @@ export function Dropdown({
   options: initialOptions,
   disabled = false,
   multiselect = false,
-  iconSrc,
+  icon,
   placeholder = "Select an option",
 }: DropdownProps) {
   const [options, setOptions] = useState<Option[]>(initialOptions);
@@ -120,9 +120,9 @@ export function Dropdown({
           <div className="relative flex flex-col items-center">
             <div ref={trigger} onClick={open} className="w-full">
               <div className="mb-2 flex rounded border border-stroke py-2 pl-3 pr-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input">
-                {iconSrc && (
+                {icon && (
                   <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                    <Image src={iconSrc} alt="Icon" width={20} height={20} />
+                    <span className={clsx("w-[20px] h-[20px]", icon)} />
                   </div>
                 )}
                 <div className="flex flex-auto flex-wrap gap-3 ml-8">
@@ -137,7 +137,7 @@ export function Dropdown({
                           onClick={() => !disabled && remove(index)}
                           className="cursor-pointer pl-2 hover:text-danger"
                         >
-                          <Image src="/icons/close.svg" alt="Remove" width={12} height={12} />
+                          <span className="i-ic-round-close w-[15px] h-[15px]" />
                         </div>
                       </div>
                     </div>
@@ -159,7 +159,7 @@ export function Dropdown({
                     className="h-6 w-6 cursor-pointer outline-none focus:outline-none"
                     disabled={disabled}
                   >
-                    <Image src="/icons/dropdown-arrow.svg" alt="Open" width={24} height={24} />
+                    <span className="i-ic-round-keyboard-arrow-down w-[25px] h-[25px]" />
                   </button>
                 </div>
               </div>
