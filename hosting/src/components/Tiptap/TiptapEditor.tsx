@@ -12,8 +12,6 @@ import Text from "@tiptap/extension-text";
 import {EditorContent, useEditor} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import {Suspense, useCallback, useEffect} from "react";
-import BubbleMenu from "./BubbleMenu";
-import FloatingMenu from "./FloatingMenu";
 
 const DEFAULT_DEBOUNCE = 2000;
 
@@ -25,6 +23,8 @@ interface TiptapEditorProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+type DebounceFunction = (...args: any[]) => void;
+
 /**
  * Implements a debounce function.
  *
@@ -32,9 +32,9 @@ interface TiptapEditorProps {
  * @param {number} wait The time to wait before executing the function.
  * @returns
  */
-function debounce<T extends (...args: any[]) => void>(func: T, wait: number) {
+function debounce<T extends DebounceFunction>(func: T, wait: number) {
   let timeout: ReturnType<typeof setTimeout>;
-  return function (...args: Parameters<T>) {
+  return (...args: Parameters<T>) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
   };

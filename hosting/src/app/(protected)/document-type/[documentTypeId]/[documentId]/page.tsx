@@ -24,7 +24,7 @@ import {Suspense, useEffect, useState} from "react";
 
 const DocumentDetailsPage = () => {
   const router = useRouter();
-  const {documentTypeId, documentId} = useParams<{documentTypeId: string, documentId: string}>() ?? {};
+  const {documentTypeId, documentId} = useParams<{documentTypeId: string; documentId: string}>() ?? {};
   const {data: document, error: documentError} = useTanamDocument(documentId);
   const {data: documentType, error: typeError} = useTanamDocumentType(documentTypeId);
   const {data: documentFields, error: fieldsError} = useTanamDocumentFields(documentTypeId);
