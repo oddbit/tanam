@@ -43,7 +43,6 @@ function debounce<T extends DebounceFunction>(func: T, wait: number) {
 export default function TiptapEditor(props: TiptapEditorProps) {
   const debouncedOnChange = useCallback(
     debounce(async (content: string) => {
-      console.log("debouncedOnChange", content);
       if (!props.onChange) return;
       await props.onChange(content);
     }, props.debounce ?? DEFAULT_DEBOUNCE),

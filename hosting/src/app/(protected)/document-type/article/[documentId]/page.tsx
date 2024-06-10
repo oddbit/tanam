@@ -4,8 +4,6 @@ import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
 import {useCrudTanamDocument, useTanamDocument} from "@/hooks/useTanamDocuments";
-import {ITanamDocument} from "@functions/models/TanamDocument";
-import {Timestamp} from "firebase/firestore";
 import {useParams, useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
 
@@ -15,7 +13,7 @@ export default function DocumentDetailsPage() {
   const {data: document, error: documentError} = useTanamDocument(documentId);
   const {update, error: writeError} = useCrudTanamDocument(documentId);
   const [readonlyMode] = useState<boolean>(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<UserNotification | null>(null);
   if (!!document?.documentType && document?.documentType !== "article") {
     router.push(`/document-type/${document?.documentType}/${document?.id}`);
     return <Loader />;
@@ -27,9 +25,9 @@ export default function DocumentDetailsPage() {
     }
   }, [documentError, writeError]);
 
-  function onDocumentContentChange(content: string) {
-    console.log("Save document", content);
-    update({data: {content} as Partial<ITanamDocument<Timestamp>>});
+  async function onDocumentContentChange(content: string) {
+    console.log("[onDocumentContentChange]", content);
+    await update({data: {content}});
   }
 
   return (
@@ -37,7 +35,7 @@ export default function DocumentDetailsPage() {
       <Suspense fallback={<Loader />}>
         {document ? <PageHeader pageName={document.data.title as string} /> : <Loader />}
       </Suspense>
-      {error && <Notification type="error" title="Error fetching document" message={error.message} />}
+      {error && <Notification type={error.type} title={error.title} message={error.message} />}
       <TiptapEditor
         key={"article-content"}
         value={document?.data.content as string}

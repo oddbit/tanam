@@ -1,12 +1,12 @@
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {firestore} from "@/plugins/firebase";
+import {ITanamDocument} from "@functions/models/TanamDocument";
 import {Timestamp, collection, doc, onSnapshot, query, serverTimestamp, updateDoc, where} from "firebase/firestore";
 import {useEffect, useState} from "react";
-import {ITanamDocumentType} from "../../../functions/src/models/TanamDocumentType";
 
 interface UseTanamDocumentsResult {
   data: TanamDocumentClient[];
-  error: Error | null;
+  error: UserNotification | null;
 }
 
 /**
@@ -17,11 +17,11 @@ interface UseTanamDocumentsResult {
  */
 export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsResult {
   const [data, setData] = useState<TanamDocumentClient[]>([]);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
     if (!documentTypeId) {
-      setError(new Error("Content type parameter is missing"));
+      setError(new UserNotification("error", "Missing parameter", "Content type parameter is missing"));
       return;
     }
 
@@ -35,7 +35,7 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
         setData(documents);
       },
       (err) => {
-        setError(err);
+        setError(new UserNotification("error", "Error fetching data", err.message));
       },
     );
 
@@ -48,7 +48,7 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
 
 interface UseTanamDocumentResult {
   data: TanamDocumentClient | null;
-  error: Error | null;
+  error: UserNotification | null;
 }
 
 /**
@@ -59,11 +59,11 @@ interface UseTanamDocumentResult {
  */
 export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
   const [data, setData] = useState<TanamDocumentClient | null>(null);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
     if (!documentId) {
-      setError(new Error("Document id parameter is missing"));
+      setError(new UserNotification("error", "Missing parameter", "Document id parameter is missing"));
       return;
     }
     const docRef = doc(firestore, "tanam-documents", documentId);
@@ -73,7 +73,7 @@ export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
         setData(TanamDocumentClient.fromFirestore(snapshot));
       },
       (err) => {
-        setError(err);
+        setError(new UserNotification("error", "Error fetching data", err.message));
       },
     );
 
@@ -86,19 +86,22 @@ export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
 
 export function useCrudTanamDocument(documentId?: string) {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<UserNotification | null>(null);
 
-  async function update(data: Partial<ITanamDocumentType<Timestamp>>): Promise<void> {
+  async function update(data: Partial<ITanamDocument<Timestamp>>): Promise<void> {
     setIsLoading(true);
     try {
       if (!documentId) {
-        throw new Error("Document ID is missing");
+        setError(new UserNotification("error", "Missing parameter", "Document id parameter is missing"));
+        return;
       }
 
       const typeRef = doc(firestore, "tanam-documents", documentId);
       await updateDoc(typeRef, {...data, updatedAt: serverTimestamp()});
     } catch (err) {
-      setError(err as Error);
+      setError(
+        new UserNotification("error", "Error updating document", "An error occurred while updating the document"),
+      );
     } finally {
       setIsLoading(false);
     }
