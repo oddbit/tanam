@@ -20,7 +20,7 @@ interface TiptapEditorProps {
   disabled?: boolean;
   value?: string;
   debounce?: number;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (content: string) => Promise<void>;
 }
 
 type DebounceFunction = (...args: any[]) => void;
@@ -42,14 +42,10 @@ function debounce<T extends DebounceFunction>(func: T, wait: number) {
 
 export default function TiptapEditor(props: TiptapEditorProps) {
   const debouncedOnChange = useCallback(
-    debounce((content: string) => {
+    debounce(async (content: string) => {
       console.log("debouncedOnChange", content);
       if (!props.onChange) return;
-      props.onChange({
-        target: {
-          value: content,
-        },
-      } as React.ChangeEvent<HTMLInputElement>);
+      await props.onChange(content);
     }, props.debounce ?? DEFAULT_DEBOUNCE),
     [props.onChange],
   );

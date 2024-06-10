@@ -1,7 +1,8 @@
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {firestore} from "@/plugins/firebase";
-import {collection, doc, onSnapshot, query, where} from "firebase/firestore";
+import {Timestamp, collection, doc, onSnapshot, query, serverTimestamp, updateDoc, where} from "firebase/firestore";
 import {useEffect, useState} from "react";
+import {ITanamDocumentType} from "../../../functions/src/models/TanamDocumentType";
 
 interface UseTanamDocumentsResult {
   data: TanamDocumentClient[];
@@ -81,4 +82,27 @@ export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
   }, [documentId]);
 
   return {data, error};
+}
+
+export function useCrudTanamDocument(documentId?: string) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  async function update(data: Partial<ITanamDocumentType<Timestamp>>): Promise<void> {
+    setIsLoading(true);
+    try {
+      if (!documentId) {
+        throw new Error("Document ID is missing");
+      }
+
+      const typeRef = doc(firestore, "tanam-documents", documentId);
+      await updateDoc(typeRef, {...data, updatedAt: serverTimestamp()});
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return {update, isLoading, error};
 }
