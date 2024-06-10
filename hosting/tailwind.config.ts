@@ -330,6 +330,7 @@ const config: Config = {
     },
   },
   plugins: [
+    require("@tailwindcss/typography"),
     iconsPlugin({
       collections: getIconCollections(["ic", "ri"]),
     }),

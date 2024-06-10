@@ -12,6 +12,9 @@
     "codecheck": "npm run prettier:fix && npm run lint:fix"
   },
   "dependencies": {
+    "@tiptap/pm": "^2.4.0",
+    "@tiptap/react": "^2.4.0",
+    "@tiptap/starter-kit": "^2.4.0",
     "apexcharts": "^3.45.2",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
@@ -29,6 +32,7 @@
     "@iconify-json/ic": "^1.1.17",
     "@iconify-json/ri": "^1.1.20",
     "@next/eslint-plugin-next": "^14.2.3",
+    "@tailwindcss/typography": "^0.5.13",
     "@types/node": "^18.19.33",
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.3.0",
