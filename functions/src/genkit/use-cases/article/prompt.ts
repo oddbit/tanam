@@ -13,7 +13,7 @@ export const generateArticlePrompt = defineDotprompt(
     },
     // TODO: Fix usage of tools in dotprompt
     // FAILED_PRECONDITION: Generation resulted in no candidates matching provided output schema.
-    // tools: [contentFromUrl], // Somehow the process is causing error if this is used
+    // tools: [getArticles], // Somehow the process is causing error if this is used
     config: {
       temperature: 0.3,
     },
@@ -36,16 +36,20 @@ article is located. Use the text if provided and download content using the prov
 the content is in a URL.
 
 # General Rules
-- **Tools:**
-    - When fetching content from a URL, do not follow URLs in that result
-    - Replace the URL with the content fetched from the URL
 - **Format:** 
-    - Write the output article in markdown format.
-    - Use markdown comments to indicate where you suggest the author to insert examples, quotes, 
-    - Use \`#\` to indicate headings (# = h1, ## = h2, ### = h3 etc.)
-    - Use \`*\` for bullet points
-    - Use \`>\` for quotes. 
-code blocks, images or similar.
+    - Write the output article in html format.
+    - Put a text such as "TODO: put image here" or "TODO: insert citation here" to indicate that the author should provide content
+    - Use <h1>, <h2>, <h3>, <h4> for headings 
+    - Use <li> and <ul> for bullet points
+    - Use <p> for paragraphs
+    - Use <code class="language-css"> for code blocks. The class attribute should be "language-<language>" where <language> is the language of the code block.    
+        - language-css
+        - language-js
+        - language-typescript
+        - language-json
+        - language-html
+        - ... etc
+    - Use <blockquote> for quotes. 
 - **Accuracy and Verification:** 
     - Do not make up references or examples that need to be exact
     - Do not make up quotes or citations by people unless they are real.
@@ -67,8 +71,7 @@ code blocks, images or similar.
 - Ignore the pauses and the speed of the speaker.
 - Ignore background noises and other sounds that are not words spoken by the speaker.
 
-## Style references
- - The content from the URLs is provided in markdown format by the provided tools.
+## Style inspiration
  - Learn about the authors choice of tone if it is formal, casual, playful, serious, humourous etc.
  - Exclude code samples from your consideration of the author's style of writing.
  - Exclude quotes or other sections of text that seems to be quote like or verbatim words
@@ -76,8 +79,13 @@ code blocks, images or similar.
  - Only use the style of writing from the content in the provided URLs. Do not use any of its 
  content in the generation of the article.
  - The author may provide multiple URLs to learn about the style of writing.
-
  
+ # Output
+  - Write the article in html format without class styling other than what is defined in the rules.
+  - The title should be maxium 70 characters long.
+  - The synopsis should be 150-160 characters long and used for SEO purposes.
+  - Make 3-5 tags for the article based on the content.
+
 {{role "user"}}
 
 # Request 
@@ -90,21 +98,5 @@ inspiration for the article.
 
 ## Transcript
 {{transcript}}
-
-# Style inspiration
-Use the following styleSources for the style of writing
-
-## Style references URLs
-{{#each styleSourceUrls~}}
-- {{this}}
-{{/each~}}
-
-## Style reference articles
-{{#each styleSources}}
-
-### {{this.title}} 
-{{this.content}}
-
-{{/each}}
 `,
 );

@@ -1,8 +1,13 @@
-import {prompt} from "@genkit-ai/dotprompt";
-import {onFlow} from "@genkit-ai/firebase/functions";
-import {isSignedInAuthPolicy} from "../../authPolicies";
-import {InputSchemaArticle, InputSchemaArticleType, OutputSchemaArticle, OutputSchemaArticleType} from "./schemas";
-import {fetchContent} from "../../tools";
+import { prompt } from "@genkit-ai/dotprompt";
+import { noAuth, onFlow } from "@genkit-ai/firebase/functions";
+import {
+  InputSchemaArticleFlow,
+  InputSchemaArticleFlowType,
+  OutputSchemaArticle,
+  OutputSchemaArticleFlow,
+  OutputSchemaArticleFlowType
+} from "./schemas";
+import { getArticles } from './tools';
 
 /**
  * Generates an article from the given audio and article URLs.
@@ -17,9 +22,9 @@ import {fetchContent} from "../../tools";
 export const generateArticleFlow = onFlow(
   {
     name: "generateArticleFlow",
-    inputSchema: InputSchemaArticle,
-    outputSchema: OutputSchemaArticle,
-    authPolicy: isSignedInAuthPolicy,
+    inputSchema: InputSchemaArticleFlow,
+    outputSchema: OutputSchemaArticleFlow,
+    authPolicy: noAuth(),
   },
   generateArticleLlm,
 );
@@ -36,21 +41,23 @@ export const generateArticleFlow = onFlow(
  * processed input data is then passed to the LLM prompt to generate the article. The response
  * from the LLM is validated against the `OutputSchemaArticle` and returned.
  *
- * @param {InputSchemaArticleType} inputData - The input data for generating the article.
- * @return {Promise<OutputSchemaArticleType>} The generated article data.
+ * @param {InputSchemaArticleFlowType} inputData - The input data for generating the article.
+ * @return {Promise<OutputSchemaArticleFlowType>} The generated article data.
  */
-export async function generateArticleLlm(inputData: InputSchemaArticleType): Promise<OutputSchemaArticleType> {
+export async function generateArticleLlm(inputData: InputSchemaArticleFlowType): Promise<OutputSchemaArticleFlowType> {
   const llmPrompt = await prompt("generateArticlePrompt");
 
-  // TODO: Check if model is supporting audio input otherwise fetch and convert audio to text
-
-  for (const url of inputData.styleSourceUrls ?? []) {
-    const content = await fetchContent(url);
-    inputData.styleSources.push(content);
-  }
-
-  const llmResponse = await llmPrompt.generate({input: inputData});
+  const llmResponse = await llmPrompt.generate({
+    input: {
+      transcript: inputData.transcript,
+      contentAudio: inputData.contentAudio,
+      minuteRead: 3,
+    },
+    tools: [getArticles],
+  });
   console.log(llmResponse.toJSON());
 
-  return OutputSchemaArticle.parse(llmResponse.output());
+  const article = OutputSchemaArticle.parse(llmResponse.output());
+  console.log("Generated article:", article);
+  return {documentId: "12345"};
 }
