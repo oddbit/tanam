@@ -1,17 +1,19 @@
 "use client";
-import {Suspense, useCallback, useEffect} from "react";
-import {useEditor, EditorContent, FloatingMenu, BubbleMenu} from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import Loader from "@/components/common/Loader";
+import Bold from "@tiptap/extension-bold";
+import BulletList from "@tiptap/extension-bullet-list";
 import Document from "@tiptap/extension-document";
+import Heading from "@tiptap/extension-heading";
+import Italic from "@tiptap/extension-italic";
+import ListItem from "@tiptap/extension-list-item";
+import OrderedList from "@tiptap/extension-ordered-list";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
-import Heading from "@tiptap/extension-heading";
-import Bold from "@tiptap/extension-bold";
-import Italic from "@tiptap/extension-italic";
-import BulletList from "@tiptap/extension-bullet-list";
-import OrderedList from "@tiptap/extension-ordered-list";
-import ListItem from "@tiptap/extension-list-item";
-import Loader from "@/components/common/Loader";
+import {EditorContent, useEditor} from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import {Suspense, useCallback, useEffect} from "react";
+import BubbleMenu from "./BubbleMenu";
+import FloatingMenu from "./FloatingMenu";
 
 const DEFAULT_DEBOUNCE = 2000;
 
@@ -88,52 +90,8 @@ export default function TiptapEditor(props: TiptapEditorProps) {
       <EditorContent editor={editor} />
       {editor && (
         <>
-          <BubbleMenu editor={editor} tippyOptions={{duration: 100}} className="bubble-menu">
-            <button
-              onClick={() => editor.chain().focus().toggleBold().run()}
-              className={editor.isActive("bold") ? "is-active" : ""}
-            >
-              Bold
-            </button>
-            <button
-              onClick={() => editor.chain().focus().toggleItalic().run()}
-              className={editor.isActive("italic") ? "is-active" : ""}
-            >
-              Italic
-            </button>
-          </BubbleMenu>
-          <FloatingMenu editor={editor} tippyOptions={{duration: 100}} className="floating-menu">
-            <button
-              onClick={() => editor.chain().focus().toggleHeading({level: 1}).run()}
-              className={editor.isActive("heading", {level: 1}) ? "is-active" : ""}
-            >
-              H1
-            </button>
-            <button
-              onClick={() => editor.chain().focus().toggleHeading({level: 2}).run()}
-              className={editor.isActive("heading", {level: 2}) ? "is-active" : ""}
-            >
-              H2
-            </button>
-            <button
-              onClick={() => editor.chain().focus().toggleHeading({level: 3}).run()}
-              className={editor.isActive("heading", {level: 3}) ? "is-active" : ""}
-            >
-              H3
-            </button>
-            <button
-              onClick={() => editor.chain().focus().toggleBulletList().run()}
-              className={editor.isActive("bulletList") ? "is-active" : ""}
-            >
-              Bullet List
-            </button>
-            <button
-              onClick={() => editor.chain().focus().toggleOrderedList().run()}
-              className={editor.isActive("orderedList") ? "is-active" : ""}
-            >
-              Ordered List
-            </button>
-          </FloatingMenu>
+          <FloatingMenu editor={editor} />
+          <BubbleMenu editor={editor} />
         </>
       )}
     </Suspense>
