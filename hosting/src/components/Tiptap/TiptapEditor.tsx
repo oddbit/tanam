@@ -88,12 +88,12 @@ export default function TiptapEditor(props: TiptapEditorProps) {
   return (
     <Suspense fallback={<Loader />}>
       <EditorContent editor={editor} />
-      {editor && (
+      {/* {editor && (
         <>
           <FloatingMenu editor={editor} />
           <BubbleMenu editor={editor} />
         </>
-      )}
+      )} */}
     </Suspense>
   );
 }
