@@ -1,6 +1,4 @@
 import DarkModeSwitcher from "@/components/Header/DarkModeSwitcher";
-import DropdownMessage from "@/components/Header/DropdownMessage";
-import DropdownNotification from "@/components/Header/DropdownNotification";
 import DropdownUser from "@/components/Header/DropdownUser";
 import {useAuthentication} from "@/hooks/useAuthentication";
 import Image from "next/image";
@@ -61,7 +59,7 @@ const Header = (props: {sidebarOpen: string | boolean | undefined; setSidebarOpe
         </div>
 
         <div className="hidden sm:block">
-          <form action="https://formbold.com/s/unique_form_id" method="POST">
+          {/* <form action="https://formbold.com/s/unique_form_id" method="POST">
             <div className="relative">
               <button className="absolute left-0 top-1/2 -translate-y-1/2 i-ic-baseline-search w-[25px] h-[25px]" />
 
@@ -71,27 +69,15 @@ const Header = (props: {sidebarOpen: string | boolean | undefined; setSidebarOpe
                 className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
               />
             </div>
-          </form>
+          </form> */}
         </div>
 
         <div className="flex items-center gap-3 2xsm:gap-7">
           <ul className="flex items-center gap-2 2xsm:gap-4">
-            {/* <!-- Dark Mode Toggler --> */}
             <DarkModeSwitcher />
-            {/* <!-- Dark Mode Toggler --> */}
-
-            {/* <!-- Notification Menu Area --> */}
-            <DropdownNotification />
-            {/* <!-- Notification Menu Area --> */}
-
-            {/* <!-- Chat Notification Area --> */}
-            <DropdownMessage />
-            {/* <!-- Chat Notification Area --> */}
           </ul>
 
-          {/* <!-- User Area --> */}
           <DropdownUser displayName={authUser?.displayName ?? ""} avatar={authUser?.photoURL ?? ""} />
-          {/* <!-- User Area --> */}
         </div>
       </div>
     </header>
