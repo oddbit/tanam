@@ -1,5 +1,6 @@
 import {Table, TableRowActions, TableRowLabel} from "@/components/Table";
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
+import Link from "next/link";
 import {useRouter} from "next/navigation";
 
 interface TableOverviewGenericProps {
@@ -15,25 +16,20 @@ export function DocumentTypeGenericList({documents}: TableOverviewGenericProps) 
   return (
     <>
       <Table
-        headers={["Id", "Created", "Status", "Actions"]}
+        headers={["Id", "Created", "Status"]}
         rows={documents.map((document, key) => [
-          <div key={`${key}-${document.id}-id`}>
+          <Link key={`${key}-${document.id}-id`} href={`/content/${document.documentType}/${document.id}`}>
             <h5 className="font-medium text-black dark:text-white">{document.id}</h5>
-          </div>,
+          </Link>,
           <p key={`${key}-${document.id}-date`} className="text-black dark:text-white">
             {document.createdAt.toDate().toUTCString()}
           </p>,
+
           <TableRowLabel
             key={`${key}-${document.id}-status`}
             title={document.status}
             status={document.status === "published" ? "success" : "info"}
-          />,
-          <TableRowActions
-            key={`${key}-${document.id}-actions`}
-            onView={() => handleView(document.id)}
-            onDelete={() => console.log("Delete", document)}
-            onDownload={() => console.log("Download", document)}
-          />,
+          />
         ])}
       />
     </>
