@@ -1,11 +1,8 @@
 "use client";
-import {firebaseAuth} from "@/plugins/firebase";
+import {firebaseUi} from "@/plugins/firebase";
 import {AuthCredential, GoogleAuthProvider} from "firebase/auth";
-import {auth as firebaseAuthUi} from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
 import {useEffect, useState} from "react";
-
-const firebaseUi = new firebaseAuthUi.AuthUI(firebaseAuth);
 
 export function useFirebaseUi() {
   const [isSignUp, setIsSignup] = useState<boolean>(false);
