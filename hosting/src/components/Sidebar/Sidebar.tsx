@@ -78,7 +78,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
           {/* <!-- Menu Group --> */}
           <SidebarMenuGroup title="MENU">
             <SidebarMenuItem
-              href="/"
+              href="/dashboard"
               icon={<span className="i-ic-outline-dashboard w-[24px] h-[24px]" />}
               title="Dashboard"
             />
