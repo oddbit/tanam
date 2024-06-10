@@ -1,4 +1,3 @@
-// hosting/src/app/[site]/document-type/page.tsx
 "use client";
 import {Button} from "@/components/Button";
 import ContentCard from "@/components/Containers/ContentCard";
@@ -68,7 +67,7 @@ export default function DocumentTypeDocumentsPage() {
             />,
             <TableRowActions
               key={`${key}-${type.id}-actions`}
-              onView={() => router.push(`/document-type/${type.id}`)}
+              onView={() => router.push(`/content/${type.id}`)}
             />,
           ])}
         />

@@ -34,7 +34,7 @@ const DocumentDetailsPage = () => {
   const [notification, setNotification] = useState<UserNotification | null>(null);
 
   if (!!document?.documentType && document?.documentType !== documentTypeId) {
-    router.push(`/document-type/${document?.documentType}/${document?.id}`);
+    router.push(`/content/${document?.documentType}/${document?.id}`);
     return <Loader />;
   }
 

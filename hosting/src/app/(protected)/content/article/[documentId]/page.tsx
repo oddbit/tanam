@@ -16,7 +16,7 @@ export default function DocumentDetailsPage() {
   const [readonlyMode] = useState<boolean>(false);
   const [notification, setNotification] = useState<UserNotification | null>(null);
   if (!!document?.documentType && document?.documentType !== "article") {
-    router.push(`/document-type/${document?.documentType}/${document?.id}`);
+    router.push(`/content/${document?.documentType}/${document?.id}`);
     return <Loader />;
   }
 

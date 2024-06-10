@@ -95,7 +95,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
               {documentTypes.map((docType) => (
                 <SidebarExpandableMenuSubItem
                   key={docType.id}
-                  href={`/document-type/${docType.id}`}
+                  href={`/content/${docType.id}`}
                   title={docType.titlePlural.translated}
                 />
               ))}
