@@ -3,6 +3,7 @@ import {firestore} from "@/plugins/firebase";
 import {ITanamDocument} from "@functions/models/TanamDocument";
 import {Timestamp, collection, doc, onSnapshot, query, serverTimestamp, updateDoc, where} from "firebase/firestore";
 import {useEffect, useState} from "react";
+import {UserNotification} from "@/models/UserNotification";
 
 interface UseTanamDocumentsResult {
   data: TanamDocumentClient[];
@@ -100,7 +101,11 @@ export function useCrudTanamDocument(documentId?: string) {
       await updateDoc(typeRef, {...data, updatedAt: serverTimestamp()});
     } catch (err) {
       setError(
-        new UserNotification("error", "Error updating document", "An error occurred while updating the document"),
+        new UserNotification(
+          "error",
+          "UserNotification updating document",
+          "An error occurred while updating the document",
+        ),
       );
     } finally {
       setIsLoading(false);

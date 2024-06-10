@@ -8,14 +8,20 @@ import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
 import {useCreateDocumentType} from "@/hooks/useCreateDocumentType";
 import {useTanamDocumentTypes} from "@/hooks/useTanamDocumentTypes";
+import {UserNotification} from "@/models/UserNotification";
 import {getDocumentTypeArticle, getDocumentTypePerson} from "@/utils/documentTypeGenerator";
 import {useRouter} from "next/navigation";
-import {Suspense} from "react";
+import {Suspense, useEffect, useState} from "react";
 
 export default function DocumentTypeDocumentsPage() {
   const {data: documentTypes, error: typesError} = useTanamDocumentTypes();
   const {createType, error: createError} = useCreateDocumentType();
   const router = useRouter();
+  const [notification, setNotification] = useState<UserNotification | null>(null);
+
+  useEffect(() => {
+    setNotification(typesError || createError);
+  }, [typesError, createError]);
 
   const handleCreateArticle = async () => {
     const {data, fields} = getDocumentTypeArticle();
@@ -39,8 +45,9 @@ export default function DocumentTypeDocumentsPage() {
           {!hasPersonType && <Button onClick={handleCreatePerson} title="Create Person Type" />}
         </ContentCard>
       )}
-      {typesError && <Notification type="error" title="Error fetching document types" message={typesError.message} />}
-      {createError && <Notification type="error" title="Error creating document type" message={createError.message} />}
+      {notification && (
+        <Notification type={notification.type} title={notification.title} message={notification.message} />
+      )}
       <Suspense fallback={<Loader />}>
         <Table
           headers={["Id", "Title", "Status", "Documents", "Actions"]}

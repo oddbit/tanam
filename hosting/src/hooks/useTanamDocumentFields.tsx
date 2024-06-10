@@ -3,10 +3,11 @@ import {ITanamDocumentField, TanamDocumentField} from "@functions/models/TanamDo
 import {collection, onSnapshot} from "firebase/firestore";
 import {useParams} from "next/navigation";
 import {useEffect, useState} from "react";
+import {UserNotification} from "@/models/UserNotification";
 
 interface TanamDocumentFieldHook {
   data: TanamDocumentField[];
-  error: Error | null;
+  error: UserNotification | null;
 }
 
 /**
@@ -20,12 +21,12 @@ export function useTanamDocumentFields(documentTypeId?: string): TanamDocumentFi
     documentTypeId: null,
   };
   const [data, setData] = useState<TanamDocumentField[]>([]);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
     const type = documentTypeId ?? paramType;
     if (!type) {
-      setError(new Error("Content type parameter is missing"));
+      setError(new UserNotification("error", "Missing parameter", "Content type parameter is missing"));
       return;
     }
 
@@ -40,7 +41,7 @@ export function useTanamDocumentFields(documentTypeId?: string): TanamDocumentFi
         setData(documentTypes);
       },
       (err) => {
-        setError(err);
+        setError(new UserNotification("error", "Error fetching data", err.message));
       },
     );
 

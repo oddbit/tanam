@@ -28,11 +28,11 @@ type DebounceFunction = (...args: any[]) => void;
 /**
  * Implements a debounce function.
  *
- * @param {T} func The function to debounce.
+ * @param {DebounceFunction} func The function to debounce.
  * @param {number} wait The time to wait before executing the function.
- * @returns
+ * @return {DebounceFunction} The debounced function.
  */
-function debounce<T extends DebounceFunction>(func: T, wait: number) {
+function debounce<T extends DebounceFunction>(func: T, wait: number): DebounceFunction {
   let timeout: ReturnType<typeof setTimeout>;
   return (...args: Parameters<T>) => {
     clearTimeout(timeout);
@@ -43,7 +43,9 @@ function debounce<T extends DebounceFunction>(func: T, wait: number) {
 export default function TiptapEditor(props: TiptapEditorProps) {
   const debouncedOnChange = useCallback(
     debounce(async (content: string) => {
-      if (!props.onChange) return;
+      if (!props.onChange) {
+        return;
+      }
       await props.onChange(content);
     }, props.debounce ?? DEFAULT_DEBOUNCE),
     [props.onChange],

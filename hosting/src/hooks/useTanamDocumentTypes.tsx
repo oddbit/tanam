@@ -3,15 +3,16 @@ import {firestore} from "@/plugins/firebase";
 import {collection, doc, onSnapshot} from "firebase/firestore";
 import {useParams} from "next/navigation";
 import {useEffect, useState} from "react";
+import {UserNotification} from "@/models/UserNotification";
 
 interface TanamDocumentTypeHook {
   data: TanamDocumentTypeClient[];
-  error: Error | null;
+  error: UserNotification | null;
 }
 
 interface SingleTanamDocumentTypeHook {
   data: TanamDocumentTypeClient | null;
-  error: Error | null;
+  error: UserNotification | null;
 }
 
 /**
@@ -21,7 +22,7 @@ interface SingleTanamDocumentTypeHook {
  */
 export function useTanamDocumentTypes(): TanamDocumentTypeHook {
   const [data, setData] = useState<TanamDocumentTypeClient[]>([]);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
     const collectionRef = collection(firestore, "tanam-types");
@@ -33,7 +34,7 @@ export function useTanamDocumentTypes(): TanamDocumentTypeHook {
         setData(documentTypes);
       },
       (err) => {
-        setError(err);
+        setError(new UserNotification("error", "Error fetching data", err.message));
       },
     );
 
@@ -55,7 +56,7 @@ export function useTanamDocumentType(documentTypeId?: string): SingleTanamDocume
     documentTypeId: null,
   };
   const [data, setData] = useState<TanamDocumentTypeClient | null>(null);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
     const typeId = documentTypeId ?? paramType;
@@ -72,11 +73,11 @@ export function useTanamDocumentType(documentTypeId?: string): SingleTanamDocume
         if (doc.exists()) {
           setData(TanamDocumentTypeClient.fromFirestore(doc));
         } else {
-          setError(new Error("Document type not found"));
+          setError(new UserNotification("error", "Error fetching data", "Document type not found"));
         }
       },
       (err) => {
-        setError(err);
+        setError(new UserNotification("error", "Error fetching data", err.message));
       },
     );
 
