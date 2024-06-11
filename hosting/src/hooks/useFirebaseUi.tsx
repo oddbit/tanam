@@ -1,16 +1,18 @@
 "use client";
-import {firebaseUi} from "@/plugins/firebase";
+import {firebaseAuth} from "@/plugins/firebase";
 import {auth as firebaseAuthUi} from "firebaseui";
 import {AuthCredential, GoogleAuthProvider} from "firebase/auth";
 import "firebaseui/dist/firebaseui.css";
 import {useEffect, useState} from "react";
+
+const firebaseUi = firebaseAuthUi.AuthUI.getInstance() || new firebaseAuthUi.AuthUI(firebaseAuth);
 
 export function useFirebaseUi() {
   const [isSignUp, setIsSignup] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    renderFirebaseUi(firebaseUi);
+    renderFirebaseUi();
 
     return () => {
       setIsLoading(false);
@@ -18,12 +20,12 @@ export function useFirebaseUi() {
     };
   }, []);
 
-  function renderFirebaseUi(ui: firebaseAuthUi.AuthUI) {
+  function renderFirebaseUi() {
     if (!window || typeof window === "undefined") return;
 
     const selector = "#firebaseuiAuthContainer";
 
-    ui.start(selector, {
+    firebaseUi.start(selector, {
       signInSuccessUrl: "/",
       siteName: "Tanam CMS",
       tosUrl: "https://github.com/oddbit/tanam/blob/main/docs/tos.md",
