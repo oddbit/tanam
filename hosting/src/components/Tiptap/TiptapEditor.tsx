@@ -30,9 +30,9 @@ type DebounceFunction = (...args: any[]) => void;
  *
  * @param {DebounceFunction} func The function to debounce.
  * @param {number} wait The time to wait before executing the function.
- * @return {DebounceFunction} The debounced function.
+ * @return {void}
  */
-function debounce<T extends DebounceFunction>(func: T, wait: number): DebounceFunction {
+function debounce<T extends DebounceFunction>(func: T, wait: number) {
   let timeout: ReturnType<typeof setTimeout>;
   return (...args: Parameters<T>) => {
     clearTimeout(timeout);
