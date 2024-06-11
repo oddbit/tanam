@@ -50,9 +50,9 @@ export abstract class TanamDocument<TimestampType, FieldValueType> {
       documentType: this.documentType,
       revision: this.revision,
       status: this.status,
-      published: this.publishedAt || null,
-      created: this.createdAt ?? this.getServerTimestamp(),
-      updated: this.getServerTimestamp(),
+      publishedAt: this.publishedAt || null,
+      createdAt: this.createdAt ?? this.getServerTimestamp(),
+      updatedAt: this.getServerTimestamp(),
     };
   }
 }
