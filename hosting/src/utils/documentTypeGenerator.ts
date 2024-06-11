@@ -15,7 +15,7 @@ export function getDocumentTypeArticle(): IDocumentTypeDataResult {
     titlePlural: new LocalizedString({en: "Articles"}),
     description: new LocalizedString({en: "Article such as a blog post or a published article."}),
     isEnabled: true,
-    documentTitleField: "title",
+    titleField: "title",
   } as ITanamDocumentType<Timestamp>);
 
   const fields: TanamDocumentField[] = [
@@ -73,7 +73,7 @@ export function getDocumentTypePerson(): IDocumentTypeDataResult {
     titlePlural: new LocalizedString({en: "People"}),
     description: new LocalizedString({en: "People such as authors, contributors, and staff members."}),
     isEnabled: true,
-    documentTitleField: "name",
+    titleField: "name",
   } as ITanamDocumentType<Timestamp>);
 
   const fields: TanamDocumentField[] = [

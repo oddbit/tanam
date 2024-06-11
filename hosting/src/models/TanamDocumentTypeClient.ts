@@ -21,7 +21,7 @@ export class TanamDocumentTypeClient extends TanamDocumentType<Timestamp, FieldV
       titleSingular: new LocalizedString(data.titleSingular),
       titlePlural: new LocalizedString(data.titlePlural),
       description: new LocalizedString(data.description),
-      documentTitleField: data.documentTitleField,
+      titleField: data.documentTitleField,
       isEnabled: data.isEnabled,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,

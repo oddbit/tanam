@@ -88,7 +88,7 @@ export default function DashboardPage() {
       </Suspense>
       {documentType && document && (
         <div className="grid grid-cols-1 gap-9">
-          <ContentCard key={document.id} title={document.data[documentType.documentTitleField] as string}>
+          <ContentCard key={document.id} title={document.data[documentType.titleField] as string}>
             <Suspense fallback={<Loader />}>
               {documentFields.map((field) => renderFormElement(field, document.data[field.id]))}
             </Suspense>
