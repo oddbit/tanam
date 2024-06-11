@@ -1,6 +1,11 @@
 import {defineTool} from "@genkit-ai/ai";
 import * as z from "zod";
 
+export const ToolGetAritlcesInputSchema = z
+  .array(z.string().describe("The ID of the article to fetch"))
+  .optional()
+  .default([]);
+
 export const ToolGetAritlcesOutputSchema = z.array(
   z.object({
     title: z.string().describe("The title of the fetched article"),
@@ -8,21 +13,23 @@ export const ToolGetAritlcesOutputSchema = z.array(
   }),
 );
 
+export type ToolGetAritlcesInputSchemaType = z.infer<typeof ToolGetAritlcesInputSchema>;
 export type ToolGetAritlcesOutputSchemaType = z.infer<typeof ToolGetAritlcesOutputSchema>;
 
-export const getArticles = defineTool(
+export const getArticlesTool = defineTool(
   {
     name: "getArticles",
     description: "A tool to fetch sample articles for style of writing analysis",
-    inputSchema: z.object({
-      synopsis: z.string().optional().describe("A brief description of the article being generated"),
-    }),
+    inputSchema: ToolGetAritlcesInputSchema,
     outputSchema: ToolGetAritlcesOutputSchema,
   },
-  () => {
-    return Promise.resolve(articles);
-  },
+  getArticles,
 );
+
+export function getArticles(input: ToolGetAritlcesInputSchemaType = []) {
+  console.log("Fetching articles with input:", input);
+  return Promise.resolve(articles);
+}
 
 const articles: ToolGetAritlcesOutputSchemaType = [
   {

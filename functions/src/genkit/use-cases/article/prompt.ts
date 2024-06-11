@@ -98,5 +98,17 @@ inspiration for the article.
 
 ## Transcript
 {{transcript}}
+
+## Style inspiration
+Use the following articles as inspiration for the writing style of the article.
+
+{{#each articles}}
+### {{this.title}}
+\`\`\`html
+{{this.content}}
+\`\`\`
+
+{{/each}}
+
 `,
 );

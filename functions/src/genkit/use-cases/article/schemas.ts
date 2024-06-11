@@ -15,6 +15,14 @@ export const OutputSchemaArticleFlow = z.object({
 export const InputSchemaArticle = z.object({
   contentAudio: z.string().url().optional().describe("The URL of the audio file to generate the article from"),
   transcript: z.string().describe("Transcript to generate the article from"),
+  articles: z
+    .array(
+      z.object({
+        title: z.string().describe("The title of the article"),
+        content: z.string().describe("The content of the article"),
+      }),
+    )
+    .describe("The articles to use as style sources for the generated article"),
   minuteRead: z
     .number()
     .min(1)

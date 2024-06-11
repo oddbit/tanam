@@ -1,13 +1,22 @@
-import { prompt } from "@genkit-ai/dotprompt";
-import { noAuth, onFlow } from "@genkit-ai/firebase/functions";
+import {prompt} from "@genkit-ai/dotprompt";
+import {noAuth, onFlow} from "@genkit-ai/firebase/functions";
+import {firestore} from "firebase-admin";
+import {onValueCreated} from "firebase-functions/v2/database";
+import {TanamDocumentAdmin} from "../../../models/TanamDocumentAdmin";
 import {
   InputSchemaArticleFlow,
   InputSchemaArticleFlowType,
   OutputSchemaArticle,
   OutputSchemaArticleFlow,
-  OutputSchemaArticleFlowType
+  OutputSchemaArticleFlowType,
 } from "./schemas";
-import { getArticles } from './tools';
+import {getArticles} from "./tools";
+
+export const generateArticleData = onValueCreated("/articleFlow/", async (event) => {
+  await event.data.ref.remove();
+  const inputData = InputSchemaArticleFlow.parse(event.data.val());
+  return generateArticleLlm(inputData);
+});
 
 /**
  * Generates an article from the given audio and article URLs.
@@ -46,18 +55,25 @@ export const generateArticleFlow = onFlow(
  */
 export async function generateArticleLlm(inputData: InputSchemaArticleFlowType): Promise<OutputSchemaArticleFlowType> {
   const llmPrompt = await prompt("generateArticlePrompt");
-
+  const articles = await getArticles();
   const llmResponse = await llmPrompt.generate({
     input: {
       transcript: inputData.transcript,
       contentAudio: inputData.contentAudio,
+      articles,
       minuteRead: 3,
     },
-    tools: [getArticles],
   });
   console.log(llmResponse.toJSON());
 
   const article = OutputSchemaArticle.parse(llmResponse.output());
-  console.log("Generated article:", article);
-  return {documentId: "12345"};
+  const articleRef = firestore().collection("tanam-documents").doc();
+  const tanamDocument = new TanamDocumentAdmin(articleRef.id, {
+    data: article,
+    documentType: "article",
+    createdAt: firestore.Timestamp.now(),
+    updatedAt: firestore.Timestamp.now(),
+  });
+  await articleRef.set(tanamDocument.toJson());
+  return {documentId: tanamDocument.id};
 }
