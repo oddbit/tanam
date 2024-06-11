@@ -1,8 +1,9 @@
-import {useEffect, useRef, useState} from "react";
+import PlaceholderAvatar from "@/components/UserPicture/PlaceholderAvatar";
+import UserAvatar from "@/components/UserPicture/UserAvatar";
+import {useAuthentication} from "@/hooks/useAuthentication";
 import {clsx} from "clsx";
 import Link from "next/link";
-import Image from "next/image";
-import {useAuthentication} from "@/hooks/useAuthentication";
+import {Suspense, useEffect, useRef, useState} from "react";
 
 interface DropdownUserProps {
   displayName: string;
@@ -63,17 +64,12 @@ export default function DropdownUser({displayName, avatar}: DropdownUserProps) {
       <Link ref={trigger} onClick={() => setDropdownOpen(!dropdownOpen)} className="flex items-center gap-4" href="#">
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">{displayName}</span>
-          <span className="block text-xs">UX Designer</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
-          <Image
-            width={112}
-            height={112}
-            src={avatar ?? "/images/user/user-01.png"}
-            style={{width: "auto", height: "auto"}}
-            alt="User"
-          />
+          <Suspense fallback={<PlaceholderAvatar size={64} />}>
+            <UserAvatar src={avatar} size={64} />
+          </Suspense>
         </span>
         <span className="i-ic-round-keyboard-arrow-down w-[20px] h-[20px]" />
       </Link>

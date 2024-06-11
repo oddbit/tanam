@@ -1,13 +1,14 @@
-import {useState} from "react";
 import {TanamDocumentTypeClient} from "@/models/TanamDocumentTypeClient";
+import {UserNotification} from "@/models/UserNotification";
 import {firestore} from "@/plugins/firebase";
 import {TanamDocumentField} from "@functions/models/TanamDocumentField";
 import {collection, doc, serverTimestamp, writeBatch} from "firebase/firestore";
+import {useState} from "react";
 
 interface CreateDocumentTypeHook {
   createType: (type: TanamDocumentTypeClient, fields: TanamDocumentField[]) => Promise<void>;
   isLoading: boolean;
-  error: Error | null;
+  error: UserNotification | null;
 }
 
 /**
@@ -20,11 +21,11 @@ interface CreateDocumentTypeHook {
  * @return {CreateDocumentTypeHook} - The hook provides the following:
  *   - createType: Function to create a new document type.
  *   - isLoading: Boolean indicating whether the creation process is ongoing.
- *   - error: Error object if an error occurred during the creation process, otherwise null.
+ *   - error: UserNotification object if an error occurred during the creation process, otherwise null.
  */
 export function useCreateDocumentType(): CreateDocumentTypeHook {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<UserNotification | null>(null);
 
   /**
    * Function to create a new document type and its fields in Firestore.
@@ -51,7 +52,8 @@ export function useCreateDocumentType(): CreateDocumentTypeHook {
       }
       await batch.commit();
     } catch (err) {
-      setError(err as Error);
+      console.error("Error creating document type", err);
+      setError(new UserNotification("error", "Problem saving data", "Error creating document type"));
     } finally {
       setIsLoading(false);
     }

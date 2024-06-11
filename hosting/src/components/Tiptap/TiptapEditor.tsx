@@ -12,8 +12,6 @@ import Text from "@tiptap/extension-text";
 import {EditorContent, useEditor} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import {Suspense, useCallback, useEffect} from "react";
-import BubbleMenu from "./BubbleMenu";
-import FloatingMenu from "./FloatingMenu";
 
 const DEFAULT_DEBOUNCE = 2000;
 
@@ -22,19 +20,21 @@ interface TiptapEditorProps {
   disabled?: boolean;
   value?: string;
   debounce?: number;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (content: string) => Promise<void>;
 }
+
+type DebounceFunction = (...args: any[]) => void;
 
 /**
  * Implements a debounce function.
  *
- * @param {T} func The function to debounce.
+ * @param {DebounceFunction} func The function to debounce.
  * @param {number} wait The time to wait before executing the function.
- * @returns
+ * @return {void}
  */
-function debounce<T extends (...args: any[]) => void>(func: T, wait: number) {
+function debounce<T extends DebounceFunction>(func: T, wait: number) {
   let timeout: ReturnType<typeof setTimeout>;
-  return function (...args: Parameters<T>) {
+  return (...args: Parameters<T>) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
   };
@@ -42,14 +42,11 @@ function debounce<T extends (...args: any[]) => void>(func: T, wait: number) {
 
 export default function TiptapEditor(props: TiptapEditorProps) {
   const debouncedOnChange = useCallback(
-    debounce((content: string) => {
-      console.log("debouncedOnChange", content);
-      if (!props.onChange) return;
-      props.onChange({
-        target: {
-          value: content,
-        },
-      } as React.ChangeEvent<HTMLInputElement>);
+    debounce(async (content: string) => {
+      if (!props.onChange) {
+        return;
+      }
+      await props.onChange(content);
     }, props.debounce ?? DEFAULT_DEBOUNCE),
     [props.onChange],
   );

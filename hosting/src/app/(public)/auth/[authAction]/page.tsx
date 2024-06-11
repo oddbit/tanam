@@ -6,7 +6,7 @@ import {notFound, useParams} from "next/navigation";
 import {useEffect} from "react";
 
 export default function AuthPage() {
-  const {authAction} = useParams();
+  const {authAction} = useParams<{authAction: string}>() ?? {};
   const {setIsSignup} = useFirebaseUi();
 
   const isSignUp = authAction === "signup";

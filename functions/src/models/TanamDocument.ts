@@ -7,7 +7,7 @@ export type TanamPublishStatus = "published" | "unpublished" | "scheduled";
 export interface ITanamDocument<TimestampType> {
   data: DocumentData;
   documentType: string;
-  revision: number;
+  revision?: number;
   publishedAt?: Date;
   createdAt: TimestampType;
   updatedAt: TimestampType;
@@ -16,10 +16,10 @@ export interface ITanamDocument<TimestampType> {
 export abstract class TanamDocument<TimestampType, FieldValueType> {
   constructor(id: string, json: ITanamDocument<TimestampType>) {
     this.id = id;
-    this.data = json.data;
-    this.documentType = json.documentType;
+    this.data = json.data ?? {};
+    this.documentType = json.documentType ?? "unknown";
     this.publishedAt = json.publishedAt;
-    this.revision = json.revision;
+    this.revision = json.revision ?? 0;
     this.createdAt = json.createdAt;
     this.updatedAt = json.updatedAt;
   }
@@ -50,9 +50,9 @@ export abstract class TanamDocument<TimestampType, FieldValueType> {
       documentType: this.documentType,
       revision: this.revision,
       status: this.status,
-      published: this.publishedAt || null,
-      created: this.createdAt,
-      updated: this.getServerTimestamp(),
+      publishedAt: this.publishedAt || null,
+      createdAt: this.createdAt ?? this.getServerTimestamp(),
+      updatedAt: this.getServerTimestamp(),
     };
   }
 }

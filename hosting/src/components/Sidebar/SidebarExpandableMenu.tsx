@@ -54,13 +54,13 @@ interface SidebarExpandableMenuSubItemProps {
 
 export function SidebarExpandableMenuSubItem({href, title}: SidebarExpandableMenuSubItemProps) {
   const pathname = usePathname() ?? "/";
-
+  const isActive = pathname.includes(href);
   return (
     <li key={href}>
       <Link
         href={href}
         className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-          pathname === href && "text-white"
+          isActive && "text-white"
         }`}
       >
         {title}

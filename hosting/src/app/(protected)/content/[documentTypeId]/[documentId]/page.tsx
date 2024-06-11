@@ -17,6 +17,7 @@ import PageHeader from "@/components/common/PageHeader";
 import {useTanamDocumentFields} from "@/hooks/useTanamDocumentFields";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {useTanamDocument} from "@/hooks/useTanamDocuments";
+import {UserNotification} from "@/models/UserNotification";
 import {TanamDocumentField} from "@functions/models/TanamDocumentField";
 import {Timestamp} from "firebase/firestore";
 import {useParams, useRouter} from "next/navigation";
@@ -24,21 +25,21 @@ import {Suspense, useEffect, useState} from "react";
 
 const DocumentDetailsPage = () => {
   const router = useRouter();
-  const {documentTypeId, documentId} = useParams<{documentTypeId: string, documentId: string}>() ?? {};
+  const {documentTypeId, documentId} = useParams<{documentTypeId: string; documentId: string}>() ?? {};
   const {data: document, error: documentError} = useTanamDocument(documentId);
   const {data: documentType, error: typeError} = useTanamDocumentType(documentTypeId);
   const {data: documentFields, error: fieldsError} = useTanamDocumentFields(documentTypeId);
 
   const [readonlyMode] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [notification, setNotification] = useState<UserNotification | null>(null);
 
   if (!!document?.documentType && document?.documentType !== documentTypeId) {
-    router.push(`/document-type/${document?.documentType}/${document?.id}`);
+    router.push(`/content/${document?.documentType}/${document?.id}`);
     return <Loader />;
   }
 
   useEffect(() => {
-    setError(documentError ?? typeError ?? fieldsError);
+    setNotification(documentError ?? typeError ?? fieldsError);
   }, [documentError]);
 
   const renderFormElement = (field: TanamDocumentField, value: any) => {
@@ -100,20 +101,14 @@ const DocumentDetailsPage = () => {
     }
   };
 
-  if (error) {
-    return (
-      <>
-        <PageHeader pageName={documentType?.titleSingular.translated ?? "Document details"} />
-        <Notification type="error" title="Error loading document" message={error?.message || "Unknown error"} />
-      </>
-    );
-  }
-
   return (
     <>
       <Suspense fallback={<Loader />}>
         {documentType ? <PageHeader pageName={documentType.titleSingular.translated} /> : <Loader />}
       </Suspense>
+      {notification && (
+        <Notification type={notification.type} title={notification.title} message={notification.message} />
+      )}
       {documentType && document && (
         <div className="grid grid-cols-1 gap-9">
           <ContentCard key={document.id} title={document.data[documentType.documentTitleField] as string}>

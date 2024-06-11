@@ -1,43 +1,39 @@
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /tanam/{siteId} {
+
+    match /tanam-types/{typeId} {
       allow read: if hasAnyRole();
       allow write: if isAtLeastAdmin();
+    }
 
-      match /document-types/{typeId} {
+    match /tanam-documents/{documentId} {
+      allow read: if hasAnyRole();
+      allow write: if isPublisher();
+
+      match /revisions/{revisionId} {
         allow read: if hasAnyRole();
-        allow write: if isAtLeastAdmin();
+        allow write: if false;
       }
+    }
 
-      match /documents/{documentId} {
-        allow read: if hasAnyRole();
-        allow write: if isPublisher();
+    function hasUserRole(role) {
+      return isSignedIn() && role == request.auth.token.tanamRole;
+    }
 
-        match /revisions/{revisionId} {
-          allow read: if hasAnyRole();
-          allow write: if false;
-        }
-      }
+    function hasAnyRole() {
+      return isSignedIn() && request.auth.token.tanamRole != null;
+    }
 
-      function hasUserRole(role) {
-        return isSignedIn() && role in request.auth.token.tanam[siteId];
-      }
+    function isSuperAdmin() {
+      return hasUserRole("superAdmin");
+    }
 
-      function hasAnyRole() {
-        return isSignedIn() && request.auth.token.tanam[siteId].size() > 0;
-      }
+    function isAtLeastAdmin() {
+      return isSuperAdmin() || hasUserRole("admin");
+    }
 
-			function isSuperAdmin() {
-        return hasUserRole("superAdmin");
-      }
-
-      function isAtLeastAdmin() {
-        return isSuperAdmin() || hasUserRole("admin");
-      }
-
-      function isPublisher() {
-        return isAtLeastAdmin() || hasUserRole("publisher");
-      }
+    function isPublisher() {
+      return isAtLeastAdmin() || hasUserRole("publisher");
     }
 
     function isSignedIn() {
