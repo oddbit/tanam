@@ -29,7 +29,7 @@ export default function DocumentTypeDocumentsPage() {
       )}
       {docsError && <Notification type="error" title="Error fetching documents" message={docsError.message} />}
       <Suspense fallback={<Loader />}>
-        <DocumentTypeGenericList documents={documents} />
+        {documentType ? <DocumentTypeGenericList documents={documents} documentType={documentType} /> : <Loader />}
       </Suspense>
     </>
   );

@@ -27,7 +27,7 @@ export default function DocumentTypeDocumentsPage() {
       )}
 
       <Suspense fallback={<Loader />}>
-        <DocumentTypeGenericList documents={documents} />
+        {documentType ? <DocumentTypeGenericList documents={documents} documentType={documentType} /> : <Loader />}
       </Suspense>
     </>
   );
