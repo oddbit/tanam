@@ -1,6 +1,5 @@
 "use client";
 import "@/assets/scss/layout-authentication.scss";
-import ClientOnly from "@/components/ClientOnly";
 import {useFirebaseUi} from "@/hooks/useFirebaseUi";
 import Image from "next/image";
 import {notFound, useParams} from "next/navigation";
@@ -37,9 +36,7 @@ export default function AuthPage() {
           </div>
 
           <div className="authentication__wrapper-content">
-            <ClientOnly>
-              <div id="firebaseuiAuthContainer" />
-            </ClientOnly>
+            <div id="firebaseuiAuthContainer" />
           </div>
         </div>
       </section>

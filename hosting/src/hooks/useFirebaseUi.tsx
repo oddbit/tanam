@@ -1,11 +1,11 @@
 "use client";
 import {firebaseAuth} from "@/plugins/firebase";
-import {AuthCredential, GoogleAuthProvider} from "firebase/auth";
 import {auth as firebaseAuthUi} from "firebaseui";
+import {AuthCredential, GoogleAuthProvider} from "firebase/auth";
 import "firebaseui/dist/firebaseui.css";
 import {useEffect, useState} from "react";
 
-const firebaseUi = new firebaseAuthUi.AuthUI(firebaseAuth);
+const firebaseUi = firebaseAuthUi.AuthUI.getInstance() || new firebaseAuthUi.AuthUI(firebaseAuth);
 
 export function useFirebaseUi() {
   const [isSignUp, setIsSignup] = useState<boolean>(false);
@@ -18,7 +18,7 @@ export function useFirebaseUi() {
       setIsLoading(false);
       setIsSignup(false);
     };
-  });
+  }, []);
 
   function renderFirebaseUi() {
     if (!window || typeof window === "undefined") return;
