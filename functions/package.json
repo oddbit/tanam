@@ -26,18 +26,13 @@
     "@genkit-ai/firebase": "^0.5.2",
     "@genkit-ai/flow": "^0.5.2",
     "@genkit-ai/googleai": "^0.5.2",
-    "axios": "^1.7.2",
-    "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "firebase-admin": "^12.1.1",
     "firebase-functions": "^5.0.1",
-    "html-to-text": "^9.0.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/cheerio": "^0.22.35",
-    "@types/html-to-text": "^9.0.4",
     "@types/node": "^18.19.34",
     "@types/sanitize-html": "^2.11.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
