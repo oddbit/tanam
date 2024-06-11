@@ -28,4 +28,3 @@ configureGenkit({
 
 export * from "./use-cases";
 export * from "./tools";
-export * from "./trigger";
