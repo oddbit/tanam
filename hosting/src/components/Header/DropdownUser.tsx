@@ -23,7 +23,7 @@ function DropdownItem({href, icon, label}: DropdownItemProps) {
         href={href}
         className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
       >
-        <span className={clsx("w-[20px] h-[20px]", icon)} />
+        <span className={clsx("w-[24px] h-[24px]", icon)} />
         {label}
       </Link>
     </li>
@@ -66,12 +66,12 @@ export default function DropdownUser({displayName, avatar}: DropdownUserProps) {
           <span className="block text-sm font-medium text-black dark:text-white">{displayName}</span>
         </span>
 
-        <span className="h-12 w-12 rounded-full">
-          <Suspense fallback={<PlaceholderAvatar size={64} />}>
-            <UserAvatar src={avatar} size={64} />
+        <span className="rounded-full">
+          <Suspense fallback={<PlaceholderAvatar size={40} />}>
+            <UserAvatar src={avatar} size={40} />
           </Suspense>
         </span>
-        <span className="i-ic-round-keyboard-arrow-down w-[20px] h-[20px]" />
+        <span className="i-ic-round-keyboard-arrow-down w-[24px] h-[24px]" />
       </Link>
 
       {/* <!-- Dropdown Start --> */}
@@ -91,7 +91,7 @@ export default function DropdownUser({displayName, avatar}: DropdownUserProps) {
           onClick={signout}
           className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
         >
-          <span className="i-ic-outline-logout w-[20px] h-[20px]" />
+          <span className="i-ic-outline-logout w-[24px] h-[24px]" />
           Log Out
         </button>
       </div>
