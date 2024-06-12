@@ -46,7 +46,17 @@ See the [official documentation](https://firebase.google.com/docs/genkit/firebas
 
 Here's the TL;DR instructions. Copy and run these commands.
 
+Make sure that you have firebase tools and genkit installed globally.
+
 ```sh
+npm install -g firebase-tools@latest genkit@latest
+```
+
+Assuming that you're running the commands from the root of your project folder
+
+```sh
+npm --prefix functions install
+npm --prefix functions run build
 GENKIT_ENV=dev firebase emulators:start --inspect-functions
 ```
 
