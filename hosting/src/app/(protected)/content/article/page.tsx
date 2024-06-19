@@ -20,8 +20,21 @@ export default function DocumentTypeDocumentsPage() {
   return (
     <>
       <Suspense fallback={<Loader />}>
-        {documentType ? <PageHeader pageName={documentType.titlePlural.translated} /> : <Loader />}
+        {documentType ? (
+          <div className="flex items-center">
+            <PageHeader pageName={documentType.titlePlural.translated} />
+            <button
+              type="button"
+              className="ml-4 mb-6 inline-flex items-center justify-center rounded-md bg-primary px-2 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2"
+            >
+              Add new {documentType.titleSingular.translated}
+            </button>
+          </div>
+        ) : (
+          <Loader />
+        )}
       </Suspense>
+
       {notification && (
         <Notification type={notification.type} title={notification.title} message={notification.message} />
       )}
