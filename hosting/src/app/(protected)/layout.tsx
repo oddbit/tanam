@@ -13,7 +13,7 @@ export default function ProtectedLayout({children}: ProtectedLayoutProps) {
   const {isSignedIn} = useAuthentication();
 
   if (isSignedIn === false) {
-    redirect("/auth");
+    redirect("/");
   }
 
   return <CmsLayout>{children}</CmsLayout>;
