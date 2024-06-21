@@ -1,7 +1,17 @@
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {firestore} from "@/plugins/firebase";
 import {ITanamDocument} from "@functions/models/TanamDocument";
-import {Timestamp, collection, doc, onSnapshot, query, serverTimestamp, updateDoc, where} from "firebase/firestore";
+import {
+  Timestamp,
+  addDoc,
+  collection,
+  doc,
+  onSnapshot,
+  query,
+  serverTimestamp,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import {useEffect, useState} from "react";
 import {UserNotification} from "@/models/UserNotification";
 
@@ -33,6 +43,7 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
       q,
       (snapshot) => {
         const documents = snapshot.docs.map((doc) => TanamDocumentClient.fromFirestore(doc));
+        console.log(documents);
         setData(documents);
       },
       (err) => {
@@ -111,6 +122,42 @@ export function useCrudTanamDocument(documentId?: string) {
       setIsLoading(false);
     }
   }
-
   return {update, isLoading, error};
+}
+
+export function useCreateTanamDocument(documentType?: string) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<UserNotification | null>(null);
+
+  async function create(): Promise<void> {
+    setIsLoading(true);
+    try {
+      if (!documentType) {
+        setError(new UserNotification("error", "Missing parameter", "Document id parameter is missing"));
+        return;
+      }
+      const typeRef = collection(firestore, "tanam-documents");
+      await addDoc(typeRef, {
+        createdAt: serverTimestamp(),
+        data: {content: ""},
+        documentType,
+        publishedAt: null,
+        revision: 0,
+        status: "",
+        updatedAt: serverTimestamp(),
+      });
+    } catch (err) {
+      setError(
+        new UserNotification(
+          "error",
+          "UserNotification updating document",
+          "An error occurred while updating the document",
+        ),
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return {create, isLoading, error};
 }
