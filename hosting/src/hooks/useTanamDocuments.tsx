@@ -90,6 +90,7 @@ export function useTanamRecentDocuments(
       (snapshot) => {
         console.log("Numm docs: ", snapshot.docs.length);
         const documents = snapshot.docs.map((doc) => TanamDocumentClient.fromFirestore(doc));
+        console.info('documents :: ', documents)
         setData(documents);
       },
       (err) => {
