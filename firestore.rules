@@ -1,14 +1,17 @@
 service cloud.firestore {
-  match /databases/{database}/documents {
-
+  match /databases/{database}/documents {    
     match /tanam-types/{typeId} {
-      allow read: if hasAnyRole();
-      allow write: if isAtLeastAdmin();
+      allow read: if true;
+      allow write: if true;
+      match /fields/{fieldId} {
+        allow read: if true;
+        allow write: if true;
+      }
     }
 
     match /tanam-documents/{documentId} {
-      allow read: if hasAnyRole();
-      allow write: if isPublisher();
+      allow read: if true;
+      allow write: if true;
 
       match /revisions/{revisionId} {
         allow read: if hasAnyRole();
@@ -16,12 +19,40 @@ service cloud.firestore {
       }
     }
 
+    match /files/{fileId} {
+      allow read: if hasAnyRole();
+      allow write: if isPublisher();
+    }
+
+    match /notifications/{notificationId} {
+      allow read: if isAtLeastAdmin();
+      allow write: if isAtLeastAdmin();
+    }
+
+    match /themes/{document=**} {
+      allow read: if hasAnyRole();
+      allow write: if isAtLeastAdmin();
+    }
+
+    match /users/{document=**} {
+      allow read, write: if isAtLeastAdmin();
+    }
+
+     match /user-invites/{document=**} {
+      allow read, write: if isSuperAdmin();
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedInAs(userId);
+      allow write: if isSignedInAs(userId);
+    }
+
     function hasUserRole(role) {
-      return isSignedIn() && role == request.auth.token.tanamRole;
+      return isSignedIn() && role in request.auth.token.tanam[siteId];
     }
 
     function hasAnyRole() {
-      return isSignedIn() && request.auth.token.tanamRole != null;
+      return isSignedIn() && request.auth.token.tanam[siteId].size() > 0;
     }
 
     function isSuperAdmin() {
