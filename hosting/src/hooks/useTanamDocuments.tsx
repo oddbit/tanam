@@ -1,61 +1,49 @@
-import {TanamDocument} from "@/models/TanamDocument";
-import {firestore} from "@/plugins/firebase";
-import {collection, doc, limit, onSnapshot, orderBy, query, where} from "firebase/firestore";
 import {useParams} from "next/navigation";
+import {TanamDocumentClient} from "@/models/TanamDocumentClient";
+import {firestore} from "@/plugins/firebase";
+import {ITanamDocument} from "@functions/models/TanamDocument";
+import {Timestamp, collection, doc, onSnapshot, query, serverTimestamp, updateDoc, where, limit, orderBy} from "firebase/firestore";
 import {useEffect, useState} from "react";
+import {UserNotification} from "@/models/UserNotification";
 
 interface UseTanamDocumentsResult {
-  data: TanamDocument[];
-  error: Error | null;
+  data: TanamDocumentClient[];
+  error: UserNotification | null;
 }
 
 /**
  * Hook to get a stream of documents of a specific content type
  *
- * @param {string?} documentTypeId Optional document type (default to content parameter from URL).
+ * @param {string?} documentTypeId Document type
  * @return {UseTanamDocumentsResult} Hook for documents subscription
  */
 export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsResult {
-  const {site, documentTypeId: paramType} = useParams<{site: string; documentTypeId: string}>() ?? {
-    site: null,
-    documentTypeId: null,
-  };
-  const type = documentTypeId ?? paramType;
-  const [data, setData] = useState<TanamDocument[]>([]);
-  const [error, setError] = useState<Error | null>(null);
+  const [data, setData] = useState<TanamDocumentClient[]>([]);
+  const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
-    if (!site) {
-      setError(new Error("Site parameter is missing"));
-      return;
-    }
-    if (!type) {
-      setError(new Error("Content type parameter is missing"));
+    if (!documentTypeId) {
+      setError(new UserNotification("error", "Missing parameter", "Content type parameter is missing"));
       return;
     }
 
-    const collectionRef = collection(firestore, `tanam/${site}/documents`);
-    const q = query(collectionRef, where("documentType", "==", type));
+    const collectionRef = collection(firestore, `tanam-documents`);
+    const q = query(collectionRef, where("documentType", "==", documentTypeId));
 
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
-        const documents = snapshot.docs.map((doc) =>
-          TanamDocument.fromJson({
-            id: doc.id,
-            ...doc.data(),
-          }),
-        );
+        const documents = snapshot.docs.map((doc) => TanamDocumentClient.fromFirestore(doc));
         setData(documents);
       },
       (err) => {
-        setError(err);
+        setError(new UserNotification("error", "Error fetching data", err.message));
       },
     );
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [site, type]);
+  }, [documentTypeId]);
 
   return {data, error};
 }
@@ -77,12 +65,12 @@ export function useTanamRecentDocuments(
   const {site} = useParams<{site: string}>() ?? {
     site: null,
   };
-  const [data, setData] = useState<TanamDocument[]>([]);
-  const [error, setError] = useState<Error | null>(null);
+  const [data, setData] = useState<TanamDocumentClient[]>([]);
+  const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
     if (!site) {
-      setError(new Error("Site parameter is missing"));
+      setError(new UserNotification("error", "Missing parameter", "Site parameter is missing"));
       return;
     }
 
@@ -101,16 +89,11 @@ export function useTanamRecentDocuments(
       q,
       (snapshot) => {
         console.log("Numm docs: ", snapshot.docs.length);
-        const documents = snapshot.docs.map((doc) =>
-          TanamDocument.fromJson({
-            id: doc.id,
-            ...doc.data(),
-          }),
-        );
+        const documents = snapshot.docs.map((doc) => TanamDocumentClient.fromFirestore(doc));
         setData(documents);
       },
       (err) => {
-        setError(err);
+        setError(new UserNotification("error", "Something wrong", err.message));
       },
     );
 
@@ -122,50 +105,69 @@ export function useTanamRecentDocuments(
 }
 
 interface UseTanamDocumentResult {
-  data: TanamDocument | null;
-  error: Error | null;
+  data: TanamDocumentClient | null;
+  error: UserNotification | null;
 }
 
 /**
  * Hook to get a subscription for a single document
  *
- * @param {string?} documentId Optional document id (default to content parameter from URL).
+ * @param {string?} documentId Document id
  * @return {UseTanamDocumentsResult} Hook for document subscription
  */
 export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
-  const {site, documentId: paramId} = useParams<{site: string; documentId: string}>() ?? {site: null, documentId: null};
-  const id = documentId ?? paramId;
-  const [data, setData] = useState<TanamDocument | null>(null);
-  const [error, setError] = useState<Error | null>(null);
+  const [data, setData] = useState<TanamDocumentClient | null>(null);
+  const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
-    if (!site) {
-      setError(new Error("Site parameter is missing"));
+    if (!documentId) {
+      setError(new UserNotification("error", "Missing parameter", "Document id parameter is missing"));
       return;
     }
-    if (!id) {
-      setError(new Error("Document id parameter is missing"));
-      return;
-    }
-    const docRef = doc(firestore, "tanam", site, "documents", id);
+    const docRef = doc(firestore, "tanam-documents", documentId);
     const unsubscribe = onSnapshot(
       docRef,
       (snapshot) => {
-        setData(
-          TanamDocument.fromJson({
-            id: snapshot.id,
-            ...snapshot.data(),
-          }),
-        );
+        setData(TanamDocumentClient.fromFirestore(snapshot));
       },
       (err) => {
-        setError(err);
+        setError(new UserNotification("error", "Error fetching data", err.message));
       },
     );
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [site, paramId]);
+  }, [documentId]);
 
   return {data, error};
+}
+
+export function useCrudTanamDocument(documentId?: string) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<UserNotification | null>(null);
+
+  async function update(data: Partial<ITanamDocument<Timestamp>>): Promise<void> {
+    setIsLoading(true);
+    try {
+      if (!documentId) {
+        setError(new UserNotification("error", "Missing parameter", "Document id parameter is missing"));
+        return;
+      }
+
+      const typeRef = doc(firestore, "tanam-documents", documentId);
+      await updateDoc(typeRef, {...data, updatedAt: serverTimestamp()});
+    } catch (err) {
+      setError(
+        new UserNotification(
+          "error",
+          "UserNotification updating document",
+          "An error occurred while updating the document",
+        ),
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return {update, isLoading, error};
 }

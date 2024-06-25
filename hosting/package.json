@@ -12,7 +12,11 @@
     "codecheck": "npm run prettier:fix && npm run lint:fix"
   },
   "dependencies": {
+    "@tiptap/pm": "^2.4.0",
+    "@tiptap/react": "^2.4.0",
+    "@tiptap/starter-kit": "^2.4.0",
     "apexcharts": "^3.45.2",
+    "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "firebase": "^10.12.0",
     "firebaseui": "^6.1.0",
@@ -21,11 +25,16 @@
     "next": "^14.2.3",
     "react": "^18.3.1",
     "react-apexcharts": "^1.4.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@egoist/tailwindcss-icons": "^1.8.1",
+    "@iconify-json/ic": "^1.1.17",
+    "@iconify-json/ri": "^1.1.20",
     "@next/eslint-plugin-next": "^14.2.3",
-    "@types/node": "^20",
+    "@tailwindcss/typography": "^0.5.13",
+    "@types/node": "^18.19.33",
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.10.0",
@@ -42,6 +51,6 @@
     "prettier-plugin-tailwindcss": "^0.5.11",
     "sass": "^1.77.2",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "5.1"
   }
 }

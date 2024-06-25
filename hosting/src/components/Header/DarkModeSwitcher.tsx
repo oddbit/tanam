@@ -11,15 +11,13 @@ const DarkModeSwitcher = () => {
   };
 
   return (
-    <li>
-      <Switcher
-        style="default"
-        defaultChecked={colorMode === "dark"}
-        onChange={handleColorModeToggle}
-        onIcon="/icons/moon-filled.svg"
-        offIcon="/icons/sun-filled.svg"
-      />
-    </li>
+    <Switcher
+      style="default"
+      defaultChecked={colorMode === "dark"}
+      onChange={handleColorModeToggle}
+      onIcon="i-ri-moon-clear-fill text-white"
+      offIcon="i-ri-sun-line"
+    />
   );
 };
 

@@ -1,17 +1,18 @@
-import {useState, useEffect} from "react";
+import {TanamDocumentTypeClient} from "@/models/TanamDocumentTypeClient";
 import {firestore} from "@/plugins/firebase";
-import {TanamDocumentType} from "@/models/TanamDocumentType";
 import {collection, doc, onSnapshot} from "firebase/firestore";
 import {useParams} from "next/navigation";
+import {useEffect, useState} from "react";
+import {UserNotification} from "@/models/UserNotification";
 
 interface TanamDocumentTypeHook {
-  data: TanamDocumentType[];
-  error: Error | null;
+  data: TanamDocumentTypeClient[];
+  error: UserNotification | null;
 }
 
 interface SingleTanamDocumentTypeHook {
-  data: TanamDocumentType | null;
-  error: Error | null;
+  data: TanamDocumentTypeClient | null;
+  error: UserNotification | null;
 }
 
 /**
@@ -20,37 +21,26 @@ interface SingleTanamDocumentTypeHook {
  * @return {TanamDocumentTypeHook} Hook for document types subscription
  */
 export function useTanamDocumentTypes(): TanamDocumentTypeHook {
-  const {site} = useParams<{site: string}>() ?? {site: null};
-  const [data, setData] = useState<TanamDocumentType[]>([]);
-  const [error, setError] = useState<Error | null>(null);
+  const [data, setData] = useState<TanamDocumentTypeClient[]>([]);
+  const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
-    if (!site) {
-      setError(new Error("No site parameter provided"));
-      return;
-    }
-
-    const collectionRef = collection(firestore, `tanam/${site}/document-types`);
+    const collectionRef = collection(firestore, "tanam-types");
 
     const unsubscribe = onSnapshot(
       collectionRef,
       (snapshot) => {
-        const documentTypes = snapshot.docs.map((doc) =>
-          TanamDocumentType.fromJson({
-            id: doc.id,
-            ...doc.data(),
-          }),
-        );
+        const documentTypes = snapshot.docs.map((doc) => TanamDocumentTypeClient.fromFirestore(doc));
         setData(documentTypes);
       },
       (err) => {
-        setError(err);
+        setError(new UserNotification("error", "Error fetching data", err.message));
       },
     );
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [site]);
+  }, []);
 
   return {data, error};
 }
@@ -62,43 +52,38 @@ export function useTanamDocumentTypes(): TanamDocumentTypeHook {
  * @return {SingleTanamDocumentTypeHook} Hook for single document type subscription
  */
 export function useTanamDocumentType(documentTypeId?: string): SingleTanamDocumentTypeHook {
-  const {site, documentTypeId: paramType} = useParams<{site: string; documentTypeId: string}>() ?? {
-    site: null,
+  const {documentTypeId: paramType} = useParams<{documentTypeId: string}>() ?? {
     documentTypeId: null,
   };
-  const typeId = documentTypeId ?? paramType;
-  const [data, setData] = useState<TanamDocumentType | null>(null);
-  const [error, setError] = useState<Error | null>(null);
+  const [data, setData] = useState<TanamDocumentTypeClient | null>(null);
+  const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
-    if (!site) {
-      setError(new Error("No site parameter provided"));
-      return;
-    }
+    const typeId = documentTypeId ?? paramType;
     if (!typeId) {
       setData(null);
       return;
     }
 
-    const docRef = doc(firestore, `tanam/${site}/document-types`, typeId);
+    const docRef = doc(firestore, `tanam-types`, typeId);
 
     const unsubscribe = onSnapshot(
       docRef,
       (doc) => {
         if (doc.exists()) {
-          setData(TanamDocumentType.fromJson({id: doc.id, ...doc.data()}));
+          setData(TanamDocumentTypeClient.fromFirestore(doc));
         } else {
-          setError(new Error("Document type not found"));
+          setError(new UserNotification("error", "Error fetching data", "Document type not found"));
         }
       },
       (err) => {
-        setError(err);
+        setError(new UserNotification("error", "Error fetching data", err.message));
       },
     );
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [site, typeId]);
+  }, [documentTypeId, paramType]);
 
   return {data, error};
 }
