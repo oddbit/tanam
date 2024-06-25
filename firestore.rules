@@ -1,5 +1,12 @@
 service cloud.firestore {
-  match /databases/{database}/documents {    
+  match /databases/{database}/documents {
+    match /tanam/{siteId} {
+      allow read: if true;
+      match /documents/{documentId} {
+        allow read: if true;
+      }
+    }
+
     match /tanam-types/{typeId} {
       allow read: if true;
       allow write: if true;
