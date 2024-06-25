@@ -2,7 +2,18 @@ import {useParams} from "next/navigation";
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {firestore} from "@/plugins/firebase";
 import {ITanamDocument} from "@functions/models/TanamDocument";
-import {Timestamp, collection, doc, onSnapshot, query, serverTimestamp, updateDoc, where, limit, orderBy} from "firebase/firestore";
+import {
+  Timestamp,
+  collection,
+  doc,
+  onSnapshot,
+  query,
+  serverTimestamp,
+  updateDoc,
+  where,
+  limit,
+  orderBy,
+} from "firebase/firestore";
 import {useEffect, useState} from "react";
 import {UserNotification} from "@/models/UserNotification";
 
@@ -90,7 +101,7 @@ export function useTanamRecentDocuments(
       (snapshot) => {
         console.log("Numm docs: ", snapshot.docs.length);
         const documents = snapshot.docs.map((doc) => TanamDocumentClient.fromFirestore(doc));
-        console.info('documents :: ', documents)
+        console.info("documents :: ", documents);
         setData(documents);
       },
       (err) => {

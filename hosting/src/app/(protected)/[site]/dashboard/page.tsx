@@ -1,7 +1,7 @@
 "use client";
 import Notification from "@/components/common/Notification";
 import {useTanamRecentDocuments} from "@/hooks/useTanamDocuments";
-import {useParams} from 'next/navigation';
+import {useParams} from "next/navigation";
 
 export default function DashboardPage() {
   const {site} = useParams<{site: string}>() ?? {
@@ -12,11 +12,7 @@ export default function DashboardPage() {
   if (docError) {
     return (
       <>
-        <Notification
-          type="error"
-          title="Error loading document"
-          message={docError?.message || "Unknown error"}
-        />
+        <Notification type="error" title="Error loading document" message={docError?.message || "Unknown error"} />
       </>
     );
   }
