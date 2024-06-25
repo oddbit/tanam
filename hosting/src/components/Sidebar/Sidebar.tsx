@@ -4,10 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import {usePathname} from "next/navigation";
 import {useEffect, useRef, useState} from "react";
-import {useTanamDocumentTypes} from "../../hooks/useTanamDocumentTypes";
+import {useTanamDocumentTypes} from "@/hooks/useTanamDocumentTypes";
 import {SidebarExpandableMenu, SidebarExpandableMenuSubItem} from "./SidebarExpandableMenu";
-import {SidebarMenuGroup} from "./SidebarMenuGroup";
-import {SidebarMenuItem} from "./SidebarMenuItem";
+import {SidebarMenuGroup} from "@/components/Sidebar/SidebarMenuGroup";
+import {SidebarMenuItem} from "@/components/Sidebar/SidebarMenuItem";
 
 interface SidebarProps {
   sidebarOpen: boolean;
