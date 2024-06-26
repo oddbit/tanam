@@ -103,9 +103,7 @@ export function useTanamRecentDocuments(
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
-        console.log("Numm docs: ", snapshot.docs.length);
         const documents = snapshot.docs.map((doc) => TanamDocumentClient.fromFirestore(doc));
-        console.info("documents :: ", documents);
         setTotalRecords(snapshot.size);
         setData(documents);
       },

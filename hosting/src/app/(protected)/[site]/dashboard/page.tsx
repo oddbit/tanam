@@ -3,9 +3,7 @@ import Notification from "@/components/common/Notification";
 import Loader from "@/components/common/Loader";
 import ContentCard from "@/components/Containers/ContentCard";
 import {Table} from "@/components/Table";
-// import {useTanamDocument} from "@/hooks/useTanamDocuments";
-import {useTanamRecentDocuments} from "@/hooks/useTanamDocuments";
-import {useTanamDocumentType, useTanamDocumentTypes} from '@/hooks/useTanamDocumentTypes';
+import {useTanamDocumentTypes} from '@/hooks/useTanamDocumentTypes';
 import {useParams} from "next/navigation";
 import {Suspense} from "react";
 
@@ -13,15 +11,12 @@ export default function DashboardPage() {
   const {site} = useParams<{site: string}>() ?? {
     site: null,
   };
-  // const {data: document, error: docError} = useTanamDocument();
-  const {data: document, error: docError} = useTanamRecentDocuments("createdAt");
   const {data: documentTypes, totalRecords: typeTotalRecords, error: typeError} = useTanamDocumentTypes();
-  // const {data: documentType, error: typeError} = useTanamDocumentType(document?.documentType);
 
-  if (docError) {
+  if (typeError) {
     return (
       <>
-        <Notification type="error" title="Error loading document" message={docError?.message || "Unknown error"} />
+        <Notification type="error" title="Error loading document" message={typeError?.message || "Unknown error"} />
       </>
     );
   }
@@ -33,22 +28,16 @@ export default function DashboardPage() {
           <ContentCard key={site} title="Post Type">
             <Suspense fallback={<Loader />}>
               <section className="l-dashboard">
-                site ID :: {site} <br />
-                document :: {JSON.stringify(document)} <br />
-                documentTypes :: {JSON.stringify(documentTypes)} <br />
-                {/* documentType :: {JSON.stringify(documentType)} <br /> */}
-                error :: {JSON.stringify(docError)}
+                <Table 
+                  headers={["Id", "Title", "Created At"]} 
+                  rows={documentTypes.map((documentType) => [
+                    <div>{documentType.id}</div>,
+                    <div>{documentType.documentTitleField}</div>,
+                    <p>{documentType.createdAt.toDate().toUTCString()}</p>
+                  ])}
+                  totalRecords={typeTotalRecords}
+                />
               </section>
-
-              <Table 
-                headers={["Id", "Title", "Created At"]} 
-                rows={documentTypes.map((documentType) => [
-                  <div>{documentType.id}</div>,
-                  <div>{documentType.documentTitleField}</div>,
-                  <p>{documentType.createdAt.toDate().toUTCString()}</p>
-                ])}
-                totalRecords={typeTotalRecords}
-              />
             </Suspense>
           </ContentCard>
         </div>
