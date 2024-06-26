@@ -7,11 +7,13 @@ import {UserNotification} from "@/models/UserNotification";
 
 interface TanamDocumentTypeHook {
   data: TanamDocumentTypeClient[];
+  totalRecords: number;
   error: UserNotification | null;
 }
 
 interface SingleTanamDocumentTypeHook {
   data: TanamDocumentTypeClient | null;
+  totalRecords: number;
   error: UserNotification | null;
 }
 
@@ -22,6 +24,7 @@ interface SingleTanamDocumentTypeHook {
  */
 export function useTanamDocumentTypes(): TanamDocumentTypeHook {
   const [data, setData] = useState<TanamDocumentTypeClient[]>([]);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
   const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
@@ -31,6 +34,7 @@ export function useTanamDocumentTypes(): TanamDocumentTypeHook {
       collectionRef,
       (snapshot) => {
         const documentTypes = snapshot.docs.map((doc) => TanamDocumentTypeClient.fromFirestore(doc));
+        setTotalRecords(snapshot.size)
         setData(documentTypes);
       },
       (err) => {
@@ -42,7 +46,7 @@ export function useTanamDocumentTypes(): TanamDocumentTypeHook {
     return () => unsubscribe();
   }, []);
 
-  return {data, error};
+  return {data, totalRecords, error};
 }
 
 /**
@@ -56,11 +60,13 @@ export function useTanamDocumentType(documentTypeId?: string): SingleTanamDocume
     documentTypeId: null,
   };
   const [data, setData] = useState<TanamDocumentTypeClient | null>(null);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
   const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
     const typeId = documentTypeId ?? paramType;
     if (!typeId) {
+      setTotalRecords(0);
       setData(null);
       return;
     }
@@ -71,6 +77,7 @@ export function useTanamDocumentType(documentTypeId?: string): SingleTanamDocume
       docRef,
       (doc) => {
         if (doc.exists()) {
+          setTotalRecords(1);
           setData(TanamDocumentTypeClient.fromFirestore(doc));
         } else {
           setError(new UserNotification("error", "Error fetching data", "Document type not found"));
@@ -85,5 +92,5 @@ export function useTanamDocumentType(documentTypeId?: string): SingleTanamDocume
     return () => unsubscribe();
   }, [documentTypeId, paramType]);
 
-  return {data, error};
+  return {data, totalRecords, error};
 }

@@ -3,6 +3,7 @@ import React from "react";
 interface TableProps {
   headers: string[];
   rows: React.ReactNode[][];
+  totalRecords?: number;
 }
 
 /**
@@ -28,7 +29,7 @@ interface TableProps {
  * @param {TableProps} param0 Table parameters
  * @return {JSX.Element} Table component
  */
-export function Table({headers, rows}: TableProps): JSX.Element {
+export function Table({headers, rows, totalRecords}: TableProps): JSX.Element {
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="max-w-full overflow-x-auto">
@@ -54,6 +55,10 @@ export function Table({headers, rows}: TableProps): JSX.Element {
             ))}
           </tbody>
         </table>
+
+        <div className="relative p-4">
+          Total Records: {totalRecords ?? rows.length}
+        </div>
       </div>
     </div>
   );
