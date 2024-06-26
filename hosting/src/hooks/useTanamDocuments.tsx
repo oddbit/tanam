@@ -19,6 +19,7 @@ import {UserNotification} from "@/models/UserNotification";
 
 interface UseTanamDocumentsResult {
   data: TanamDocumentClient[];
+  totalRecords: number;
   error: UserNotification | null;
 }
 
@@ -30,6 +31,7 @@ interface UseTanamDocumentsResult {
  */
 export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsResult {
   const [data, setData] = useState<TanamDocumentClient[]>([]);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
   const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
@@ -45,6 +47,7 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
       q,
       (snapshot) => {
         const documents = snapshot.docs.map((doc) => TanamDocumentClient.fromFirestore(doc));
+        setTotalRecords(snapshot.size);
         setData(documents);
       },
       (err) => {
@@ -56,7 +59,7 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
     return () => unsubscribe();
   }, [documentTypeId]);
 
-  return {data, error};
+  return {data, totalRecords, error};
 }
 
 type RecentField = "createdAt" | "updatedAt" | "publishedAt";
@@ -77,6 +80,7 @@ export function useTanamRecentDocuments(
     site: null,
   };
   const [data, setData] = useState<TanamDocumentClient[]>([]);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
   const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
@@ -102,6 +106,7 @@ export function useTanamRecentDocuments(
         console.log("Numm docs: ", snapshot.docs.length);
         const documents = snapshot.docs.map((doc) => TanamDocumentClient.fromFirestore(doc));
         console.info("documents :: ", documents);
+        setTotalRecords(snapshot.size);
         setData(documents);
       },
       (err) => {
@@ -113,7 +118,7 @@ export function useTanamRecentDocuments(
     return () => unsubscribe();
   }, [site]);
 
-  return {data, error};
+  return {data, totalRecords, error};
 }
 
 interface UseTanamDocumentResult {

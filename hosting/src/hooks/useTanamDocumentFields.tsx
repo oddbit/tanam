@@ -7,6 +7,7 @@ import {UserNotification} from "@/models/UserNotification";
 
 interface TanamDocumentFieldHook {
   data: TanamDocumentField[];
+  totalRecords: number;
   error: UserNotification | null;
 }
 
@@ -21,6 +22,7 @@ export function useTanamDocumentFields(documentTypeId?: string): TanamDocumentFi
     documentTypeId: null,
   };
   const [data, setData] = useState<TanamDocumentField[]>([]);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
   const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
@@ -38,6 +40,7 @@ export function useTanamDocumentFields(documentTypeId?: string): TanamDocumentFi
         const documentTypes = snapshot.docs.map(
           (doc) => new TanamDocumentField(doc.id, doc.data() as ITanamDocumentField),
         );
+        setTotalRecords(snapshot.size);
         setData(documentTypes);
       },
       (err) => {
@@ -49,5 +52,5 @@ export function useTanamDocumentFields(documentTypeId?: string): TanamDocumentFi
     return () => unsubscribe();
   }, [documentTypeId, paramType]);
 
-  return {data, error};
+  return {data, totalRecords, error};
 }
