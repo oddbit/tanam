@@ -15,7 +15,7 @@ export default function DashboardPage() {
   };
   // const {data: document, error: docError} = useTanamDocument();
   const {data: document, error: docError} = useTanamRecentDocuments("createdAt");
-  const {data: documentTypes, error: typesError} = useTanamDocumentTypes();
+  const {data: documentTypes, totalRecords: typeTotalRecords, error: typeError} = useTanamDocumentTypes();
   // const {data: documentType, error: typeError} = useTanamDocumentType(document?.documentType);
 
   if (docError) {
@@ -47,6 +47,7 @@ export default function DashboardPage() {
                   <div>{documentType.documentTitleField}</div>,
                   <p>{documentType.createdAt.toDate().toUTCString()}</p>
                 ])}
+                totalRecords={typeTotalRecords}
               />
             </Suspense>
           </ContentCard>
