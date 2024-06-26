@@ -11,6 +11,7 @@ export function useAuthentication() {
   useEffect(() => {
     const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
       console.log("[onAuthStateChanged]", {user});
+
       setUser(user);
       setIsSignedIn(!!user);
     });

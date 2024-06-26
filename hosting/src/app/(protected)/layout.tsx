@@ -12,8 +12,8 @@ interface ProtectedLayoutProps {
 export default function ProtectedLayout({children}: ProtectedLayoutProps) {
   const {isSignedIn} = useAuthentication();
 
-  if (isSignedIn === false) {
-    redirect("/");
+  if (!isSignedIn) {
+    redirect("/auth/signin");
   }
 
   return <CmsLayout>{children}</CmsLayout>;
