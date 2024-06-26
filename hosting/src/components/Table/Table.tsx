@@ -56,9 +56,7 @@ export function Table({headers, rows, totalRecords}: TableProps): JSX.Element {
           </tbody>
         </table>
 
-        <div className="relative p-4">
-          Total Records: {totalRecords ?? rows.length}
-        </div>
+        <div className="relative p-4">Total Records: {totalRecords ?? rows.length}</div>
       </div>
     </div>
   );

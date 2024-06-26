@@ -3,7 +3,7 @@ import Notification from "@/components/common/Notification";
 import Loader from "@/components/common/Loader";
 import ContentCard from "@/components/Containers/ContentCard";
 import {Table} from "@/components/Table";
-import {useTanamDocumentTypes} from '@/hooks/useTanamDocumentTypes';
+import {useTanamDocumentTypes} from "@/hooks/useTanamDocumentTypes";
 import {useParams} from "next/navigation";
 import {Suspense} from "react";
 
@@ -28,12 +28,12 @@ export default function DashboardPage() {
           <ContentCard key={site} title="Post Type">
             <Suspense fallback={<Loader />}>
               <section className="l-dashboard">
-                <Table 
-                  headers={["Id", "Title", "Created At"]} 
-                  rows={documentTypes.map((documentType) => [
-                    <div>{documentType.id}</div>,
-                    <div>{documentType.documentTitleField}</div>,
-                    <p>{documentType.createdAt.toDate().toUTCString()}</p>
+                <Table
+                  headers={["Id", "Title", "Created At"]}
+                  rows={documentTypes.map((documentType, documentTypeKey) => [
+                    <div key={documentTypeKey}>{documentType.id}</div>,
+                    <div key={documentTypeKey}>{documentType.documentTitleField}</div>,
+                    <p key={documentTypeKey}>{documentType.createdAt.toDate().toUTCString()}</p>,
                   ])}
                   totalRecords={typeTotalRecords}
                 />

@@ -34,7 +34,7 @@ export function useTanamDocumentTypes(): TanamDocumentTypeHook {
       collectionRef,
       (snapshot) => {
         const documentTypes = snapshot.docs.map((doc) => TanamDocumentTypeClient.fromFirestore(doc));
-        setTotalRecords(snapshot.size)
+        setTotalRecords(snapshot.size);
         setData(documentTypes);
       },
       (err) => {
