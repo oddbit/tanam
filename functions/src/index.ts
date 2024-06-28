@@ -1,12 +1,6 @@
-import * as admin from 'firebase-admin';
-import * as functions from 'firebase-functions';
+import admin from "firebase-admin";
 
-admin.initializeApp();
+const app = admin.initializeApp();
+app.firestore().settings({ignoreUndefinedProperties: true});
 
-// noinspection JSUnusedGlobalSymbols
-export const heartbeat = functions.pubsub.schedule('every 1 minutes').onRun(() => {
-  console.log('lub-dub');
-  return null;
-});
-
-export * from './triggers';
+export * from "./genkit";

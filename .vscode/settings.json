@@ -1,6 +1,6 @@
 {
   "editor.codeActionsOnSave": {
-    "source.organizeImports": false,
+    "source.organizeImports": "always"
   },
   "javascript.preferences.quoteStyle": "single",
   "typescript.preferences.quoteStyle": "single",
@@ -8,25 +8,25 @@
   "html.format.wrapAttributes": "force-aligned",
   "typescript.preferences.importModuleSpecifier": "relative",
   "javascript.preferences.importModuleSpecifier": "relative",
-  "editor.tabSize": 4,
+  "editor.tabSize": 2,
   "editor.insertSpaces": true,
   "json.format.enable": true,
   "[scss]": {
-    "editor.tabSize": 2,
+    "editor.tabSize": 2
   },
   "[json]": {
-    "editor.tabSize": 2,
+    "editor.tabSize": 2
   },
   "[jsonc]": {
-    "editor.tabSize": 2,
+    "editor.tabSize": 2
   },
   "[firerules]": {
-    "editor.tabSize": 2,
+    "editor.tabSize": 2
   },
   "[markdown]": {
-    "editor.tabSize": 2,
+    "editor.tabSize": 2
   },
   "[typescript]": {
-    "editor.tabSize": 2,
+    "editor.tabSize": 2
   }
 }

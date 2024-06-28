@@ -1,8 +1,0 @@
-<component name="ProjectCodeStyleConfiguration">
-  <code_scheme name="Project" version="173">
-    <option name="LINE_SEPARATOR" value="&#10;" />
-    <TypeScriptCodeStyleSettings version="1">
-      <option name="SPACES_WITHIN_IMPORTS" value="true" />
-    </TypeScriptCodeStyleSettings>
-  </code_scheme>
-</component>

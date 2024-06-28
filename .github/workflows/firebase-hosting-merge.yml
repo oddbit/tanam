@@ -1,0 +1,82 @@
+name: Deploy to Firebase Hosting on merge
+on:
+  push:
+    branches:
+      - main
+env:
+  HOSTING_ENV: ${{ github.ref == 'refs/heads/main' && vars.HOSTING_ENV_PROD || vars.HOSTING_ENV_DEV  }}
+jobs:
+  code_check:
+    name: Code check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "npm"
+          cache-dependency-path: |
+            hosting/package-lock.json
+            functions/package-lock.json
+
+      - name: Run code checking and formatting (functions)
+        run: npm ci && npm run codecheck
+        working-directory: ./functions
+
+      - name: Run code checking and formatting (hosting)
+        run: npm ci && npm run codecheck
+        working-directory: ./hosting
+
+      - name: Ensure code is unchanged
+        run: git diff --exit-code
+
+  build_and_deploy:
+    name: Build and deploy
+    needs: code_check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "npm"
+          cache-dependency-path: |
+            hosting/package-lock.json
+            functions/package-lock.json
+
+      - name: Cache build
+        uses: actions/cache@v4
+        with:
+          path: |
+            hosting/.next/cache
+          # Generate a new cache whenever packages or source files change.
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          # If source files changed but packages didn't, rebuild from a prior cache.
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
+      - name: Set hosting environment
+        run: echo $HOSTING_ENV > hosting/.env
+
+      - name: Build functions code
+        run: npm ci && npm run build
+        working-directory: ./functions
+
+      - name: Build web application
+        run: npm ci && npm run build
+        working-directory: ./hosting
+
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TANAM_TESTING }}
+          projectId: tanam-testing
+          channelId: live

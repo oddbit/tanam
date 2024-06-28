@@ -1,0 +1,17 @@
+.l-authentication {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+
+  & .authentication {
+    &__title {
+      font-size: 3rem;
+    }
+
+    &__wrapper-content {
+      position: relative;
+      padding-top: 16px;
+      padding-bottom: 16px;
+    }
+  }
+}
