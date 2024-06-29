@@ -129,7 +129,7 @@ export function useCreateTanamDocument(documentType?: string) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<UserNotification | null>(null);
 
-  async function create(): Promise<void> {
+  async function create() {
     setIsLoading(true);
     try {
       if (!documentType) {
@@ -137,7 +137,7 @@ export function useCreateTanamDocument(documentType?: string) {
         return;
       }
       const typeRef = collection(firestore, "tanam-documents");
-      await addDoc(typeRef, {
+      const result = await addDoc(typeRef, {
         createdAt: serverTimestamp(),
         data: {content: ""},
         documentType,
@@ -146,6 +146,7 @@ export function useCreateTanamDocument(documentType?: string) {
         status: "",
         updatedAt: serverTimestamp(),
       });
+      return result;
     } catch (err) {
       setError(
         new UserNotification(

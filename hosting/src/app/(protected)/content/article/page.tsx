@@ -6,6 +6,7 @@ import PageHeader from "@/components/common/PageHeader";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {useCreateTanamDocument, useTanamDocuments} from "@/hooks/useTanamDocuments";
 import {UserNotification} from "@/models/UserNotification";
+import {useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
 
 export default function DocumentTypeDocumentsPage() {
@@ -13,13 +14,16 @@ export default function DocumentTypeDocumentsPage() {
   const {create, error: writeError, isLoading} = useCreateTanamDocument(documentType?.id);
   const {data: documents, error: docsError} = useTanamDocuments("article");
   const [notification, setNotification] = useState<UserNotification | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     setNotification(docsError || writeError);
   }, [docsError, writeError]);
 
   const addNewArticle = async () => {
-    await create();
+    const result = await create();
+
+    router.push(`article/${result?.id}`);
   };
 
   return (

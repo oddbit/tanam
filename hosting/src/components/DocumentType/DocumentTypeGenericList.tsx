@@ -20,7 +20,7 @@ export function DocumentTypeGenericList({documents, documentType}: TableOverview
             </p>
           </Link>,
           <p key={`${key}-${document.id}-date`} className="text-black dark:text-white">
-            {document.createdAt.toDate().toUTCString()}
+            {document.createdAt?.toDate().toUTCString()}
           </p>,
 
           <TableRowLabel
