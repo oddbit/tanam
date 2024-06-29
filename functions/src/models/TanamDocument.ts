@@ -9,8 +9,8 @@ export interface ITanamDocument<TimestampType> {
   documentType: string;
   revision?: number;
   publishedAt?: Date;
-  createdAt: TimestampType;
-  updatedAt: TimestampType;
+  createdAt?: TimestampType;
+  updatedAt?: TimestampType;
 }
 
 export abstract class TanamDocument<TimestampType, FieldValueType> {
@@ -29,8 +29,8 @@ export abstract class TanamDocument<TimestampType, FieldValueType> {
   public documentType: string;
   public publishedAt?: Date;
   public revision: number;
-  public readonly createdAt: TimestampType;
-  public readonly updatedAt: TimestampType;
+  public readonly createdAt?: TimestampType;
+  public readonly updatedAt?: TimestampType;
 
   get status(): TanamPublishStatus {
     if (!this.publishedAt) {
