@@ -11,7 +11,6 @@ interface TableOverviewGenericProps {
 export function DocumentTypeGenericList({documents, documentType}: TableOverviewGenericProps) {
   return (
     <>
-      documents :: {JSON.stringify(documents)}
       <Table
         headers={["Title", "Created", "Status"]}
         rows={documents.map((document, key) => [

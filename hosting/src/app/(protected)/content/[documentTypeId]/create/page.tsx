@@ -16,25 +16,19 @@ import PageHeader from "@/components/common/PageHeader";
 import {ErrorPage} from '@/components/Error/ErrorPage';
 import {useTanamDocumentFields} from "@/hooks/useTanamDocumentFields";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
-import {useTanamDocument} from "@/hooks/useTanamDocuments";
 import {TanamDocumentField} from "@functions/models/TanamDocumentField";
 import {Timestamp} from "firebase/firestore";
-import {useParams, useRouter} from "next/navigation";
+import {useParams} from "next/navigation";
 import {Suspense, useState} from "react";
 
-const DocumentDetailsPage = () => {
-  const router = useRouter();
-  const {documentTypeId, documentId} = useParams<{documentTypeId: string; documentId: string}>() ?? {};
-  const {data: document, error: documentError} = useTanamDocument(documentId);
+const DocumentCreatePage = () => {
+  const {documentTypeId} = useParams<{documentTypeId: string;}>() ?? {};
   const {data: documentType, error: typeError} = useTanamDocumentType(documentTypeId);
   const {data: documentFields, error: fieldsError} = useTanamDocumentFields(documentTypeId);
 
-  const [readonlyMode] = useState<boolean>(true);
+  console.info('documentTypeId :: ', documentTypeId)
 
-  if (!!document?.documentType && document?.documentType !== documentTypeId) {
-    router.push(`/content/${document?.documentType}/${document?.id}`);
-    return <Loader />;
-  }
+  const [readonlyMode] = useState<boolean>(false);
 
   const renderFormElement = (field: TanamDocumentField, value: any) => {
     const formgroupKey = `formgroup-${field.id}`;
@@ -95,14 +89,14 @@ const DocumentDetailsPage = () => {
     }
   };
 
-  if (documentError || typeError || fieldsError) {
+  if (typeError || fieldsError) {
     return (
       <>
         <ErrorPage 
           pageName={documentType?.titleSingular.translated ?? "Document details"}
           notificationType="error"
           notificationTitle="Error loading document"
-          notificationMessage={documentError?.message || typeError?.message || fieldsError?.message || "Unknown error"}
+          notificationMessage={typeError?.message || fieldsError?.message || "Unknown error"}
         />
       </>
     );
@@ -113,11 +107,11 @@ const DocumentDetailsPage = () => {
       <Suspense fallback={<Loader />}>
         {documentType ? <PageHeader pageName={documentType.titleSingular.translated} /> : <Loader />}
       </Suspense>
-      {documentType && document && (
+      {documentType && (
         <div className="grid grid-cols-1 gap-9">
-          <ContentCard key={document.id} title={document.data[documentType.titleField] as string}>
+          <ContentCard title={`Create New ${documentType.titleField}`}>
             <Suspense fallback={<Loader />}>
-              {documentFields.map((field) => renderFormElement(field, document.data[field.id]))}
+              {documentFields.map((field) => renderFormElement(field, ""))}
             </Suspense>
           </ContentCard>
         </div>
@@ -126,4 +120,4 @@ const DocumentDetailsPage = () => {
   );
 };
 
-export default DocumentDetailsPage;
+export default DocumentCreatePage;

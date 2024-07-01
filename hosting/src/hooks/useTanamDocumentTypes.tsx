@@ -70,8 +70,10 @@ export function useTanamDocumentType(documentTypeId?: string): SingleTanamDocume
     const unsubscribe = onSnapshot(
       docRef,
       (doc) => {
+        console.info('typeId :: ', typeId)
         if (doc.exists()) {
           setData(TanamDocumentTypeClient.fromFirestore(doc));
+          console.info('doc :: ', doc.data())
         } else {
           setError(new UserNotification("error", "Error fetching data", "Document type not found"));
         }
