@@ -101,6 +101,19 @@ const DocumentDetailsPage = () => {
     }
   };
 
+  if (documentError || typeError || fieldsError) {
+    return (
+      <>
+        <PageHeader pageName={documentType?.titleSingular.translated ?? "Document details"} />
+        <Notification
+          type="error"
+          title="Error loading document"
+          message={documentError?.message || typeError?.message || "Unknown error"}
+        />
+      </>
+    );
+  }
+
   return (
     <>
       dynamic idsss

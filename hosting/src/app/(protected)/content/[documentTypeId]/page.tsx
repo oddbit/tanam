@@ -1,8 +1,8 @@
 "use client";
 import {DocumentTypeGenericList} from "@/components/DocumentType/DocumentTypeGenericList";
 import Loader from "@/components/common/Loader";
-import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
+import {ErrorPage} from '@/components/Error/ErrorPage';
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {useTanamDocuments} from "@/hooks/useTanamDocuments";
 import {useParams} from "next/navigation";
@@ -16,11 +16,11 @@ export default function DocumentTypeDocumentsPage() {
   if (docsError || typesError) {
     return (
       <>
-        <PageHeader pageName={documentType?.titleSingular.translated ?? "Document details"} />
-        <Notification
-          type="error"
-          title="Error loading document"
-          message={docsError?.message || typesError?.message || "Unknown error"}
+        <ErrorPage 
+          pageName={documentType?.titleSingular.translated ?? "Document details"}
+          notificationType="error"
+          notificationTitle="Error loading document"
+          notificationMessage={docsError?.message || typesError?.message || "Unknown error"}
         />
       </>
     );
