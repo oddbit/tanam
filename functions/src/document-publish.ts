@@ -37,9 +37,28 @@ export const onPublishChange = onDocumentWritten("tanam-documents/{documentId}",
   if (documentAfter.status === "published") {
     logger.info("Document was published.");
     return publishQueue.enqueue({documentId});
-  } else if (documentBefore.status === "published") {
+  }
+
+  if (documentBefore.status === "published") {
     logger.info("Document was unpublished", documentAfter.toJson());
-    return unpublishQueue.enqueue({documentId});
+    await unpublishQueue.enqueue({documentId});
+  }
+
+  if (documentAfter.status === "scheduled") {
+    logger.info("Document has been scheduled", documentAfter.toJson());
+    const publishedAt = documentAfter.publishedAt!.toDate();
+    if (publishedAt !== normalizeDateToMaxOffset(publishedAt)) {
+      logger.error("Scheduled date is too far in the future", documentAfter.toJson());
+      throw new Error("Scheduled date is too far in the future");
+    }
+
+    logger.info(`Enqueueing document for publishing at ${publishedAt}`, documentAfter.toJson());
+    await publishQueue.enqueue(
+      {documentId},
+      {
+        scheduleTime: publishedAt,
+      },
+    );
   }
 });
 
@@ -138,3 +157,17 @@ export const taskUnpublishDocument = onTaskDispatched(
     await Promise.all(promises);
   },
 );
+
+/**
+ * Normalize a date to a maximum offset from now
+ *
+ * @param {Date} date A date to normalize
+ * @param {number} hours Optional. Default is 720 hours (30 days)
+ * @returns {Date} The normalized date
+ */
+function normalizeDateToMaxOffset(date: Date, hours: number = 720): Date {
+  const now = new Date();
+  const maxDate = new Date(now.getTime() + hours * 60 * 60 * 1000);
+
+  return date > maxDate ? maxDate : date;
+}
