@@ -5,9 +5,9 @@ import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {useTanamDocuments} from "@/hooks/useTanamDocuments";
-import {Suspense, useEffect, useState} from "react";
-import {useParams} from "next/navigation";
 import {UserNotification} from "@/models/UserNotification";
+import {useParams} from "next/navigation";
+import {Suspense, useEffect, useState} from "react";
 
 export default function DocumentTypeDocumentsPage() {
   const {documentTypeId} = useParams<{documentTypeId: string}>() ?? {};
@@ -21,6 +21,7 @@ export default function DocumentTypeDocumentsPage() {
 
   return (
     <>
+      dynamic
       <Suspense fallback={<Loader />}>
         {documentType ? <PageHeader pageName={documentType.titlePlural.translated} /> : <Loader />}
       </Suspense>

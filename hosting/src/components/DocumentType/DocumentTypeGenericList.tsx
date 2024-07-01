@@ -11,12 +11,14 @@ interface TableOverviewGenericProps {
 export function DocumentTypeGenericList({documents, documentType}: TableOverviewGenericProps) {
   return (
     <>
+      documents :: {JSON.stringify(documents)}
       <Table
         headers={["Title", "Created", "Status"]}
         rows={documents.map((document, key) => [
           <Link key={`${key}-${document.id}-id`} href={`/content/${document.documentType}/${document.id}`}>
             <p className="font-medium text-black dark:text-white">{document.data[documentType.titleField] as string}</p>
           </Link>,
+
           <p key={`${key}-${document.id}-date`} className="text-black dark:text-white">
             {document.createdAt.toDate().toUTCString()}
           </p>,

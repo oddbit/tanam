@@ -103,6 +103,7 @@ const DocumentDetailsPage = () => {
 
   return (
     <>
+      dynamic idsss
       <Suspense fallback={<Loader />}>
         {documentType ? <PageHeader pageName={documentType.titleSingular.translated} /> : <Loader />}
       </Suspense>

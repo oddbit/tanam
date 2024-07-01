@@ -1,7 +1,10 @@
 {
-  "editor.codeActionsOnSave": {
-    "source.organizeImports": "always"
-  },
+  // This config make my local change the import path with space in bracket eg: { foo, bar },
+  // You need to run `npm run codecheck` to reformatting the code.
+  // So I comment this stuff to prevent reformatting the import code with space in bracket
+  // "editor.codeActionsOnSave": {
+  //   "source.organizeImports": "always"
+  // },
   "javascript.preferences.quoteStyle": "single",
   "typescript.preferences.quoteStyle": "single",
   "html.format.indentInnerHtml": true,
