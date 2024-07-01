@@ -44,9 +44,9 @@ export const onPublishChange = onDocumentWritten("tanam-documents/{documentId}",
     await unpublishQueue.enqueue({documentId});
   }
 
-  if (documentAfter.status === "scheduled") {
+  const publishedAt = documentAfter.publishedAt?.toDate();
+  if (documentAfter.status === "scheduled" && !!publishedAt) {
     logger.info("Document has been scheduled", documentAfter.toJson());
-    const publishedAt = documentAfter.publishedAt!.toDate();
     if (publishedAt !== normalizeDateToMaxOffset(publishedAt)) {
       logger.error("Scheduled date is too far in the future", documentAfter.toJson());
       throw new Error("Scheduled date is too far in the future");
@@ -163,9 +163,9 @@ export const taskUnpublishDocument = onTaskDispatched(
  *
  * @param {Date} date A date to normalize
  * @param {number} hours Optional. Default is 720 hours (30 days)
- * @returns {Date} The normalized date
+ * @return {Date} The normalized date
  */
-function normalizeDateToMaxOffset(date: Date, hours: number = 720): Date {
+function normalizeDateToMaxOffset(date: Date, hours = 720): Date {
   const now = new Date();
   const maxDate = new Date(now.getTime() + hours * 60 * 60 * 1000);
 
