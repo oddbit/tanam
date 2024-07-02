@@ -2,13 +2,13 @@
 import React, {useState, useEffect, useRef} from "react";
 import {clsx} from "clsx";
 
-interface Option {
+export interface Option {
   value: string;
   text: string;
   selected?: boolean;
 }
 
-interface DropdownProps {
+export interface DropdownProps {
   id: string;
   options: Option[];
   disabled?: boolean;
