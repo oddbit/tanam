@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Suspense} from "react";
 import {
   Checkbox,
   DatePicker,
@@ -10,6 +10,7 @@ import {
   Switcher,
   TextArea,
 } from "@/components/Form";
+import Loader from "@/components/common/Loader";
 import {FieldType} from "@functions/definitions/FieldType";
 import {v4 as uuidv4} from "uuid";
 import {Timestamp} from 'firebase/firestore';
@@ -78,4 +79,12 @@ export function DynamicForm(props: DynamicFormProps) {
         return null;
     }
   };
+
+  return (
+    <>
+      <Suspense fallback={<Loader />}>
+        {props.fields.map((field) => renderFormElement(field))}
+      </Suspense>
+    </>
+  )
 }
