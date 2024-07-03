@@ -1,4 +1,4 @@
-import React, {Suspense, useCallback, useEffect, useState} from "react";
+import React, {Suspense, useEffect, useState} from "react";
 import {
   Checkbox,
   DatePicker,
@@ -30,7 +30,7 @@ export interface DynamicFormField {
 export interface DynamicFormProps {
   readonlyMode: boolean;
   fields: DynamicFormField[];
-  onFieldsChange?: (fields: {[key: string]: any}) => void;
+  onFieldsChange?: (fields: DynamicFormField[]) => void;
 }
 
 export const initialProps: DynamicFormProps = {
@@ -43,27 +43,42 @@ export function DynamicForm({
   fields,
   onFieldsChange
 }: DynamicFormProps) {
-  const [formValues, setFormValues] = useState(() => {
-    return fields.reduce((acc, field) => {
-      acc[field.id] = field.value || "";
-      return acc;
-    }, {} as { [key: string]: any });
-  });
+  const [testInput, setTestInput] = useState()
+  const [formValues, setFormValues] = useState<DynamicFormField[]>([]);
 
   useEffect(() => {
-    if (onFieldsChange) {
-      onFieldsChange(formValues);
+    if (fields) {
+      console.info('fields :: ', fields)
+      setFormValues(fields)
+      console.info('formValues :: ', formValues)
     }
-  }, [formValues, onFieldsChange]);
 
-  const handleOnChange = useCallback((id: string, value: any) => {
-    setFormValues(prevValues => ({
-      ...prevValues,
-      [id]: value
-    }));
-  }, []);
+    return () => {
+      setFormValues([])
+    }
+  }, [fields])
 
-  const renderFormElement = useCallback((field: DynamicFormField, fieldIndex: number) => {
+  // useEffect(() => {
+  //   if (onFieldsChange) {
+  //     onFieldsChange(formValues);
+  //   }
+  // }, [formValues, onFieldsChange]);
+
+  const handleOnChange = (value: any) => {
+    console.info('handleOnChange :: ', value)
+    // field.value = value
+    // setFormValues(prevValues => ({
+    //   ...prevValues,
+    //   [id]: value
+    // }));
+  }
+
+  const handleTestInput = (value: any) => {
+    setTestInput(value.target.value)
+    console.info('handleTestInput :: ', value)
+  }
+
+  const renderFormElement = (field: DynamicFormField, fieldIndex: number) => {
     const formId = uuidv4();
     const formgroupKey = `formgroup-${formId}-${fieldIndex}`;
     const inputKey = `input-${formId}-${fieldIndex}`;
@@ -73,14 +88,14 @@ export function DynamicForm({
       case FieldType.TextLine:
         return (
           <FormGroup key={formgroupKey} label={field.label} disabled={field.disabled || readonlyMode}>
-            <Input key={inputKey} type={field.inputType || "text"} disabled={field.disabled || readonlyMode} placeholder={field.placeholder} value={field.value} onChange={(e) => handleOnChange(field.id, e.target.value)} />
+            <Input key={inputKey} type={field.inputType || "text"} disabled={field.disabled || readonlyMode} placeholder={field.placeholder} value={testInput} onChange={handleTestInput} />
           </FormGroup>
         );
       case FieldType.TextboxRich:
       case FieldType.TextRich:
         return (
           <FormGroup key={formgroupKey} label={field.label} disabled={field.disabled || readonlyMode}>
-            <TextArea key={inputKey} rows={6} disabled={field.disabled || readonlyMode} placeholder={field.placeholder} value={field.value} onChange={(e) => handleOnChange(field.id, e.target.value)} />
+            <TextArea key={inputKey} rows={6} disabled={field.disabled || readonlyMode} placeholder={field.placeholder} value={field.value} onChange={handleOnChange} />
           </FormGroup>
         );
       case FieldType.DatePicker:
@@ -91,14 +106,14 @@ export function DynamicForm({
             label={field.label}
             disabled={field.disabled || readonlyMode}
             placeholder={field.placeholder || "mm/dd/yyyy"}
-            onChange={(e) => handleOnChange(field.id, e)}
+            onChange={handleOnChange}
             defaultValue={(field.value as Timestamp).toDate()}
           />
         );
       case FieldType.FileUpload:
-        return <FileUpload key={inputKey} label={field.label} disabled={field.disabled || readonlyMode} onChange={(e) => handleOnChange(field.id, e.target.value)} />;
+        return <FileUpload key={inputKey} label={field.label} disabled={field.disabled || readonlyMode} onChange={handleOnChange} />;
       case FieldType.Switcher:
-        return <Switcher key={inputKey} disabled={field.disabled || readonlyMode} defaultChecked={field.value} onChange={(e) => handleOnChange(field.id, e)} />;
+        return <Switcher key={inputKey} disabled={field.disabled || readonlyMode} defaultChecked={field.value} onChange={handleOnChange} />;
       case FieldType.Radio:
         return <RadioButton key={inputKey} disabled={field.disabled || readonlyMode} label={field.label} defaultChecked={field.value} />;
       case FieldType.Checkbox:
@@ -108,12 +123,13 @@ export function DynamicForm({
       default:
         return null;
     }
-  }, [formValues, readonlyMode, handleOnChange]);
+  };
 
   return (
     <>
+      formValues :: {JSON.stringify(formValues)}
       <Suspense fallback={<Loader />}>
-        {fields.map((field, index) => renderFormElement(field, index))}
+        {formValues.map((field, index) => renderFormElement(field, index))}
       </Suspense>
     </>
   )
