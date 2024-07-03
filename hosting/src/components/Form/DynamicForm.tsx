@@ -90,7 +90,6 @@ export function DynamicForm({
 
   return (
     <>
-      fields :: {JSON.stringify(fields)}
       <Suspense fallback={<Loader />}>
         {fields.map((field) => renderFormElement(field))}
       </Suspense>

@@ -17,16 +17,12 @@ const DocumentCreatePage = () => {
   const {data: documentType, error: typeError} = useTanamDocumentType(documentTypeId);
   const {data: documentFields, error: fieldsError} = useTanamDocumentFields(documentTypeId);
 
-  console.info('documentTypeId :: ', documentTypeId)
-
   const [entry, setEntry] = useState<DynamicFormProps>({
     readonlyMode: false,
     fields: []
   });
 
   useEffect(() => {
-    console.info('documentFields :: ', documentFields)
-
     if (documentFields) {
       setEntry({
         ...entry,
@@ -36,10 +32,7 @@ const DocumentCreatePage = () => {
           fieldType: field.fieldType
         }))
       });
-      console.info('entry if :: ', entry)
     }
-
-    console.info('entry :: ', entry)
   }, [documentFields]);
 
   if (typeError || fieldsError) {
@@ -57,7 +50,6 @@ const DocumentCreatePage = () => {
 
   return (
     <>
-      entry :: {JSON.stringify(entry)}
       <Suspense fallback={<Loader />}>
         {documentType ? <PageHeader pageName={documentType.titleSingular.translated} /> : <Loader />}
       </Suspense>
