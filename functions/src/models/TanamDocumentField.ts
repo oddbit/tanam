@@ -1,5 +1,5 @@
 import {FieldType} from './../definitions/FieldType';
-import {LocalizedString} from "./LocalizedString";
+import {LocalizedString, Translations} from "./LocalizedString";
 
 export interface ITanamDocumentField {
   weight: number;
@@ -23,7 +23,7 @@ export class TanamDocumentField {
   constructor(id: string, json: ITanamDocumentField) {
     this.id = id;
     this.weight = json.weight;
-    this.title = json.title;
+    this.title = new LocalizedString(json.title as Translations) ?? json.title;
     this.description = json.description;
     this.type = json.type;
     this.fieldType = json.fieldType;
