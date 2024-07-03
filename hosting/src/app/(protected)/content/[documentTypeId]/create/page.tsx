@@ -10,7 +10,7 @@ import {ErrorPage} from '@/components/Error/ErrorPage';
 import {useTanamDocumentFields} from "@/hooks/useTanamDocumentFields";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {useParams} from "next/navigation";
-import {Suspense, useState, useEffect} from "react";
+import {Suspense, useState, useEffect, useCallback} from "react";
 
 const DocumentCreatePage = () => {
   const {documentTypeId} = useParams<{documentTypeId: string;}>() ?? {};
@@ -27,13 +27,26 @@ const DocumentCreatePage = () => {
       setEntry({
         ...entry,
         fields: documentFields.map((field) => ({
+          id: field.id,
           label: field.title.translated,
           placeholder: field.title.translated,
-          fieldType: field.fieldType
+          fieldType: field.fieldType,
+          value: ""
         }))
       });
     }
   }, [documentFields]);
+
+  const handleFormChange = useCallback((updatedFields: { [key: string]: any }) => {
+    setEntry((prevEntry) => ({
+      ...prevEntry,
+      fields: prevEntry.fields.map((field) => ({
+        ...field,
+        value: updatedFields[field.id]
+      }))
+    }));
+    console.log("Updated form values:", updatedFields);
+  }, []);
 
   if (typeError || fieldsError) {
     return (
@@ -56,7 +69,7 @@ const DocumentCreatePage = () => {
       {documentType && (
         <div className="grid grid-cols-1 gap-9">
           <ContentCard title={`Create New ${documentType.titleSingular.translated}`}>
-            <DynamicForm readonlyMode={entry.readonlyMode} fields={entry.fields} />
+            <DynamicForm readonlyMode={entry.readonlyMode} fields={entry.fields} onFieldsChange={handleFormChange} />
           </ContentCard>
         </div>
       )}
