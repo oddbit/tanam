@@ -13,7 +13,6 @@ import {
 } from "@/components/Form";
 import Loader from "@/components/common/Loader";
 import {FieldType} from "@functions/definitions/FieldType";
-import {v4 as uuidv4} from "uuid";
 import {Timestamp} from 'firebase/firestore';
 import {Option} from '@/components/Form/Dropdown';
 import {Formik, Form} from "formik";
@@ -61,33 +60,37 @@ export function DynamicForm({
     }
   }, [formValues, onFieldsChange]);
 
-  const handleOnChange = (value: any) => {
-    console.info('handleOnChange :: ', value)
-    // field.value = value
-    // setFormValues(prevValues => ({
-    //   ...prevValues,
-    //   [id]: value
-    // }));
+  const handleOnChange = (fieldKey: string, e: any) => {
+    if (!fieldKey && !e) return
+
+    const {name, value} = e.target
+    console.info('handleOnChange fieldKey :: ', fieldKey)
+    console.info('handleOnChange name :: ', name)
+    console.info('handleOnChange value :: ', value)
+    
+    setFormValues(prevValues => ({
+      ...prevValues,
+      [fieldKey]: value
+    }));
   }
 
   const renderFormElement = (field: DynamicFormField, fieldIndex: number) => {
-    const formId = uuidv4();
-    const formgroupKey = `formgroup-${formId}-${fieldIndex}`;
-    const inputKey = `input-${formId}-${fieldIndex}`;
+    const formgroupKey = `formgroup-${fieldIndex}`;
+    const inputKey = `input-${fieldIndex}`;
 
     switch (field.fieldType) {
       case FieldType.InputText:
       case FieldType.TextLine:
         return (
           <FormGroup key={formgroupKey} label={field.label} disabled={field.disabled || readonlyMode}>
-            <TextField key={inputKey} name={field.id} placeholder={field.placeholder} disabled={field.disabled || readonlyMode} />
+            <Input key={inputKey} type="text" placeholder={field.placeholder} disabled={field.disabled || readonlyMode} onChange={(e) => handleOnChange(field.id, e)} />
           </FormGroup>
         );
       case FieldType.TextboxRich:
       case FieldType.TextRich:
         return (
           <FormGroup key={formgroupKey} label={field.label} disabled={field.disabled || readonlyMode}>
-            <TextArea key={inputKey} rows={6} disabled={field.disabled || readonlyMode} placeholder={field.placeholder} value={field.value} onChange={handleOnChange} />
+            <TextArea key={inputKey} rows={6} disabled={field.disabled || readonlyMode} placeholder={field.placeholder} value={field.value} onChange={(e) => handleOnChange(field.id, e)} />
           </FormGroup>
         );
       case FieldType.DatePicker:
@@ -98,14 +101,14 @@ export function DynamicForm({
             label={field.label}
             disabled={field.disabled || readonlyMode}
             placeholder={field.placeholder || "mm/dd/yyyy"}
-            onChange={handleOnChange}
+            onChange={(e) => handleOnChange(field.id, e)}
             defaultValue={(field.value as Timestamp).toDate()}
           />
         );
       case FieldType.FileUpload:
-        return <FileUpload key={inputKey} label={field.label} disabled={field.disabled || readonlyMode} onChange={handleOnChange} />;
+        return <FileUpload key={inputKey} label={field.label} disabled={field.disabled || readonlyMode} onChange={(e) => handleOnChange(field.id, e)} />;
       case FieldType.Switcher:
-        return <Switcher key={inputKey} disabled={field.disabled || readonlyMode} defaultChecked={field.value} onChange={handleOnChange} />;
+        return <Switcher key={inputKey} disabled={field.disabled || readonlyMode} defaultChecked={field.value} onChange={(e) => handleOnChange(field.id, e)} />;
       case FieldType.Radio:
         return <RadioButton key={inputKey} disabled={field.disabled || readonlyMode} label={field.label} defaultChecked={field.value} />;
       case FieldType.Checkbox:
