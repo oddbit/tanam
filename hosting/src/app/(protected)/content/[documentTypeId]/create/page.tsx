@@ -30,15 +30,12 @@ const DocumentCreatePage = () => {
     if (documentFields) {
       setEntry({
         ...entry,
-        fields: documentFields.map((field) => {
-          console.info('field :: ', field)
-          return {
-            label: field.title.translated,
-            placeholder: field.title.translated,
-            fieldType: "input-text"
-          }
-        })
-      })
+        fields: documentFields.map((field) => ({
+          label: field.title.translated,
+          placeholder: field.title.translated,
+          fieldType: field.type
+        }))
+      });
       console.info('entry if :: ', entry)
     }
 

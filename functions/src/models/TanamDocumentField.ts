@@ -5,8 +5,7 @@ export interface ITanamDocumentField {
   weight: number;
   title: LocalizedString;
   description: LocalizedString;
-  type: string;
-  fieldType: FieldType
+  type: FieldType | string;
   validators: string[] | null;
 }
 
@@ -26,16 +25,14 @@ export class TanamDocumentField {
     this.title = new LocalizedString(json.title as Translations) ?? json.title;
     this.description = json.description;
     this.type = json.type;
-    this.fieldType = json.fieldType;
     this.validators = json.validators;
   }
 
   public id: string;
   public weight: number;
   public title: LocalizedString;
-  public fieldType: FieldType;
   public description: LocalizedString;
-  public readonly type: string;
+  public readonly type: FieldType | string;
   public readonly validators: string[] | null;
 
   /**
@@ -47,7 +44,6 @@ export class TanamDocumentField {
     return {
       weight: this.weight,
       title: this.title.toJson(),
-      fieldType: this.fieldType,
       description: this.description.toJson(),
       type: this.type,
       validators: this.validators,
