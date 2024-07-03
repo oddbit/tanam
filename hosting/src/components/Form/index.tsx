@@ -8,4 +8,5 @@ export {RadioButton} from "./RadioButton";
 export {Select} from "./Select";
 export {Switcher} from "./Switcher";
 export {TextArea} from "./TextArea";
+export {TextField} from "./TextField";
 export * from "./DynamicForm";

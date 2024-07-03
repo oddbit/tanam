@@ -9,12 +9,14 @@ import {
   RadioButton,
   Switcher,
   TextArea,
+  TextField
 } from "@/components/Form";
 import Loader from "@/components/common/Loader";
 import {FieldType} from "@functions/definitions/FieldType";
 import {v4 as uuidv4} from "uuid";
 import {Timestamp} from 'firebase/firestore';
 import {Option} from '@/components/Form/Dropdown';
+import {Formik, Form} from "formik";
 
 export interface DynamicFormField {
   id: string;
@@ -30,7 +32,7 @@ export interface DynamicFormField {
 export interface DynamicFormProps {
   readonlyMode: boolean;
   fields: DynamicFormField[];
-  onFieldsChange?: (fields: DynamicFormField[]) => void;
+  onFieldsChange?: (fields: { [key: string]: any }) => void;
 }
 
 export const initialProps: DynamicFormProps = {
@@ -43,26 +45,21 @@ export function DynamicForm({
   fields,
   onFieldsChange
 }: DynamicFormProps) {
-  const [testInput, setTestInput] = useState()
-  const [formValues, setFormValues] = useState<DynamicFormField[]>([]);
+  const [formValues, setFormValues] = useState<{ [key: string]: any }>([]);
 
   useEffect(() => {
-    if (fields) {
-      console.info('fields :: ', fields)
-      setFormValues(fields)
-      console.info('formValues :: ', formValues)
-    }
+    const initialValues = fields.reduce((acc, field) => {
+      acc[field.id] = field.value || "";
+      return acc;
+    }, {} as { [key: string]: any });
+    setFormValues(initialValues);
+  }, [fields]);
 
-    return () => {
-      setFormValues([])
+  useEffect(() => {
+    if (onFieldsChange) {
+      onFieldsChange(formValues);
     }
-  }, [fields])
-
-  // useEffect(() => {
-  //   if (onFieldsChange) {
-  //     onFieldsChange(formValues);
-  //   }
-  // }, [formValues, onFieldsChange]);
+  }, [formValues, onFieldsChange]);
 
   const handleOnChange = (value: any) => {
     console.info('handleOnChange :: ', value)
@@ -71,11 +68,6 @@ export function DynamicForm({
     //   ...prevValues,
     //   [id]: value
     // }));
-  }
-
-  const handleTestInput = (value: any) => {
-    setTestInput(value.target.value)
-    console.info('handleTestInput :: ', value)
   }
 
   const renderFormElement = (field: DynamicFormField, fieldIndex: number) => {
@@ -88,7 +80,7 @@ export function DynamicForm({
       case FieldType.TextLine:
         return (
           <FormGroup key={formgroupKey} label={field.label} disabled={field.disabled || readonlyMode}>
-            <Input key={inputKey} type={field.inputType || "text"} disabled={field.disabled || readonlyMode} placeholder={field.placeholder} value={testInput} onChange={handleTestInput} />
+            <TextField key={inputKey} name={field.id} placeholder={field.placeholder} disabled={field.disabled || readonlyMode} />
           </FormGroup>
         );
       case FieldType.TextboxRich:
@@ -129,7 +121,21 @@ export function DynamicForm({
     <>
       formValues :: {JSON.stringify(formValues)}
       <Suspense fallback={<Loader />}>
-        {formValues.map((field, index) => renderFormElement(field, index))}
+        <Formik
+          initialValues={formValues}
+          onSubmit={(values, actions) => {
+            setTimeout(() => {
+              console.info(JSON.stringify(values, null, 2))
+              actions.setSubmitting(false);
+            }, 1000);
+          }}
+        >
+          {({handleSubmit}) => (
+            <Form onSubmit={handleSubmit}>
+              {fields.map((field, index) => renderFormElement(field, index))}
+            </Form>
+          )}
+        </Formik>
       </Suspense>
     </>
   )

@@ -10,7 +10,7 @@ import {ErrorPage} from '@/components/Error/ErrorPage';
 import {useTanamDocumentFields} from "@/hooks/useTanamDocumentFields";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {useParams} from "next/navigation";
-import {Suspense, useState, useEffect, useCallback} from "react";
+import {Suspense, useState, useEffect} from "react";
 
 const DocumentCreatePage = () => {
   const {documentTypeId} = useParams<{documentTypeId: string;}>() ?? {};
@@ -37,16 +37,16 @@ const DocumentCreatePage = () => {
     }
   }, [documentFields]);
 
-  const handleFormChange = useCallback((updatedFields: { [key: string]: any }) => {
-    setEntry((prevEntry) => ({
-      ...prevEntry,
-      fields: prevEntry.fields.map((field) => ({
-        ...field,
-        value: updatedFields[field.id]
-      }))
-    }));
+  const handleFormChange = (updatedFields: { [key: string]: any }) => {
+    // setEntry((prevEntry) => ({
+    //   ...prevEntry,
+    //   fields: prevEntry.fields.map((field) => ({
+    //     ...field,
+    //     value: updatedFields[field.id]
+    //   }))
+    // }));
     console.log("Updated form values:", updatedFields);
-  }, []);
+  };
 
   if (typeError || fieldsError) {
     return (
