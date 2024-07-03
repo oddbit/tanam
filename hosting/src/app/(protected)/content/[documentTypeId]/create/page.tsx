@@ -19,7 +19,8 @@ import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {TanamDocumentField} from "@functions/models/TanamDocumentField";
 import {Timestamp} from "firebase/firestore";
 import {useParams} from "next/navigation";
-import {Suspense, useState} from "react";
+import {Suspense, useState, useEffect} from "react";
+import {DynamicFormProps} from '@/components/Form/DynamicForm';
 
 const DocumentCreatePage = () => {
   const {documentTypeId} = useParams<{documentTypeId: string;}>() ?? {};
@@ -29,6 +30,29 @@ const DocumentCreatePage = () => {
   console.info('documentTypeId :: ', documentTypeId)
 
   const [readonlyMode] = useState<boolean>(false);
+  const [entry, setEntry] = useState<DynamicFormProps>({
+    readonlyMode: false,
+    fields: []
+  });
+
+  useEffect(() => {
+    console.info('documentFields :: ', documentFields)
+
+    if (documentFields) {
+      setEntry({
+        ...entry,
+        fields: documentFields.map((field) => 
+          ({
+            label: field.title.translated,
+            placeholder: field.title.translated,
+            fieldType: field.type
+          })
+        )
+      })
+    }
+
+    console.info('entry :: ', entry)
+  }, [documentFields])
 
   const renderFormElement = (field: TanamDocumentField, value: any) => {
     const formgroupKey = `formgroup-${field.id}`;
@@ -104,6 +128,7 @@ const DocumentCreatePage = () => {
 
   return (
     <>
+      entry :: {JSON.stringify(entry)}
       <Suspense fallback={<Loader />}>
         {documentType ? <PageHeader pageName={documentType.titleSingular.translated} /> : <Loader />}
       </Suspense>
