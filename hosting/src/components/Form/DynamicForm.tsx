@@ -32,7 +32,15 @@ export interface DynamicFormProps {
   fields: DynamicFormField[];
 }
 
-export function DynamicForm(props: DynamicFormProps) {
+export const initialProps: DynamicFormProps = {
+  readonlyMode: false,
+  fields: []
+}
+
+export function DynamicForm({
+  readonlyMode,
+  fields
+}: DynamicFormProps) {
   const renderFormElement = (field: DynamicFormField) => {
     const formId = uuidv4();
     const formgroupKey = `formgroup-${formId}`;
@@ -42,15 +50,15 @@ export function DynamicForm(props: DynamicFormProps) {
       case FieldType.InputText:
       case FieldType.TextLine:
         return (
-          <FormGroup key={formgroupKey} label={field.label} disabled={field.disabled}>
-            <Input key={inputKey} type={field.inputType || "text"} disabled={field.disabled} placeholder={field.placeholder} value={field.value} onChange={field.onChange} />
+          <FormGroup key={formgroupKey} label={field.label} disabled={field.disabled || readonlyMode}>
+            <Input key={inputKey} type={field.inputType || "text"} disabled={field.disabled || readonlyMode} placeholder={field.placeholder} value={field.value} onChange={field.onChange} />
           </FormGroup>
         );
       case FieldType.TextboxRich:
       case FieldType.TextRich:
         return (
-          <FormGroup key={formgroupKey} label={field.label} disabled={field.disabled}>
-            <TextArea key={inputKey} rows={6} disabled={field.disabled} placeholder={field.placeholder} value={field.value} onChange={field.onChange} />
+          <FormGroup key={formgroupKey} label={field.label} disabled={field.disabled || readonlyMode}>
+            <TextArea key={inputKey} rows={6} disabled={field.disabled || readonlyMode} placeholder={field.placeholder} value={field.value} onChange={field.onChange} />
           </FormGroup>
         );
       case FieldType.DatePicker:
@@ -59,22 +67,22 @@ export function DynamicForm(props: DynamicFormProps) {
           <DatePicker
             key={inputKey}
             label={field.label}
-            disabled={field.disabled}
+            disabled={field.disabled || readonlyMode}
             placeholder={field.placeholder || "mm/dd/yyyy"}
             onChange={field.onChange}
             defaultValue={(field.value as Timestamp).toDate()}
           />
         );
       case FieldType.FileUpload:
-        return <FileUpload key={inputKey} label={field.label} disabled={field.disabled} onChange={field.onChange} />;
+        return <FileUpload key={inputKey} label={field.label} disabled={field.disabled || readonlyMode} onChange={field.onChange} />;
       case FieldType.Switcher:
-        return <Switcher key={inputKey} disabled={field.disabled} defaultChecked={field.value} onChange={field.onChange} />;
+        return <Switcher key={inputKey} disabled={field.disabled || readonlyMode} defaultChecked={field.value} onChange={field.onChange} />;
       case FieldType.Radio:
-        return <RadioButton key={inputKey} disabled={field.disabled} label={field.label} defaultChecked={field.value} />;
+        return <RadioButton key={inputKey} disabled={field.disabled || readonlyMode} label={field.label} defaultChecked={field.value} />;
       case FieldType.Checkbox:
         return <Checkbox key={inputKey} />;
       case FieldType.Dropdown:
-        return <Dropdown key={inputKey} disabled={field.disabled} options={field.dropdownOptions || []} placeholder={field.placeholder} id={""} />;
+        return <Dropdown key={inputKey} disabled={field.disabled || readonlyMode} options={field.dropdownOptions || []} placeholder={field.placeholder} id={""} />;
       default:
         return null;
     }
@@ -82,8 +90,9 @@ export function DynamicForm(props: DynamicFormProps) {
 
   return (
     <>
+      fields :: {JSON.stringify(fields)}
       <Suspense fallback={<Loader />}>
-        {props.fields.map((field) => renderFormElement(field))}
+        {fields.map((field) => renderFormElement(field))}
       </Suspense>
     </>
   )

@@ -1,26 +1,16 @@
 "use client";
 import ContentCard from "@/components/Containers/ContentCard";
 import {
-  Checkbox,
-  DatePicker,
-  Dropdown,
-  FileUpload,
-  FormGroup,
-  Input,
-  RadioButton,
-  Switcher,
-  TextArea,
+  DynamicForm,
+  DynamicFormProps
 } from "@/components/Form";
 import Loader from "@/components/common/Loader";
 import PageHeader from "@/components/common/PageHeader";
 import {ErrorPage} from '@/components/Error/ErrorPage';
 import {useTanamDocumentFields} from "@/hooks/useTanamDocumentFields";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
-import {TanamDocumentField} from "@functions/models/TanamDocumentField";
-import {Timestamp} from "firebase/firestore";
 import {useParams} from "next/navigation";
 import {Suspense, useState, useEffect} from "react";
-import {DynamicFormProps} from '@/components/Form/DynamicForm';
 
 const DocumentCreatePage = () => {
   const {documentTypeId} = useParams<{documentTypeId: string;}>() ?? {};
@@ -29,7 +19,6 @@ const DocumentCreatePage = () => {
 
   console.info('documentTypeId :: ', documentTypeId)
 
-  const [readonlyMode] = useState<boolean>(false);
   const [entry, setEntry] = useState<DynamicFormProps>({
     readonlyMode: false,
     fields: []
@@ -41,77 +30,20 @@ const DocumentCreatePage = () => {
     if (documentFields) {
       setEntry({
         ...entry,
-        fields: documentFields.map((field) => 
-          ({
+        fields: documentFields.map((field) => {
+          console.info('field :: ', field)
+          return {
             label: field.title.translated,
             placeholder: field.title.translated,
-            fieldType: field.type
-          })
-        )
+            fieldType: "input-text"
+          }
+        })
       })
+      console.info('entry if :: ', entry)
     }
 
     console.info('entry :: ', entry)
-  }, [documentFields])
-
-  const renderFormElement = (field: TanamDocumentField, value: any) => {
-    const formgroupKey = `formgroup-${field.id}`;
-    const inputKey = `input-${field.id}`;
-    switch (field.type) {
-      case "input-text":
-      case "text-line":
-        return (
-          <FormGroup key={formgroupKey} label={field.title.translated} disabled={readonlyMode}>
-            <Input
-              key={inputKey}
-              type="text"
-              disabled={readonlyMode}
-              placeholder={field.title.translated}
-              value={value || ""}
-            />
-          </FormGroup>
-        );
-      case "html":
-      case "textbox-rich":
-      case "text-rich":
-        return (
-          <FormGroup key={`formgroup-${field.id}`} disabled={readonlyMode} label={field.title.translated}>
-            <TextArea
-              key={inputKey}
-              disabled={readonlyMode}
-              rows={6}
-              placeholder={field.title.translated}
-              value={value || ""}
-            />
-          </FormGroup>
-        );
-      case "datepicker":
-      case "date":
-        return (
-          <DatePicker
-            key={inputKey}
-            disabled={readonlyMode}
-            label={field.title.translated}
-            placeholder="mm/dd/yyyy"
-            defaultValue={(value as Timestamp).toDate()}
-          />
-        );
-      case "file-upload":
-        return <FileUpload key={inputKey} disabled={readonlyMode} label={field.title.translated} />;
-      case "switcher":
-        return <Switcher key={inputKey} disabled={readonlyMode} defaultChecked={value} />;
-      case "radio":
-        return <RadioButton key={inputKey} disabled={readonlyMode} label={field.title.translated} />;
-      case "checkbox":
-        return <Checkbox key={inputKey} />;
-      case "dropdown":
-        return (
-          <Dropdown key={inputKey} disabled={readonlyMode} options={[]} placeholder={field.title.translated} id={""} />
-        );
-      default:
-        return null;
-    }
-  };
+  }, [documentFields]);
 
   if (typeError || fieldsError) {
     return (
@@ -135,9 +67,7 @@ const DocumentCreatePage = () => {
       {documentType && (
         <div className="grid grid-cols-1 gap-9">
           <ContentCard title={`Create New ${documentType.titleField}`}>
-            <Suspense fallback={<Loader />}>
-              {documentFields.map((field) => renderFormElement(field, ""))}
-            </Suspense>
+            <DynamicForm readonlyMode={entry.readonlyMode} fields={entry.fields} />
           </ContentCard>
         </div>
       )}
