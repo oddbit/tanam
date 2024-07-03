@@ -55,7 +55,7 @@ const DocumentCreatePage = () => {
       </Suspense>
       {documentType && (
         <div className="grid grid-cols-1 gap-9">
-          <ContentCard title={`Create New ${documentType.titleField}`}>
+          <ContentCard title={`Create New ${documentType.titleSingular.translated}`}>
             <DynamicForm readonlyMode={entry.readonlyMode} fields={entry.fields} />
           </ContentCard>
         </div>
