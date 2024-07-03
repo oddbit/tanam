@@ -33,7 +33,7 @@ const DocumentCreatePage = () => {
         fields: documentFields.map((field) => ({
           label: field.title.translated,
           placeholder: field.title.translated,
-          fieldType: field.type
+          fieldType: field.fieldType
         }))
       });
       console.info('entry if :: ', entry)
