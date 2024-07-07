@@ -8,7 +8,7 @@ export interface ITanamDocument<TimestampType> {
   data: DocumentData;
   documentType: string;
   revision?: number;
-  publishedAt?: Date;
+  publishedAt?: TimestampType;
   createdAt: TimestampType;
   updatedAt: TimestampType;
 }
@@ -27,21 +27,12 @@ export abstract class TanamDocument<TimestampType, FieldValueType> {
   public readonly id: string;
   public data: DocumentData;
   public documentType: string;
-  public publishedAt?: Date;
+  public publishedAt?: TimestampType;
   public revision: number;
   public readonly createdAt: TimestampType;
   public readonly updatedAt: TimestampType;
 
-  get status(): TanamPublishStatus {
-    if (!this.publishedAt) {
-      return "unpublished";
-    } else if (this.publishedAt > new Date()) {
-      return "scheduled";
-    } else {
-      return "published";
-    }
-  }
-
+  abstract get status(): TanamPublishStatus;
   protected abstract getServerTimestamp(): FieldValueType;
 
   toJson(): object {
