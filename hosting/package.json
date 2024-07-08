@@ -21,7 +21,6 @@
     "firebase": "^10.12.0",
     "firebaseui": "^6.1.0",
     "flatpickr": "^4.6.13",
-    "formik": "^2.4.6",
     "jsvectormap": "^1.5.3",
     "next": "^14.2.3",
     "react": "^18.3.1",

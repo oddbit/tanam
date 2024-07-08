@@ -37,17 +37,8 @@ const DocumentCreatePage = () => {
     }
   }, [documentFields]);
 
-  const handleFieldsChange = (updatedFields: { [key: string]: any }) => {
-    // if (updatedFields) return
-
-    // setEntry({
-    //   ...entry,
-    //   fields: entry.fields.map((field) => ({
-    //     ...field,
-    //     value: updatedFields[field.id]
-    //   }))
-    // });
-    console.log("Updated form values:", updatedFields);
+  const handleSave = (value: { [key: string]: any }) => {
+    console.log("handleSave ::", value);
   };
 
   if (typeError || fieldsError) {
@@ -72,7 +63,7 @@ const DocumentCreatePage = () => {
         <div className="grid grid-cols-1 gap-9">
           <ContentCard title={`Create New ${documentType.titleSingular.translated}`}>
             entry :: {JSON.stringify(entry)}
-            <DynamicForm readonlyMode={entry.readonlyMode} fields={entry.fields} onFieldsChange={handleFieldsChange} />
+            <DynamicForm readonlyMode={entry.readonlyMode} fields={entry.fields} onSave={handleSave} />
           </ContentCard>
         </div>
       )}

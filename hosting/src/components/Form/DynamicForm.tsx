@@ -8,14 +8,13 @@ import {
   Input,
   RadioButton,
   Switcher,
-  TextArea,
-  TextField
+  TextArea
 } from "@/components/Form";
+import {Button} from "@/components/Button";
 import Loader from "@/components/common/Loader";
 import {FieldType} from "@functions/definitions/FieldType";
 import {Timestamp} from 'firebase/firestore';
 import {Option} from '@/components/Form/Dropdown';
-import {Formik, Form} from "formik";
 
 export interface DynamicFormField {
   id: string;
@@ -31,7 +30,8 @@ export interface DynamicFormField {
 export interface DynamicFormProps {
   readonlyMode: boolean;
   fields: DynamicFormField[];
-  onFieldsChange?: (fields: { [key: string]: any }) => void;
+  onSave?: (fields: { [key: string]: any }) => void;
+  onSubmit?: (fields: { [key: string]: any }) => void;
 }
 
 export const initialProps: DynamicFormProps = {
@@ -42,7 +42,8 @@ export const initialProps: DynamicFormProps = {
 export function DynamicForm({
   readonlyMode,
   fields,
-  onFieldsChange
+  onSave,
+  onSubmit
 }: DynamicFormProps) {
   const [formValues, setFormValues] = useState<{ [key: string]: any }>([]);
 
@@ -54,24 +55,29 @@ export function DynamicForm({
     setFormValues(initialValues);
   }, [fields]);
 
-  useEffect(() => {
-    if (onFieldsChange) {
-      onFieldsChange(formValues);
-    }
-  }, [formValues, onFieldsChange]);
-
   const handleOnChange = (fieldKey: string, e: any) => {
     if (!fieldKey && !e) return
 
-    const {name, value} = e.target
-    console.info('handleOnChange fieldKey :: ', fieldKey)
-    console.info('handleOnChange name :: ', name)
-    console.info('handleOnChange value :: ', value)
+    const {value} = e.target
     
     setFormValues(prevValues => ({
       ...prevValues,
       [fieldKey]: value
     }));
+  }
+
+  const handleSave = () => {
+    if (onSave) {
+      onSave(formValues);
+    }
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (onSubmit) {
+      onSubmit(formValues);
+    }
   }
 
   const renderFormElement = (field: DynamicFormField, fieldIndex: number) => {
@@ -124,21 +130,11 @@ export function DynamicForm({
     <>
       formValues :: {JSON.stringify(formValues)}
       <Suspense fallback={<Loader />}>
-        <Formik
-          initialValues={formValues}
-          onSubmit={(values, actions) => {
-            setTimeout(() => {
-              console.info(JSON.stringify(values, null, 2))
-              actions.setSubmitting(false);
-            }, 1000);
-          }}
-        >
-          {({handleSubmit}) => (
-            <Form onSubmit={handleSubmit}>
-              {fields.map((field, index) => renderFormElement(field, index))}
-            </Form>
-          )}
-        </Formik>
+        <form onSubmit={handleSubmit}>
+          {fields.map((field, index) => renderFormElement(field, index))}
+
+          <Button key="actionButton" onClick={handleSave} title="Save" />
+        </form>
       </Suspense>
     </>
   )
