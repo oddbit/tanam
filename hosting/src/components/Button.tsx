@@ -2,13 +2,14 @@ import React, {useState} from "react";
 
 interface ButtonProps {
   title: string;
+  className?: string;
   onClick: () => Promise<void> | void;
   style?: "normal" | "rounded" | "outline" | "icon";
-  color?: "primary" | "meta-3" | "black";
+  color?: "primary" | "danger" | "meta-3" | "black";
   children?: React.ReactNode;
 }
 
-export function Button({title, onClick, style = "normal", color = "primary", children}: ButtonProps) {
+export function Button({title, onClick, style = "normal", color = "primary", children, className = ""}: ButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = async () => {
@@ -32,7 +33,7 @@ export function Button({title, onClick, style = "normal", color = "primary", chi
     "lg:px-8",
     "xl:px-10",
     isLoading ? "opacity-50 cursor-not-allowed" : "",
-  ];
+  ].concat(className);
 
   switch (color) {
     case "primary":
@@ -43,6 +44,9 @@ export function Button({title, onClick, style = "normal", color = "primary", chi
       break;
     case "black":
       styles.push("bg-black", "text-white");
+      break;
+    case "danger":
+      styles.push("bg-danger", "text-white");
       break;
     default:
       styles.push("bg-primary", "text-white");
