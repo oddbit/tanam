@@ -1,15 +1,18 @@
 "use client";
 import Loader from "@/components/common/Loader";
-import Bold from "@tiptap/extension-bold";
-import BulletList from "@tiptap/extension-bullet-list";
-import Document from "@tiptap/extension-document";
-import Heading from "@tiptap/extension-heading";
-import Italic from "@tiptap/extension-italic";
-import ListItem from "@tiptap/extension-list-item";
-import OrderedList from "@tiptap/extension-ordered-list";
-import Paragraph from "@tiptap/extension-paragraph";
-import Text from "@tiptap/extension-text";
+import BubbleMenu from '@/components/Tiptap/BubbleMenu';
+import FloatingMenu from '@/components/Tiptap/FloatingMenu';
+// import Bold from "@tiptap/extension-bold";
+// import BulletList from "@tiptap/extension-bullet-list";
+// import Document from "@tiptap/extension-document";
+// import Heading from "@tiptap/extension-heading";
+// import Italic from "@tiptap/extension-italic";
+// import ListItem from "@tiptap/extension-list-item";
+// import OrderedList from "@tiptap/extension-ordered-list";
+// import Paragraph from "@tiptap/extension-paragraph";
+// import Text from "@tiptap/extension-text";
 import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from '@tiptap/starter-kit';
 import { Suspense, useCallback, useEffect } from "react";
 
 const DEFAULT_DEBOUNCE = 2000;
@@ -52,15 +55,16 @@ export default function TiptapEditor(props: TiptapEditorProps) {
 
   const editor = useEditor({
     extensions: [
-      Document,
-      Paragraph,
-      Text,
-      Heading.configure({levels: [1, 2, 3]}),
-      Bold,
-      Italic,
-      BulletList,
-      OrderedList,
-      ListItem,
+      StarterKit,
+      // Document,
+      // Paragraph,
+      // Text,
+      // Heading.configure({levels: [1, 2, 3]}),
+      // Bold,
+      // Italic,
+      // BulletList,
+      // OrderedList,
+      // ListItem,
     ],
     editable: !props.disabled,
     content: props.value,
@@ -82,13 +86,13 @@ export default function TiptapEditor(props: TiptapEditorProps) {
 
   return (
     <Suspense fallback={<Loader />}>
-      <EditorContent editor={editor} />
-      {/* {editor && (
+      {editor && (
         <>
           <FloatingMenu editor={editor} />
           <BubbleMenu editor={editor} />
         </>
-      )} */}
+      )}
+      <EditorContent editor={editor} />
     </Suspense>
   );
 }
