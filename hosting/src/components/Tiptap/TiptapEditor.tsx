@@ -14,6 +14,7 @@ import FloatingMenu from '@/components/Tiptap/FloatingMenu';
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from '@tiptap/starter-kit';
 import { Suspense, useCallback, useEffect } from "react";
+import "./styles/tiptap-helpers.scss";
 
 const DEFAULT_DEBOUNCE = 2000;
 

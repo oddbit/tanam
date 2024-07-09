@@ -1,17 +1,17 @@
 /* Bubble menu */
 .bubble-menu {
-  background-color: white;
+  background-color: var(--white);
   border: 1px solid var(--gray-1);
   border-radius: 0.7rem;
   box-shadow: var(--shadow);
   display: flex;
-  padding: 0.2rem;
+  padding: 8px;
 
   button {
     background-color: unset;
 
     &:hover {
-      background-color: var(--gray-3);
+      background-color: rgba(0,0,0,0.5);
     }
 
     &.is-active {
