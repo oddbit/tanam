@@ -9,9 +9,8 @@ import ListItem from "@tiptap/extension-list-item";
 import OrderedList from "@tiptap/extension-ordered-list";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
-import {EditorContent, useEditor} from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import {Suspense, useCallback, useEffect} from "react";
+import { EditorContent, useEditor } from "@tiptap/react";
+import { Suspense, useCallback, useEffect } from "react";
 
 const DEFAULT_DEBOUNCE = 2000;
 
@@ -53,7 +52,6 @@ export default function TiptapEditor(props: TiptapEditorProps) {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
       Document,
       Paragraph,
       Text,
