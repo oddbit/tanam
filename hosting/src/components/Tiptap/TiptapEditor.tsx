@@ -11,6 +11,7 @@ import FloatingMenu from '@/components/Tiptap/FloatingMenu';
 // import OrderedList from "@tiptap/extension-ordered-list";
 // import Paragraph from "@tiptap/extension-paragraph";
 // import Text from "@tiptap/extension-text";
+import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from '@tiptap/starter-kit';
 import { Suspense, useCallback, useEffect } from "react";
@@ -57,6 +58,7 @@ export default function TiptapEditor(props: TiptapEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit,
+      Underline,
       // Document,
       // Paragraph,
       // Text,
