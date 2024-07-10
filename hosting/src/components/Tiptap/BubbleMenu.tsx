@@ -16,6 +16,7 @@ export default function BubbleMenu({editor}: BubbleMenuProps) {
         <button className={editor.isActive('italic') ? `${baseStyleButton} is-active` : baseStyleButton} onClick={() => editor.chain().focus().toggleItalic().run()}>Italic</button>
         <button className={editor.isActive('underline') ? `${baseStyleButton} is-active` : baseStyleButton} onClick={() => editor.chain().focus().toggleUnderline().run()}>Underline</button>
         <button className={editor.isActive('strike') ? `${baseStyleButton} is-active` : baseStyleButton} onClick={() => editor.chain().focus().toggleStrike().run()}>Strike</button>
+        <button className={editor.isActive('codeBlock') ? `${baseStyleButton} is-active` : baseStyleButton} onClick={() => editor.chain().focus().toggleCodeBlock().run()}>Code Block</button>
       </div>
     </TiptapBubbleMenu>
   ) : (
