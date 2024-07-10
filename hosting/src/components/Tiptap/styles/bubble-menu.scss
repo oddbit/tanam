@@ -11,14 +11,17 @@
     background-color: unset;
 
     &:hover {
-      background-color: rgba(0,0,0,0.5);
+      background-color: rgba(0,0,0,0.3);
+      color: var(--white);
     }
 
     &.is-active {
-      background-color: var(--purple);
+      background-color: rgba(0,0,0,0.3);
+      color: var(--white);
 
       &:hover {
-        background-color: var(--purple-contrast);
+        background-color: rgba(0,0,0,0.3);
+        color: var(--white);
       }
     }
   }
