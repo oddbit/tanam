@@ -12,6 +12,7 @@
     "codecheck": "npm run prettier:fix && npm run lint:fix"
   },
   "dependencies": {
+    "@tiptap/extension-code-block-lowlight": "^2.4.0",
     "@tiptap/extension-underline": "^2.4.0",
     "@tiptap/pm": "^2.4.0",
     "@tiptap/react": "^2.4.0",
@@ -22,7 +23,9 @@
     "firebase": "^10.12.0",
     "firebaseui": "^6.1.0",
     "flatpickr": "^4.6.13",
+    "highlight.js": "^11.10.0",
     "jsvectormap": "^1.5.3",
+    "lowlight": "^3.1.0",
     "next": "^14.2.3",
     "react": "^18.3.1",
     "react-apexcharts": "^1.4.1",
@@ -35,6 +38,7 @@
     "@iconify-json/ri": "^1.1.20",
     "@next/eslint-plugin-next": "^14.2.3",
     "@tailwindcss/typography": "^0.5.13",
+    "@types/highlight.js": "^10.1.0",
     "@types/node": "^18.19.33",
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.3.0",
