@@ -25,4 +25,12 @@
       }
     }
   }
+
+  & .separator {
+    width: 1px;
+    height: 28px;
+    background: #dcdbdd;
+    margin-right: 8px;
+    margin-left: 8px;
+  }
 }
