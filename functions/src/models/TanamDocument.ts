@@ -9,8 +9,8 @@ export interface ITanamDocument<TimestampType> {
   documentType: string;
   revision?: number;
   publishedAt?: TimestampType;
-  createdAt: TimestampType;
-  updatedAt: TimestampType;
+  createdAt?: TimestampType;
+  updatedAt?: TimestampType;
 }
 
 export abstract class TanamDocument<TimestampType, FieldValueType> {
