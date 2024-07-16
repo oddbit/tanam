@@ -4,7 +4,7 @@ export interface ITanamDocumentType<TimestampType> {
   titleSingular: LocalizedString;
   titlePlural: LocalizedString;
   description: LocalizedString;
-  documentTitleField: string;
+  titleField: string;
   isEnabled: boolean;
   createdAt: TimestampType;
   updatedAt: TimestampType;
@@ -16,7 +16,7 @@ export abstract class TanamDocumentType<TimestampType, FieldValueType> {
     this.titleSingular = json.titleSingular;
     this.description = json.description;
     this.titlePlural = json.titlePlural;
-    this.documentTitleField = json.documentTitleField;
+    this.titleField = json.titleField;
     this.isEnabled = !!json.isEnabled;
     this.createdAt = json.createdAt;
     this.updatedAt = json.updatedAt;
@@ -26,7 +26,7 @@ export abstract class TanamDocumentType<TimestampType, FieldValueType> {
   public titleSingular: LocalizedString;
   public titlePlural: LocalizedString;
   public description: LocalizedString;
-  public documentTitleField: string;
+  public titleField: string;
   public isEnabled: boolean;
   public readonly createdAt: TimestampType;
   public readonly updatedAt: TimestampType;
@@ -38,7 +38,7 @@ export abstract class TanamDocumentType<TimestampType, FieldValueType> {
       titleSingular: this.titleSingular.toJson(),
       titlePlural: this.titlePlural.toJson(),
       description: this.description.toJson(),
-      documentTitleField: this.documentTitleField,
+      titleField: this.titleField,
       isEnabled: !!this.isEnabled,
       createdAt: this.createdAt,
       updatedAt: this.getServerTimestamp(),

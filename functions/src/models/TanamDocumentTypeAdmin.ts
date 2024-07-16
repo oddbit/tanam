@@ -20,7 +20,7 @@ export class TanamDocumentTypeAdmin extends TanamDocumentType<Timestamp, FieldVa
       titleSingular: new LocalizedString(data.titleSingular),
       titlePlural: new LocalizedString(data.titlePlural),
       description: new LocalizedString(data.description),
-      documentTitleField: data.documentTitleField,
+      titleField: data.documentTitleField,
       isEnabled: data.isEnabled,
       createdAt: data.createdAt || Timestamp.now(),
       updatedAt: data.updatedAt || Timestamp.now(),
