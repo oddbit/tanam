@@ -43,7 +43,6 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
       q,
       (snapshot) => {
         const documents = snapshot.docs.map((doc) => TanamDocumentClient.fromFirestore(doc));
-        console.log(documents);
         setData(documents);
       },
       (err) => {
@@ -137,15 +136,15 @@ export function useCreateTanamDocument(documentType?: string) {
         return;
       }
       const typeRef = collection(firestore, "tanam-documents");
-      const result = await addDoc(typeRef, {
-        createdAt: serverTimestamp(),
-        data: {content: ""},
-        documentType,
-        publishedAt: null,
-        revision: 0,
-        status: "",
-        updatedAt: serverTimestamp(),
-      });
+
+      const result = await addDoc(
+        typeRef,
+        new TanamDocumentClient("", {
+          data: {content: ""},
+          documentType,
+          revision: 0,
+        }).toJson(),
+      );
       return result;
     } catch (err) {
       setError(
