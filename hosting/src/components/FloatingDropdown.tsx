@@ -20,6 +20,8 @@ export function FloatingDropdown({ buttonRef, content }: DropdownProps) {
         trigger: "manual",
         placement: "bottom",
       } as Partial<Props>);
+
+      console.info('dropdownRef.current :: ', dropdownRef.current)
     }
   }, [buttonRef]);
 
