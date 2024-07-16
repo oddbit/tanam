@@ -1,4 +1,5 @@
 "use client";
+import {Button} from "@/components/Button";
 import {DocumentTypeGenericList} from "@/components/DocumentType/DocumentTypeGenericList";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
@@ -11,7 +12,7 @@ import {Suspense, useEffect, useState} from "react";
 
 export default function DocumentTypeDocumentsPage() {
   const {data: documentType} = useTanamDocumentType("article");
-  const {create, error: writeError, isLoading} = useCreateTanamDocument(documentType?.id);
+  const {create, error: writeError} = useCreateTanamDocument(documentType?.id);
   const {data: documents, error: docsError} = useTanamDocuments("article");
   const [notification, setNotification] = useState<UserNotification | null>(null);
   const router = useRouter();
@@ -30,18 +31,15 @@ export default function DocumentTypeDocumentsPage() {
     <>
       <Suspense fallback={<Loader />}>
         {documentType ? (
-          <div className="flex items-center">
+          <div className="flex items-center gap-4">
             <PageHeader pageName={documentType.titlePlural.translated} />
-            <button
-              type="button"
-              className="ml-4 mb-6 inline-flex items-center justify-center rounded-md bg-primary px-2 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2"
-              onClick={addNewArticle}
-            >
-              <span className={isLoading ? "opacity-0" : "opacity-100"}>
-                Add new {documentType.titleSingular.translated}
-              </span>
-              {isLoading ? <span className="i-line-md-loading-loop w-[24px] h-[24px] absolute" /> : null}
-            </button>
+            <div className="mb-6">
+              <Button
+                title={`Add New ${documentType.titleSingular.translated}`}
+                onClick={addNewArticle}
+                style="rounded"
+              />
+            </div>
           </div>
         ) : (
           <Loader />
