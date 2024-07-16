@@ -136,15 +136,13 @@ export function useCreateTanamDocument(documentType?: string) {
         return;
       }
       const typeRef = collection(firestore, "tanam-documents");
+      const tanamDocument = new TanamDocumentClient("", {
+        data: {content: ""},
+        documentType,
+        revision: 0,
+      }).toJson();
 
-      const result = await addDoc(
-        typeRef,
-        new TanamDocumentClient("", {
-          data: {content: ""},
-          documentType,
-          revision: 0,
-        }).toJson(),
-      );
+      const result = await addDoc(typeRef, tanamDocument);
       return result;
     } catch (err) {
       setError(
