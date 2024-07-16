@@ -10,7 +10,7 @@ import Loader from "@/components/common/Loader";
 // import Italic from "@tiptap/extension-italic";
 // import ListItem from "@tiptap/extension-list-item";
 // import OrderedList from "@tiptap/extension-ordered-list";
-// import Paragraph from "@tiptap/extension-paragraph";
+import Paragraph from "@tiptap/extension-paragraph";
 // import Text from "@tiptap/extension-text";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Underline from "@tiptap/extension-underline";
@@ -80,6 +80,7 @@ export default function TiptapEditor(props: TiptapEditorProps) {
           },
         })
         .configure({ lowlight }),
+      Paragraph,
       // Document,
       // Paragraph,
       // Text,

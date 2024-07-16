@@ -46,18 +46,10 @@ export default function BubbleMenu({editor}: BubbleMenuProps) {
             </div>
 
             <div className="py-1" role="none">
-              <button className={editor.isActive('bold') ? `${baseStyleDropdownItem} is-active` : baseStyleDropdownItem} onClick={() => {
-                editor.chain().focus().toggleBold().run()
+              <button className={editor.isActive('paragraph') ? `${baseStyleDropdownItem} is-active` : baseStyleDropdownItem} onClick={() => {
+                editor.commands.setParagraph()
                 toggleDropdownFormat()
-              }}>Bold</button>
-              <button className={editor.isActive('italic') ? `${baseStyleDropdownItem} is-active` : baseStyleDropdownItem} onClick={() => {
-                editor.chain().focus().toggleItalic().run()
-                toggleDropdownFormat()
-              }}>Italic</button>
-              <button className={editor.isActive('underline') ? `${baseStyleDropdownItem} is-active` : baseStyleDropdownItem} onClick={() => {
-                editor.chain().focus().toggleUnderline().run()
-                toggleDropdownFormat()
-              }}>Underline</button>
+              }}>Paragraph</button>
             </div>
           </div>
         )}
