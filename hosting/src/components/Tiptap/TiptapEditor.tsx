@@ -6,7 +6,7 @@ import Loader from "@/components/common/Loader";
 // import Bold from "@tiptap/extension-bold";
 // import BulletList from "@tiptap/extension-bullet-list";
 // import Document from "@tiptap/extension-document";
-// import Heading from "@tiptap/extension-heading";
+import Heading from "@tiptap/extension-heading";
 // import Italic from "@tiptap/extension-italic";
 // import ListItem from "@tiptap/extension-list-item";
 // import OrderedList from "@tiptap/extension-ordered-list";
@@ -81,6 +81,9 @@ export default function TiptapEditor(props: TiptapEditorProps) {
         })
         .configure({ lowlight }),
       Paragraph,
+      Heading.configure({
+        levels: [1, 2, 3],
+      }),
       // Document,
       // Paragraph,
       // Text,

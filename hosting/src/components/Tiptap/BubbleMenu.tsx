@@ -50,6 +50,21 @@ export default function BubbleMenu({editor}: BubbleMenuProps) {
                 editor.commands.setParagraph()
                 toggleDropdownFormat()
               }}>Paragraph</button>
+
+              <button className={editor.isActive('heading', { level: 1 }) ? `${baseStyleDropdownItem} is-active` : baseStyleDropdownItem} onClick={() => {
+                editor.chain().focus().toggleHeading({ level: 1 }).run()
+                toggleDropdownFormat()
+              }}>Heading 1</button>
+
+              <button className={editor.isActive('heading', { level: 2 }) ? `${baseStyleDropdownItem} is-active` : baseStyleDropdownItem} onClick={() => {
+                editor.chain().focus().toggleHeading({ level: 2 }).run()
+                toggleDropdownFormat()
+              }}>Heading 2</button>
+
+              <button className={editor.isActive('heading', { level: 3 }) ? `${baseStyleDropdownItem} is-active` : baseStyleDropdownItem} onClick={() => {
+                editor.chain().focus().toggleHeading({ level: 3 }).run()
+                toggleDropdownFormat()
+              }}>Heading 3</button>
             </div>
           </div>
         )}
