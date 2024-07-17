@@ -9,7 +9,7 @@ import BulletList from "@tiptap/extension-bullet-list";
 import Heading from "@tiptap/extension-heading";
 // import Italic from "@tiptap/extension-italic";
 // import ListItem from "@tiptap/extension-list-item";
-// import OrderedList from "@tiptap/extension-ordered-list";
+import OrderedList from "@tiptap/extension-ordered-list";
 import Paragraph from "@tiptap/extension-paragraph";
 // import Text from "@tiptap/extension-text";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
@@ -83,6 +83,7 @@ export default function TiptapEditor(props: TiptapEditorProps) {
         levels: [1, 2, 3],
       }),
       BulletList,
+      OrderedList,
       // Document,
       // Paragraph,
       // Text,

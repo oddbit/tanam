@@ -157,6 +157,18 @@ export default function BubbleMenu({editor}: BubbleMenuProps) {
               >
                 Bullet List
               </button>
+
+              <button
+                className={
+                  editor.isActive("orderedList") ? `${baseStyleDropdownItem} is-active` : baseStyleDropdownItem
+                }
+                onClick={() => {
+                  editor.chain().focus().toggleOrderedList().run();
+                  toggleDropdownFormat();
+                }}
+              >
+                Numbered List
+              </button>
             </div>
           </div>
         )}
