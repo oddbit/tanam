@@ -22,9 +22,9 @@ export default function DocumentTypeDocumentsPage() {
   }, [docsError, writeError]);
 
   const addNewArticle = async () => {
-    const result = await create();
+    const id = await create();
 
-    router.push(`article/${result?.id}`);
+    router.push(`article/${id}`);
   };
 
   return (

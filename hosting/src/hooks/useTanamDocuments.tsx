@@ -3,12 +3,12 @@ import {firestore} from "@/plugins/firebase";
 import {ITanamDocument} from "@functions/models/TanamDocument";
 import {
   Timestamp,
-  addDoc,
   collection,
   doc,
   onSnapshot,
   query,
   serverTimestamp,
+  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -135,21 +135,18 @@ export function useCreateTanamDocument(documentType?: string) {
         setError(new UserNotification("error", "Missing parameter", "Document id parameter is missing"));
         return;
       }
-      const typeRef = collection(firestore, "tanam-documents");
-      const tanamDocument = new TanamDocumentClient("", {
-        data: {content: ""},
-        documentType,
-        revision: 0,
-      }).toJson();
+      const docRef = doc(collection(firestore, "tanam-documents"));
+      const docId = docRef.id;
 
-      const result = await addDoc(typeRef, tanamDocument);
-      return result;
+      const tanamDocument = new TanamDocumentClient(docId, {data: {}, documentType}).toJson();
+      await setDoc(docRef, tanamDocument);
+      return docId;
     } catch (err) {
       setError(
         new UserNotification(
           "error",
-          "UserNotification updating document",
-          "An error occurred while updating the document",
+          "UserNotification creating document",
+          "An error occurred while creating the document",
         ),
       );
     } finally {
