@@ -1,6 +1,6 @@
-import {Editor, BubbleMenu as TiptapBubbleMenu} from "@tiptap/react";
+import { Editor, BubbleMenu as TiptapBubbleMenu } from "@tiptap/react";
 // import styles from "./BubbleMenu.module.css";
-import {useState} from "react";
+import { useState } from "react";
 import "./styles/bubble-menu.scss";
 
 interface BubbleMenuProps {
@@ -134,6 +134,28 @@ export default function BubbleMenu({editor}: BubbleMenuProps) {
                 }}
               >
                 Heading 3
+              </button>
+            </div>
+
+            <div className="py-1" role="none">
+              <div className="mt-2">
+                <div className="text-[.65rem] font-semibold mb-1 uppercase text-neutral-500 dark:text-neutral-400 px-1.5">
+                  List
+                </div>
+              </div>
+            </div>
+
+            <div className="py-1" role="none">
+              <button
+                className={
+                  editor.isActive("bulletList") ? `${baseStyleDropdownItem} is-active` : baseStyleDropdownItem
+                }
+                onClick={() => {
+                  editor.chain().focus().toggleBulletList().run();
+                  toggleDropdownFormat();
+                }}
+              >
+                Bullet List
               </button>
             </div>
           </div>

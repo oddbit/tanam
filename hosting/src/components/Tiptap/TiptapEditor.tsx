@@ -4,7 +4,7 @@ import CodeBlock from "@/components/Tiptap/CodeBlock";
 import FloatingMenu from "@/components/Tiptap/FloatingMenu";
 import Loader from "@/components/common/Loader";
 // import Bold from "@tiptap/extension-bold";
-// import BulletList from "@tiptap/extension-bullet-list";
+import BulletList from "@tiptap/extension-bullet-list";
 // import Document from "@tiptap/extension-document";
 import Heading from "@tiptap/extension-heading";
 // import Italic from "@tiptap/extension-italic";
@@ -14,14 +14,14 @@ import Paragraph from "@tiptap/extension-paragraph";
 // import Text from "@tiptap/extension-text";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Underline from "@tiptap/extension-underline";
-import {EditorContent, ReactNodeViewRenderer as reactNodeViewRenderer, useEditor} from "@tiptap/react";
+import { EditorContent, ReactNodeViewRenderer as reactNodeViewRenderer, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import css from "highlight.js/lib/languages/css";
 import js from "highlight.js/lib/languages/javascript";
 import ts from "highlight.js/lib/languages/typescript";
 import html from "highlight.js/lib/languages/xml";
-import {common, createLowlight} from "lowlight";
-import {Suspense, useCallback, useEffect} from "react";
+import { common, createLowlight } from "lowlight";
+import { Suspense, useCallback, useEffect } from "react";
 
 import "./styles/tiptap-main.scss";
 
@@ -82,6 +82,7 @@ export default function TiptapEditor(props: TiptapEditorProps) {
       Heading.configure({
         levels: [1, 2, 3],
       }),
+      BulletList,
       // Document,
       // Paragraph,
       // Text,
