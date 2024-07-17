@@ -24,12 +24,8 @@ service cloud.firestore {
       return isSignedIn() && request.auth.token.tanamRole != null;
     }
 
-    function isSuperAdmin() {
-      return hasUserRole("superAdmin");
-    }
-
     function isAtLeastAdmin() {
-      return isSuperAdmin() || hasUserRole("admin");
+      return hasUserRole("admin");
     }
 
     function isPublisher() {
