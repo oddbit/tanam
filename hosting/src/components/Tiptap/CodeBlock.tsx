@@ -1,4 +1,4 @@
-import { NodeViewContent, NodeViewWrapper } from "@tiptap/react";
+import {NodeViewContent, NodeViewWrapper} from "@tiptap/react";
 import "./styles/code-block.scss";
 
 interface CodeBlockProps {
@@ -7,7 +7,7 @@ interface CodeBlockProps {
       language: string;
     };
   };
-  updateAttributes: (attrs: { language: string }) => void;
+  updateAttributes: (attrs: {language: string}) => void;
   extension: {
     options: {
       lowlight: {
@@ -17,16 +17,22 @@ interface CodeBlockProps {
   };
 }
 
-export default function CodeBlock({ node: { attrs: { language: defaultLanguage } }, updateAttributes, extension }: CodeBlockProps) {
+export default function CodeBlock({
+  node: {
+    attrs: {language: defaultLanguage},
+  },
+  updateAttributes,
+  extension,
+}: CodeBlockProps) {
   return (
     <NodeViewWrapper className="code-block">
-      <select contentEditable={false} defaultValue={defaultLanguage} onChange={event => updateAttributes({ language: event.target.value })}>
-        <option value="null">
-          auto
-        </option>
-        <option disabled>
-          —
-        </option>
+      <select
+        contentEditable={false}
+        defaultValue={defaultLanguage}
+        onChange={(event) => updateAttributes({language: event.target.value})}
+      >
+        <option value="null">auto</option>
+        <option disabled>—</option>
         {extension.options.lowlight.listLanguages().map((lang, index) => (
           <option key={index} value={lang}>
             {lang}
@@ -37,5 +43,5 @@ export default function CodeBlock({ node: { attrs: { language: defaultLanguage }
         <NodeViewContent as="code" />
       </pre>
     </NodeViewWrapper>
-  )
+  );
 }
