@@ -9,7 +9,7 @@ service cloud.firestore {
     match /tanam-users/{uid} {
       allow read: if isSignedInAs(uid);
       // Delete and create must be done manually
-      allow update: if isSignedInAs(uid);
+      allow update: if isSignedInAs(uid) && request.resource.data.role == resource.data.role;
     }
 
     match /tanam-documents/{documentId} {
