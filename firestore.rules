@@ -6,6 +6,12 @@ service cloud.firestore {
       allow write: if isAtLeastAdmin();
     }
 
+    match /tanam-users/{uid} {
+      allow read: if isSignedInAs(uid);
+      // Delete and create must be done manually
+      allow update: if isSignedInAs(uid);
+    }
+
     match /tanam-documents/{documentId} {
       allow read: if hasAnyRole();
       allow write: if isPublisher();
