@@ -33,11 +33,15 @@ export const onTanamUserCreated = onDocumentCreated("tanam-users/{docId}", async
   });
   logger.info("Creating User", tanamUser.toJson());
 
-  const customClaims = (await auth.getUser(uid)).customClaims || {};
-  return Promise.all([
-    auth.setCustomUserClaims(uid, {...customClaims, tanamRole: tanamUser.role}),
-    docRef.set(tanamUser.toJson()),
-  ]);
+  const customClaimsBefore = (await auth.getUser(uid)).customClaims || {};
+  const customClaimsAfter = {...customClaimsBefore, tanamRole: tanamUser.role};
+
+  logger.info(`Setting custom claims for ${uid}`, {
+    customClaimsBefore,
+    customClaimsAfter,
+  });
+
+  return Promise.all([auth.setCustomUserClaims(uid, customClaimsAfter), docRef.set(tanamUser.toJson())]);
 });
 
 // Function to enforce role management on document update
@@ -71,6 +75,11 @@ export const onTanamUserDeleted = onDocumentDeleted("tanam-users/{docId}", async
 
   console.log(`Document deleted: ${uid}, removing custom claims`);
   const customClaims = (await auth.getUser(uid)).customClaims || {};
-  customClaims.tanamRole = null;
+  customClaims.tanamRole = undefined;
+
+  logger.info(`Tanam user deleted, removing custom claims for ${uid}`, {
+    customClaims,
+  });
+
   await auth.setCustomUserClaims(uid, customClaims);
 });
