@@ -11,7 +11,7 @@ const db = admin.firestore();
 // Function to validate and assign role on document creation
 // This funciton will scaffold and create a new user document with a role field
 // and assert that all the document fields are populated.
-export const validateAndAssignRole = onDocumentCreated("tanam-users/{docId}", async (event) => {
+export const onTanamUserCreated = onDocumentCreated("tanam-users/{docId}", async (event) => {
   const uid = event.params.docId;
   const docRef = db.collection("tanam-users").doc(uid);
   const docData = (await docRef.get()).data() || {};
@@ -42,7 +42,7 @@ export const validateAndAssignRole = onDocumentCreated("tanam-users/{docId}", as
 
 // Function to enforce role management on document update
 // This function will apply changes to custom claims when the role field is updated
-export const enforceRoleManagement = onDocumentUpdated("tanam-users/{docId}", async (event) => {
+export const onRoleChange = onDocumentUpdated("tanam-users/{docId}", async (event) => {
   const uid = event.params.docId;
   const beforeData = event?.data?.before.data();
   const afterData = event?.data?.after.data();
@@ -66,7 +66,7 @@ export const enforceRoleManagement = onDocumentUpdated("tanam-users/{docId}", as
 });
 
 // Function to remove role on document deletion
-export const removeRoleOnDelete = onDocumentDeleted("tanam-users/{docId}", async (event) => {
+export const onTanamUserDeleted = onDocumentDeleted("tanam-users/{docId}", async (event) => {
   const uid = event.params.docId;
 
   console.log(`Document deleted: ${uid}, removing custom claims`);
