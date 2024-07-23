@@ -3,17 +3,12 @@ import BubbleMenu from "@/components/Tiptap/BubbleMenu";
 import CodeBlock from "@/components/Tiptap/CodeBlock";
 import FloatingMenu from "@/components/Tiptap/FloatingMenu";
 import Loader from "@/components/common/Loader";
-// import Bold from "@tiptap/extension-bold";
 import BulletList from "@tiptap/extension-bullet-list";
-// import Document from "@tiptap/extension-document";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Heading from "@tiptap/extension-heading";
-// import Italic from "@tiptap/extension-italic";
-// import ListItem from "@tiptap/extension-list-item";
+import Link from "@tiptap/extension-link";
 import OrderedList from "@tiptap/extension-ordered-list";
 import Paragraph from "@tiptap/extension-paragraph";
-// import Text from "@tiptap/extension-text";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
 import { EditorContent, ReactNodeViewRenderer as reactNodeViewRenderer, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -90,15 +85,6 @@ export default function TiptapEditor(props: TiptapEditorProps) {
         autolink: true,
         defaultProtocol: 'https',
       }),
-      // Document,
-      // Paragraph,
-      // Text,
-      // Heading.configure({levels: [1, 2, 3]}),
-      // Bold,
-      // Italic,
-      // BulletList,
-      // OrderedList,
-      // ListItem,
     ],
     editable: !props.disabled,
     content: props.value,

@@ -1,5 +1,4 @@
 import { Editor, BubbleMenu as TiptapBubbleMenu } from "@tiptap/react";
-// import styles from "./BubbleMenu.module.css";
 import { useCallback, useState } from "react";
 import "./styles/bubble-menu.scss";
 
