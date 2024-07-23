@@ -1,6 +1,6 @@
-import {Editor, BubbleMenu as TiptapBubbleMenu} from "@tiptap/react";
+import { Editor, BubbleMenu as TiptapBubbleMenu } from "@tiptap/react";
 // import styles from "./BubbleMenu.module.css";
-import {useState} from "react";
+import { useCallback, useState } from "react";
 import "./styles/bubble-menu.scss";
 
 interface BubbleMenuProps {
@@ -18,6 +18,28 @@ export default function BubbleMenu({editor}: BubbleMenuProps) {
   const toggleDropdownFormat = () => {
     setDropdownFormat(!dropdownFormat);
   };
+
+  const setLink = useCallback(() => {
+    const previousUrl = editor.getAttributes('link').href
+    const url = window.prompt('URL', previousUrl)
+
+    // cancelled
+    if (url === null) {
+      return
+    }
+
+    // empty
+    if (url === '') {
+      editor.chain().focus().extendMarkRange('link').unsetLink()
+        .run()
+
+      return
+    }
+
+    // update link
+    editor.chain().focus().extendMarkRange('link').setLink({ href: url })
+      .run()
+  }, [editor])
 
   return editor ? (
     <TiptapBubbleMenu editor={editor} tippyOptions={{duration: 100}}>
@@ -71,6 +93,12 @@ export default function BubbleMenu({editor}: BubbleMenuProps) {
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
         >
           Code Block
+        </button>
+        <button
+          className={editor.isActive("link") ? `${baseStyleButton} is-active` : baseStyleButton}
+          onClick={setLink}
+        >
+          Set Link
         </button>
 
         {dropdownFormat && (

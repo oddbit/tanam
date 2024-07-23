@@ -13,15 +13,16 @@ import OrderedList from "@tiptap/extension-ordered-list";
 import Paragraph from "@tiptap/extension-paragraph";
 // import Text from "@tiptap/extension-text";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
-import {EditorContent, ReactNodeViewRenderer as reactNodeViewRenderer, useEditor} from "@tiptap/react";
+import { EditorContent, ReactNodeViewRenderer as reactNodeViewRenderer, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import css from "highlight.js/lib/languages/css";
 import js from "highlight.js/lib/languages/javascript";
 import ts from "highlight.js/lib/languages/typescript";
 import html from "highlight.js/lib/languages/xml";
-import {common, createLowlight} from "lowlight";
-import {Suspense, useCallback, useEffect} from "react";
+import { common, createLowlight } from "lowlight";
+import { Suspense, useCallback, useEffect } from "react";
 
 import "./styles/tiptap-main.scss";
 
@@ -84,6 +85,11 @@ export default function TiptapEditor(props: TiptapEditorProps) {
       }),
       BulletList,
       OrderedList,
+      Link.configure({
+        openOnClick: false,
+        autolink: true,
+        defaultProtocol: 'https',
+      }),
       // Document,
       // Paragraph,
       // Text,

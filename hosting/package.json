@@ -38,6 +38,7 @@
     "@iconify-json/ri": "^1.1.20",
     "@next/eslint-plugin-next": "^14.2.3",
     "@tailwindcss/typography": "^0.5.13",
+    "@tiptap/extension-link": "^2.5.5",
     "@types/highlight.js": "^10.1.0",
     "@types/node": "^18.19.33",
     "@types/react": "^18.3.2",
