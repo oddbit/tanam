@@ -1,11 +1,14 @@
 /* Bubble menu */
 .bubble-menu {
-  background-color: var(--white);
-  border: 1px solid var(--gray-1);
-  border-radius: 0.7rem;
-  box-shadow: var(--shadow);
-  display: flex;
-  padding: 8px;
+  // background-color: var(--white);
+  // border: 1px solid var(--gray-1);
+  // border-radius: 0.7rem;
+  // box-shadow: var(--shadow);
+  // display: flex;
+  // padding: 8px;
+  background: unset;
+  box-shadow: unset;
+  border: unset;
 
   & button {
     background-color: unset;
