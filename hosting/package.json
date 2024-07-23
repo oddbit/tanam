@@ -12,7 +12,6 @@
     "codecheck": "npm run prettier:fix && npm run lint:fix"
   },
   "dependencies": {
-    "@heroicons/react": "^2.1.5",
     "@tiptap/extension-code-block-lowlight": "^2.4.0",
     "@tiptap/extension-underline": "^2.4.0",
     "@tiptap/pm": "^2.4.0",

@@ -1,6 +1,6 @@
 {
   "editor.codeActionsOnSave": {
-    "source.organizeImports": "always"
+    "source.organizeImports": "always",
   },
   "javascript.preferences.quoteStyle": "single",
   "typescript.preferences.quoteStyle": "single",
@@ -10,12 +10,13 @@
   "javascript.preferences.importModuleSpecifier": "relative",
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
+  "editor.formatOnSave": false,
   "json.format.enable": true,
   "[scss]": {
     "editor.tabSize": 2
   },
   "[json]": {
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
   },
   "[jsonc]": {
     "editor.tabSize": 2
@@ -27,6 +28,9 @@
     "editor.tabSize": 2
   },
   "[typescript]": {
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+  },
+  "[javascript]": {
+    "editor.tabSize": 2,
   }
 }
