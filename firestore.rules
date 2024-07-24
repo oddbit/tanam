@@ -6,6 +6,12 @@ service cloud.firestore {
       allow write: if isAtLeastAdmin();
     }
 
+    match /tanam-users/{uid} {
+      allow read: if isSignedInAs(uid);
+      // Delete and create must be done manually
+      allow update: if isSignedInAs(uid) && request.resource.data.role == resource.data.role;
+    }
+
     match /tanam-documents/{documentId} {
       allow read: if hasAnyRole();
       allow write: if isPublisher();
@@ -24,12 +30,8 @@ service cloud.firestore {
       return isSignedIn() && request.auth.token.tanamRole != null;
     }
 
-    function isSuperAdmin() {
-      return hasUserRole("superAdmin");
-    }
-
     function isAtLeastAdmin() {
-      return isSuperAdmin() || hasUserRole("admin");
+      return hasUserRole("admin");
     }
 
     function isPublisher() {
