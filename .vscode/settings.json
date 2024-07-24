@@ -10,7 +10,6 @@
   "javascript.preferences.importModuleSpecifier": "relative",
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
-  "editor.formatOnSave": false,
   "json.format.enable": true,
   "[scss]": {
     "editor.tabSize": 2
