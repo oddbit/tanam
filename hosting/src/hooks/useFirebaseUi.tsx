@@ -1,9 +1,9 @@
 "use client";
-import {firebaseAuth} from "@/plugins/firebase";
-import {auth as firebaseAuthUi} from "firebaseui";
-import {AuthCredential, GoogleAuthProvider} from "firebase/auth";
+import { firebaseAuth } from "@/plugins/firebase";
+import { AuthCredential, EmailAuthProvider, GoogleAuthProvider } from "firebase/auth";
+import { auth as firebaseAuthUi } from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
 const firebaseUi = firebaseAuthUi.AuthUI.getInstance() || new firebaseAuthUi.AuthUI(firebaseAuth);
 
@@ -31,6 +31,12 @@ export function useFirebaseUi() {
       tosUrl: "https://github.com/oddbit/tanam/blob/main/docs/tos.md",
       privacyPolicyUrl: "https://github.com/oddbit/tanam/blob/main/docs/privacy-policy.md",
       signInOptions: [
+        {
+          provider: EmailAuthProvider.PROVIDER_ID,
+          fullLabel: isSignUp
+            ? "Sign up with email"
+            : "Sign in with email"
+        },
         {
           provider: GoogleAuthProvider.PROVIDER_ID,
           fullLabel: isSignUp ? "Sign up with Google" : "Sign in with Google",
