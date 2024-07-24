@@ -1,5 +1,5 @@
-import { Editor, BubbleMenu as TiptapBubbleMenu } from "@tiptap/react";
-import { useCallback, useState } from "react";
+import {Editor, BubbleMenu as TiptapBubbleMenu} from "@tiptap/react";
+import {useCallback, useState} from "react";
 import "./styles/bubble-menu.scss";
 
 interface BubbleMenuProps {
@@ -19,26 +19,24 @@ export default function BubbleMenu({editor}: BubbleMenuProps) {
   };
 
   const setLink = useCallback(() => {
-    const previousUrl = editor.getAttributes('link').href
-    const url = window.prompt('URL', previousUrl)
+    const previousUrl = editor.getAttributes("link").href;
+    const url = window.prompt("URL", previousUrl);
 
     // cancelled
     if (url === null) {
-      return
+      return;
     }
 
     // empty
-    if (url === '') {
-      editor.chain().focus().extendMarkRange('link').unsetLink()
-        .run()
+    if (url === "") {
+      editor.chain().focus().extendMarkRange("link").unsetLink().run();
 
-      return
+      return;
     }
 
     // update link
-    editor.chain().focus().extendMarkRange('link').setLink({ href: url })
-      .run()
-  }, [editor])
+    editor.chain().focus().extendMarkRange("link").setLink({href: url}).run();
+  }, [editor]);
 
   return editor ? (
     <TiptapBubbleMenu editor={editor} tippyOptions={{duration: 100}}>
@@ -52,7 +50,36 @@ export default function BubbleMenu({editor}: BubbleMenuProps) {
             aria-haspopup="true"
             onClick={toggleDropdownFormat}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" className="w-4 h-4"><path d="M13 4v16"></path><path d="M17 4v16"></path><path d="M19 4H9.5a4.5 4.5 0 0 0 0 9H13"></path></svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" className="w-2 h-2"><path d="m6 9 6 6 6-6"></path></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-4 h-4"
+            >
+              <path d="M13 4v16"></path>
+              <path d="M17 4v16"></path>
+              <path d="M19 4H9.5a4.5 4.5 0 0 0 0 9H13"></path>
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-2 h-2"
+            >
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
           </button>
 
           <div className="bg-neutral-200 dark:bg-neutral-800 h-full min-h-[1.5rem] w-[1px] mx-1 first:ml-0 last:mr-0"></div>
@@ -62,7 +89,21 @@ export default function BubbleMenu({editor}: BubbleMenuProps) {
               className={editor.isActive("bold") ? `${baseStyleButton} is-active` : baseStyleButton}
               onClick={() => editor.chain().focus().toggleBold().run()}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" className="w-4 h-4"><path d="M14 12a4 4 0 0 0 0-8H6v8"></path><path d="M15 20a4 4 0 0 0 0-8H6v8Z"></path></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-4 h-4"
+              >
+                <path d="M14 12a4 4 0 0 0 0-8H6v8"></path>
+                <path d="M15 20a4 4 0 0 0 0-8H6v8Z"></path>
+              </svg>
             </button>
           </span>
 
@@ -71,7 +112,22 @@ export default function BubbleMenu({editor}: BubbleMenuProps) {
               className={editor.isActive("italic") ? `${baseStyleButton} is-active` : baseStyleButton}
               onClick={() => editor.chain().focus().toggleItalic().run()}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" className="w-4 h-4"><line x1="19" x2="10" y1="4" y2="4"></line><line x1="14" x2="5" y1="20" y2="20"></line><line x1="15" x2="9" y1="4" y2="20"></line></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-4 h-4"
+              >
+                <line x1="19" x2="10" y1="4" y2="4"></line>
+                <line x1="14" x2="5" y1="20" y2="20"></line>
+                <line x1="15" x2="9" y1="4" y2="20"></line>
+              </svg>
             </button>
           </span>
 
@@ -80,7 +136,21 @@ export default function BubbleMenu({editor}: BubbleMenuProps) {
               className={editor.isActive("underline") ? `${baseStyleButton} is-active` : baseStyleButton}
               onClick={() => editor.chain().focus().toggleUnderline().run()}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" className="w-4 h-4"><path d="M6 4v6a6 6 0 0 0 12 0V4"></path><line x1="4" x2="20" y1="20" y2="20"></line></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-4 h-4"
+              >
+                <path d="M6 4v6a6 6 0 0 0 12 0V4"></path>
+                <line x1="4" x2="20" y1="20" y2="20"></line>
+              </svg>
             </button>
           </span>
 
@@ -89,16 +159,46 @@ export default function BubbleMenu({editor}: BubbleMenuProps) {
               className={editor.isActive("strike") ? `${baseStyleButton} is-active` : baseStyleButton}
               onClick={() => editor.chain().focus().toggleStrike().run()}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" className="w-4 h-4"><path d="M16 4H9a3 3 0 0 0-2.83 4"></path><path d="M14 12a4 4 0 0 1 0 8H6"></path><line x1="4" x2="20" y1="12" y2="12"></line></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-4 h-4"
+              >
+                <path d="M16 4H9a3 3 0 0 0-2.83 4"></path>
+                <path d="M14 12a4 4 0 0 1 0 8H6"></path>
+                <line x1="4" x2="20" y1="12" y2="12"></line>
+              </svg>
             </button>
           </span>
-          
+
           <span>
             <button
               className={editor.isActive("codeBlock") ? `${baseStyleButton} is-active` : baseStyleButton}
               onClick={() => editor.chain().focus().toggleCodeBlock().run()}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" className="w-4 h-4"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-4 h-4"
+              >
+                <path d="m18 16 4-4-4-4"></path>
+                <path d="m6 8-4 4 4 4"></path>
+                <path d="m14.5 4-5 16"></path>
+              </svg>
             </button>
           </span>
           <span>
@@ -106,7 +206,21 @@ export default function BubbleMenu({editor}: BubbleMenuProps) {
               className={editor.isActive("link") ? `${baseStyleButton} is-active` : baseStyleButton}
               onClick={setLink}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" className="w-4 h-4"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-4 h-4"
+              >
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+              </svg>
             </button>
           </span>
         </div>
