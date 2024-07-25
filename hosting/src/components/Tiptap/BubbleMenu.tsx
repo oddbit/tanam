@@ -1,5 +1,6 @@
-import {Editor, BubbleMenu as TiptapBubbleMenu} from "@tiptap/react";
-import {useCallback, useState} from "react";
+import ParagraphIcon from "@/assets/icons/paragraph.svg";
+import { Editor, BubbleMenu as TiptapBubbleMenu } from "@tiptap/react";
+import { useCallback, useState } from "react";
 import "./styles/bubble-menu.scss";
 
 interface BubbleMenuProps {
@@ -50,22 +51,8 @@ export default function BubbleMenu({editor}: BubbleMenuProps) {
             aria-haspopup="true"
             onClick={toggleDropdownFormat}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-4 h-4"
-            >
-              <path d="M13 4v16"></path>
-              <path d="M17 4v16"></path>
-              <path d="M19 4H9.5a4.5 4.5 0 0 0 0 9H13"></path>
-            </svg>
+            <img src={ParagraphIcon} />
+            
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
