@@ -4,6 +4,8 @@
 // if there are load dependency packages in them and some packages sometimes only support server side.
 export * from "./LocalizedString";
 export * from "./TanamDocument";
+export * from "./TanamDocumentData";
 export * from "./TanamDocumentField";
 export * from "./TanamDocumentType";
-export * from "./TanamDocumentData";
+export * from "./TanamUser";
+
