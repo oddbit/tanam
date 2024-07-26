@@ -1,9 +1,9 @@
 import * as admin from "firebase-admin";
-import {Timestamp} from "firebase-admin/firestore";
-import {logger} from "firebase-functions/v2";
-import {onDocumentCreated, onDocumentDeleted, onDocumentUpdated} from "firebase-functions/v2/firestore";
-import {TanamRole} from "../models/TanamUser";
-import {TanamUserAdmin} from "../models/TanamUserAdmin";
+import { Timestamp } from "firebase-admin/firestore";
+import { logger } from "firebase-functions/v2";
+import { onDocumentCreated, onDocumentDeleted, onDocumentUpdated } from "firebase-functions/v2/firestore";
+import { TanamRole } from "../models/TanamUser";
+import { TanamUserAdmin } from "../models/TanamUserAdmin";
 
 const auth = admin.auth();
 const db = admin.firestore();
@@ -23,10 +23,12 @@ export const onTanamUserCreated = onDocumentCreated("tanam-users/{docId}", async
     console.log("Document ID does not match any Firebase Auth UID, deleting document");
     return docRef.delete();
   }
-
+  
+  const firebaseUser = await auth.getUser(uid);
   const existingDocs = await db.collection("tanam-users").get();
   const tanamUser = new TanamUserAdmin(uid, {
     ...docData,
+    name: firebaseUser.displayName,
     role: existingDocs.size === 1 ? "admin" : "publisher",
     createdAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
