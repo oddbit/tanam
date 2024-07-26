@@ -3,9 +3,9 @@ import "@/assets/css/satoshi.css";
 import "@/assets/css/style.css";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
-import { useAuthentication } from "@/hooks/useAuthentication";
+import {useAuthentication} from "@/hooks/useAuthentication";
 import "flatpickr/dist/flatpickr.min.css";
-import React, { useState } from "react";
+import React, {useState} from "react";
 
 export default function CmsLayout({children}: {children: React.ReactNode}) {
   useAuthentication();
