@@ -15,13 +15,13 @@ interface UseTanamDocumentsResult {
  * @param {string?} uid User ID
  * @return {UseTanamDocumentsResult} Hook for documents subscription
  */
-export function useTanamUser(uid: string): UseTanamDocumentsResult {
+export function useTanamUser(uid?: string): UseTanamDocumentsResult {
   const [data, setData] = useState<TanamUserClient | null>(null);
   const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
     if (!uid) {
-      setError(new UserNotification("error", "Missing parameter", "User ID parameter is missing"));
+      setData(null);
       return;
     }
 

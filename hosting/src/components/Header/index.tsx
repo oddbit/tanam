@@ -3,13 +3,12 @@ import DropdownUser from "@/components/Header/DropdownUser";
 import {useAuthentication} from "@/hooks/useAuthentication";
 import Image from "next/image";
 import Link from "next/link";
-import {Suspense, useEffect} from "react";
+import {useEffect} from "react";
 import {useTanamUser} from "../../hooks/useTanamUser";
-import Loader from "../common/Loader";
 
 const Header = (props: {sidebarOpen: string | boolean | undefined; setSidebarOpen: (arg0: boolean) => void}) => {
   const {authUser} = useAuthentication();
-  const {data: tanamUser, error: userError} = useTanamUser(authUser?.uid ?? "");
+  const {data: tanamUser, error: userError} = useTanamUser(authUser?.uid);
 
   useEffect(() => {
     console.log("userError", userError);
@@ -85,13 +84,7 @@ const Header = (props: {sidebarOpen: string | boolean | undefined; setSidebarOpe
           <ul className="flex items-center gap-2 2xsm:gap-4">
             <DarkModeSwitcher />
           </ul>
-          <Suspense fallback={<Loader />}>
-            {tanamUser ? (
-              <DropdownUser displayName={tanamUser?.name ?? ""} avatar={authUser?.photoURL ?? ""} />
-            ) : (
-              <Loader />
-            )}
-          </Suspense>
+          {tanamUser ? <DropdownUser displayName={tanamUser.name ?? ""} avatar={authUser?.photoURL ?? ""} /> : <></>}
         </div>
       </div>
     </header>
