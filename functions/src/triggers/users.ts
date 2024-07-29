@@ -9,7 +9,7 @@ const auth = admin.auth();
 const db = admin.firestore();
 
 // Function to validate and assign role on document creation
-// This funciton will scaffold and create a new user document with a role field
+// This function will scaffold and create a new user document with a role field
 // and assert that all the document fields are populated.
 export const onTanamUserCreated = onDocumentCreated("tanam-users/{docId}", async (event) => {
   const uid = event.params.docId;
