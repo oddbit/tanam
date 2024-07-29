@@ -1,8 +1,8 @@
-import {TanamUserClient} from "@/models/TanamUserClient";
-import {UserNotification} from "@/models/UserNotification";
-import {firestore} from "@/plugins/firebase";
-import {doc, onSnapshot} from "firebase/firestore";
-import {useEffect, useState} from "react";
+import { TanamUserClient } from "@/models/TanamUserClient";
+import { UserNotification } from "@/models/UserNotification";
+import { firestore } from "@/plugins/firebase";
+import { doc, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 interface UseTanamDocumentsResult {
   data: TanamUserClient | null;
@@ -29,7 +29,14 @@ export function useTanamUser(uid?: string): UseTanamDocumentsResult {
     const unsubscribe = onSnapshot(
       docRef,
       (snapshot) => {
+        console.info("tanamUser snapshot :: ", snapshot.exists)
+
+        if (!snapshot.exists()) {
+          setError(new UserNotification("error", "Error user doesnt exist", "We can't found the user"));
+        }
+
         const tanamUser = TanamUserClient.fromFirestore(snapshot);
+        console.info("tanamUser :: ", tanamUser)
         setData(tanamUser);
       },
       (err) => {
