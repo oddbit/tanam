@@ -1,15 +1,27 @@
+import {useTanamUserImage} from "@/hooks/useTanamUser";
 import Image from "next/image";
-import PlaceholderAvatar from "./PlaceholderAvatar";
 
 interface UserImageProps {
-  src: string | null;
+  uid?: string;
   size?: number;
 }
 
-export default function UserAvatar({src, size = 112}: UserImageProps) {
-  return src ? (
-    <Image width={size} height={size} src={src} style={{width: "auto", height: "auto"}} alt="User Profile picture" />
+export default function UserAvatar({uid, size = 112}: UserImageProps) {
+  const {imageUrl} = useTanamUserImage(uid);
+
+  return imageUrl ? (
+    <Image
+      id={`UserAvatar-${uid}`}
+      width={size}
+      height={size}
+      src={imageUrl}
+      style={{width: "auto", height: "auto"}}
+      alt="User Profile picture"
+    />
   ) : (
-    <PlaceholderAvatar size={size} />
+    // Placeholder Avatar
+    <div className="flex items-center justify-center">
+      <span className="i-ic-baseline-person" style={{fontSize: size}} />
+    </div>
   );
 }
