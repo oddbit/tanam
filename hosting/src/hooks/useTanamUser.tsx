@@ -32,7 +32,7 @@ export function useTanamUser(uid?: string): UseTanamDocumentsResult {
         console.info("tanamUser snapshot :: ", snapshot.exists)
 
         if (!snapshot.exists()) {
-          setError(new UserNotification("error", "Error user doesnt exist", "We can't found the user"));
+          setError(new UserNotification("error", "Access Denied", "Sorry you cant access the page"));
         }
 
         const tanamUser = TanamUserClient.fromFirestore(snapshot);
