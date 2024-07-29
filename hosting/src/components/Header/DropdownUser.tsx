@@ -1,4 +1,4 @@
-import UserAvatar from "@/components/UserPicture/UserAvatar";
+import UserAvatar from "@/components/UserAvatar";
 import {useAuthentication} from "@/hooks/useAuthentication";
 import {clsx} from "clsx";
 import Link from "next/link";
