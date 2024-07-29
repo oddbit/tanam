@@ -1,9 +1,9 @@
 "use client";
-import { firebaseAuth } from "@/plugins/firebase";
-import { AuthCredential, EmailAuthProvider, GoogleAuthProvider } from "firebase/auth";
-import { auth as firebaseAuthUi } from "firebaseui";
+import {firebaseAuth} from "@/plugins/firebase";
+import {AuthCredential, EmailAuthProvider, GoogleAuthProvider} from "firebase/auth";
+import {auth as firebaseAuthUi} from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 
 const firebaseUi = firebaseAuthUi.AuthUI.getInstance() || new firebaseAuthUi.AuthUI(firebaseAuth);
 
@@ -33,9 +33,7 @@ export function useFirebaseUi() {
       signInOptions: [
         {
           provider: EmailAuthProvider.PROVIDER_ID,
-          fullLabel: isSignUp
-            ? "Sign up with email"
-            : "Sign in with email"
+          fullLabel: isSignUp ? "Sign up with email" : "Sign in with email",
         },
         {
           provider: GoogleAuthProvider.PROVIDER_ID,

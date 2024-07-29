@@ -1,10 +1,10 @@
 import DarkModeSwitcher from "@/components/Header/DarkModeSwitcher";
 import DropdownUser from "@/components/Header/DropdownUser";
-import { useAuthentication } from "@/hooks/useAuthentication";
+import {useAuthentication} from "@/hooks/useAuthentication";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect, usePathname } from "next/navigation";
-import { useTanamUser } from "../../hooks/useTanamUser";
+import {redirect, usePathname} from "next/navigation";
+import {useTanamUser} from "../../hooks/useTanamUser";
 
 const Header = (props: {sidebarOpen: string | boolean | undefined; setSidebarOpen: (arg0: boolean) => void}) => {
   const pathname = usePathname();

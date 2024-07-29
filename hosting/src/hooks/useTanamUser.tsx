@@ -1,8 +1,8 @@
-import { TanamUserClient } from "@/models/TanamUserClient";
-import { UserNotification } from "@/models/UserNotification";
-import { firestore } from "@/plugins/firebase";
-import { doc, onSnapshot } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import {TanamUserClient} from "@/models/TanamUserClient";
+import {UserNotification} from "@/models/UserNotification";
+import {firestore} from "@/plugins/firebase";
+import {doc, onSnapshot} from "firebase/firestore";
+import {useEffect, useState} from "react";
 
 interface UseTanamDocumentsResult {
   data: TanamUserClient | null;

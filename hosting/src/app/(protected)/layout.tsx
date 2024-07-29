@@ -1,7 +1,7 @@
 "use client";
 import CmsLayout from "@/components/Layouts/CmsLayout";
-import { useAuthentication } from "@/hooks/useAuthentication";
-import { redirect } from "next/navigation";
+import {useAuthentication} from "@/hooks/useAuthentication";
+import {redirect} from "next/navigation";
 import React from "react";
 
 interface ProtectedLayoutProps {

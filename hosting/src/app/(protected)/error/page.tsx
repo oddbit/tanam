@@ -2,9 +2,9 @@
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
-import { useAuthentication } from "@/hooks/useAuthentication";
-import { useTanamUser } from "@/hooks/useTanamUser";
-import { Suspense } from "react";
+import {useAuthentication} from "@/hooks/useAuthentication";
+import {useTanamUser} from "@/hooks/useTanamUser";
+import {Suspense} from "react";
 
 export default function ErrorPage() {
   const {authUser} = useAuthentication();
