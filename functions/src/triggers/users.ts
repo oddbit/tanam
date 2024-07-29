@@ -24,9 +24,11 @@ export const onTanamUserCreated = onDocumentCreated("tanam-users/{docId}", async
     return docRef.delete();
   }
 
+  const firebaseUser = await auth.getUser(uid);
   const existingDocs = await db.collection("tanam-users").get();
   const tanamUser = new TanamUserAdmin(uid, {
     ...docData,
+    name: firebaseUser.displayName,
     role: existingDocs.size === 1 ? "admin" : "publisher",
     createdAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
