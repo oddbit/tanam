@@ -3,16 +3,17 @@ import DropdownUser from "@/components/Header/DropdownUser";
 import { useAuthentication } from "@/hooks/useAuthentication";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
+import { redirect, usePathname } from "next/navigation";
 import { useTanamUser } from "../../hooks/useTanamUser";
 
 const Header = (props: {sidebarOpen: string | boolean | undefined; setSidebarOpen: (arg0: boolean) => void}) => {
+  const pathname = usePathname();
   const {authUser} = useAuthentication();
   const {data: tanamUser, error: userError} = useTanamUser(authUser?.uid);
 
-  useEffect(() => {
-    console.log("userError", userError);
-  }, [userError]);
+  if (pathname !== "/error" && userError && userError.message) {
+    redirect("/error");
+  }
 
   return (
     <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
