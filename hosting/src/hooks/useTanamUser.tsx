@@ -56,3 +56,39 @@ export function useTanamUser(uid?: string) {
 
   return {tanamUser, saveColorMode, error};
 }
+
+interface UseProfileImageResult {
+  imageUrl: string | null;
+  error: UserNotification | null;
+}
+
+/**
+ * Hook to get a profile image URL from Firebase Cloud Storage
+ *
+ * @param {string?} uid User ID
+ * @return {UseProfileImageResult} Hook for profile image URL
+ */
+export function useTanamUserImage(uid?: string): UseProfileImageResult {
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [error, setError] = useState<UserNotification | null>(null);
+
+  useEffect(() => {
+    if (!uid) {
+      setImageUrl(null);
+      return;
+    }
+
+    const imageRef = ref(storage, `tanam-users/${uid}/profile.png`);
+    console.log(`Fetching profile image for user ${uid}: ${imageRef}`);
+
+    getDownloadURL(imageRef)
+      .then((url) => {
+        setImageUrl(url);
+      })
+      .catch((err) => {
+        setError(new UserNotification("error", "Error fetching profile image", err.message));
+      });
+  }, [uid]);
+
+  return {imageUrl, error};
+}
