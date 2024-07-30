@@ -1,7 +1,7 @@
 import DarkModeSwitcher from "@/components/Header/DarkModeSwitcher";
 import DropdownUser from "@/components/Header/DropdownUser";
-import { useAuthentication } from "@/hooks/useAuthentication";
-import { useTanamUser } from "@/hooks/useTanamUser";
+import {useAuthentication} from "@/hooks/useAuthentication";
+import {useTanamUser} from "@/hooks/useTanamUser";
 import Image from "next/image";
 import Link from "next/link";
 

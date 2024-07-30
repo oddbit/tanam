@@ -1,9 +1,9 @@
 "use client";
-import { firebaseAuth } from "@/plugins/firebase";
-import { TanamRole } from "@functions/models/TanamUser";
-import { User } from "firebase/auth";
-import { redirect, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import {firebaseAuth} from "@/plugins/firebase";
+import {TanamRole} from "@functions/models/TanamUser";
+import {User} from "firebase/auth";
+import {redirect, usePathname} from "next/navigation";
+import {useEffect, useState} from "react";
 
 export function useAuthentication() {
   const pathname = usePathname();
