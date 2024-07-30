@@ -1,14 +1,8 @@
-import PlaceholderAvatar from "@/components/UserPicture/PlaceholderAvatar";
-import UserAvatar from "@/components/UserPicture/UserAvatar";
+import UserAvatar from "@/components/UserAvatar";
 import {useAuthentication} from "@/hooks/useAuthentication";
 import {clsx} from "clsx";
 import Link from "next/link";
-import {Suspense, useEffect, useRef, useState} from "react";
-
-interface DropdownUserProps {
-  displayName: string;
-  avatar: string;
-}
+import {useEffect, useRef, useState} from "react";
 
 interface DropdownItemProps {
   href: string;
@@ -30,11 +24,11 @@ function DropdownItem({href, icon, label}: DropdownItemProps) {
   );
 }
 
-export default function DropdownUser({displayName, avatar}: DropdownUserProps) {
+export default function DropdownUser() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const trigger = useRef<HTMLAnchorElement>(null);
   const dropdown = useRef<HTMLDivElement>(null);
-  const {signout} = useAuthentication();
+  const {authUser, signout} = useAuthentication();
 
   // close on click outside
   useEffect(() => {
@@ -63,13 +57,11 @@ export default function DropdownUser({displayName, avatar}: DropdownUserProps) {
     <div className="relative">
       <Link ref={trigger} onClick={() => setDropdownOpen(!dropdownOpen)} className="flex items-center gap-4" href="#">
         <span className="hidden text-right lg:block">
-          <span className="block text-sm font-medium text-black dark:text-white">{displayName}</span>
+          <span className="block text-sm font-medium text-black dark:text-white">{authUser?.displayName}</span>
         </span>
 
         <span className="rounded-full">
-          <Suspense fallback={<PlaceholderAvatar size={40} />}>
-            <UserAvatar src={avatar} size={40} />
-          </Suspense>
+          <UserAvatar uid={authUser?.uid} size={40} />
         </span>
         <span className="i-ic-round-keyboard-arrow-down w-[24px] h-[24px]" />
       </Link>
