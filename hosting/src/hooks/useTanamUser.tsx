@@ -30,6 +30,10 @@ export function useTanamUser(uid?: string): UseTanamDocumentsResult {
     const unsubscribe = onSnapshot(
       docRef,
       (snapshot) => {
+        if (!snapshot.exists()) {
+          setError(new UserNotification("error", "Access Denied", "Sorry you cant access the page"));
+        }
+
         const tanamUser = TanamUserClient.fromFirestore(snapshot);
         setData(tanamUser);
       },
