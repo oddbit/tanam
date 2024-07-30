@@ -30,9 +30,6 @@ export function useAuthentication() {
 
       setUserRole((idTokenResult?.claims as {tanamRole: TanamRole}).tanamRole);
 
-      console.info("userRole :: ", userRole);
-      console.info("idTokenResult :: ", idTokenResult);
-
       // Redirect when user doesnt have claims
       if (pathname !== "/error/insufficient-role" && (userRole === null || !userRole)) {
         redirect("/error/insufficient-role");
