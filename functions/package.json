@@ -26,15 +26,18 @@
     "@genkit-ai/firebase": "^0.5.2",
     "@genkit-ai/flow": "^0.5.2",
     "@genkit-ai/googleai": "^0.5.2",
+    "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "firebase-admin": "^12.1.1",
     "firebase-functions": "^5.0.1",
+    "sharp": "^0.33.4",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^18.19.34",
     "@types/sanitize-html": "^2.11.0",
+    "@types/sharp": "^0.32.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "eslint": "^8.9.0",
