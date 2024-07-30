@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 export function useAuthentication() {
   const pathname = usePathname();
-  
+
   const [error, setError] = useState<Error | null>(null);
   const [authUser, setUser] = useState<User | null>(null);
   const [userRole, setUserRole] = useState<TanamRole | null>(null);
@@ -26,12 +26,15 @@ export function useAuthentication() {
 
   async function fetchUserRole() {
     try {
-      const idTokenResult = await firebaseAuth.currentUser?.getIdTokenResult()
-      
-      setUserRole((idTokenResult?.claims as {tanamRole: TanamRole}).tanamRole)
+      const idTokenResult = await firebaseAuth.currentUser?.getIdTokenResult();
 
-      // Redirect when user doesn have claims
-      if (pathname !== "/error/insufficient-role" && !userRole) {
+      setUserRole((idTokenResult?.claims as {tanamRole: TanamRole}).tanamRole);
+
+      console.info("userRole :: ", userRole);
+      console.info("idTokenResult :: ", idTokenResult);
+
+      // Redirect when user doesnt have claims
+      if (pathname !== "/error/insufficient-role" && (userRole === null || !userRole)) {
         redirect("/error/insufficient-role");
       }
     } catch (error) {
