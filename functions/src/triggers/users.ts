@@ -52,7 +52,7 @@ export const tanamNewUserInit = onDocumentCreated("tanam-users/{docId}", async (
 
 // Function to enforce role management on document update
 // This function will apply changes to custom claims when the role field is updated
-export const onRoleChange = onDocumentUpdated("tanam-users/{docId}", async (event) => {
+export const onTanamUserRoleChange = onDocumentUpdated("tanam-users/{docId}", async (event) => {
   const uid = event.params.docId;
   const beforeData = event?.data?.before.data();
   const afterData = event?.data?.after.data();

@@ -12,7 +12,7 @@
     "lint:fix": "npm run lint --fix",
     "logs": "firebase functions:log",
     "prettier:fix": "prettier --write .",
-    "serve": "npm run build && firebase emulators:start --only functions",
+    "serve": "npm run build && firebase emulators:start --only auth,functions,firestore",
     "shell": "npm run build && firebase functions:shell"
   },
   "name": "functions",
