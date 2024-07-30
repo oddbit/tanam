@@ -26,7 +26,7 @@ export default function DocumentDetailsPage() {
 
   async function onDocumentContentChange(content: string) {
     console.log("[onDocumentContentChange]", content);
-    await update({data: {content}});
+    await update({data: {...document?.data, content}});
   }
 
   return (
