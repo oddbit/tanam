@@ -19,6 +19,7 @@ export class TanamUserClient extends TanamUser<Timestamp, FieldValue> {
     return new TanamUserClient(snap.id, {
       role: data.role,
       name: data.name,
+      colorMode: data.colorMode,
       createdAt: data.createdAt || Timestamp.now(),
       updatedAt: data.updatedAt || Timestamp.now(),
     });
