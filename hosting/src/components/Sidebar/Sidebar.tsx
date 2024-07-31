@@ -82,11 +82,6 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
               icon={<span className="i-ic-outline-dashboard w-[24px] h-[24px]" />}
               title="Dashboard"
             />
-            <SidebarMenuItem
-              href="/profile"
-              icon={<span className="i-ic-baseline-person-outline  w-[24px] h-[24px]" />}
-              title="Profile"
-            />
             <SidebarExpandableMenu
               icon={<span className="i-ic-twotone-format-indent-decrease w-[24px] h-[24px]" />}
               title="Content"
