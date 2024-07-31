@@ -1,6 +1,6 @@
 "use client";
 import {firebaseAuth} from "@/plugins/firebase";
-import {AuthCredential, EmailAuthProvider, GoogleAuthProvider} from "firebase/auth";
+import {AuthCredential, GoogleAuthProvider} from "firebase/auth";
 import {auth as firebaseAuthUi} from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
 import {useEffect, useState} from "react";
