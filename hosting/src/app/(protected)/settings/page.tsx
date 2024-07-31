@@ -1,11 +1,7 @@
+"use client";
 import PageHeader from "@/components/common/PageHeader";
-import {Metadata} from "next";
+import DarkModeSwitcher from "@/components/Header/DarkModeSwitcher";
 import Image from "next/image";
-
-export const metadata: Metadata = {
-  title: "Next.js Settings | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Settings page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
-};
 
 const Settings = () => {
   return (
@@ -127,6 +123,7 @@ const Settings = () => {
               </div>
             </div>
           </div>
+
           <div className="col-span-5 xl:col-span-2">
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
@@ -181,6 +178,24 @@ const Settings = () => {
                     </button>
                   </div>
                 </form>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-span-5 xl:col-span-2">
+            <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+              <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
+                <h3 className="font-medium text-black dark:text-white">System</h3>
+              </div>
+              <div className="p-7">
+                <div className="mb-4 flex items-center gap-3">
+                  <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="emailAddress">
+                    Dark mode
+                  </label>
+                  <div className="relative">
+                    <DarkModeSwitcher />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
