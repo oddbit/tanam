@@ -1,9 +1,8 @@
 "use client";
 import PageHeader from "@/components/common/PageHeader";
-import { useAuthentication } from "@/hooks/useAuthentication";
-import { useTanamUser } from "@/hooks/useTanamUser";
+import {useAuthentication} from "@/hooks/useAuthentication";
+import {useTanamUser} from "@/hooks/useTanamUser";
 import Image from "next/image";
-import { useEffect, useState } from 'react';
 
 export default function Settings() {
   const {authUser} = useAuthentication();
