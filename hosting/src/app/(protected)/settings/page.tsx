@@ -1,6 +1,6 @@
 "use client";
 import PageHeader from "@/components/common/PageHeader";
-import DarkModeSwitcher from "@/components/Header/DarkModeSwitcher";
+import DarkModeSwitcher from "@/components/DarkModeSwitcher";
 import {useAuthentication} from "@/hooks/useAuthentication";
 import {useTanamUser} from "@/hooks/useTanamUser";
 import Image from "next/image";
