@@ -24,6 +24,8 @@ export default function DocumentTypeDocumentsPage() {
   const addNewArticle = async () => {
     const id = await create(documentType?.id);
 
+    if (!id) return
+
     router.push(`article/${id}`);
   };
 

@@ -103,7 +103,7 @@ export function useCrudTanamDocument() {
     setIsLoading(true);
     try {
       if (!documentType) {
-        setError(new UserNotification("error", "Missing parameter", "Document id parameter is missing"));
+        setError(new UserNotification("error", "Missing parameter", "Document type parameter is missing"));
         return;
       }
       const docRef = doc(collection(firestore, "tanam-documents"));
@@ -148,37 +148,4 @@ export function useCrudTanamDocument() {
     }
   }
   return {isLoading, error, create, update};
-}
-
-export function useCreateTanamDocument(documentType?: string) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<UserNotification | null>(null);
-
-  async function create() {
-    setIsLoading(true);
-    try {
-      if (!documentType) {
-        setError(new UserNotification("error", "Missing parameter", "Document id parameter is missing"));
-        return;
-      }
-      const docRef = doc(collection(firestore, "tanam-documents"));
-      const docId = docRef.id;
-
-      const tanamDocument = new TanamDocumentClient(docId, {data: {}, documentType}).toJson();
-      await setDoc(docRef, tanamDocument);
-      return docId;
-    } catch (err) {
-      setError(
-        new UserNotification(
-          "error",
-          "UserNotification creating document",
-          "An error occurred while creating the document",
-        ),
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  return {create, isLoading, error};
 }
