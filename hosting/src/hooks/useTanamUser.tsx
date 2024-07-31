@@ -1,14 +1,9 @@
 import {TanamUserClient} from "@/models/TanamUserClient";
 import {UserNotification} from "@/models/UserNotification";
 import {firestore, storage} from "@/plugins/firebase";
-import {doc, onSnapshot} from "firebase/firestore";
+import {doc, onSnapshot, updateDoc} from "firebase/firestore";
 import {getDownloadURL, ref} from "firebase/storage";
 import {useEffect, useState} from "react";
-
-interface UseTanamDocumentsResult {
-  data: TanamUserClient | null;
-  error: UserNotification | null;
-}
 
 /**
  * Hook to get a Tanam user document from Firestore
@@ -16,13 +11,13 @@ interface UseTanamDocumentsResult {
  * @param {string?} uid User ID
  * @return {UseTanamDocumentsResult} Hook for documents subscription
  */
-export function useTanamUser(uid?: string): UseTanamDocumentsResult {
-  const [data, setData] = useState<TanamUserClient | null>(null);
+export function useTanamUser(uid?: string) {
+  const [tanamUser, setTanamUser] = useState<TanamUserClient | null>(null);
   const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
     if (!uid) {
-      setData(null);
+      setTanamUser(null);
       return;
     }
 
@@ -35,7 +30,7 @@ export function useTanamUser(uid?: string): UseTanamDocumentsResult {
         }
 
         const tanamUser = TanamUserClient.fromFirestore(snapshot);
-        setData(tanamUser);
+        setTanamUser(tanamUser);
       },
       (err) => {
         setError(new UserNotification("error", "Error fetching user", err.message));
@@ -46,7 +41,21 @@ export function useTanamUser(uid?: string): UseTanamDocumentsResult {
     return () => unsubscribe();
   }, [uid]);
 
-  return {data, error};
+  async function saveColorMode(colorMode: "dark" | "light") {
+    if (!uid) {
+      return;
+    }
+
+    try {
+      const docRef = doc(firestore, `tanam-users`, uid);
+      return updateDoc(docRef, {colorMode});
+    } catch (error) {
+      const typedError = error as Error;
+      setError(new UserNotification("error", "Failed to set color mode to " + colorMode, typedError.message));
+    }
+  }
+
+  return {tanamUser, saveColorMode, error};
 }
 
 interface UseProfileImageResult {
