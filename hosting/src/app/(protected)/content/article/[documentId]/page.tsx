@@ -3,10 +3,10 @@ import TiptapEditor from "@/components/Tiptap/TiptapEditor";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
-import { useCrudTanamDocument, useTanamDocument } from "@/hooks/useTanamDocuments";
-import { UserNotification } from "@/models/UserNotification";
-import { useParams, useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import {useCrudTanamDocument, useTanamDocument} from "@/hooks/useTanamDocuments";
+import {UserNotification} from "@/models/UserNotification";
+import {useParams, useRouter} from "next/navigation";
+import {Suspense, useEffect, useState} from "react";
 
 export default function DocumentDetailsPage() {
   const router = useRouter();

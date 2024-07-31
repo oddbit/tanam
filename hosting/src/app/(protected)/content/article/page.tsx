@@ -1,14 +1,14 @@
 "use client";
-import { Button } from "@/components/Button";
-import { DocumentTypeGenericList } from "@/components/DocumentType/DocumentTypeGenericList";
+import {Button} from "@/components/Button";
+import {DocumentTypeGenericList} from "@/components/DocumentType/DocumentTypeGenericList";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
-import { useTanamDocumentType } from "@/hooks/useTanamDocumentTypes";
-import { useCrudTanamDocument, useTanamDocuments } from "@/hooks/useTanamDocuments";
-import { UserNotification } from "@/models/UserNotification";
-import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
+import {useCrudTanamDocument, useTanamDocuments} from "@/hooks/useTanamDocuments";
+import {UserNotification} from "@/models/UserNotification";
+import {useRouter} from "next/navigation";
+import {Suspense, useEffect, useState} from "react";
 
 export default function DocumentTypeDocumentsPage() {
   const {data: documentType} = useTanamDocumentType("article");
@@ -24,7 +24,7 @@ export default function DocumentTypeDocumentsPage() {
   const addNewArticle = async () => {
     const id = await create(documentType?.id);
 
-    if (!id) return
+    if (!id) return;
 
     router.push(`article/${id}`);
   };

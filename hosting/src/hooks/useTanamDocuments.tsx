@@ -1,7 +1,8 @@
-import { TanamDocumentClient } from "@/models/TanamDocumentClient";
-import { UserNotification } from "@/models/UserNotification";
-import { firestore } from "@/plugins/firebase";
-import { ITanamDocument } from "@functions/models/TanamDocument";
+"use client";
+import {TanamDocumentClient} from "@/models/TanamDocumentClient";
+import {UserNotification} from "@/models/UserNotification";
+import {firestore} from "@/plugins/firebase";
+import {ITanamDocument} from "@functions/models/TanamDocument";
 import {
   Timestamp,
   collection,
@@ -13,7 +14,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 
 interface UseTanamDocumentsResult {
   data: TanamDocumentClient[];
