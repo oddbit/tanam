@@ -1,4 +1,3 @@
-import DarkModeSwitcher from "@/components/Header/DarkModeSwitcher";
 import DropdownUser from "@/components/Header/DropdownUser";
 import Image from "next/image";
 import Link from "next/link";
@@ -71,9 +70,6 @@ const Header = (props: {sidebarOpen: string | boolean | undefined; setSidebarOpe
         </div>
 
         <div className="flex items-center gap-2 2xsm:gap-4">
-          <ul className="flex items-center gap-2 2xsm:gap-4">
-            <DarkModeSwitcher />
-          </ul>
           <DropdownUser />
         </div>
       </div>
