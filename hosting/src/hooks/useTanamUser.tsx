@@ -1,8 +1,8 @@
 import {TanamUserClient} from "@/models/TanamUserClient";
 import {UserNotification} from "@/models/UserNotification";
 import {firestore, storage} from "@/plugins/firebase";
-import {getDownloadURL, ref} from "@firebase/storage";
 import {doc, onSnapshot} from "firebase/firestore";
+import {getDownloadURL, ref} from "firebase/storage";
 import {useEffect, useState} from "react";
 
 interface UseTanamDocumentsResult {
