@@ -1,7 +1,8 @@
 import {TanamUserClient} from "@/models/TanamUserClient";
 import {UserNotification} from "@/models/UserNotification";
-import {firestore} from "@/plugins/firebase";
+import {firestore, storage} from "@/plugins/firebase";
 import {doc, onSnapshot, updateDoc} from "firebase/firestore";
+import {getDownloadURL, ref} from "firebase/storage";
 import {useEffect, useState} from "react";
 
 /**
