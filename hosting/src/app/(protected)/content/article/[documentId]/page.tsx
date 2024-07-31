@@ -3,16 +3,16 @@ import TiptapEditor from "@/components/Tiptap/TiptapEditor";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
-import {useCrudTanamDocument, useTanamDocument} from "@/hooks/useTanamDocuments";
-import {UserNotification} from "@/models/UserNotification";
-import {useParams, useRouter} from "next/navigation";
-import {Suspense, useEffect, useState} from "react";
+import { useCrudTanamDocument, useTanamDocument } from "@/hooks/useTanamDocuments";
+import { UserNotification } from "@/models/UserNotification";
+import { useParams, useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 
 export default function DocumentDetailsPage() {
   const router = useRouter();
   const {documentId} = useParams<{documentId: string}>() ?? {};
   const {data: document, error: documentError} = useTanamDocument(documentId);
-  const {update, error: writeError} = useCrudTanamDocument(documentId);
+  const {update, error: writeError} = useCrudTanamDocument();
   const [readonlyMode] = useState<boolean>(false);
   const [notification, setNotification] = useState<UserNotification | null>(null);
   if (!!document?.documentType && document?.documentType !== "article") {
@@ -26,7 +26,7 @@ export default function DocumentDetailsPage() {
 
   async function onDocumentContentChange(content: string) {
     console.log("[onDocumentContentChange]", content);
-    await update({data: {...document?.data, content}});
+    await update(documentId, {data: {...document?.data, content}});
   }
 
   return (

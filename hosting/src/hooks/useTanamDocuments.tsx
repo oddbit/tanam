@@ -1,6 +1,7 @@
-import {TanamDocumentClient} from "@/models/TanamDocumentClient";
-import {firestore} from "@/plugins/firebase";
-import {ITanamDocument} from "@functions/models/TanamDocument";
+import { TanamDocumentClient } from "@/models/TanamDocumentClient";
+import { UserNotification } from "@/models/UserNotification";
+import { firestore } from "@/plugins/firebase";
+import { ITanamDocument } from "@functions/models/TanamDocument";
 import {
   Timestamp,
   collection,
@@ -12,8 +13,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import {useEffect, useState} from "react";
-import {UserNotification} from "@/models/UserNotification";
+import { useEffect, useState } from "react";
 
 interface UseTanamDocumentsResult {
   data: TanamDocumentClient[];
@@ -95,11 +95,37 @@ export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
   return {data, error};
 }
 
-export function useCrudTanamDocument(documentId?: string) {
+export function useCrudTanamDocument() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<UserNotification | null>(null);
 
-  async function update(data: Partial<ITanamDocument<Timestamp>>): Promise<void> {
+  async function create(documentType?: string) {
+    setIsLoading(true);
+    try {
+      if (!documentType) {
+        setError(new UserNotification("error", "Missing parameter", "Document id parameter is missing"));
+        return;
+      }
+      const docRef = doc(collection(firestore, "tanam-documents"));
+      const docId = docRef.id;
+
+      const tanamDocument = new TanamDocumentClient(docId, {data: {}, documentType});
+      await setDoc(docRef, tanamDocument.toJson());
+      return docId;
+    } catch (err) {
+      setError(
+        new UserNotification(
+          "error",
+          "UserNotification creating document",
+          "An error occurred while creating the document",
+        ),
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function update(documentId: string, data: Partial<ITanamDocument<Timestamp>>): Promise<void> {
     setIsLoading(true);
     try {
       if (!documentId) {
@@ -121,7 +147,7 @@ export function useCrudTanamDocument(documentId?: string) {
       setIsLoading(false);
     }
   }
-  return {update, isLoading, error};
+  return {isLoading, error, create, update};
 }
 
 export function useCreateTanamDocument(documentType?: string) {
