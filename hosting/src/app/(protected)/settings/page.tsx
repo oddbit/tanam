@@ -1,13 +1,23 @@
+"use client";
 import PageHeader from "@/components/common/PageHeader";
-import {Metadata} from "next";
+import { useAuthentication } from "@/hooks/useAuthentication";
+import { useTanamUser } from "@/hooks/useTanamUser";
 import Image from "next/image";
+import { useEffect, useState } from 'react';
 
-export const metadata: Metadata = {
-  title: "Next.js Settings | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Settings page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
-};
+export default function Settings() {
+  const {authUser} = useAuthentication();
+  const {tanamUser, saveUserInfo} = useTanamUser(authUser?.uid);
 
-const Settings = () => {
+  async function onPersonalInfoSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = {
+      fullName: form.fullName.value,
+    };
+    await saveUserInfo(formData.fullName);
+  }
+
   return (
     <>
       <div className="mx-auto max-w-270">
@@ -20,9 +30,9 @@ const Settings = () => {
                 <h3 className="font-medium text-black dark:text-white">Personal Information</h3>
               </div>
               <div className="p-7">
-                <form action="#">
+                <form onSubmit={onPersonalInfoSubmit}>
                   <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                    <div className="w-full sm:w-1/2">
+                    <div className="w-full">
                       <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="fullName">
                         Full Name
                       </label>
@@ -33,79 +43,10 @@ const Settings = () => {
                           type="text"
                           name="fullName"
                           id="fullName"
-                          placeholder="Devid Jhon"
-                          defaultValue="Devid Jhon"
+                          placeholder="Your full name"
+                          defaultValue={tanamUser?.name}
                         />
                       </div>
-                    </div>
-
-                    <div className="w-full sm:w-1/2">
-                      <label
-                        className="mb-3 block text-sm font-medium text-black dark:text-white"
-                        htmlFor="phoneNumber"
-                      >
-                        Phone Number
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-4 top-4 i-ic-round-phone w-[22px] h-[22px]" />
-                        <input
-                          className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                          type="text"
-                          name="phoneNumber"
-                          id="phoneNumber"
-                          placeholder="+990 3343 7865"
-                          defaultValue="+990 3343 7865"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mb-5.5">
-                    <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="emailAddress">
-                      Email Address
-                    </label>
-                    <div className="relative">
-                      <span className="absolute left-4 top-4 i-ic-round-mail-outline w-[22px] h-[22px]" />
-
-                      <input
-                        className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                        type="email"
-                        name="emailAddress"
-                        id="emailAddress"
-                        placeholder="devidjond45@gmail.com"
-                        defaultValue="devidjond45@gmail.com"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="mb-5.5">
-                    <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="Username">
-                      Username
-                    </label>
-                    <input
-                      className="w-full rounded border border-stroke bg-gray px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                      type="text"
-                      name="Username"
-                      id="Username"
-                      placeholder="devidjhon24"
-                      defaultValue="devidjhon24"
-                    />
-                  </div>
-
-                  <div className="mb-5.5">
-                    <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="Username">
-                      BIO
-                    </label>
-                    <div className="relative">
-                      <span className="absolute left-4 top-4 i-ic-baseline-edit-note w-[25px] h-[25px]" />
-                      <textarea
-                        className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                        name="bio"
-                        id="bio"
-                        rows={6}
-                        placeholder="Write your bio here"
-                        defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque posuere fermentum urna, eu condimentum mauris tempus ut. Donec fermentum blandit aliquet."
-                      ></textarea>
                     </div>
                   </div>
 
@@ -188,6 +129,4 @@ const Settings = () => {
       </div>
     </>
   );
-};
-
-export default Settings;
+}
