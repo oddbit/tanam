@@ -34,6 +34,7 @@ export const tanamNewUserInit = onDocumentCreated("tanam-users/{docId}", async (
     ...docData,
     name: firebaseUser.displayName,
     role: existingDocs.size === 1 ? "admin" : "publisher",
+    colorMode: "light",
     createdAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
   });
