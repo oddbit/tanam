@@ -7,16 +7,6 @@ export class TanamDocumentAdmin extends TanamDocument<Timestamp, FieldValue> {
     super(id, json);
   }
 
-  get status(): TanamPublishStatus {
-    if (!this.publishedAt) {
-      return "unpublished";
-    } else if (this.publishedAt.toMillis() > Timestamp.now().toMillis()) {
-      return "scheduled";
-    } else {
-      return "published";
-    }
-  }
-
   getServerTimestamp(): FieldValue {
     return FieldValue.serverTimestamp();
   }
