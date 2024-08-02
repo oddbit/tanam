@@ -1,10 +1,10 @@
-import {fileURLToPath} from "url";
 import path from "path";
+import {fileURLToPath} from "url";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["lh3.googleusercontent.com"],
+    domains: ["lh3.googleusercontent.com", "firebasestorage.googleapis.com"],
   },
   redirects() {
     return [

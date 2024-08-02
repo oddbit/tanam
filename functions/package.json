@@ -7,12 +7,11 @@
     "compile": "tsc",
     "build:clean": "rm -rf ./lib",
     "deploy": "firebase deploy --only functions",
-    "genkit": "genkit start --open",
     "lint": "eslint --ext .ts .",
     "lint:fix": "npm run lint --fix",
     "logs": "firebase functions:log",
     "prettier:fix": "prettier --write .",
-    "serve": "npm run build && firebase emulators:start --only functions",
+    "serve": "npm run build && firebase emulators:start --only auth,functions,firestore",
     "shell": "npm run build && firebase functions:shell"
   },
   "name": "functions",
@@ -20,21 +19,19 @@
     "node": "18"
   },
   "dependencies": {
-    "@genkit-ai/ai": "^0.5.2",
-    "@genkit-ai/core": "^0.5.2",
-    "@genkit-ai/dotprompt": "^0.5.2",
-    "@genkit-ai/firebase": "^0.5.2",
-    "@genkit-ai/flow": "^0.5.2",
-    "@genkit-ai/googleai": "^0.5.2",
+    "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "firebase-admin": "^12.1.1",
     "firebase-functions": "^5.0.1",
+    "sharp": "^0.33.4",
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/node": "^18.19.34",
     "@types/sanitize-html": "^2.11.0",
+    "@types/sharp": "^0.32.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "eslint": "^8.9.0",
@@ -44,7 +41,6 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prettier": "^5.1.3",
     "firebase-functions-test": "^3.1.0",
-    "genkit": "^0.5.2",
     "prettier": "^3.2.5",
     "typescript": "5.1"
   },

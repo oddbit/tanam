@@ -11,6 +11,10 @@
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
   "json.format.enable": true,
+  "eslint.workingDirectories": [
+    "./hosting",
+    "./functions",
+  ],
   "[scss]": {
     "editor.tabSize": 2
   },

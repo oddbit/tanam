@@ -66,7 +66,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <Link href="/" className="flex items-center space-x-2">
-          <Image width={32} height={32} src={"/images/logo/logo.svg"} alt="Logo" priority />
+          <Image width={32} height={32} src={"/images/logo.svg"} alt="Logo" priority />
           <h1 className="text-3xl font-bold leading-none">Tanam</h1>
         </Link>
       </div>
@@ -81,11 +81,6 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
               href="/dashboard"
               icon={<span className="i-ic-outline-dashboard w-[24px] h-[24px]" />}
               title="Dashboard"
-            />
-            <SidebarMenuItem
-              href="/profile"
-              icon={<span className="i-ic-baseline-person-outline  w-[24px] h-[24px]" />}
-              title="Profile"
             />
             <SidebarExpandableMenu
               icon={<span className="i-ic-twotone-format-indent-decrease w-[24px] h-[24px]" />}

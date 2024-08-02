@@ -8,7 +8,7 @@ interface ButtonProps {
   children?: React.ReactNode;
 }
 
-export function Button({title, onClick, style = "normal", color = "primary", children}: ButtonProps) {
+export function Button({title, onClick, style = "rounded", color = "primary", children}: ButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = async () => {
