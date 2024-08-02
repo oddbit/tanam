@@ -1,25 +1,18 @@
 import {Button} from "@/components/Button";
-import {useCrudTanamDocument, useTanamDocument} from "@/hooks/useTanamDocuments";
-import {serverTimestamp} from "firebase/firestore";
+import {useTanamDocument} from "@/hooks/useTanamDocuments";
 import {useParams} from "next/navigation";
 
 export function TogglePublishDocument() {
   const {documentId} = useParams<{documentId: string}>() ?? {};
-  const {data: document} = useTanamDocument(documentId);
-  const {update} = useCrudTanamDocument();
+  const {data: document, changeStatus} = useTanamDocument(documentId);
 
   async function onTogglePublishDocument() {
-    let data = document?.toJson();
-
-    if (document?.status === "unpublished") {
-      data = {...data, status: "published", publishedAt: serverTimestamp()};
+    if (!document) {
+      return;
     }
 
-    if (document?.status === "published") {
-      data = {...data, status: "unpublished", publishedAt: null};
-    }
-
-    await update(documentId, {...data});
+    // Toggle the status of the document
+    return changeStatus(document.status === "published" ? "unpublished" : "published");
   }
 
   return (

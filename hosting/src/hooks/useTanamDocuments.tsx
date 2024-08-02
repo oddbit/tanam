@@ -2,18 +2,8 @@
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {UserNotification} from "@/models/UserNotification";
 import {firestore} from "@/plugins/firebase";
-import {ITanamDocument} from "@functions/models/TanamDocument";
-import {
-  Timestamp,
-  collection,
-  doc,
-  onSnapshot,
-  query,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
-  where,
-} from "firebase/firestore";
+import {TanamPublishStatus} from "@functions/models/TanamDocument";
+import {collection, doc, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where} from "firebase/firestore";
 import {useEffect, useState} from "react";
 
 interface UseTanamDocumentsResult {
@@ -60,6 +50,7 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
 
 interface UseTanamDocumentResult {
   data: TanamDocumentClient | null;
+  changeStatus: (status: TanamPublishStatus) => Promise<void>;
   error: UserNotification | null;
 }
 
@@ -93,15 +84,38 @@ export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
     return () => unsubscribe();
   }, [documentId]);
 
-  return {data, error};
+  /**
+   * Method to publish or unpublish a document
+   *
+   * @param {TanamPublishStatus} status Flag to publish or unpublish the document
+   * @return {Promise<void>} Promise
+   */
+  async function changeStatus(status: TanamPublishStatus): Promise<void> {
+    if (!documentId) {
+      setError(new UserNotification("error", "Missing parameter", "Document id parameter is missing"));
+      return;
+    }
+
+    try {
+      const typeRef = doc(firestore, "tanam-documents", documentId);
+      await updateDoc(typeRef, {
+        publishedAt: status === "published" ? serverTimestamp() : null,
+        status,
+      } as Partial<TanamDocumentClient>);
+    } catch (err) {
+      setError(
+        new UserNotification("error", "Error publishing document", "An error occurred while publishing the document"),
+      );
+    }
+  }
+
+  return {data, changeStatus, error};
 }
 
 export function useCrudTanamDocument() {
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<UserNotification | null>(null);
 
   async function create(documentType?: string) {
-    setIsLoading(true);
     try {
       if (!documentType) {
         setError(new UserNotification("error", "Missing parameter", "Document type parameter is missing"));
@@ -115,38 +129,21 @@ export function useCrudTanamDocument() {
       return docId;
     } catch (err) {
       setError(
-        new UserNotification(
-          "error",
-          "UserNotification creating document",
-          "An error occurred while creating the document",
-        ),
+        new UserNotification("error", "Error creating document", "An error occurred while creating the document"),
       );
-    } finally {
-      setIsLoading(false);
     }
   }
 
-  async function update(documentId: string, data: Partial<ITanamDocument<Timestamp>>): Promise<void> {
-    setIsLoading(true);
+  async function update(document: TanamDocumentClient): Promise<void> {
     try {
-      if (!documentId) {
-        setError(new UserNotification("error", "Missing parameter", "Document id parameter is missing"));
-        return;
-      }
-
-      const typeRef = doc(firestore, "tanam-documents", documentId);
-      await updateDoc(typeRef, {...data, updatedAt: serverTimestamp()});
+      const typeRef = doc(firestore, "tanam-documents", document.id);
+      await updateDoc(typeRef, document.toJson());
     } catch (err) {
       setError(
-        new UserNotification(
-          "error",
-          "UserNotification updating document",
-          "An error occurred while updating the document",
-        ),
+        new UserNotification("error", "Error updating document", "An error occurred while updating the document"),
       );
-    } finally {
-      setIsLoading(false);
     }
   }
-  return {isLoading, error, create, update};
+
+  return {error, create, update};
 }
