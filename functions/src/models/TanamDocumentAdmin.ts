@@ -1,20 +1,10 @@
 import {FieldValue, Timestamp} from "firebase-admin/firestore";
-import {ITanamDocument, TanamDocument, TanamPublishStatus} from "./TanamDocument";
 import {DocumentSnapshot} from "firebase-functions/v2/firestore";
+import {ITanamDocument, TanamDocument} from "./TanamDocument";
 
 export class TanamDocumentAdmin extends TanamDocument<Timestamp, FieldValue> {
   constructor(id: string, json: ITanamDocument<Timestamp>) {
     super(id, json);
-  }
-
-  get status(): TanamPublishStatus {
-    if (!this.publishedAt) {
-      return "unpublished";
-    } else if (this.publishedAt.toMillis() > Timestamp.now().toMillis()) {
-      return "scheduled";
-    } else {
-      return "published";
-    }
   }
 
   getServerTimestamp(): FieldValue {

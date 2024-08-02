@@ -32,7 +32,14 @@ export abstract class TanamDocument<TimestampType, FieldValueType> {
   public readonly createdAt?: TimestampType;
   public readonly updatedAt?: TimestampType;
 
-  abstract get status(): TanamPublishStatus;
+  get status(): TanamPublishStatus {
+    if (!this.publishedAt) {
+      return "unpublished";
+    } else {
+      return "published";
+    }
+  }
+
   protected abstract getServerTimestamp(): FieldValueType;
 
   toJson(): object {

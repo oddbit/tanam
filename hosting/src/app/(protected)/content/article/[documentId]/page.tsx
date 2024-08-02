@@ -12,7 +12,7 @@ export default function DocumentDetailsPage() {
   const router = useRouter();
   const {documentId} = useParams<{documentId: string}>() ?? {};
   const {data: document, error: documentError} = useTanamDocument(documentId);
-  const {update, error: writeError} = useCrudTanamDocument(documentId);
+  const {update, error: writeError} = useCrudTanamDocument();
   const [readonlyMode] = useState<boolean>(false);
   const [notification, setNotification] = useState<UserNotification | null>(null);
   if (!!document?.documentType && document?.documentType !== "article") {
@@ -26,7 +26,12 @@ export default function DocumentDetailsPage() {
 
   async function onDocumentContentChange(content: string) {
     console.log("[onDocumentContentChange]", content);
-    await update({data: {...document?.data, content}});
+    if (!document) {
+      return;
+    }
+
+    document.data.content = content;
+    await update(document);
   }
 
   return (
