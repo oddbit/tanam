@@ -75,7 +75,7 @@ jobs:
       - name: Set service account for Firebase CLI
         run: |
           echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/service_account.json" >> $GITHUB_ENV
-          echo ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TANAM_TESTING }} | base64 -d - > service_account.json
+          echo ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TANAM_TESTING }} > service_account.json
 
       - run: firebase use tanam-testing
 
@@ -85,3 +85,7 @@ jobs:
           -m "Github action run $GITHUB_RUN_ID"
           --non-interactive
           --force
+
+      - name: Clean up service account
+        if: always()
+        run: rm service_account.json
