@@ -8,6 +8,7 @@ import {useTanamDocuments} from "@/hooks/useTanamDocuments";
 import {Suspense, useEffect, useState} from "react";
 import {useParams} from "next/navigation";
 import {UserNotification} from "@/models/UserNotification";
+import {Button} from "@/components/Button";
 
 export default function DocumentTypeDocumentsPage() {
   const {documentTypeId} = useParams<{documentTypeId: string}>() ?? {};
@@ -19,10 +20,25 @@ export default function DocumentTypeDocumentsPage() {
     setNotification(docsError);
   }, [docsError]);
 
+  const addNewDocument = async () => {};
+
   return (
     <>
       <Suspense fallback={<Loader />}>
-        {documentType ? <PageHeader pageName={documentType.titlePlural.translated} /> : <Loader />}
+        {documentType ? (
+          <div className="flex items-center gap-4">
+            <PageHeader pageName={documentType.titlePlural.translated} />{" "}
+            <div className="mb-6">
+              <Button
+                onClick={addNewDocument}
+                title={`Add New ${documentType.titleSingular.translated}`}
+                style="rounded"
+              />
+            </div>
+          </div>
+        ) : (
+          <Loader />
+        )}
       </Suspense>
       {notification && (
         <Notification type={notification.type} title={notification.title} message={notification.message} />

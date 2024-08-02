@@ -12,6 +12,7 @@
     "codecheck": "npm run prettier:fix && npm run lint:fix"
   },
   "dependencies": {
+    "@iconify-json/line-md": "^1.1.37",
     "@tiptap/extension-code-block-lowlight": "^2.4.0",
     "@tiptap/extension-floating-menu": "^2.5.5",
     "@tiptap/extension-underline": "^2.4.0",
