@@ -5,8 +5,8 @@ import {getStorage} from "firebase-admin/storage";
 import {logger} from "firebase-functions/v2";
 import {onDocumentWritten} from "firebase-functions/v2/firestore";
 import {onTaskDispatched} from "firebase-functions/v2/tasks";
-import {ITanamDocument} from "./models/TanamDocument";
-import {TanamDocumentAdmin} from "./models/TanamDocumentAdmin";
+import {ITanamDocument} from "../models/TanamDocument";
+import {TanamDocumentAdmin} from "../models/TanamDocumentAdmin";
 
 const db = admin.firestore();
 const storage = getStorage().bucket();
@@ -103,7 +103,7 @@ export const taskPublishDocument = onTaskDispatched(
     const promises = [];
 
     // Copy document data to public collection
-    promises.push(publicDocumentRef.set(documentData));
+    promises.push(publicDocumentRef.set(document.data));
 
     // Copy associated files to public directory
     const [files] = await storage.getFiles({prefix: `tanam-documents/${documentId}/`});
