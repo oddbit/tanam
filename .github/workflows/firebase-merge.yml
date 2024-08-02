@@ -77,5 +77,5 @@ jobs:
         with:
           args: deploy -m "Github action run $GITHUB_RUN_ID"
         env:
-          GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TANAM_TESTING }}
+          GCP_SA_KEY: ${{ secrets.FIREBASE_DEPLOY_SA }}
           PROJECT_ID: tanam-testing
