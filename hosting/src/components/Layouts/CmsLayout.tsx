@@ -4,9 +4,9 @@ import "@/assets/css/style.css";
 import "@/assets/scss/layout-default.scss";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
-import { useAuthentication } from "@/hooks/useAuthentication";
+import {useAuthentication} from "@/hooks/useAuthentication";
 import "flatpickr/dist/flatpickr.min.css";
-import React, { useState } from "react";
+import React, {useState} from "react";
 
 export default function CmsLayout({children}: {children: React.ReactNode}) {
   useAuthentication();
@@ -35,7 +35,10 @@ export default function CmsLayout({children}: {children: React.ReactNode}) {
             {/* <!-- ===== Main Content End ===== --> */}
           </div>
 
-          <div className={`overlay ${sidebarOpen ? 'block' : 'hidden'}`} onClick={() => setSidebarOpen(!sidebarOpen)}></div>
+          <div
+            className={`overlay ${sidebarOpen ? "block" : "hidden"}`}
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          ></div>
           {/* <!-- ===== Content Area End ===== --> */}
         </div>
         {/* <!-- ===== Page Wrapper End ===== --> */}

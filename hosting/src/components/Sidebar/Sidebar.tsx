@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useTanamDocumentTypes } from "../../hooks/useTanamDocumentTypes";
-import { SidebarExpandableMenu, SidebarExpandableMenuSubItem } from "./SidebarExpandableMenu";
-import { SidebarMenuGroup } from "./SidebarMenuGroup";
-import { SidebarMenuItem } from "./SidebarMenuItem";
+import {usePathname} from "next/navigation";
+import {useEffect, useState} from "react";
+import {useTanamDocumentTypes} from "../../hooks/useTanamDocumentTypes";
+import {SidebarExpandableMenu, SidebarExpandableMenuSubItem} from "./SidebarExpandableMenu";
+import {SidebarMenuGroup} from "./SidebarMenuGroup";
+import {SidebarMenuItem} from "./SidebarMenuItem";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -51,13 +51,13 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
     };
 
     // Add event listener
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     // Call handler right away so state gets updated with initial window size
     handleResize();
 
     // Clean up the event listener on component unmount
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []); // Empty array ensures that effect is only run on mount and unmount
 
   useEffect(() => {
