@@ -21,6 +21,10 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
   const storedSidebarExpanded = "true";
 
   const [sidebarExpanded] = useState(storedSidebarExpanded === null ? false : storedSidebarExpanded === "true");
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0,
+  });
 
   // close if the esc key is pressed
   useEffect(() => {
@@ -32,6 +36,31 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
+  // close sidebar when page is changed or window resize
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname, windowSize]);
+
+  useEffect(() => {
+    // Handler to call on window resize
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+      console.info(`Window resized to: ${window.innerWidth}x${window.innerHeight}`);
+    };
+
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+
+    // Call handler right away so state gets updated with initial window size
+    handleResize();
+
+    // Clean up the event listener on component unmount
+    return () => window.removeEventListener('resize', handleResize);
+  }, []); // Empty array ensures that effect is only run on mount and unmount
+
   useEffect(() => {
     localStorage.setItem("sidebar-expanded", sidebarExpanded.toString());
     if (sidebarExpanded) {
@@ -40,11 +69,6 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
       document.querySelector("body")?.classList.remove("sidebar-expanded");
     }
   }, [sidebarExpanded]);
-
-  // close sidebar when page is changed
-  useEffect(() => {
-    setSidebarOpen(false);
-  }, [pathname]);
 
   return (
     <aside
