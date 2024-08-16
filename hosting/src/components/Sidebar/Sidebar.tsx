@@ -48,7 +48,6 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
         width: window.innerWidth,
         height: window.innerHeight,
       });
-      console.info(`Window resized to: ${window.innerWidth}x${window.innerHeight}`);
     };
 
     // Add event listener
