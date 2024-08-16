@@ -56,6 +56,11 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
     }
   }, [sidebarExpanded]);
 
+  // close sidebar when page is changed
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname]);
+
   return (
     <aside
       ref={sidebar}
