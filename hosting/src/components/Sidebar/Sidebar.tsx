@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTanamDocumentTypes } from "../../hooks/useTanamDocumentTypes";
 import { SidebarExpandableMenu, SidebarExpandableMenuSubItem } from "./SidebarExpandableMenu";
 import { SidebarMenuGroup } from "./SidebarMenuGroup";
@@ -16,26 +16,11 @@ interface SidebarProps {
 
 const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
   const pathname = usePathname() ?? "/";
-  const trigger = useRef<any>(null);
-  const sidebar = useRef<any>(null);
   const {data: documentTypes} = useTanamDocumentTypes();
 
   const storedSidebarExpanded = "true";
 
   const [sidebarExpanded] = useState(storedSidebarExpanded === null ? false : storedSidebarExpanded === "true");
-
-  // close on click outside
-  useEffect(() => {
-    const clickHandler = ({target}: MouseEvent) => {
-      if (!sidebar.current || !trigger.current) return;
-      if (!sidebarOpen || sidebar.current.contains(target) || trigger.current.contains(target)) {
-        return;
-      }
-      setSidebarOpen(false);
-    };
-    document.addEventListener("click", clickHandler);
-    return () => document.removeEventListener("click", clickHandler);
-  });
 
   // close if the esc key is pressed
   useEffect(() => {
@@ -63,7 +48,6 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
 
   return (
     <aside
-      ref={sidebar}
       className={`absolute left-0 top-0 z-99 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
