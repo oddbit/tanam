@@ -1,6 +1,6 @@
 import DarkModeSwitcher from "@/components/DarkModeSwitcher";
-import DropdownUser from '@/components/Dropdown/DropdownUser';
-import { TogglePublishDocument } from "@/components/TogglePublishDocument";
+import DropdownUser from "@/components/Dropdown/DropdownUser";
+import {TogglePublishDocument} from "@/components/TogglePublishDocument";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -50,7 +50,7 @@ export default function Header({sidebarOpen, setSidebarOpen}: HeaderProps) {
           </div>
         </div>
         {/* End Hamburger Menu */}
-        
+
         {/* Start List Top Right Menu */}
         <div className="flex items-center gap-2 2xsm:gap-4">
           <ul className="flex items-center gap-2 2xsm:gap-4">

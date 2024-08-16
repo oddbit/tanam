@@ -1,8 +1,8 @@
 import UserAvatar from "@/components/UserAvatar";
-import { useAuthentication } from "@/hooks/useAuthentication";
-import { clsx } from "clsx";
+import {useAuthentication} from "@/hooks/useAuthentication";
+import {clsx} from "clsx";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 
 interface DropdownItemProps {
   href: string;
