@@ -104,12 +104,15 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
             />
             {
               authUser && (
-                <SidebarMenuItem
-                  href="javascript:;"
-                  icon={<span className="i-ic-outline-logout w-[24px] h-[24px]" />}
-                  title="Signout"
-                  onClick={signout}
-                />
+                <>
+                  <hr />
+                  <SidebarMenuItem
+                    href="#"
+                    icon={<span className="i-ic-outline-logout w-[24px] h-[24px]" />}
+                    title="Signout"
+                    onClick={signout}
+                  />
+                </>
               )
             }
           </SidebarMenuGroup>
