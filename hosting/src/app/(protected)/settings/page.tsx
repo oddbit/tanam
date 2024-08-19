@@ -25,6 +25,24 @@ export default function Settings() {
 
         <div className="grid grid-cols-5 gap-8">
           <div className="col-span-5 xl:col-span-7">
+            <div className="w-full mb-4">
+              <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+                <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
+                  <h3 className="font-medium text-black dark:text-white">System</h3>
+                </div>
+                <div className="p-7">
+                  <div className="mb-4">
+                    <label className="mb-3 block w-full text-sm font-medium text-black dark:text-white" htmlFor="emailAddress">
+                      Dark mode
+                    </label>
+                    <div className="relative">
+                      <DarkModeSwitcher />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <form onSubmit={onPersonalInfoSubmit}>
               <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                 <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
@@ -83,22 +101,6 @@ export default function Settings() {
                           defaultValue={tanamUser?.name}
                         />
                       </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
-                  <h3 className="font-medium text-black dark:text-white">System</h3>
-                </div>
-                <div className="p-7">
-                  <div className="mb-4">
-                    <label className="mb-3 block w-full text-sm font-medium text-black dark:text-white" htmlFor="emailAddress">
-                      Dark mode
-                    </label>
-                    <div className="relative">
-                      <DarkModeSwitcher />
                     </div>
                   </div>
 
