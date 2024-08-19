@@ -1,8 +1,8 @@
 "use client";
 import PageHeader from "@/components/common/PageHeader";
 import DarkModeSwitcher from "@/components/DarkModeSwitcher";
-import { useAuthentication } from "@/hooks/useAuthentication";
-import { useTanamUser } from "@/hooks/useTanamUser";
+import {useAuthentication} from "@/hooks/useAuthentication";
+import {useTanamUser} from "@/hooks/useTanamUser";
 import Image from "next/image";
 
 export default function Settings() {
@@ -32,7 +32,10 @@ export default function Settings() {
                 </div>
                 <div className="p-7">
                   <div className="mb-4">
-                    <label className="mb-3 block w-full text-sm font-medium text-black dark:text-white" htmlFor="emailAddress">
+                    <label
+                      className="mb-3 block w-full text-sm font-medium text-black dark:text-white"
+                      htmlFor="emailAddress"
+                    >
                       Dark mode
                     </label>
                     <div className="relative">

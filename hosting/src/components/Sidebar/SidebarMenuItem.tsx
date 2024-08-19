@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import {usePathname} from "next/navigation";
 import React from "react";
 
 interface SidebarMenuProps {
   href: string;
   icon: React.ReactNode;
   title: string;
-  onClick?: (event: React.MouseEvent<HTMLAnchorElement>) => void
+  onClick?: (event: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
 export function SidebarMenuItem({href, icon, title, onClick}: SidebarMenuProps) {
