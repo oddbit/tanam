@@ -1,13 +1,14 @@
 "use client";
 
+import { useAuthentication } from '@/hooks/useAuthentication';
+import { useTanamDocumentTypes } from "@/hooks/useTanamDocumentTypes";
 import Image from "next/image";
 import Link from "next/link";
-import {usePathname} from "next/navigation";
-import {useEffect, useRef, useState} from "react";
-import {useTanamDocumentTypes} from "../../hooks/useTanamDocumentTypes";
-import {SidebarExpandableMenu, SidebarExpandableMenuSubItem} from "./SidebarExpandableMenu";
-import {SidebarMenuGroup} from "./SidebarMenuGroup";
-import {SidebarMenuItem} from "./SidebarMenuItem";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { SidebarExpandableMenu, SidebarExpandableMenuSubItem } from "./SidebarExpandableMenu";
+import { SidebarMenuGroup } from "./SidebarMenuGroup";
+import { SidebarMenuItem } from "./SidebarMenuItem";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -19,6 +20,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
   const {data: documentTypes} = useTanamDocumentTypes();
+  const {authUser, signout} = useAuthentication();
 
   const storedSidebarExpanded = "true";
 
@@ -100,6 +102,16 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
               icon={<span className="i-ic-outline-settings w-[24px] h-[24px]" />}
               title="Settings"
             />
+            {
+              authUser && (
+                <SidebarMenuItem
+                  href="javascript:;"
+                  icon={<span className="i-ic-outline-logout w-[24px] h-[24px]" />}
+                  title="Signout"
+                  onClick={signout}
+                />
+              )
+            }
           </SidebarMenuGroup>
         </nav>
         {/* <!-- Sidebar Menu --> */}
