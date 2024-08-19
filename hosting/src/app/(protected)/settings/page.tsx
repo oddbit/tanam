@@ -28,13 +28,54 @@ export default function Settings() {
         <PageHeader pageName="Settings" />
 
         <div className="grid grid-cols-5 gap-8">
-          <div className="col-span-5 xl:col-span-3">
+          <div className="col-span-5 xl:col-span-7">
+            <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+              <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
+                <h3 className="font-medium text-black dark:text-white">System</h3>
+              </div>
+              <div className="p-7">
+                <div className="mb-4 gap-3">
+                  <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="emailAddress">
+                    Dark mode
+                  </label>
+                  <div className="relative">
+                    <DarkModeSwitcher />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-span-5 xl:col-span-7">
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
                 <h3 className="font-medium text-black dark:text-white">Personal Information</h3>
               </div>
               <div className="p-7">
                 <form onSubmit={onPersonalInfoSubmit}>
+                  <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                    <div className="w-full">
+                      <div className="mb-4 flex items-center gap-3">
+                        <div className="h-14 w-14 rounded-full">
+                          <Image src={"/images/user/user-03.png"} width={55} height={55} alt="User" />
+                        </div>
+                        <div>
+                          <span className="mb-1.5 text-black dark:text-white">Edit your photo</span>
+                          <span className="flex gap-2.5">
+                            <button className="text-sm hover:text-primary">Delete</button>
+                            <button className="text-sm hover:text-primary" onClick={() => setShowDropzone(!showDropzone)}>Update</button>
+                          </span>
+                        </div>
+                      </div>
+
+                      {
+                        showDropzone && (
+                          <Dropzone />
+                        )
+                      }
+                    </div>
+                  </div>
+                  
                   <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full">
                       <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="fullName">
@@ -69,67 +110,6 @@ export default function Settings() {
                     </button>
                   </div>
                 </form>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-span-5 xl:col-span-2">
-            <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-              <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
-                <h3 className="font-medium text-black dark:text-white">Your Photo</h3>
-              </div>
-              <div className="p-7">
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="h-14 w-14 rounded-full">
-                    <Image src={"/images/user/user-03.png"} width={55} height={55} alt="User" />
-                  </div>
-                  <div>
-                    <span className="mb-1.5 text-black dark:text-white">Edit your photo</span>
-                    <span className="flex gap-2.5">
-                      <button className="text-sm hover:text-primary">Delete</button>
-                      <button className="text-sm hover:text-primary" onClick={() => setShowDropzone(!showDropzone)}>Update</button>
-                    </span>
-                  </div>
-                </div>
-
-                {
-                  showDropzone && (
-                    <Dropzone />
-                  )
-                }
-
-                <div className="flex justify-end gap-4.5">
-                  <button
-                    className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                    type="submit"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
-                    type="submit"
-                  >
-                    Save
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-span-5 xl:col-span-2">
-            <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-              <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
-                <h3 className="font-medium text-black dark:text-white">System</h3>
-              </div>
-              <div className="p-7">
-                <div className="mb-4 flex items-center gap-3">
-                  <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="emailAddress">
-                    Dark mode
-                  </label>
-                  <div className="relative">
-                    <DarkModeSwitcher />
-                  </div>
-                </div>
               </div>
             </div>
           </div>
