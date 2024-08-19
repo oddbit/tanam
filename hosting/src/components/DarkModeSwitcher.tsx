@@ -1,8 +1,8 @@
-import {Switcher} from "@/components/Form/Switcher";
-import {useAuthentication} from "@/hooks/useAuthentication";
+import { Switcher } from "@/components/Form/Switcher";
+import { useAuthentication } from "@/hooks/useAuthentication";
 import useColorMode from "@/hooks/useColorMode";
-import {useTanamUser} from "@/hooks/useTanamUser";
-import {useEffect} from "react";
+import { useTanamUser } from "@/hooks/useTanamUser";
+import { useEffect } from "react";
 
 const DarkModeSwitcher = () => {
   const [colorMode, setColorMode] = useColorMode();
@@ -18,7 +18,7 @@ const DarkModeSwitcher = () => {
   return (
     <Switcher
       style="default"
-      defaultChecked={colorMode === "dark"}
+      initialValue={colorMode === "dark"}
       onChange={async (checked) => await saveColorMode(checked ? "dark" : "light")}
       onIcon="i-ri-moon-clear-fill text-white"
       offIcon="i-ri-sun-line"
