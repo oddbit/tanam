@@ -87,7 +87,7 @@ const DocumentDetailsPage = () => {
       case "file-upload":
         return <FileUpload key={inputKey} disabled={readonlyMode} label={field.title.translated} />;
       case "switcher":
-        return <Switcher key={inputKey} disabled={readonlyMode} defaultChecked={value} />;
+        return <Switcher key={inputKey} disabled={readonlyMode} initialValue={value} />;
       case "radio":
         return <RadioButton key={inputKey} disabled={readonlyMode} label={field.title.translated} />;
       case "checkbox":
