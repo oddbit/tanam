@@ -46,10 +46,14 @@ export function Dropzone({ disabled, onChange }: DropzoneProps) {
   const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
+
     if (disabled) return;
+    
     if (e.type === "dragenter" || e.type === "dragover") {
       setDragActive(true);
-    } else if (e.type === "dragleave") {
+    }
+    
+    if (e.type === "dragleave") {
       setDragActive(false);
     }
   };
