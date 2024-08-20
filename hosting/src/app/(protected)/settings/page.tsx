@@ -78,9 +78,11 @@ export default function Settings() {
                           <Dropzone 
                             value={profilePicture}
                             onChange={
-                              (value) => {
-                                if (!value) return
-                                setProfilePicture(value)
+                              (valueString, valueBlob) => {
+                                if (!valueString) return
+                                console.info('valueBlob :: ', valueBlob)
+                                console.info('valueString :: ', valueString)
+                                setProfilePicture(valueString)
                               }
                             }
                           />

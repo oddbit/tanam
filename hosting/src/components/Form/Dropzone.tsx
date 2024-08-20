@@ -3,32 +3,34 @@ import React from "react";
 interface DropzoneProps {
   value?: string;
   disabled?: boolean;
-  onChange?: (fileData: string | null) => void; // Callback to send the file data to parent
+  onChange?: (fileString: string | null, fileBlob: File | null) => void; // Callback to send the file data to parent
 }
 
 /**
  * Function to handle file reading and sending data to parent.
  * @param {File} file - The file object to handle.
- * @param {(result: string | null) => void} callback - Callback function to handle the file read result.
+ * @param {(fileString: string | null, fileBlob: File | null) => void} callback - Callback function to handle the file data.
  */
-export function handleFile(file: File, callback?: (result: string | null) => void) {
+export function handleFile(file: File, callback?: (fileString: string | null, fileBlob: File | null) => void) {
   const reader = new FileReader();
+  
   reader.onloadend = () => {
     if (callback) {
-      callback(reader.result as string);
+      callback(reader.result as string, file);
     }
   };
+  
   reader.readAsDataURL(file);
 }
 
 /**
  * Function to handle file input change event.
  * @param {React.ChangeEvent<HTMLInputElement>} e - The change event from file input.
- * @param {(result: string | null) => void} callback - Callback function to handle the file read result.
+ * @param {(fileString: string | null, fileBlob: File | null) => void} callback - Callback function to handle the file data.
  */
 export function handleChange(
   e: React.ChangeEvent<HTMLInputElement>,
-  callback?: (result: string | null) => void
+  callback?: (fileString: string | null, fileBlob: File | null) => void
 ) {
   if (e.target.files && e.target.files[0]) {
     handleFile(e.target.files[0], callback);
@@ -84,7 +86,7 @@ export function Dropzone({ disabled, onChange }: DropzoneProps) {
       >
         <input
           type="file"
-          accept="image/*"
+          accept="image/*" // Adjust if needed for other file types
           disabled={disabled}
           onChange={(e) => handleChange(e, onChange)}
           className="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
