@@ -24,7 +24,7 @@ export default function Settings() {
       fullName: form.fullName.value,
     };
     
-    await saveUserInfo(formData.fullName);
+    await saveUserInfo(formData.fullName, profilePicture);
   }
 
   return (
