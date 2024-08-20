@@ -3,22 +3,43 @@ import PageHeader from "@/components/common/PageHeader";
 import DarkModeSwitcher from "@/components/DarkModeSwitcher";
 import { Dropzone } from "@/components/Form/Dropzone";
 import { useAuthentication } from "@/hooks/useAuthentication";
-import { useTanamUpload } from '@/hooks/useTanamUpload';
+import { useFirebaseStorage } from '@/hooks/useFirebaseStorage';
 import { useTanamUser } from "@/hooks/useTanamUser";
 import Image from "next/image";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const defaultProfilePicture = "/images/user/user-03.png";
 
 export default function Settings() {
   const {authUser} = useAuthentication();
   const {tanamUser, saveUserInfo} = useTanamUser(authUser?.uid);
-  const pathUpload = `tanam-users/${tanamUser?.id}/new-profile-image`;
-  const {loading: uploadLoading, upload} = useTanamUpload(pathUpload);
+  const {loading: uploadLoading, upload, getFile} = useFirebaseStorage();
 
   const [showDropzone, setShowDropzone] = useState<boolean>(false);
+  const [pathUpload, setPathUpload] = useState<string>();
   const [fileUploadContentType, setFileUploadContentType] = useState<string>();
   const [profilePicture, setProfilePicture] = useState<string>(defaultProfilePicture);
+
+  useEffect(() => {
+    if (tanamUser) {
+      console.info("effect :: ", tanamUser)
+      init();
+    }
+  }, [tanamUser, pathUpload]);
+
+  async function init() {
+    console.info("init")
+    
+    if (!pathUpload) {
+      setPathUpload(`tanam-users/${tanamUser?.id}`);
+
+      return
+    }
+
+    const profilePictureUrl = await getFile(`${pathUpload}/profile.png`);
+    console.info("profilePictureUrl :: ", profilePictureUrl);
+    setProfilePicture(profilePictureUrl ?? defaultProfilePicture);
+  }
 
   function resetChanges() {
     setFileUploadContentType(undefined);
@@ -41,16 +62,19 @@ export default function Settings() {
 
     // Do upload when have profilePicture and contentType file
     if (fileUploadContentType && profilePicture) {
-      await upload(profilePicture, fileUploadContentType);
+      const fileName = "new-profile-image"
+      await upload(`${pathUpload}/${fileName}`, profilePicture, fileUploadContentType);
     }
     
-    // await saveUserInfo(formData.fullName, profilePicture);
+    await saveUserInfo(formData.fullName);
   }
 
   return (
     <>
       <div className="mx-auto max-w-270">
         <PageHeader pageName="Settings" />
+        pathUpload :: {pathUpload} <br />
+        tanamUser :: {JSON.stringify(tanamUser)}
 
         <div className="grid grid-cols-5 gap-8">
           <div className="col-span-5 xl:col-span-7">
