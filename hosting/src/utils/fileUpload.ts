@@ -5,23 +5,11 @@
  * @return {Blob} - The Blob object created from the base64 string.
  */
 export function base64ToBlob(base64: string, contentType: string) {
-  const sliceSize = 512;
-  const byteCharacters = atob(base64);
-  const byteArrays = [];
-
-  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-    const slice = byteCharacters.slice(offset, offset + sliceSize);
-    const byteNumbers = new Array(slice.length);
-
-    for (let i = 0; i < slice.length; i++) {
-      byteNumbers[i] = slice.charCodeAt(i);
-    }
-
-    const byteArray = new Uint8Array(byteNumbers);
-    byteArrays.push(byteArray);
-  }
-
-  return new Blob(byteArrays, { type: contentType });
+  const byteCharacters = atob(base64.split(',')[1]);
+  const byteNumbers = Array.from(byteCharacters, char => char.charCodeAt(0));
+  const byteArray = new Uint8Array(byteNumbers);
+  
+  return new Blob([byteArray], { type: contentType });
 };
 
 /**

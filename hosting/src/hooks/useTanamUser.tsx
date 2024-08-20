@@ -55,14 +55,14 @@ export function useTanamUser(uid?: string) {
     }
   }
 
-  async function saveUserInfo(name: string, profilePicture: string) {
+  async function saveUserInfo(name: string) {
     if (!uid) {
       return;
     }
 
     try {
       const docRef = doc(firestore, `tanam-users`, uid);
-      return updateDoc(docRef, {name, profilePicture});
+      return updateDoc(docRef, {name});
     } catch (error) {
       const typedError = error as Error;
       setError(new UserNotification("error", "Failed to update user info.", typedError.message));

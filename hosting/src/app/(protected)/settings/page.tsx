@@ -17,18 +17,18 @@ export default function Settings() {
   const {loading: uploadLoading, upload} = useTanamUpload(pathUpload);
 
   const [showDropzone, setShowDropzone] = useState<boolean>(false);
-  const [fileUploadName, setFileUploadName] = useState<string>();
   const [fileUploadContentType, setFileUploadContentType] = useState<string>();
   const [profilePicture, setProfilePicture] = useState<string>(defaultProfilePicture);
 
   function resetChanges() {
-    setFileUploadName(undefined);
     setFileUploadContentType(undefined);
     setProfilePicture(defaultProfilePicture);
   }
 
   async function onPersonalInfoSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (uploadLoading) return
 
     const form = event.currentTarget;
     const formData = {
@@ -37,12 +37,12 @@ export default function Settings() {
 
     console.info('formData :: ', formData);
     console.info('profilePicture :: ', profilePicture);
-    console.info('fileUploadName :: ', fileUploadName);
     console.info('fileUploadContentType :: ', fileUploadContentType);
 
-    if (!fileUploadName || !fileUploadContentType) return
-
-    await upload(profilePicture, fileUploadName, fileUploadContentType);
+    // Do upload when have profilePicture and contentType file
+    if (fileUploadContentType && profilePicture) {
+      await upload(profilePicture, fileUploadContentType);
+    }
     
     // await saveUserInfo(formData.fullName, profilePicture);
   }
@@ -102,7 +102,6 @@ export default function Settings() {
                               console.info('valueBlob :: ', valueBlob)
                               console.info('valueString :: ', valueString)
                               setProfilePicture(valueString)
-                              setFileUploadName(valueBlob?.name)
                               setFileUploadContentType(valueBlob?.type)
                             }
                           }

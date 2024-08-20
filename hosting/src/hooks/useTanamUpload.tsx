@@ -1,5 +1,5 @@
 import { storage } from "@/plugins/firebase";
-import { base64ToBlob, getFileExtension } from "@/utils/fileUpload";
+import { base64ToBlob } from "@/utils/fileUpload";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useCallback, useState } from "react";
 
@@ -19,28 +19,18 @@ export function useTanamUpload(folderPath: string) {
    * @param {string} contentType - MIME type of the file (e.g., 'image/jpeg', 'application/pdf').
    * @return {Promise<string | null>} - Returns a promise that resolves to the download URL of the uploaded file or null if failed.
    */
-  const upload = useCallback(async (base64: string, fileName: string, contentType: string) => {
+  const upload = useCallback(async (base64: string, contentType: string) => {
     setLoading(true);
     setError(null);
 
     console.info("upload :: ", folderPath)
 
     try {
-      // Extract file extension from contentType
-      const fileExtension = getFileExtension(contentType);
-      const fullFileName = `${fileName}${fileExtension}`;
-
-      // Remove data URL prefix (e.g., 'data:image/jpeg;base64,')
-      const base64Data = base64.split(',')[1];
-      const blob = base64ToBlob(base64Data, contentType);
-      const file = new File([blob], fileName);
-
-      console.info("upload fullFileName :: ", fullFileName)
-      console.info("upload file :: ", file)
+      const blob = base64ToBlob(base64, contentType);
 
       // Create a reference to the file in Firebase Storage
-      const storageRef = ref(storage, `${folderPath}/${fileName}`);
-      await uploadBytes(storageRef, file);
+      const storageRef = ref(storage, `${folderPath}`);
+      await uploadBytes(storageRef, blob);
       console.info("upload finished")
       const downloadURL = await getDownloadURL(storageRef);
 

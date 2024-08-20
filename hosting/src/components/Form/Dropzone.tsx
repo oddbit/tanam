@@ -16,6 +16,7 @@ export function handleFile(file: File, callback?: (fileString: string | null, fi
   
   reader.onloadend = () => {
     if (callback) {
+      console.info('reader result :: ', reader)
       callback(reader.result as string, file);
     }
   };
@@ -32,6 +33,7 @@ export function handleChange(
   e: React.ChangeEvent<HTMLInputElement>,
   callback?: (fileString: string | null, fileBlob: File | null) => void
 ) {
+  console.info('files :: ', e.target.files)
   if (e.target.files && e.target.files[0]) {
     handleFile(e.target.files[0], callback);
   }
