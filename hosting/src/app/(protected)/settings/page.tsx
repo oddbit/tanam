@@ -7,18 +7,23 @@ import { useTanamUser } from "@/hooks/useTanamUser";
 import Image from "next/image";
 import { useState } from 'react';
 
+const defaultAvatar = "/images/user/user-03.png";
+
 export default function Settings() {
   const {authUser} = useAuthentication();
   const {tanamUser, saveUserInfo} = useTanamUser(authUser?.uid);
 
   const [showDropzone, setShowDropzone] = useState(false);
+  const [avatar, setAvatar] = useState(defaultAvatar);
 
   async function onPersonalInfoSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
     const form = event.currentTarget;
     const formData = {
       fullName: form.fullName.value,
     };
+    
     await saveUserInfo(formData.fullName);
   }
 
@@ -57,12 +62,12 @@ export default function Settings() {
                     <div className="w-full">
                       <div className="mb-4 flex items-center gap-3">
                         <div className="h-14 w-14 rounded-full">
-                          <Image src={"/images/user/user-03.png"} width={55} height={55} alt="User" />
+                          <Image className="rounded-full object-cover" src={avatar} width={55} height={55} alt="User" />
                         </div>
                         <div>
                           <span className="mb-1.5 text-black dark:text-white">Edit your photo</span>
                           <span className="flex gap-2.5">
-                            <button className="text-sm hover:text-primary">Delete</button>
+                            <button className="text-sm hover:text-primary" onClick={() => setAvatar(defaultAvatar)}>Delete</button>
                             <button className="text-sm hover:text-primary" onClick={() => setShowDropzone(!showDropzone)}>Update</button>
                           </span>
                         </div>
@@ -70,12 +75,20 @@ export default function Settings() {
 
                       {
                         showDropzone && (
-                          <Dropzone />
+                          <Dropzone 
+                            value={avatar}
+                            onChange={
+                              (value) => {
+                                if (!value) return
+                                setAvatar(value)
+                              }
+                            }
+                          />
                         )
                       }
                     </div>
                   </div>
-                  
+
                   <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full">
                       <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="fullName">
