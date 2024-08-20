@@ -9,7 +9,7 @@ import { useCallback, useState } from "react";
  * @return {Object} - Returns an object with functions and states for uploading the file.
  */
 export function useTanamUpload(folderPath: string) {
-  const [uploading, setUploading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   /**
@@ -20,8 +20,10 @@ export function useTanamUpload(folderPath: string) {
    * @return {Promise<string | null>} - Returns a promise that resolves to the download URL of the uploaded file or null if failed.
    */
   const upload = useCallback(async (base64: string, fileName: string, contentType: string) => {
-    setUploading(true);
+    setLoading(true);
     setError(null);
+
+    console.info("upload :: ", folderPath)
 
     try {
       // Extract file extension from contentType
@@ -31,20 +33,24 @@ export function useTanamUpload(folderPath: string) {
       // Remove data URL prefix (e.g., 'data:image/jpeg;base64,')
       const base64Data = base64.split(',')[1];
       const blob = base64ToBlob(base64Data, contentType);
-      const file = new File([blob], fullFileName);
+      const file = new File([blob], fileName);
+
+      console.info("upload fullFileName :: ", fullFileName)
+      console.info("upload file :: ", file)
 
       // Create a reference to the file in Firebase Storage
-      const storageRef = ref(storage, `${folderPath}/${fullFileName}`);
+      const storageRef = ref(storage, `${folderPath}/${fileName}`);
       await uploadBytes(storageRef, file);
+      console.info("upload finished")
       const downloadURL = await getDownloadURL(storageRef);
 
-      setUploading(false);
+      setLoading(false);
       return downloadURL;
     } catch (err) {
       setError(`Upload failed: ${(err as Error).message}`);
-      setUploading(false);
+      setLoading(false);
     }
   }, [folderPath]);
 
-  return { uploading, error, upload };
+  return { loading, error, upload };
 }

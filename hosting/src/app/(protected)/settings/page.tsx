@@ -3,6 +3,7 @@ import PageHeader from "@/components/common/PageHeader";
 import DarkModeSwitcher from "@/components/DarkModeSwitcher";
 import { Dropzone } from "@/components/Form/Dropzone";
 import { useAuthentication } from "@/hooks/useAuthentication";
+import { useTanamUpload } from '@/hooks/useTanamUpload';
 import { useTanamUser } from "@/hooks/useTanamUser";
 import Image from "next/image";
 import { useState } from 'react';
@@ -12,9 +13,19 @@ const defaultProfilePicture = "/images/user/user-03.png";
 export default function Settings() {
   const {authUser} = useAuthentication();
   const {tanamUser, saveUserInfo} = useTanamUser(authUser?.uid);
+  const pathUpload = `tanam-users/${tanamUser?.id}/new-profile-image`;
+  const {loading: uploadLoading, upload} = useTanamUpload(pathUpload);
 
-  const [showDropzone, setShowDropzone] = useState(false);
-  const [profilePicture, setProfilePicture] = useState(defaultProfilePicture);
+  const [showDropzone, setShowDropzone] = useState<boolean>(false);
+  const [fileUploadName, setFileUploadName] = useState<string>();
+  const [fileUploadContentType, setFileUploadContentType] = useState<string>();
+  const [profilePicture, setProfilePicture] = useState<string>(defaultProfilePicture);
+
+  function resetChanges() {
+    setFileUploadName(undefined);
+    setFileUploadContentType(undefined);
+    setProfilePicture(defaultProfilePicture);
+  }
 
   async function onPersonalInfoSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -23,8 +34,17 @@ export default function Settings() {
     const formData = {
       fullName: form.fullName.value,
     };
+
+    console.info('formData :: ', formData);
+    console.info('profilePicture :: ', profilePicture);
+    console.info('fileUploadName :: ', fileUploadName);
+    console.info('fileUploadContentType :: ', fileUploadContentType);
+
+    if (!fileUploadName || !fileUploadContentType) return
+
+    await upload(profilePicture, fileUploadName, fileUploadContentType);
     
-    await saveUserInfo(formData.fullName, profilePicture);
+    // await saveUserInfo(formData.fullName, profilePicture);
   }
 
   return (
@@ -57,40 +77,42 @@ export default function Settings() {
                 <h3 className="font-medium text-black dark:text-white">Personal Information</h3>
               </div>
               <div className="p-7">
-                <form onSubmit={onPersonalInfoSubmit}>
-                  <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-                    <div className="w-full">
-                      <div className="mb-4 flex items-center gap-3">
-                        <div className="h-14 w-14 rounded-full">
-                          <Image className="rounded-full object-cover" src={profilePicture} width={55} height={55} alt="User" />
-                        </div>
-                        <div>
-                          <span className="mb-1.5 text-black dark:text-white">Edit your photo</span>
-                          <span className="flex gap-2.5">
-                            <button className="text-sm hover:text-primary" onClick={() => setProfilePicture(defaultProfilePicture)}>Delete</button>
-                            <button className="text-sm hover:text-primary" onClick={() => setShowDropzone(!showDropzone)}>Update</button>
-                          </span>
-                        </div>
+                <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                  <div className="w-full">
+                    <div className="mb-4 flex items-center gap-3">
+                      <div className="h-14 w-14 rounded-full">
+                        <Image className="rounded-full object-cover" src={profilePicture} width={55} height={55} alt="User" />
                       </div>
-
-                      {
-                        showDropzone && (
-                          <Dropzone 
-                            value={profilePicture}
-                            onChange={
-                              (valueString, valueBlob) => {
-                                if (!valueString) return
-                                console.info('valueBlob :: ', valueBlob)
-                                console.info('valueString :: ', valueString)
-                                setProfilePicture(valueString)
-                              }
-                            }
-                          />
-                        )
-                      }
+                      <div>
+                        <span className="mb-1.5 text-black dark:text-white">Edit your photo</span>
+                        <span className="flex gap-2.5">
+                          <button className="text-sm hover:text-primary" onClick={() => setProfilePicture(defaultProfilePicture)}>Delete</button>
+                          <button className="text-sm hover:text-primary" onClick={() => setShowDropzone(!showDropzone)}>Update</button>
+                        </span>
+                      </div>
                     </div>
-                  </div>
 
+                    {
+                      showDropzone && (
+                        <Dropzone 
+                          value={profilePicture}
+                          onChange={
+                            (valueString, valueBlob) => {
+                              if (!valueString) return
+                              console.info('valueBlob :: ', valueBlob)
+                              console.info('valueString :: ', valueString)
+                              setProfilePicture(valueString)
+                              setFileUploadName(valueBlob?.name)
+                              setFileUploadContentType(valueBlob?.type)
+                            }
+                          }
+                        />
+                      )
+                    }
+                  </div>
+                </div>
+
+                <form onSubmit={onPersonalInfoSubmit}>
                   <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                     <div className="w-full">
                       <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="fullName">
@@ -113,7 +135,8 @@ export default function Settings() {
                   <div className="flex justify-end gap-4.5">
                     <button
                       className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                      type="submit"
+                      type="reset"
+                      onClick={resetChanges}
                     >
                       Cancel
                     </button>

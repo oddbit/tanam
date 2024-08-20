@@ -15,7 +15,7 @@ service firebase.storage {
       }
 
       match /new-profile-image {
-        allow create: if request.auth != null && request.auth.uid == uid;
+        allow create: if request.auth != null;
         allow read: if request.auth != null;
       }
     }
