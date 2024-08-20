@@ -8,7 +8,7 @@ import { useTanamUser } from "@/hooks/useTanamUser";
 import Image from "next/image";
 import { useEffect, useState } from 'react';
 
-const defaultProfilePicture = "/images/user/user-03.png";
+const defaultImage = "/images/no-image.png";
 
 export default function Settings() {
   const {authUser} = useAuthentication();
@@ -18,18 +18,17 @@ export default function Settings() {
   const [showDropzone, setShowDropzone] = useState<boolean>(false);
   const [pathUpload, setPathUpload] = useState<string>();
   const [fileUploadContentType, setFileUploadContentType] = useState<string>();
-  const [profilePicture, setProfilePicture] = useState<string>(defaultProfilePicture);
+  const [profilePicture, setProfilePicture] = useState<string>(defaultImage);
 
   useEffect(() => {
     if (tanamUser) {
-      console.info("effect :: ", tanamUser)
       init();
     }
+
+    return () => resetChanges();
   }, [tanamUser, pathUpload]);
 
   async function init() {
-    console.info("init")
-    
     if (!pathUpload) {
       setPathUpload(`tanam-users/${tanamUser?.id}`);
 
@@ -37,13 +36,12 @@ export default function Settings() {
     }
 
     const profilePictureUrl = await getFile(`${pathUpload}/profile.png`);
-    console.info("profilePictureUrl :: ", profilePictureUrl);
-    setProfilePicture(profilePictureUrl ?? defaultProfilePicture);
+    setProfilePicture(profilePictureUrl ?? defaultImage);
   }
 
   function resetChanges() {
     setFileUploadContentType(undefined);
-    setProfilePicture(defaultProfilePicture);
+    setProfilePicture(defaultImage);
   }
 
   async function onPersonalInfoSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -55,10 +53,6 @@ export default function Settings() {
     const formData = {
       fullName: form.fullName.value,
     };
-
-    console.info('formData :: ', formData);
-    console.info('profilePicture :: ', profilePicture);
-    console.info('fileUploadContentType :: ', fileUploadContentType);
 
     // Do upload when have profilePicture and contentType file
     if (fileUploadContentType && profilePicture) {
@@ -73,8 +67,6 @@ export default function Settings() {
     <>
       <div className="mx-auto max-w-270">
         <PageHeader pageName="Settings" />
-        pathUpload :: {pathUpload} <br />
-        tanamUser :: {JSON.stringify(tanamUser)}
 
         <div className="grid grid-cols-5 gap-8">
           <div className="col-span-5 xl:col-span-7">
@@ -104,13 +96,12 @@ export default function Settings() {
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                   <div className="w-full">
                     <div className="mb-4 flex items-center gap-3">
-                      <div className="h-14 w-14 rounded-full">
-                        <Image className="rounded-full object-cover" src={profilePicture} width={55} height={55} alt="User" />
-                      </div>
+                      <Image className="w-14 h-14 rounded-full object-cover" src={profilePicture} width={80} height={80} alt="User" />
+                      
                       <div>
                         <span className="mb-1.5 text-black dark:text-white">Edit your photo</span>
                         <span className="flex gap-2.5">
-                          <button className="text-sm hover:text-primary" onClick={() => setProfilePicture(defaultProfilePicture)}>Delete</button>
+                          <button className="text-sm hover:text-primary" onClick={() => setProfilePicture(defaultImage)}>Delete</button>
                           <button className="text-sm hover:text-primary" onClick={() => setShowDropzone(!showDropzone)}>Update</button>
                         </span>
                       </div>
@@ -123,8 +114,7 @@ export default function Settings() {
                           onChange={
                             (valueString, valueBlob) => {
                               if (!valueString) return
-                              console.info('valueBlob :: ', valueBlob)
-                              console.info('valueString :: ', valueString)
+                              
                               setProfilePicture(valueString)
                               setFileUploadContentType(valueBlob?.type)
                             }
