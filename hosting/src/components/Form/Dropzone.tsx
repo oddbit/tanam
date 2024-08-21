@@ -1,8 +1,11 @@
+import { AcceptFileType, getAcceptDescription } from "@/utils/fileUpload";
 import React from "react";
 
+// Props interface for the Dropzone component
 interface DropzoneProps {
   value?: string;
   disabled?: boolean;
+  accept?: AcceptFileType;
   onChange?: (fileString: string | null, fileBlob: File | null) => void; // Callback to send the file data to parent
 }
 
@@ -44,7 +47,7 @@ export function handleChange(
  * @param {DropzoneProps} props - The properties for the dropzone component.
  * @return {JSX.Element} The rendered dropzone component.
  */
-export function Dropzone({ disabled, onChange }: DropzoneProps) {
+export function Dropzone({ disabled, accept = AcceptFileType.AllFiles, onChange }: DropzoneProps) {
   const [dragActive, setDragActive] = React.useState(false);
 
   const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
@@ -88,7 +91,7 @@ export function Dropzone({ disabled, onChange }: DropzoneProps) {
       >
         <input
           type="file"
-          accept="image/*" // Adjust if needed for other file types
+          accept={accept}
           disabled={disabled}
           onChange={(e) => handleChange(e, onChange)}
           className="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
@@ -98,8 +101,7 @@ export function Dropzone({ disabled, onChange }: DropzoneProps) {
           <p>
             <span className="text-primary">Click to upload</span> or drag and drop
           </p>
-          <p className="mt-1.5">SVG, PNG, JPG or GIF</p>
-          <p>(max, 800 X 800px)</p>
+          <p className="mt-1.5">Allowed types: {getAcceptDescription(accept)}</p>
         </div>
       </div>
     </div>
