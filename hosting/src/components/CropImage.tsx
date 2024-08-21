@@ -4,7 +4,7 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 // Props interface for the CropImage component
 export interface ICropImageProps {
-  src: string; // URL or path of the image to be cropped
+  src?: string; // URL or path of the image to be cropped
   onCropComplete?: (croppedImageUrl: string) => void; // Callback to handle the cropped image URL
   contentType?: string; // The content type for the output image, e.g., 'image/jpeg' or 'image/png'
 }
@@ -12,9 +12,11 @@ export interface ICropImageProps {
 /**
  * CropImage component allows users to crop an image and get the resulting cropped image data.
  * @param {ICropImageProps} props - Props for the CropImage component.
- * @returns {JSX.Element} - The rendered CropImage component.
+ * @returns {JSX.Element | null} - The rendered CropImage component.
  */
-export function CropImage(props: ICropImageProps) {
+export function CropImage(props: ICropImageProps): JSX.Element | null {
+  if (!props.src) return null;
+
   const { src, onCropComplete, contentType = 'image/jpeg' } = props;
 
   const [crop, setCrop] = useState<Crop>();

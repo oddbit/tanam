@@ -3,6 +3,7 @@ import PageHeader from "@/components/common/PageHeader";
 import { CropImage } from "@/components/CropImage";
 import DarkModeSwitcher from "@/components/DarkModeSwitcher";
 import { Dropzone } from "@/components/Form/Dropzone";
+import { Modal } from '@/components/Modal';
 import { useAuthentication } from "@/hooks/useAuthentication";
 import { useFirebaseStorage } from '@/hooks/useFirebaseStorage';
 import { useTanamUser } from "@/hooks/useTanamUser";
@@ -21,6 +22,7 @@ export default function Settings() {
   const [showCropImage, setShowCropImage] = useState<boolean>(false);
   const [pathUpload, setPathUpload] = useState<string>();
   const [fileUploadContentType, setFileUploadContentType] = useState<string>();
+  const [beforeCropImage, setBeforeCropImage] = useState<string>();
   const [profilePicture, setProfilePicture] = useState<string>(defaultImage);
 
   useEffect(() => {
@@ -41,6 +43,7 @@ export default function Settings() {
 
   async function resetChanges() {
     setFileUploadContentType(undefined);
+    setBeforeCropImage(undefined);
     setShowCropImage(false);
 
     await fetchProfilePicture();
@@ -108,7 +111,12 @@ export default function Settings() {
                       <div>
                         <span className="mb-1.5 text-black dark:text-white">Edit your photo</span>
                         <span className="flex gap-2.5">
-                          <button className="text-sm hover:text-primary" onClick={async () => await fetchProfilePicture()}>Delete</button>
+                          <button className="text-sm hover:text-primary" onClick={
+                            async () => {
+                              await fetchProfilePicture();
+                              setBeforeCropImage(undefined);
+                            }
+                          }>Delete</button>
                           <button className="text-sm hover:text-primary" onClick={() => setShowDropzone(!showDropzone)}>Update</button>
                         </span>
                       </div>
@@ -123,7 +131,7 @@ export default function Settings() {
                             (valueString, valueBlob) => {
                               if (!valueString) return
                               
-                              setProfilePicture(valueString)
+                              setBeforeCropImage(valueString)
                               setFileUploadContentType(valueBlob?.type)
                               setShowCropImage(true)
                             }
@@ -132,14 +140,19 @@ export default function Settings() {
                       )
                     }
 
-                    {
-                      showCropImage && (
-                        <CropImage 
-                          src={profilePicture}
-                          contentType={fileUploadContentType}
-                        />
-                      )
-                    }
+                    {/* Start modal crop image */}
+                    <Modal isOpen={showCropImage} onClose={
+                      () => {
+                        setShowCropImage(false)
+                        setBeforeCropImage(undefined)
+                      }
+                    } title="Crop Profile Picture">
+                      <CropImage 
+                        src={beforeCropImage}
+                        contentType={fileUploadContentType}
+                      />
+                    </Modal>
+                    {/* End modal crop image */}
                   </div>
                 </div>
 
