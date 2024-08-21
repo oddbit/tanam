@@ -96,3 +96,17 @@ export function getAcceptDescription(accept: AcceptFileType): string {
       return "Any file type";
   }
 }
+
+/**
+ * Checks if the file is accepted based on the MIME type.
+ * @param {File} file - The file object to be checked.
+ * @param {AcceptFileType} accept - The accepted file type.
+ * @return {boolean} - True if the file is accepted, otherwise false.
+ */
+export function isFileAccepted(file: File, accept: AcceptFileType): boolean {
+  const fileExtension = getFileExtension(file.type);
+  const acceptedMimeTypes = accept.split(',').map(type => type.trim());
+
+  // Check if the file's MIME type matches any of the accepted MIME types
+  return acceptedMimeTypes.some(type => type === file.type || fileExtension === getFileExtension(type));
+}

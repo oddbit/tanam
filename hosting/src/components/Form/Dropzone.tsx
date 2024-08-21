@@ -1,4 +1,4 @@
-import { AcceptFileType, getAcceptDescription } from "@/utils/fileUpload";
+import { AcceptFileType, getAcceptDescription, isFileAccepted } from "@/utils/fileUpload";
 import React from "react";
 
 // Props interface for the Dropzone component
@@ -73,7 +73,16 @@ export function Dropzone({ disabled, accept = AcceptFileType.AllFiles, onChange 
     if (disabled) return;
 
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFile(e.dataTransfer.files[0], onChange);
+      const file = e.dataTransfer.files[0];
+      console.info('drop :: ', file);
+
+      if (!isFileAccepted(file, accept)) {
+        console.error(`File type not accepted: ${file.name}`);
+
+        return
+      }
+
+      handleFile(file, onChange);
     }
   };
 

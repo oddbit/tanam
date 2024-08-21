@@ -5,6 +5,7 @@ import { Dropzone } from "@/components/Form/Dropzone";
 import { useAuthentication } from "@/hooks/useAuthentication";
 import { useFirebaseStorage } from '@/hooks/useFirebaseStorage';
 import { useTanamUser } from "@/hooks/useTanamUser";
+import { AcceptFileType } from "@/utils/fileUpload";
 import Image from "next/image";
 import { useEffect, useState } from 'react';
 
@@ -97,7 +98,7 @@ export default function Settings() {
                   <div className="w-full">
                     <div className="mb-4 flex items-center gap-3">
                       <Image className="w-14 h-14 rounded-full object-cover" src={profilePicture} width={80} height={80} alt="User" />
-                      
+
                       <div>
                         <span className="mb-1.5 text-black dark:text-white">Edit your photo</span>
                         <span className="flex gap-2.5">
@@ -111,6 +112,7 @@ export default function Settings() {
                       showDropzone && (
                         <Dropzone 
                           value={profilePicture}
+                          accept={AcceptFileType.Images}
                           onChange={
                             (valueString, valueBlob) => {
                               if (!valueString) return
