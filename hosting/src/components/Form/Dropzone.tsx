@@ -3,7 +3,7 @@ import { AcceptFileType, getAcceptDescription, isFileAccepted } from "@/utils/fi
 import React from "react";
 
 // Props interface for the Dropzone component
-interface DropzoneProps {
+export interface DropzoneProps {
   value?: string;
   disabled?: boolean;
   accept?: AcceptFileType;

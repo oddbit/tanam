@@ -1,5 +1,6 @@
 "use client";
 import PageHeader from "@/components/common/PageHeader";
+import { CropImage } from "@/components/CropImage";
 import DarkModeSwitcher from "@/components/DarkModeSwitcher";
 import { Dropzone } from "@/components/Form/Dropzone";
 import { useAuthentication } from "@/hooks/useAuthentication";
@@ -17,6 +18,7 @@ export default function Settings() {
   const {loading: uploadLoading, upload, getFile} = useFirebaseStorage();
 
   const [showDropzone, setShowDropzone] = useState<boolean>(false);
+  const [showCropImage, setShowCropImage] = useState<boolean>(false);
   const [pathUpload, setPathUpload] = useState<string>();
   const [fileUploadContentType, setFileUploadContentType] = useState<string>();
   const [profilePicture, setProfilePicture] = useState<string>(defaultImage);
@@ -39,6 +41,8 @@ export default function Settings() {
 
   async function resetChanges() {
     setFileUploadContentType(undefined);
+    setShowCropImage(false);
+
     await fetchProfilePicture();
   }
 
@@ -121,8 +125,18 @@ export default function Settings() {
                               
                               setProfilePicture(valueString)
                               setFileUploadContentType(valueBlob?.type)
+                              setShowCropImage(true)
                             }
                           }
+                        />
+                      )
+                    }
+
+                    {
+                      showCropImage && (
+                        <CropImage 
+                          src={profilePicture}
+                          contentType={fileUploadContentType}
                         />
                       )
                     }

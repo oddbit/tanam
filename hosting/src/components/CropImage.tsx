@@ -1,9 +1,9 @@
-import React, { useRef, useState } from 'react';
-import ReactCrop, { Crop, centerCrop, makeAspectCrop } from 'react-image-crop';
+import React, { useEffect, useRef, useState } from 'react';
+import ReactCrop, { centerCrop, Crop, makeAspectCrop, PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
 // Props interface for the CropImage component
-interface ICropImageProps {
+export interface ICropImageProps {
   src: string; // URL or path of the image to be cropped
   onCropComplete?: (croppedImageUrl: string) => void; // Callback to handle the cropped image URL
   contentType?: string; // The content type for the output image, e.g., 'image/jpeg' or 'image/png'
@@ -16,17 +16,19 @@ interface ICropImageProps {
  */
 export function CropImage(props: ICropImageProps) {
   const { src, onCropComplete, contentType = 'image/jpeg' } = props;
-  
-  const [crop, setCrop] = useState<Crop>({
-    unit: '%', // Unit for crop dimensions: '%' or 'px'
-    x: 25, // X position of the crop area
-    y: 25, // Y position of the crop area
-    width: 50, // Width of the crop area
-    height: 50 // Height of the crop area
-  }); 
 
+  const [crop, setCrop] = useState<Crop>();
+  const [completedCrop, setCompletedCrop] = useState<PixelCrop | null>(null); // State to store the completed crop
   const [croppedImageUrl, setCroppedImageUrl] = useState<string | null>(null); // State to store the cropped image URL
   const imageRef = useRef<HTMLImageElement | null>(null); // Ref to hold the reference to the image element
+  const previewCanvasRef = useRef<HTMLCanvasElement | null>(null); // Ref to hold the reference to the canvas element
+
+  // Generate cropped image once the crop is complete and the crop area is valid
+  useEffect(() => {
+    if (completedCrop && imageRef.current && previewCanvasRef.current) {
+      generateCroppedImage(imageRef.current, previewCanvasRef.current, completedCrop, contentType);
+    }
+  }, [completedCrop, contentType]);
 
   /**
    * Callback function triggered when the image is loaded.
@@ -56,58 +58,61 @@ export function CropImage(props: ICropImageProps) {
   }
 
   /**
-   * Callback function triggered when the crop area changes.
-   * Updates the crop state with the new crop area.
-   * @param {Crop} crop - The new crop area data.
-   */
-  function onCropChange(crop: Crop) {
-    setCrop(crop);
-  };
-
-  /**
    * Callback function triggered when the crop operation is completed.
    * Processes the cropped image area and generates a URL for the cropped image.
-   * @param {Crop} crop - The crop area data.
-   * @param {object} pixelCrop - The pixel values of the crop area.
+   * @param {PixelCrop} pixelCrop - The pixel values of the crop area.
    */
-  function onCropCompleteInternal(crop: Crop, pixelCrop: any) {
-    if (imageRef.current && pixelCrop.width && pixelCrop.height) {
-      const canvas = document.createElement('canvas'); // Create a canvas element to draw the cropped image
-      const scaleX = imageRef.current.naturalWidth / imageRef.current.width; // Calculate horizontal scaling factor
-      const scaleY = imageRef.current.naturalHeight / imageRef.current.height; // Calculate vertical scaling factor
-      canvas.width = pixelCrop.width; // Set canvas width to the width of the crop area
-      canvas.height = pixelCrop.height; // Set canvas height to the height of the crop area
-      const ctx = canvas.getContext('2d'); // Get 2D context of the canvas
+  function onCropCompleteInternal(pixelCrop: PixelCrop) {
+    setCompletedCrop(pixelCrop);
+  }
 
-      if (ctx) {
-        // Draw the cropped image on the canvas
-        ctx.drawImage(
-          imageRef.current,
-          pixelCrop.x * scaleX, // X coordinate of the source image to start cropping
-          pixelCrop.y * scaleY, // Y coordinate of the source image to start cropping
-          pixelCrop.width * scaleX, // Width of the source image to crop
-          pixelCrop.height * scaleY, // Height of the source image to crop
-          0,
-          0,
-          pixelCrop.width,
-          pixelCrop.height
-        );
+  /**
+   * Draw the cropped image on a canvas element and generate a data URL.
+   * @param {HTMLImageElement} image - The image element to be cropped.
+   * @param {HTMLCanvasElement} canvas - The canvas element to draw the cropped image on.
+   * @param {PixelCrop} crop - The crop area data.
+   * @param {string} contentType - The content type for the output image.
+   */
+  function generateCroppedImage(
+    image: HTMLImageElement,
+    canvas: HTMLCanvasElement,
+    crop: PixelCrop,
+    contentType: string
+  ) {
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+    canvas.width = crop.width;
+    canvas.height = crop.height;
+    const ctx = canvas.getContext('2d');
 
-        // Convert the canvas content to a data URL with the specified content type
-        const croppedImageUrl = canvas.toDataURL(contentType);
-        setCroppedImageUrl(croppedImageUrl); // Save the cropped image URL in state
-        if (onCropComplete) {
-          onCropComplete(croppedImageUrl); // Trigger the callback with the cropped image URL
-        }
+    if (ctx) {
+      ctx.drawImage(
+        image,
+        crop.x * scaleX,
+        crop.y * scaleY,
+        crop.width * scaleX,
+        crop.height * scaleY,
+        0,
+        0,
+        crop.width,
+        crop.height
+      );
+
+      // Convert the canvas content to a data URL with the specified content type
+      const croppedImageUrl = canvas.toDataURL(contentType);
+      setCroppedImageUrl(croppedImageUrl); // Save the cropped image URL in state
+
+      if (onCropComplete) {
+        onCropComplete(croppedImageUrl); // Trigger the callback with the cropped image URL
       }
     }
-  };
+  }
 
   return (
     <div>
       <ReactCrop
         crop={crop} // Crop area managed by state
-        onChange={onCropChange} // Update crop state when crop area changes
+        onChange={(newCrop) => setCrop(newCrop)} // Update crop state when crop area changes
         onComplete={onCropCompleteInternal} // Callback triggered when cropping is completed
       >
         <img
@@ -117,6 +122,12 @@ export function CropImage(props: ICropImageProps) {
           onLoad={onImageLoad} // Callback when the image is loaded
         />
       </ReactCrop>
+      <canvas
+        ref={previewCanvasRef}
+        style={{
+          display: 'none', // Canvas is hidden, used only for generating the cropped image
+        }}
+      />
       {croppedImageUrl && (
         <div>
           <h3>Preview:</h3>
