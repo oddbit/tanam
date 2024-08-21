@@ -56,7 +56,7 @@ export default function DashboardPage() {
       case "file-upload":
         return <FileUpload disabled={viewMode} label={field.title.translated} />;
       case "switcher":
-        return <Switcher disabled={viewMode} defaultChecked={value} />;
+        return <Switcher disabled={viewMode} initialValue={value} />;
       case "radio":
         return <RadioButton disabled={viewMode} label={field.title.translated} />;
       case "checkbox":

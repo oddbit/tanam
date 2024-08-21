@@ -18,7 +18,7 @@ const DarkModeSwitcher = () => {
   return (
     <Switcher
       style="default"
-      defaultChecked={colorMode === "dark"}
+      initialValue={colorMode === "dark"}
       onChange={async (checked) => await saveColorMode(checked ? "dark" : "light")}
       onIcon="i-ri-moon-clear-fill text-white"
       offIcon="i-ri-sun-line"

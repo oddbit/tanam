@@ -5,11 +5,13 @@ import "@/assets/scss/layout-default.scss";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import {useAuthentication} from "@/hooks/useAuthentication";
+import useColorMode from "@/hooks/useColorMode";
 import "flatpickr/dist/flatpickr.min.css";
 import React, {useState} from "react";
 
 export default function CmsLayout({children}: {children: React.ReactNode}) {
   useAuthentication();
+  useColorMode();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
