@@ -1,6 +1,7 @@
 import {Table, TableRowLabel} from "@/components/Table";
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {TanamDocumentTypeClient} from "@/models/TanamDocumentTypeClient";
+import {TanamPublishStatus} from "@functions/models/TanamDocument";
 import Link from "next/link";
 
 interface TableOverviewGenericProps {
@@ -24,7 +25,7 @@ export function DocumentTypeGenericList({documents, documentType}: TableOverview
           <TableRowLabel
             key={`${key}-${document.id}-status`}
             title={document.status}
-            status={document.status === "published" ? "success" : "info"}
+            status={document.status === TanamPublishStatus.Published ? "success" : "info"}
           />,
         ])}
       />

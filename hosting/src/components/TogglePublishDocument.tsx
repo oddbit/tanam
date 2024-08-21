@@ -1,5 +1,6 @@
 import {Button} from "@/components/Button";
 import {useTanamDocument} from "@/hooks/useTanamDocuments";
+import {TanamPublishStatus} from "@functions/models/TanamDocument";
 import {useParams} from "next/navigation";
 
 export function TogglePublishDocument() {
@@ -12,14 +13,18 @@ export function TogglePublishDocument() {
     }
 
     // Toggle the status of the document
-    return changeStatus(document.status === "published" ? "unpublished" : "published");
+    return changeStatus(
+      document.status === TanamPublishStatus.Unpublished
+        ? TanamPublishStatus.Unpublished
+        : TanamPublishStatus.Published,
+    );
   }
 
   return (
     documentId && (
       <>
         <Button
-          title={document?.status === "published" ? "Unpublish" : "Publish"}
+          title={document?.status === TanamPublishStatus.Published ? "Unpublish" : "Publish"}
           onClick={onTogglePublishDocument}
           style="outline"
           color="primary"
