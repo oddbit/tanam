@@ -25,8 +25,6 @@ export default function Settings() {
     if (tanamUser) {
       init();
     }
-
-    return () => resetChanges();
   }, [tanamUser, pathUpload]);
 
   async function init() {
@@ -36,13 +34,17 @@ export default function Settings() {
       return
     }
 
-    const profilePictureUrl = await getFile(`${pathUpload}/profile.png`);
-    setProfilePicture(profilePictureUrl ?? defaultImage);
+    await resetChanges();
   }
 
-  function resetChanges() {
+  async function resetChanges() {
     setFileUploadContentType(undefined);
-    setProfilePicture(defaultImage);
+    await fetchProfilePicture();
+  }
+
+  async function fetchProfilePicture() {
+    const profilePictureUrl = await getFile(`${pathUpload}/profile.png`);
+    setProfilePicture(profilePictureUrl ?? defaultImage);
   }
 
   async function onPersonalInfoSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -102,7 +104,7 @@ export default function Settings() {
                       <div>
                         <span className="mb-1.5 text-black dark:text-white">Edit your photo</span>
                         <span className="flex gap-2.5">
-                          <button className="text-sm hover:text-primary" onClick={() => setProfilePicture(defaultImage)}>Delete</button>
+                          <button className="text-sm hover:text-primary" onClick={async () => await fetchProfilePicture()}>Delete</button>
                           <button className="text-sm hover:text-primary" onClick={() => setShowDropzone(!showDropzone)}>Update</button>
                         </span>
                       </div>

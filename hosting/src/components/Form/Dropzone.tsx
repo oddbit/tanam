@@ -1,3 +1,4 @@
+import "@/components/Form/styles/dropzone.scss";
 import { AcceptFileType, getAcceptDescription, isFileAccepted } from "@/utils/fileUpload";
 import React from "react";
 
@@ -87,11 +88,11 @@ export function Dropzone({ disabled, accept = AcceptFileType.AllFiles, onChange 
   };
 
   return (
-    <div className="w-full">
+    <div className="c-dropzone w-full">
       <div
         id="FileUpload"
-        className={`relative mb-5.5 block w-full cursor-pointer appearance-none rounded border border-dashed border-primary bg-gray px-4 py-4 dark:bg-meta-4 sm:py-7.5 ${
-          dragActive ? "bg-opacity-50" : ""
+        className={`dropzone__inner-wrapper relative mb-5.5 block w-full cursor-pointer appearance-none rounded border border-dashed border-primary bg-gray px-4 py-4 dark:bg-meta-4 sm:py-7.5 ${
+          dragActive ? "drag--active" : ""
         }`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}

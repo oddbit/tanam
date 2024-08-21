@@ -1,7 +1,11 @@
 .c-dropzone {
-  &.drag {
-    &--active {
-      border-color: #4caf50 !important;
+  & .dropzone {
+    &__inner-wrapper {
+      &.drag {
+        &--active {
+          border-color: #4caf50 !important;
+        }
+      }
     }
   }
 }
