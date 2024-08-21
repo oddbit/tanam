@@ -1,14 +1,14 @@
 "use client";
 
-import { useAuthentication } from "@/hooks/useAuthentication";
-import { useTanamDocumentTypes } from "@/hooks/useTanamDocumentTypes";
+import {useAuthentication} from "@/hooks/useAuthentication";
+import {useTanamDocumentTypes} from "@/hooks/useTanamDocumentTypes";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { SidebarExpandableMenu, SidebarExpandableMenuSubItem } from "./SidebarExpandableMenu";
-import { SidebarMenuGroup } from "./SidebarMenuGroup";
-import { SidebarMenuItem } from "./SidebarMenuItem";
+import {usePathname} from "next/navigation";
+import {useEffect, useState} from "react";
+import {SidebarExpandableMenu, SidebarExpandableMenuSubItem} from "./SidebarExpandableMenu";
+import {SidebarMenuGroup} from "./SidebarMenuGroup";
+import {SidebarMenuItem} from "./SidebarMenuItem";
 
 interface SidebarProps {
   sidebarOpen: boolean;
