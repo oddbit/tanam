@@ -17,9 +17,9 @@ export function useFirebaseStorage() {
    * @param {string} base64 - Base64 encoded file string.
    * @param {string} fileName - The name for the uploaded file.
    * @param {string} contentType - MIME type of the file (e.g., 'image/jpeg', 'application/pdf').
-   * @return {Promise<string | null>} - Returns a promise that resolves to the download URL of the uploaded file or null if failed.
+   * @return {Promise<string | undefined>} - Returns a promise that resolves to the download URL of the uploaded file or undefined if failed.
    */
-  async function upload(folderPath: string, base64: string, contentType: string) {
+  async function upload(folderPath: string, base64: string, contentType: string): Promise<string | undefined> {
     setLoading(true);
     setError(null);
 
