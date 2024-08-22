@@ -1,4 +1,3 @@
-import React from "react";
 
 interface NotificationProps {
   type: "warning" | "success" | "error";
@@ -27,7 +26,7 @@ function Notification({type, title, message}: NotificationProps) {
 
   return (
     <div
-      className={`flex w-full border-l-6 ${colorClasses} px-7 py-8 shadow-md dark:bg-[#1B1B24] dark:bg-opacity-30 md:p-9`}
+      className={`flex w-full border-l-6 ${colorClasses} px-7 py-8 shadow-md dark:bg-[#1B1B24] dark:bg-opacity-30 md:p-9 mb-4`}
     >
       {IconComponent && <IconComponent />}
       <div className="w-full">

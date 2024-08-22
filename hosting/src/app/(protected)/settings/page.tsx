@@ -1,4 +1,5 @@
 "use client";
+import Notification from '@/components/common/Notification';
 import PageHeader from "@/components/common/PageHeader";
 import { CropImage } from "@/components/CropImage";
 import DarkModeSwitcher from "@/components/DarkModeSwitcher";
@@ -7,6 +8,7 @@ import { Modal } from '@/components/Modal';
 import { useAuthentication } from "@/hooks/useAuthentication";
 import { useFirebaseStorage } from '@/hooks/useFirebaseStorage';
 import { useTanamUser } from "@/hooks/useTanamUser";
+import { UserNotification } from '@/models/UserNotification';
 import { AcceptFileType } from "@/utils/fileUpload";
 import Image from "next/image";
 import { useEffect, useState } from 'react';
@@ -16,8 +18,9 @@ const defaultImage = "/images/no-image.png";
 
 export default function Settings() {
   const {authUser} = useAuthentication();
-  const {tanamUser, saveUserInfo} = useTanamUser(authUser?.uid);
-  const {isLoading: uploadLoading, upload, getFile} = useFirebaseStorage();
+  const {tanamUser, error: userError, saveUserInfo} = useTanamUser(authUser?.uid);
+  const {isLoading: uploadLoading, error: storageError, upload, getFile} = useFirebaseStorage();
+  const [notification, setNotification] = useState<UserNotification | null>(null);
 
   // State hooks for controlling UI and data
   const [showDropzone, setShowDropzone] = useState<boolean>(false);  // Show or hide the Dropzone component
@@ -34,6 +37,10 @@ export default function Settings() {
       init();
     }
   }, [tanamUser, pathUpload]);
+
+  useEffect(() => {
+    setNotification(userError || storageError);
+  }, [userError, storageError]);
 
   /**
    * Initializes component by setting the required state.
@@ -95,21 +102,29 @@ export default function Settings() {
   async function onPersonalInfoSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
 
-    if (uploadLoading) return; // Ignore form submission if upload is in progress
+    setNotification(null);
 
-    const form = event.currentTarget;
-    const formData = {
-      fullName: form.fullName.value,  // Get the full name value from the form
-    };
+    try {
+      if (uploadLoading) return; // Ignore form submission if upload is in progress
 
-    if (fileUploadContentType && profilePicture) {
-      // If there is a file content type and profile picture, upload the image to Firebase Storage
-      const fileName = "new-profile-image";
-      await upload(`${pathUpload}/${fileName}`, profilePicture, fileUploadContentType);
+      const form = event.currentTarget;
+      const formData = {
+        fullName: form.fullName.value,  // Get the full name value from the form
+      };
+
+      if (fileUploadContentType && profilePicture) {
+        // If there is a file content type and profile picture, upload the image to Firebase Storage
+        const fileName = "new-profile-image";
+        await upload(`${pathUpload}/${fileName}`, profilePicture, fileUploadContentType);
+      }
+
+      // Save the user information with the new full name
+      await saveUserInfo(formData.fullName);
+
+      setNotification(new UserNotification("success", "Update Profile", "Success to update profile"))
+    } catch (error) {
+      setNotification(new UserNotification("error", "Update Profile", "Failed to update profile"))
     }
-
-    // Save the user information with the new full name
-    await saveUserInfo(formData.fullName);
   }
 
   /**
@@ -122,7 +137,7 @@ export default function Settings() {
       {/* Start button to close the crop image modal */}
       <button
         className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white sm:w-full sm:text-sm"
-        onClick={() => resetCropImage()}
+        onClick={resetCropImage}
       >
         Close
       </button>
@@ -149,6 +164,10 @@ export default function Settings() {
 
   return (
     <div className="mx-auto max-w-270">
+      {notification && (
+        <Notification type={notification.type} title={notification.title} message={notification.message} />
+      )}
+      
       <PageHeader pageName="Settings" />
 
       <div className="grid grid-cols-5 gap-8">
