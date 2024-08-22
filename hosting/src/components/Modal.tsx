@@ -3,6 +3,7 @@ import React from 'react';
 // Props interface for the Modal component
 interface ModalProps {
   isOpen: boolean;
+  disableOverlayClose?: boolean;
   onClose: () => void;
   title: string;
   children: React.ReactNode;
@@ -14,7 +15,7 @@ interface ModalProps {
  * @param {ModalProps} props - The properties for the Modal component.
  * @return {JSX.Element | null} The rendered Modal component or null if not open.
  */
-export function Modal({ isOpen, onClose, title, children, actions }: ModalProps): JSX.Element | null {
+export function Modal({ isOpen, disableOverlayClose, title, children, actions, onClose }: ModalProps): JSX.Element | null {
   // If the modal is not open, don't render anything
   if (!isOpen) return null;
 
@@ -23,7 +24,13 @@ export function Modal({ isOpen, onClose, title, children, actions }: ModalProps)
       {/* Background overlay */}
       <div
         className="fixed w-full h-screen bg-black opacity-50"
-        onClick={onClose}
+        onClick={
+          () => {
+            if (disableOverlayClose) return
+
+            onClose()
+          }
+        }
       ></div>
 
       <div className="flex items-center justify-center min-h-screen px-4 text-center">

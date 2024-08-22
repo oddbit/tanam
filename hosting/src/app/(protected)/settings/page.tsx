@@ -177,7 +177,8 @@ export default function Settings() {
 
                     {/* Start modal crop image */}
                     <Modal 
-                      isOpen={showCropImage} 
+                      isOpen={showCropImage}
+                      disableOverlayClose={true}
                       onClose={
                         () => {
                           setShowCropImage(false)
