@@ -106,18 +106,30 @@ export default function Settings() {
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                   <div className="w-full">
                     <div className="mb-4 flex items-center gap-3">
-                      <Image className="w-14 h-14 rounded-full object-cover" src={profilePicture} width={80} height={80} alt="User" />
+                      <Image
+                        className="w-14 h-14 rounded-full object-cover"
+                        src={profilePicture}
+                        width={80}
+                        height={80}
+                        alt="User"
+                      />
 
                       <div>
                         <span className="mb-1.5 text-black dark:text-white">Edit your photo</span>
                         <span className="flex gap-2.5">
-                          <button className="text-sm hover:text-primary" onClick={
-                            async () => {
-                              await fetchProfilePicture();
-                              setBeforeCropImage(undefined);
+                          <button
+                            className="text-sm hover:text-primary"
+                            onClick={
+                              async () => {
+                                await fetchProfilePicture();
+                                setBeforeCropImage(undefined);
+                              }
                             }
-                          }>Delete</button>
-                          <button className="text-sm hover:text-primary" onClick={() => setShowDropzone(!showDropzone)}>Update</button>
+                          >Delete</button>
+                          <button
+                            className="text-sm hover:text-primary"
+                            onClick={() => setShowDropzone(!showDropzone)}
+                          >Update</button>
                         </span>
                       </div>
                     </div>
@@ -141,12 +153,16 @@ export default function Settings() {
                     }
 
                     {/* Start modal crop image */}
-                    <Modal isOpen={showCropImage} onClose={
-                      () => {
-                        setShowCropImage(false)
-                        setBeforeCropImage(undefined)
+                    <Modal 
+                      isOpen={showCropImage} 
+                      onClose={
+                        () => {
+                          setShowCropImage(false)
+                          setBeforeCropImage(undefined)
+                        }
                       }
-                    } title="Crop Profile Picture">
+                      title="Crop Profile Picture"
+                    >
                       <CropImage 
                         src={beforeCropImage}
                         contentType={fileUploadContentType}
