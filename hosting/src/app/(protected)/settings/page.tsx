@@ -17,7 +17,7 @@ const defaultImage = "/images/no-image.png";
 export default function Settings() {
   const {authUser} = useAuthentication();
   const {tanamUser, saveUserInfo} = useTanamUser(authUser?.uid);
-  const {loading: uploadLoading, upload, getFile} = useFirebaseStorage();
+  const {isLoading: uploadLoading, upload, getFile} = useFirebaseStorage();
 
   // State hooks for controlling UI and data
   const [showDropzone, setShowDropzone] = useState<boolean>(false);  // Show or hide the Dropzone component

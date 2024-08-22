@@ -2,25 +2,32 @@ import { storage } from "@/plugins/firebase";
 import { base64ToBlob } from "@/utils/fileUpload";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useState } from "react";
+import { UserNotification } from '../models/UserNotification';
+
+interface FirebaseStorageHook {
+  isLoading: boolean;
+  error: UserNotification | null;
+  upload: (folderPath: string, base64: string, contentType: string) => Promise<string | undefined>;
+  getFile: (filePath: string) => Promise<string | undefined>
+}
 
 /**
  * Hook for uploading base64 data to Firebase Storage.
- * @return {Object} - Returns an object with functions and states for uploading the file.
+ * @return {FirebaseStorageHook} - Returns an object with functions and states for uploading the file.
  */
-export function useFirebaseStorage() {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+export function useFirebaseStorage(): FirebaseStorageHook {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<UserNotification | null>(null);
 
   /**
    * Uploads a base64 encoded file to Firebase Storage.
    * @param {string} folderPath - Path in Firebase Storage where the file will be saved.
    * @param {string} base64 - Base64 encoded file string.
-   * @param {string} fileName - The name for the uploaded file.
    * @param {string} contentType - MIME type of the file (e.g., 'image/jpeg', 'application/pdf').
    * @return {Promise<string | undefined>} - Returns a promise that resolves to the download URL of the uploaded file or undefined if failed.
    */
   async function upload(folderPath: string, base64: string, contentType: string): Promise<string | undefined> {
-    setLoading(true);
+    setIsLoading(true);
     setError(null);
 
     console.info("upload :: ", folderPath)
@@ -36,9 +43,9 @@ export function useFirebaseStorage() {
 
       return downloadURL;
     } catch (err) {
-      setError(`Upload failed: ${(err as Error).message}`);
+      setError(new UserNotification("error", "Problem upload to storage", `Upload failed: ${(err as Error).message}`));
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   }
 
@@ -48,7 +55,7 @@ export function useFirebaseStorage() {
    * @return {Promise<string | undefined>} - Returns a promise that resolves to the download URL or null if failed.
    */
   async function getFile(filePath: string): Promise<string | undefined> {
-    setLoading(true);
+    setIsLoading(true);
     setError(null);
 
     try {
@@ -58,11 +65,11 @@ export function useFirebaseStorage() {
 
       return downloadURL;
     } catch (err) {
-      setError(`Failed to get download URL: ${(err as Error).message}`);
+      setError(new UserNotification("error", "Problem get file from storage", `Failed to get download URL: ${(err as Error).message}`));
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   }
 
-  return { loading, error, upload, getFile };
+  return { isLoading, error, upload, getFile };
 }
