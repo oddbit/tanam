@@ -1,17 +1,17 @@
 "use client";
-import Notification from '@/components/common/Notification';
+import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
 import { CropImage } from "@/components/CropImage";
 import DarkModeSwitcher from "@/components/DarkModeSwitcher";
 import { Dropzone } from "@/components/Form/Dropzone";
-import { Modal } from '@/components/Modal';
+import { Modal } from "@/components/Modal";
 import { useAuthentication } from "@/hooks/useAuthentication";
-import { useFirebaseStorage } from '@/hooks/useFirebaseStorage';
+import { useFirebaseStorage } from "@/hooks/useFirebaseStorage";
 import { useTanamUser } from "@/hooks/useTanamUser";
-import { UserNotification } from '@/models/UserNotification';
-import { AcceptFileType } from "@/utils/fileUpload";
+import { UserNotification } from "@/models/UserNotification";
+import { AcceptFileType } from "@functions/definitions/AcceptFileType";
 import Image from "next/image";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 // Default image path if the user has not uploaded a profile picture
 const defaultImage = "/images/no-image.png";
@@ -23,13 +23,13 @@ export default function Settings() {
   const [notification, setNotification] = useState<UserNotification | null>(null);
 
   // State hooks for controlling UI and data
-  const [showDropzone, setShowDropzone] = useState<boolean>(false);  // Show or hide the Dropzone component
-  const [showCropImage, setShowCropImage] = useState<boolean>(false);  // Show or hide the crop image modal
-  const [pathUpload, setPathUpload] = useState<string>();  // Path for file upload in Firebase Storage
-  const [fileUploadContentType, setFileUploadContentType] = useState<string>();  // Content type of the uploaded file (e.g., image/png)
-  const [beforeCropImage, setBeforeCropImage] = useState<string>();  // Image before cropping
-  const [afterCropImage, setAfterCropImage] = useState<string>();  // Image after cropping
-  const [profilePicture, setProfilePicture] = useState<string>(defaultImage);  // Displayed profile picture
+  const [showDropzone, setShowDropzone] = useState<boolean>(false); // Show or hide the Dropzone component
+  const [showCropImage, setShowCropImage] = useState<boolean>(false); // Show or hide the crop image modal
+  const [pathUpload, setPathUpload] = useState<string>(); // Path for file upload in Firebase Storage
+  const [fileUploadContentType, setFileUploadContentType] = useState<string>(); // Content type of the uploaded file (e.g., image/png)
+  const [beforeCropImage, setBeforeCropImage] = useState<string>(); // Image before cropping
+  const [afterCropImage, setAfterCropImage] = useState<string>(); // Image after cropping
+  const [profilePicture, setProfilePicture] = useState<string>(defaultImage); // Displayed profile picture
 
   useEffect(() => {
     if (tanamUser) {
@@ -45,7 +45,7 @@ export default function Settings() {
   /**
    * Initializes component by setting the required state.
    * Loads the profile picture if upload path is available.
-   * @returns {Promise<void>}
+   * @return {Promise<void>}
    */
   async function init(): Promise<void> {
     if (!pathUpload) {
@@ -59,7 +59,7 @@ export default function Settings() {
 
   /**
    * Resets upload and crop image-related states.
-   * @returns {Promise<void>}
+   * @return {Promise<void>}
    */
   async function resetChanges(): Promise<void> {
     // Reset file content type and crop image states
@@ -82,7 +82,7 @@ export default function Settings() {
   /**
    * Fetches the user's profile picture from Firebase Storage.
    * Uses a default image if none is found.
-   * @returns {Promise<void>}
+   * @return {Promise<void>}
    */
   async function fetchProfilePicture(): Promise<void> {
     // Retrieve the profile picture URL from Firebase Storage
@@ -97,7 +97,7 @@ export default function Settings() {
    * Handles the submission of the personal information form.
    * Uploads a new profile picture if provided and saves the user's name.
    * @param {React.FormEvent<HTMLFormElement>} event - Form submission event.
-   * @returns {Promise<void>}
+   * @return {Promise<void>}
    */
   async function onPersonalInfoSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
@@ -109,7 +109,7 @@ export default function Settings() {
 
       const form = event.currentTarget;
       const formData = {
-        fullName: form.fullName.value,  // Get the full name value from the form
+        fullName: form.fullName.value, // Get the full name value from the form
       };
 
       if (fileUploadContentType && profilePicture) {
@@ -121,9 +121,9 @@ export default function Settings() {
       // Save the user information with the new full name
       await saveUserInfo(formData.fullName);
 
-      setNotification(new UserNotification("success", "Update Profile", "Success to update profile"))
+      setNotification(new UserNotification("success", "Update Profile", "Success to update profile"));
     } catch (error) {
-      setNotification(new UserNotification("error", "Update Profile", "Failed to update profile"))
+      setNotification(new UserNotification("error", "Update Profile", "Failed to update profile"));
     }
   }
 
@@ -167,7 +167,7 @@ export default function Settings() {
       {notification && (
         <Notification type={notification.type} title={notification.title} message={notification.message} />
       )}
-      
+
       <PageHeader pageName="Settings" />
 
       <div className="grid grid-cols-5 gap-8">
@@ -214,38 +214,33 @@ export default function Settings() {
                       <span className="flex gap-2.5">
                         <button
                           className="text-sm hover:text-primary"
-                          onClick={
-                            async () => {
-                              await fetchProfilePicture();
-                              setBeforeCropImage(undefined);
-                            }
-                          }
-                        >Delete</button>
-                        <button
-                          className="text-sm hover:text-primary"
-                          onClick={() => setShowDropzone(!showDropzone)}
-                        >Update</button>
+                          onClick={async () => {
+                            await fetchProfilePicture();
+                            setBeforeCropImage(undefined);
+                          }}
+                        >
+                          Delete
+                        </button>
+                        <button className="text-sm hover:text-primary" onClick={() => setShowDropzone(!showDropzone)}>
+                          Update
+                        </button>
                       </span>
                     </div>
                   </div>
 
-                  {
-                    showDropzone && (
-                      <Dropzone 
-                        value={beforeCropImage}
-                        accept={AcceptFileType.Images}
-                        onChange={
-                          (valueString, valueBlob) => {
-                            if (!valueString) return
-                            
-                            setBeforeCropImage(valueString)
-                            setFileUploadContentType(valueBlob?.type)
-                            setShowCropImage(true)
-                          }
-                        }
-                      />
-                    )
-                  }
+                  {showDropzone && (
+                    <Dropzone
+                      value={beforeCropImage}
+                      accept={AcceptFileType.Images}
+                      onChange={(valueString, valueBlob) => {
+                        if (!valueString) return;
+
+                        setBeforeCropImage(valueString);
+                        setFileUploadContentType(valueBlob?.type);
+                        setShowCropImage(true);
+                      }}
+                    />
+                  )}
                 </div>
               </div>
 
@@ -292,18 +287,14 @@ export default function Settings() {
       </div>
 
       {/* Start modal crop image */}
-      <Modal 
+      <Modal
         isOpen={showCropImage}
         disableOverlayClose={true}
         onClose={resetCropImage}
         actions={modalActionCropImage}
         title="Crop Profile Picture"
       >
-        <CropImage 
-          src={beforeCropImage}
-          contentType={fileUploadContentType}
-          onCropComplete={setAfterCropImage}
-        />
+        <CropImage src={beforeCropImage} contentType={fileUploadContentType} onCropComplete={setAfterCropImage} />
       </Modal>
       {/* End modal crop image */}
     </div>

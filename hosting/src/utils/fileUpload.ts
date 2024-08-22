@@ -1,18 +1,4 @@
-// Enum to define acceptable file types for the Dropzone component
-export enum AcceptFileType {
-  AllImages = "image/*",
-  Images = "image/jpg, image/jpeg, image/png, image/svg",
-  Pdf = "application/pdf",
-  Word = "application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  Excel = "application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  PowerPoint = "application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation",
-  Text = "text/plain",
-  Audio = "audio/*",
-  Video = "video/*",
-  Zip = "application/zip, application/x-rar-compressed, application/x-7z-compressed",
-  Csv = "text/csv",
-  AllFiles = "*/*",
-}
+import {AcceptFileType} from "@functions/definitions/AcceptFileType";
 
 /**
  * Converts a base64 string to a Blob object.
@@ -21,12 +7,12 @@ export enum AcceptFileType {
  * @return {Blob} - The Blob object created from the base64 string.
  */
 export function base64ToBlob(base64: string, contentType: string): Blob {
-  const byteCharacters = atob(base64.split(',')[1]);
-  const byteNumbers = Array.from(byteCharacters, char => char.charCodeAt(0));
+  const byteCharacters = atob(base64.split(",")[1]);
+  const byteNumbers = Array.from(byteCharacters, (char) => char.charCodeAt(0));
   const byteArray = new Uint8Array(byteNumbers);
 
-  return new Blob([byteArray], { type: contentType });
-};
+  return new Blob([byteArray], {type: contentType});
+}
 
 /**
  * Gets the file extension based on the MIME type.
@@ -34,33 +20,33 @@ export function base64ToBlob(base64: string, contentType: string): Blob {
  * @return {string} - File extension based on MIME type.
  */
 export function getFileExtension(contentType: string): string {
-  const mimeTypeToExtension: { [key: string]: string } = {
-    'image/jpeg': '.jpg',
-    'image/jpg': '.jpg',
-    'image/png': '.png',
-    'image/gif': '.gif',
-    'image/bmp': '.bmp',
-    'image/webp': '.webp',
-    'application/pdf': '.pdf',
-    'application/msword': '.doc',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '.docx',
-    'application/vnd.ms-excel': '.xls',
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': '.xlsx',
-    'application/vnd.ms-powerpoint': '.ppt',
-    'application/vnd.openxmlformats-officedocument.presentationml.presentation': '.pptx',
-    'text/plain': '.txt',
-    'text/html': '.html',
-    'text/css': '.css',
-    'application/javascript': '.js',
-    'application/json': '.json',
-    'application/zip': '.zip',
-    'application/x-rar-compressed': '.rar',
-    'application/x-7z-compressed': '.7z',
+  const mimeTypeToExtension: {[key: string]: string} = {
+    "image/jpeg": ".jpg",
+    "image/jpg": ".jpg",
+    "image/png": ".png",
+    "image/gif": ".gif",
+    "image/bmp": ".bmp",
+    "image/webp": ".webp",
+    "application/pdf": ".pdf",
+    "application/msword": ".doc",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx",
+    "application/vnd.ms-excel": ".xls",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ".xlsx",
+    "application/vnd.ms-powerpoint": ".ppt",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation": ".pptx",
+    "text/plain": ".txt",
+    "text/html": ".html",
+    "text/css": ".css",
+    "application/javascript": ".js",
+    "application/json": ".json",
+    "application/zip": ".zip",
+    "application/x-rar-compressed": ".rar",
+    "application/x-7z-compressed": ".7z",
     // Add more mappings as needed
   };
-  
-  return mimeTypeToExtension[contentType] || '';
-};
+
+  return mimeTypeToExtension[contentType] || "";
+}
 
 /**
  * Utility function to get a user-friendly description of the accepted file types.
@@ -105,8 +91,8 @@ export function getAcceptDescription(accept: AcceptFileType): string {
  */
 export function isFileAccepted(file: File, accept: AcceptFileType): boolean {
   const fileExtension = getFileExtension(file.type);
-  const acceptedMimeTypes = accept.split(',').map(type => type.trim());
+  const acceptedMimeTypes = accept.split(",").map((type) => type.trim());
 
   // Check if the file's MIME type matches any of the accepted MIME types
-  return acceptedMimeTypes.some(type => type === file.type || fileExtension === getFileExtension(type));
+  return acceptedMimeTypes.some((type) => type === file.type || fileExtension === getFileExtension(type));
 }

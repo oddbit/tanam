@@ -1,8 +1,8 @@
-import { UserNotification } from '@/models/UserNotification';
-import { storage } from "@/plugins/firebase";
-import { base64ToBlob } from "@/utils/fileUpload";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useState } from "react";
+import {UserNotification} from "@/models/UserNotification";
+import {storage} from "@/plugins/firebase";
+import {base64ToBlob} from "@/utils/fileUpload";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import {useState} from "react";
 
 interface FirebaseStorageHook {
   isLoading: boolean;
@@ -36,10 +36,10 @@ export function useFirebaseStorage(): FirebaseStorageHook {
     try {
       // Convert base64 to Blob
       const blob = base64ToBlob(base64, contentType);
-      
+
       // Create a reference to the file location in Firebase Storage
       const storageRef = ref(storage, folderPath);
-      
+
       // Upload the Blob to Firebase Storage
       await uploadBytes(storageRef, blob);
 
@@ -48,12 +48,12 @@ export function useFirebaseStorage(): FirebaseStorageHook {
       return downloadURL;
     } catch (err) {
       // Handle errors and set the error state
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(new UserNotification("error", "Problem uploading to storage", `Upload failed: ${errorMessage}`));
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   /**
    * Retrieves the download URL for a file stored in Firebase Storage.
@@ -67,18 +67,24 @@ export function useFirebaseStorage(): FirebaseStorageHook {
     try {
       // Create a reference to the file location in Firebase Storage
       const storageRef = ref(storage, filePath);
-      
+
       // Retrieve the download URL for the file
       const downloadURL = await getDownloadURL(storageRef);
       return downloadURL;
     } catch (err) {
       // Handle errors and set the error state
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      setError(new UserNotification("error", "Problem getting file from storage", `Failed to get download URL: ${errorMessage}`));
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      setError(
+        new UserNotification(
+          "error",
+          "Problem getting file from storage",
+          `Failed to get download URL: ${errorMessage}`,
+        ),
+      );
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
-  return { isLoading, error, upload, getFile };
+  return {isLoading, error, upload, getFile};
 }

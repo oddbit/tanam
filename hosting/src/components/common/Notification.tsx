@@ -1,4 +1,3 @@
-
 interface NotificationProps {
   type: "warning" | "success" | "error";
   title: string;

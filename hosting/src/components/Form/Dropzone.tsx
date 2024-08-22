@@ -1,5 +1,6 @@
 import "@/components/Form/styles/dropzone.scss";
-import { AcceptFileType, getAcceptDescription, isFileAccepted } from "@/utils/fileUpload";
+import { getAcceptDescription, isFileAccepted } from "@/utils/fileUpload";
+import { AcceptFileType } from "@functions/definitions/AcceptFileType";
 import React, { useEffect, useRef, useState } from "react";
 
 // Props interface for the Dropzone component
@@ -17,13 +18,13 @@ export interface DropzoneProps {
  */
 export function handleFile(file: File, callback?: (fileString: string | null, fileBlob: File | null) => void) {
   const reader = new FileReader();
-  
+
   reader.onloadend = () => {
     if (callback) {
       callback(reader.result as string, file);
     }
   };
-  
+
   reader.readAsDataURL(file);
 }
 
@@ -34,7 +35,7 @@ export function handleFile(file: File, callback?: (fileString: string | null, fi
  */
 export function handleChange(
   e: React.ChangeEvent<HTMLInputElement>,
-  callback?: (fileString: string | null, fileBlob: File | null) => void
+  callback?: (fileString: string | null, fileBlob: File | null) => void,
 ) {
   if (e.target.files && e.target.files[0]) {
     handleFile(e.target.files[0], callback);
@@ -46,7 +47,7 @@ export function handleChange(
  * @param {DropzoneProps} props - The properties for the dropzone component.
  * @return {JSX.Element} The rendered dropzone component.
  */
-export function Dropzone({ value, disabled, accept = AcceptFileType.AllFiles, onChange }: DropzoneProps): JSX.Element {
+export function Dropzone({value, disabled, accept = AcceptFileType.AllFiles, onChange}: DropzoneProps): JSX.Element {
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -64,11 +65,11 @@ export function Dropzone({ value, disabled, accept = AcceptFileType.AllFiles, on
     e.stopPropagation();
 
     if (disabled) return;
-    
+
     if (e.type === "dragenter" || e.type === "dragover") {
       setDragActive(true);
     }
-    
+
     if (e.type === "dragleave") {
       setDragActive(false);
     }
@@ -87,7 +88,7 @@ export function Dropzone({ value, disabled, accept = AcceptFileType.AllFiles, on
       if (!isFileAccepted(file, accept)) {
         console.error(`File type not accepted: ${file.name}`);
 
-        return
+        return;
       }
 
       handleFile(file, onChange);

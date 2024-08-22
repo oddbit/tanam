@@ -1,9 +1,9 @@
-import { TanamUserClient } from "@/models/TanamUserClient";
-import { UserNotification } from "@/models/UserNotification";
-import { firestore, storage } from "@/plugins/firebase";
-import { doc, onSnapshot, updateDoc } from "firebase/firestore";
-import { getDownloadURL, ref } from "firebase/storage";
-import { useEffect, useState } from "react";
+import {TanamUserClient} from "@/models/TanamUserClient";
+import {UserNotification} from "@/models/UserNotification";
+import {firestore, storage} from "@/plugins/firebase";
+import {doc, onSnapshot, updateDoc} from "firebase/firestore";
+import {getDownloadURL, ref} from "firebase/storage";
+import {useEffect, useState} from "react";
 
 /**
  * Hook to get a Tanam user document from Firestore

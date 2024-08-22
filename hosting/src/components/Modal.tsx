@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 // Props interface for the Modal component
 interface ModalProps {
@@ -15,7 +15,14 @@ interface ModalProps {
  * @param {ModalProps} props - The properties for the Modal component.
  * @return {JSX.Element | null} The rendered Modal component or null if not open.
  */
-export function Modal({ isOpen, disableOverlayClose, title, children, actions, onClose }: ModalProps): JSX.Element | null {
+export function Modal({
+  isOpen,
+  disableOverlayClose,
+  title,
+  children,
+  actions,
+  onClose,
+}: ModalProps): JSX.Element | null {
   // If the modal is not open, don't render anything
   if (!isOpen) return null;
 
@@ -24,13 +31,11 @@ export function Modal({ isOpen, disableOverlayClose, title, children, actions, o
       {/* Start background overlay */}
       <div
         className="fixed w-full h-screen bg-black opacity-50"
-        onClick={
-          () => {
-            if (disableOverlayClose) return
+        onClick={() => {
+          if (disableOverlayClose) return;
 
-            onClose()
-          }
-        }
+          onClose();
+        }}
       ></div>
       {/* End background overlay */}
 
@@ -39,12 +44,11 @@ export function Modal({ isOpen, disableOverlayClose, title, children, actions, o
         <div className="inline-block bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full">
           {/* Start modal header */}
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              {title}
-            </h3>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{title}</h3>
             <button
               type="button"
-              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal"
+              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              data-modal-hide="default-modal"
               onClick={onClose}
             >
               <span className="i-ic-baseline-close w-[22px] h-[22px]" />
@@ -54,9 +58,7 @@ export function Modal({ isOpen, disableOverlayClose, title, children, actions, o
           {/* End modal header */}
 
           {/* Start modal body */}
-          <div className="p-4 md:p-5 space-y-4">
-            {children}
-          </div>
+          <div className="p-4 md:p-5 space-y-4">{children}</div>
           {/* End modal body */}
 
           {/* Modal footer */}
@@ -78,4 +80,4 @@ export function Modal({ isOpen, disableOverlayClose, title, children, actions, o
       </div>
     </div>
   );
-};
+}
