@@ -1,7 +1,7 @@
 import "@/components/Form/styles/dropzone.scss";
-import { getAcceptDescription, isFileAccepted } from "@/utils/fileUpload";
-import { AcceptFileType } from "@functions/definitions/AcceptFileType";
-import React, { useEffect, useRef, useState } from "react";
+import {getAcceptDescription, isFileAccepted} from "@/utils/fileUpload";
+import {AcceptFileType} from "@functions/definitions/AcceptFileType";
+import React, {useEffect, useRef, useState} from "react";
 
 // Props interface for the Dropzone component
 export interface DropzoneProps {
@@ -12,55 +12,31 @@ export interface DropzoneProps {
 }
 
 /**
- * Function to handle file reading and sending data to parent.
- * @param {File} file - The file object to handle.
- * @param {(fileString: string | null, fileBlob: File | null) => void} callback - Callback function to handle the file data.
- */
-export function handleFile(file: File, callback?: (fileString: string | null, fileBlob: File | null) => void) {
-  const reader = new FileReader();
-
-  reader.onloadend = () => {
-    if (callback) {
-      callback(reader.result as string, file);
-    }
-  };
-
-  reader.readAsDataURL(file);
-}
-
-/**
- * Function to handle file input change event.
- * @param {React.ChangeEvent<HTMLInputElement>} e - The change event from file input.
- * @param {(fileString: string | null, fileBlob: File | null) => void} callback - Callback function to handle the file data.
- */
-export function handleChange(
-  e: React.ChangeEvent<HTMLInputElement>,
-  callback?: (fileString: string | null, fileBlob: File | null) => void,
-) {
-  if (e.target.files && e.target.files[0]) {
-    handleFile(e.target.files[0], callback);
-  }
-}
-
-/**
  * Dropzone component for handling file uploads and sending data to parent without preview.
  * @param {DropzoneProps} props - The properties for the dropzone component.
  * @return {JSX.Element} The rendered dropzone component.
  */
 export function Dropzone({value, disabled, accept = AcceptFileType.AllFiles, onChange}: DropzoneProps): JSX.Element {
-  const [dragActive, setDragActive] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [dragActive, setDragActive] = useState(false); // State to track if a file is being dragged over the dropzone.
+  const inputRef = useRef<HTMLInputElement>(null); // Reference to the hidden file input element.
 
+  /**
+   * useEffect hook that resets the file input value when the component unmounts.
+   */
   useEffect(() => {
     return () => {
-      // Reset the input file value when component unmounts
       if (inputRef.current) {
-        inputRef.current.value = "";
+        // Check if the input element exists.
+        inputRef.current.value = ""; // Reset the input value to an empty string.
       }
     };
-  }, [value]);
+  }, [value]); // This effect depends on the `value` prop.
 
-  const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
+  /**
+   * Handles drag events (dragenter, dragover, dragleave) to manage the drag state.
+   * @param {React.DragEvent<HTMLDivElement>} e - The drag event triggered when a file is dragged over the dropzone.
+   */
+  function handleDrag(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -73,9 +49,13 @@ export function Dropzone({value, disabled, accept = AcceptFileType.AllFiles, onC
     if (e.type === "dragleave") {
       setDragActive(false);
     }
-  };
+  }
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  /**
+   * Handles the drop event when a file is dropped into the dropzone.
+   * @param {React.DragEvent<HTMLDivElement>} e - The drop event triggered when a file is dropped.
+   */
+  function handleDrop(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
@@ -93,7 +73,31 @@ export function Dropzone({value, disabled, accept = AcceptFileType.AllFiles, onC
 
       handleFile(file, onChange);
     }
-  };
+  }
+
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement>,
+    callback?: (fileString: string | null, fileBlob: File | null) => void,
+  ): void {
+    if (e.target.files && e.target.files[0]) {
+      // Check if a file is selected.
+      handleFile(e.target.files[0], callback); // Process the selected file using the handleFile function.
+    }
+  }
+
+  function handleFile(file: File, callback?: (fileString: string | null, fileBlob: File | null) => void): void {
+    const reader = new FileReader(); // Create a new FileReader instance.
+
+    reader.onloadend = () => {
+      // Event handler for when the file has been read.
+      if (callback) {
+        // If a callback is provided,
+        callback(reader.result as string, file); // Pass the base64 string and file blob to the callback.
+      }
+    };
+
+    reader.readAsDataURL(file); // Read the file as a Data URL (base64 string).
+  }
 
   return (
     <div className="c-dropzone w-full">

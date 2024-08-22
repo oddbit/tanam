@@ -1,17 +1,17 @@
 "use client";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
-import { CropImage } from "@/components/CropImage";
+import {CropImage} from "@/components/CropImage";
 import DarkModeSwitcher from "@/components/DarkModeSwitcher";
-import { Dropzone } from "@/components/Form/Dropzone";
-import { Modal } from "@/components/Modal";
-import { useAuthentication } from "@/hooks/useAuthentication";
-import { useFirebaseStorage } from "@/hooks/useFirebaseStorage";
-import { useTanamUser } from "@/hooks/useTanamUser";
-import { UserNotification } from "@/models/UserNotification";
-import { AcceptFileType } from "@functions/definitions/AcceptFileType";
+import {Dropzone} from "@/components/Form/Dropzone";
+import {Modal} from "@/components/Modal";
+import {useAuthentication} from "@/hooks/useAuthentication";
+import {useFirebaseStorage} from "@/hooks/useFirebaseStorage";
+import {useTanamUser} from "@/hooks/useTanamUser";
+import {UserNotification} from "@/models/UserNotification";
+import {AcceptFileType} from "@functions/definitions/AcceptFileType";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 
 // Default image path if the user has not uploaded a profile picture
 const defaultImage = "/images/no-image.png";

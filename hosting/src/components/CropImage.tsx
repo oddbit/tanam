@@ -1,6 +1,6 @@
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
-import ReactCrop, { centerCrop, Crop, makeAspectCrop, PixelCrop } from "react-image-crop";
+import React, {useEffect, useRef, useState} from "react";
+import ReactCrop, {centerCrop, Crop, makeAspectCrop, PixelCrop} from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 
 // Props interface for the CropImage component
@@ -136,12 +136,8 @@ export function CropImage(props: CropImageProps): JSX.Element | null {
       {croppedImageUrl && (
         <div>
           <h3>Preview:</h3>
-          <Image 
-            alt="Crop preview" 
-            src={croppedImageUrl} 
-            width={1200}
-            height={800}
-          /> {/* Display the cropped image preview */}
+          <Image alt="Crop preview" src={croppedImageUrl} width={1200} height={800} />
+          {/* Display the cropped image preview */}
         </div>
       )}
     </div>
