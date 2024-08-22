@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import ReactCrop, { centerCrop, Crop, makeAspectCrop, PixelCrop } from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
+import Image from "next/image";
+import React, { useEffect, useRef, useState } from "react";
+import ReactCrop, { centerCrop, Crop, makeAspectCrop, PixelCrop } from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
 // Props interface for the CropImage component
 export interface CropImageProps {
@@ -12,12 +13,12 @@ export interface CropImageProps {
 /**
  * CropImage component allows users to crop an image and get the resulting cropped image data.
  * @param {CropImageProps} props - Props for the CropImage component.
- * @returns {JSX.Element | null} - The rendered CropImage component.
+ * @return {JSX.Element | null} - The rendered CropImage component.
  */
 export function CropImage(props: CropImageProps): JSX.Element | null {
   if (!props.src) return null;
 
-  const { src, onCropComplete, contentType = 'image/jpeg' } = props;
+  const {src, onCropComplete, contentType = "image/jpeg"} = props;
 
   const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<PixelCrop | null>(null); // State to store the completed crop
@@ -38,22 +39,22 @@ export function CropImage(props: CropImageProps): JSX.Element | null {
    * @param {React.SyntheticEvent<HTMLImageElement>} e - The synthetic event containing the image data.
    */
   function onImageLoad(e: React.SyntheticEvent<HTMLImageElement>): void {
-    const { naturalWidth: width, naturalHeight: height } = e.currentTarget;
+    const {naturalWidth: width, naturalHeight: height} = e.currentTarget;
 
     // Create a crop with a 16:9 aspect ratio, centered on the image
     const crop = centerCrop(
       makeAspectCrop(
         {
           // Initial crop dimensions and aspect ratio
-          unit: '%',
+          unit: "%",
           width: 90,
         },
         16 / 9,
         width,
-        height
+        height,
       ),
       width,
-      height
+      height,
     );
 
     setCrop(crop);
@@ -79,13 +80,13 @@ export function CropImage(props: CropImageProps): JSX.Element | null {
     image: HTMLImageElement,
     canvas: HTMLCanvasElement,
     crop: PixelCrop,
-    contentType: string
+    contentType: string,
   ) {
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
     canvas.width = crop.width;
     canvas.height = crop.height;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
 
     if (ctx) {
       ctx.drawImage(
@@ -97,7 +98,7 @@ export function CropImage(props: CropImageProps): JSX.Element | null {
         0,
         0,
         crop.width,
-        crop.height
+        crop.height,
       );
 
       // Convert the canvas content to a data URL with the specified content type
@@ -117,9 +118,11 @@ export function CropImage(props: CropImageProps): JSX.Element | null {
         onChange={(newCrop) => setCrop(newCrop)} // Update crop state when crop area changes
         onComplete={onCropCompleteInternal} // Callback triggered when cropping is completed
       >
-        <img
+        <Image
           src={src} // Source image to be cropped
           alt="Source image crop"
+          width={1200}
+          height={800}
           ref={imageRef} // Ref to hold the image element
           onLoad={onImageLoad} // Callback when the image is loaded
         />
@@ -127,13 +130,18 @@ export function CropImage(props: CropImageProps): JSX.Element | null {
       <canvas
         ref={previewCanvasRef}
         style={{
-          display: 'none', // Canvas is hidden, used only for generating the cropped image
+          display: "none", // Canvas is hidden, used only for generating the cropped image
         }}
       />
       {croppedImageUrl && (
         <div>
           <h3>Preview:</h3>
-          <img alt="Crop preview" src={croppedImageUrl} /> {/* Display the cropped image preview */}
+          <Image 
+            alt="Crop preview" 
+            src={croppedImageUrl} 
+            width={1200}
+            height={800}
+          /> {/* Display the cropped image preview */}
         </div>
       )}
     </div>
