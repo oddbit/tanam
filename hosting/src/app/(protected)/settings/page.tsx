@@ -23,6 +23,7 @@ export default function Settings() {
   const [pathUpload, setPathUpload] = useState<string>();
   const [fileUploadContentType, setFileUploadContentType] = useState<string>();
   const [beforeCropImage, setBeforeCropImage] = useState<string>();
+  const [afterCropImage, setAfterCropImage] = useState<string>();
   const [profilePicture, setProfilePicture] = useState<string>(defaultImage);
 
   useEffect(() => {
@@ -43,10 +44,15 @@ export default function Settings() {
 
   async function resetChanges() {
     setFileUploadContentType(undefined);
-    setBeforeCropImage(undefined);
-    setShowCropImage(false);
+    resetCropImage();
 
     await fetchProfilePicture();
+  }
+
+  function resetCropImage() {
+    setBeforeCropImage(undefined);
+    setAfterCropImage(undefined);
+    setShowCropImage(false);
   }
 
   async function fetchProfilePicture() {
@@ -80,8 +86,7 @@ export default function Settings() {
         className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white sm:w-full sm:text-sm"
         onClick={
           () => {
-            setBeforeCropImage(undefined)
-            setShowCropImage(false)
+            resetCropImage();
           }
         }
       >
@@ -89,7 +94,18 @@ export default function Settings() {
       </button>
       <button
         className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90 sm:w-full sm:text-sm"
-        onClick={() => {}}
+        onClick={
+          () => {
+            if (!afterCropImage) {
+              window.alert("No cropped image");
+
+              return;
+            }
+
+            setProfilePicture(afterCropImage);
+            resetCropImage();
+          }
+        }
       >
         Save
       </button>
@@ -191,6 +207,7 @@ export default function Settings() {
                       <CropImage 
                         src={beforeCropImage}
                         contentType={fileUploadContentType}
+                        onCropComplete={setAfterCropImage}
                       />
                     </Modal>
                     {/* End modal crop image */}
