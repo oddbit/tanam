@@ -20,7 +20,7 @@ export enum AcceptFileType {
  * @param {string} contentType - MIME type of the file (e.g., 'image/jpeg', 'application/pdf').
  * @return {Blob} - The Blob object created from the base64 string.
  */
-export function base64ToBlob(base64: string, contentType: string) {
+export function base64ToBlob(base64: string, contentType: string): Blob {
   const byteCharacters = atob(base64.split(',')[1]);
   const byteNumbers = Array.from(byteCharacters, char => char.charCodeAt(0));
   const byteArray = new Uint8Array(byteNumbers);
@@ -33,7 +33,7 @@ export function base64ToBlob(base64: string, contentType: string) {
  * @param {string} contentType - MIME type of the file (e.g., 'image/jpeg', 'application/pdf').
  * @return {string} - File extension based on MIME type.
  */
-export function getFileExtension(contentType: string) {
+export function getFileExtension(contentType: string): string {
   const mimeTypeToExtension: { [key: string]: string } = {
     'image/jpeg': '.jpg',
     'image/jpg': '.jpg',

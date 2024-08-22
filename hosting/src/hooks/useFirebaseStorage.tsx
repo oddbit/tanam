@@ -50,7 +50,6 @@ export function useFirebaseStorage(): FirebaseStorageHook {
       // Handle errors and set the error state
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(new UserNotification("error", "Problem uploading to storage", `Upload failed: ${errorMessage}`));
-      return undefined;
     } finally {
       setIsLoading(false);
     }
@@ -76,7 +75,6 @@ export function useFirebaseStorage(): FirebaseStorageHook {
       // Handle errors and set the error state
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(new UserNotification("error", "Problem getting file from storage", `Failed to get download URL: ${errorMessage}`));
-      return undefined;
     } finally {
       setIsLoading(false);
     }
