@@ -1,14 +1,14 @@
 "use client";
 
-import {useAuthentication} from "@/hooks/useAuthentication";
-import {useTanamDocumentTypes} from "@/hooks/useTanamDocumentTypes";
+import { useAuthentication } from "@/hooks/useAuthentication";
+import { useTanamDocumentTypes } from "@/hooks/useTanamDocumentTypes";
 import Image from "next/image";
 import Link from "next/link";
-import {usePathname} from "next/navigation";
-import {useEffect, useState} from "react";
-import {SidebarExpandableMenu, SidebarExpandableMenuSubItem} from "./SidebarExpandableMenu";
-import {SidebarMenuGroup} from "./SidebarMenuGroup";
-import {SidebarMenuItem} from "./SidebarMenuItem";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { SidebarExpandableMenu, SidebarExpandableMenuSubItem } from "./SidebarExpandableMenu";
+import { SidebarMenuGroup } from "./SidebarMenuGroup";
+import { SidebarMenuItem } from "./SidebarMenuItem";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -20,9 +20,6 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
   const {data: documentTypes} = useTanamDocumentTypes();
   const {authUser, signout} = useAuthentication();
 
-  const storedSidebarExpanded = "true";
-
-  const [sidebarExpanded] = useState(storedSidebarExpanded === null ? false : storedSidebarExpanded === "true");
   const [windowSize, setWindowSize] = useState({
     width: 0,
     height: 0,
@@ -61,15 +58,6 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
     // Clean up the event listener on component unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []); // Empty array ensures that effect is only run on mount and unmount
-
-  useEffect(() => {
-    localStorage.setItem("sidebar-expanded", sidebarExpanded.toString());
-    if (sidebarExpanded) {
-      document.querySelector("body")?.classList.add("sidebar-expanded");
-    } else {
-      document.querySelector("body")?.classList.remove("sidebar-expanded");
-    }
-  }, [sidebarExpanded]);
 
   return (
     <aside
