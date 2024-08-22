@@ -1,8 +1,9 @@
-import React from "react";
+import React, {FC} from "react";
 
 interface TableProps {
   headers: string[];
   rows: React.ReactNode[][];
+  isLoading?: boolean;
 }
 
 /**
@@ -22,13 +23,14 @@ interface TableProps {
  *        onDownload={() => console.log("Download", document)}
  *      />,
  *    ])}
+ *    isLoading={true}
  *  />
  * ```
  *
  * @param {TableProps} param0 Table parameters
  * @return {JSX.Element} Table component
  */
-export function Table({headers, rows}: TableProps): JSX.Element {
+export function Table({headers, rows, isLoading = false}: TableProps): JSX.Element {
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="max-w-full overflow-x-auto">
@@ -43,18 +45,38 @@ export function Table({headers, rows}: TableProps): JSX.Element {
             </tr>
           </thead>
           <tbody>
-            {rows.map((row, rowIndex) => (
-              <tr key={rowIndex} className="border-b border-[#eee] dark:border-strokedark">
-                {row.map((col, colIndex) => (
-                  <td key={`r${rowIndex}c${colIndex}`} className="px-4 py-5 dark:border-strokedark">
-                    {col}
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {isLoading
+              ? Array.from({length: 20}).map((_, rowIndex) => <TableRowShimmer key={rowIndex} headers={headers} />)
+              : rows.map((row, rowIndex) => <TableRow key={rowIndex} row={row} />)}
           </tbody>
         </table>
       </div>
     </div>
   );
 }
+
+const TableRowShimmer: FC<{
+  headers: string[];
+  rowIndex?: number;
+}> = ({headers, rowIndex}) => (
+  <tr className="border-b border-[#eee] dark:border-strokedark">
+    {headers.map((_, colIndex) => (
+      <td key={`r${rowIndex}c${colIndex}`} className="px-4 py-5 dark:border-strokedark">
+        <div className="h-5 bg-zinc-200 rounded-md animate-pulse dark:bg-gray-700"></div>
+      </td>
+    ))}
+  </tr>
+);
+
+const TableRow: FC<{
+  row: React.ReactNode[];
+  rowIndex?: number;
+}> = ({row, rowIndex}) => (
+  <tr className="border-b border-[#eee] dark:border-strokedark">
+    {row.map((col, colIndex) => (
+      <td key={`r${rowIndex}c${colIndex}`} className="px-4 py-5 dark:border-strokedark">
+        {col}
+      </td>
+    ))}
+  </tr>
+);
