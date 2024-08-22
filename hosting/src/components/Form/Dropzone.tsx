@@ -20,7 +20,6 @@ export function handleFile(file: File, callback?: (fileString: string | null, fi
   
   reader.onloadend = () => {
     if (callback) {
-      console.info('reader result :: ', reader)
       callback(reader.result as string, file);
     }
   };
@@ -37,8 +36,6 @@ export function handleChange(
   e: React.ChangeEvent<HTMLInputElement>,
   callback?: (fileString: string | null, fileBlob: File | null) => void
 ) {
-  console.info('handleChange :: ', e.target)
-  console.info('files :: ', e.target.files)
   if (e.target.files && e.target.files[0]) {
     handleFile(e.target.files[0], callback);
   }
@@ -86,7 +83,6 @@ export function Dropzone({ value, disabled, accept = AcceptFileType.AllFiles, on
 
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const file = e.dataTransfer.files[0];
-      console.info('drop :: ', file);
 
       if (!isFileAccepted(file, accept)) {
         console.error(`File type not accepted: ${file.name}`);
