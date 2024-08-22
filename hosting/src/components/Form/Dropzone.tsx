@@ -49,7 +49,7 @@ export function handleChange(
  * @param {DropzoneProps} props - The properties for the dropzone component.
  * @return {JSX.Element} The rendered dropzone component.
  */
-export function Dropzone({ disabled, accept = AcceptFileType.AllFiles, onChange }: DropzoneProps): JSX.Element {
+export function Dropzone({ value, disabled, accept = AcceptFileType.AllFiles, onChange }: DropzoneProps): JSX.Element {
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -60,7 +60,7 @@ export function Dropzone({ disabled, accept = AcceptFileType.AllFiles, onChange 
         inputRef.current.value = "";
       }
     };
-  }, []);
+  }, [value]);
 
   const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -112,6 +112,7 @@ export function Dropzone({ disabled, accept = AcceptFileType.AllFiles, onChange 
       >
         <input
           type="file"
+          ref={inputRef}
           accept={accept}
           disabled={disabled}
           onChange={(e) => handleChange(e, onChange)}

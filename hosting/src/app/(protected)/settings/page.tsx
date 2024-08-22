@@ -276,12 +276,7 @@ export default function Settings() {
       <Modal 
         isOpen={showCropImage}
         disableOverlayClose={true}
-        onClose={
-          () => {
-            setShowCropImage(false)
-            setBeforeCropImage(undefined)
-          }
-        }
+        onClose={resetCropImage}
         actions={modalActionCropImage}
         title="Crop Profile Picture"
       >
