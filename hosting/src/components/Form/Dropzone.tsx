@@ -1,6 +1,6 @@
 import "@/components/Form/styles/dropzone.scss";
 import { AcceptFileType, getAcceptDescription, isFileAccepted } from "@/utils/fileUpload";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 // Props interface for the Dropzone component
 export interface DropzoneProps {
@@ -37,6 +37,7 @@ export function handleChange(
   e: React.ChangeEvent<HTMLInputElement>,
   callback?: (fileString: string | null, fileBlob: File | null) => void
 ) {
+  console.info('handleChange :: ', e.target)
   console.info('files :: ', e.target.files)
   if (e.target.files && e.target.files[0]) {
     handleFile(e.target.files[0], callback);
@@ -49,7 +50,17 @@ export function handleChange(
  * @return {JSX.Element} The rendered dropzone component.
  */
 export function Dropzone({ disabled, accept = AcceptFileType.AllFiles, onChange }: DropzoneProps): JSX.Element {
-  const [dragActive, setDragActive] = React.useState(false);
+  const [dragActive, setDragActive] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    return () => {
+      // Reset the input file value when component unmounts
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
+    };
+  }, []);
 
   const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();

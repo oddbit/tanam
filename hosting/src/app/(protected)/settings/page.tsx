@@ -52,6 +52,7 @@ export default function Settings() {
   async function fetchProfilePicture() {
     const profilePictureUrl = await getFile(`${pathUpload}/profile.png`);
     setProfilePicture(profilePictureUrl ?? defaultImage);
+    setBeforeCropImage(profilePicture);
   }
 
   async function onPersonalInfoSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -77,7 +78,12 @@ export default function Settings() {
     <div className="flex flex-col sm:flex-row justify-end gap-3">
       <button
         className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white sm:w-full sm:text-sm"
-        onClick={() => setShowCropImage(false)}
+        onClick={
+          () => {
+            setBeforeCropImage(undefined)
+            setShowCropImage(false)
+          }
+        }
       >
         Close
       </button>
@@ -154,7 +160,7 @@ export default function Settings() {
                     {
                       showDropzone && (
                         <Dropzone 
-                          value={profilePicture}
+                          value={beforeCropImage}
                           accept={AcceptFileType.Images}
                           onChange={
                             (valueString, valueBlob) => {
