@@ -34,10 +34,10 @@ export function useFirebaseStorage() {
       console.info("upload finished")
       const downloadURL = await getFile(`${folderPath}`);
 
-      setLoading(false);
       return downloadURL;
     } catch (err) {
       setError(`Upload failed: ${(err as Error).message}`);
+    } finally {
       setLoading(false);
     }
   }
@@ -48,13 +48,19 @@ export function useFirebaseStorage() {
    * @return {Promise<string | undefined>} - Returns a promise that resolves to the download URL or null if failed.
    */
   async function getFile(filePath: string): Promise<string | undefined> {
+    setLoading(true);
+    setError(null);
+
     try {
       const storageRef = ref(storage, filePath);
       const downloadURL = await getDownloadURL(storageRef);
       console.info("getFile :: ", downloadURL);
+
       return downloadURL;
     } catch (err) {
       setError(`Failed to get download URL: ${(err as Error).message}`);
+    } finally {
+      setLoading(false);
     }
   }
 
