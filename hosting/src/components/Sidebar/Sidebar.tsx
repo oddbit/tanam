@@ -1,14 +1,13 @@
 "use client";
-
+import {SidebarExpandableMenu, SidebarExpandableMenuSubItem} from "@/components/Sidebar/SidebarExpandableMenu";
+import {SidebarMenuGroup} from "@/components/Sidebar/SidebarMenuGroup";
+import {SidebarMenuItem} from "@/components/Sidebar/SidebarMenuItem";
 import {useAuthentication} from "@/hooks/useAuthentication";
 import {useTanamDocumentTypes} from "@/hooks/useTanamDocumentTypes";
 import Image from "next/image";
 import Link from "next/link";
 import {usePathname} from "next/navigation";
 import {useEffect, useState} from "react";
-import {SidebarExpandableMenu, SidebarExpandableMenuSubItem} from "./SidebarExpandableMenu";
-import {SidebarMenuGroup} from "./SidebarMenuGroup";
-import {SidebarMenuItem} from "./SidebarMenuItem";
 
 interface SidebarProps {
   sidebarOpen: boolean;
