@@ -1,3 +1,4 @@
+"use client";
 import "@/components/Form/styles/dropzone.scss";
 import {getAcceptDescription, isFileAccepted} from "@/utils/fileUpload";
 import {AcceptFileType} from "@functions/definitions/AcceptFileType";
