@@ -19,13 +19,14 @@ export function Modal({ isOpen, onClose, title, children, actions }: ModalProps)
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen px-4 text-center">
-        {/* Background overlay */}
-        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-        </div>
+    <div className="fixed inset-0 z-999 overflow-y-auto">
+      {/* Background overlay */}
+      <div
+        className="fixed w-full h-screen bg-black opacity-50"
+        onClick={onClose}
+      ></div>
 
+      <div className="flex items-center justify-center min-h-screen px-4 text-center">
         {/* Centering trick for modal */}
         <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
@@ -36,7 +37,7 @@ export function Modal({ isOpen, onClose, title, children, actions }: ModalProps)
             <div className="sm:flex sm:items-start">
               <div className="mt-3 text-center sm:mt-0 sm:text-left">
                 {/* Modal title */}
-                <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                <h3 className="text-lg leading-6 font-medium" id="modal-title">
                   {title}
                 </h3>
                 {/* Modal children content */}
