@@ -1,15 +1,17 @@
 {
-  "editor.codeActionsOnSave": {
-    "source.organizeImports": "always",
-  },
-  "javascript.preferences.quoteStyle": "single",
-  "typescript.preferences.quoteStyle": "single",
+  "javascript.preferences.quoteStyle": "double",
+  "typescript.preferences.quoteStyle": "double",
   "html.format.indentInnerHtml": true,
   "html.format.wrapAttributes": "force-aligned",
   "typescript.preferences.importModuleSpecifier": "relative",
   "javascript.preferences.importModuleSpecifier": "relative",
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "always",
+  },
   "json.format.enable": true,
   "eslint.workingDirectories": [
     "./hosting",
