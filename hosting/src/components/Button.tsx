@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 interface ButtonProps {
   title: string;
@@ -36,16 +36,16 @@ export function Button({title, onClick, style = "rounded", color = "primary", ch
 
   switch (color) {
     case "primary":
-      styles.push("bg-primary", !style ? "text-white" : "");
+      styles.push("bg-primary text-white");
       break;
     case "meta-3":
-      styles.push("bg-meta-3", !style ? "text-white" : "");
+      styles.push("bg-meta-3 text-white");
       break;
     case "black":
-      styles.push("bg-black", !style ? "text-white" : "");
+      styles.push("bg-black text-white");
       break;
     default:
-      styles.push("bg-primary", !style ? "text-white" : "");
+      styles.push("bg-primary text-white");
   }
 
   switch (style) {
