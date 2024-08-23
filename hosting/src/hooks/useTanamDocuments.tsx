@@ -1,11 +1,9 @@
 "use client";
-import {generateArticle} from "@/genkit/article";
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {UserNotification} from "@/models/UserNotification";
-import {firestore, storage} from "@/plugins/firebase";
+import {firestore} from "@/plugins/firebase";
 import {TanamPublishStatus} from "@functions/models/TanamDocument";
 import {collection, doc, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where} from "firebase/firestore";
-import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {useEffect, useState} from "react";
 
 interface UseTanamDocumentsResult {
