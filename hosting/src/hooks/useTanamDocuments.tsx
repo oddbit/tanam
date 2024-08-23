@@ -129,7 +129,7 @@ export function useCrudTanamDocument() {
     try {
       if (!documentType) {
         setError(new UserNotification("error", "Missing parameter", "Document type parameter is missing"));
-        return;
+        return null;
       }
       const docRef = doc(collection(firestore, "tanam-documents"));
       const docId = docRef.id;
@@ -142,6 +142,7 @@ export function useCrudTanamDocument() {
         new UserNotification("error", "Error creating document", "An error occurred while creating the document"),
       );
     }
+    return null;
   }
 
   async function update(document: TanamDocumentClient): Promise<void> {
