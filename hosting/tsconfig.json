@@ -40,6 +40,9 @@
       "@functions/models/*": [
         "./../functions/src/models/shared"
       ],
+      "@functions/schemas/*": [
+        "./../functions/src/schemas/*"
+      ],
       "@functions/definitions/*": [
         "./../functions/src/definitions/*"
       ]
