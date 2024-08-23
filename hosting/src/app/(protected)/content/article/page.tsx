@@ -6,9 +6,10 @@ import FilePicker from "@/components/FilePicker";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
-import {ArticleCreationStatus, useGenkitArticle} from "@/hooks/useGenkitArticle";
+import {useGenkitArticle} from "@/hooks/useGenkitArticle";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {useCrudTanamDocument, useTanamDocuments} from "@/hooks/useTanamDocuments";
+import {ProcessingState} from "@/models/ProcessingState";
 import {UserNotification} from "@/models/UserNotification";
 import {useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
@@ -64,14 +65,15 @@ export default function DocumentTypeDocumentsPage() {
         )}
       </Suspense>
       <Dialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} title={"Tell your story"}>
-        {status === ArticleCreationStatus.Ready ? (
+        {status === ProcessingState.Ready ? (
           <FilePicker onFileSelect={handleFileSelect} />
         ) : (
-          <div className="flex items-center justify-center">
+          <div className="flex flex-col items-center justify-center space-y-2">
             <Loader />
-            {status === ArticleCreationStatus.UploadingFile && <p>Uploading file...</p>}
-            {status === ArticleCreationStatus.GeneratingWithAI && <p>Generating with AI...</p>}
-            {status === ArticleCreationStatus.Finalizing && <p>Finalizing...</p>}
+            {status === ProcessingState.Uploading && <p>Uploading file...</p>}
+            {status === ProcessingState.Processing && <p>Preparing...</p>}
+            {status === ProcessingState.Generating && <p>Generating with AI...</p>}
+            {status === ProcessingState.Finalizing && <p>Finalizing...</p>}
           </div>
         )}
       </Dialog>
