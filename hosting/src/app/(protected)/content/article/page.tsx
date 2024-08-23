@@ -1,14 +1,14 @@
 "use client";
-import {Button} from "@/components/Button";
-import {DocumentTypeGenericList} from "@/components/DocumentType/DocumentTypeGenericList";
+import { Button } from "@/components/Button";
+import { DocumentTypeGenericList } from "@/components/DocumentType/DocumentTypeGenericList";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
-import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
-import {useCrudTanamDocument, useTanamDocuments} from "@/hooks/useTanamDocuments";
-import {UserNotification} from "@/models/UserNotification";
-import {useRouter} from "next/navigation";
-import {Suspense, useEffect, useState} from "react";
+import { useTanamDocumentType } from "@/hooks/useTanamDocumentTypes";
+import { useCrudTanamDocument, useTanamDocuments } from "@/hooks/useTanamDocuments";
+import { UserNotification } from "@/models/UserNotification";
+import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 
 export default function DocumentTypeDocumentsPage() {
   const {data: documentType} = useTanamDocumentType("article");
@@ -40,7 +40,9 @@ export default function DocumentTypeDocumentsPage() {
                 title={`Add New ${documentType.titleSingular.translated}`}
                 onClick={addNewArticle}
                 style="rounded"
-              />
+              >
+                <span className="i-ic-add w-[22px] h-[22px] text-white mr-2" />
+              </Button>
             </div>
           </div>
         ) : (
