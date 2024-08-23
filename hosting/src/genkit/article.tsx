@@ -1,15 +1,13 @@
 "use server";
 
 import {definePrompt, generate, renderPrompt} from "@genkit-ai/ai";
-import {configureGenkit} from "@genkit-ai/core";
 import {defineFlow, runFlow} from "@genkit-ai/flow";
-import {gemini15Pro, googleAI} from "@genkit-ai/googleai";
+import {gemini15Pro} from "@genkit-ai/googleai";
 import {z} from "zod";
 
 export async function generateArticle(input: z.infer<typeof PromptInputSchema>) {
   return runFlow(articleFlow, input);
 }
-
 
 const PromptInputSchema = z.object({
   length: z.number().optional().default(3).describe("Length of the article in minutes of reading time"),
