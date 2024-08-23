@@ -66,7 +66,7 @@ export function useGenkitArticle() {
         length: 3,
         sampleArticles: articles,
       });
-      console.log("\n-----------------------------\nGenerated article:", generatedArticle);
+
       setStatus(ProcessingState.Finalizing);
       const tanamDocument = new TanamDocumentClient(docId, {
         documentType: "article",
