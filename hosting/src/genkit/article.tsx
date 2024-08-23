@@ -1,5 +1,6 @@
 "use server";
 
+import {ArticleSchema} from "@functions/schemas/article";
 import {definePrompt, generate, renderPrompt} from "@genkit-ai/ai";
 import {configureGenkit} from "@genkit-ai/core";
 import {firebase} from "@genkit-ai/firebase";
@@ -19,13 +20,7 @@ export async function generateArticle(input: z.infer<typeof PromptInputSchema>) 
 const PromptInputSchema = z.object({
   length: z.number().optional().default(3).describe("Length of the article in minutes of reading time"),
   recordingUrl: z.string().describe("URL to a voice recording"),
-});
-
-const PromptOutputSchema = z.object({
-  title: z.string().default("").describe("Title of the article"),
-  content: z.string().default("").describe("Content of the article"),
-  blurb: z.string().default("").describe("SEO summary of the article"),
-  tags: z.array(z.string()).default([]).describe("List of tags for the article"),
+  sampleArticles: z.array(ArticleSchema).default([]).optional().describe("List of sample articles to learn from"),
 });
 
 const articlePrompt = definePrompt(
@@ -37,7 +32,7 @@ const articlePrompt = definePrompt(
     return {
       output: {
         format: "json",
-        schema: PromptOutputSchema,
+        schema: ArticleSchema,
       },
       config: {temperature: 0.6},
       messages: [
@@ -81,7 +76,12 @@ const articlePrompt = definePrompt(
             {
               text: `
               The generated output must follow the schema: 
-              ${JSON.stringify((zodToJsonSchema(PromptOutputSchema) as {properties: Record<string, unknown>}).properties)}`,
+              ${JSON.stringify((zodToJsonSchema(ArticleSchema) as {properties: Record<string, unknown>}).properties)}`,
+            },
+            {
+              text: `
+              # Articles to learn from 
+              ${JSON.stringify(input.sampleArticles)}`,
             },
             {
               text: `
@@ -94,7 +94,6 @@ const articlePrompt = definePrompt(
 
               ## Article 
                 - Make the article about ${input.length} minutes of read time.
-                - Adjust the length of article to represent the amount of content provided in the input recording.                 
                 - Make a lead paragraph that introduces the topic with a hook to engage the reader.
                 - Use HTML markup and only using: <h1>,<h2>,<h3>,<p>,<strong>,<em>,<a>,<ul>,<li>,<img>
                 - Do not include the title in the article content as header to the article. 
@@ -119,7 +118,7 @@ const articleFlow = defineFlow(
   {
     name: "articleFlow",
     inputSchema: PromptInputSchema,
-    outputSchema: PromptOutputSchema,
+    outputSchema: ArticleSchema,
     authPolicy: (auth) => {
       console.log("Genkit Auth", auth);
       // if (!auth) {
@@ -141,7 +140,7 @@ const articleFlow = defineFlow(
 
     try {
       const response = llmResponse.output();
-      return PromptOutputSchema.parse(response || {});
+      return ArticleSchema.parse(response || {});
     } catch (error) {
       console.error("Failed to parse genkit output:", error);
       throw new Error("Invalid AI output format");
