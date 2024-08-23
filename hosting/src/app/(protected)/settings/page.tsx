@@ -13,7 +13,6 @@ import {AcceptFileType} from "@functions/definitions/AcceptFileType";
 import Image from "next/image";
 import {useEffect, useState} from "react";
 
-// Default image path if the user has not uploaded a profile picture
 const defaultImage = "/images/no-image.png";
 
 export default function Settings() {
@@ -22,18 +21,16 @@ export default function Settings() {
   const {isLoading: uploadLoading, error: storageError, upload, getFile} = useFirebaseStorage();
   const [notification, setNotification] = useState<UserNotification | null>(null);
 
-  // State hooks for controlling UI and data
-  const [showDropzone, setShowDropzone] = useState<boolean>(false); // Show or hide the Dropzone component
-  const [showCropImage, setShowCropImage] = useState<boolean>(false); // Show or hide the crop image modal
-  const [pathUpload, setPathUpload] = useState<string>(); // Path for file upload in Firebase Storage
-  const [fileUploadContentType, setFileUploadContentType] = useState<string>(); // Content type of the uploaded file (e.g., image/png)
-  const [beforeCropImage, setBeforeCropImage] = useState<string>(); // Image before cropping
-  const [afterCropImage, setAfterCropImage] = useState<string>(); // Image after cropping
-  const [profilePicture, setProfilePicture] = useState<string>(defaultImage); // Displayed profile picture
+  const [showDropzone, setShowDropzone] = useState<boolean>(false);
+  const [showCropImage, setShowCropImage] = useState<boolean>(false);
+  const [pathUpload, setPathUpload] = useState<string>();
+  const [fileUploadContentType, setFileUploadContentType] = useState<string>();
+  const [beforeCropImage, setBeforeCropImage] = useState<string>();
+  const [afterCropImage, setAfterCropImage] = useState<string>();
+  const [profilePicture, setProfilePicture] = useState<string>(defaultImage);
 
   useEffect(() => {
     if (tanamUser) {
-      // Call init function when tanamUser or pathUpload changes
       init();
     }
   }, [tanamUser, pathUpload]);
@@ -49,11 +46,10 @@ export default function Settings() {
    */
   async function init(): Promise<void> {
     if (!pathUpload) {
-      // Set the upload path based on the TanamUser ID
       setPathUpload(`tanam-users/${tanamUser?.id}`);
       return;
     }
-    // If upload path is available, reset changes
+
     await resetChanges();
   }
 
@@ -62,10 +58,9 @@ export default function Settings() {
    * @return {Promise<void>}
    */
   async function resetChanges(): Promise<void> {
-    // Reset file content type and crop image states
     setFileUploadContentType(undefined);
     resetCropImage();
-    // Reload the profile picture
+
     await fetchProfilePicture();
   }
 
@@ -73,7 +68,6 @@ export default function Settings() {
    * Resets the crop image states.
    */
   function resetCropImage() {
-    // Clear before and after crop images and hide the crop modal
     setBeforeCropImage(undefined);
     setAfterCropImage(undefined);
     setShowCropImage(false);
@@ -85,11 +79,9 @@ export default function Settings() {
    * @return {Promise<void>}
    */
   async function fetchProfilePicture(): Promise<void> {
-    // Retrieve the profile picture URL from Firebase Storage
     const profilePictureUrl = await getFile(`${pathUpload}/profile.png`);
-    // Set the profile picture to the retrieved URL or default image if none found
+
     setProfilePicture(profilePictureUrl ?? defaultImage);
-    // Set the before crop image to the retrieved profile picture
     setBeforeCropImage(profilePicture);
   }
 
@@ -105,20 +97,19 @@ export default function Settings() {
     setNotification(null);
 
     try {
-      if (uploadLoading) return; // Ignore form submission if upload is in progress
+      if (uploadLoading) return;
 
       const form = event.currentTarget;
       const formData = {
-        fullName: form.fullName.value, // Get the full name value from the form
+        fullName: form.fullName.value,
       };
 
       if (fileUploadContentType && profilePicture) {
-        // If there is a file content type and profile picture, upload the image to Firebase Storage
         const fileName = "new-profile-image";
+
         await upload(`${pathUpload}/${fileName}`, profilePicture, fileUploadContentType);
       }
 
-      // Save the user information with the new full name
       await saveUserInfo(formData.fullName);
 
       setNotification(new UserNotification("success", "Update Profile", "Success to update profile"));
@@ -151,7 +142,7 @@ export default function Settings() {
             window.alert("No cropped image");
             return;
           }
-          // Set the profile picture with the cropped image and reset crop image states
+
           setProfilePicture(afterCropImage);
           resetCropImage();
         }}
