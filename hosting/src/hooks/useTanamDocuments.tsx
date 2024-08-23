@@ -11,6 +11,7 @@ import {useEffect, useState} from "react";
 interface UseTanamDocumentsResult {
   data: TanamDocumentClient[];
   error: UserNotification | null;
+  isLoading: boolean;
 }
 
 /**
@@ -22,10 +23,12 @@ interface UseTanamDocumentsResult {
 export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsResult {
   const [data, setData] = useState<TanamDocumentClient[]>([]);
   const [error, setError] = useState<UserNotification | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!documentTypeId) {
       setError(new UserNotification("error", "Missing parameter", "Content type parameter is missing"));
+      setIsLoading(false);
       return;
     }
 
@@ -37,9 +40,11 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
       (snapshot) => {
         const documents = snapshot.docs.map((doc) => TanamDocumentClient.fromFirestore(doc));
         setData(documents);
+        setIsLoading(false);
       },
       (err) => {
         setError(new UserNotification("error", "Error fetching data", err.message));
+        setIsLoading(false);
       },
     );
 
@@ -47,28 +52,31 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
     return () => unsubscribe();
   }, [documentTypeId]);
 
-  return {data, error};
+  return {data, error, isLoading};
 }
 
 interface UseTanamDocumentResult {
   data: TanamDocumentClient | null;
   changeStatus: (status: TanamPublishStatus) => Promise<void>;
   error: UserNotification | null;
+  isLoading: boolean;
 }
 
 /**
  * Hook to get a subscription for a single document
  *
  * @param {string?} documentId Document id
- * @return {UseTanamDocumentsResult} Hook for document subscription
+ * @return {UseTanamDocumentResult} Hook for document subscription
  */
 export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
   const [data, setData] = useState<TanamDocumentClient | null>(null);
   const [error, setError] = useState<UserNotification | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!documentId) {
       setError(new UserNotification("error", "Missing parameter", "Document id parameter is missing"));
+      setIsLoading(false);
       return;
     }
     const docRef = doc(firestore, "tanam-documents", documentId);
@@ -76,9 +84,11 @@ export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
       docRef,
       (snapshot) => {
         setData(TanamDocumentClient.fromFirestore(snapshot));
+        setIsLoading(false);
       },
       (err) => {
         setError(new UserNotification("error", "Error fetching data", err.message));
+        setIsLoading(false);
       },
     );
 
@@ -111,7 +121,7 @@ export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
     }
   }
 
-  return {data, changeStatus, error};
+  return {data, changeStatus, error, isLoading};
 }
 
 export function useCrudTanamDocument() {
