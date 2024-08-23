@@ -1,6 +1,6 @@
 module.exports = {
   runner: {
-    mode: 'harness',
-    files: ['./src/app/*.ts'],
+    mode: "harness",
+    files: ["./src/app/*.ts"],
   },
 };
