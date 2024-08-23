@@ -1,9 +1,11 @@
 "use client";
+import {generateArticle} from "@/genkit/article";
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {UserNotification} from "@/models/UserNotification";
-import {firestore} from "@/plugins/firebase";
+import {firestore, storage} from "@/plugins/firebase";
 import {TanamPublishStatus} from "@functions/models/TanamDocument";
 import {collection, doc, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where} from "firebase/firestore";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {useEffect, useState} from "react";
 
 interface UseTanamDocumentsResult {
@@ -99,7 +101,7 @@ export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
     try {
       const typeRef = doc(firestore, "tanam-documents", documentId);
       await updateDoc(typeRef, {
-        publishedAt: status === "published" ? serverTimestamp() : null,
+        publishedAt: status === TanamPublishStatus.Published ? serverTimestamp() : null,
         status,
       } as Partial<TanamDocumentClient>);
     } catch (err) {
