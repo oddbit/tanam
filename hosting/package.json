@@ -2,16 +2,27 @@
   "name": "tanam-next",
   "version": "0.1.0",
   "private": true,
+  "main": "lib/index.js",
+  "engines": {
+    "node": "20"
+  },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
     "start": "next start",
+    "build": "next build",
+    "build:watch": "tsc --watch",
+    "dev": "next dev",
+    "genkit": "genkit start --open",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "prettier:fix": "prettier --write .",
     "codecheck": "npm run prettier:fix && npm run lint:fix"
   },
   "dependencies": {
+    "@genkit-ai/ai": "^0.5.10",
+    "@genkit-ai/core": "^0.5.10",
+    "@genkit-ai/dotprompt": "^0.5.10",
+    "@genkit-ai/flow": "^0.5.10",
+    "@genkit-ai/googleai": "^0.5.10",
     "@iconify-json/line-md": "^1.1.37",
     "@tiptap/extension-code-block-lowlight": "^2.4.0",
     "@tiptap/extension-floating-menu": "^2.5.5",
@@ -22,6 +33,7 @@
     "apexcharts": "^3.45.2",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "firebase": "^10.12.0",
     "firebaseui": "^6.1.0",
     "flatpickr": "^4.6.13",
