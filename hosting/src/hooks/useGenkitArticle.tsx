@@ -1,5 +1,4 @@
 import {generateArticle} from "@/genkit/article";
-import {ProcessingState} from "@/models/ProcessingState";
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {UserNotification} from "@/models/UserNotification";
 import {firestore, storage} from "@/plugins/firebase";
@@ -8,6 +7,20 @@ import {ArticleSchema} from "@functions/schemas/article";
 import {collection, doc, getDocs, limit, orderBy, query, setDoc, where} from "firebase/firestore";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {useEffect, useState} from "react";
+
+// NOTE: (Dennis) For some reason, the enum values are warning for not being used
+export enum ProcessingState {
+  // eslint-disable-next-line no-unused-vars
+  Uploading,
+  // eslint-disable-next-line no-unused-vars
+  Processing,
+  // eslint-disable-next-line no-unused-vars
+  Generating,
+  // eslint-disable-next-line no-unused-vars
+  Finalizing,
+  // eslint-disable-next-line no-unused-vars
+  Ready,
+}
 
 export function useGenkitArticle() {
   const [error, setError] = useState<UserNotification | null>(null);
@@ -53,12 +66,11 @@ export function useGenkitArticle() {
         length: 3,
         sampleArticles: articles,
       });
-
+      console.log("\n-----------------------------\nGenerated article:", generatedArticle);
       setStatus(ProcessingState.Finalizing);
       const tanamDocument = new TanamDocumentClient(docId, {
         documentType: "article",
         status: TanamPublishStatus.Unpublished,
-        publishedAt: undefined,
         data: {
           title: generatedArticle.title,
           content: generatedArticle.content,
