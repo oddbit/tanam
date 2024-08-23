@@ -10,9 +10,6 @@ export async function generateArticle(input: z.infer<typeof PromptInputSchema>) 
   return runFlow(articleFlow, input);
 }
 
-configureGenkit({
-  plugins: [googleAI()],
-});
 
 const PromptInputSchema = z.object({
   length: z.number().optional().default(3).describe("Length of the article in minutes of reading time"),
@@ -26,7 +23,7 @@ const PromptOutputSchema = z.object({
   tags: z.array(z.string()).default([]).describe("List of tags for the article"),
 });
 
-const articlePrompt = definePrompt(
+export const articlePrompt = definePrompt(
   {
     name: "articlePrompt",
     inputSchema: PromptInputSchema,
@@ -111,7 +108,7 @@ const articlePrompt = definePrompt(
   },
 );
 
-const articleFlow = defineFlow(
+export const articleFlow = defineFlow(
   {
     name: "articleFlow",
     inputSchema: PromptInputSchema,
