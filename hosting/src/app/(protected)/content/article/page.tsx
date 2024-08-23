@@ -68,7 +68,7 @@ export default function DocumentTypeDocumentsPage() {
         {status === ProcessingState.Ready ? (
           <FilePicker onFileSelect={handleFileSelect} />
         ) : (
-          <div className="flex flex-col items-center justify-center space-y-2">
+          <div className="flex flex-col items-center justify-center h-64 space-y-2">
             <Loader />
             {status === ProcessingState.Uploading && <p>Uploading file...</p>}
             {status === ProcessingState.Processing && <p>Preparing...</p>}
