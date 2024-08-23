@@ -51,7 +51,7 @@ export abstract class TanamDocument<TimestampType, FieldValueType> {
       documentType: this.documentType,
       revision: this.revision,
       status: this.status,
-      publishedAt: this.status === TanamPublishStatus.Unpublished ? null : this.publishedAt,
+      publishedAt: this.publishedAt || null,
       createdAt: this.createdAt ?? this.getServerTimestamp(),
       updatedAt: this.getServerTimestamp(),
     };
