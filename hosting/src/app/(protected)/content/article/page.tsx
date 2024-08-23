@@ -13,7 +13,7 @@ import {Suspense, useEffect, useState} from "react";
 export default function DocumentTypeDocumentsPage() {
   const {data: documentType} = useTanamDocumentType("article");
   const {create, error: crudError} = useCrudTanamDocument();
-  const {data: documents, error: docsError} = useTanamDocuments("article");
+  const {data: documents, error: docsError, isLoading} = useTanamDocuments("article");
   const [notification, setNotification] = useState<UserNotification | null>(null);
   const router = useRouter();
 
@@ -53,7 +53,11 @@ export default function DocumentTypeDocumentsPage() {
       )}
 
       <Suspense fallback={<Loader />}>
-        {documentType ? <DocumentTypeGenericList documents={documents} documentType={documentType} /> : <Loader />}
+        {documentType ? (
+          <DocumentTypeGenericList isLoading={isLoading} documents={documents} documentType={documentType} />
+        ) : (
+          <Loader />
+        )}
       </Suspense>
     </>
   );
