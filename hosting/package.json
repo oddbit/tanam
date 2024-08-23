@@ -21,6 +21,7 @@
     "@genkit-ai/ai": "^0.5.10",
     "@genkit-ai/core": "^0.5.10",
     "@genkit-ai/dotprompt": "^0.5.10",
+    "@genkit-ai/firebase": "^0.5.10",
     "@genkit-ai/flow": "^0.5.10",
     "@genkit-ai/googleai": "^0.5.10",
     "@iconify-json/line-md": "^1.1.37",
