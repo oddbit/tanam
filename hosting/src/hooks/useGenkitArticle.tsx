@@ -1,3 +1,4 @@
+import {generateArticle} from "@/genkit/article";
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {UserNotification} from "@/models/UserNotification";
 import {firestore, storage} from "@/plugins/firebase";
@@ -5,7 +6,6 @@ import {TanamPublishStatus} from "@functions/models/TanamDocument";
 import {collection, doc, setDoc} from "firebase/firestore";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {useState} from "react";
-import {generateArticle} from "../genkit/article";
 
 export enum ArticleCreationStatus {
   UploadingFile,
