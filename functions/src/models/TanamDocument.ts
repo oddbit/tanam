@@ -3,7 +3,6 @@ interface DocumentData {
 }
 
 export enum TanamPublishStatus {
-  Processing = "processing",
   Published = "published",
   Unpublished = "unpublished",
   Scheduled = "scheduled",
@@ -27,13 +26,7 @@ export abstract class TanamDocument<TimestampType, FieldValueType> {
     this.publishedAt = json.publishedAt;
 
     // The status of the document is determined by the publishedAt field
-    this.status = json.publishedAt
-      ? json.status === TanamPublishStatus.Scheduled
-        ? TanamPublishStatus.Scheduled
-        : TanamPublishStatus.Published
-      : json.status === TanamPublishStatus.Unpublished
-        ? TanamPublishStatus.Unpublished
-        : TanamPublishStatus.Processing;
+    this.status = json.publishedAt ? TanamPublishStatus.Published : TanamPublishStatus.Unpublished;
 
     this.status = json.status || json.publishedAt ? TanamPublishStatus.Published : TanamPublishStatus.Unpublished;
     this.revision = json.revision ?? 0;
@@ -58,7 +51,7 @@ export abstract class TanamDocument<TimestampType, FieldValueType> {
       documentType: this.documentType,
       revision: this.revision,
       status: this.status,
-      publishedAt: this.publishedAt || null,
+      publishedAt: this.status === TanamPublishStatus.Unpublished ? null : this.publishedAt,
       createdAt: this.createdAt ?? this.getServerTimestamp(),
       updatedAt: this.getServerTimestamp(),
     };

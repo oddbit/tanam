@@ -20,6 +20,7 @@ export class TanamDocumentClient extends TanamDocument<Timestamp, FieldValue> {
       data: data.data,
       documentType: data.documentType,
       publishedAt: data.publishedAt,
+      status: data.status,
       revision: data.revision,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
