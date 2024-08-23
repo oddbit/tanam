@@ -34,20 +34,14 @@ export function useFirebaseStorage(): FirebaseStorageHook {
     setError(null);
 
     try {
-      // Convert base64 to Blob
       const blob = base64ToBlob(base64, contentType);
-
-      // Create a reference to the file location in Firebase Storage
       const storageRef = ref(storage, folderPath);
 
-      // Upload the Blob to Firebase Storage
       await uploadBytes(storageRef, blob);
 
-      // Retrieve and return the download URL of the uploaded file
       const downloadURL = await getFile(folderPath);
       return downloadURL;
     } catch (err) {
-      // Handle errors and set the error state
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(new UserNotification("error", "Problem uploading to storage", `Upload failed: ${errorMessage}`));
     } finally {
@@ -65,14 +59,11 @@ export function useFirebaseStorage(): FirebaseStorageHook {
     setError(null);
 
     try {
-      // Create a reference to the file location in Firebase Storage
       const storageRef = ref(storage, filePath);
 
-      // Retrieve the download URL for the file
       const downloadURL = await getDownloadURL(storageRef);
       return downloadURL;
     } catch (err) {
-      // Handle errors and set the error state
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(
         new UserNotification(

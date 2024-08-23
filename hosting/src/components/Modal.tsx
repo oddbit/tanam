@@ -1,6 +1,5 @@
 import React from "react";
 
-// Props interface for the Modal component
 interface ModalProps {
   isOpen: boolean;
   disableOverlayClose?: boolean;
