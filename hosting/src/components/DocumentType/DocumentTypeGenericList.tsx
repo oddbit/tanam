@@ -1,7 +1,7 @@
 import {Table, TableRowLabel} from "@/components/Table";
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {TanamDocumentTypeClient} from "@/models/TanamDocumentTypeClient";
-import {TanamPublishStatus} from "@functions/models/TanamDocument";
+import {TanamPublishStatus} from "@functions/definitions/TanamPublishStatus";
 import Link from "next/link";
 
 interface TableOverviewGenericProps {

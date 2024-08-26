@@ -1,11 +1,7 @@
+import {TanamPublishStatus} from "../definitions/TanamPublishStatus";
+
 interface DocumentData {
   [key: string]: unknown;
-}
-
-export enum TanamPublishStatus {
-  Published = "published",
-  Unpublished = "unpublished",
-  Scheduled = "scheduled",
 }
 
 export interface ITanamDocument<TimestampType> {

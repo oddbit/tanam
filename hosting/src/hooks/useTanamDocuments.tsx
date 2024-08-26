@@ -2,7 +2,7 @@
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {UserNotification} from "@/models/UserNotification";
 import {firestore} from "@/plugins/firebase";
-import {TanamPublishStatus} from "@functions/models/TanamDocument";
+import {TanamPublishStatus} from "@functions/definitions/TanamPublishStatus";
 import {collection, doc, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where} from "firebase/firestore";
 import {useEffect, useState} from "react";
 

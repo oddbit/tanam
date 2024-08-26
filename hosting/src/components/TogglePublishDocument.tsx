@@ -1,6 +1,6 @@
 import {Button} from "@/components/Button";
 import {useTanamDocument} from "@/hooks/useTanamDocuments";
-import {TanamPublishStatus} from "@functions/models/TanamDocument";
+import {TanamPublishStatus} from "@functions/definitions/TanamPublishStatus";
 import {useParams} from "next/navigation";
 
 export function TogglePublishDocument() {
