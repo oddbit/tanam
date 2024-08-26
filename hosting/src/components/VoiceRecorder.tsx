@@ -22,7 +22,7 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
 
   const mediaRecorderRef = useRef<MediaRecorder | undefined>();
   const audioChunksRef = useRef<Blob[]>([]);
-  const recognitionRef = useRef<any>();
+  const recognitionRef = useRef<SpeechRecognition | undefined>();
 
   /**
    * Effect to trigger onChange whenever the value prop changes.
@@ -38,19 +38,19 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
    * It handles starting, stopping, and restarting the speech recognition process.
    */
   useEffect(() => {
-    const speechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-    console.info("speechRecognition :: ", speechRecognition);
+    console.info("SpeechRecognition :: ", SpeechRecognition);
 
-    if (speechRecognition) {
-      recognitionRef.current = new speechRecognition();
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
       const recognition = recognitionRef.current;
 
       if (!recognition) return;
 
       console.info("recognition before :: ", recognition);
 
-      recognition.lang = "en-US"; // Set language for speech recognition
+      // recognition.lang = "en-US"; // Set language for speech recognition
       recognition.interimResults = false; // Only return final results
       recognition.continuous = true;
 
@@ -69,14 +69,9 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
           onTranscriptChange(transcript);
         }
       };
-
-      // Restart speech recognition if it ends while still recording
-      recognition.onend = () => {
-        if (isRecording) {
-          recognition.start();
-        }
-      };
     }
+
+    console.info("isRecording :: ", isRecording);
   }, [onTranscriptChange, isRecording]);
 
   /**
@@ -85,6 +80,7 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
    * When recording stops, it converts the audio chunks to a base64 string and passes it to onChange.
    */
   async function handleStartRecording() {
+    handleReset();
     setIsRecording(true);
 
     const stream = await navigator.mediaDevices.getUserMedia({audio: true});
@@ -117,10 +113,12 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
   function handleStopRecording() {
     setIsRecording(false);
 
-    if (!mediaRecorderRef.current) return;
+    if (!mediaRecorderRef.current || !recognitionRef.current) return;
+
+    console.info("handleStopRecording");
 
     mediaRecorderRef.current.stop();
-    recognitionRef.current?.stop();
+    recognitionRef.current.stop();
   }
 
   /**
@@ -129,7 +127,7 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
   function handleReset() {
     onChange("");
     setTranscript("");
-    recognitionRef.current?.stop();
+    handleStopRecording();
   }
 
   return (
@@ -139,7 +137,7 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
         {isRecording ? (
           <button
             onClick={handleStopRecording}
-            className="mt-10 m-auto flex items-center justify-center bg-red-400 hover:bg-red-500 rounded-full w-20 h-20 focus:outline-none"
+            className="mt-10 m-auto flex items-center justify-center bg-red-400 hover:bg-red-500 rounded-full w-20 h-20 focus:outline-none animate-pulse border"
           >
             <svg className="h-12 w-12 " viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
