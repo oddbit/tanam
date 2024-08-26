@@ -1,7 +1,7 @@
-import {generateArticle} from "@/genkit/article";
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {UserNotification} from "@/models/UserNotification";
 import {firestore, storage} from "@/plugins/firebase";
+import {generateArticle} from "@/plugins/genkit/article";
 import {TanamPublishStatus} from "@functions/models/TanamDocument";
 import {ArticleSchema} from "@functions/schemas/article";
 import {collection, doc, getDocs, limit, orderBy, query, setDoc, where} from "firebase/firestore";
