@@ -1,5 +1,4 @@
 "use server";
-
 import {ArticleSchema} from "@functions/schemas/article";
 import {definePrompt, generate, renderPrompt} from "@genkit-ai/ai";
 import {configureGenkit} from "@genkit-ai/core";
