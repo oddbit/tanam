@@ -12,7 +12,7 @@ export interface VoiceRecorderProps {
  * and automatically performs speech recognition to provide a text transcript of the recorded audio.
  *
  * @param {VoiceRecorderProps} props - The props for the component.
- * @returns {JSX.Element} The rendered VoiceRecorder component.
+ * @return {JSX.Element} The rendered VoiceRecorder component.
  */
 export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
   const {title, value, onChange, onTranscriptChange} = props;
