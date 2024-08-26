@@ -3,6 +3,7 @@ import {Button} from "@/components/Button";
 import Dialog from "@/components/Dialog";
 import {DocumentTypeGenericList} from "@/components/DocumentType/DocumentTypeGenericList";
 import FilePicker from "@/components/FilePicker";
+import {VoiceRecorder} from "@/components/VoiceRecorder";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
@@ -14,12 +15,13 @@ import {useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
 
 export default function DocumentTypeDocumentsPage() {
+  const router = useRouter();
   const {data: documentType} = useTanamDocumentType("article");
   const {create, error: crudError} = useCrudTanamDocument();
   const {data: documents, error: docsError, isLoading} = useTanamDocuments("article");
   const [notification, setNotification] = useState<UserNotification | null>(null);
-  const router = useRouter();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [audio, setAudio] = useState<string>("");
   const {createFromRecording, status} = useGenkitArticle();
 
   useEffect(() => {
@@ -65,7 +67,10 @@ export default function DocumentTypeDocumentsPage() {
       </Suspense>
       <Dialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} title={"Tell your story"}>
         {status === ProcessingState.Ready ? (
-          <FilePicker onFileSelect={handleFileSelect} />
+          <>
+            <VoiceRecorder value={audio} onChange={setAudio} />
+            <FilePicker onFileSelect={handleFileSelect} />
+          </>
         ) : (
           <div className="flex flex-col items-center justify-center h-64 space-y-2">
             <Loader />

@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 
 export interface VoiceRecorderProps {
+  title?: string;
   value: string;
   onChange: (value: string) => void;
 }
@@ -13,7 +14,7 @@ export interface VoiceRecorderProps {
  * @returns {JSX.Element} The rendered VoiceRecorder component.
  */
 export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
-  const {value, onChange} = props;
+  const {title, value, onChange} = props;
 
   const [isRecording, setIsRecording] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | undefined>();
@@ -78,8 +79,8 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
   }
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-white shadow-lg rounded-lg">
-      <h2 className="text-xl font-semibold text-center mb-4">Voice Recorder</h2>
+    <div className="max-w-md mx-auto p-4">
+      {title && <h2 className="text-xl font-semibold text-center mb-4">{title}</h2>}
       <div className="flex justify-center mb-4">
         <button
           onClick={isRecording ? handleStopRecording : handleStartRecording}
