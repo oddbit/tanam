@@ -4,21 +4,25 @@ export interface VoiceRecorderProps {
   title?: string;
   value: string;
   onChange: (value: string) => void;
+  onTranscriptChange?: (transcript: string) => void;
 }
 
 /**
- * VoiceRecorder component that allows users to record audio and returns the recorded audio
- * as a base64 string. The component is interactive, using Tailwind CSS for styling.
+ * VoiceRecorder component allows users to record audio, convert it to a base64 string,
+ * and automatically performs speech recognition to provide a text transcript of the recorded audio.
  *
  * @param {VoiceRecorderProps} props - The props for the component.
  * @returns {JSX.Element} The rendered VoiceRecorder component.
  */
 export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
-  const {title, value, onChange} = props;
+  const {title, value, onChange, onTranscriptChange} = props;
 
   const [isRecording, setIsRecording] = useState(false);
+  const [transcript, setTranscript] = useState<string>("");
+
   const mediaRecorderRef = useRef<MediaRecorder | undefined>();
   const audioChunksRef = useRef<Blob[]>([]);
+  const recognitionRef = useRef<any>();
 
   /**
    * Effect to trigger onChange whenever the value prop changes.
@@ -28,6 +32,52 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
       onChange(value);
     }
   }, [value, onChange]);
+
+  /**
+   * Effect hook that sets up the SpeechRecognition instance and its event handlers.
+   * It handles starting, stopping, and restarting the speech recognition process.
+   */
+  useEffect(() => {
+    const speechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    console.info("speechRecognition :: ", speechRecognition);
+
+    if (speechRecognition) {
+      recognitionRef.current = new speechRecognition();
+      const recognition = recognitionRef.current;
+
+      if (!recognition) return;
+
+      console.info("recognition before :: ", recognition);
+
+      recognition.lang = "en-US"; // Set language for speech recognition
+      recognition.interimResults = false; // Only return final results
+      recognition.continuous = true;
+
+      console.info("recognition after :: ", recognition);
+
+      // Handle the event when speech recognition returns results
+      recognition.onresult = (event: any) => {
+        const transcript = Array.from(event.results)
+          .map((result: any) => result[0])
+          .map((result) => result.transcript)
+          .join("");
+
+        setTranscript(transcript); // Update local state with the transcript
+
+        if (onTranscriptChange) {
+          onTranscriptChange(transcript);
+        }
+      };
+
+      // Restart speech recognition if it ends while still recording
+      recognition.onend = () => {
+        if (isRecording) {
+          recognition.start();
+        }
+      };
+    }
+  }, [onTranscriptChange, isRecording]);
 
   /**
    * Starts recording audio using the user's microphone.
@@ -58,6 +108,7 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
     };
 
     mediaRecorderRef.current.start();
+    recognitionRef.current?.start();
   }
 
   /**
@@ -69,6 +120,7 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
     if (!mediaRecorderRef.current) return;
 
     mediaRecorderRef.current.stop();
+    recognitionRef.current?.stop();
   }
 
   /**
@@ -76,6 +128,8 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
    */
   function handleReset() {
     onChange("");
+    setTranscript("");
+    recognitionRef.current?.stop();
   }
 
   return (
@@ -115,6 +169,12 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
           >
             Reset
           </button>
+        </div>
+      )}
+      {transcript && (
+        <div className="text-center mt-4">
+          <h3 className="text-lg font-medium mb-2">Transcript:</h3>
+          <p className="bg-gray-100 p-2 rounded-md border border-gray-300">{transcript}</p>
         </div>
       )}
     </div>
