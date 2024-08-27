@@ -2,9 +2,9 @@
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {UserNotification} from "@/models/UserNotification";
 import {firestore} from "@/plugins/firebase";
-import {TanamPublishStatus} from "@functions/models/TanamDocument";
 import {collection, doc, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where} from "firebase/firestore";
 import {useEffect, useState} from "react";
+import {TanamPublishStatus} from "tanam-shared/models/TanamDocument";
 
 interface UseTanamDocumentsResult {
   data: TanamDocumentClient[];
@@ -129,7 +129,7 @@ export function useCrudTanamDocument() {
     try {
       if (!documentType) {
         setError(new UserNotification("error", "Missing parameter", "Document type parameter is missing"));
-        return;
+        return undefined;
       }
       const docRef = doc(collection(firestore, "tanam-documents"));
       const docId = docRef.id;
@@ -142,6 +142,7 @@ export function useCrudTanamDocument() {
         new UserNotification("error", "Error creating document", "An error occurred while creating the document"),
       );
     }
+    return undefined;
   }
 
   async function update(document: TanamDocumentClient): Promise<void> {

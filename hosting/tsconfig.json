@@ -37,11 +37,8 @@
       "@/*": [
         "./src/*"
       ],
-      "@functions/models/*": [
-        "./../functions/src/models/shared"
-      ],
-      "@functions/definitions/*": [
-        "./../functions/src/definitions/*"
+      "tanam-shared/*": [
+        "../shared/src/*"
       ]
     }
   },
