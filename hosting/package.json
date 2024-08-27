@@ -42,6 +42,7 @@
     "jsvectormap": "^1.5.3",
     "lowlight": "^3.1.0",
     "next": "^14.2.3",
+    "peaks.js": "^0.18.1",
     "react": "^18.3.1",
     "react-apexcharts": "^1.4.1",
     "react-dom": "^18.3.1",

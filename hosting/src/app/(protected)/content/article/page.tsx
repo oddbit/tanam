@@ -69,6 +69,9 @@ export default function DocumentTypeDocumentsPage() {
         {status === ProcessingState.Ready ? (
           <>
             <VoiceRecorder value={audio} onChange={setAudio} />
+
+            <div className="relative w-full text-center mt-4 mb-4">Or</div>
+
             <FilePicker onFileSelect={handleFileSelect} />
           </>
         ) : (

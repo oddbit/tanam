@@ -19,10 +19,15 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
 
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState<string>("");
+  const [amplitudeArray, setAmplitudeArray] = useState<number[]>([]);
 
   const mediaRecorderRef = useRef<MediaRecorder | undefined>();
   const audioChunksRef = useRef<Blob[]>([]);
   const recognitionRef = useRef<SpeechRecognition | undefined>();
+  const streamRef = useRef<MediaStream | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   /**
    * Effect to trigger onChange whenever the value prop changes.
@@ -84,7 +89,18 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
     setIsRecording(true);
 
     const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+    streamRef.current = stream;
     mediaRecorderRef.current = new MediaRecorder(stream);
+
+    const audioContext = new AudioContext();
+    audioContextRef.current = audioContext;
+
+    const analyser = audioContext.createAnalyser();
+    analyser.fftSize = 2048;
+    analyserRef.current = analyser;
+
+    const source = audioContext.createMediaStreamSource(stream);
+    source.connect(analyser);
 
     mediaRecorderRef.current.ondataavailable = (event: BlobEvent) => {
       audioChunksRef.current.push(event.data);
@@ -96,15 +112,23 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
       reader.onloadend = () => {
         if (!reader.result) return;
 
+        console.info("reader result :: ", reader.result);
+
         const base64String = reader.result?.toString().split(",")[1] || "";
+        console.info("base64String :: ", base64String);
         onChange(base64String);
       };
       reader.readAsDataURL(audioBlob);
       audioChunksRef.current = [];
+
+      // Clear amplitude data when recording stops
+      setAmplitudeArray([]);
     };
 
     mediaRecorderRef.current.start();
     recognitionRef.current?.start();
+
+    visualizeAmplitude();
   }
 
   /**
@@ -112,13 +136,22 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
    */
   function handleStopRecording() {
     setIsRecording(false);
+    setAmplitudeArray([]);
 
-    if (!mediaRecorderRef.current || !recognitionRef.current) return;
+    if (!mediaRecorderRef.current || !recognitionRef.current || !streamRef.current) return;
 
     console.info("handleStopRecording");
 
     mediaRecorderRef.current.stop();
     recognitionRef.current.stop();
+    // Stop all tracks to turn off the microphone
+    streamRef.current.getTracks().forEach((track) => track.stop());
+
+    if (audioContextRef.current && audioContextRef.current.state !== "closed") {
+      audioContextRef.current.close().then(() => {
+        audioContextRef.current = null;
+      });
+    }
   }
 
   /**
@@ -130,8 +163,76 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
     handleStopRecording();
   }
 
+  function drawAmplitude(data: Uint8Array) {
+    const canvas = canvasRef.current;
+    const analyser = analyserRef.current;
+
+    if (!data || !analyser || !canvas) return;
+
+    analyser.getByteTimeDomainData(data);
+
+    console.info("drawAmplitude canvas :: ", canvas);
+    console.info("drawAmplitude :: ", data);
+
+    const context = canvas.getContext("2d");
+    if (!context) return;
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    context.lineWidth = 2;
+    context.strokeStyle = "green";
+
+    context.beginPath();
+
+    const sliceWidth = canvas.width / data.length;
+    let x = 0;
+
+    for (let i = 0; i < data.length; i++) {
+      const v = data[i] / 128.0;
+      const y = (v * canvas.height) / 2;
+
+      if (i === 0) {
+        context.moveTo(x, y);
+      } else {
+        context.lineTo(x, y);
+      }
+
+      x += sliceWidth;
+
+      console.info("drawAmplitude loop :: ", x);
+    }
+
+    context.lineTo(canvas.width, canvas.height / 2);
+    context.stroke();
+  }
+
+  /**
+   * Visualizes the amplitude of the audio input in real-time.
+   */
+  function visualizeAmplitude() {
+    const analyser = analyserRef.current;
+
+    if (!analyser) return;
+
+    const bufferLength = analyser.fftSize;
+    const dataArray = new Uint8Array(bufferLength);
+
+    console.info("visualizeAmplitude bufferLength :: ", bufferLength);
+    console.info("visualizeAmplitude :: ", dataArray);
+
+    const renderFrame = () => {
+      drawAmplitude(dataArray);
+
+      if (isRecording) {
+        requestAnimationFrame(renderFrame);
+      }
+    };
+
+    renderFrame();
+  }
+
   return (
-    <div className="max-w-md mx-auto p-4">
+    <div className="relative w-full">
       {title && <h2 className="text-xl font-semibold text-center mb-4">{title}</h2>}
       <div className="flex justify-center mb-4">
         {isRecording ? (
@@ -157,6 +258,7 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
           </button>
         )}
       </div>
+      <canvas ref={canvasRef} id="soundWave" className="w-full mb-4 border rounded-md" height={100} />
       {value && (
         <div className="text-center">
           <h3 className="text-lg font-medium mb-2">Your Recording:</h3>
