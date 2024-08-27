@@ -7,6 +7,7 @@ import PageHeader from "@/components/common/PageHeader";
 import Dialog from "@/components/Dialog";
 import {DocumentTypeGenericList} from "@/components/DocumentType/DocumentTypeGenericList";
 import FilePicker from "@/components/FilePicker";
+import {VoiceRecorder} from "@/components/VoiceRecorder";
 import {useAuthentication} from "@/hooks/useAuthentication";
 import {ProcessingState, useGenkitArticle} from "@/hooks/useGenkitArticle";
 import {useCrudTanamDocument, useTanamDocuments} from "@/hooks/useTanamDocuments";
@@ -102,7 +103,7 @@ export default function DocumentTypeDocumentsPage() {
         >
           {status === ProcessingState.Ready ? (
             <>
-              {/* <VoiceRecorder value={audio} onChange={setAudio} onLoadingChange={setIsRecording} /> */}
+              <VoiceRecorder value={audio} onChange={setAudio} onLoadingChange={setIsRecording} />
 
               {!isRecording && !audio && (
                 <>

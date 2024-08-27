@@ -1,5 +1,6 @@
+/* eslint-disable */
 "use client";
-import Peaks, {PeaksOptions} from "peaks.js";
+// import Peaks from "peaks.js";
 import {useEffect, useRef, useState} from "react";
 
 export interface VoiceRecorderProps {
@@ -176,6 +177,8 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
    * Loads the audio buffer and initializes Peak.js with the given options.
    */
   function initSoundWave() {
+    if (!window) return;
+
     if (peaksInstanceRef.current) {
       peaksInstanceRef.current.destroy();
     }
@@ -211,71 +214,72 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
       axisGridlineColor: "#ccc",
       axisLabelColor: "#aaa",
       randomizeSegmentColor: true,
-    } as unknown as PeaksOptions;
+    } as any;
 
-    peaksInstanceRef.current = Peaks.init(options);
+    // peaksInstanceRef.current = Peaks.init(options);
   }
 
   return (
-    <div className="relative w-full">
-      {title && <h2 className="text-xl font-semibold text-center mb-4">{title}</h2>}
-      <div className="relative text-center mb-4">
-        {isRecording ? (
-          <>
-            <div className="relative w-full mb-4">
-              <button
-                onClick={handleStopRecording}
-                className="mt-10 m-auto flex items-center justify-center bg-red-400 hover:bg-red-500 rounded-full w-20 h-20 focus:outline-none animate-pulse border"
-              >
-                <svg className="h-12 w-12 " viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                </svg>
-              </button>
-            </div>
+    // <div className="relative w-full">
+    //   {title && <h2 className="text-xl font-semibold text-center mb-4">{title}</h2>}
+    //   <div className="relative text-center mb-4">
+    //     {isRecording ? (
+    //       <>
+    //         <div className="relative w-full mb-4">
+    //           <button
+    //             onClick={handleStopRecording}
+    //             className="mt-10 m-auto flex items-center justify-center bg-red-400 hover:bg-red-500 rounded-full w-20 h-20 focus:outline-none animate-pulse border"
+    //           >
+    //             <svg className="h-12 w-12 " viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    //               <path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+    //             </svg>
+    //           </button>
+    //         </div>
 
-            <h3 className="text-lg font-medium">Mic&#39;s Live!</h3>
-          </>
-        ) : (
-          <>
-            <div className="relative w-full mb-4">
-              <button
-                onClick={handleStartRecording}
-                className="mt-10 m-auto flex items-center justify-center bg-blue-400 hover:bg-blue-500 rounded-full w-20 h-20 focus:outline-none"
-              >
-                <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" className="w-12 h-12 text-white">
-                  <path
-                    fill="currentColor" // Change fill color to the desired color
-                    d="M128 176a48.05 48.05 0 0 0 48-48V64a48 48 0 0 0-96 0v64a48.05 48.05 0 0 0 48 48ZM96 64a32 32 0 0 1 64 0v64a32 32 0 0 1-64 0Zm40 143.6V232a8 8 0 0 1-16 0v-24.4A80.11 80.11 0 0 1 48 128a8 8 0 0 1 16 0a64 64 0 0 0 128 0a8 8 0 0 1 16 0a80.11 80.11 0 0 1-72 79.6Z"
-                  />
-                </svg>
-              </button>
-            </div>
+    //         <h3 className="text-lg font-medium">Mic&#39;s Live!</h3>
+    //       </>
+    //     ) : (
+    //       <>
+    //         <div className="relative w-full mb-4">
+    //           <button
+    //             onClick={handleStartRecording}
+    //             className="mt-10 m-auto flex items-center justify-center bg-blue-400 hover:bg-blue-500 rounded-full w-20 h-20 focus:outline-none"
+    //           >
+    //             <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" className="w-12 h-12 text-white">
+    //               <path
+    //                 fill="currentColor" // Change fill color to the desired color
+    //                 d="M128 176a48.05 48.05 0 0 0 48-48V64a48 48 0 0 0-96 0v64a48.05 48.05 0 0 0 48 48ZM96 64a32 32 0 0 1 64 0v64a32 32 0 0 1-64 0Zm40 143.6V232a8 8 0 0 1-16 0v-24.4A80.11 80.11 0 0 1 48 128a8 8 0 0 1 16 0a64 64 0 0 0 128 0a8 8 0 0 1 16 0a80.11 80.11 0 0 1-72 79.6Z"
+    //               />
+    //             </svg>
+    //           </button>
+    //         </div>
 
-            <h3 className="text-lg font-medium">{!audioUrl ? "Tap & Speak" : "Tap to Try Again"}</h3>
-          </>
-        )}
-      </div>
-      {audioUrl && (
-        <div className="text-center">
-          <h3 className="text-lg font-medium mb-2">Your Recording:</h3>
-          <div className="waveform-container">
-            <div id="overviewContainer"></div>
-          </div>
-          <audio controls src={audioUrl} id="audio" className="w-full rounded-md shadow-sm"></audio>
-          <button
-            onClick={handleReset}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
-            Reset
-          </button>
-        </div>
-      )}
-      {transcript && (
-        <div className="text-center mt-4">
-          <h3 className="text-lg font-medium mb-2">What You Said:</h3>
-          <p className="bg-gray-100 p-2 rounded-md border border-gray-300">{transcript}</p>
-        </div>
-      )}
-    </div>
+    //         <h3 className="text-lg font-medium">{!audioUrl ? "Tap & Speak" : "Tap to Try Again"}</h3>
+    //       </>
+    //     )}
+    //   </div>
+    //   {audioUrl && (
+    //     <div className="text-center">
+    //       <h3 className="text-lg font-medium mb-2">Your Recording:</h3>
+    //       <div className="waveform-container">
+    //         <div id="overviewContainer"></div>
+    //       </div>
+    //       <audio controls src={audioUrl} id="audio" className="w-full rounded-md shadow-sm"></audio>
+    //       <button
+    //         onClick={handleReset}
+    //         className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+    //       >
+    //         Reset
+    //       </button>
+    //     </div>
+    //   )}
+    //   {transcript && (
+    //     <div className="text-center mt-4">
+    //       <h3 className="text-lg font-medium mb-2">What You Said:</h3>
+    //       <p className="bg-gray-100 p-2 rounded-md border border-gray-300">{transcript}</p>
+    //     </div>
+    //   )}
+    // </div>
+    <>Hello</>
   );
 }
