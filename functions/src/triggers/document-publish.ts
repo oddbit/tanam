@@ -5,7 +5,7 @@ import {getStorage} from "firebase-admin/storage";
 import {logger} from "firebase-functions/v2";
 import {onDocumentWritten} from "firebase-functions/v2/firestore";
 import {onTaskDispatched} from "firebase-functions/v2/tasks";
-import {ITanamDocument} from "../models/TanamDocument";
+import {ITanamDocument} from "tanam-shared/models/TanamDocument";
 import {TanamDocumentAdmin} from "../models/TanamDocumentAdmin";
 
 const db = admin.firestore();

@@ -5,7 +5,7 @@ import {logger} from "firebase-functions/v2";
 import {onDocumentCreated, onDocumentDeleted, onDocumentUpdated} from "firebase-functions/v2/firestore";
 import {onObjectFinalized} from "firebase-functions/v2/storage";
 import sharp from "sharp";
-import {TanamRole} from "../models/TanamUser";
+import {TanamRole} from "tanam-shared/models/TanamUser";
 import {TanamUserAdmin} from "../models/TanamUserAdmin";
 
 const auth = admin.auth();
