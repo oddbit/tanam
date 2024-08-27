@@ -1,29 +1,36 @@
-import React, {useState, ReactNode} from "react";
+import {ReactNode, useEffect, useState} from "react";
 
 interface DialogProps {
   isOpen: boolean;
-  onClose: () => void;
+  isLoading?: boolean;
   title: string;
   children: ReactNode;
+  onClose?: () => void;
+  onSubmit?: () => void;
+  onLoadingChange?: (isLoading: boolean) => void;
 }
 
-export default function Dialog({isOpen, onClose, title, children}: DialogProps) {
+export default function Dialog(props: DialogProps) {
+  const {isOpen, title, children, isLoading, onClose, onSubmit, onLoadingChange} = props;
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    await dummyHook(); // Replace this with your actual hook
-    setLoading(false);
-    onClose();
-  };
+  /**
+   * Effect to trigger onLoadingChange whenever the loading prop changes.
+   */
+  useEffect(() => {
+    if (onLoadingChange) {
+      onLoadingChange(loading);
+    }
+  }, [loading, onLoadingChange]);
 
-  const dummyHook = (): Promise<void> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, 2000); // Simulate a delay
-    });
-  };
+  /**
+   * Effect to trigger setLoading.
+   */
+  useEffect(() => {
+    setLoading(isLoading ?? false);
+
+    return () => setLoading(false);
+  }, [isLoading]);
 
   if (!isOpen) return null;
 
@@ -33,16 +40,21 @@ export default function Dialog({isOpen, onClose, title, children}: DialogProps) 
         <h2 className="text-xl font-semibold mb-4">{title}</h2>
         <div className="mb-6">{children}</div>
         <div className="flex justify-end space-x-4">
-          <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400" disabled={loading}>
-            Cancel
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            disabled={loading}
-          >
-            {loading ? "Submitting..." : "Submit"}
-          </button>
+          {onClose && (
+            <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400" disabled={loading}>
+              Cancel
+            </button>
+          )}
+
+          {onSubmit && (
+            <button
+              onClick={onSubmit}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              disabled={loading}
+            >
+              {loading ? "Submitting..." : "Submit"}
+            </button>
+          )}
         </div>
       </div>
     </div>

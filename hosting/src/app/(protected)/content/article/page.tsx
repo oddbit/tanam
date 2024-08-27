@@ -7,15 +7,18 @@ import {VoiceRecorder} from "@/components/VoiceRecorder";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
+import {useAuthentication} from "@/hooks/useAuthentication";
 import {ProcessingState, useGenkitArticle} from "@/hooks/useGenkitArticle";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {useCrudTanamDocument, useTanamDocuments} from "@/hooks/useTanamDocuments";
 import {UserNotification} from "@/models/UserNotification";
+import {base64ToFile} from "@/plugins/fileUpload";
 import {useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
 
 export default function DocumentTypeDocumentsPage() {
   const router = useRouter();
+  const {authUser} = useAuthentication();
   const {data: documentType} = useTanamDocumentType("article");
   const {create, error: crudError} = useCrudTanamDocument();
   const {data: documents, error: docsError, isLoading} = useTanamDocuments("article");
@@ -34,6 +37,17 @@ export default function DocumentTypeDocumentsPage() {
     const id = await create(documentType.id);
     if (!id) return;
     router.push(`article/${id}`);
+  }
+
+  async function submitAudio() {
+    if (!audio) return;
+
+    console.info("submitAudio audio :: ", audio);
+
+    const file = base64ToFile(audio, `audio-${authUser?.uid}`);
+    await handleFileSelect(file);
+
+    console.info("submitAudio file :: ", file);
   }
 
   async function handleFileSelect(file: File) {
@@ -66,7 +80,12 @@ export default function DocumentTypeDocumentsPage() {
           <Loader />
         )}
       </Suspense>
-      <Dialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} title={"Tell your story"}>
+      <Dialog
+        isOpen={isDialogOpen}
+        onSubmit={submitAudio}
+        onClose={() => setIsDialogOpen(false)}
+        title={"Tell your story"}
+      >
         {status === ProcessingState.Ready ? (
           <>
             <VoiceRecorder value={audio} onChange={setAudio} onLoadingChange={setIsRecording} />
