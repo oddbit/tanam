@@ -3,7 +3,7 @@
  *
  * @param {string} base64String - The base64-encoded string.
  * @param {string} fileName - The name of the resulting File.
- * @returns {File} The resulting File object containing the file data.
+ * @return {File} The resulting File object containing the file data.
  */
 export function base64ToFile(base64String: string, fileName: string): File {
   // Split the base64 string into metadata and data parts
