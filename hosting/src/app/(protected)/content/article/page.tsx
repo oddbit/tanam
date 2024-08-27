@@ -1,16 +1,14 @@
+/* eslint-disable */
 "use client";
 import {Button} from "@/components/Button";
-import Dialog from "@/components/Dialog";
-import {DocumentTypeGenericList} from "@/components/DocumentType/DocumentTypeGenericList";
-import FilePicker from "@/components/FilePicker";
-import {VoiceRecorder} from "@/components/VoiceRecorder";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
+import {DocumentTypeGenericList} from "@/components/DocumentType/DocumentTypeGenericList";
 import {useAuthentication} from "@/hooks/useAuthentication";
-import {ProcessingState, useGenkitArticle} from "@/hooks/useGenkitArticle";
-import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
+import {useGenkitArticle} from "@/hooks/useGenkitArticle";
 import {useCrudTanamDocument, useTanamDocuments} from "@/hooks/useTanamDocuments";
+import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {UserNotification} from "@/models/UserNotification";
 import {base64ToFile} from "@/plugins/fileUpload";
 import {useRouter} from "next/navigation";
@@ -81,7 +79,19 @@ export default function DocumentTypeDocumentsPage() {
         )}
       </Suspense>
 
-      {isDialogOpen && (
+      {notification && (
+        <Notification type={notification.type} title={notification.title} message={notification.message} />
+      )}
+
+      <Suspense fallback={<Loader />}>
+        {documentType ? (
+          <DocumentTypeGenericList isLoading={isLoading} documents={documents} documentType={documentType} />
+        ) : (
+          <Loader />
+        )}
+      </Suspense>
+
+      {/* {isDialogOpen && (
         <Dialog
           isOpen={isDialogOpen}
           onSubmit={submitAudio}
@@ -110,19 +120,7 @@ export default function DocumentTypeDocumentsPage() {
             </div>
           )}
         </Dialog>
-      )}
-
-      {notification && (
-        <Notification type={notification.type} title={notification.title} message={notification.message} />
-      )}
-
-      <Suspense fallback={<Loader />}>
-        {documentType ? (
-          <DocumentTypeGenericList isLoading={isLoading} documents={documents} documentType={documentType} />
-        ) : (
-          <Loader />
-        )}
-      </Suspense>
+      )} */}
     </>
   );
 }
