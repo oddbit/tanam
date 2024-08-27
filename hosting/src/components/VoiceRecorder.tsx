@@ -5,6 +5,7 @@ export interface VoiceRecorderProps {
   title?: string;
   value: string;
   onChange: (value: string) => void;
+  onLoadingChange?: (isRecording: boolean) => void;
   onTranscriptChange?: (transcript: string) => void;
 }
 
@@ -16,7 +17,7 @@ export interface VoiceRecorderProps {
  * @return {JSX.Element} The rendered VoiceRecorder component.
  */
 export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
-  const {title, value, onChange, onTranscriptChange} = props;
+  const {title, value, onChange, onTranscriptChange, onLoadingChange} = props;
 
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState<string>("");
@@ -37,6 +38,15 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
       onChange(value);
     }
   }, [value, onChange]);
+
+  /**
+   * Effect to trigger onLoadingChange whenever the isRecording prop changes.
+   */
+  useEffect(() => {
+    if (onLoadingChange) {
+      onLoadingChange(isRecording);
+    }
+  }, [isRecording, onLoadingChange]);
 
   /**
    * Effect hook that sets up the SpeechRecognition instance and its event handlers.
@@ -102,6 +112,7 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
     mediaRecorderRef.current.onstop = () => {
       const audioBlob = new Blob(audioChunksRef.current, {type: "audio/wav"});
       const reader = new FileReader();
+
       reader.onloadend = () => {
         if (!reader.result) return;
 
@@ -207,16 +218,22 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
   return (
     <div className="relative w-full">
       {title && <h2 className="text-xl font-semibold text-center mb-4">{title}</h2>}
-      <div className="flex justify-center mb-4">
+      <div className="relative text-center mb-4">
         {isRecording ? (
-          <button
-            onClick={handleStopRecording}
-            className="mt-10 m-auto flex items-center justify-center bg-red-400 hover:bg-red-500 rounded-full w-20 h-20 focus:outline-none animate-pulse border"
-          >
-            <svg className="h-12 w-12 " viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-            </svg>
-          </button>
+          <>
+            <div className="relative w-full mb-4">
+              <button
+                onClick={handleStopRecording}
+                className="mt-10 m-auto flex items-center justify-center bg-red-400 hover:bg-red-500 rounded-full w-20 h-20 focus:outline-none animate-pulse border"
+              >
+                <svg className="h-12 w-12 " viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                </svg>
+              </button>
+            </div>
+
+            <h3 className="text-lg font-medium">Recording...</h3>
+          </>
         ) : (
           <button
             onClick={handleStartRecording}

@@ -20,6 +20,7 @@ export default function DocumentTypeDocumentsPage() {
   const {create, error: crudError} = useCrudTanamDocument();
   const {data: documents, error: docsError, isLoading} = useTanamDocuments("article");
   const [notification, setNotification] = useState<UserNotification | null>(null);
+  const [isRecording, setIsRecording] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [audio, setAudio] = useState<string>("");
   const {createFromRecording, status} = useGenkitArticle();
@@ -68,11 +69,15 @@ export default function DocumentTypeDocumentsPage() {
       <Dialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} title={"Tell your story"}>
         {status === ProcessingState.Ready ? (
           <>
-            <VoiceRecorder value={audio} onChange={setAudio} />
+            <VoiceRecorder value={audio} onChange={setAudio} onLoadingChange={setIsRecording} />
 
-            <div className="relative w-full text-center mt-4 mb-4">Or</div>
+            {!isRecording && !audio && (
+              <>
+                <div className="relative w-full text-center mt-4 mb-4">Or</div>
 
-            <FilePicker onFileSelect={handleFileSelect} />
+                <FilePicker onFileSelect={handleFileSelect} />
+              </>
+            )}
           </>
         ) : (
           <div className="flex flex-col items-center justify-center h-64 space-y-2">
