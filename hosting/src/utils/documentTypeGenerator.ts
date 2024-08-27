@@ -1,8 +1,8 @@
 import {TanamDocumentTypeClient} from "@/models/TanamDocumentTypeClient";
-import {LocalizedString} from "@functions/models/LocalizedString";
-import {TanamDocumentField} from "@functions/models/TanamDocumentField";
-import {ITanamDocumentType} from "@functions/models/TanamDocumentType";
 import {Timestamp} from "firebase/firestore";
+import {LocalizedString} from "tanam-shared/models/LocalizedString";
+import {TanamDocumentField} from "tanam-shared/models/TanamDocumentField";
+import {ITanamDocumentType} from "tanam-shared/models/TanamDocumentType";
 
 export interface IDocumentTypeDataResult {
   data: TanamDocumentTypeClient;

@@ -18,10 +18,10 @@ import {useTanamDocumentFields} from "@/hooks/useTanamDocumentFields";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {useTanamDocument} from "@/hooks/useTanamDocuments";
 import {UserNotification} from "@/models/UserNotification";
-import {TanamDocumentField} from "@functions/models/TanamDocumentField";
 import {Timestamp} from "firebase/firestore";
 import {useParams, useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
+import {TanamDocumentField} from "tanam-shared/models/TanamDocumentField";
 
 const DocumentDetailsPage = () => {
   const router = useRouter();
