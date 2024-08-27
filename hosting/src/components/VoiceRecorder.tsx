@@ -265,7 +265,7 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
       )}
       {transcript && (
         <div className="text-center mt-4">
-          <h3 className="text-lg font-medium mb-2">Transcript:</h3>
+          <h3 className="text-lg font-medium mb-2">What You Said:</h3>
           <p className="bg-gray-100 p-2 rounded-md border border-gray-300">{transcript}</p>
         </div>
       )}
