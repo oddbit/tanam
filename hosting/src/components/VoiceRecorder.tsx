@@ -1,3 +1,4 @@
+import Peaks, {PeaksOptions} from "peaks.js";
 import {useEffect, useRef, useState} from "react";
 
 export interface VoiceRecorderProps {
@@ -19,15 +20,14 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
 
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState<string>("");
-  const [amplitudeArray, setAmplitudeArray] = useState<number[]>([]);
+  const [audioUrl, setAudioUrl] = useState<string>("");
 
   const mediaRecorderRef = useRef<MediaRecorder | undefined>();
   const audioChunksRef = useRef<Blob[]>([]);
   const recognitionRef = useRef<SpeechRecognition | undefined>();
   const streamRef = useRef<MediaStream | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
-  const analyserRef = useRef<AnalyserNode | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const peaksInstanceRef = useRef<any>(null);
 
   /**
    * Effect to trigger onChange whenever the value prop changes.
@@ -80,7 +80,7 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
   }, [onTranscriptChange, isRecording]);
 
   /**
-   * Starts recording audio using the user's microphone.
+   * Starts recording audio using the user"s microphone.
    * It sets up the MediaRecorder, gathers audio data, and pushes it to the audioChunksRef.
    * When recording stops, it converts the audio chunks to a base64 string and passes it to onChange.
    */
@@ -95,13 +95,6 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
     const audioContext = new AudioContext();
     audioContextRef.current = audioContext;
 
-    const analyser = audioContext.createAnalyser();
-    analyser.fftSize = 2048;
-    analyserRef.current = analyser;
-
-    const source = audioContext.createMediaStreamSource(stream);
-    source.connect(analyser);
-
     mediaRecorderRef.current.ondataavailable = (event: BlobEvent) => {
       audioChunksRef.current.push(event.data);
     };
@@ -114,21 +107,25 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
 
         console.info("reader result :: ", reader.result);
 
-        const base64String = reader.result?.toString().split(",")[1] || "";
+        const base64String = reader.result?.toString() || "";
         console.info("base64String :: ", base64String);
         onChange(base64String);
+
+        // Set audio URL for visualization
+        const url = URL.createObjectURL(audioBlob);
+        setAudioUrl(url);
+
+        setTimeout(() => {
+          initSoundWave();
+        }, 500);
       };
+
       reader.readAsDataURL(audioBlob);
       audioChunksRef.current = [];
-
-      // Clear amplitude data when recording stops
-      setAmplitudeArray([]);
     };
 
     mediaRecorderRef.current.start();
     recognitionRef.current?.start();
-
-    visualizeAmplitude();
   }
 
   /**
@@ -136,7 +133,6 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
    */
   function handleStopRecording() {
     setIsRecording(false);
-    setAmplitudeArray([]);
 
     if (!mediaRecorderRef.current || !recognitionRef.current || !streamRef.current) return;
 
@@ -160,75 +156,52 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
   function handleReset() {
     onChange("");
     setTranscript("");
+    setAudioUrl("");
     handleStopRecording();
   }
 
-  function drawAmplitude(data: Uint8Array) {
-    const canvas = canvasRef.current;
-    const analyser = analyserRef.current;
-
-    if (!data || !analyser || !canvas) return;
-
-    analyser.getByteTimeDomainData(data);
-
-    console.info("drawAmplitude canvas :: ", canvas);
-    console.info("drawAmplitude :: ", data);
-
-    const context = canvas.getContext("2d");
-    if (!context) return;
-
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
-    context.lineWidth = 2;
-    context.strokeStyle = "green";
-
-    context.beginPath();
-
-    const sliceWidth = canvas.width / data.length;
-    let x = 0;
-
-    for (let i = 0; i < data.length; i++) {
-      const v = data[i] / 128.0;
-      const y = (v * canvas.height) / 2;
-
-      if (i === 0) {
-        context.moveTo(x, y);
-      } else {
-        context.lineTo(x, y);
-      }
-
-      x += sliceWidth;
-
-      console.info("drawAmplitude loop :: ", x);
+  /**
+   * Loads the audio buffer and initializes Peak.js with the given options.
+   */
+  function initSoundWave() {
+    if (peaksInstanceRef.current) {
+      peaksInstanceRef.current.destroy();
     }
 
-    context.lineTo(canvas.width, canvas.height / 2);
-    context.stroke();
-  }
+    // Peak.js options configuration (https://www.npmjs.com/package/peaks.js/v/0.18.1#configuration)
+    const options = {
+      containers: {
+        overview: document.getElementById("overviewContainer"),
+      },
+      mediaElement: document.getElementById("audio"),
+      webAudio: {
+        audioContext: new AudioContext(),
+        audioBuffer: null,
+        multiChannel: false,
+      },
+      height: 200,
+      waveformBuilderOptions: {
+        scale: 128,
+      },
+      zoomLevels: [128, 256, 512, 1024, 2048],
+      logger: console.error.bind(console),
+      emitCueEvents: false,
+      segmentStartMarkerColor: "#a0a0a0",
+      segmentEndMarkerColor: "#a0a0a0",
+      overviewWaveformColor: "rgba(0,0,0,0.2)",
+      overviewHighlightColor: "grey",
+      overviewHighlightOffset: 11,
+      segmentColor: "rgba(255, 161, 39, 1)",
+      playheadColor: "rgba(0, 0, 0, 1)",
+      playheadTextColor: "#aaa",
+      showPlayheadTime: false,
+      pointMarkerColor: "#FF0000",
+      axisGridlineColor: "#ccc",
+      axisLabelColor: "#aaa",
+      randomizeSegmentColor: true,
+    } as unknown as PeaksOptions;
 
-  /**
-   * Visualizes the amplitude of the audio input in real-time.
-   */
-  function visualizeAmplitude() {
-    const analyser = analyserRef.current;
-
-    if (!analyser) return;
-
-    const bufferLength = analyser.fftSize;
-    const dataArray = new Uint8Array(bufferLength);
-
-    console.info("visualizeAmplitude bufferLength :: ", bufferLength);
-    console.info("visualizeAmplitude :: ", dataArray);
-
-    const renderFrame = () => {
-      drawAmplitude(dataArray);
-
-      if (isRecording) {
-        requestAnimationFrame(renderFrame);
-      }
-    };
-
-    renderFrame();
+    peaksInstanceRef.current = Peaks.init(options);
   }
 
   return (
@@ -258,11 +231,13 @@ export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
           </button>
         )}
       </div>
-      <canvas ref={canvasRef} id="soundWave" className="w-full mb-4 border rounded-md" height={100} />
-      {value && (
+      {audioUrl && (
         <div className="text-center">
           <h3 className="text-lg font-medium mb-2">Your Recording:</h3>
-          <audio controls src={`data:audio/wav;base64,${value}`} className="w-full rounded-md shadow-sm"></audio>
+          <div className="waveform-container">
+            <div id="overviewContainer"></div>
+          </div>
+          <audio controls src={audioUrl} id="audio" className="w-full rounded-md shadow-sm"></audio>
           <button
             onClick={handleReset}
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
