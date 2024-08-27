@@ -4,9 +4,11 @@ import {Button} from "@/components/Button";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
+import Dialog from "@/components/Dialog";
 import {DocumentTypeGenericList} from "@/components/DocumentType/DocumentTypeGenericList";
+import FilePicker from "@/components/FilePicker";
 import {useAuthentication} from "@/hooks/useAuthentication";
-import {useGenkitArticle} from "@/hooks/useGenkitArticle";
+import {ProcessingState, useGenkitArticle} from "@/hooks/useGenkitArticle";
 import {useCrudTanamDocument, useTanamDocuments} from "@/hooks/useTanamDocuments";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {UserNotification} from "@/models/UserNotification";
@@ -91,7 +93,7 @@ export default function DocumentTypeDocumentsPage() {
         )}
       </Suspense>
 
-      {/* {isDialogOpen && (
+      {isDialogOpen && (
         <Dialog
           isOpen={isDialogOpen}
           onSubmit={submitAudio}
@@ -100,7 +102,7 @@ export default function DocumentTypeDocumentsPage() {
         >
           {status === ProcessingState.Ready ? (
             <>
-              <VoiceRecorder value={audio} onChange={setAudio} onLoadingChange={setIsRecording} />
+              {/* <VoiceRecorder value={audio} onChange={setAudio} onLoadingChange={setIsRecording} /> */}
 
               {!isRecording && !audio && (
                 <>
@@ -120,7 +122,7 @@ export default function DocumentTypeDocumentsPage() {
             </div>
           )}
         </Dialog>
-      )} */}
+      )}
     </>
   );
 }
