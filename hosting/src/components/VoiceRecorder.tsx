@@ -1,3 +1,4 @@
+"use client";
 import Peaks, {PeaksOptions} from "peaks.js";
 import {useEffect, useRef, useState} from "react";
 
