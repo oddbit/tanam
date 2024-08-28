@@ -109,6 +109,12 @@ export default function TiptapEditor(props: TiptapEditorProps) {
     if (props.value) {
       editor?.commands.setContent(props.value);
     }
+
+    return () => {
+      if (editor) {
+        editor.destroy();
+      }
+    };
   }, [props.value, editor]);
 
   return (

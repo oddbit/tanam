@@ -54,9 +54,7 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
    */
   useEffect(() => {
     if (audioUrl) {
-      setTimeout(() => {
-        initSoundWave();
-      }, 1000);
+      initSoundWave();
     }
 
     return () => {
@@ -178,9 +176,6 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
   function initSoundWave() {
     resetSoundWave();
 
-    console.info("initSoundWave zoomviewContainer :: ", document.getElementById("zoomviewContainer"));
-    console.info("initSoundWave overviewContainer :: ", document.getElementById("overviewContainer"));
-
     // Peak.js options configuration (https://www.npmjs.com/package/peaks.js/v/0.18.1#configuration)
     const options = {
       overview: {
@@ -214,13 +209,11 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
       randomizeSegmentColor: true,
     } as any;
 
-    peaksInstanceRef.current = Peaks.init(options, (err, peaksInstance) => {
+    peaksInstanceRef.current = Peaks.init(options, (err) => {
       if (err) {
         console.error(err.message);
         return;
       }
-
-      console.log("Peaks instance ready");
     });
   }
 
