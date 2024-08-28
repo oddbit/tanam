@@ -1,6 +1,6 @@
 import {FieldValue, Timestamp} from "firebase-admin/firestore";
 import {DocumentSnapshot} from "firebase-functions/v2/firestore";
-import {ITanamUser, TanamUser} from "./TanamUser";
+import {ITanamUser, TanamUser} from "tanam-shared/models/TanamUser";
 
 export class TanamUserAdmin extends TanamUser<Timestamp, FieldValue> {
   constructor(id: string, json: ITanamUser<Timestamp>) {

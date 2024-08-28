@@ -1,13 +1,13 @@
 "use client";
-
+import {SidebarExpandableMenu, SidebarExpandableMenuSubItem} from "@/components/Sidebar/SidebarExpandableMenu";
+import {SidebarMenuGroup} from "@/components/Sidebar/SidebarMenuGroup";
+import {SidebarMenuItem} from "@/components/Sidebar/SidebarMenuItem";
+import {useAuthentication} from "@/hooks/useAuthentication";
+import {useTanamDocumentTypes} from "@/hooks/useTanamDocumentTypes";
 import Image from "next/image";
 import Link from "next/link";
 import {usePathname} from "next/navigation";
-import {useEffect, useRef, useState} from "react";
-import {useTanamDocumentTypes} from "../../hooks/useTanamDocumentTypes";
-import {SidebarExpandableMenu, SidebarExpandableMenuSubItem} from "./SidebarExpandableMenu";
-import {SidebarMenuGroup} from "./SidebarMenuGroup";
-import {SidebarMenuItem} from "./SidebarMenuItem";
+import {useEffect, useState} from "react";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -16,25 +16,12 @@ interface SidebarProps {
 
 const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
   const pathname = usePathname() ?? "/";
-  const trigger = useRef<any>(null);
-  const sidebar = useRef<any>(null);
   const {data: documentTypes} = useTanamDocumentTypes();
+  const {authUser, signout} = useAuthentication();
 
-  const storedSidebarExpanded = "true";
-
-  const [sidebarExpanded] = useState(storedSidebarExpanded === null ? false : storedSidebarExpanded === "true");
-
-  // close on click outside
-  useEffect(() => {
-    const clickHandler = ({target}: MouseEvent) => {
-      if (!sidebar.current || !trigger.current) return;
-      if (!sidebarOpen || sidebar.current.contains(target) || trigger.current.contains(target)) {
-        return;
-      }
-      setSidebarOpen(false);
-    };
-    document.addEventListener("click", clickHandler);
-    return () => document.removeEventListener("click", clickHandler);
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0,
   });
 
   // close if the esc key is pressed
@@ -47,19 +34,33 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
+  // close sidebar when page is changed or window resize
   useEffect(() => {
-    localStorage.setItem("sidebar-expanded", sidebarExpanded.toString());
-    if (sidebarExpanded) {
-      document.querySelector("body")?.classList.add("sidebar-expanded");
-    } else {
-      document.querySelector("body")?.classList.remove("sidebar-expanded");
-    }
-  }, [sidebarExpanded]);
+    setSidebarOpen(false);
+  }, [pathname, windowSize]);
+
+  useEffect(() => {
+    // Handler to call on window resize
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+
+    // Call handler right away so state gets updated with initial window size
+    handleResize();
+
+    // Clean up the event listener on component unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []); // Empty array ensures that effect is only run on mount and unmount
 
   return (
     <aside
-      ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 z-99 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -100,6 +101,17 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
               icon={<span className="i-ic-outline-settings w-[24px] h-[24px]" />}
               title="Settings"
             />
+            {authUser && (
+              <>
+                <hr />
+                <SidebarMenuItem
+                  href="#"
+                  icon={<span className="i-ic-outline-logout w-[24px] h-[24px]" />}
+                  title="Signout"
+                  onClick={signout}
+                />
+              </>
+            )}
           </SidebarMenuGroup>
         </nav>
         {/* <!-- Sidebar Menu --> */}

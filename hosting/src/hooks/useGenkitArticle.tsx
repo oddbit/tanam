@@ -2,11 +2,11 @@ import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {UserNotification} from "@/models/UserNotification";
 import {firestore, storage} from "@/plugins/firebase";
 import {generateArticle} from "@/plugins/genkit/article";
-import {TanamPublishStatus} from "@functions/definitions/TanamPublishStatus";
-import {ArticleSchema} from "@functions/schemas/article";
 import {collection, doc, getDocs, limit, orderBy, query, setDoc, where} from "firebase/firestore";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {useEffect, useState} from "react";
+import {TanamPublishStatus} from "tanam-shared/definitions/TanamPublishStatus";
+import {ArticleSchema} from "tanam-shared/schemas/article";
 
 // NOTE: (Dennis) For some reason, the enum values are warning for not being used
 export enum ProcessingState {

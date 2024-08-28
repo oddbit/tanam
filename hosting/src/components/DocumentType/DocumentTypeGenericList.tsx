@@ -1,8 +1,8 @@
 import {Table, TableRowLabel} from "@/components/Table";
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {TanamDocumentTypeClient} from "@/models/TanamDocumentTypeClient";
-import {TanamPublishStatus} from "@functions/definitions/TanamPublishStatus";
 import Link from "next/link";
+import {TanamPublishStatus} from "tanam-shared/definitions/TanamPublishStatus";
 
 interface TableOverviewGenericProps {
   documentType: TanamDocumentTypeClient;

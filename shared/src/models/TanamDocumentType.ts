@@ -1,4 +1,4 @@
-import {LocalizedString} from "./LocalizedString";
+import { LocalizedString } from "./LocalizedString";
 
 export interface ITanamDocumentType<TimestampType> {
   titleSingular: LocalizedString;
