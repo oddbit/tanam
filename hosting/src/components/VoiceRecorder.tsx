@@ -50,12 +50,25 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
   }, [isRecording, onLoadingChange]);
 
   /**
+   * Effect to trigger initSoundWave whenever the audioUrl changes.
+   */
+  useEffect(() => {
+    if (audioUrl) {
+      setTimeout(() => {
+        initSoundWave();
+      }, 1000);
+    }
+
+    return () => {
+      resetSoundWave();
+    };
+  }, [audioUrl]);
+
+  /**
    * Effect hook that sets up the SpeechRecognition instance and its event handlers.
    * It handles starting, stopping, and restarting the speech recognition process.
    */
   useEffect(() => {
-    if (typeof navigator === "undefined" || typeof window === "undefined") return;
-
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (SpeechRecognition) {
@@ -119,10 +132,6 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
         // Set audio URL for visualization
         const url = URL.createObjectURL(audioBlob);
         setAudioUrl(url);
-
-        setTimeout(() => {
-          initSoundWave();
-        }, 500);
       };
 
       reader.readAsDataURL(audioBlob);
@@ -167,16 +176,15 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
    * Loads the audio buffer and initializes Peak.js with the given options.
    */
   function initSoundWave() {
-    if (typeof navigator === "undefined" || typeof window === "undefined") return;
+    resetSoundWave();
 
-    if (peaksInstanceRef.current) {
-      peaksInstanceRef.current.destroy();
-    }
+    console.info("initSoundWave zoomviewContainer :: ", document.getElementById("zoomviewContainer"));
+    console.info("initSoundWave overviewContainer :: ", document.getElementById("overviewContainer"));
 
     // Peak.js options configuration (https://www.npmjs.com/package/peaks.js/v/0.18.1#configuration)
     const options = {
-      containers: {
-        overview: document.getElementById("overviewContainer"),
+      overview: {
+        container: document.getElementById("overviewContainer"),
       },
       mediaElement: document.getElementById("audio"),
       webAudio: {
@@ -206,7 +214,20 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
       randomizeSegmentColor: true,
     } as any;
 
-    peaksInstanceRef.current = Peaks.init(options);
+    peaksInstanceRef.current = Peaks.init(options, (err, peaksInstance) => {
+      if (err) {
+        console.error(err.message);
+        return;
+      }
+
+      console.log("Peaks instance ready");
+    });
+  }
+
+  function resetSoundWave() {
+    if (!peaksInstanceRef.current) return;
+
+    peaksInstanceRef.current.destroy();
   }
 
   return (
@@ -252,7 +273,7 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
         <div className="text-center">
           <h3 className="text-lg font-medium mb-2">Your Recording:</h3>
           <div className="waveform-container">
-            <div id="overviewContainer"></div>
+            <div id="overviewContainer" className="w-full h-30"></div>
           </div>
           <audio controls src={audioUrl} id="audio" className="w-full rounded-md shadow-sm"></audio>
           <button
