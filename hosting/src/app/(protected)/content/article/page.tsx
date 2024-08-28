@@ -1,4 +1,3 @@
-/* eslint-disable */
 "use client";
 import {Button} from "@/components/Button";
 import Loader from "@/components/common/Loader";

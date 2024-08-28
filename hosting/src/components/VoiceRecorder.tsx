@@ -1,4 +1,3 @@
-/* eslint-disable */
 "use client";
 import Peaks from "peaks.js";
 import {useEffect, useRef, useState} from "react";
