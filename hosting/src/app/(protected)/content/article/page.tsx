@@ -7,15 +7,19 @@ import PageHeader from "@/components/common/PageHeader";
 import Dialog from "@/components/Dialog";
 import {DocumentTypeGenericList} from "@/components/DocumentType/DocumentTypeGenericList";
 import FilePicker from "@/components/FilePicker";
-import {VoiceRecorder} from "@/components/VoiceRecorder";
 import {useAuthentication} from "@/hooks/useAuthentication";
 import {ProcessingState, useGenkitArticle} from "@/hooks/useGenkitArticle";
 import {useCrudTanamDocument, useTanamDocuments} from "@/hooks/useTanamDocuments";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {UserNotification} from "@/models/UserNotification";
 import {base64ToFile} from "@/plugins/fileUpload";
+import dynamic from "next/dynamic";
 import {useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
+
+const VoiceRecorder = dynamic(() => import("@/components/VoiceRecorder"), {
+  ssr: false,
+});
 
 export default function DocumentTypeDocumentsPage() {
   const router = useRouter();
@@ -100,9 +104,7 @@ export default function DocumentTypeDocumentsPage() {
               >
                 {status === ProcessingState.Ready ? (
                   <>
-                    {window && navigator && (
-                      <VoiceRecorder value={audio} onChange={setAudio} onLoadingChange={setIsRecording} />
-                    )}
+                    <VoiceRecorder value={audio} onChange={setAudio} onLoadingChange={setIsRecording} />
 
                     {!isRecording && !audio && (
                       <>
