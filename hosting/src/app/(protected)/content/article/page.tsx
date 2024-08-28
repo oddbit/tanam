@@ -32,6 +32,7 @@ export default function DocumentTypeDocumentsPage() {
   const [notification, setNotification] = useState<UserNotification | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDropdownCreateOpen, setIsDropdownCreateOpen] = useState(false);
   const [audio, setAudio] = useState<string>("");
   const {createFromRecording, status} = useGenkitArticle();
 
@@ -66,17 +67,44 @@ export default function DocumentTypeDocumentsPage() {
         {documentType ? (
           <div className="flex items-center gap-4">
             <PageHeader pageName={documentType.titlePlural.translated} />
+
             <div className="mb-6">
-              <Button
-                title={`Add New ${documentType.titleSingular.translated}`}
-                onClick={addNewArticle}
-                style="rounded"
-              />
-              <Button
-                title={`Record new ${documentType.titleSingular.translated}`}
-                onClick={() => setIsDialogOpen(true)}
-                style="rounded"
-              />
+              <span className="relative">
+                <Button
+                  title={`Create ${documentType.titleSingular.translated}`}
+                  onClick={() => setIsDropdownCreateOpen(!isDropdownCreateOpen)}
+                  style="rounded"
+                >
+                  <span className="i-ic-add mr-2" />
+                </Button>
+
+                <div
+                  className={`${isDropdownCreateOpen ? "block" : "hidden"} absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="dropdownCreateArticle"
+                  tabIndex={-1}
+                >
+                  <div className="py-1" role="none">
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-black hover:bg-opacity-5"
+                      onClick={addNewArticle}
+                    >
+                      <span className="i-ic-create mr-2" />
+                      {`Add New ${documentType.titleSingular.translated}`}
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-black hover:bg-opacity-5"
+                      onClick={() => setIsDialogOpen(true)}
+                    >
+                      <span className="i-ic-mic mr-2" />
+                      {`Record new ${documentType.titleSingular.translated}`}
+                    </a>
+                  </div>
+                </div>
+              </span>
             </div>
           </div>
         ) : (
