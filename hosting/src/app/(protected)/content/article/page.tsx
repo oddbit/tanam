@@ -16,6 +16,9 @@ import dynamic from "next/dynamic";
 import {useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
 
+// I don't know why this component always errors
+// when built because this component is still detected as a component rendered on the server.
+// Even though I've used "use client" inside the component :(
 const VoiceRecorder = dynamic(() => import("@/components/VoiceRecorder"), {
   ssr: false,
 });
