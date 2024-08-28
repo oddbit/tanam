@@ -58,21 +58,15 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-    console.info("SpeechRecognition :: ", SpeechRecognition);
-
     if (SpeechRecognition) {
       recognitionRef.current = new SpeechRecognition();
       const recognition = recognitionRef.current;
 
       if (!recognition) return;
 
-      console.info("recognition before :: ", recognition);
-
-      // recognition.lang = "en-US"; // Set language for speech recognition
+      recognition.lang = "en-US"; // Set language for speech recognition
       recognition.interimResults = false; // Only return final results
       recognition.continuous = true;
-
-      console.info("recognition after :: ", recognition);
 
       // Handle the event when speech recognition returns results
       recognition.onresult = (event: any) => {
@@ -88,8 +82,6 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
         }
       };
     }
-
-    console.info("isRecording :: ", isRecording);
   }, [onTranscriptChange, isRecording]);
 
   /**
@@ -121,10 +113,7 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
       reader.onloadend = () => {
         if (!reader.result) return;
 
-        console.info("reader result :: ", reader.result);
-
         const base64String = reader.result?.toString() || "";
-        console.info("base64String :: ", base64String);
         onChange(base64String);
 
         // Set audio URL for visualization
@@ -151,8 +140,6 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
     setIsRecording(false);
 
     if (!mediaRecorderRef.current || !recognitionRef.current || !streamRef.current) return;
-
-    console.info("handleStopRecording");
 
     mediaRecorderRef.current.stop();
     recognitionRef.current.stop();

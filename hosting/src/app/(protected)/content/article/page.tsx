@@ -49,12 +49,8 @@ export default function DocumentTypeDocumentsPage() {
   async function submitAudio() {
     if (!audio) return;
 
-    console.info("submitAudio audio :: ", audio);
-
     const file = base64ToFile(audio, `audio-${authUser?.uid}`);
     await handleFileSelect(file);
-
-    console.info("submitAudio file :: ", file);
   }
 
   async function handleFileSelect(file: File) {
