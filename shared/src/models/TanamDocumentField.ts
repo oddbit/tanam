@@ -1,4 +1,4 @@
-import { LocalizedString } from "./LocalizedString";
+import {LocalizedString} from "./LocalizedString";
 
 export interface ITanamDocumentField {
   weight: number;

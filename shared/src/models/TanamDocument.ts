@@ -1,4 +1,4 @@
-import { TanamPublishStatus } from "./../definitions/TanamPublishStatus";
+import {TanamPublishStatus} from "./../definitions/TanamPublishStatus";
 
 interface DocumentData {
   [key: string]: unknown;
