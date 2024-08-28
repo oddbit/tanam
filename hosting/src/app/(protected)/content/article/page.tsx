@@ -88,42 +88,46 @@ export default function DocumentTypeDocumentsPage() {
 
       <Suspense fallback={<Loader />}>
         {documentType ? (
-          <DocumentTypeGenericList isLoading={isLoading} documents={documents} documentType={documentType} />
+          <>
+            <DocumentTypeGenericList isLoading={isLoading} documents={documents} documentType={documentType} />
+
+            {isDialogOpen && (
+              <Dialog
+                isOpen={isDialogOpen}
+                onSubmit={submitAudio}
+                onClose={() => setIsDialogOpen(false)}
+                title={"Tell your story"}
+              >
+                {status === ProcessingState.Ready ? (
+                  <>
+                    {window && navigator && (
+                      <VoiceRecorder value={audio} onChange={setAudio} onLoadingChange={setIsRecording} />
+                    )}
+
+                    {!isRecording && !audio && (
+                      <>
+                        <div className="relative w-full text-center mt-4 mb-4">Or</div>
+
+                        <FilePicker onFileSelect={handleFileSelect} />
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-64 space-y-2">
+                    <Loader />
+                    {status === ProcessingState.Uploading && <p>Uploading file...</p>}
+                    {status === ProcessingState.Processing && <p>Preparing...</p>}
+                    {status === ProcessingState.Generating && <p>Generating with AI...</p>}
+                    {status === ProcessingState.Finalizing && <p>Finalizing...</p>}
+                  </div>
+                )}
+              </Dialog>
+            )}
+          </>
         ) : (
           <Loader />
         )}
       </Suspense>
-
-      {isDialogOpen && (
-        <Dialog
-          isOpen={isDialogOpen}
-          onSubmit={submitAudio}
-          onClose={() => setIsDialogOpen(false)}
-          title={"Tell your story"}
-        >
-          {status === ProcessingState.Ready ? (
-            <>
-              <VoiceRecorder value={audio} onChange={setAudio} onLoadingChange={setIsRecording} />
-
-              {!isRecording && !audio && (
-                <>
-                  <div className="relative w-full text-center mt-4 mb-4">Or</div>
-
-                  <FilePicker onFileSelect={handleFileSelect} />
-                </>
-              )}
-            </>
-          ) : (
-            <div className="flex flex-col items-center justify-center h-64 space-y-2">
-              <Loader />
-              {status === ProcessingState.Uploading && <p>Uploading file...</p>}
-              {status === ProcessingState.Processing && <p>Preparing...</p>}
-              {status === ProcessingState.Generating && <p>Generating with AI...</p>}
-              {status === ProcessingState.Finalizing && <p>Finalizing...</p>}
-            </div>
-          )}
-        </Dialog>
-      )}
     </>
   );
 }
