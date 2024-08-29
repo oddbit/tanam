@@ -9,9 +9,9 @@ import {useAuthentication} from "@/hooks/useAuthentication";
 import {useFirebaseStorage} from "@/hooks/useFirebaseStorage";
 import {useTanamUser} from "@/hooks/useTanamUser";
 import {UserNotification} from "@/models/UserNotification";
-import {AcceptFileType} from "@functions/definitions/AcceptFileType";
 import Image from "next/image";
 import {useEffect, useState} from "react";
+import {AcceptFileType} from "tanam-shared/definitions/AcceptFileType";
 
 const defaultImage = "/images/no-image.png";
 

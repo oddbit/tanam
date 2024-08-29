@@ -18,10 +18,10 @@ import {useTanamDocumentFields} from "@/hooks/useTanamDocumentFields";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {useTanamDocument} from "@/hooks/useTanamDocuments";
 import {UserNotification} from "@/models/UserNotification";
-import {TanamDocumentField} from "@functions/models/TanamDocumentField";
 import {Timestamp} from "firebase/firestore";
 import {useParams, useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
+import {TanamDocumentField} from "tanam-shared/models/TanamDocumentField";
 
 const DocumentDetailsPage = () => {
   const router = useRouter();
@@ -87,7 +87,7 @@ const DocumentDetailsPage = () => {
       case "file-upload":
         return <FileUpload key={inputKey} disabled={readonlyMode} label={field.title.translated} />;
       case "switcher":
-        return <Switcher key={inputKey} disabled={readonlyMode} defaultChecked={value} />;
+        return <Switcher key={inputKey} disabled={readonlyMode} initialValue={value} />;
       case "radio":
         return <RadioButton key={inputKey} disabled={readonlyMode} label={field.title.translated} />;
       case "checkbox":
