@@ -1,11 +1,6 @@
 {
   "compileOnSave": true,
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "compilerOptions": {
     "module": "esnext",
     "noImplicitReturns": true,
@@ -15,11 +10,7 @@
     "target": "es2017",
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "noEmit": true,
     "moduleResolution": "bundler",
@@ -34,15 +25,9 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "tanam-shared/*": [
-        "../shared/src/*"
-      ]
+      "@/*": ["./src/*"],
+      "tanam-shared/*": ["../shared/src/*"]
     }
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

@@ -1,6 +1,7 @@
 export {Checkbox} from "./Checkbox";
 export {DatePicker} from "./DatePicker";
 export {Dropdown} from "./Dropdown";
+export {Dropzone} from "./Dropzone";
 export {FileUpload} from "./FileUpload";
 export {FormGroup} from "./FormGroup";
 export {Input} from "./Input";
