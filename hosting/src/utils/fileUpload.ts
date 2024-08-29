@@ -1,4 +1,4 @@
-import {AcceptFileType} from "@functions/definitions/AcceptFileType";
+import {AcceptFileType} from "tanam-shared/definitions/AcceptFileType";
 
 /**
  * Converts a base64 string to a Blob object.

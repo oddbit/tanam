@@ -1,8 +1,8 @@
 "use client";
 import "@/components/Form/styles/dropzone.scss";
 import {getAcceptDescription, isFileAccepted} from "@/utils/fileUpload";
-import {AcceptFileType} from "@functions/definitions/AcceptFileType";
 import React, {useEffect, useRef, useState} from "react";
+import {AcceptFileType} from "tanam-shared/definitions/AcceptFileType";
 
 export interface DropzoneProps {
   value?: string;
