@@ -1,4 +1,5 @@
 "use client";
+import {TanamSpeechRecognition} from "@/models/TanamSpeechRecognition";
 import Peaks from "peaks.js";
 import {useEffect, useRef, useState} from "react";
 
@@ -26,7 +27,7 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
 
   const mediaRecorderRef = useRef<MediaRecorder | undefined>();
   const audioChunksRef = useRef<Blob[]>([]);
-  const recognitionRef = useRef<SpeechRecognition | undefined>();
+  const recognitionRef = useRef<TanamSpeechRecognition | undefined>();
   const streamRef = useRef<MediaStream | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const peaksInstanceRef = useRef<any>(null);
@@ -67,10 +68,10 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
    * It handles starting, stopping, and restarting the speech recognition process.
    */
   useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition = new TanamSpeechRecognition();
 
     if (SpeechRecognition) {
-      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current = SpeechRecognition;
       const recognition = recognitionRef.current;
 
       if (!recognition) return;
