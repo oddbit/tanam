@@ -92,7 +92,11 @@ export default function DocumentDetailsPage() {
                 />
               )}
 
-              <Button title="Edit Title" onClick={() => setUpdateTitleShown(!updateTitleShown)} style="rounded">
+              <Button
+                title={updateTitleShown ? "Save Changes" : "Edit Title"}
+                onClick={() => setUpdateTitleShown(!updateTitleShown)}
+                style="rounded"
+              >
                 <span className="i-ic-outline-edit mr-2" />
               </Button>
             </div>
