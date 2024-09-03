@@ -44,7 +44,7 @@ export interface SpeechRecognitionAlternative {
 
 export class TanamSpeechRecognition implements SpeechRecognition {
   constructor() {
-    const SpeechRecognitionConstructor = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognitionConstructor = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
     if (!SpeechRecognitionConstructor) {
       throw new Error("SpeechRecognition is not supported in this browser.");
