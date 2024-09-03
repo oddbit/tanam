@@ -66,8 +66,15 @@ export default function TiptapEditor(props: TiptapEditorProps) {
   );
 
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        heading: false,
+        codeBlock: false,
+        paragraph: false,
+        bulletList: false,
+        orderedList: false,
+      }),
       Underline,
       CodeBlockLowlight.extend({
         addNodeView() {
@@ -102,6 +109,12 @@ export default function TiptapEditor(props: TiptapEditorProps) {
     if (props.value) {
       editor?.commands.setContent(props.value);
     }
+
+    return () => {
+      if (editor) {
+        editor.destroy();
+      }
+    };
   }, [props.value, editor]);
 
   return (

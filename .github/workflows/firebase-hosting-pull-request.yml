@@ -17,11 +17,16 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: "npm"
           cache-dependency-path: |
+            shared/package-lock.json
             hosting/package-lock.json
             functions/package-lock.json
+
+      - name: Run code checking and formatting (shared)
+        run: npm ci && npm run codecheck
+        working-directory: ./shared
 
       - name: Run code checking and formatting (functions)
         run: npm ci && npm run codecheck
@@ -46,9 +51,10 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: "npm"
           cache-dependency-path: |
+            shared/package-lock.json
             hosting/package-lock.json
             functions/package-lock.json
 
@@ -65,6 +71,10 @@ jobs:
 
       - name: Set hosting environment
         run: echo $HOSTING_ENV > hosting/.env
+
+      - name: Build shared code
+        run: npm ci && npm run build
+        working-directory: ./shared
 
       - name: Build functions code
         run: npm ci && npm run build
