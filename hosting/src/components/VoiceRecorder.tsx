@@ -76,10 +76,6 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
 
       if (!recognition) return;
 
-      recognition.lang = "en-US"; // Set language for speech recognition
-      recognition.interimResults = false; // Only return final results
-      recognition.continuous = true;
-
       // Handle the event when speech recognition returns results
       recognition.onresult = (event: any) => {
         const transcript = Array.from(event.results)
