@@ -87,7 +87,7 @@ export default function DocumentDetailsPage() {
                   type="text"
                   placeholder="Title"
                   disabled={readonlyMode}
-                  value={title}
+                  value={title || ""}
                   onChange={(e) => setTitle(e.target.value)}
                 />
               )}
