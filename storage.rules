@@ -7,15 +7,19 @@ service firebase.storage {
 		}
 
     match /tanam-users/{uid} {
-			match /{allPaths=**} {
+      match /{allPaths=**} {
         allow read: if request.auth != null && request.auth.uid == uid;
       }
 
-			match /profile.png {
+      match /profile.png {
         allow read: if request.auth != null;
       }
 
       match /profile-picture-new {
+        allow create: if request.auth != null && request.auth.uid == uid;
+      }
+
+      match /new-profile-image {
         allow create: if request.auth != null && request.auth.uid == uid;
       }
     }

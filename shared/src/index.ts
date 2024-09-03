@@ -1,5 +1,6 @@
 export * from "./schemas/article";
 
+export * from "./definitions/AcceptFileType";
 export * from "./definitions/LanguageCode";
 
 export * from "./models/LocalizedString";
