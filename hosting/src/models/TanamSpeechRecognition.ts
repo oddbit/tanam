@@ -1,3 +1,44 @@
+/**
+ * Extend the global `window` interface to include custom speech recognition classes.
+ * This is useful for environments where `SpeechRecognition` or `webkitSpeechRecognition`
+ * are available or need to be assigned to a custom implementation.
+ *
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition} for
+ *      standard SpeechRecognition API documentation.
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/WebkitSpeechRecognition} for
+ *      WebkitSpeechRecognition API documentation.
+ */
+declare global {
+  /**
+   * The global `window` object, extended with additional properties for speech recognition.
+   */
+  interface Window {
+    /**
+     * A reference to the custom `SpeechRecognition` implementation or standard implementation.
+     * This can be used to access speech recognition features in browsers that support it.
+     *
+     * @type {typeof TanamSpeechRecognition}
+     * @example
+     * // Example usage
+     * const recognition = new window.SpeechRecognition();
+     * recognition.start();
+     */
+    SpeechRecognition: typeof TanamSpeechRecognition;
+
+    /**
+     * A reference to the Webkit-specific `SpeechRecognition` implementation.
+     * This is particularly relevant for browsers that use the `webkit` prefix.
+     *
+     * @type {typeof TanamSpeechRecognition}
+     * @example
+     * // Example usage
+     * const recognition = new window.webkitSpeechRecognition();
+     * recognition.start();
+     */
+    webkitSpeechRecognition: typeof TanamSpeechRecognition;
+  }
+}
+
 export interface SpeechRecognition {
   start(): void;
   stop(): void;
@@ -44,7 +85,7 @@ export interface SpeechRecognitionAlternative {
 
 export class TanamSpeechRecognition implements SpeechRecognition {
   constructor() {
-    const SpeechRecognitionConstructor = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognitionConstructor = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognitionConstructor) {
       throw new Error("SpeechRecognition is not supported in this browser.");
