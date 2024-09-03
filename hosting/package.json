@@ -2,16 +2,28 @@
   "name": "tanam-next",
   "version": "0.1.0",
   "private": true,
+  "main": "lib/index.js",
+  "engines": {
+    "node": "20"
+  },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
     "start": "next start",
+    "build": "next build",
+    "build:watch": "tsc --watch",
+    "dev": "next dev",
+    "genkit": "genkit start --open",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "prettier:fix": "prettier --write .",
     "codecheck": "npm run prettier:fix && npm run lint:fix"
   },
   "dependencies": {
+    "@genkit-ai/ai": "^0.5.10",
+    "@genkit-ai/core": "^0.5.10",
+    "@genkit-ai/dotprompt": "^0.5.10",
+    "@genkit-ai/firebase": "^0.5.10",
+    "@genkit-ai/flow": "^0.5.10",
+    "@genkit-ai/googleai": "^0.5.10",
     "@iconify-json/line-md": "^1.1.37",
     "@tiptap/extension-code-block-lowlight": "^2.4.0",
     "@tiptap/extension-floating-menu": "^2.5.5",
@@ -22,25 +34,32 @@
     "apexcharts": "^3.45.2",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "firebase": "^10.12.0",
+    "firebase-admin": "^12.4.0",
     "firebaseui": "^6.1.0",
     "flatpickr": "^4.6.13",
     "highlight.js": "^11.10.0",
     "jsvectormap": "^1.5.3",
+    "konva": "^9.3.14",
     "lowlight": "^3.1.0",
     "next": "^14.2.3",
+    "peaks.js": "^3.4.2",
     "react": "^18.3.1",
     "react-apexcharts": "^1.4.1",
     "react-dom": "^18.3.1",
     "react-image-crop": "^11.0.6",
     "tanam-shared": "file:../shared",
-    "zod": "^3.23.8"
+    "waveform-data": "^4.5.0",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.23.2"
   },
   "devDependencies": {
     "@egoist/tailwindcss-icons": "^1.8.1",
     "@iconify-json/ic": "^1.1.17",
     "@iconify-json/ri": "^1.1.20",
     "@next/eslint-plugin-next": "^14.2.3",
+    "@opentelemetry/exporter-jaeger": "^1.25.1",
     "@tailwindcss/typography": "^0.5.13",
     "@tiptap/extension-link": "^2.5.5",
     "@types/highlight.js": "^10.1.0",
@@ -62,6 +81,7 @@
     "sass": "^1.77.2",
     "sass-loader": "^14.2.1",
     "tailwindcss": "^3.4.1",
-    "typescript": "5.1"
+    "typescript": "5.1",
+    "xhr2": "^0.2.1"
   }
 }

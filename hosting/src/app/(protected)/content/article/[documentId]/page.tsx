@@ -1,14 +1,19 @@
 "use client";
 import {Button} from "@/components/Button";
 import {Input} from "@/components/Form";
-import TiptapEditor from "@/components/Tiptap/TiptapEditor";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
 import {useCrudTanamDocument, useTanamDocument} from "@/hooks/useTanamDocuments";
 import {UserNotification} from "@/models/UserNotification";
+import dynamic from "next/dynamic";
 import {useParams, useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
+
+// TiptapEditor is also detected as ssr, even though it uses "use client" :(
+const TiptapEditor = dynamic(() => import("@/components/Tiptap/TiptapEditor"), {
+  ssr: false,
+});
 
 export default function DocumentDetailsPage() {
   const router = useRouter();

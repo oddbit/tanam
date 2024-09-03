@@ -21,6 +21,7 @@ export class TanamDocumentAdmin extends TanamDocument<Timestamp, FieldValue> {
       data: data.data,
       documentType: data.documentType,
       publishedAt: data.publishedAt,
+      status: data.status,
       revision: data.revision,
       createdAt: data.createdAt || Timestamp.now(),
       updatedAt: data.updatedAt || Timestamp.now(),
