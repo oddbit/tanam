@@ -1,6 +1,11 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
+    match /tanam-documents/{documentId}/{allPaths=**} {
+      allow read: if hasAnyRole();
+      allow write: if hasAnyRole();
+		}
+
     match /tanam-users/{uid} {
       match /{allPaths=**} {
         allow read: if request.auth != null && request.auth.uid == uid;
@@ -18,5 +23,29 @@ service firebase.storage {
         allow create: if request.auth != null && request.auth.uid == uid;
       }
     }
+  }
+
+  function hasUserRole(role) {
+    return isSignedIn() && role == request.auth.token.tanamRole;
+  }
+
+  function hasAnyRole() {
+    return isSignedIn() && request.auth.token.tanamRole != null;
+  }
+
+  function isAtLeastAdmin() {
+    return hasUserRole("admin");
+  }
+
+  function isPublisher() {
+    return isAtLeastAdmin() || hasUserRole("publisher");
+  }
+
+  function isSignedIn() {
+    return request.auth != null;
+  }
+
+  function isSignedInAs(uid) {
+    return isSignedIn() && request.auth.uid == uid;
   }
 }
