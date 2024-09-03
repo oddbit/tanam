@@ -15,6 +15,8 @@ export default function DocumentDetailsPage() {
   const {documentId} = useParams<{documentId: string}>() ?? {};
   const {data: document, error: documentError} = useTanamDocument(documentId);
   const {update, error: writeError} = useCrudTanamDocument();
+
+  const [title, setTitle] = useState<string>("");
   const [readonlyMode] = useState<boolean>(false);
   const [updateTitleShown, setUpdateTitleShown] = useState<boolean>(false);
   const [notification, setNotification] = useState<UserNotification | null>(null);
@@ -27,6 +29,30 @@ export default function DocumentDetailsPage() {
   useEffect(() => {
     setNotification(documentError || writeError);
   }, [documentError, writeError]);
+
+  useEffect(() => {
+    if (updateTitleShown) return;
+
+    onDocumentTitleChange(title);
+  }, [updateTitleShown]);
+
+  useEffect(() => {
+    if (document) {
+      setTitle(document.data.title as string);
+    }
+
+    return () => setTitle("");
+  }, [document]);
+
+  async function onDocumentTitleChange(title: string) {
+    console.log("[onDocumentTitleChange]", title);
+    if (!document) {
+      return;
+    }
+
+    document.data.title = title;
+    await update(document);
+  }
 
   async function onDocumentContentChange(content: string) {
     console.log("[onDocumentContentChange]", content);
@@ -56,7 +82,8 @@ export default function DocumentDetailsPage() {
                   type="text"
                   placeholder="Title"
                   disabled={readonlyMode}
-                  value={(document.data.title as string) || ""}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
               )}
 
