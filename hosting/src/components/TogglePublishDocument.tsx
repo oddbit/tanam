@@ -26,7 +26,7 @@ export function TogglePublishDocument() {
         <Button
           title={document?.status === TanamPublishStatus.Published ? "Unpublish" : "Publish"}
           onClick={onTogglePublishDocument}
-          style="outline"
+          style="outline-rounded"
           color="primary"
         />
       </>

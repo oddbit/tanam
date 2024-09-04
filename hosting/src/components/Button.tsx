@@ -3,7 +3,7 @@ import React, {useState} from "react";
 interface ButtonProps {
   title: string;
   onClick: () => Promise<void> | void;
-  style?: "normal" | "rounded" | "outline" | "icon" | "icon-rounded";
+  style?: "normal" | "rounded" | "outline" | "outline-rounded" | "icon" | "icon-rounded";
   color?: "primary" | "meta-3" | "black";
   children?: React.ReactNode;
 }
@@ -55,6 +55,10 @@ export function Button({title, onClick, style = "rounded", color = "primary", ch
     case "outline":
       styles = styles.filter((style) => style !== "text-white");
       styles.push(`border`, `border-${color}`, `text-${color}`, `bg-transparent`);
+      break;
+    case "outline-rounded":
+      styles = styles.filter((style) => style !== "text-white");
+      styles.push(`border`, `border-${color}`, `text-${color}`, `bg-transparent`, "rounded-md");
       break;
     case "icon":
       break;
