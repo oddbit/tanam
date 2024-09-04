@@ -2,7 +2,17 @@
 import {TanamDocumentClient} from "@/models/TanamDocumentClient";
 import {UserNotification} from "@/models/UserNotification";
 import {firestore} from "@/plugins/firebase";
-import {collection, doc, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where} from "firebase/firestore";
+import {
+  collection,
+  doc,
+  onSnapshot,
+  query,
+  serverTimestamp,
+  setDoc,
+  Timestamp,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import {useEffect, useState} from "react";
 import {TanamPublishStatus} from "tanam-shared/definitions/TanamPublishStatus";
 
@@ -55,7 +65,7 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
 
 interface UseTanamDocumentResult {
   data: TanamDocumentClient | null;
-  changeStatus: (status: TanamPublishStatus) => Promise<void>;
+  changeStatus: (status: TanamPublishStatus, publishedAt?: Date) => Promise<void>;
   error: UserNotification | null;
   isLoading: boolean;
 }
@@ -98,9 +108,10 @@ export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
    * Method to publish or unpublish a document
    *
    * @param {TanamPublishStatus} status Flag to publish or unpublish the document
+   * @param {Date | undefined} publishedAt Time for publish document
    * @return {Promise<void>} Promise
    */
-  async function changeStatus(status: TanamPublishStatus): Promise<void> {
+  async function changeStatus(status: TanamPublishStatus, publishedAt?: Date): Promise<void> {
     if (!documentId) {
       setError(new UserNotification("error", "Missing parameter", "Document id parameter is missing"));
       return;
@@ -109,7 +120,12 @@ export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
     try {
       const typeRef = doc(firestore, "tanam-documents", documentId);
       await updateDoc(typeRef, {
-        publishedAt: status === TanamPublishStatus.Published ? serverTimestamp() : null,
+        publishedAt:
+          status === TanamPublishStatus.Published || status === TanamPublishStatus.Scheduled
+            ? publishedAt
+              ? Timestamp.fromDate(publishedAt)
+              : serverTimestamp()
+            : null,
         status,
       } as Partial<TanamDocumentClient>);
     } catch (err) {
