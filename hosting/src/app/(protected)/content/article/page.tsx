@@ -119,22 +119,20 @@ export default function DocumentTypeDocumentsPage() {
                   tabIndex={-1}
                 >
                   <div className="py-1" role="none">
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-black hover:bg-opacity-5"
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-black hover:bg-opacity-5 w-full text-left"
                       onClick={addNewArticle}
                     >
                       <span className="i-ic-create mr-2" />
                       {`Add New ${documentType.titleSingular.translated}`}
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-black hover:bg-opacity-5"
+                    </button>
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-black hover:bg-opacity-5 w-full text-left"
                       onClick={() => setIsDialogOpen(true)}
                     >
                       <span className="i-ic-mic mr-2" />
                       {`Record new ${documentType.titleSingular.translated}`}
-                    </a>
+                    </button>
                   </div>
                 </div>
               </span>
