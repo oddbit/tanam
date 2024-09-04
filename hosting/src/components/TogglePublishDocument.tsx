@@ -11,6 +11,9 @@ export function TogglePublishDocument() {
   const {documentId} = useParams<{documentId: string}>() ?? {};
   const {data: document, changeStatus} = useTanamDocument(documentId);
 
+  const maxDate = new Date();
+  maxDate.setDate(maxDate.getDate() + 30);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDropdownPublishOpen, setIsDropdownPublishOpen] = useState(false);
@@ -152,10 +155,11 @@ export function TogglePublishDocument() {
               disabled={isLoading}
               enableTime={true}
               label="Published At"
-              placeholder="Y-m-d H:i"
+              placeholder="Select date and time"
               dateFormat="Y-m-d H:i"
               minDate="today"
               defaultValue={publishedAt}
+              maxDate={maxDate}
               onChange={setPublishedAt}
             />
           </Modal>
