@@ -25,12 +25,10 @@ export function TogglePublishDocument() {
     if (!date) return date;
 
     return (
-      <>
-        <small>
-          Scheduled for <strong>{formatDate(date, "MMMM DD, YYYY")}</strong> at{" "}
-          <strong>{formatDate(date, "hh:mm A")}</strong>
-        </small>
-      </>
+      <small>
+        Scheduled for <strong>{formatDate(date, "MMMM DD, YYYY")}</strong> at{" "}
+        <strong>{formatDate(date, "hh:mm A")}</strong>
+      </small>
     );
   }, [document]);
 

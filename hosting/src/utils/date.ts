@@ -2,7 +2,7 @@
  * Format date based on a given format string
  * @param {Date} date - The date object to format
  * @param {string} format - The format string specifying the desired date format
- * @returns {string} The formatted date string based on the provided format
+ * @return {string} The formatted date string based on the provided format
  */
 export function formatDate(date: Date, format: string): string {
   const map: {[key: string]: string} = {
@@ -50,7 +50,7 @@ export function formatDate(date: Date, format: string): string {
 /**
  * Get the current date formatted based on a given format string
  * @param {string} format - The format string specifying the desired date format
- * @returns {string} The current date formatted based on the provided format
+ * @return {string} The current date formatted based on the provided format
  */
 export function getCurrentDateFormatted(format: string): string {
   return formatDate(new Date(), format);
