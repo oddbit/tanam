@@ -1,0 +1,9 @@
+{
+  "name": "bazapp-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/bazapp-e2e/src",
+  "tags": [],
+  "implicitDependencies": ["bazapp"],
+  "// targets": "to see all targets run: nx show project bazapp-e2e --web",
+  "targets": {}
+}
