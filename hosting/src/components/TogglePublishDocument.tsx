@@ -8,6 +8,7 @@ export function TogglePublishDocument() {
   const {documentId} = useParams<{documentId: string}>() ?? {};
   const {data: document, changeStatus} = useTanamDocument(documentId);
 
+  const [isLoading, setIsLoading] = useState(false);
   const [isDropdownPublishOpen, setIsDropdownPublishOpen] = useState(false);
 
   async function onTogglePublishDocument() {
@@ -15,20 +16,37 @@ export function TogglePublishDocument() {
       return;
     }
 
-    // Toggle the status of the document
-    return changeStatus(
-      document.status === TanamPublishStatus.Unpublished
-        ? TanamPublishStatus.Unpublished
-        : TanamPublishStatus.Published,
-    );
+    console.info("onTogglePublishDocument :: ", document);
+
+    setIsDropdownPublishOpen(false);
+
+    try {
+      await changeStatus(
+        document.status === TanamPublishStatus.Published
+          ? TanamPublishStatus.Unpublished
+          : TanamPublishStatus.Published,
+      );
+    } catch (error) {
+      console.error("Error :: ", error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
     documentId && (
       <div className="relative">
+        {document?.status}
         <Button
           title={document?.status === TanamPublishStatus.Published ? "Unpublish" : "Publish"}
-          onClick={() => setIsDropdownPublishOpen(!isDropdownPublishOpen)}
+          onClick={() => {
+            if (document?.status === TanamPublishStatus.Published) {
+              onTogglePublishDocument();
+              return;
+            }
+
+            setIsDropdownPublishOpen(!isDropdownPublishOpen);
+          }}
           style="outline-rounded"
           color="primary"
         />
