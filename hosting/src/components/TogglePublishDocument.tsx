@@ -2,8 +2,9 @@ import {Button} from "@/components/Button";
 import {DatePicker} from "@/components/Form";
 import {Modal} from "@/components/Modal";
 import {useTanamDocument} from "@/hooks/useTanamDocuments";
+import {formatDate} from "@/utils/date";
 import {useParams} from "next/navigation";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {TanamPublishStatus} from "tanam-shared/definitions/TanamPublishStatus";
 
 export function TogglePublishDocument() {
@@ -14,6 +15,21 @@ export function TogglePublishDocument() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDropdownPublishOpen, setIsDropdownPublishOpen] = useState(false);
   const [publishedAt, setPublishedAt] = useState<Date | undefined>();
+
+  const publishDate = useMemo(() => {
+    const date = document?.publishedAt?.toDate() ?? null;
+
+    if (!date) return date;
+
+    return (
+      <>
+        <small>
+          Scheduled for <strong>{formatDate(date, "MMMM DD, YYYY")}</strong> at{" "}
+          <strong>{formatDate(date, "hh:mm A")}</strong>
+        </small>
+      </>
+    );
+  }, [document]);
 
   function pruneState() {
     setIsLoading(false);
@@ -94,6 +110,8 @@ export function TogglePublishDocument() {
             style="outline-rounded"
             color="primary"
           />
+
+          {document?.publishedAt && <div className="relative">{publishDate}</div>}
 
           <div
             className={`${isDropdownPublishOpen ? "block" : "hidden"} absolute left-0 z-10 mt-2 w-56 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
