@@ -125,14 +125,14 @@ export function TogglePublishDocument() {
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-black hover:bg-opacity-5 w-full text-left"
                 onClick={onTogglePublishDocument}
               >
-                <span className="i-ic-create mr-2" />
+                <span className="i-ic-baseline-send mr-2" />
                 Publish
               </button>
               <button
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-black hover:bg-opacity-5 w-full text-left"
                 onClick={() => setIsDialogOpen(true)}
               >
-                <span className="i-ic-mic mr-2" />
+                <span className="i-ic-baseline-schedule-send mr-2" />
                 Scheduled Publish
               </button>
             </div>
