@@ -65,7 +65,7 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
 
 interface UseTanamDocumentResult {
   data: TanamDocumentClient | null;
-  changeStatus: (status: TanamPublishStatus, publishedAt?: Date) => Promise<void>;
+  changeStatus: (status: TanamPublishStatus, publishedAt?: Date | null) => Promise<void>;
   error: UserNotification | null;
   isLoading: boolean;
 }
@@ -108,10 +108,10 @@ export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
    * Method to publish or unpublish a document
    *
    * @param {TanamPublishStatus} status Flag to publish or unpublish the document
-   * @param {Date | undefined} publishedAt Time for publish document
+   * @param {Date | null} publishedAt Time for publish document
    * @return {Promise<void>} Promise
    */
-  async function changeStatus(status: TanamPublishStatus, publishedAt?: Date): Promise<void> {
+  async function changeStatus(status: TanamPublishStatus, publishedAt?: Date | null): Promise<void> {
     if (!documentId) {
       setError(new UserNotification("error", "Missing parameter", "Document id parameter is missing"));
       return;

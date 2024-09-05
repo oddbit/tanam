@@ -17,7 +17,7 @@ export function TogglePublishDocument() {
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDropdownPublishOpen, setIsDropdownPublishOpen] = useState(false);
-  const [publishedAt, setPublishedAt] = useState<Date | undefined>();
+  const [publishedAt, setPublishedAt] = useState<Date | null>(null);
 
   const publishDate = useMemo(() => {
     const date = document?.publishedAt?.toDate() ?? null;
@@ -36,7 +36,7 @@ export function TogglePublishDocument() {
     setIsLoading(false);
     setIsDialogOpen(false);
     setIsDropdownPublishOpen(false);
-    setPublishedAt(undefined);
+    setPublishedAt(null);
   }
 
   async function onTogglePublishDocument() {
@@ -58,7 +58,7 @@ export function TogglePublishDocument() {
           : publishedAt
             ? TanamPublishStatus.Scheduled
             : TanamPublishStatus.Published,
-        publishedAt ? publishedAt : undefined,
+        publishedAt ? publishedAt : null,
       );
     } catch (error) {
       console.error("Error :: ", error);

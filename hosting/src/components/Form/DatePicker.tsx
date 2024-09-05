@@ -8,7 +8,7 @@ interface DatePickerProps {
   placeholder: string;
   enableTime?: boolean;
   dateFormat?: string;
-  defaultValue?: Date;
+  defaultValue?: Date | null;
   disabledDates?: DateLimit<DateOption>[];
   enabledDates?: DateLimit<DateOption>[];
   maxDate?: DateOption;
