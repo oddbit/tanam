@@ -1,12 +1,20 @@
 "use client";
-import React, {useEffect} from "react";
 import flatpickr from "flatpickr";
-import {BaseOptions} from "flatpickr/dist/types/options";
+import {BaseOptions, DateLimit, DateOption} from "flatpickr/dist/types/options";
+import {useEffect, useRef} from "react";
 
 interface DatePickerProps {
   label: string;
   placeholder: string;
-  defaultValue?: Date;
+  enableTime?: boolean;
+  dateFormat?: string;
+  defaultValue?: Date | null;
+  disabledDates?: DateLimit<DateOption>[];
+  enabledDates?: DateLimit<DateOption>[];
+  maxDate?: DateOption;
+  maxTime?: DateOption;
+  minDate?: DateOption;
+  minTime?: DateOption;
   onChange?: (date: Date) => void;
   styleType?: "default" | "static" | "withArrows";
   disabled?: boolean;
@@ -17,18 +25,36 @@ interface DatePickerProps {
  * @param {DatePickerProps} props - The properties for the date picker component.
  * @return {JSX.Element} The rendered date picker component.
  */
-export function DatePicker({
-  label,
-  placeholder,
-  defaultValue,
-  onChange,
-  styleType = "default",
-  disabled = false,
-}: DatePickerProps) {
+export function DatePicker(props: DatePickerProps) {
+  const {
+    label,
+    placeholder,
+    defaultValue,
+    onChange,
+    styleType = "default",
+    dateFormat = "M j, Y",
+    disabled = false,
+    enableTime = false,
+    maxDate,
+    maxTime,
+    minDate,
+    minTime,
+  } = props;
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  const pickerRef = useRef<flatpickr.Instance | null>(null);
+
   const config = {
     mode: "single",
-    dateFormat: "M j, Y",
+    dateFormat,
+    enableTime,
+    maxDate,
+    maxTime,
+    minDate,
+    minTime,
     defaultDate: defaultValue,
+    // Prevents Flatpickr from closing when selecting a date/time
+    closeOnSelect: false,
     onChange: (selectedDates: Date[]) => {
       if (onChange && selectedDates.length > 0) {
         onChange(selectedDates[0]);
@@ -39,9 +65,13 @@ export function DatePicker({
   function getFlatPickr() {
     switch (styleType) {
       case "static":
-        return flatpickr(".form-datepicker", {...config, static: true, monthSelectorType: "static"});
+        return flatpickr(inputRef.current!, {
+          ...config,
+          static: true,
+          monthSelectorType: "static",
+        });
       case "withArrows":
-        return flatpickr(".form-datepicker", {
+        return flatpickr(inputRef.current!, {
           ...config,
           static: true,
           monthSelectorType: "static",
@@ -49,17 +79,16 @@ export function DatePicker({
           nextArrow: `<svg className="fill-current" width="7" height="11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>`,
         });
       default:
-        return flatpickr(".form-datepicker", config);
+        return flatpickr(inputRef.current!, config);
     }
   }
 
   useEffect(() => {
-    const fp = getFlatPickr();
+    pickerRef.current = getFlatPickr();
+
     return () => {
-      if (Array.isArray(fp)) {
-        fp.forEach((el) => el.destroy());
-      } else {
-        fp.destroy();
+      if (pickerRef.current) {
+        pickerRef.current.destroy();
       }
     };
   }, [onChange, styleType, defaultValue]);
@@ -69,6 +98,7 @@ export function DatePicker({
       <label className="mb-3 block text-sm font-medium text-black dark:text-white">{label}</label>
       <div className="relative">
         <input
+          ref={inputRef}
           className="form-datepicker w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           placeholder={placeholder}
           disabled={disabled}
