@@ -15,7 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@tanam/shared": ["libs/shared/src/index.ts"]
+      "@tanam/shared": ["libs/shared/src/index.ts"],
+      "@tanam/cms/*": [
+        "apps/cms/src/*"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
