@@ -34,9 +34,23 @@
             "allow": [],
             "depConstraints": [
               {
-                "sourceTag": "*",
+                "sourceTag": "scope:frontend",
                 "onlyDependOnLibsWithTags": [
-                  "*"
+                  "scope:shared",
+                  "scope:frontend"
+                ]
+              },
+              {
+                "sourceTag": "scope:backend",
+                "onlyDependOnLibsWithTags": [
+                  "scope:shared",
+                  "scope:backend"
+                ]
+              },
+              {
+                "sourceTag": "scope:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:shared"
                 ]
               }
             ]
