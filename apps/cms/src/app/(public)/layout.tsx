@@ -1,7 +1,7 @@
 "use client";
 
-import "@/assets/css/satoshi.css";
-import "@/assets/css/style.css";
+import "@tanam/cms/assets/css/satoshi.css";
+import "@tanam/cms/assets/css/style.css";
 import React from "react";
 
 interface PublicLayoutProps {

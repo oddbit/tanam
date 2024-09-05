@@ -1,8 +1,8 @@
 "use client";
-import BubbleMenu from "@/components/Tiptap/BubbleMenu";
-import CodeBlock from "@/components/Tiptap/CodeBlock";
-import FloatingMenu from "@/components/Tiptap/FloatingMenu";
-import Loader from "@/components/common/Loader";
+import BubbleMenu from "@tanam/cms/components/Tiptap/BubbleMenu";
+import CodeBlock from "@tanam/cms/components/Tiptap/CodeBlock";
+import FloatingMenu from "@tanam/cms/components/Tiptap/FloatingMenu";
+import Loader from "@tanam/cms/components/common/Loader";
 import BulletList from "@tiptap/extension-bullet-list";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Heading from "@tiptap/extension-heading";
@@ -10,14 +10,14 @@ import Link from "@tiptap/extension-link";
 import OrderedList from "@tiptap/extension-ordered-list";
 import Paragraph from "@tiptap/extension-paragraph";
 import Underline from "@tiptap/extension-underline";
-import {EditorContent, ReactNodeViewRenderer as reactNodeViewRenderer, useEditor} from "@tiptap/react";
+import { EditorContent, ReactNodeViewRenderer as reactNodeViewRenderer, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import css from "highlight.js/lib/languages/css";
 import js from "highlight.js/lib/languages/javascript";
 import ts from "highlight.js/lib/languages/typescript";
 import html from "highlight.js/lib/languages/xml";
-import {common, createLowlight} from "lowlight";
-import {Suspense, useCallback, useEffect} from "react";
+import { common, createLowlight } from "lowlight";
+import { Suspense, useCallback, useEffect } from "react";
 
 import "./styles/tiptap-main.scss";
 

@@ -1,5 +1,5 @@
 "use client";
-import ContentCard from "@/components/Containers/ContentCard";
+import ContentCard from "@tanam/cms/components/Containers/ContentCard";
 import {
   Checkbox,
   DatePicker,
@@ -10,14 +10,14 @@ import {
   RadioButton,
   Switcher,
   TextArea,
-} from "@/components/Form";
-import Loader from "@/components/common/Loader";
-import Notification from "@/components/common/Notification";
-import PageHeader from "@/components/common/PageHeader";
-import { useTanamDocumentFields } from "@/hooks/useTanamDocumentFields";
-import { useTanamDocumentType } from "@/hooks/useTanamDocumentTypes";
-import { useTanamDocument } from "@/hooks/useTanamDocuments";
-import { UserNotification } from "@/models/UserNotification";
+} from "@tanam/cms/components/Form";
+import Loader from "@tanam/cms/components/common/Loader";
+import Notification from "@tanam/cms/components/common/Notification";
+import PageHeader from "@tanam/cms/components/common/PageHeader";
+import { useTanamDocumentFields } from "@tanam/cms/hooks/useTanamDocumentFields";
+import { useTanamDocumentType } from "@tanam/cms/hooks/useTanamDocumentTypes";
+import { useTanamDocument } from "@tanam/cms/hooks/useTanamDocuments";
+import { UserNotification } from "@tanam/cms/models/UserNotification";
 import { TanamDocumentField } from "@tanam/shared";
 import { Timestamp } from "firebase/firestore";
 import { useParams, useRouter } from "next/navigation";

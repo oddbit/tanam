@@ -1,4 +1,4 @@
-import { TanamDocumentTypeClient } from "@/models/TanamDocumentTypeClient";
+import { TanamDocumentTypeClient } from "@tanam/cms/models/TanamDocumentTypeClient";
 import { ITanamDocumentType, LocalizedString, TanamDocumentField } from "@tanam/shared";
 import { Timestamp } from "firebase/firestore";
 

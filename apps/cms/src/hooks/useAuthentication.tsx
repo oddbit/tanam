@@ -1,5 +1,5 @@
 "use client";
-import { firebaseAuth } from "@/plugins/firebase";
+import { firebaseAuth } from "@tanam/cms/plugins/firebase";
 import { TanamRole } from "@tanam/shared";
 import { User } from "firebase/auth";
 import { redirect, usePathname } from "next/navigation";

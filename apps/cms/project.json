@@ -1,7 +1,7 @@
 {
   "name": "cms",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/cms/src",
+  "sourceRoot": "apps/cms",
   "projectType": "application",
   "tags": [
     "scope:frontend"

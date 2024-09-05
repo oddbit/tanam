@@ -1,13 +1,13 @@
 "use client";
-import "@/assets/css/satoshi.css";
-import "@/assets/css/style.css";
-import "@/assets/scss/layout-default.scss";
-import Header from "@/components/Header";
-import Sidebar from "@/components/Sidebar";
-import {useAuthentication} from "@/hooks/useAuthentication";
-import useColorMode from "@/hooks/useColorMode";
+import "@tanam/cms/assets/css/satoshi.css";
+import "@tanam/cms/assets/css/style.css";
+import "@tanam/cms/assets/scss/layout-default.scss";
+import Header from "@tanam/cms/components/Header";
+import Sidebar from "@tanam/cms/components/Sidebar";
+import { useAuthentication } from "@tanam/cms/hooks/useAuthentication";
+import useColorMode from "@tanam/cms/hooks/useColorMode";
 import "flatpickr/dist/flatpickr.min.css";
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 export default function CmsLayout({children}: {children: React.ReactNode}) {
   useAuthentication();

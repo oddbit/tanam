@@ -1,5 +1,5 @@
-import { UserNotification } from "@/models/UserNotification";
-import { firestore } from "@/plugins/firebase";
+import { UserNotification } from "@tanam/cms/models/UserNotification";
+import { firestore } from "@tanam/cms/plugins/firebase";
 import { ITanamDocumentField, TanamDocumentField } from "@tanam/shared";
 import { collection, onSnapshot } from "firebase/firestore";
 import { useParams } from "next/navigation";

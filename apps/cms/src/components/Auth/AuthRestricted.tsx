@@ -1,5 +1,5 @@
 "use client";
-import {useAuthentication} from "@/hooks/useAuthentication";
+import { useAuthentication } from "@tanam/cms/hooks/useAuthentication";
 
 interface AuthRestrictedProps {
   children: React.ReactNode;

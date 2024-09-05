@@ -1,9 +1,9 @@
 "use client";
-import {firebaseAuth} from "@/plugins/firebase";
-import {AuthCredential, GoogleAuthProvider} from "firebase/auth";
-import {auth as firebaseAuthUi} from "firebaseui";
+import { firebaseAuth } from "@tanam/cms/plugins/firebase";
+import { AuthCredential, GoogleAuthProvider } from "firebase/auth";
+import { auth as firebaseAuthUi } from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
 const firebaseUi = firebaseAuthUi.AuthUI.getInstance() || new firebaseAuthUi.AuthUI(firebaseAuth);
 

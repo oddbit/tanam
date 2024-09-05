@@ -1,14 +1,17 @@
-import type {Config} from "tailwindcss";
+import { getIconCollections, iconsPlugin } from "@egoist/tailwindcss-icons";
+import { createGlobPatternsForDependencies } from '@nx/react/tailwind';
+import { join } from 'path';
+import type { Config } from "tailwindcss";
 import defaultTheme from "tailwindcss/defaultTheme";
-import {iconsPlugin, getIconCollections} from "@egoist/tailwindcss-icons";
 
 const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    join(
+      __dirname,
+      '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'
+    ),
+    ...createGlobPatternsForDependencies(__dirname),
   ],
-
   darkMode: "class",
   theme: {
     fontFamily: {

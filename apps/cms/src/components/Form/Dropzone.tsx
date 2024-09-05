@@ -1,6 +1,6 @@
 "use client";
-import "@/components/Form/styles/dropzone.scss";
-import { getAcceptDescription, isFileAccepted } from "@/utils/fileUpload";
+import "@tanam/cms/components/Form/styles/dropzone.scss";
+import { getAcceptDescription, isFileAccepted } from "@tanam/cms/utils/fileUpload";
 import { AcceptFileType } from "@tanam/shared";
 import React, { useEffect, useRef, useState } from "react";
 

@@ -1,7 +1,7 @@
 "use client";
-import { TanamDocumentClient } from "@/models/TanamDocumentClient";
-import { UserNotification } from "@/models/UserNotification";
-import { firestore } from "@/plugins/firebase";
+import { TanamDocumentClient } from "@tanam/cms/models/TanamDocumentClient";
+import { UserNotification } from "@tanam/cms/models/UserNotification";
+import { firestore } from "@tanam/cms/plugins/firebase";
 import { TanamPublishStatus } from "@tanam/shared";
 import {
   collection,

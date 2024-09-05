@@ -1,6 +1,6 @@
 "use client";
-import {useEffect} from "react";
-import {useAuthentication} from "@/hooks/useAuthentication";
+import { useAuthentication } from "@tanam/cms/hooks/useAuthentication";
+import { useEffect } from "react";
 
 const SignoutUser: React.FC = () => {
   const {signout} = useAuthentication();

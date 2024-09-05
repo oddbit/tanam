@@ -1,7 +1,7 @@
 "use client";
-import {TanamSpeechRecognition} from "@/models/TanamSpeechRecognition";
+import { TanamSpeechRecognition } from "@tanam/cms/models/TanamSpeechRecognition";
 import Peaks from "peaks.js";
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface VoiceRecorderProps {
   title?: string;

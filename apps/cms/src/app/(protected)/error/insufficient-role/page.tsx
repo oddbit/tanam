@@ -1,10 +1,10 @@
 "use client";
-import Loader from "@/components/common/Loader";
-import Notification from "@/components/common/Notification";
-import PageHeader from "@/components/common/PageHeader";
-import {useAuthentication} from "@/hooks/useAuthentication";
-import {useTanamUser} from "@/hooks/useTanamUser";
-import {Suspense} from "react";
+import Loader from "@tanam/cms/components/common/Loader";
+import Notification from "@tanam/cms/components/common/Notification";
+import PageHeader from "@tanam/cms/components/common/PageHeader";
+import { useAuthentication } from "@tanam/cms/hooks/useAuthentication";
+import { useTanamUser } from "@tanam/cms/hooks/useTanamUser";
+import { Suspense } from "react";
 
 export default function ErrorInsufficientRolePage() {
   const {authUser} = useAuthentication();
