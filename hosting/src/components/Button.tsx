@@ -5,13 +5,14 @@ interface ButtonProps {
   onClick: () => Promise<void> | void;
   style?: "normal" | "rounded" | "outline" | "outline-rounded" | "icon" | "icon-rounded";
   color?: "primary" | "meta-3" | "black";
+  type?: "button" | "reset" | "submit";
   loading?: boolean;
   disabled?: boolean;
   children?: React.ReactNode;
 }
 
 export function Button(props: ButtonProps) {
-  const {title, onClick, style = "rounded", color = "primary", children, loading, disabled} = props;
+  const {title, onClick, style = "rounded", color = "primary", children, loading, disabled, type} = props;
 
   const [isLoading, setIsLoading] = useState(loading ?? false);
   const [isDisabled, setIsDisabled] = useState(disabled ?? false);
@@ -84,11 +85,11 @@ export function Button(props: ButtonProps) {
   }
 
   return (
-    <button onClick={handleClick} className={styles.join(" ")} disabled={isLoading || isDisabled}>
+    <button onClick={handleClick} className={styles.join(" ")} disabled={isLoading || isDisabled} type={type}>
       {isLoading && (
         <>
           <svg
-            className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+            className={`animate-spin -ml-1 mr-3 h-5 w-5 ${style === "outline" || style === "outline-rounded" ? "text-white" : "text-" + color}`}
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
