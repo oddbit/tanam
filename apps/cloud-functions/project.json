@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/cloud-functions/src",
   "projectType": "application",
-  "tags": [],
+  "tags": ["scope:backend"],
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
