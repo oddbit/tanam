@@ -1,4 +1,5 @@
 "use client";
+import {Button} from "@/components/Button";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
 import {CropImage} from "@/components/CropImage";
@@ -10,9 +11,8 @@ import {useFirebaseStorage} from "@/hooks/useFirebaseStorage";
 import {useTanamUser} from "@/hooks/useTanamUser";
 import {UserNotification} from "@/models/UserNotification";
 import Image from "next/image";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {AcceptFileType} from "tanam-shared/definitions/AcceptFileType";
-import {Button} from "../../../components/Button";
 
 const defaultImage = "/images/no-image.png";
 
@@ -33,6 +33,10 @@ export default function Settings() {
   const [beforeCropImage, setBeforeCropImage] = useState<string>();
   const [afterCropImage, setAfterCropImage] = useState<string>();
   const [profilePicture, setProfilePicture] = useState<string>(defaultImage);
+
+  const isDisabled = useMemo(() => {
+    return isLoading || readonlyMode;
+  }, [isLoading, readonlyMode]);
 
   useEffect(() => {
     if (tanamUser) {
@@ -63,9 +67,15 @@ export default function Settings() {
    * @return {Promise<void>}
    */
   async function resetChanges(): Promise<void> {
+    setNotification(null);
     setReadonlyMode(true);
-    setFileUploadContentType(undefined);
+    setShowDropzone(false);
+    setFileUploadContentType("");
     resetCropImage();
+
+    if (formUserRef.current) {
+      formUserRef.current.reset();
+    }
 
     await fetchProfilePicture();
   }
@@ -74,8 +84,8 @@ export default function Settings() {
    * Resets the crop image states.
    */
   function resetCropImage() {
-    setBeforeCropImage(undefined);
-    setAfterCropImage(undefined);
+    setBeforeCropImage("");
+    setAfterCropImage("");
     setShowCropImage(false);
   }
 
@@ -92,8 +102,6 @@ export default function Settings() {
   }
 
   async function fetchSaveUserInfo() {
-    console.info("[fetchSaveUserInfo] :: ", formUserRef.current);
-
     if (!formUserRef.current) return;
 
     formUserRef.current.requestSubmit();
@@ -143,17 +151,21 @@ export default function Settings() {
   const modalActionCropImage = (
     <div className="flex flex-col sm:flex-row justify-end gap-3">
       {/* Start button to close the crop image modal */}
-      <button
-        className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white sm:w-full sm:text-sm"
+      <Button
+        title="Close"
         onClick={resetCropImage}
-      >
-        Close
-      </button>
+        loading={isLoading}
+        disabled={isDisabled}
+        style="outline-rounded"
+        color="black"
+      />
       {/* End button to close the crop image modal */}
 
       {/* Start button to save changes to the profile picture after cropping */}
-      <button
-        className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90 sm:w-full sm:text-sm"
+      <Button
+        title="Save"
+        loading={isLoading}
+        disabled={isDisabled}
         onClick={() => {
           if (!afterCropImage) {
             window.alert("No cropped image");
@@ -163,9 +175,7 @@ export default function Settings() {
           setProfilePicture(afterCropImage);
           resetCropImage();
         }}
-      >
-        Save
-      </button>
+      />
       {/* End button to save changes to the profile picture after cropping */}
     </div>
   );
@@ -220,18 +230,26 @@ export default function Settings() {
                     <div>
                       <span className="mb-1.5 text-black dark:text-white">Edit your photo</span>
                       <span className="flex gap-2.5">
-                        <button
-                          className="text-sm hover:text-primary"
+                        <Button
+                          title="Delete"
+                          loading={isLoading}
+                          disabled={isDisabled}
+                          style="plain-text"
+                          className={["text-sm", "!p-0"]}
                           onClick={async () => {
                             await fetchProfilePicture();
                             setBeforeCropImage(undefined);
                           }}
-                        >
-                          Delete
-                        </button>
-                        <button className="text-sm hover:text-primary" onClick={() => setShowDropzone(!showDropzone)}>
-                          Update
-                        </button>
+                        />
+
+                        <Button
+                          title="Update"
+                          loading={isLoading}
+                          disabled={isDisabled}
+                          style="plain-text"
+                          className={["text-sm", "!p-0"]}
+                          onClick={() => setShowDropzone(!showDropzone)}
+                        />
                       </span>
                     </div>
                   </div>
@@ -261,11 +279,12 @@ export default function Settings() {
                     <div className="relative">
                       <span className="absolute left-4 top-3 i-ic-outline-person w-[24px] h-[24px]" />
                       <input
-                        className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                        className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary disabled:cursor-not-allowed"
                         type="text"
                         name="fullName"
                         id="fullName"
                         placeholder="Your full name"
+                        disabled={isDisabled}
                         defaultValue={tanamUser?.name}
                       />
                     </div>
@@ -273,22 +292,30 @@ export default function Settings() {
                 </div>
 
                 <div className="flex justify-end gap-4.5">
-                  <button
-                    className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                    type="reset"
-                    onClick={resetChanges}
-                  >
-                    Cancel
-                  </button>
+                  {readonlyMode && (
+                    <Button
+                      title="Edit"
+                      onClick={() => {
+                        setReadonlyMode(false);
+                      }}
+                      loading={isLoading}
+                    />
+                  )}
 
-                  <Button title="Save" onClick={fetchSaveUserInfo} loading={isLoading} />
-                  <button
-                    disabled={true}
-                    className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90 disabled:opacity-50"
-                    type="submit"
-                  >
-                    Save
-                  </button>
+                  {!readonlyMode && (
+                    <>
+                      <Button
+                        title="Cancel"
+                        onClick={resetChanges}
+                        loading={isLoading}
+                        disabled={isDisabled}
+                        style="outline-rounded"
+                        color="black"
+                      />
+
+                      <Button title="Save" onClick={fetchSaveUserInfo} loading={isLoading} disabled={isDisabled} />
+                    </>
+                  )}
                 </div>
               </form>
             </div>

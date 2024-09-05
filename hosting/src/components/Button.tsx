@@ -4,9 +4,10 @@ import React, {useEffect, useState} from "react";
 interface ButtonProps {
   title: string;
   onClick?: () => Promise<void> | void;
-  style?: "normal" | "rounded" | "outline" | "outline-rounded" | "icon" | "icon-rounded";
+  style?: "normal" | "plain-text" | "rounded" | "outline" | "outline-rounded" | "icon" | "icon-rounded";
   color?: "primary" | "meta-3" | "black";
   type?: "button" | "reset" | "submit";
+  className?: string[];
   loading?: boolean;
   disabled?: boolean;
   children?: React.ReactNode;
@@ -22,6 +23,7 @@ export function Button(props: ButtonProps) {
     loading = false,
     disabled = false,
     type,
+    className = [],
   } = props;
 
   const [isLoading, setIsLoading] = useState(loading);
@@ -77,6 +79,10 @@ export function Button(props: ButtonProps) {
   switch (style) {
     case "normal":
       break;
+    case "plain-text":
+      styles = styles.filter((style) => style !== "text-white");
+      styles.push("!bg-transparent", `hover:text-${color}`);
+      break;
     case "rounded":
       styles.push("rounded-md");
       break;
@@ -96,6 +102,8 @@ export function Button(props: ButtonProps) {
     default:
       break;
   }
+
+  styles = styles.concat(styles, ...className);
 
   return (
     <button onClick={onClick} className={styles.join(" ")} disabled={isLoading || isDisabled} type={type}>
