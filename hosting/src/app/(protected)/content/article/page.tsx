@@ -3,9 +3,9 @@ import {Button} from "@/components/Button";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
-import Dialog from "@/components/Dialog";
 import {DocumentTypeGenericList} from "@/components/DocumentType/DocumentTypeGenericList";
 import FilePicker from "@/components/FilePicker";
+import {Modal} from "@/components/Modal";
 import {useAuthentication} from "@/hooks/useAuthentication";
 import {ProcessingState, useGenkitArticle} from "@/hooks/useGenkitArticle";
 import {useCrudTanamDocument, useTanamDocuments} from "@/hooks/useTanamDocuments";
@@ -40,6 +40,12 @@ export default function DocumentTypeDocumentsPage() {
     setNotification(docsError || crudError);
   }, [docsError, crudError]);
 
+  function resetAudioInput() {
+    setAudio("");
+    setIsDialogOpen(false);
+    setIsRecording(false);
+  }
+
   async function addNewArticle() {
     if (!documentType) return;
     const id = await create(documentType.id);
@@ -60,6 +66,33 @@ export default function DocumentTypeDocumentsPage() {
     setIsDialogOpen(false);
     if (articleId) router.push(`article/${articleId}`);
   }
+
+  /**
+   * Modal actions for saving or canceling audio input.
+   * @constant
+   * @type {JSX.Element}
+   */
+  const modalActionAudioInput = (
+    <div className="flex flex-col sm:flex-row justify-end gap-3">
+      {/* Start button to close the audio input modal */}
+      <button
+        className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white sm:w-full sm:text-sm"
+        onClick={resetAudioInput}
+      >
+        Close
+      </button>
+      {/* End button to close the audio input modal */}
+
+      {/* Start button to save changes audio input */}
+      <button
+        className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90 sm:w-full sm:text-sm"
+        onClick={submitAudio}
+      >
+        Save
+      </button>
+      {/* End button to save changes audio input */}
+    </div>
+  );
 
   return (
     <>
@@ -86,22 +119,20 @@ export default function DocumentTypeDocumentsPage() {
                   tabIndex={-1}
                 >
                   <div className="py-1" role="none">
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-black hover:bg-opacity-5"
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-black hover:bg-opacity-5 w-full text-left"
                       onClick={addNewArticle}
                     >
                       <span className="i-ic-create mr-2" />
                       {`Add New ${documentType.titleSingular.translated}`}
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-black hover:bg-opacity-5"
+                    </button>
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-black hover:bg-opacity-5 w-full text-left"
                       onClick={() => setIsDialogOpen(true)}
                     >
                       <span className="i-ic-mic mr-2" />
                       {`Record new ${documentType.titleSingular.translated}`}
-                    </a>
+                    </button>
                   </div>
                 </div>
               </span>
@@ -122,10 +153,11 @@ export default function DocumentTypeDocumentsPage() {
             <DocumentTypeGenericList isLoading={isLoading} documents={documents} documentType={documentType} />
 
             {isDialogOpen && (
-              <Dialog
+              <Modal
                 isOpen={isDialogOpen}
-                onSubmit={submitAudio}
-                onClose={() => setIsDialogOpen(false)}
+                disableOverlayClose={true}
+                onClose={resetAudioInput}
+                actions={modalActionAudioInput}
                 title={"Tell your story"}
               >
                 {status === ProcessingState.Ready ? (
@@ -149,7 +181,7 @@ export default function DocumentTypeDocumentsPage() {
                     {status === ProcessingState.Finalizing && <p>Finalizing...</p>}
                   </div>
                 )}
-              </Dialog>
+              </Modal>
             )}
           </>
         ) : (

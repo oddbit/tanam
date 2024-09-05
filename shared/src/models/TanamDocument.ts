@@ -23,8 +23,6 @@ export abstract class TanamDocument<TimestampType, FieldValueType> {
 
     // The status of the document is determined by the publishedAt field
     this.status = json.publishedAt ? TanamPublishStatus.Published : TanamPublishStatus.Unpublished;
-
-    this.status = json.status || json.publishedAt ? TanamPublishStatus.Published : TanamPublishStatus.Unpublished;
     this.revision = json.revision ?? 0;
     this.createdAt = json.createdAt;
     this.updatedAt = json.updatedAt;
