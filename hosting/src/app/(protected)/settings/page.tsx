@@ -21,6 +21,7 @@ export default function Settings() {
   const {isLoading: uploadLoading, error: storageError, upload, getFile} = useFirebaseStorage();
   const [notification, setNotification] = useState<UserNotification | null>(null);
 
+  const [readonlyMode, setReadonlyMode] = useState<boolean>(true);
   const [showDropzone, setShowDropzone] = useState<boolean>(false);
   const [showCropImage, setShowCropImage] = useState<boolean>(false);
   const [pathUpload, setPathUpload] = useState<string>();
@@ -58,6 +59,7 @@ export default function Settings() {
    * @return {Promise<void>}
    */
   async function resetChanges(): Promise<void> {
+    setReadonlyMode(true);
     setFileUploadContentType(undefined);
     resetCropImage();
 
@@ -264,7 +266,8 @@ export default function Settings() {
                     Cancel
                   </button>
                   <button
-                    className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
+                    disabled={true}
+                    className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90 disabled:opacity-50"
                     type="submit"
                   >
                     Save
