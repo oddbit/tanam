@@ -2,6 +2,7 @@ export * from "./schemas/article";
 
 export * from "./definitions/AcceptFileType";
 export * from "./definitions/LanguageCode";
+export * from "./definitions/TanamPublishStatus";
 
 export * from "./models/LocalizedString";
 export * from "./models/TanamDocument";
