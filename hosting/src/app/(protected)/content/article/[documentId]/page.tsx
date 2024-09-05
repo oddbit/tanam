@@ -1,4 +1,6 @@
 "use client";
+import {Button} from "@/components/Button";
+import {Input} from "@/components/Form";
 import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
@@ -18,8 +20,12 @@ export default function DocumentDetailsPage() {
   const {documentId} = useParams<{documentId: string}>() ?? {};
   const {data: document, error: documentError} = useTanamDocument(documentId);
   const {update, error: writeError} = useCrudTanamDocument();
+
+  const [title, setTitle] = useState<string>("");
   const [readonlyMode] = useState<boolean>(false);
+  const [updateTitleShown, setUpdateTitleShown] = useState<boolean>(false);
   const [notification, setNotification] = useState<UserNotification | null>(null);
+
   if (!!document?.documentType && document?.documentType !== "article") {
     router.push(`/content/${document?.documentType}/${document?.id}`);
     return <Loader />;
@@ -28,6 +34,30 @@ export default function DocumentDetailsPage() {
   useEffect(() => {
     setNotification(documentError || writeError);
   }, [documentError, writeError]);
+
+  useEffect(() => {
+    if (updateTitleShown) return;
+
+    onDocumentTitleChange(title);
+  }, [updateTitleShown]);
+
+  useEffect(() => {
+    if (document) {
+      setTitle(document.data.title as string);
+    }
+
+    return () => setTitle("");
+  }, [document]);
+
+  async function onDocumentTitleChange(title: string) {
+    console.log("[onDocumentTitleChange]", title);
+    if (!document) {
+      return;
+    }
+
+    document.data.title = title;
+    await update(document);
+  }
 
   async function onDocumentContentChange(content: string) {
     console.log("[onDocumentContentChange]", content);
@@ -41,12 +71,40 @@ export default function DocumentDetailsPage() {
 
   return (
     <>
-      <Suspense fallback={<Loader />}>
-        {document ? <PageHeader pageName={document.data.title as string} /> : <Loader />}
-      </Suspense>
       {notification && (
         <Notification type={notification.type} title={notification.title} message={notification.message} />
       )}
+
+      <Suspense fallback={<Loader />}>
+        {document ? (
+          <>
+            <div className="relative w-full flex flex-row gap-3">
+              {!updateTitleShown && <PageHeader pageName={document.data.title as string} />}
+
+              {updateTitleShown && (
+                <Input
+                  key="titleArticle"
+                  type="text"
+                  placeholder="Title"
+                  disabled={readonlyMode}
+                  value={title || ""}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              )}
+
+              <Button
+                title={updateTitleShown ? "Save Changes" : "Edit Title"}
+                onClick={() => setUpdateTitleShown(!updateTitleShown)}
+                style="rounded"
+              >
+                <span className="i-ic-outline-edit mr-2" />
+              </Button>
+            </div>
+          </>
+        ) : (
+          <Loader />
+        )}
+      </Suspense>
 
       <TiptapEditor
         key={"article-content"}

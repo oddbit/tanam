@@ -3,7 +3,7 @@ import React, {useState} from "react";
 interface ButtonProps {
   title: string;
   onClick: () => Promise<void> | void;
-  style?: "normal" | "rounded" | "outline" | "icon";
+  style?: "normal" | "rounded" | "outline" | "outline-rounded" | "icon" | "icon-rounded";
   color?: "primary" | "meta-3" | "black";
   children?: React.ReactNode;
 }
@@ -20,7 +20,7 @@ export function Button({title, onClick, style = "rounded", color = "primary", ch
     }
   };
 
-  const styles = [
+  let styles = [
     "inline-flex",
     "items-center",
     "justify-center",
@@ -53,9 +53,17 @@ export function Button({title, onClick, style = "rounded", color = "primary", ch
       styles.push("rounded-md");
       break;
     case "outline":
+      styles = styles.filter((style) => style !== "text-white");
       styles.push(`border`, `border-${color}`, `text-${color}`, `bg-transparent`);
       break;
+    case "outline-rounded":
+      styles = styles.filter((style) => style !== "text-white");
+      styles.push(`border`, `border-${color}`, `text-${color}`, `bg-transparent`, "rounded-md");
+      break;
     case "icon":
+      break;
+    case "icon-rounded":
+      styles.push("rounded-md");
       break;
     default:
       break;
@@ -64,7 +72,7 @@ export function Button({title, onClick, style = "rounded", color = "primary", ch
   return (
     <button onClick={handleClick} className={styles.join(" ")} disabled={isLoading}>
       {children}
-      {style !== "icon" && <span>{title}</span>}
+      {style !== "icon" && style !== "icon-rounded" && <span>{title}</span>}
     </button>
   );
 }

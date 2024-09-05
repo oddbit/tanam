@@ -26,7 +26,7 @@ export function Modal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-999 overflow-y-auto">
+    <div className="fixed top-0 left-0 w-full z-9999 overflow-y-auto">
       {/* Start background overlay */}
       <div
         className="fixed w-full h-screen bg-black opacity-50"
