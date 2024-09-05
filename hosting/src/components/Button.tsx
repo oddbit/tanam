@@ -1,8 +1,9 @@
+import clsx from "clsx";
 import React, {useEffect, useState} from "react";
 
 interface ButtonProps {
   title: string;
-  onClick: () => Promise<void> | void;
+  onClick?: () => Promise<void> | void;
   style?: "normal" | "rounded" | "outline" | "outline-rounded" | "icon" | "icon-rounded";
   color?: "primary" | "meta-3" | "black";
   type?: "button" | "reset" | "submit";
@@ -12,28 +13,40 @@ interface ButtonProps {
 }
 
 export function Button(props: ButtonProps) {
-  const {title, onClick, style = "rounded", color = "primary", children, loading, disabled, type} = props;
+  const {
+    title,
+    onClick,
+    style = "rounded",
+    color = "primary",
+    children,
+    loading = false,
+    disabled = false,
+    type,
+  } = props;
 
-  const [isLoading, setIsLoading] = useState(loading ?? false);
-  const [isDisabled, setIsDisabled] = useState(disabled ?? false);
+  const [isLoading, setIsLoading] = useState(loading);
+  const [isDisabled, setIsDisabled] = useState(disabled);
 
   useEffect(() => {
     return () => pruneState();
   }, []);
 
+  useEffect(() => {
+    setIsLoading(loading);
+
+    return () => pruneState();
+  }, [loading]);
+
+  useEffect(() => {
+    setIsDisabled(disabled);
+
+    return () => pruneState();
+  }, [disabled]);
+
   function pruneState() {
     setIsLoading(false);
     setIsDisabled(false);
   }
-
-  const handleClick = async () => {
-    setIsLoading(true);
-    try {
-      await onClick();
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   let styles = [
     "inline-flex",
@@ -85,16 +98,19 @@ export function Button(props: ButtonProps) {
   }
 
   return (
-    <button onClick={handleClick} className={styles.join(" ")} disabled={isLoading || isDisabled} type={type}>
+    <button onClick={onClick} className={styles.join(" ")} disabled={isLoading || isDisabled} type={type}>
       {isLoading && (
         <>
           <svg
-            className={`animate-spin -ml-1 mr-3 h-5 w-5 ${style === "outline" || style === "outline-rounded" ? "text-white" : "text-" + color}`}
+            className={clsx(
+              "animate-spin -ml-1 mr-3 h-5 w-5",
+              style === "outline" || style === "outline-rounded" ? `text-${color}` : "text-white",
+            )}
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
           >
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path
               className="opacity-75"
               fill="currentColor"

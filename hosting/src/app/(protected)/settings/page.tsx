@@ -10,8 +10,9 @@ import {useFirebaseStorage} from "@/hooks/useFirebaseStorage";
 import {useTanamUser} from "@/hooks/useTanamUser";
 import {UserNotification} from "@/models/UserNotification";
 import Image from "next/image";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {AcceptFileType} from "tanam-shared/definitions/AcceptFileType";
+import {Button} from "../../../components/Button";
 
 const defaultImage = "/images/no-image.png";
 
@@ -21,9 +22,12 @@ export default function Settings() {
   const {isLoading: uploadLoading, error: storageError, upload, getFile} = useFirebaseStorage();
   const [notification, setNotification] = useState<UserNotification | null>(null);
 
+  const formUserRef = useRef<HTMLFormElement>(null);
+
   const [readonlyMode, setReadonlyMode] = useState<boolean>(true);
   const [showDropzone, setShowDropzone] = useState<boolean>(false);
   const [showCropImage, setShowCropImage] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [pathUpload, setPathUpload] = useState<string>();
   const [fileUploadContentType, setFileUploadContentType] = useState<string>();
   const [beforeCropImage, setBeforeCropImage] = useState<string>();
@@ -87,6 +91,14 @@ export default function Settings() {
     setBeforeCropImage(profilePicture);
   }
 
+  async function fetchSaveUserInfo() {
+    console.info("[fetchSaveUserInfo] :: ", formUserRef.current);
+
+    if (!formUserRef.current) return;
+
+    formUserRef.current.requestSubmit();
+  }
+
   /**
    * Handles the submission of the personal information form.
    * Uploads a new profile picture if provided and saves the user's name.
@@ -97,6 +109,7 @@ export default function Settings() {
     event.preventDefault();
 
     setNotification(null);
+    setIsLoading(true);
 
     try {
       if (uploadLoading) return;
@@ -117,6 +130,8 @@ export default function Settings() {
       setNotification(new UserNotification("success", "Update Profile", "Success to update profile"));
     } catch (error) {
       setNotification(new UserNotification("error", "Update Profile", "Failed to update profile"));
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -237,7 +252,7 @@ export default function Settings() {
                 </div>
               </div>
 
-              <form onSubmit={onPersonalInfoSubmit}>
+              <form ref={formUserRef} onSubmit={onPersonalInfoSubmit}>
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                   <div className="w-full">
                     <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="fullName">
@@ -265,6 +280,8 @@ export default function Settings() {
                   >
                     Cancel
                   </button>
+
+                  <Button title="Save" onClick={fetchSaveUserInfo} loading={isLoading} />
                   <button
                     disabled={true}
                     className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90 disabled:opacity-50"
