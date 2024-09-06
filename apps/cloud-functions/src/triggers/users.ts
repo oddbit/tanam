@@ -1,3 +1,4 @@
+import {TanamUserAdmin} from "@tanam/domain-backend";
 import {TanamRole} from "@tanam/domain-shared";
 import axios from "axios";
 import * as admin from "firebase-admin";
@@ -6,7 +7,6 @@ import {logger} from "firebase-functions/v2";
 import {onDocumentCreated, onDocumentDeleted, onDocumentUpdated} from "firebase-functions/v2/firestore";
 import {onObjectFinalized} from "firebase-functions/v2/storage";
 import sharp from "sharp";
-import {TanamUserAdmin} from "../models/TanamUserAdmin";
 
 const auth = admin.auth();
 const db = admin.firestore();

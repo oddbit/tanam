@@ -1,0 +1,12 @@
+{
+  "name": "domain-backend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/domain-backend/src",
+  "projectType": "library",
+  "tags": [
+    "scope:shared",
+    "scope:backend"
+  ],
+  "// targets": "to see all targets run: nx show project domain-backend --web",
+  "targets": {}
+}
