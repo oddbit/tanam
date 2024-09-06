@@ -1,3 +1,4 @@
+"use client";
 import {Editor, BubbleMenu as TiptapBubbleMenu} from "@tiptap/react";
 import {useCallback, useState} from "react";
 import "./styles/bubble-menu.scss";

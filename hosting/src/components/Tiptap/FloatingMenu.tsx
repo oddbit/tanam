@@ -1,3 +1,4 @@
+"use client";
 import {Editor} from "@tiptap/react";
 import "./styles/floating-menu.scss";
 

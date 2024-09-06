@@ -1,7 +1,7 @@
 "use client";
-// import BubbleMenu from "@/components/Tiptap/BubbleMenu";
+import BubbleMenu from "@/components/Tiptap/BubbleMenu";
 import CodeBlock from "@/components/Tiptap/CodeBlock";
-// import FloatingMenu from "@/components/Tiptap/FloatingMenu";
+import FloatingMenu from "@/components/Tiptap/FloatingMenu";
 import Loader from "@/components/common/Loader";
 import BulletList from "@tiptap/extension-bullet-list";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
@@ -120,11 +120,10 @@ export default function TiptapEditor(props: TiptapEditorProps) {
   return (
     <Suspense fallback={<Loader />}>
       {editor && (
-        <>
-          {/* <FloatingMenu editor={editor} />
-          <BubbleMenu editor={editor} /> */}
-          <EditorContent editor={editor} />
-        </>
+        <EditorContent editor={editor}>
+          <FloatingMenu editor={editor} />
+          <BubbleMenu editor={editor} />
+        </EditorContent>
       )}
     </Suspense>
   );
