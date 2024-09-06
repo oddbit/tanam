@@ -3,8 +3,10 @@
   "language": "en",
   "words": [
     "Buildable",
+    "datepicker",
     "firebaseui",
     "firestore",
+    "formgroup",
     "Genkit",
     "googleai",
     "linebreak",
