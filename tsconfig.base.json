@@ -17,7 +17,8 @@
     "paths": {
       "@tanam/domain-backend": ["libs/domain-backend/src/index.ts"],
       "@tanam/domain-client": ["libs/domain-client/src/index.ts"],
-      "@tanam/domain-shared": ["libs/domain-shared/src/index.ts"]
+      "@tanam/domain-shared": ["libs/domain-shared/src/index.ts"],
+      "@tanam/ui-components": ["libs/ui-components/src/index.ts"],
     }
   },
   "exclude": ["node_modules", "tmp"]
