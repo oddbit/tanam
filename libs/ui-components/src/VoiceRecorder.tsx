@@ -1,5 +1,5 @@
 "use client";
-import {TanamSpeechRecognition} from "@tanam/cms/models/TanamSpeechRecognition";
+import {TanamSpeechRecognition} from "@tanam/domain-client";
 import Peaks from "peaks.js";
 import {useEffect, useRef, useState} from "react";
 
@@ -18,7 +18,7 @@ interface VoiceRecorderProps {
  * @param {VoiceRecorderProps} props - The props for the component.
  * @return {JSX.Element} The rendered VoiceRecorder component.
  */
-export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
+export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
   const {title, value, onChange, onTranscriptChange, onLoadingChange} = props;
 
   const [isRecording, setIsRecording] = useState(false);

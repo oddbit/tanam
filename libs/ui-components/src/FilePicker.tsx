@@ -4,7 +4,7 @@ interface FilePickerProps {
   onFileSelect: (file: File) => void;
 }
 
-export default function FilePicker({onFileSelect}: FilePickerProps) {
+export function FilePicker({onFileSelect}: FilePickerProps) {
   const [dragActive, setDragActive] = useState(false);
 
   const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {

@@ -10,7 +10,7 @@ interface ContentCardProps {
  * @param {ContentCardProps} props - The properties for the content card component.
  * @return {JSX.Element} The rendered content card component.
  */
-function ContentCard({title, children}: ContentCardProps): JSX.Element {
+export function ContentCard({title, children}: ContentCardProps): JSX.Element {
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark mb-6">
       {title && (
@@ -22,5 +22,3 @@ function ContentCard({title, children}: ContentCardProps): JSX.Element {
     </div>
   );
 }
-
-export default ContentCard;

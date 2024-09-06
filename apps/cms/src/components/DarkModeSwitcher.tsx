@@ -1,8 +1,8 @@
-import {Switcher} from "@tanam/cms/components/Form/Switcher";
-import {useAuthentication} from "@tanam/cms/hooks/useAuthentication";
-import useColorMode from "@tanam/cms/hooks/useColorMode";
-import {useTanamUser} from "@tanam/cms/hooks/useTanamUser";
+import {Switcher} from "@tanam/ui-components";
 import {useEffect} from "react";
+import {useAuthentication} from "../../../../../hooks/useAuthentication";
+import useColorMode from "../../../../../hooks/useColorMode";
+import {useTanamUser} from "../../../../../hooks/useTanamUser";
 
 const DarkModeSwitcher = () => {
   const [colorMode, setColorMode] = useColorMode();

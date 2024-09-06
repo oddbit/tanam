@@ -1,6 +1,6 @@
-import {useTanamUserImage} from "@tanam/cms/hooks/useTanamUser";
 import Image from "next/image";
 import {Suspense} from "react";
+import {useTanamUserImage} from "../hooks/useTanamUser";
 
 interface UserImageProps {
   uid?: string;

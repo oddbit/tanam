@@ -4,7 +4,7 @@ interface NotificationProps {
   message: string;
 }
 
-function Notification({type, title, message}: NotificationProps) {
+export function Notification({type, title, message}: NotificationProps) {
   let colorClasses = "";
   let IconComponent = null;
 
@@ -59,5 +59,3 @@ function ErrorIcon() {
     </div>
   );
 }
-
-export default Notification;

@@ -1,6 +1,6 @@
 import {Table, TableRowLabel} from "@tanam/cms/components/Table";
-import {TanamDocumentClient} from "@tanam/cms/models/TanamDocumentClient";
-import {TanamDocumentTypeClient} from "@tanam/cms/models/TanamDocumentTypeClient";
+import {TanamDocumentClient} from "@tanam/domain-client/TanamDocumentClient";
+import {TanamDocumentTypeClient} from "@tanam/domain-client/TanamDocumentTypeClient";
 import {TanamPublishStatus} from "@tanam/domain-shared";
 import Link from "next/link";
 

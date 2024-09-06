@@ -1,8 +1,4 @@
 "use client";
-import BubbleMenu from "@tanam/cms/components/Tiptap/BubbleMenu";
-import CodeBlock from "@tanam/cms/components/Tiptap/CodeBlock";
-import FloatingMenu from "@tanam/cms/components/Tiptap/FloatingMenu";
-import Loader from "@tanam/cms/components/common/Loader";
 import BulletList from "@tiptap/extension-bullet-list";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Heading from "@tiptap/extension-heading";
@@ -18,6 +14,10 @@ import ts from "highlight.js/lib/languages/typescript";
 import html from "highlight.js/lib/languages/xml";
 import {common, createLowlight} from "lowlight";
 import {Suspense, useCallback, useEffect} from "react";
+import {Loader} from "../common/Loader";
+import BubbleMenu from "./BubbleMenu";
+import CodeBlock from "./CodeBlock";
+import FloatingMenu from "./FloatingMenu";
 
 import "./styles/tiptap-main.scss";
 
@@ -54,7 +54,7 @@ lowlight.register("css", css);
 lowlight.register("js", js);
 lowlight.register("ts", ts);
 
-export default function TiptapEditor(props: TiptapEditorProps) {
+export function TiptapEditor(props: TiptapEditorProps) {
   const debouncedOnChange = useCallback(
     debounce(async (content: string) => {
       if (!props.onChange) {
