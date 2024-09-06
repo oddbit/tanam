@@ -46,6 +46,12 @@
                 ]
               },
               {
+                "sourceTag": "lib:frontend",
+                "onlyDependOnLibsWithTags": [
+                  "lib:frontend"
+                ]
+              },
+              {
                 "sourceTag": "lib:shared",
                 "onlyDependOnLibsWithTags": [
                   "lib:shared"
