@@ -10,6 +10,7 @@ The project is using [NX monorepo](https://nx.dev/) for its architecture.
 You will find the code structured like this
  - Cloud functions: `./apps/cloud-functions`
  - App Hosting CMS application: `./apps/cms`
+ - UI components: `./libs/ui-components`
  - Shared definitions and base classes: `./libs/domain-shared`
  - Backend classes: `./libs/domain-backend`
  - Frontend client classes: `./libs/domain-frontend`
