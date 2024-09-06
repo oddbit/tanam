@@ -34,21 +34,21 @@
             "allow": [],
             "depConstraints": [
               {
-                "sourceTag": "scope:frontend",
+                "sourceTag": "app:frontend",
                 "onlyDependOnLibsWithTags": [
-                  "scope:frontend"
+                  "lib:frontend"
                 ]
               },
               {
-                "sourceTag": "scope:backend",
+                "sourceTag": "app:backend",
                 "onlyDependOnLibsWithTags": [
-                  "scope:backend","scope:shared"
+                  "lib:backend"
                 ]
               },
               {
-                "sourceTag": "scope:shared",
+                "sourceTag": "lib:shared",
                 "onlyDependOnLibsWithTags": [
-                  "scope:shared"
+                  "lib:shared"
                 ]
               }
             ]

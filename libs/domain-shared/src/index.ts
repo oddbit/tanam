@@ -1,12 +1,3 @@
-export * from "./schemas/article";
-
-export * from "./definitions/AcceptFileType";
-export * from "./definitions/LanguageCode";
-export * from "./definitions/TanamPublishStatus";
-
-export * from "./models/LocalizedString";
-export * from "./models/TanamDocument";
-export * from "./models/TanamDocumentData";
-export * from "./models/TanamDocumentField";
-export * from "./models/TanamDocumentType";
-export * from "./models/TanamUser";
+export * from "./definitions";
+export * from "./models";
+export * from "./schemas";

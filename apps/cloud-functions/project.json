@@ -3,20 +3,28 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/cloud-functions/src",
   "projectType": "application",
-  "tags": ["scope:backend"],
+  "tags": [
+    "app:backend"
+  ],
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
       "options": {
         "platform": "node",
         "outputPath": "dist/apps/cloud-functions",
-        "format": ["cjs"],
+        "format": [
+          "cjs"
+        ],
         "bundle": false,
         "main": "apps/cloud-functions/src/main.ts",
         "tsConfig": "apps/cloud-functions/tsconfig.app.json",
-        "assets": ["apps/cloud-functions/src/assets"],
+        "assets": [
+          "apps/cloud-functions/src/assets"
+        ],
         "generatePackageJson": true,
         "esbuildOptions": {
           "sourcemap": true,
@@ -40,7 +48,9 @@
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
-      "dependsOn": ["build"],
+      "dependsOn": [
+        "build"
+      ],
       "options": {
         "buildTarget": "cloud-functions:build",
         "runBuildTargetDependencies": false

@@ -1,0 +1,12 @@
+{
+  "name": "domain-client",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/domain-client/src",
+  "projectType": "library",
+  "tags": [
+    "lib:shared",
+    "lib:frontend"
+  ],
+  "// targets": "to see all targets run: nx show project domain-client --web",
+  "targets": {}
+}

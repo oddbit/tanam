@@ -4,8 +4,8 @@
   "sourceRoot": "libs/domain-backend/src",
   "projectType": "library",
   "tags": [
-    "scope:shared",
-    "scope:backend"
+    "lib:shared",
+    "lib:backend"
   ],
   "// targets": "to see all targets run: nx show project domain-backend --web",
   "targets": {}

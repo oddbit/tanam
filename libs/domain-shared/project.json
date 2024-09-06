@@ -4,7 +4,7 @@
   "sourceRoot": "libs/domain-shared/src",
   "projectType": "library",
   "tags": [
-    "scope:shared"
+    "lib:shared"
   ],
   "// targets": "to see all targets run: nx show project domain-shared --web",
   "targets": {}
