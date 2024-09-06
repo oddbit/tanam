@@ -1,12 +1,12 @@
-import { TanamDocumentAdmin } from "@tanam/domain-backend";
-import { ITanamDocument } from "@tanam/domain-shared";
+import {TanamDocumentAdmin} from "@tanam/domain-backend";
+import {ITanamDocument} from "@tanam/domain-shared";
 import * as admin from "firebase-admin";
-import { Timestamp } from "firebase-admin/firestore";
-import { getFunctions } from "firebase-admin/functions";
-import { getStorage } from "firebase-admin/storage";
-import { logger } from "firebase-functions/v2";
-import { onDocumentWritten } from "firebase-functions/v2/firestore";
-import { onTaskDispatched } from "firebase-functions/v2/tasks";
+import {Timestamp} from "firebase-admin/firestore";
+import {getFunctions} from "firebase-admin/functions";
+import {getStorage} from "firebase-admin/storage";
+import {logger} from "firebase-functions/v2";
+import {onDocumentWritten} from "firebase-functions/v2/firestore";
+import {onTaskDispatched} from "firebase-functions/v2/tasks";
 
 const db = admin.firestore();
 const storage = getStorage().bucket();
