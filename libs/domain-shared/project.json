@@ -1,0 +1,13 @@
+{
+  "name": "domain-shared",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/domain-shared/src",
+  "projectType": "library",
+  "tags": [
+    "feature:domain-shared",
+    "scope:backend",
+    "scope:frontend"
+  ],
+  "// targets": "to see all targets run: nx show project domain-shared --web",
+  "targets": {}
+}

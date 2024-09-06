@@ -1,6 +1,6 @@
 "use client";
 import {firebaseAuth} from "@tanam/cms/plugins/firebase";
-import {TanamRole} from "@tanam/shared";
+import {TanamRole} from "@tanam/domain-shared";
 import {User} from "firebase/auth";
 import {redirect, usePathname} from "next/navigation";
 import {useEffect, useState} from "react";

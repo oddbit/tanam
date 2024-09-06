@@ -2,7 +2,7 @@ import {TanamDocumentClient} from "@tanam/cms/models/TanamDocumentClient";
 import {UserNotification} from "@tanam/cms/models/UserNotification";
 import {firestore, storage} from "@tanam/cms/plugins/firebase";
 import {generateArticle} from "@tanam/cms/plugins/genkit/article";
-import {ArticleSchema, TanamPublishStatus} from "@tanam/shared";
+import {ArticleSchema, TanamPublishStatus} from "@tanam/domain-shared";
 import {collection, doc, getDocs, limit, orderBy, query, setDoc, where} from "firebase/firestore";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {useEffect, useState} from "react";

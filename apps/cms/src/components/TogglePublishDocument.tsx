@@ -3,7 +3,7 @@ import {DatePicker} from "@tanam/cms/components/Form";
 import {Modal} from "@tanam/cms/components/Modal";
 import {useTanamDocument} from "@tanam/cms/hooks/useTanamDocuments";
 import {formatDate} from "@tanam/cms/utils/date";
-import {TanamPublishStatus} from "@tanam/shared";
+import {TanamPublishStatus} from "@tanam/domain-shared";
 import {useParams} from "next/navigation";
 import {useMemo, useState} from "react";
 

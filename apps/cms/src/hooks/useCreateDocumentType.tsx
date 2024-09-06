@@ -1,7 +1,7 @@
 import {TanamDocumentTypeClient} from "@tanam/cms/models/TanamDocumentTypeClient";
 import {UserNotification} from "@tanam/cms/models/UserNotification";
 import {firestore} from "@tanam/cms/plugins/firebase";
-import {TanamDocumentField} from "@tanam/shared";
+import {TanamDocumentField} from "@tanam/domain-shared";
 import {collection, doc, serverTimestamp, writeBatch} from "firebase/firestore";
 import {useState} from "react";
 

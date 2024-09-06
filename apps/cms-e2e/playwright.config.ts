@@ -17,7 +17,7 @@ const baseURL = process.env["BASE_URL"] || "http://localhost:3000";
  */
 export default defineConfig({
   ...nxE2EPreset(__filename, {testDir: "./src"}),
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  /* domain settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     baseURL,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */

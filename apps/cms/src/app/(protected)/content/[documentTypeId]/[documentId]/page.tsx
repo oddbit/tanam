@@ -18,7 +18,7 @@ import {useTanamDocumentFields} from "@tanam/cms/hooks/useTanamDocumentFields";
 import {useTanamDocumentType} from "@tanam/cms/hooks/useTanamDocumentTypes";
 import {useTanamDocument} from "@tanam/cms/hooks/useTanamDocuments";
 import {UserNotification} from "@tanam/cms/models/UserNotification";
-import {TanamDocumentField} from "@tanam/shared";
+import {TanamDocumentField} from "@tanam/domain-shared";
 import {Timestamp} from "firebase/firestore";
 import {useParams, useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";

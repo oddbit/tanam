@@ -4,7 +4,7 @@ import {configureGenkit} from "@genkit-ai/core";
 import {firebase} from "@genkit-ai/firebase";
 import {defineFlow, runFlow} from "@genkit-ai/flow";
 import googleAI, {gemini15Pro} from "@genkit-ai/googleai";
-import {ArticleSchema} from "@tanam/shared";
+import {ArticleSchema} from "@tanam/domain-shared";
 import {z} from "zod";
 import {zodToJsonSchema} from "zod-to-json-schema";
 

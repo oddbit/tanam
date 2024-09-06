@@ -1,4 +1,4 @@
-import {ITanamDocument} from "@tanam/shared";
+import {ITanamDocument} from "@tanam/domain-shared";
 import * as admin from "firebase-admin";
 import {Timestamp} from "firebase-admin/firestore";
 import {getFunctions} from "firebase-admin/functions";

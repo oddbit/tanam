@@ -1,4 +1,4 @@
-import {ITanamDocument, TanamDocument} from "@tanam/shared";
+import {ITanamDocument, TanamDocument} from "@tanam/domain-shared";
 import {FieldValue, Timestamp} from "firebase-admin/firestore";
 import {DocumentSnapshot} from "firebase-functions/v2/firestore";
 

@@ -2,7 +2,7 @@
 import {TanamDocumentClient} from "@tanam/cms/models/TanamDocumentClient";
 import {UserNotification} from "@tanam/cms/models/UserNotification";
 import {firestore} from "@tanam/cms/plugins/firebase";
-import {TanamPublishStatus} from "@tanam/shared";
+import {TanamPublishStatus} from "@tanam/domain-shared";
 import {
   collection,
   doc,

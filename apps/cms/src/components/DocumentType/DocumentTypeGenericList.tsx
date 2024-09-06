@@ -1,7 +1,7 @@
 import {Table, TableRowLabel} from "@tanam/cms/components/Table";
 import {TanamDocumentClient} from "@tanam/cms/models/TanamDocumentClient";
 import {TanamDocumentTypeClient} from "@tanam/cms/models/TanamDocumentTypeClient";
-import {TanamPublishStatus} from "@tanam/shared";
+import {TanamPublishStatus} from "@tanam/domain-shared";
 import Link from "next/link";
 
 interface TableOverviewGenericProps {

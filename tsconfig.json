@@ -10,16 +10,24 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@tanam/shared": ["libs/shared/src/index.ts"],
+      "@tanam/domain-shared": [
+        "libs/domain-shared/src/index.ts"
+      ],
       "@tanam/cms/*": [
         "apps/cms/src/*"
       ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

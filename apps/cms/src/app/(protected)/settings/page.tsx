@@ -9,7 +9,7 @@ import {useAuthentication} from "@tanam/cms/hooks/useAuthentication";
 import {useFirebaseStorage} from "@tanam/cms/hooks/useFirebaseStorage";
 import {useTanamUser} from "@tanam/cms/hooks/useTanamUser";
 import {UserNotification} from "@tanam/cms/models/UserNotification";
-import {AcceptFileType} from "@tanam/shared";
+import {AcceptFileType} from "@tanam/domain-shared";
 import Image from "next/image";
 import {useEffect, useState} from "react";
 
