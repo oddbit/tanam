@@ -1,16 +1,13 @@
 "use client";
-import {
-  SidebarExpandableMenu,
-  SidebarExpandableMenuSubItem,
-  SidebarMenuGroup,
-  SidebarMenuItem,
-} from "@tanam/ui-components";
 import Image from "next/image";
 import Link from "next/link";
 import {usePathname} from "next/navigation";
 import {useEffect, useState} from "react";
-import {useAuthentication} from "../../../../../hooks/useAuthentication";
-import {useTanamDocumentTypes} from "../../../../../hooks/useTanamDocumentTypes";
+import {useAuthentication} from "../../hooks/useAuthentication";
+import {useTanamDocumentTypes} from "../../hooks/useTanamDocumentTypes";
+import {SidebarExpandableMenu, SidebarExpandableMenuSubItem} from "./SidebarExpandableMenu";
+import {SidebarMenuGroup} from "./SidebarMenuGroup";
+import {SidebarMenuItem} from "./SidebarMenuItem";
 
 interface SidebarProps {
   sidebarOpen: boolean;

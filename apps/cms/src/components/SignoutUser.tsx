@@ -1,6 +1,6 @@
 "use client";
 import {useEffect} from "react";
-import {useAuthentication} from "../../../../../hooks/useAuthentication";
+import {useAuthentication} from "../hooks/useAuthentication";
 
 const SignoutUser: React.FC = () => {
   const {signout} = useAuthentication();

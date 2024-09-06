@@ -1,9 +1,8 @@
-import {UserNotification} from "@tanam/cms/models/UserNotification";
-import {firestore} from "@tanam/cms/plugins/firebase";
-import {ITanamDocumentField, TanamDocumentField} from "@tanam/domain-shared";
+import {ITanamDocumentField, TanamDocumentField, UserNotification} from "@tanam/domain-client";
 import {collection, onSnapshot} from "firebase/firestore";
 import {useParams} from "next/navigation";
 import {useEffect, useState} from "react";
+import {firestore} from "../plugins/firebase";
 
 interface TanamDocumentFieldHook {
   data: TanamDocumentField[];

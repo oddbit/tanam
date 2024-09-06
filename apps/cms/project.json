@@ -4,7 +4,7 @@
   "sourceRoot": "apps/cms",
   "projectType": "application",
   "tags": [
-    "scope:frontend"
+    "app:frontend"
   ],
   "// targets": "to see all targets run: nx show project cms --web",
   "targets": {}

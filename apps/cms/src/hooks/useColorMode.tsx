@@ -1,5 +1,5 @@
-import useLocalStorage from "@tanam/cms/hooks/useLocalStorage";
 import {useEffect} from "react";
+import useLocalStorage from "./useLocalStorage";
 
 const useColorMode = () => {
   const [colorMode, setColorMode] = useLocalStorage("color-theme", "light");

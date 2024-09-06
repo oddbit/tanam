@@ -1,9 +1,8 @@
-import {TanamDocumentTypeClient} from "@tanam/cms/models/TanamDocumentTypeClient";
-import {UserNotification} from "@tanam/cms/models/UserNotification";
-import {firestore} from "@tanam/cms/plugins/firebase";
+import {TanamDocumentTypeClient, UserNotification} from "@tanam/domain-client";
 import {collection, doc, onSnapshot} from "firebase/firestore";
 import {useParams} from "next/navigation";
 import {useEffect, useState} from "react";
+import {firestore} from "../plugins/firebase";
 
 interface TanamDocumentTypeHook {
   data: TanamDocumentTypeClient[];

@@ -1,9 +1,7 @@
-import {TanamDocumentTypeClient} from "@tanam/cms/models/TanamDocumentTypeClient";
-import {UserNotification} from "@tanam/cms/models/UserNotification";
-import {firestore} from "@tanam/cms/plugins/firebase";
-import {TanamDocumentField} from "@tanam/domain-shared";
+import {TanamDocumentField, TanamDocumentTypeClient, UserNotification} from "@tanam/domain-client";
 import {collection, doc, serverTimestamp, writeBatch} from "firebase/firestore";
 import {useState} from "react";
+import {firestore} from "../plugins/firebase";
 
 interface CreateDocumentTypeHook {
   createType: (type: TanamDocumentTypeClient, fields: TanamDocumentField[]) => Promise<void>;

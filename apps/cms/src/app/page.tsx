@@ -1,7 +1,7 @@
 "use client";
-import {useAuthentication} from "@tanam/cms/hooks/useAuthentication";
+import {Loader} from "@tanam/ui-components";
 import {redirect} from "next/navigation";
-import Loader from "../components/common/Loader";
+import {useAuthentication} from "../hooks/useAuthentication";
 
 export default function HomePage() {
   const {isSignedIn} = useAuthentication();

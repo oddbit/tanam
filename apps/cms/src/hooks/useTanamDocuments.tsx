@@ -1,8 +1,5 @@
 "use client";
-import {TanamDocumentClient} from "@tanam/cms/models/TanamDocumentClient";
-import {UserNotification} from "@tanam/cms/models/UserNotification";
-import {firestore} from "@tanam/cms/plugins/firebase";
-import {TanamPublishStatus} from "@tanam/domain-shared";
+import {TanamDocumentClient, TanamPublishStatus, UserNotification} from "@tanam/domain-client";
 import {
   collection,
   doc,
@@ -15,6 +12,7 @@ import {
   where,
 } from "firebase/firestore";
 import {useEffect, useState} from "react";
+import {firestore} from "../plugins/firebase";
 
 interface UseTanamDocumentsResult {
   data: TanamDocumentClient[];

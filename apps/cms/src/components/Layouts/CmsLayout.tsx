@@ -4,8 +4,10 @@ import "@tanam/cms/assets/css/style.css";
 import "@tanam/cms/assets/scss/layout-default.scss";
 import "flatpickr/dist/flatpickr.min.css";
 import React, {useState} from "react";
-import {useAuthentication} from "../../../../../hooks/useAuthentication";
-import useColorMode from "../../../../../hooks/useColorMode";
+import {useAuthentication} from "../../hooks/useAuthentication";
+import useColorMode from "../../hooks/useColorMode";
+import {Header} from "../Header";
+import Sidebar from "../Sidebar/Sidebar";
 
 export default function CmsLayout({children}: {children: React.ReactNode}) {
   useAuthentication();

@@ -1,7 +1,5 @@
 "use client";
-import Loader from "@tanam/cms/components/common/Loader";
-import Notification from "@tanam/cms/components/common/Notification";
-import PageHeader from "@tanam/cms/components/common/PageHeader";
+import {Loader, Notification, PageHeader} from "@tanam/ui-components";
 import {Suspense} from "react";
 
 export default function ErrorPage() {

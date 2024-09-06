@@ -1,25 +1,19 @@
 "use client";
-import {Button} from "@tanam/cms/components/Button";
-import Loader from "@tanam/cms/components/common/Loader";
-import Notification from "@tanam/cms/components/common/Notification";
-import PageHeader from "@tanam/cms/components/common/PageHeader";
-import {DocumentTypeGenericList} from "@tanam/cms/components/DocumentType/DocumentTypeGenericList";
-import FilePicker from "@tanam/cms/components/FilePicker";
-import {Modal} from "@tanam/cms/components/Modal";
-import {useAuthentication} from "@tanam/cms/hooks/useAuthentication";
-import {ProcessingState, useGenkitArticle} from "@tanam/cms/hooks/useGenkitArticle";
-import {useCrudTanamDocument, useTanamDocuments} from "@tanam/cms/hooks/useTanamDocuments";
-import {useTanamDocumentType} from "@tanam/cms/hooks/useTanamDocumentTypes";
-import {UserNotification} from "@tanam/cms/models/UserNotification";
-import {base64ToFile} from "@tanam/cms/plugins/fileUpload";
+import { UserNotification } from "@tanam/domain-client";
+import { Button } from "@tanam/ui-components";
 import dynamic from "next/dynamic";
-import {useRouter} from "next/navigation";
-import {Suspense, useEffect, useState} from "react";
+import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useAuthentication } from "../../../../hooks/useAuthentication";
+import { ProcessingState, useGenkitArticle } from "../../../../hooks/useGenkitArticle";
+import { useCrudTanamDocument, useTanamDocuments } from "../../../../hooks/useTanamDocuments";
+import { useTanamDocumentType } from "../../../../hooks/useTanamDocumentTypes";
+import { base64ToFile } from "../../../../plugins/fileUpload";
 
 // I don't know why this component always errors
 // when built because this component is still detected as a component rendered on the server.
 // Even though I've used "use client" inside the component :(
-const VoiceRecorder = dynamic(() => import("@tanam/cms/components/VoiceRecorder"), {
+const VoiceRecorder = dynamic(() => import("@tanam/ui-components";
   ssr: false,
 });
 

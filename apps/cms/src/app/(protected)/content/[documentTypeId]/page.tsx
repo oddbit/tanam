@@ -1,14 +1,10 @@
 "use client";
-import {Button} from "@tanam/cms/components/Button";
-import {DocumentTypeGenericList} from "@tanam/cms/components/DocumentType/DocumentTypeGenericList";
-import Loader from "@tanam/cms/components/common/Loader";
-import Notification from "@tanam/cms/components/common/Notification";
-import PageHeader from "@tanam/cms/components/common/PageHeader";
-import {useTanamDocumentType} from "@tanam/cms/hooks/useTanamDocumentTypes";
-import {useTanamDocuments} from "@tanam/cms/hooks/useTanamDocuments";
-import {UserNotification} from "@tanam/cms/models/UserNotification";
+import {UserNotification} from "@tanam/domain-client";
+import {Button, DocumentTypeGenericList, Loader, Notification, PageHeader} from "@tanam/ui-components";
 import {useParams} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
+import {useTanamDocumentType} from "../../../../hooks/useTanamDocumentTypes";
+import {useTanamDocuments} from "../../../../hooks/useTanamDocuments";
 
 export default function DocumentTypeDocumentsPage() {
   const {documentTypeId} = useParams<{documentTypeId: string}>() ?? {};
@@ -20,7 +16,9 @@ export default function DocumentTypeDocumentsPage() {
     setNotification(docsError);
   }, [docsError]);
 
-  const addNewDocument = async () => {};
+  const addNewDocument = async () => {
+    // Add your code here
+  };
 
   return (
     <>

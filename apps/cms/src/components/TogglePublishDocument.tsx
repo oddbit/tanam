@@ -1,9 +1,9 @@
-import {formatDate} from "@tanam/cms/utils/date";
-import {TanamPublishStatus} from "@tanam/domain-shared";
+import {TanamPublishStatus} from "@tanam/domain-client";
 import {Button, DatePicker, Modal} from "@tanam/ui-components";
 import {useParams} from "next/navigation";
 import {useMemo, useState} from "react";
-import {useTanamDocument} from "../../../../../hooks/useTanamDocuments";
+import {useTanamDocument} from "../hooks/useTanamDocuments";
+import {formatDate} from "../utils/date";
 
 export function TogglePublishDocument() {
   const {documentId} = useParams<{documentId: string}>() ?? {};

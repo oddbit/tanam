@@ -1,17 +1,13 @@
 "use client";
-import {Button} from "@tanam/cms/components/Button";
-import {Input} from "@tanam/cms/components/Form";
-import Loader from "@tanam/cms/components/common/Loader";
-import Notification from "@tanam/cms/components/common/Notification";
-import PageHeader from "@tanam/cms/components/common/PageHeader";
-import {useCrudTanamDocument, useTanamDocument} from "@tanam/cms/hooks/useTanamDocuments";
-import {UserNotification} from "@tanam/cms/models/UserNotification";
+import { UserNotification } from "@tanam/domain-client";
+import { Button, Input, Loader, PageHeader, Notification } from "@tanam/ui-components";
 import dynamic from "next/dynamic";
-import {useParams, useRouter} from "next/navigation";
-import {Suspense, useEffect, useState} from "react";
+import { useParams, useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useCrudTanamDocument, useTanamDocument } from "../../../../../hooks/useTanamDocuments";
 
 // TiptapEditor is also detected as ssr, even though it uses "use client" :(
-const TiptapEditor = dynamic(() => import("@tanam/cms/components/Tiptap/TiptapEditor"), {
+const TiptapEditor = dynamic(() => import("@tanam/ui-components";
   ssr: false,
 });
 

@@ -1,27 +1,26 @@
 "use client";
-import ContentCard from "@tanam/cms/components/Containers/ContentCard";
+import {TanamDocumentField, UserNotification} from "@tanam/domain-client";
 import {
   Checkbox,
+  ContentCard,
   DatePicker,
   Dropdown,
   FileUpload,
   FormGroup,
   Input,
+  Loader,
+  Notification,
+  PageHeader,
   RadioButton,
   Switcher,
   TextArea,
-} from "@tanam/cms/components/Form";
-import Loader from "@tanam/cms/components/common/Loader";
-import Notification from "@tanam/cms/components/common/Notification";
-import PageHeader from "@tanam/cms/components/common/PageHeader";
-import {useTanamDocumentFields} from "@tanam/cms/hooks/useTanamDocumentFields";
-import {useTanamDocumentType} from "@tanam/cms/hooks/useTanamDocumentTypes";
-import {useTanamDocument} from "@tanam/cms/hooks/useTanamDocuments";
-import {UserNotification} from "@tanam/cms/models/UserNotification";
-import {TanamDocumentField} from "@tanam/domain-shared";
+} from "@tanam/ui-components";
 import {Timestamp} from "firebase/firestore";
 import {useParams, useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
+import {useTanamDocumentFields} from "../../../../../hooks/useTanamDocumentFields";
+import {useTanamDocumentType} from "../../../../../hooks/useTanamDocumentTypes";
+import {useTanamDocument} from "../../../../../hooks/useTanamDocuments";
 
 const DocumentDetailsPage = () => {
   const router = useRouter();
@@ -33,14 +32,15 @@ const DocumentDetailsPage = () => {
   const [readonlyMode] = useState<boolean>(true);
   const [notification, setNotification] = useState<UserNotification | null>(null);
 
-  if (!!document?.documentType && document?.documentType !== documentTypeId) {
-    router.push(`/content/${document?.documentType}/${document?.id}`);
-    return <Loader />;
-  }
-
   useEffect(() => {
     setNotification(documentError ?? typeError ?? fieldsError);
-  }, [documentError]);
+  }, [documentError, typeError, fieldsError]);
+
+  useEffect(() => {
+    if (!!document?.documentType && document?.documentType !== documentTypeId) {
+      router.push(`/content/${document?.documentType}/${document?.id}`);
+    }
+  }, [document, documentTypeId, router]);
 
   const renderFormElement = (field: TanamDocumentField, value: any) => {
     const formgroupKey = `formgroup-${field.id}`;
