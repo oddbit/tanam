@@ -1,5 +1,4 @@
-import {TanamDocumentAdmin} from "@tanam/domain-backend";
-import {ITanamDocument} from "@tanam/domain-shared";
+import {ITanamDocument, TanamDocumentAdmin} from "@tanam/domain-backend";
 import * as admin from "firebase-admin";
 import {Timestamp} from "firebase-admin/firestore";
 import {getFunctions} from "firebase-admin/functions";

@@ -1,5 +1,4 @@
-import {TanamUserAdmin} from "@tanam/domain-backend";
-import {TanamRole} from "@tanam/domain-shared";
+import {TanamRole, TanamUserAdmin} from "@tanam/domain-backend";
 import axios from "axios";
 import * as admin from "firebase-admin";
 import {Timestamp} from "firebase-admin/firestore";
