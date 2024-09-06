@@ -59,6 +59,10 @@ export function getAcceptDescription(accept: AcceptFileType): string {
       return "Any image type";
     case AcceptFileType.Images:
       return "Images (JPG, PNG, SVG)";
+    case AcceptFileType.AllAudios:
+      return "Any audio type";
+    case AcceptFileType.Audios:
+      return "Audios (MP3, WAV, OGG)";
     case AcceptFileType.Pdf:
       return "PDF files";
     case AcceptFileType.Word:

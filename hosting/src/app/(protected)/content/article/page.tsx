@@ -4,24 +4,26 @@ import Loader from "@/components/common/Loader";
 import Notification from "@/components/common/Notification";
 import PageHeader from "@/components/common/PageHeader";
 import {DocumentTypeGenericList} from "@/components/DocumentType/DocumentTypeGenericList";
-import FilePicker from "@/components/FilePicker";
+import {Dropzone} from "@/components/Form";
 import {Modal} from "@/components/Modal";
+import VoiceRecorder from "@/components/VoiceRecorder";
 import {useAuthentication} from "@/hooks/useAuthentication";
 import {ProcessingState, useGenkitArticle} from "@/hooks/useGenkitArticle";
 import {useCrudTanamDocument, useTanamDocuments} from "@/hooks/useTanamDocuments";
 import {useTanamDocumentType} from "@/hooks/useTanamDocumentTypes";
 import {UserNotification} from "@/models/UserNotification";
 import {base64ToFile} from "@/plugins/fileUpload";
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 import {useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
+import {AcceptFileType} from "tanam-shared/definitions/AcceptFileType";
 
 // I don't know why this component always errors
 // when built because this component is still detected as a component rendered on the server.
 // Even though I've used "use client" inside the component :(
-const VoiceRecorder = dynamic(() => import("@/components/VoiceRecorder"), {
-  ssr: false,
-});
+// const VoiceRecorder = dynamic(() => import("@/components/VoiceRecorder"), {
+//   ssr: false,
+// });
 
 export default function DocumentTypeDocumentsPage() {
   const router = useRouter();
@@ -168,7 +170,14 @@ export default function DocumentTypeDocumentsPage() {
                       <>
                         <div className="relative w-full text-center mt-4 mb-4">Or</div>
 
-                        <FilePicker onFileSelect={handleFileSelect} />
+                        <Dropzone
+                          accept={AcceptFileType.Audios}
+                          onChange={(_, fileBlob) => {
+                            if (!fileBlob) return;
+
+                            handleFileSelect(fileBlob);
+                          }}
+                        />
                       </>
                     )}
                   </>
