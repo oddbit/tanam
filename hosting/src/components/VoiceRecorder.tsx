@@ -1,6 +1,5 @@
 "use client";
 import {TanamSpeechRecognition} from "@/models/TanamSpeechRecognition";
-import Peaks from "peaks.js";
 import {useEffect, useRef, useState} from "react";
 
 interface VoiceRecorderProps {
@@ -170,8 +169,14 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
   /**
    * Loads the audio buffer and initializes Peak.js with the given options.
    */
-  function initSoundWave() {
+  async function initSoundWave() {
     resetSoundWave();
+
+    // SSR Compatability (https://github.com/bbc/peaks.js/issues/335#issuecomment-682223058)
+    /* eslint-disable */
+    const module = await import("peaks.js");
+    const Peaks = module.default;
+    /* eslint-enable */
 
     // Peak.js options configuration (https://www.npmjs.com/package/peaks.js/v/0.18.1#configuration)
     const options = {
