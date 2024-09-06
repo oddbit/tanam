@@ -1,7 +1,7 @@
 "use client";
 import CmsLayout from "@tanam/cms/components/Layouts/CmsLayout";
-import { useAuthentication } from "@tanam/cms/hooks/useAuthentication";
-import { redirect } from "next/navigation";
+import {useAuthentication} from "@tanam/cms/hooks/useAuthentication";
+import {redirect} from "next/navigation";
 import React from "react";
 
 interface ProtectedLayoutProps {

@@ -1,9 +1,9 @@
 "use client";
 import "@tanam/cms/assets/scss/layout-authentication.scss";
-import { useFirebaseUi } from "@tanam/cms/hooks/useFirebaseUi";
+import {useFirebaseUi} from "@tanam/cms/hooks/useFirebaseUi";
 import Image from "next/image";
-import { notFound, useParams } from "next/navigation";
-import { useEffect } from "react";
+import {notFound, useParams} from "next/navigation";
+import {useEffect} from "react";
 
 export default function AuthPage() {
   const {authAction} = useParams<{authAction: string}>() ?? {};

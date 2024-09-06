@@ -1,16 +1,16 @@
 "use client";
-import { Button } from "@tanam/cms/components/Button";
+import {Button} from "@tanam/cms/components/Button";
 import ContentCard from "@tanam/cms/components/Containers/ContentCard";
-import { Table, TableRowLabel } from "@tanam/cms/components/Table";
+import {Table, TableRowLabel} from "@tanam/cms/components/Table";
 import Loader from "@tanam/cms/components/common/Loader";
 import Notification from "@tanam/cms/components/common/Notification";
 import PageHeader from "@tanam/cms/components/common/PageHeader";
-import { useCreateDocumentType } from "@tanam/cms/hooks/useCreateDocumentType";
-import { useTanamDocumentTypes } from "@tanam/cms/hooks/useTanamDocumentTypes";
-import { UserNotification } from "@tanam/cms/models/UserNotification";
-import { getDocumentTypeArticle, getDocumentTypePerson } from "@tanam/cms/utils/documentTypeGenerator";
+import {useCreateDocumentType} from "@tanam/cms/hooks/useCreateDocumentType";
+import {useTanamDocumentTypes} from "@tanam/cms/hooks/useTanamDocumentTypes";
+import {UserNotification} from "@tanam/cms/models/UserNotification";
+import {getDocumentTypeArticle, getDocumentTypePerson} from "@tanam/cms/utils/documentTypeGenerator";
 import Link from "next/link";
-import { Suspense, useEffect, useState } from "react";
+import {Suspense, useEffect, useState} from "react";
 
 export default function DocumentTypeDocumentsPage() {
   const {data: documentTypes, error: typesError} = useTanamDocumentTypes();

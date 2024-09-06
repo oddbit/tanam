@@ -1,13 +1,13 @@
 "use client";
-import { SidebarExpandableMenu, SidebarExpandableMenuSubItem } from "@tanam/cms/components/Sidebar/SidebarExpandableMenu";
-import { SidebarMenuGroup } from "@tanam/cms/components/Sidebar/SidebarMenuGroup";
-import { SidebarMenuItem } from "@tanam/cms/components/Sidebar/SidebarMenuItem";
-import { useAuthentication } from "@tanam/cms/hooks/useAuthentication";
-import { useTanamDocumentTypes } from "@tanam/cms/hooks/useTanamDocumentTypes";
+import {SidebarExpandableMenu, SidebarExpandableMenuSubItem} from "@tanam/cms/components/Sidebar/SidebarExpandableMenu";
+import {SidebarMenuGroup} from "@tanam/cms/components/Sidebar/SidebarMenuGroup";
+import {SidebarMenuItem} from "@tanam/cms/components/Sidebar/SidebarMenuItem";
+import {useAuthentication} from "@tanam/cms/hooks/useAuthentication";
+import {useTanamDocumentTypes} from "@tanam/cms/hooks/useTanamDocumentTypes";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import {usePathname} from "next/navigation";
+import {useEffect, useState} from "react";
 
 interface SidebarProps {
   sidebarOpen: boolean;

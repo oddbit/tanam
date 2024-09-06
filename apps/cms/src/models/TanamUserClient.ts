@@ -1,5 +1,5 @@
-import { ITanamUser, TanamUser } from "@tanam/shared";
-import { DocumentSnapshot, FieldValue, serverTimestamp, Timestamp } from "firebase/firestore";
+import {ITanamUser, TanamUser} from "@tanam/shared";
+import {DocumentSnapshot, FieldValue, serverTimestamp, Timestamp} from "firebase/firestore";
 
 export class TanamUserClient extends TanamUser<Timestamp, FieldValue> {
   constructor(id: string, json: ITanamUser<Timestamp>) {

@@ -1,15 +1,12 @@
-import { getIconCollections, iconsPlugin } from "@egoist/tailwindcss-icons";
-import { createGlobPatternsForDependencies } from '@nx/react/tailwind';
-import { join } from 'path';
-import type { Config } from "tailwindcss";
+import {getIconCollections, iconsPlugin} from "@egoist/tailwindcss-icons";
+import {createGlobPatternsForDependencies} from "@nx/react/tailwind";
+import {join} from "path";
+import type {Config} from "tailwindcss";
 import defaultTheme from "tailwindcss/defaultTheme";
 
 const config: Config = {
   content: [
-    join(
-      __dirname,
-      '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'
-    ),
+    join(__dirname, "{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}"),
     ...createGlobPatternsForDependencies(__dirname),
   ],
   darkMode: "class",

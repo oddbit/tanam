@@ -1,12 +1,12 @@
-import { TanamRole } from "@tanam/shared";
+import {TanamRole} from "@tanam/shared";
 import axios from "axios";
 import * as admin from "firebase-admin";
-import { Timestamp } from "firebase-admin/firestore";
-import { logger } from "firebase-functions/v2";
-import { onDocumentCreated, onDocumentDeleted, onDocumentUpdated } from "firebase-functions/v2/firestore";
-import { onObjectFinalized } from "firebase-functions/v2/storage";
+import {Timestamp} from "firebase-admin/firestore";
+import {logger} from "firebase-functions/v2";
+import {onDocumentCreated, onDocumentDeleted, onDocumentUpdated} from "firebase-functions/v2/firestore";
+import {onObjectFinalized} from "firebase-functions/v2/storage";
 import sharp from "sharp";
-import { TanamUserAdmin } from "../models/TanamUserAdmin";
+import {TanamUserAdmin} from "../models/TanamUserAdmin";
 
 const auth = admin.auth();
 const db = admin.firestore();

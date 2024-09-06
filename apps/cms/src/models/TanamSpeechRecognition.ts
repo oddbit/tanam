@@ -107,10 +107,10 @@ export class TanamSpeechRecognition implements SpeechRecognition {
     this.recognition.onnomatch = this.handleEvent.bind(this, "onnomatch");
   }
 
-  public lang: string = "en-US";
-  public interimResults: boolean = false;
-  public maxAlternatives: number = 1;
-  public continuous: boolean = false;
+  public lang = "en-US";
+  public interimResults = false;
+  public maxAlternatives = 1;
+  public continuous = false;
 
   public onaudiostart?: (event: Event) => void;
   public onsoundstart?: (event: Event) => void;

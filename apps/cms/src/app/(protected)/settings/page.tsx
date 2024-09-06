@@ -1,17 +1,17 @@
 "use client";
 import Notification from "@tanam/cms/components/common/Notification";
 import PageHeader from "@tanam/cms/components/common/PageHeader";
-import { CropImage } from "@tanam/cms/components/CropImage";
+import {CropImage} from "@tanam/cms/components/CropImage";
 import DarkModeSwitcher from "@tanam/cms/components/DarkModeSwitcher";
-import { Dropzone } from "@tanam/cms/components/Form/Dropzone";
-import { Modal } from "@tanam/cms/components/Modal";
-import { useAuthentication } from "@tanam/cms/hooks/useAuthentication";
-import { useFirebaseStorage } from "@tanam/cms/hooks/useFirebaseStorage";
-import { useTanamUser } from "@tanam/cms/hooks/useTanamUser";
-import { UserNotification } from "@tanam/cms/models/UserNotification";
-import { AcceptFileType } from "@tanam/shared";
+import {Dropzone} from "@tanam/cms/components/Form/Dropzone";
+import {Modal} from "@tanam/cms/components/Modal";
+import {useAuthentication} from "@tanam/cms/hooks/useAuthentication";
+import {useFirebaseStorage} from "@tanam/cms/hooks/useFirebaseStorage";
+import {useTanamUser} from "@tanam/cms/hooks/useTanamUser";
+import {UserNotification} from "@tanam/cms/models/UserNotification";
+import {AcceptFileType} from "@tanam/shared";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 
 const defaultImage = "/images/no-image.png";
 

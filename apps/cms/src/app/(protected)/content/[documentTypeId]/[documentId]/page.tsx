@@ -14,14 +14,14 @@ import {
 import Loader from "@tanam/cms/components/common/Loader";
 import Notification from "@tanam/cms/components/common/Notification";
 import PageHeader from "@tanam/cms/components/common/PageHeader";
-import { useTanamDocumentFields } from "@tanam/cms/hooks/useTanamDocumentFields";
-import { useTanamDocumentType } from "@tanam/cms/hooks/useTanamDocumentTypes";
-import { useTanamDocument } from "@tanam/cms/hooks/useTanamDocuments";
-import { UserNotification } from "@tanam/cms/models/UserNotification";
-import { TanamDocumentField } from "@tanam/shared";
-import { Timestamp } from "firebase/firestore";
-import { useParams, useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import {useTanamDocumentFields} from "@tanam/cms/hooks/useTanamDocumentFields";
+import {useTanamDocumentType} from "@tanam/cms/hooks/useTanamDocumentTypes";
+import {useTanamDocument} from "@tanam/cms/hooks/useTanamDocuments";
+import {UserNotification} from "@tanam/cms/models/UserNotification";
+import {TanamDocumentField} from "@tanam/shared";
+import {Timestamp} from "firebase/firestore";
+import {useParams, useRouter} from "next/navigation";
+import {Suspense, useEffect, useState} from "react";
 
 const DocumentDetailsPage = () => {
   const router = useRouter();

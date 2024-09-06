@@ -1,6 +1,6 @@
-import { ITanamDocumentType, LocalizedString, TanamDocumentType } from "@tanam/shared";
-import { FieldValue, Timestamp } from "firebase-admin/firestore";
-import { DocumentSnapshot } from "firebase-functions/v2/firestore";
+import {ITanamDocumentType, LocalizedString, TanamDocumentType} from "@tanam/shared";
+import {FieldValue, Timestamp} from "firebase-admin/firestore";
+import {DocumentSnapshot} from "firebase-functions/v2/firestore";
 
 export class TanamDocumentTypeAdmin extends TanamDocumentType<Timestamp, FieldValue> {
   constructor(id: string, json: ITanamDocumentType<Timestamp>) {

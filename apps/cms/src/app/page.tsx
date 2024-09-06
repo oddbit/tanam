@@ -1,6 +1,6 @@
 "use client";
-import { useAuthentication } from "@tanam/cms/hooks/useAuthentication";
-import { redirect } from "next/navigation";
+import {useAuthentication} from "@tanam/cms/hooks/useAuthentication";
+import {redirect} from "next/navigation";
 import Loader from "../components/common/Loader";
 
 export default function HomePage() {

@@ -1,8 +1,8 @@
-import { UserNotification } from "@tanam/cms/models/UserNotification";
-import { storage } from "@tanam/cms/plugins/firebase";
-import { base64ToBlob } from "@tanam/cms/utils/fileUpload";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useState } from "react";
+import {UserNotification} from "@tanam/cms/models/UserNotification";
+import {storage} from "@tanam/cms/plugins/firebase";
+import {base64ToBlob} from "@tanam/cms/utils/fileUpload";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import {useState} from "react";
 
 interface FirebaseStorageHook {
   isLoading: boolean;

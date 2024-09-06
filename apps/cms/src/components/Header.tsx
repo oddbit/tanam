@@ -1,4 +1,4 @@
-import { TogglePublishDocument } from "@tanam/cms/components/TogglePublishDocument";
+import {TogglePublishDocument} from "@tanam/cms/components/TogglePublishDocument";
 import Image from "next/image";
 import Link from "next/link";
 
