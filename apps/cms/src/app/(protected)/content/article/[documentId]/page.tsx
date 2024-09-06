@@ -1,6 +1,6 @@
 "use client";
-import { UserNotification } from "@tanam/domain-client";
-import { Button, Input, Loader, PageHeader, Notification } from "@tanam/ui-components";
+import { UserNotification } from "@tanam/domain-frontend";
+import { Button, Input, Loader, Notification, PageHeader } from "@tanam/ui-components";
 import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";

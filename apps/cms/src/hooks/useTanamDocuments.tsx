@@ -1,5 +1,5 @@
 "use client";
-import {TanamDocumentClient, TanamPublishStatus, UserNotification} from "@tanam/domain-client";
+import {TanamDocumentClient, TanamPublishStatus, UserNotification} from "@tanam/domain-frontend";
 import {
   collection,
   doc,

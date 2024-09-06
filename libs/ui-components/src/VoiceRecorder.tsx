@@ -1,5 +1,5 @@
 "use client";
-import {TanamSpeechRecognition} from "@tanam/domain-client";
+import {TanamSpeechRecognition} from "@tanam/domain-frontend";
 import Peaks from "peaks.js";
 import {useEffect, useRef, useState} from "react";
 

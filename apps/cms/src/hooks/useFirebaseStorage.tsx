@@ -1,4 +1,4 @@
-import {UserNotification} from "@tanam/domain-client";
+import {UserNotification} from "@tanam/domain-frontend";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {useState} from "react";
 import {storage} from "../plugins/firebase";

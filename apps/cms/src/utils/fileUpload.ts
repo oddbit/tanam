@@ -1,4 +1,4 @@
-import {AcceptFileType} from "@tanam/domain-client";
+import {AcceptFileType} from "@tanam/domain-frontend";
 
 /**
  * Converts a base64 string to a Blob object.

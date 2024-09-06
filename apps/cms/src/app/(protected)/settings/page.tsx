@@ -1,5 +1,5 @@
 "use client";
-import {AcceptFileType, UserNotification} from "@tanam/domain-client";
+import {AcceptFileType, UserNotification} from "@tanam/domain-frontend";
 import {CropImage, Dropzone, Modal, Notification, PageHeader} from "@tanam/ui-components";
 import Image from "next/image";
 import {useEffect, useState} from "react";

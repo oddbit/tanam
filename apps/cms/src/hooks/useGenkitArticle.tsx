@@ -1,4 +1,4 @@
-import {ArticleSchema, TanamDocumentClient, TanamPublishStatus, UserNotification} from "@tanam/domain-client";
+import {ArticleSchema, TanamDocumentClient, TanamPublishStatus, UserNotification} from "@tanam/domain-frontend";
 import {collection, doc, getDocs, limit, orderBy, query, setDoc, where} from "firebase/firestore";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {useEffect, useState} from "react";

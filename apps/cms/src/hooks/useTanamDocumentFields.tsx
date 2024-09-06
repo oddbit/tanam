@@ -1,4 +1,4 @@
-import {ITanamDocumentField, TanamDocumentField, UserNotification} from "@tanam/domain-client";
+import {ITanamDocumentField, TanamDocumentField, UserNotification} from "@tanam/domain-frontend";
 import {collection, onSnapshot} from "firebase/firestore";
 import {useParams} from "next/navigation";
 import {useEffect, useState} from "react";

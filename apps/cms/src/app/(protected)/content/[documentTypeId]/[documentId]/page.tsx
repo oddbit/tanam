@@ -1,5 +1,5 @@
 "use client";
-import {TanamDocumentField, UserNotification} from "@tanam/domain-client";
+import {TanamDocumentField, UserNotification} from "@tanam/domain-frontend";
 import {
   Checkbox,
   ContentCard,

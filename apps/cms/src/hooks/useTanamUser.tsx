@@ -1,4 +1,4 @@
-import {TanamUserClient, UserNotification} from "@tanam/domain-client";
+import {TanamUserClient, UserNotification} from "@tanam/domain-frontend";
 import {doc, onSnapshot, updateDoc} from "firebase/firestore";
 import {getDownloadURL, ref} from "firebase/storage";
 import {useEffect, useState} from "react";

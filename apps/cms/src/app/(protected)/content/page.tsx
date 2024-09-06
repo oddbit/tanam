@@ -1,5 +1,5 @@
 "use client";
-import {UserNotification} from "@tanam/domain-client";
+import {UserNotification} from "@tanam/domain-frontend";
 import {Button, ContentCard, Loader, Notification, PageHeader, Table, TableRowLabel} from "@tanam/ui-components";
 import Link from "next/link";
 import {Suspense, useEffect, useState} from "react";

@@ -1,5 +1,5 @@
 "use client";
-import { UserNotification } from "@tanam/domain-client";
+import { UserNotification } from "@tanam/domain-frontend";
 import { Button } from "@tanam/ui-components";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";

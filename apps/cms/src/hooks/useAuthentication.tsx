@@ -1,5 +1,5 @@
 "use client";
-import {TanamRole} from "@tanam/domain-client";
+import {TanamRole} from "@tanam/domain-frontend";
 import {User} from "firebase/auth";
 import {redirect, usePathname} from "next/navigation";
 import {useEffect, useState} from "react";

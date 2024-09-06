@@ -1,4 +1,4 @@
-import {TanamDocumentField, TanamDocumentTypeClient, UserNotification} from "@tanam/domain-client";
+import {TanamDocumentField, TanamDocumentTypeClient, UserNotification} from "@tanam/domain-frontend";
 import {collection, doc, serverTimestamp, writeBatch} from "firebase/firestore";
 import {useState} from "react";
 import {firestore} from "../plugins/firebase";
