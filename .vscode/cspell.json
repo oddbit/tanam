@@ -2,10 +2,15 @@
   "version": "0.2",
   "language": "en",
   "words": [
+    "Buildable",
+    "datepicker",
     "firebaseui",
     "firestore",
+    "formgroup",
     "Genkit",
     "googleai",
+    "linebreak",
+    "satoshi",
     "tanam",
     "tiptap"
   ]

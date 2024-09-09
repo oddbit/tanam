@@ -4,18 +4,30 @@ Wow, you're amazing for even considering to contribute.
 
 It's a scary road ahead. Take this 🦄 to accompany on your adventure with us.
 
+## Architecture
+The project is using [NX monorepo](https://nx.dev/) for its architecture. 
+
+You will find the code structured like this
+ - Cloud functions: `./apps/cloud-functions`
+ - App Hosting CMS application: `./apps/cms`
+ - UI components: `./libs/ui-components`
+ - Shared definitions and base classes: `./libs/domain-shared`
+ - Backend classes: `./libs/domain-backend`
+ - Frontend client classes: `./libs/domain-frontend`
+
 ## Configuration
 
 All configuration values below are populated and injected in Github actions during
 deployment. During development you will need to configure your environment in the
-`.env` files in `functions` and `hosting`. The files are omitted from the repository.
+`.env` files for `cloud-functions` and `hosting` apps. 
 
-### Hosting
+The files are omitted from the repository.
 
-Create a `.env` file in the functions folder.
+### CMS app
+Create a `.env` file in the CMS app folder.
 
 ```sh
-touch ./hosting/.env
+touch ./apps/cms/.env
 ```
 
 Set the following environment variables from your Firebase project web app configuration.
@@ -33,7 +45,7 @@ Set the following environment variables from your Firebase project web app confi
 Create a `.env` file in the functions folder.
 
 ```sh
-touch ./functions/.env
+touch ./apps/cloud-functions/.env
 ```
 
 Set the following environment variables
@@ -55,8 +67,8 @@ npm install -g firebase-tools@latest genkit@latest
 Assuming that you're running the commands from the root of your project folder
 
 ```sh
-npm --prefix functions install
-npm --prefix functions run build
+npm install
+npm build:functions
 GENKIT_ENV=dev firebase emulators:start --inspect-functions
 ```
 

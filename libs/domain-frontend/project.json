@@ -1,0 +1,12 @@
+{
+  "name": "domain-frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/domain-frontend/src",
+  "projectType": "library",
+  "tags": [
+    "lib:shared",
+    "lib:frontend"
+  ],
+  "// targets": "to see all targets run: nx show project domain-frontend --web",
+  "targets": {}
+}
