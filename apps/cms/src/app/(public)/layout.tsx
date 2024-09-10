@@ -1,8 +1,8 @@
 "use client";
 
-import "@tanam/cms/assets/css/satoshi.css";
-import "@tanam/cms/assets/css/style.css";
 import React from "react";
+import "../../assets/css/satoshi.css";
+import "../../assets/css/style.css";
 
 interface PublicLayoutProps {
   children: React.ReactNode;
