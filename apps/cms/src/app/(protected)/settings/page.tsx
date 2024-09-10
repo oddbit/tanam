@@ -1,9 +1,10 @@
 "use client";
 import {AcceptFileType, UserNotification} from "@tanam/domain-frontend";
-import {CropImage, Dropzone, Modal, Notification, PageHeader} from "@tanam/ui-components";
+import {CropImage, Modal, Notification, PageHeader} from "@tanam/ui-components";
 import Image from "next/image";
 import {useEffect, useState} from "react";
 import DarkModeSwitcher from "../../../components/DarkModeSwitcher";
+import {Dropzone} from "../../../components/Form/Dropzone";
 import {useAuthentication} from "../../../hooks/useAuthentication";
 import {useFirebaseStorage} from "../../../hooks/useFirebaseStorage";
 import {useTanamUser} from "../../../hooks/useTanamUser";
