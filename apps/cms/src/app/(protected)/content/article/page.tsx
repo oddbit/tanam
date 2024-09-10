@@ -8,6 +8,7 @@ import {
   Modal,
   Notification,
   PageHeader,
+  VoiceRecorder,
 } from "@tanam/ui-components";
 import {useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
@@ -16,13 +17,6 @@ import {ProcessingState, useGenkitArticle} from "../../../../hooks/useGenkitArti
 import {useCrudTanamDocument, useTanamDocuments} from "../../../../hooks/useTanamDocuments";
 import {useTanamDocumentType} from "../../../../hooks/useTanamDocumentTypes";
 import {base64ToFile} from "../../../../plugins/fileUpload";
-
-// I don't know why this component always errors
-// when built because this component is still detected as a component rendered on the server.
-// Even though I've used "use client" inside the component :(
-const VoiceRecorder = dynamic(() => import("@tanam/ui-components";
-  ssr: false,
-});
 
 export default function DocumentTypeDocumentsPage() {
   const router = useRouter();
