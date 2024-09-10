@@ -1,14 +1,21 @@
 "use client";
-import { UserNotification } from "@tanam/domain-frontend";
-import { Button } from "@tanam/ui-components";
-import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
-import { useAuthentication } from "../../../../hooks/useAuthentication";
-import { ProcessingState, useGenkitArticle } from "../../../../hooks/useGenkitArticle";
-import { useCrudTanamDocument, useTanamDocuments } from "../../../../hooks/useTanamDocuments";
-import { useTanamDocumentType } from "../../../../hooks/useTanamDocumentTypes";
-import { base64ToFile } from "../../../../plugins/fileUpload";
+import {UserNotification} from "@tanam/domain-frontend";
+import {
+  Button,
+  DocumentTypeGenericList,
+  FilePicker,
+  Loader,
+  Modal,
+  Notification,
+  PageHeader,
+} from "@tanam/ui-components";
+import {useRouter} from "next/navigation";
+import {Suspense, useEffect, useState} from "react";
+import {useAuthentication} from "../../../../hooks/useAuthentication";
+import {ProcessingState, useGenkitArticle} from "../../../../hooks/useGenkitArticle";
+import {useCrudTanamDocument, useTanamDocuments} from "../../../../hooks/useTanamDocuments";
+import {useTanamDocumentType} from "../../../../hooks/useTanamDocumentTypes";
+import {base64ToFile} from "../../../../plugins/fileUpload";
 
 // I don't know why this component always errors
 // when built because this component is still detected as a component rendered on the server.

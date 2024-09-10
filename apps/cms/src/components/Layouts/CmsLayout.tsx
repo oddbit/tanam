@@ -1,9 +1,9 @@
 "use client";
-import "@tanam/cms/assets/css/satoshi.css";
-import "@tanam/cms/assets/css/style.css";
-import "@tanam/cms/assets/scss/layout-default.scss";
 import "flatpickr/dist/flatpickr.min.css";
 import React, {useState} from "react";
+import "../../assets/css/satoshi.css";
+import "../../assets/css/style.css";
+import "../../assets/scss/layout-default.scss";
 import {useAuthentication} from "../../hooks/useAuthentication";
 import useColorMode from "../../hooks/useColorMode";
 import {Header} from "../Header";
