@@ -3,7 +3,7 @@ import "@tanam/cms/assets/scss/layout-authentication.scss";
 import Image from "next/image";
 import {notFound, useParams} from "next/navigation";
 import {useEffect} from "react";
-import {useFirebaseUi} from "../../../../../hooks/useFirebaseUi";
+import {useFirebaseUi} from "../../../../hooks/useFirebaseUi";
 
 export default function AuthPage() {
   const {authAction} = useParams<{authAction: string}>() ?? {};
