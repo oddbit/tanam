@@ -1,15 +1,9 @@
 "use client";
-import { UserNotification } from "@tanam/domain-frontend";
-import { Button, Input, Loader, Notification, PageHeader } from "@tanam/ui-components";
-import dynamic from "next/dynamic";
-import { useParams, useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
-import { useCrudTanamDocument, useTanamDocument } from "../../../../../hooks/useTanamDocuments";
-
-// TiptapEditor is also detected as ssr, even though it uses "use client" :(
-const TiptapEditor = dynamic(() => import("@tanam/ui-components";
-  ssr: false,
-});
+import {UserNotification} from "@tanam/domain-frontend";
+import {Button, Input, Loader, Notification, PageHeader, TiptapEditor} from "@tanam/ui-components";
+import {useParams, useRouter} from "next/navigation";
+import {Suspense, useEffect, useState} from "react";
+import {useCrudTanamDocument, useTanamDocument} from "../../../../../hooks/useTanamDocuments";
 
 export default function DocumentDetailsPage() {
   const router = useRouter();
@@ -22,10 +16,11 @@ export default function DocumentDetailsPage() {
   const [updateTitleShown, setUpdateTitleShown] = useState<boolean>(false);
   const [notification, setNotification] = useState<UserNotification | null>(null);
 
-  if (!!document?.documentType && document?.documentType !== "article") {
-    router.push(`/content/${document?.documentType}/${document?.id}`);
-    return <Loader />;
-  }
+  useEffect(() => {
+    if (!!document?.documentType && document?.documentType !== "article") {
+      router.push(`/content/${document?.documentType}/${document?.id}`);
+    }
+  }, [document, router]);
 
   useEffect(() => {
     setNotification(documentError || writeError);
@@ -33,9 +28,18 @@ export default function DocumentDetailsPage() {
 
   useEffect(() => {
     if (updateTitleShown) return;
+    async function onDocumentTitleChange(title: string) {
+      console.log("[onDocumentTitleChange]", title);
+      if (!document) {
+        return;
+      }
+
+      document.data.title = title;
+      await update(document);
+    }
 
     onDocumentTitleChange(title);
-  }, [updateTitleShown]);
+  }, [document, title, update, updateTitleShown]);
 
   useEffect(() => {
     if (document) {
@@ -44,16 +48,6 @@ export default function DocumentDetailsPage() {
 
     return () => setTitle("");
   }, [document]);
-
-  async function onDocumentTitleChange(title: string) {
-    console.log("[onDocumentTitleChange]", title);
-    if (!document) {
-      return;
-    }
-
-    document.data.title = title;
-    await update(document);
-  }
 
   async function onDocumentContentChange(content: string) {
     console.log("[onDocumentContentChange]", content);
