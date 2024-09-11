@@ -54,6 +54,14 @@
       "inputs": ["production", "^production"]
     }
   },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "lint",
+        "projects": "self"
+      }
+    ]
+  },
   "generators": {
     "@nx/next": {
       "application": {
