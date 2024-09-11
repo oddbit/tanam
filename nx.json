@@ -1,7 +1,10 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
     "production": [
       "default",
       "!{projectRoot}/.eslintrc.json",
@@ -12,7 +15,9 @@
       "!{projectRoot}/src/test-setup.[jt]s",
       "!{projectRoot}/test-setup.[jt]s"
     ],
-    "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
+    "sharedGlobals": [
+      "{workspaceRoot}/.github/workflows/ci.yml"
+    ]
   },
   "nxCloudAccessToken": "MzExN2Y0YjQtYzRjZi00MjlmLWFlMzItYTc4ZWMzOGY5MmQxfHJlYWQtd3JpdGU=",
   "plugins": [
@@ -46,21 +51,22 @@
   ],
   "targetDefaults": {
     "e2e-ci--**/*": {
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
     },
     "@nx/esbuild:esbuild": {
       "cache": true,
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "dependsOn": [
+        "lint",
+        "^lint",
+        "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
+      ]
     }
-  },
-  "targetDependencies": {
-    "build": [
-      {
-        "target": "lint",
-        "projects": "self"
-      }
-    ]
   },
   "generators": {
     "@nx/next": {
