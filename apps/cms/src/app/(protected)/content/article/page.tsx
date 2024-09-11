@@ -10,6 +10,7 @@ import {
   Notification,
   PageHeader,
 } from "@tanam/ui-components";
+import dynamic from "next/dynamic";
 import {useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
 import {useAuthentication} from "../../../../hooks/useAuthentication";
@@ -18,10 +19,10 @@ import {useCrudTanamDocument, useTanamDocuments} from "../../../../hooks/useTana
 import {useTanamDocumentType} from "../../../../hooks/useTanamDocumentTypes";
 import {base64ToFile} from "../../../../plugins/fileUpload";
 
-// I don't know why this component always errors
-// when built because this component is still detected as a component rendered on the server.
-// Even though I've used "use client" inside the component :(
-const VoiceRecorder = dynamic(() => import("@tanam/ui-components";
+// NOTE(Dennis)
+// The VoiceRecorder is using `navigator` to access the microphone, which creates issues with server-side rendering.
+// The module must be dynamically imported to avoid problems when statically rendered components are generated.
+const VoiceRecorder = dynamic(() => import("../../../../components/VoiceRecorder").then((mod) => mod.default), {
   ssr: false,
 });
 
