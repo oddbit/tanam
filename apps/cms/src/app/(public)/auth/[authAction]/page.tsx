@@ -1,9 +1,9 @@
 "use client";
-import "@tanam/cms/assets/scss/layout-authentication.scss";
 import Image from "next/image";
 import {notFound, useParams} from "next/navigation";
 import {useEffect} from "react";
-import {useFirebaseUi} from "../../../../../hooks/useFirebaseUi";
+import "../../../../assets/scss/layout-authentication.scss";
+import {useFirebaseUi} from "../../../../hooks/useFirebaseUi";
 
 export default function AuthPage() {
   const {authAction} = useParams<{authAction: string}>() ?? {};
@@ -12,17 +12,17 @@ export default function AuthPage() {
   const isSignUp = authAction === "signup";
   const isSignIn = authAction === "signin";
 
-  if (!isSignUp && !isSignIn) {
-    return notFound();
-  }
-
   useEffect(() => {
     setIsSignup(isSignUp);
 
     return () => {
       setIsSignup(false);
     };
-  });
+  }, [isSignUp, setIsSignup]);
+
+  if (!isSignUp && !isSignIn) {
+    return notFound();
+  }
 
   return (
     <>

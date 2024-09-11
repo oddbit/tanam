@@ -1,13 +1,13 @@
 "use client";
-import BulletList from "@tiptap/extension-bullet-list";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import Heading from "@tiptap/extension-heading";
-import Link from "@tiptap/extension-link";
-import OrderedList from "@tiptap/extension-ordered-list";
-import Paragraph from "@tiptap/extension-paragraph";
-import Underline from "@tiptap/extension-underline";
+import {BulletList} from "@tiptap/extension-bullet-list";
+import {CodeBlockLowlight} from "@tiptap/extension-code-block-lowlight";
+import HeadingExtension from "@tiptap/extension-heading";
+import LinkExtension from "@tiptap/extension-link";
+import OrderedListExtension from "@tiptap/extension-ordered-list";
+import ParagraphExtension from "@tiptap/extension-paragraph";
+import UnderlineExtension from "@tiptap/extension-underline";
 import {EditorContent, ReactNodeViewRenderer as reactNodeViewRenderer, useEditor} from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import StarterKitDefault from "@tiptap/starter-kit";
 import css from "highlight.js/lib/languages/css";
 import js from "highlight.js/lib/languages/javascript";
 import ts from "highlight.js/lib/languages/typescript";
@@ -68,26 +68,26 @@ export function TiptapEditor(props: TiptapEditorProps) {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      StarterKit.configure({
+      StarterKitDefault.configure({
         heading: false,
         codeBlock: false,
         paragraph: false,
         bulletList: false,
         orderedList: false,
       }),
-      Underline,
+      UnderlineExtension,
       CodeBlockLowlight.extend({
         addNodeView() {
           return reactNodeViewRenderer(CodeBlock);
         },
       }).configure({lowlight}),
-      Paragraph,
-      Heading.configure({
+      ParagraphExtension,
+      HeadingExtension.configure({
         levels: [1, 2, 3],
       }),
       BulletList,
-      OrderedList,
-      Link.configure({
+      OrderedListExtension,
+      LinkExtension.configure({
         openOnClick: false,
         autolink: true,
         defaultProtocol: "https",
