@@ -1,6 +1,6 @@
 "use client";
-import React, {useState, useEffect, useRef} from "react";
 import {clsx} from "clsx";
+import {useEffect, useRef, useState} from "react";
 
 interface Option {
   value: string;
