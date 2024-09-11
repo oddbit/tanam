@@ -324,7 +324,5 @@ export default function BubbleMenu({editor}: BubbleMenuProps) {
         )}
       </div>
     </TiptapBubbleMenu>
-  ) : (
-    <></>
-  );
+  ) : null;
 }
