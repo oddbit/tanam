@@ -23,7 +23,7 @@ export function Switcher({
 
   useEffect(() => {
     setEnabled(initialValue);
-  }, []);
+  }, [initialValue]);
 
   const handleToggle = () => {
     if (!disabled) {
