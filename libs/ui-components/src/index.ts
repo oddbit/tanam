@@ -15,4 +15,3 @@ export * from "./Button";
 export * from "./CropImage";
 export * from "./FilePicker";
 export * from "./Modal";
-export * from "./VoiceRecorder";

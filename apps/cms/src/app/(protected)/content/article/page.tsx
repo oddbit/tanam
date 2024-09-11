@@ -1,4 +1,5 @@
 "use client";
+
 import {UserNotification} from "@tanam/domain-frontend";
 import {
   Button,
@@ -8,8 +9,8 @@ import {
   Modal,
   Notification,
   PageHeader,
-  VoiceRecorder,
 } from "@tanam/ui-components";
+import dynamic from "next/dynamic";
 import {useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
 import {useAuthentication} from "../../../../hooks/useAuthentication";
@@ -17,6 +18,13 @@ import {ProcessingState, useGenkitArticle} from "../../../../hooks/useGenkitArti
 import {useCrudTanamDocument, useTanamDocuments} from "../../../../hooks/useTanamDocuments";
 import {useTanamDocumentType} from "../../../../hooks/useTanamDocumentTypes";
 import {base64ToFile} from "../../../../plugins/fileUpload";
+
+// NOTE(Dennis)
+// The VoiceRecorder is using `navigator` to access the microphone, which creates issues with server-side rendering.
+// The module must be dynamically imported to avoid problems when statically rendered components are generated.
+const VoiceRecorder = dynamic(() => import("../../../../components/VoiceRecorder").then((mod) => mod.default), {
+  ssr: false,
+});
 
 export default function DocumentTypeDocumentsPage() {
   const router = useRouter();

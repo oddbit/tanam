@@ -18,7 +18,7 @@ interface VoiceRecorderProps {
  * @param {VoiceRecorderProps} props - The props for the component.
  * @return {JSX.Element} The rendered VoiceRecorder component.
  */
-export function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
+export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
   const {title, value, onChange, onTranscriptChange, onLoadingChange} = props;
 
   const [isRecording, setIsRecording] = useState(false);

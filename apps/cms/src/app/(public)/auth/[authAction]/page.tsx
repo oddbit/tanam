@@ -12,17 +12,17 @@ export default function AuthPage() {
   const isSignUp = authAction === "signup";
   const isSignIn = authAction === "signin";
 
-  if (!isSignUp && !isSignIn) {
-    return notFound();
-  }
-
   useEffect(() => {
     setIsSignup(isSignUp);
 
     return () => {
       setIsSignup(false);
     };
-  });
+  }, [isSignUp, setIsSignup]);
+
+  if (!isSignUp && !isSignIn) {
+    return notFound();
+  }
 
   return (
     <>
