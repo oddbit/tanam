@@ -32,7 +32,7 @@ interface TiptapEditorProps {
   onChange?: (content: string) => Promise<void>;
 }
 
-type DebounceFunction = (...args: any[]) => void;
+type DebounceFunction = (...args: string[]) => void;
 
 /**
  * Implements a debounce function.
@@ -56,13 +56,15 @@ lowlight.register("ts", ts);
 
 export function TiptapEditor(props: TiptapEditorProps) {
   const debouncedOnChange = useCallback(
-    debounce(async (content: string) => {
-      if (!props.onChange) {
-        return;
-      }
-      await props.onChange(content);
-    }, props.debounce ?? DEFAULT_DEBOUNCE),
-    [props.onChange],
+    (...args: [string]) => {
+      debounce(async (content: string) => {
+        if (!props.onChange) {
+          return;
+        }
+        await props.onChange(content);
+      }, props.debounce ?? DEFAULT_DEBOUNCE)(...args);
+    },
+    [props],
   );
 
   const editor = useEditor({

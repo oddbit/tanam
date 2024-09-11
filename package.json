@@ -7,7 +7,9 @@
     "build:cms": "nx build cms",
     "build:functions": "nx build cloud-functions",
     "lint": "nx affected:lint",
-    "lint:fix": "nx affected:lint --fix"
+    "lint:fix": "nx affected:lint --fix",
+    "lint:all": " nx run-many --target=lint --all",
+    "lint:all:fix": " nx run-many --target=lint --all --fix"
   },
   "private": true,
   "dependencies": {
