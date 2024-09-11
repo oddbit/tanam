@@ -3,6 +3,7 @@
   "language": "en",
   "words": [
     "Buildable",
+    "clsx",
     "datepicker",
     "firebaseui",
     "firestore",

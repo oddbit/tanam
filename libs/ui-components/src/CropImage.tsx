@@ -15,8 +15,6 @@ export interface CropImageProps {
  * @return {JSX.Element | null} - The rendered CropImage component.
  */
 export function CropImage(props: CropImageProps): JSX.Element | null {
-  if (!props.src) return null;
-
   const {src, onCropComplete, contentType = "image/jpeg"} = props;
 
   const [crop, setCrop] = useState<Crop>();
@@ -27,10 +25,53 @@ export function CropImage(props: CropImageProps): JSX.Element | null {
 
   // Generate cropped image once the crop is complete and the crop area is valid
   useEffect(() => {
+    /**
+     * Draw the cropped image on a canvas element and generate a data URL.
+     * @param {HTMLImageElement} image - The image element to be cropped.
+     * @param {HTMLCanvasElement} canvas - The canvas element to draw the cropped image on.
+     * @param {PixelCrop} crop - The crop area data.
+     * @param {string} contentType - The content type for the output image.
+     */
+    function generateCroppedImage(
+      image: HTMLImageElement,
+      canvas: HTMLCanvasElement,
+      crop: PixelCrop,
+      contentType: string,
+    ) {
+      const scaleX = image.naturalWidth / image.width;
+      const scaleY = image.naturalHeight / image.height;
+      canvas.width = crop.width;
+      canvas.height = crop.height;
+      const ctx = canvas.getContext("2d");
+
+      if (ctx) {
+        ctx.drawImage(
+          image,
+          crop.x * scaleX,
+          crop.y * scaleY,
+          crop.width * scaleX,
+          crop.height * scaleY,
+          0,
+          0,
+          crop.width,
+          crop.height,
+        );
+
+        // Convert the canvas content to a data URL with the specified content type
+        const croppedImageUrl = canvas.toDataURL(contentType);
+        setCroppedImageUrl(croppedImageUrl);
+
+        if (onCropComplete) {
+          onCropComplete(croppedImageUrl);
+        }
+      }
+    }
     if (completedCrop && imageRef.current && previewCanvasRef.current) {
       generateCroppedImage(imageRef.current, previewCanvasRef.current, completedCrop, contentType);
     }
-  }, [completedCrop, contentType]);
+  }, [completedCrop, contentType, onCropComplete]);
+
+  if (!props.src) return null;
 
   /**
    * Callback function triggered when the image is loaded.
@@ -68,52 +109,12 @@ export function CropImage(props: CropImageProps): JSX.Element | null {
     setCompletedCrop(pixelCrop);
   }
 
-  /**
-   * Draw the cropped image on a canvas element and generate a data URL.
-   * @param {HTMLImageElement} image - The image element to be cropped.
-   * @param {HTMLCanvasElement} canvas - The canvas element to draw the cropped image on.
-   * @param {PixelCrop} crop - The crop area data.
-   * @param {string} contentType - The content type for the output image.
-   */
-  function generateCroppedImage(
-    image: HTMLImageElement,
-    canvas: HTMLCanvasElement,
-    crop: PixelCrop,
-    contentType: string,
-  ) {
-    const scaleX = image.naturalWidth / image.width;
-    const scaleY = image.naturalHeight / image.height;
-    canvas.width = crop.width;
-    canvas.height = crop.height;
-    const ctx = canvas.getContext("2d");
-
-    if (ctx) {
-      ctx.drawImage(
-        image,
-        crop.x * scaleX,
-        crop.y * scaleY,
-        crop.width * scaleX,
-        crop.height * scaleY,
-        0,
-        0,
-        crop.width,
-        crop.height,
-      );
-
-      // Convert the canvas content to a data URL with the specified content type
-      const croppedImageUrl = canvas.toDataURL(contentType);
-      setCroppedImageUrl(croppedImageUrl);
-
-      if (onCropComplete) {
-        onCropComplete(croppedImageUrl);
-      }
-    }
-  }
-
   return (
     <div>
       <ReactCrop crop={crop} onChange={(newCrop) => setCrop(newCrop)} onComplete={onCropCompleteInternal}>
-        <Image src={src} alt="Source image crop" width={1200} height={800} ref={imageRef} onLoad={onImageLoad} />
+        {src && (
+          <Image src={src} alt="Source image crop" width={1200} height={800} ref={imageRef} onLoad={onImageLoad} />
+        )}
       </ReactCrop>
       <canvas
         ref={previewCanvasRef}
