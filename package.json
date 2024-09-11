@@ -31,7 +31,7 @@
     "axios": "^1.7.7",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2",
+    "express": "^4.20.0",
     "firebase": "^10.13.1",
     "firebase-admin": "^12.4.0",
     "firebase-functions": "^5.1.1",
