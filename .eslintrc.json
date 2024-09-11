@@ -115,6 +115,15 @@
       "error",
       "before"
     ],
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "spaced-comment": [
+      "error",
+      "always",
+      {
+        "markers": [
+          "/"
+        ]
+      }
+    ]
   }
 }
