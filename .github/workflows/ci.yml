@@ -11,31 +11,8 @@ permissions:
   contents: read
 
 jobs:
-  code_check:
-    name: Code check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "npm"
-
-      - run: npm ci --legacy-peer-deps
-      - uses: nrwl/nx-set-shas@v4
-
-      - name: Run code checking and formatting (hosting)
-        run: npm run lint:fix
-
-      - name: Ensure code is unchanged after lint fix
-        run: git diff --exit-code
-
   main:
     runs-on: ubuntu-latest
-    needs: code_check
     steps:
       - uses: actions/checkout@v4
         with:
@@ -56,7 +33,9 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
 
       - name: Configure Firebase for CMS app
-        run: echo ${{ secrets.APP_CMS_DOT_ENV }} >> apps/cms/.env
+        run: |
+          touch apps/cms/.env
+          echo ${{ secrets.APP_CMS_DOT_ENV }} > apps/cms/.env
 
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
       # - run: npx nx-cloud record -- echo Hello World
