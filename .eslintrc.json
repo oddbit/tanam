@@ -48,7 +48,15 @@
               {
                 "sourceTag": "lib:frontend",
                 "onlyDependOnLibsWithTags": [
-                  "lib:frontend"
+                  "lib:frontend",
+                  "lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "lib:backend",
+                "onlyDependOnLibsWithTags": [
+                  "lib:backend",
+                  "lib:shared"
                 ]
               },
               {
