@@ -48,7 +48,15 @@
               {
                 "sourceTag": "lib:frontend",
                 "onlyDependOnLibsWithTags": [
-                  "lib:frontend"
+                  "lib:frontend",
+                  "lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "lib:backend",
+                "onlyDependOnLibsWithTags": [
+                  "lib:backend",
+                  "lib:shared"
                 ]
               },
               {
@@ -107,6 +115,15 @@
       "error",
       "before"
     ],
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "spaced-comment": [
+      "error",
+      "always",
+      {
+        "markers": [
+          "/"
+        ]
+      }
+    ]
   }
 }

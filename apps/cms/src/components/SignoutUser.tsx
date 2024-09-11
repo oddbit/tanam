@@ -13,7 +13,7 @@ const SignoutUser: React.FC = () => {
     signout();
   }
 
-  return <></>;
+  return null;
 };
 
 export default SignoutUser;

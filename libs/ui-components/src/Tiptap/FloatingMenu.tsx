@@ -98,7 +98,5 @@ export default function FloatingMenu({editor}: FloatingMenuProps) {
         </div>
       </div>
     </div>
-  ) : (
-    <></>
-  );
+  ) : null;
 }
