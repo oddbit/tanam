@@ -50,6 +50,13 @@
     }
   ],
   "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        "lint",
+        "^lint",
+        "^build"
+      ]
+    },
     "e2e-ci--**/*": {
       "dependsOn": [
         "^build"
