@@ -1,9 +1,8 @@
 "use client";
-
 import {AcceptFileType, UserNotification} from "@tanam/domain-frontend";
-import {Button, CropImage, Modal, Notification, PageHeader} from "@tanam/ui-components";
+import {CropImage, Modal, Notification, PageHeader} from "@tanam/ui-components";
 import Image from "next/image";
-import {useEffect, useMemo, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import DarkModeSwitcher from "../../../components/DarkModeSwitcher";
 import {Dropzone} from "../../../components/Form/Dropzone";
 import {useAuthentication} from "../../../hooks/useAuthentication";
@@ -18,21 +17,13 @@ export default function Settings() {
   const {isLoading: uploadLoading, error: storageError, upload, getFile} = useFirebaseStorage();
   const [notification, setNotification] = useState<UserNotification | null>(null);
 
-  const formUserRef = useRef<HTMLFormElement>(null);
-
-  const [readonlyMode, setReadonlyMode] = useState<boolean>(true);
   const [showDropzone, setShowDropzone] = useState<boolean>(false);
   const [showCropImage, setShowCropImage] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [pathUpload, setPathUpload] = useState<string>();
   const [fileUploadContentType, setFileUploadContentType] = useState<string>();
   const [beforeCropImage, setBeforeCropImage] = useState<string>();
   const [afterCropImage, setAfterCropImage] = useState<string>();
   const [profilePicture, setProfilePicture] = useState<string>(defaultImage);
-
-  const isDisabled = useMemo(() => {
-    return isLoading || readonlyMode;
-  }, [isLoading, readonlyMode]);
 
   useEffect(() => {
     if (tanamUser) {
@@ -63,15 +54,8 @@ export default function Settings() {
    * @return {Promise<void>}
    */
   async function resetChanges(): Promise<void> {
-    setNotification(null);
-    setReadonlyMode(true);
-    setShowDropzone(false);
-    setFileUploadContentType("");
+    setFileUploadContentType(undefined);
     resetCropImage();
-
-    if (formUserRef.current) {
-      formUserRef.current.reset();
-    }
 
     await fetchProfilePicture();
   }
@@ -80,8 +64,8 @@ export default function Settings() {
    * Resets the crop image states.
    */
   function resetCropImage() {
-    setBeforeCropImage("");
-    setAfterCropImage("");
+    setBeforeCropImage(undefined);
+    setAfterCropImage(undefined);
     setShowCropImage(false);
   }
 
@@ -97,12 +81,6 @@ export default function Settings() {
     setBeforeCropImage(profilePicture);
   }
 
-  async function fetchSaveUserInfo() {
-    if (!formUserRef.current) return;
-
-    formUserRef.current.requestSubmit();
-  }
-
   /**
    * Handles the submission of the personal information form.
    * Uploads a new profile picture if provided and saves the user's name.
@@ -113,7 +91,6 @@ export default function Settings() {
     event.preventDefault();
 
     setNotification(null);
-    setIsLoading(true);
 
     try {
       if (uploadLoading) return;
@@ -134,8 +111,6 @@ export default function Settings() {
       setNotification(new UserNotification("success", "Update Profile", "Success to update profile"));
     } catch (error) {
       setNotification(new UserNotification("error", "Update Profile", "Failed to update profile"));
-    } finally {
-      setIsLoading(false);
     }
   }
 
@@ -147,21 +122,17 @@ export default function Settings() {
   const modalActionCropImage = (
     <div className="flex flex-col sm:flex-row justify-end gap-3">
       {/* Start button to close the crop image modal */}
-      <Button
-        title="Close"
+      <button
+        className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white sm:w-full sm:text-sm"
         onClick={resetCropImage}
-        loading={isLoading}
-        disabled={isDisabled}
-        style="outline-rounded"
-        color="black"
-      />
+      >
+        Close
+      </button>
       {/* End button to close the crop image modal */}
 
       {/* Start button to save changes to the profile picture after cropping */}
-      <Button
-        title="Save"
-        loading={isLoading}
-        disabled={isDisabled}
+      <button
+        className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90 sm:w-full sm:text-sm"
         onClick={() => {
           if (!afterCropImage) {
             window.alert("No cropped image");
@@ -171,7 +142,9 @@ export default function Settings() {
           setProfilePicture(afterCropImage);
           resetCropImage();
         }}
-      />
+      >
+        Save
+      </button>
       {/* End button to save changes to the profile picture after cropping */}
     </div>
   );
@@ -226,26 +199,18 @@ export default function Settings() {
                     <div>
                       <span className="mb-1.5 text-black dark:text-white">Edit your photo</span>
                       <span className="flex gap-2.5">
-                        <Button
-                          title="Delete"
-                          loading={isLoading}
-                          disabled={isDisabled}
-                          style="plain-text"
-                          className={["text-sm", "!p-0"]}
+                        <button
+                          className="text-sm hover:text-primary"
                           onClick={async () => {
                             await fetchProfilePicture();
                             setBeforeCropImage(undefined);
                           }}
-                        />
-
-                        <Button
-                          title="Update"
-                          loading={isLoading}
-                          disabled={isDisabled}
-                          style="plain-text"
-                          className={["text-sm", "!p-0"]}
-                          onClick={() => setShowDropzone(!showDropzone)}
-                        />
+                        >
+                          Delete
+                        </button>
+                        <button className="text-sm hover:text-primary" onClick={() => setShowDropzone(!showDropzone)}>
+                          Update
+                        </button>
                       </span>
                     </div>
                   </div>
@@ -266,7 +231,7 @@ export default function Settings() {
                 </div>
               </div>
 
-              <form ref={formUserRef} onSubmit={onPersonalInfoSubmit}>
+              <form onSubmit={onPersonalInfoSubmit}>
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                   <div className="w-full">
                     <label className="mb-3 block text-sm font-medium text-black dark:text-white" htmlFor="fullName">
@@ -275,12 +240,11 @@ export default function Settings() {
                     <div className="relative">
                       <span className="absolute left-4 top-3 i-ic-outline-person w-[24px] h-[24px]" />
                       <input
-                        className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary disabled:cursor-not-allowed"
+                        className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                         type="text"
                         name="fullName"
                         id="fullName"
                         placeholder="Your full name"
-                        disabled={isDisabled}
                         defaultValue={tanamUser?.name}
                       />
                     </div>
@@ -288,30 +252,19 @@ export default function Settings() {
                 </div>
 
                 <div className="flex justify-end gap-4.5">
-                  {readonlyMode && (
-                    <Button
-                      title="Edit"
-                      onClick={() => {
-                        setReadonlyMode(false);
-                      }}
-                      loading={isLoading}
-                    />
-                  )}
-
-                  {!readonlyMode && (
-                    <>
-                      <Button
-                        title="Cancel"
-                        onClick={resetChanges}
-                        loading={isLoading}
-                        disabled={isDisabled}
-                        style="outline-rounded"
-                        color="black"
-                      />
-
-                      <Button title="Save" onClick={fetchSaveUserInfo} loading={isLoading} disabled={isDisabled} />
-                    </>
-                  )}
+                  <button
+                    className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
+                    type="reset"
+                    onClick={resetChanges}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
+                    type="submit"
+                  >
+                    Save
+                  </button>
                 </div>
               </form>
             </div>

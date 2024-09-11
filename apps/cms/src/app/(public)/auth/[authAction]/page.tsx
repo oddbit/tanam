@@ -13,16 +13,16 @@ export default function AuthPage() {
   const isSignIn = authAction === "signin";
 
   useEffect(() => {
-    if (!isSignUp && !isSignIn) {
-      notFound();
-    } else {
-      setIsSignup(isSignUp);
-    }
+    setIsSignup(isSignUp);
 
     return () => {
       setIsSignup(false);
     };
-  }, [isSignUp, isSignIn, setIsSignup]);
+  }, [isSignUp, setIsSignup]);
+
+  if (!isSignUp && !isSignIn) {
+    return notFound();
+  }
 
   return (
     <>
