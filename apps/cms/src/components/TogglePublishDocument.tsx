@@ -1,3 +1,5 @@
+"use client";
+
 import {TanamPublishStatus} from "@tanam/domain-frontend";
 import {Button, DatePicker, Modal} from "@tanam/ui-components";
 import {useParams} from "next/navigation";
