@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "serve": "npx nx dev cms",
     "build": "nx run-many --target=build --all",
     "build:cms": "nx build cms",
     "build:functions": "nx build cloud-functions",
