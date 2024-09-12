@@ -1,14 +1,10 @@
 name: Build
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-
+on: pull_request
 permissions:
   actions: read
+  checks: write
   contents: read
+  pull-requests: write
 
 jobs:
   main:
