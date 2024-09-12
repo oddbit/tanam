@@ -1,0 +1,26 @@
+runConfig:
+  cpu: 2
+  memoryMiB: 2048
+
+env:
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    secret: firebaseApiKey
+
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    secret: firebaseAuthDomain
+
+  - variable: NEXT_PUBLIC_FIREBASE_DATABASE_URL
+    secret: firebaseDatabaseUrl
+
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    secret: firebaseProjectId
+
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    secret: firebaseStorageBucket
+
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    secret: firebaseMessagingSenderId
+
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    secret: firebaseAppId
+
