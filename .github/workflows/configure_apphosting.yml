@@ -1,4 +1,4 @@
-name: Configure App Hosting
+name: Configure Firebase Secrets with Matrix
 
 on:
   push:
@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   firebase_secrets_update:
+    name: Update Firebase Secrets
     runs-on: ubuntu-latest
 
     strategy:
@@ -32,64 +33,56 @@ jobs:
             secret: "firebaseAppId"
 
     steps:
-      # Step 1: Check out the repository code
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # Step 2: Set up Node.js environment
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "npm"
 
-      # Step 3: Install dependencies
       - run: npm ci --legacy-peer-deps
 
-      # Step 4: Install Firebase CLI
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
-      # Step 5: Load environment variable value from apps/cms/.env
-      - name: Load environment variable value
+      - name: Load environment variable value from apps/cms/.env
         id: load_env
         run: |
-          value=$(grep -m 1 "${{ matrix.config.variable }}" apps/cms/.env | cut -d '=' -f 2)
+          echo "${{ secrets.APP_CMS_DOT_ENV }}" > apps/cms/.env
+          value=$(grep -m 1 "${{ matrix.config.variable }}" apps/cms/.env | cut -d '=' -f 2 || true)
           if [ -z "$value" ]; then
             echo "Environment variable ${{ matrix.config.variable }} is missing in the .env file!"
             exit 1
           fi
-          echo "CONF_VALUE=$value" >> $GITHUB_ENV
+          echo "CONFIG_VALUE=$value" >> $GITHUB_ENV
 
-      # Step 6: Check if the secret has changed in the cloud
-      - name: Check if cloud secret value has changed
+      - name: Check the cloud if the secret has changed
         id: check_secret
         run: |
           # Try to get the current value of the secret from Firebase
           cloud_value=$(firebase apphosting:secrets:access ${{ matrix.config.secret }} 2>/dev/null || echo "")
 
-          if [ "$cloud_value" = "${{ env.CONF_VALUE }}" ]; then
+          if [ "$cloud_value" = "${{ env.CONFIG_VALUE }}" ]; then
             echo "The value for ${{ matrix.config.secret }} has not changed."
-            echo "skip_update=true" >> $GITHUB_ENV
+            echo "SKIP_UPDATE=true" >> $GITHUB_ENV
           else
             echo "The value for ${{ matrix.config.secret }} has changed or the secret does not exist."
-            echo "skip_update=false" >> $GITHUB_ENV
+            echo "SKIP_UPDATE=false" >> $GITHUB_ENV
         continue-on-error: true
 
-      # Step 7: Stop job if secret value hasn't changed (skip steps)
       - name: Stop if value has not changed
-        if: env.skip_update == 'true'
+        if: env.SKIP_UPDATE == 'true'
         run: |
           echo "Skipping the secret update since the value has not changed."
           exit 0
 
-      # Step 8: Set the new secret value in Firebase
-      - name: Set cloud secret
-        if: env.skip_update == 'false'
+      - name: Set secret value in Firebase
+        if: env.SKIP_UPDATE == 'false'
         run: |
-          echo "${{ env.value }}" | firebase apphosting:secrets:set --force --data-file - ${{ matrix.config.secret }}
+          echo "${{ env.CONFIG_VALUE }}" | firebase apphosting:secrets:set --force --data-file - ${{ matrix.config.secret }}
 
-      # Step 9: Grant access to the new secret
       - name: Grant access to the secret
-        if: env.skip_update == 'false'
+        if: env.SKIP_UPDATE == 'false'
         run: firebase apphosting:secrets:grantAccess ${{ matrix.config.secret }}
