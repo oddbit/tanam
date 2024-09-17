@@ -91,9 +91,10 @@ jobs:
           GCP_SA_KEY: ${{ secrets.FIREBASE_DEPLOY_SA }}
 
       - name: Grant access to the secret
+        if: env.SKIP_UPDATE == 'false'
         uses: w9jds/firebase-action@master
         with:
-          args: apphosting:secrets:grantaccess ${{ matrix.config.secret }}
+          args: apphosting:secrets:grantaccess --backend ${{ secrets.APP_HOSTING_BACKEND }} ${{ matrix.config.secret }}
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_DEPLOY_SA }}
 
