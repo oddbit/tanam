@@ -47,7 +47,7 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
-      - name: Load environment variable value from apps/cms/.env
+      - name: Load environment variable value
         id: load_env
         run: |
           echo "${{ secrets.APP_CMS_DOT_ENV }}" > apps/cms/.env
@@ -56,33 +56,38 @@ jobs:
             echo "Environment variable ${{ matrix.config.variable }} is missing in the .env file!"
             exit 1
           fi
-          echo "CONFIG_VALUE=$value" >> $GITHUB_ENV
+          echo "::set-output name=CONFIG_VALUE::$value"
+        shell: bash
 
       - name: Check the cloud if the secret has changed
         id: check_secret
+        env:
+          CONFIG_VALUE: ${{ steps.load_env.outputs.CONFIG_VALUE }}
         run: |
           # Try to get the current value of the secret from Firebase
           cloud_value=$(firebase apphosting:secrets:access ${{ matrix.config.secret }} 2>/dev/null || echo "")
 
           if [ "$cloud_value" = "${{ env.CONFIG_VALUE }}" ]; then
             echo "The value for ${{ matrix.config.secret }} has not changed."
-            echo "SKIP_UPDATE=true" >> $GITHUB_ENV
+            echo "::set-output name=SKIP_UPDATE::true"
           else
             echo "The value for ${{ matrix.config.secret }} has changed or the secret does not exist."
-            echo "SKIP_UPDATE=false" >> $GITHUB_ENV
+            echo "::set-output name=SKIP_UPDATE::false"
         continue-on-error: true
 
       - name: Stop if value has not changed
-        if: env.SKIP_UPDATE == 'true'
+        if: steps.load_env.outputs.CONFIG_VALUE == 'true'
         run: |
           echo "Skipping the secret update since the value has not changed."
           exit 0
 
       - name: Set secret value in Firebase
-        if: env.SKIP_UPDATE == 'false'
+        if: steps.load_env.outputs.CONFIG_VALUE == 'false'
+        env:
+          CONFIG_VALUE: ${{ steps.load_env.outputs.CONFIG_VALUE }}
         run: |
           echo "${{ env.CONFIG_VALUE }}" | firebase apphosting:secrets:set --force --data-file - ${{ matrix.config.secret }}
 
       - name: Grant access to the secret
-        if: env.SKIP_UPDATE == 'false'
+        if: steps.load_env.outputs.CONFIG_VALUE == 'false'
         run: firebase apphosting:secrets:grantAccess ${{ matrix.config.secret }}
