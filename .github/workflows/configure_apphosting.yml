@@ -59,30 +59,27 @@ jobs:
           echo "CONFIG_VALUE=$value" >> $GITHUB_ENV
         shell: bash
 
-      - name: Check the cloud if the secret has changed
-        id: check_secret
+      - name: Save config value to a file
         run: |
-          cloud_value=$(firebase apphosting:secrets:access ${{ matrix.config.secret }} 2>/dev/null || echo "")
-
-          if [ "$cloud_value" = "${{ env.CONFIG_VALUE }}" ]; then
-            echo "The value for ${{ matrix.config.secret }} has not changed."
-            echo "SKIP_UPDATE=true" >> $GITHUB_ENV
-          else
-            echo "The value for ${{ matrix.config.secret }} has changed or the secret does not exist."
-            echo "SKIP_UPDATE=false" >> $GITHUB_ENV
-        continue-on-error: true
-
-      - name: Stop if value has not changed
-        if: env.SKIP_UPDATE == 'true'
-        run: |
-          echo "Skipping the secret update since the value has not changed."
-          exit 0
+          touch ${{ matrix.config.variable }}
+          echo "${{ env.CONFIG_VALUE }}" > ${{ matrix.config.variable }}
 
       - name: Set secret value in Firebase
-        if: env.SKIP_UPDATE == 'false'
-        run: |
-          echo "${{ env.CONFIG_VALUE }}" | firebase apphosting:secrets:set --force --data-file - ${{ matrix.config.secret }}
+        uses: w9jds/firebase-action@master
+        with:
+          args: apphosting:secrets:set --force --data-file ${{ matrix.config.variable }} ${{ matrix.config.secret }}
+        env:
+          GCP_SA_KEY: ${{ secrets.FIREBASE_DEPLOY_SA }}
 
       - name: Grant access to the secret
-        if: env.SKIP_UPDATE == 'false'
-        run: firebase apphosting:secrets:grantAccess ${{ matrix.config.secret }}
+        uses: w9jds/firebase-action@master
+        with:
+          args: apphosting:secrets:grantAccess ${{ matrix.config.secret }}
+        env:
+          GCP_SA_KEY: ${{ secrets.FIREBASE_DEPLOY_SA }}
+
+      - name: Clean up
+        if: always()
+        run: |
+          rm ${{ matrix.config.variable }}
+          rm apps/cms/.env
