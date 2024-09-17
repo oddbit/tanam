@@ -56,38 +56,33 @@ jobs:
             echo "Environment variable ${{ matrix.config.variable }} is missing in the .env file!"
             exit 1
           fi
-          echo "::set-output name=CONFIG_VALUE::$value"
+          echo "CONFIG_VALUE=$value" >> $GITHUB_ENV
         shell: bash
 
       - name: Check the cloud if the secret has changed
         id: check_secret
-        env:
-          CONFIG_VALUE: ${{ steps.load_env.outputs.CONFIG_VALUE }}
         run: |
-          # Try to get the current value of the secret from Firebase
           cloud_value=$(firebase apphosting:secrets:access ${{ matrix.config.secret }} 2>/dev/null || echo "")
 
           if [ "$cloud_value" = "${{ env.CONFIG_VALUE }}" ]; then
             echo "The value for ${{ matrix.config.secret }} has not changed."
-            echo "::set-output name=SKIP_UPDATE::true"
+            echo "SKIP_UPDATE=true" >> $GITHUB_ENV
           else
             echo "The value for ${{ matrix.config.secret }} has changed or the secret does not exist."
-            echo "::set-output name=SKIP_UPDATE::false"
+            echo "SKIP_UPDATE=false" >> $GITHUB_ENV
         continue-on-error: true
 
       - name: Stop if value has not changed
-        if: steps.load_env.outputs.CONFIG_VALUE == 'true'
+        if: env.SKIP_UPDATE == 'true'
         run: |
           echo "Skipping the secret update since the value has not changed."
           exit 0
 
       - name: Set secret value in Firebase
-        if: steps.load_env.outputs.CONFIG_VALUE == 'false'
-        env:
-          CONFIG_VALUE: ${{ steps.load_env.outputs.CONFIG_VALUE }}
+        if: env.SKIP_UPDATE == 'false'
         run: |
           echo "${{ env.CONFIG_VALUE }}" | firebase apphosting:secrets:set --force --data-file - ${{ matrix.config.secret }}
 
       - name: Grant access to the secret
-        if: steps.load_env.outputs.CONFIG_VALUE == 'false'
+        if: env.SKIP_UPDATE == 'false'
         run: firebase apphosting:secrets:grantAccess ${{ matrix.config.secret }}
