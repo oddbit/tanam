@@ -102,5 +102,5 @@ jobs:
       - name: Clean up
         if: always()
         run: |
-          rm ${{ matrix.config.variable }}
-          rm apps/cms/.env
+          rm -f ${{ matrix.config.variable }}
+          rm -f apps/cms/.env
