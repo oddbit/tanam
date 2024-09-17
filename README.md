@@ -3,7 +3,6 @@
 ![License](https://img.shields.io/npm/l/tanam.svg)
 ![NPM version](https://img.shields.io/npm/v/tanam.svg)
 ![Total NPM downloads](https://img.shields.io/npm/dt/tanam.svg)
-[![Travis build status](https://img.shields.io/travis/oddbit/tanam.svg)](https://travis-ci.org/oddbit/tanam)
 
 Our aim is to provide a self hosted publishing platform for Firebase.
 
@@ -25,7 +24,8 @@ npm serve
 ```
 
 ## Deploy to Firebase
-Follow the [documentation for Firebase App Hosting](https://firebase.google.com/docs/app-hosting) 
+
+Follow the [documentation for Firebase App Hosting](https://firebase.google.com/docs/app-hosting)
 on how to set up your application for automatic deployment.
 
 ### Configure Firebase cloud
@@ -34,34 +34,36 @@ In order to deploy to Firebase App Hosting you will need to set up some secrets 
 
 Follow the steps below to configure it from command line.
 
-Set the following environment variables
+Read the environment variables from the CMS configuration
 
 ```sh
-export NEXT_PUBLIC_FIREBASE_API_KEY=
-export NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
-export NEXT_PUBLIC_FIREBASE_DATABASE_URL=
-export NEXT_PUBLIC_FIREBASE_PROJECT_ID=
-export NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
-export NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
-export NEXT_PUBLIC_FIREBASE_APP_ID=
+source apps/cms/.env
 ```
 
 Copy and paste all these to set up. Be patient, it will take a little while to complete all variable configuration.
 
 ```sh
 echo $NEXT_PUBLIC_FIREBASE_API_KEY | firebase apphosting:secrets:set --force --data-file - firebaseApiKey
-
 echo $NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN | firebase apphosting:secrets:set --force --data-file - firebaseAuthDomain
-
 echo $NEXT_PUBLIC_FIREBASE_DATABASE_URL | firebase apphosting:secrets:set --force --data-file - firebaseDatabaseUrl
-
 echo $NEXT_PUBLIC_FIREBASE_PROJECT_ID | firebase apphosting:secrets:set --force --data-file - firebaseProjectId
-
 echo $NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET | firebase apphosting:secrets:set --force --data-file - firebaseStorageBucket
-
 echo $NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID | firebase apphosting:secrets:set --force --data-file - firebaseMessagingSenderId
-
 echo $NEXT_PUBLIC_FIREBASE_APP_ID | firebase apphosting:secrets:set --force --data-file - firebaseAppId
+```
+
+You will need to grant access to your app-hosting backend if this is the first time you are setting the variables
+and if you didn't enable access to all variables in the `apphosting:secrets:set` step.
+
+```sh
+export APP_HOSTING_BACKEND=<your app-hosting-backend>
+firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND firebaseApiKey
+firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND firebaseAuthDomain
+firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND firebaseDatabaseUrl
+firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND firebaseProjectId
+firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND firebaseStorageBucket
+firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND firebaseMessagingSenderId
+firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND firebaseAppId
 ```
 
 # License
