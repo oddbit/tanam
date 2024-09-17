@@ -56,12 +56,34 @@ jobs:
           echo "CONFIG_VALUE=$value" >> $GITHUB_ENV
         shell: bash
 
-      - name: Save config value to a file
+      - name: Save current value to a file
+        uses: w9jds/firebase-action@master
+        with:
+          args: apphosting:secrets:access ${{ matrix.config.secret }} > ${{ matrix.config.variable }}
+        env:
+          GCP_SA_KEY: ${{ secrets.FIREBASE_DEPLOY_SA }}
+        continue-on-error: true
+
+      - name: Check if secret value has changed
+        id: check_secret
+        shell: bash
         run: |
-          touch ${{ matrix.config.variable }}
-          echo "${{ env.CONFIG_VALUE }}" > ${{ matrix.config.variable }}
+          if [ -f "${{ matrix.config.variable }}" ]; then
+            current_value=$(cat ${{ matrix.config.variable }})
+          else
+            current_value=""
+          fi
+
+          if [ "$current_value" = "${{ env.CONFIG_VALUE }}" ]; then
+            echo "The value for ${{ matrix.config.secret }} has not changed."
+            echo "SKIP_UPDATE=true" >> $GITHUB_ENV
+          else
+            echo "The value for ${{ matrix.config.secret }} has changed or the secret does not exist."
+            echo "SKIP_UPDATE=false" >> $GITHUB_ENV
+          fi
 
       - name: Set secret value in Firebase
+        if: env.SKIP_UPDATE == 'false'
         uses: w9jds/firebase-action@master
         with:
           args: apphosting:secrets:set --force --data-file ${{ matrix.config.variable }} ${{ matrix.config.secret }}
