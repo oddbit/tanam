@@ -79,6 +79,7 @@ jobs:
             echo "SKIP_UPDATE=true" >> $GITHUB_ENV
           else
             echo "The value for ${{ matrix.config.secret }} has changed or the secret does not exist."
+            echo "${{ env.CONFIG_VALUE }}" > ${{ matrix.config.variable }}
             echo "SKIP_UPDATE=false" >> $GITHUB_ENV
           fi
 
