@@ -44,9 +44,6 @@ jobs:
 
       - run: npm ci --legacy-peer-deps
 
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools
-
       - name: Load environment variable value
         id: load_env
         run: |
@@ -74,7 +71,7 @@ jobs:
       - name: Grant access to the secret
         uses: w9jds/firebase-action@master
         with:
-          args: apphosting:secrets:grantAccess ${{ matrix.config.secret }}
+          args: apphosting:secrets:grantaccess ${{ matrix.config.secret }}
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_DEPLOY_SA }}
 
