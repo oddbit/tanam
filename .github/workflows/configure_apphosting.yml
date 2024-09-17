@@ -1,0 +1,93 @@
+name: Configure Firebase Secrets with Matrix
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  firebase_secrets_update:
+    name: Update Firebase Secrets
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        config:
+          - variable: "NEXT_PUBLIC_FIREBASE_API_KEY"
+            secret: "firebaseApiKey"
+          - variable: "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN"
+            secret: "firebaseAuthDomain"
+          - variable: "NEXT_PUBLIC_FIREBASE_DATABASE_URL"
+            secret: "firebaseDatabaseUrl"
+          - variable: "NEXT_PUBLIC_FIREBASE_PROJECT_ID"
+            secret: "firebaseProjectId"
+          - variable: "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET"
+            secret: "firebaseStorageBucket"
+          - variable: "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID"
+            secret: "firebaseMessagingSenderId"
+          - variable: "NEXT_PUBLIC_FIREBASE_APP_ID"
+            secret: "firebaseAppId"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - run: npm ci --legacy-peer-deps
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Load environment variable value
+        id: load_env
+        run: |
+          echo "${{ secrets.APP_CMS_DOT_ENV }}" > apps/cms/.env
+          value=$(grep -m 1 "${{ matrix.config.variable }}" apps/cms/.env | cut -d '=' -f 2 || true)
+          if [ -z "$value" ]; then
+            echo "Environment variable ${{ matrix.config.variable }} is missing in the .env file!"
+            exit 1
+          fi
+          echo "::set-output name=CONFIG_VALUE::$value"
+        shell: bash
+
+      - name: Check the cloud if the secret has changed
+        id: check_secret
+        env:
+          CONFIG_VALUE: ${{ steps.load_env.outputs.CONFIG_VALUE }}
+        run: |
+          # Try to get the current value of the secret from Firebase
+          cloud_value=$(firebase apphosting:secrets:access ${{ matrix.config.secret }} 2>/dev/null || echo "")
+
+          if [ "$cloud_value" = "${{ env.CONFIG_VALUE }}" ]; then
+            echo "The value for ${{ matrix.config.secret }} has not changed."
+            echo "::set-output name=SKIP_UPDATE::true"
+          else
+            echo "The value for ${{ matrix.config.secret }} has changed or the secret does not exist."
+            echo "::set-output name=SKIP_UPDATE::false"
+        continue-on-error: true
+
+      - name: Stop if value has not changed
+        if: steps.load_env.outputs.CONFIG_VALUE == 'true'
+        run: |
+          echo "Skipping the secret update since the value has not changed."
+          exit 0
+
+      - name: Set secret value in Firebase
+        if: steps.load_env.outputs.CONFIG_VALUE == 'false'
+        env:
+          CONFIG_VALUE: ${{ steps.load_env.outputs.CONFIG_VALUE }}
+        run: |
+          echo "${{ env.CONFIG_VALUE }}" | firebase apphosting:secrets:set --force --data-file - ${{ matrix.config.secret }}
+
+      - name: Grant access to the secret
+        if: steps.load_env.outputs.CONFIG_VALUE == 'false'
+        run: firebase apphosting:secrets:grantAccess ${{ matrix.config.secret }}
