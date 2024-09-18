@@ -13,8 +13,8 @@ jobs:
   firebase_secrets_update:
     name: Secrets
     runs-on: ubuntu-latest
-
     strategy:
+      fail-fast: false
       matrix:
         config:
           - secret: firebaseApiKey
