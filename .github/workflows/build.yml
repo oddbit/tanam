@@ -1,14 +1,10 @@
-name: CI
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-
+name: Build
+on: pull_request
 permissions:
   actions: read
+  checks: write
   contents: read
+  pull-requests: write
 
 jobs:
   main:
