@@ -103,4 +103,5 @@ jobs:
         if: always()
         run: |
           rm -f ${{ matrix.config.variable }}
+          rm -f ${{ matrix.config.secret }}
           rm -f apps/cms/.env
