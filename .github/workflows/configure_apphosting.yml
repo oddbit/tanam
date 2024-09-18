@@ -1,4 +1,4 @@
-name: Configure Firebase Secrets with Matrix
+name: Configure
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   firebase_secrets_update:
-    name: Update Firebase Secrets
+    name: Secrets
     runs-on: ubuntu-latest
 
     strategy:
