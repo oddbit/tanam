@@ -48,12 +48,12 @@ jobs:
         id: load_env
         run: |
           echo "${{ secrets.APP_CMS_DOT_ENV }}" > apps/cms/.env
-          value=$(grep -m 1 "${{ matrix.config.variable }}" apps/cms/.env | cut -d '=' -f 2 || true)
-          if [ -z "$value" ]; then
+          source apps/cms/.env
+          if [ -z "${{ matrix.config.variable }}" ]; then
             echo "Environment variable ${{ matrix.config.variable }} is missing in the .env file!"
             exit 1
           fi
-          echo "CONFIG_VALUE=$value" >> $GITHUB_ENV
+          echo "CONFIG_VALUE=${!matrix.config.variable}" | tr -d '[:space:]' >> $GITHUB_ENV
         shell: bash
 
       - name: Save current value to a file
