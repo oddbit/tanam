@@ -49,11 +49,14 @@ jobs:
         run: |
           echo "${{ secrets.APP_CMS_DOT_ENV }}" > apps/cms/.env
           source apps/cms/.env
-          if [ -z "${{ matrix.config.variable }}" ]; then
+
+          value=$(eval echo \$${{ matrix.config.variable }})
+          if [ -z "$value" ]; then
             echo "Environment variable ${{ matrix.config.variable }} is missing in the .env file!"
             exit 1
           fi
-          echo "CONFIG_VALUE=${!matrix.config.variable}" | tr -d '[:space:]' >> $GITHUB_ENV
+
+          echo "CONFIG_VALUE=${value}" >> $GITHUB_ENV
         shell: bash
 
       - name: Save current value to a file
@@ -79,7 +82,7 @@ jobs:
             echo "SKIP_UPDATE=true" >> $GITHUB_ENV
           else
             echo "The value for ${{ matrix.config.secret }} has changed or the secret does not exist."
-            echo ${{ env.CONFIG_VALUE }} > ${{ matrix.config.variable }}
+            echo ${{ env.CONFIG_VALUE }} | tr -d '[:space:]' > ${{ matrix.config.variable }}
             echo "SKIP_UPDATE=false" >> $GITHUB_ENV
           fi
 
