@@ -1,41 +1,21 @@
 import {TanamPublishStatus} from "./../definitions/TanamPublishStatus";
+import {TanamDocumentData} from "./TanamDocumentData";
 
-interface DocumentData {
-  [key: string]: unknown;
-}
-
-export interface ITanamDocument<TimestampType> {
-  data: DocumentData;
-  documentType: string;
-  revision?: number;
-  status?: TanamPublishStatus;
-  publishedAt?: TimestampType;
-  createdAt?: TimestampType;
-  updatedAt?: TimestampType;
-}
-
-export abstract class TanamDocument<TimestampType, FieldValueType> {
-  constructor(id: string, json: ITanamDocument<TimestampType>) {
-    this.id = id;
-    this.data = json.data ?? {};
-    this.documentType = json.documentType ?? "unknown";
-    this.publishedAt = json.publishedAt;
-
-    // The status of the document is determined by the publishedAt field
-    this.status = json.publishedAt ? TanamPublishStatus.Published : TanamPublishStatus.Unpublished;
-    this.revision = json.revision ?? 0;
-    this.createdAt = json.createdAt;
-    this.updatedAt = json.updatedAt;
-  }
-
-  public readonly id: string;
-  public data: DocumentData;
-  public documentType: string;
-  public publishedAt?: TimestampType;
+export abstract class TanamDocumentBase<TimestampType, FieldValueType> {
   public status: TanamPublishStatus;
-  public revision: number;
-  public readonly createdAt?: TimestampType;
-  public readonly updatedAt?: TimestampType;
+
+  constructor(
+    public readonly id: string,
+    public readonly createdAt?: TimestampType,
+    public readonly updatedAt?: TimestampType,
+    public documentType = "unknown",
+    public data: TanamDocumentData = {},
+    public revision = 0,
+    public publishedAt?: TimestampType,
+  ) {
+    // The status of the document is determined by the publishedAt field
+    this.status = this.publishedAt ? TanamPublishStatus.Published : TanamPublishStatus.Unpublished;
+  }
 
   protected abstract getServerTimestamp(): FieldValueType;
 

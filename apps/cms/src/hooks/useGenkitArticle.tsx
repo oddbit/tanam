@@ -1,4 +1,4 @@
-import {ArticleSchema, TanamDocumentClient, TanamPublishStatus, UserNotification} from "@tanam/domain-frontend";
+import {ArticleSchema, TanamDocument, TanamPublishStatus, UserNotification} from "@tanam/domain-frontend";
 import {collection, doc, getDocs, limit, orderBy, query, setDoc, where} from "firebase/firestore";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {useEffect, useState} from "react";
@@ -54,7 +54,7 @@ export function useGenkitArticle() {
         ),
       );
       const articles = querySnapshot.docs
-        .map((doc) => TanamDocumentClient.fromFirestore(doc))
+        .map((doc) => TanamDocument.fromFirestore(doc))
         .map((tanamDoc) => ArticleSchema.parse(tanamDoc.data));
 
       setStatus(ProcessingState.Generating);
@@ -65,16 +65,13 @@ export function useGenkitArticle() {
       });
 
       setStatus(ProcessingState.Finalizing);
-      const tanamDocument = new TanamDocumentClient(docId, {
-        documentType: "article",
-        status: TanamPublishStatus.Unpublished,
-        data: {
-          title: generatedArticle.title,
-          content: generatedArticle.content,
-          tags: generatedArticle.tags,
-          blurb: generatedArticle.blurb,
-        },
+      const tanamDocument = TanamDocument.new(docId, "article", {
+        title: generatedArticle.title,
+        content: generatedArticle.content,
+        tags: generatedArticle.tags,
+        blurb: generatedArticle.blurb,
       });
+
       await setDoc(docRef, tanamDocument.toJson());
       return docId;
     } catch (err) {

@@ -1,5 +1,5 @@
 "use client";
-import {TanamDocumentClient, TanamPublishStatus, UserNotification} from "@tanam/domain-frontend";
+import {TanamDocument, TanamPublishStatus, UserNotification} from "@tanam/domain-frontend";
 import {
   collection,
   doc,
@@ -15,7 +15,7 @@ import {useEffect, useState} from "react";
 import {firestore} from "../plugins/firebase";
 
 interface UseTanamDocumentsResult {
-  data: TanamDocumentClient[];
+  data: TanamDocument[];
   error: UserNotification | null;
   isLoading: boolean;
 }
@@ -27,7 +27,7 @@ interface UseTanamDocumentsResult {
  * @return {UseTanamDocumentsResult} Hook for documents subscription
  */
 export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsResult {
-  const [data, setData] = useState<TanamDocumentClient[]>([]);
+  const [data, setData] = useState<TanamDocument[]>([]);
   const [error, setError] = useState<UserNotification | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -44,7 +44,7 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
-        const documents = snapshot.docs.map((doc) => TanamDocumentClient.fromFirestore(doc));
+        const documents = snapshot.docs.map((doc) => TanamDocument.fromFirestore(doc));
         setData(documents);
         setIsLoading(false);
       },
@@ -62,7 +62,7 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
 }
 
 interface UseTanamDocumentResult {
-  data: TanamDocumentClient | null;
+  data: TanamDocument | null;
   changeStatus: (status: TanamPublishStatus, publishedAt?: Date | null) => Promise<void>;
   error: UserNotification | null;
   isLoading: boolean;
@@ -75,7 +75,7 @@ interface UseTanamDocumentResult {
  * @return {UseTanamDocumentResult} Hook for document subscription
  */
 export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
-  const [data, setData] = useState<TanamDocumentClient | null>(null);
+  const [data, setData] = useState<TanamDocument | null>(null);
   const [error, setError] = useState<UserNotification | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -89,7 +89,7 @@ export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
     const unsubscribe = onSnapshot(
       docRef,
       (snapshot) => {
-        setData(TanamDocumentClient.fromFirestore(snapshot));
+        setData(TanamDocument.fromFirestore(snapshot));
         setIsLoading(false);
       },
       (err) => {
@@ -125,7 +125,7 @@ export function useTanamDocument(documentId?: string): UseTanamDocumentResult {
               : serverTimestamp()
             : null,
         status,
-      } as Partial<TanamDocumentClient>);
+      } as Partial<TanamDocument>);
     } catch (err) {
       setError(
         new UserNotification("error", "Error publishing document", "An error occurred while publishing the document"),
@@ -148,8 +148,7 @@ export function useCrudTanamDocument() {
       const docRef = doc(collection(firestore, "tanam-documents"));
       const docId = docRef.id;
 
-      const tanamDocument = new TanamDocumentClient(docId, {data: {}, documentType});
-      await setDoc(docRef, tanamDocument.toJson());
+      await setDoc(docRef, TanamDocument.new(docId, documentType, {}).toJson());
       return docId;
     } catch (err) {
       setError(
@@ -159,7 +158,7 @@ export function useCrudTanamDocument() {
     return null;
   }
 
-  async function update(document: TanamDocumentClient): Promise<void> {
+  async function update(document: TanamDocument): Promise<void> {
     try {
       const typeRef = doc(firestore, "tanam-documents", document.id);
       await updateDoc(typeRef, document.toJson());

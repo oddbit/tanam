@@ -1,4 +1,4 @@
-export * from "./TanamDocumentClient";
+export * from "./TanamDocument";
 export * from "./TanamDocumentTypeClient";
 export * from "./TanamSpeechRecognition";
 export * from "./TanamUser";
