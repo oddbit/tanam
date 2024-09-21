@@ -1,19 +1,19 @@
-import {ITanamDocumentType, LocalizedString, TanamDocumentField, TanamDocumentTypeClient} from "@tanam/domain-frontend";
-import {Timestamp} from "firebase/firestore";
+import {LocalizedString, TanamDocumentField, TanamDocumentType} from "@tanam/domain-frontend";
 
 export interface IDocumentTypeDataResult {
-  data: TanamDocumentTypeClient;
+  data: TanamDocumentType;
   fields: TanamDocumentField[];
 }
 
 export function getDocumentTypeArticle(): IDocumentTypeDataResult {
-  const data = new TanamDocumentTypeClient("article", {
-    titleSingular: new LocalizedString({en: "Article"}),
-    titlePlural: new LocalizedString({en: "Articles"}),
-    description: new LocalizedString({en: "Article such as a blog post or a published article."}),
-    isEnabled: true,
-    titleField: "title",
-  } as ITanamDocumentType<Timestamp>);
+  const data = new TanamDocumentType(
+    "article",
+    new LocalizedString({en: "Article"}),
+    new LocalizedString({en: "Articles"}),
+    new LocalizedString({en: "Article such as a blog post or a published article."}),
+    "title",
+    true,
+  );
 
   const fields: TanamDocumentField[] = [
     new TanamDocumentField("title", {
@@ -65,13 +65,14 @@ export function getDocumentTypeArticle(): IDocumentTypeDataResult {
 }
 
 export function getDocumentTypePerson(): IDocumentTypeDataResult {
-  const data = new TanamDocumentTypeClient("person", {
-    titleSingular: new LocalizedString({en: "Person"}),
-    titlePlural: new LocalizedString({en: "People"}),
-    description: new LocalizedString({en: "People such as authors, contributors, and staff members."}),
-    isEnabled: true,
-    titleField: "name",
-  } as ITanamDocumentType<Timestamp>);
+  const data = new TanamDocumentType(
+    "person",
+    new LocalizedString({en: "Person"}),
+    new LocalizedString({en: "People"}),
+    new LocalizedString({en: "People such as authors, contributors, and staff members."}),
+    "name",
+    true,
+  );
 
   const fields: TanamDocumentField[] = [
     new TanamDocumentField("name", {

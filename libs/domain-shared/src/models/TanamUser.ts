@@ -1,29 +1,14 @@
 export type TanamRole = "publisher" | "admin";
 
-export interface ITanamUser<TimestampType> {
-  role?: TanamRole;
-  name?: string;
-  colorMode: "dark" | "light";
-  createdAt: TimestampType;
-  updatedAt: TimestampType;
-}
-
-export abstract class TanamUser<TimestampType, FieldValueType> {
-  constructor(id: string, json: ITanamUser<TimestampType>) {
-    this.id = id;
-    this.role = json.role ?? "publisher";
-    this.name = json.name;
-    this.colorMode = json.colorMode ?? "light";
-    this.createdAt = json.createdAt;
-    this.updatedAt = json.updatedAt;
-  }
-
-  public readonly id: string;
-  public role: TanamRole;
-  public name?: string;
-  public colorMode: "dark" | "light";
-  public readonly createdAt: TimestampType;
-  public readonly updatedAt: TimestampType;
+export abstract class TanamUserBase<TimestampType, FieldValueType> {
+  constructor(
+    public readonly id: string,
+    public readonly createdAt?: TimestampType,
+    public readonly updatedAt?: TimestampType,
+    public name?: string,
+    public role: TanamRole = "publisher",
+    public colorMode: "dark" | "light" = "light",
+  ) {}
 
   protected abstract getServerTimestamp(): FieldValueType;
 

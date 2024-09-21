@@ -1,4 +1,4 @@
-import {TanamUserClient, UserNotification} from "@tanam/domain-frontend";
+import {TanamUser, UserNotification} from "@tanam/domain-frontend";
 import {doc, onSnapshot, updateDoc} from "firebase/firestore";
 import {getDownloadURL, ref} from "firebase/storage";
 import {useEffect, useState} from "react";
@@ -11,7 +11,7 @@ import {firestore, storage} from "../plugins/firebase";
  * @return {UseTanamDocumentsResult} Hook for documents subscription
  */
 export function useTanamUser(uid?: string) {
-  const [tanamUser, setTanamUser] = useState<TanamUserClient | null>(null);
+  const [tanamUser, setTanamUser] = useState<TanamUser | null>(null);
   const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export function useTanamUser(uid?: string) {
           setError(new UserNotification("error", "Access Denied", "Sorry you cant access the page"));
         }
 
-        const tanamUser = TanamUserClient.fromFirestore(snapshot);
+        const tanamUser = TanamUser.fromFirestore(snapshot);
         setTanamUser(tanamUser);
       },
       (err) => {

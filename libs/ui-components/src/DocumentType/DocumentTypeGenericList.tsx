@@ -1,10 +1,10 @@
-import {TanamDocumentClient, TanamDocumentTypeClient, TanamPublishStatus} from "@tanam/domain-frontend";
+import {TanamDocument, TanamDocumentType, TanamPublishStatus} from "@tanam/domain-frontend";
 import Link from "next/link";
 import {Table, TableRowLabel} from "../Table";
 
 interface TableOverviewGenericProps {
-  documentType: TanamDocumentTypeClient;
-  documents: TanamDocumentClient[];
+  documentType: TanamDocumentType;
+  documents: TanamDocument[];
   isLoading?: boolean;
 }
 

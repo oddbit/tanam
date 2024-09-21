@@ -1,35 +1,16 @@
 import {LocalizedString} from "./LocalizedString";
 
-export interface ITanamDocumentType<TimestampType> {
-  titleSingular: LocalizedString;
-  titlePlural: LocalizedString;
-  description: LocalizedString;
-  titleField: string;
-  isEnabled: boolean;
-  createdAt: TimestampType;
-  updatedAt: TimestampType;
-}
-
-export abstract class TanamDocumentType<TimestampType, FieldValueType> {
-  constructor(id: string, json: ITanamDocumentType<TimestampType>) {
-    this.id = id;
-    this.titleSingular = json.titleSingular;
-    this.description = json.description;
-    this.titlePlural = json.titlePlural;
-    this.titleField = json.titleField;
-    this.isEnabled = !!json.isEnabled;
-    this.createdAt = json.createdAt;
-    this.updatedAt = json.updatedAt;
-  }
-
-  public readonly id: string;
-  public titleSingular: LocalizedString;
-  public titlePlural: LocalizedString;
-  public description: LocalizedString;
-  public titleField: string;
-  public isEnabled: boolean;
-  public readonly createdAt: TimestampType;
-  public readonly updatedAt: TimestampType;
+export abstract class TanamDocumentTypeBase<TimestampType, FieldValueType> {
+  constructor(
+    public readonly id: string,
+    public titleSingular: LocalizedString,
+    public titlePlural: LocalizedString,
+    public description: LocalizedString,
+    public titleField: string,
+    public isEnabled = true,
+    public readonly createdAt?: TimestampType,
+    public readonly updatedAt?: TimestampType,
+  ) {}
 
   protected abstract getServerTimestamp(): FieldValueType;
 
@@ -40,7 +21,7 @@ export abstract class TanamDocumentType<TimestampType, FieldValueType> {
       description: this.description.toJson(),
       titleField: this.titleField,
       isEnabled: !!this.isEnabled,
-      createdAt: this.createdAt,
+      createdAt: this.createdAt ?? this.getServerTimestamp(),
       updatedAt: this.getServerTimestamp(),
     };
   }

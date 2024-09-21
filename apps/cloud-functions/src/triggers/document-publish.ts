@@ -1,6 +1,5 @@
-import {ITanamDocument, TanamDocumentAdmin} from "@tanam/domain-backend";
+import {TanamDocument} from "@tanam/domain-backend";
 import * as admin from "firebase-admin";
-import {Timestamp} from "firebase-admin/firestore";
 import {getFunctions} from "firebase-admin/functions";
 import {getStorage} from "firebase-admin/storage";
 import {logger} from "firebase-functions/v2";
@@ -22,11 +21,8 @@ export const onPublishChange = onDocumentWritten("tanam-documents/{documentId}",
     return unpublishQueue.enqueue({documentId});
   }
 
-  const documentBeforeData = (event.data.before.data() || {}) as ITanamDocument<Timestamp>;
-  const documentBefore = new TanamDocumentAdmin(documentId, documentBeforeData);
-
-  const documentAfterData = (event.data.after.data() || {}) as ITanamDocument<Timestamp>;
-  const documentAfter = new TanamDocumentAdmin(documentId, documentAfterData);
+  const documentBefore = TanamDocument.fromFirestore(event.data.before);
+  const documentAfter = TanamDocument.fromFirestore(event.data.after);
 
   if (documentBefore.status === documentAfter.status) {
     logger.info("Document status did not change. Skipping.");
@@ -86,12 +82,7 @@ export const taskPublishDocument = onTaskDispatched(
       return;
     }
 
-    const documentData = snap.data();
-    if (!documentData) {
-      logger.error(`Document data is empty: ${documentId}`);
-      return;
-    }
-    const document = new TanamDocumentAdmin(documentId, documentData as ITanamDocument<Timestamp>);
+    const document = TanamDocument.fromFirestore(snap);
 
     if (document.status !== "published") {
       // This could happen if the document changed status while the task was in the queue
@@ -135,8 +126,7 @@ export const taskUnpublishDocument = onTaskDispatched(
     const documentRef = db.collection("tanam-documents").doc(documentId);
     const snap = await documentRef.get();
 
-    const documentData = snap.data();
-    const document = new TanamDocumentAdmin(documentId, documentData as ITanamDocument<Timestamp>);
+    const document = TanamDocument.fromFirestore(snap);
 
     if (document.status === "published") {
       // This could happen if the document changed status while the task was in the queue

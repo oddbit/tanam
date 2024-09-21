@@ -1,3 +1,3 @@
-export * from "./TanamDocumentAdmin";
-export * from "./TanamDocumentTypeAdmin";
-export * from "./TanamUserAdmin";
+export * from "./TanamDocument";
+export * from "./TanamDocumentType";
+export * from "./TanamUser";

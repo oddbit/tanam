@@ -1,7 +1,6 @@
-import {TanamRole, TanamUserAdmin} from "@tanam/domain-backend";
+import {TanamRole, TanamUser} from "@tanam/domain-backend";
 import axios from "axios";
 import * as admin from "firebase-admin";
-import {Timestamp} from "firebase-admin/firestore";
 import {logger} from "firebase-functions/v2";
 import {onDocumentCreated, onDocumentDeleted, onDocumentUpdated} from "firebase-functions/v2/firestore";
 import {onObjectFinalized} from "firebase-functions/v2/storage";
@@ -17,7 +16,6 @@ const storage = admin.storage();
 export const tanamNewUserInit = onDocumentCreated("tanam-users/{docId}", async (event) => {
   const uid = event.params.docId;
   const docRef = db.collection("tanam-users").doc(uid);
-  const docData = (await docRef.get()).data() || {};
 
   logger.info(`Validating User ID: ${uid}`);
   try {
@@ -29,14 +27,13 @@ export const tanamNewUserInit = onDocumentCreated("tanam-users/{docId}", async (
 
   const firebaseUser = await auth.getUser(uid);
   const existingDocs = await db.collection("tanam-users").get();
-  const tanamUser = new TanamUserAdmin(uid, {
-    ...docData,
-    name: firebaseUser.displayName,
-    role: existingDocs.size === 1 ? "admin" : "publisher",
-    colorMode: "light",
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
-  });
+  const tanamUser = new TanamUser(
+    uid,
+    undefined,
+    undefined,
+    firebaseUser.displayName,
+    existingDocs.size === 1 ? "admin" : "publisher",
+  );
   logger.info("Creating User", tanamUser.toJson());
 
   const customClaimsBefore = (await auth.getUser(uid)).customClaims || {};
