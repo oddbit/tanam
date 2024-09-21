@@ -1,16 +1,16 @@
-import {TanamDocumentTypeClient, UserNotification} from "@tanam/domain-frontend";
+import {TanamDocumentType, UserNotification} from "@tanam/domain-frontend";
 import {collection, doc, onSnapshot} from "firebase/firestore";
 import {useParams} from "next/navigation";
 import {useEffect, useState} from "react";
 import {firestore} from "../plugins/firebase";
 
 interface TanamDocumentTypeHook {
-  data: TanamDocumentTypeClient[];
+  data: TanamDocumentType[];
   error: UserNotification | null;
 }
 
 interface SingleTanamDocumentTypeHook {
-  data: TanamDocumentTypeClient | null;
+  data: TanamDocumentType | null;
   error: UserNotification | null;
 }
 
@@ -20,7 +20,7 @@ interface SingleTanamDocumentTypeHook {
  * @return {TanamDocumentTypeHook} Hook for document types subscription
  */
 export function useTanamDocumentTypes(): TanamDocumentTypeHook {
-  const [data, setData] = useState<TanamDocumentTypeClient[]>([]);
+  const [data, setData] = useState<TanamDocumentType[]>([]);
   const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export function useTanamDocumentTypes(): TanamDocumentTypeHook {
     const unsubscribe = onSnapshot(
       collectionRef,
       (snapshot) => {
-        const documentTypes = snapshot.docs.map((doc) => TanamDocumentTypeClient.fromFirestore(doc));
+        const documentTypes = snapshot.docs.map((doc) => TanamDocumentType.fromFirestore(doc));
         setData(documentTypes);
       },
       (err) => {
@@ -54,7 +54,7 @@ export function useTanamDocumentType(documentTypeId?: string): SingleTanamDocume
   const {documentTypeId: paramType} = useParams<{documentTypeId: string}>() ?? {
     documentTypeId: null,
   };
-  const [data, setData] = useState<TanamDocumentTypeClient | null>(null);
+  const [data, setData] = useState<TanamDocumentType | null>(null);
   const [error, setError] = useState<UserNotification | null>(null);
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export function useTanamDocumentType(documentTypeId?: string): SingleTanamDocume
       docRef,
       (doc) => {
         if (doc.exists()) {
-          setData(TanamDocumentTypeClient.fromFirestore(doc));
+          setData(TanamDocumentType.fromFirestore(doc));
         } else {
           setError(new UserNotification("error", "Error fetching data", "Document type not found"));
         }

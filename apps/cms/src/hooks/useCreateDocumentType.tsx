@@ -1,10 +1,10 @@
-import {TanamDocumentField, TanamDocumentTypeClient, UserNotification} from "@tanam/domain-frontend";
+import {TanamDocumentField, TanamDocumentType, UserNotification} from "@tanam/domain-frontend";
 import {collection, doc, serverTimestamp, writeBatch} from "firebase/firestore";
 import {useState} from "react";
 import {firestore} from "../plugins/firebase";
 
 interface CreateDocumentTypeHook {
-  createType: (type: TanamDocumentTypeClient, fields: TanamDocumentField[]) => Promise<void>;
+  createType: (type: TanamDocumentType, fields: TanamDocumentField[]) => Promise<void>;
   isLoading: boolean;
   error: UserNotification | null;
 }
@@ -32,12 +32,12 @@ export function useCreateDocumentType(): CreateDocumentTypeHook {
    * associated fields in a subcollection under the document type. It uses a batch write to
    * ensure that all operations succeed or fail together, maintaining consistency.
    *
-   * @param {TanamDocumentTypeClient} type - The document type to be created.
+   * @param {TanamDocumentType} type - The document type to be created.
    * @param {TanamDocumentField[]} fields - An array of fields to be added under the document type.
    * @return {Promise<void>} - A promise that resolves when the batch operation completes
    * successfully. If any operation in the batch fails, the promise will be rejected.
    */
-  const createType = async (type: TanamDocumentTypeClient, fields: TanamDocumentField[]): Promise<void> => {
+  const createType = async (type: TanamDocumentType, fields: TanamDocumentField[]): Promise<void> => {
     setIsLoading(true);
     setError(null);
     try {
