@@ -50,10 +50,9 @@ jobs:
 
       - name: Load environment variable value
         id: load_env
+        shell: bash
         run: |
-          echo "${{ secrets.APP_CMS_DOT_ENV }}" > apps/cms/.env
-          source apps/cms/.env
-
+          eval $(echo "${{ secrets.APP_CMS_DOT_ENV }}")
           value=$(eval echo \$${{ matrix.config.variable }})
           if [ -z "$value" ]; then
             echo "Environment variable ${{ matrix.config.variable }} is missing in the .env file!"
@@ -61,15 +60,14 @@ jobs:
           fi
 
           echo "CONFIG_VALUE=${value}" >> $GITHUB_ENV
-        shell: bash
 
       - name: Save current value to a file
         uses: w9jds/firebase-action@master
+        continue-on-error: true
         with:
           args: apphosting:secrets:access ${{ matrix.config.secret }} > ${{ matrix.config.secret }}
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_DEPLOY_SA }}
-        continue-on-error: true
 
       - name: Check if secret value has changed
         id: check_secret
@@ -111,4 +109,3 @@ jobs:
         run: |
           rm -f ${{ matrix.config.variable }}
           rm -f ${{ matrix.config.secret }}
-          rm -f apps/cms/.env
