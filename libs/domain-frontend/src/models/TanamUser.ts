@@ -1,4 +1,4 @@
-import {TanamRole, TanamUserBase} from "@tanam/domain-shared";
+import {TanamUserBase} from "@tanam/domain-shared";
 import {DocumentSnapshot, FieldValue, serverTimestamp, Timestamp} from "firebase/firestore";
 
 export class TanamUser extends TanamUserBase<Timestamp, FieldValue> {

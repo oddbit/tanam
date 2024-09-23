@@ -13,7 +13,6 @@ export enum AcceptFileType {
   Excel = "application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   PowerPoint = "application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation",
   Text = "text/plain",
-  Audio = "audio/*",
   Video = "video/*",
   Zip = "application/zip, application/x-rar-compressed, application/x-7z-compressed",
   Csv = "text/csv",
@@ -25,6 +24,7 @@ export enum AcceptFileType {
   Flac = "audio/flac",
   Aac = "audio/aac",
   Wma = "audio/x-ms-wma",
+  Audio = `${AcceptFileType.AllAudios}`,
   Audios = `${AcceptFileType.Mp3}, ${AcceptFileType.Wav}, ${AcceptFileType.Ogg}`,
   AllFiles = "*/*",
 }

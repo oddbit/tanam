@@ -20,7 +20,7 @@ Install all dependencies and serve locally.
 
 ```sh
 npm install
-npm serve
+npm run serve
 ```
 
 ## Deploy to Firebase

@@ -1,8 +1,8 @@
 import {UserNotification} from "@tanam/domain-frontend";
+import {base64ToBlob} from "@tanam/domain-shared";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {useState} from "react";
 import {storage} from "../plugins/firebase";
-import {base64ToBlob} from "../utils/fileUpload";
 
 interface FirebaseStorageHook {
   isLoading: boolean;
