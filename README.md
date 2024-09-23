@@ -43,13 +43,13 @@ source apps/cms/.env
 Copy and paste all these to set up. Be patient, it will take a little while to complete all variable configuration.
 
 ```sh
-echo $NEXT_PUBLIC_FIREBASE_API_KEY | firebase apphosting:secrets:set --force --data-file - firebaseApiKey
-echo $NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN | firebase apphosting:secrets:set --force --data-file - firebaseAuthDomain
-echo $NEXT_PUBLIC_FIREBASE_DATABASE_URL | firebase apphosting:secrets:set --force --data-file - firebaseDatabaseUrl
-echo $NEXT_PUBLIC_FIREBASE_PROJECT_ID | firebase apphosting:secrets:set --force --data-file - firebaseProjectId
-echo $NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET | firebase apphosting:secrets:set --force --data-file - firebaseStorageBucket
-echo $NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID | firebase apphosting:secrets:set --force --data-file - firebaseMessagingSenderId
-echo $NEXT_PUBLIC_FIREBASE_APP_ID | firebase apphosting:secrets:set --force --data-file - firebaseAppId
+echo $NEXT_PUBLIC_FIREBASE_API_KEY | firebase apphosting:secrets:set --force --data-file - tanamApiKey
+echo $NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN | firebase apphosting:secrets:set --force --data-file - tanamAuthDomain
+echo $NEXT_PUBLIC_FIREBASE_DATABASE_URL | firebase apphosting:secrets:set --force --data-file - tanamDatabaseUrl
+echo $NEXT_PUBLIC_FIREBASE_PROJECT_ID | firebase apphosting:secrets:set --force --data-file - tanamProjectId
+echo $NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET | firebase apphosting:secrets:set --force --data-file - tanamStorageBucket
+echo $NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID | firebase apphosting:secrets:set --force --data-file - tanamMessagingSenderId
+echo $NEXT_PUBLIC_FIREBASE_APP_ID | firebase apphosting:secrets:set --force --data-file - tanamAppId
 ```
 
 You will need to grant access to your app-hosting backend if this is the first time you are setting the variables
@@ -57,13 +57,13 @@ and if you didn't enable access to all variables in the `apphosting:secrets:set`
 
 ```sh
 export APP_HOSTING_BACKEND=<your app-hosting-backend>
-firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND firebaseApiKey
-firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND firebaseAuthDomain
-firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND firebaseDatabaseUrl
-firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND firebaseProjectId
-firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND firebaseStorageBucket
-firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND firebaseMessagingSenderId
-firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND firebaseAppId
+firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND tanamApiKey
+firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND tanamAuthDomain
+firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND tanamDatabaseUrl
+firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND tanamProjectId
+firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND tanamStorageBucket
+firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND tanamMessagingSenderId
+firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND tanamAppId
 ```
 
 # License
