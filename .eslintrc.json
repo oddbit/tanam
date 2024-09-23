@@ -1,0 +1,129 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    "**/*"
+  ],
+  "plugins": [
+    "@nx",
+    "@typescript-eslint",
+    "import",
+    "prettier"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "plugin:prettier/recommended",
+    "google",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx"
+      ],
+      "rules": {
+        "@nx/enforce-module-boundaries": [
+          "error",
+          {
+            "enforceBuildableLibDependency": true,
+            "allow": [],
+            "depConstraints": [
+              {
+                "sourceTag": "app:frontend",
+                "onlyDependOnLibsWithTags": [
+                  "lib:frontend"
+                ]
+              },
+              {
+                "sourceTag": "app:backend",
+                "onlyDependOnLibsWithTags": [
+                  "lib:backend"
+                ]
+              },
+              {
+                "sourceTag": "lib:frontend",
+                "onlyDependOnLibsWithTags": [
+                  "lib:frontend",
+                  "lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "lib:backend",
+                "onlyDependOnLibsWithTags": [
+                  "lib:backend",
+                  "lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "lib:shared",
+                "onlyDependOnLibsWithTags": [
+                  "lib:shared"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
+      "extends": [
+        "plugin:@nx/typescript"
+      ],
+      "rules": {}
+    },
+    {
+      "files": [
+        "*.js",
+        "*.jsx"
+      ],
+      "extends": [
+        "plugin:@nx/javascript"
+      ],
+      "rules": {}
+    }
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": [
+      "tsconfig.json",
+      "tsconfig.dev.json"
+    ],
+    "sourceType": "module"
+  },
+  "rules": {
+    "quotes": "off", // Use config from prettier
+    "max-len": "off",
+    "require-jsdoc": "off",
+    "import/no-unresolved": 0,
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "operator-linebreak": [
+      "error",
+      "before"
+    ],
+    "prettier/prettier": "error",
+    "spaced-comment": [
+      "error",
+      "always",
+      {
+        "markers": [
+          "/"
+        ]
+      }
+    ]
+  }
+}

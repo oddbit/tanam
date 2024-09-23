@@ -2,10 +2,19 @@
   "version": "0.2",
   "language": "en",
   "words": [
+    "apphosting",
+    "Buildable",
+    "clsx",
+    "datepicker",
     "firebaseui",
     "firestore",
+    "formgroup",
     "Genkit",
     "googleai",
+    "grantaccess",
+    "linebreak",
+    "lowlight",
+    "satoshi",
     "tanam",
     "tiptap"
   ]

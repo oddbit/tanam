@@ -1,0 +1,110 @@
+name: Configure
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  firebase_secrets_update:
+    name: Secrets
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - secret: firebaseApiKey
+            variable: NEXT_PUBLIC_FIREBASE_API_KEY
+          - secret: firebaseAuthDomain
+            variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+          - secret: firebaseDatabaseUrl
+            variable: NEXT_PUBLIC_FIREBASE_DATABASE_URL
+          - secret: firebaseProjectId
+            variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+          - secret: firebaseStorageBucket
+            variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+          - secret: firebaseMessagingSenderId
+            variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+          - secret: firebaseAppId
+            variable: NEXT_PUBLIC_FIREBASE_APP_ID
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - run: npm ci --legacy-peer-deps
+
+      - name: Load environment variable value
+        id: load_env
+        run: |
+          echo "${{ secrets.APP_CMS_DOT_ENV }}" > apps/cms/.env
+          source apps/cms/.env
+
+          value=$(eval echo \$${{ matrix.config.variable }})
+          if [ -z "$value" ]; then
+            echo "Environment variable ${{ matrix.config.variable }} is missing in the .env file!"
+            exit 1
+          fi
+
+          echo "CONFIG_VALUE=${value}" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Save current value to a file
+        uses: w9jds/firebase-action@master
+        with:
+          args: apphosting:secrets:access ${{ matrix.config.secret }} > ${{ matrix.config.secret }}
+        env:
+          GCP_SA_KEY: ${{ secrets.FIREBASE_DEPLOY_SA }}
+        continue-on-error: true
+
+      - name: Check if secret value has changed
+        id: check_secret
+        shell: bash
+        run: |
+          if [ -f "${{ matrix.config.secret }}" ]; then
+            current_value=$(cat ${{ matrix.config.secret }})
+          else
+            current_value=""
+          fi
+
+          if [ "$current_value" = "${{ env.CONFIG_VALUE }}" ]; then
+            echo "The value for ${{ matrix.config.secret }} has not changed."
+            echo "SKIP_UPDATE=true" >> $GITHUB_ENV
+          else
+            echo "The value for ${{ matrix.config.secret }} has changed or the secret does not exist."
+            echo ${{ env.CONFIG_VALUE }} | tr -d '[:space:]' > ${{ matrix.config.variable }}
+            echo "SKIP_UPDATE=false" >> $GITHUB_ENV
+          fi
+
+      - name: Set secret value in Firebase
+        if: env.SKIP_UPDATE == 'false'
+        uses: w9jds/firebase-action@master
+        with:
+          args: apphosting:secrets:set --force --data-file ${{ matrix.config.variable }} ${{ matrix.config.secret }}
+        env:
+          GCP_SA_KEY: ${{ secrets.FIREBASE_DEPLOY_SA }}
+
+      - name: Grant access to the secret
+        if: env.SKIP_UPDATE == 'false'
+        uses: w9jds/firebase-action@master
+        with:
+          args: apphosting:secrets:grantaccess --backend ${{ secrets.APP_HOSTING_BACKEND }} ${{ matrix.config.secret }}
+        env:
+          GCP_SA_KEY: ${{ secrets.FIREBASE_DEPLOY_SA }}
+
+      - name: Clean up
+        if: always()
+        run: |
+          rm -f ${{ matrix.config.variable }}
+          rm -f ${{ matrix.config.secret }}
+          rm -f apps/cms/.env

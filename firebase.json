@@ -5,7 +5,7 @@
   },
   "functions": [
     {
-      "source": "functions",
+      "source": "apps/cloud-functions",
       "codebase": "tanam",
       "ignore": [
         "node_modules",
@@ -21,7 +21,7 @@
     }
   ],
   "hosting": {
-    "source": "hosting",
+    "source": "apps/cms",
     "ignore": [
       "firebase.json",
       "**/.*",
