@@ -2,19 +2,12 @@
 
 import {UserNotification} from "@tanam/domain-frontend";
 import {AcceptFileType} from "@tanam/domain-shared";
-import {
-  Button,
-  DocumentTypeGenericList,
-  Dropzone,
-  Loader,
-  Modal,
-  Notification,
-  PageHeader,
-  VoiceRecorder,
-} from "@tanam/ui-components";
+import {Button, DocumentTypeGenericList, Loader, Modal, Notification, PageHeader} from "@tanam/ui-components";
 // import dynamic from "next/dynamic";
 import {useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
+import {Dropzone} from "../../../../components/Form/Dropzone";
+import VoiceRecorder from "../../../../components/VoiceRecorder";
 import {useAuthentication} from "../../../../hooks/useAuthentication";
 import {ProcessingState, useGenkitArticle} from "../../../../hooks/useGenkitArticle";
 import {useCrudTanamDocument, useTanamDocuments} from "../../../../hooks/useTanamDocuments";

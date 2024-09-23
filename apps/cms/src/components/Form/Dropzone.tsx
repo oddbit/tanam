@@ -1,7 +1,7 @@
 "use client";
 import {AcceptFileType} from "@tanam/domain-frontend";
-import {getAcceptDescription, isFileAccepted} from "@tanam/domain-shared";
 import React, {useEffect, useRef, useState} from "react";
+import {getAcceptDescription, isFileAccepted} from "./../../utils/fileUpload";
 import "./styles/dropzone.scss";
 
 export interface DropzoneProps {
