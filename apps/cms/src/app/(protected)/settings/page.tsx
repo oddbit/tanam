@@ -2,7 +2,7 @@
 import {AcceptFileType, UserNotification} from "@tanam/domain-frontend";
 import {CropImage, Modal, Notification, PageHeader} from "@tanam/ui-components";
 import Image from "next/image";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import DarkModeSwitcher from "../../../components/DarkModeSwitcher";
 import {Dropzone} from "../../../components/Form/Dropzone";
 import {useAuthentication} from "../../../hooks/useAuthentication";
@@ -25,29 +25,19 @@ export default function Settings() {
   const [afterCropImage, setAfterCropImage] = useState<string>();
   const [profilePicture, setProfilePicture] = useState<string>(defaultImage);
 
-  useEffect(() => {
-    if (tanamUser) {
-      init();
-    }
-  }, [tanamUser, pathUpload]);
-
-  useEffect(() => {
-    setNotification(userError || storageError);
-  }, [userError, storageError]);
-
   /**
    * Initializes component by setting the required state.
    * Loads the profile picture if upload path is available.
    * @return {Promise<void>}
    */
-  async function init(): Promise<void> {
+  const init = useCallback(async () => {
     if (!pathUpload) {
       setPathUpload(`tanam-users/${tanamUser?.id}`);
       return;
     }
 
     await resetChanges();
-  }
+  }, [pathUpload, tanamUser, resetChanges]);
 
   /**
    * Resets upload and crop image-related states.
@@ -148,6 +138,18 @@ export default function Settings() {
       {/* End button to save changes to the profile picture after cropping */}
     </div>
   );
+
+  useEffect(() => {
+    if (!tanamUser) {
+      return;
+    }
+
+    init();
+  }, [tanamUser, pathUpload, init]);
+
+  useEffect(() => {
+    setNotification(userError || storageError);
+  }, [userError, storageError]);
 
   return (
     <div className="mx-auto max-w-270">
