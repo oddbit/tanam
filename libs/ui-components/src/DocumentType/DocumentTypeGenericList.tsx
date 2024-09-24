@@ -8,15 +8,16 @@ interface TableOverviewGenericProps {
   isLoading?: boolean;
 }
 
-export function DocumentTypeGenericList({documents, documentType, isLoading}: TableOverviewGenericProps) {
+export function DocumentTypeGenericList({documents, isLoading}: TableOverviewGenericProps) {
   return (
     <Table
       isLoading={isLoading}
       headers={["Title", "Created", "Status"]}
       rows={documents.map((document, key) => [
         <Link key={`${key}-${document.id}-id`} href={`/content/${document.documentType}/${document.id}`}>
-          <p className="font-medium text-black dark:text-white">{document.data[documentType.titleField] as string}</p>
+          <p className="font-medium text-black dark:text-white">{(document.data.title as string) || ""}</p>
         </Link>,
+
         <p key={`${key}-${document.id}-date`} className="text-black dark:text-white">
           {document.createdAt?.toDate().toUTCString()}
         </p>,
