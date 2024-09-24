@@ -13,13 +13,11 @@ export class TanamDocument extends TanamDocumentBase<Timestamp, FieldValue> {
   static fromFirestore(snap: DocumentSnapshot): TanamDocument {
     const data = snap.data();
 
-    console.info("data :: ", data);
-
     if (!data) {
       throw new Error("Document data is undefined");
     }
 
-    const result = new TanamDocument(
+    return new TanamDocument(
       snap.id,
       data.createdAt,
       data.updatedAt,
@@ -28,9 +26,5 @@ export class TanamDocument extends TanamDocumentBase<Timestamp, FieldValue> {
       data.revision,
       data.publishedAt,
     );
-
-    console.info("result :: ", result);
-
-    return result;
   }
 }

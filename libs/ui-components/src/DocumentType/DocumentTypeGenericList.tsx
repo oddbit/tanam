@@ -9,7 +9,6 @@ interface TableOverviewGenericProps {
 }
 
 export function DocumentTypeGenericList({documents, documentType, isLoading}: TableOverviewGenericProps) {
-  console.info("documents :: ", documents);
   return (
     <Table
       isLoading={isLoading}

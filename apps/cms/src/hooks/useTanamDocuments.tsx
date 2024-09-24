@@ -44,10 +44,7 @@ export function useTanamDocuments(documentTypeId?: string): UseTanamDocumentsRes
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
-        const documents = snapshot.docs.map((doc) => {
-          console.info("doc :: ", doc);
-          return TanamDocument.fromFirestore(doc);
-        });
+        const documents = snapshot.docs.map((doc) => TanamDocument.fromFirestore(doc));
         setData(documents);
         setIsLoading(false);
       },
