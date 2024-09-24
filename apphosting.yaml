@@ -4,23 +4,22 @@ runConfig:
 
 env:
   - variable: NEXT_PUBLIC_FIREBASE_API_KEY
-    secret: firebaseApiKey
+    secret: tanamApiKey
 
   - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
-    secret: firebaseAuthDomain
+    secret: tanamAuthDomain
 
   - variable: NEXT_PUBLIC_FIREBASE_DATABASE_URL
-    secret: firebaseDatabaseUrl
+    secret: tanamDatabaseUrl
 
   - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
-    secret: firebaseProjectId
+    secret: tanamProjectId
 
   - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
-    secret: firebaseStorageBucket
+    secret: tanamStorageBucket
 
   - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
-    secret: firebaseMessagingSenderId
+    secret: tanamMessagingSenderId
 
   - variable: NEXT_PUBLIC_FIREBASE_APP_ID
-    secret: firebaseAppId
-
+    secret: tanamAppId

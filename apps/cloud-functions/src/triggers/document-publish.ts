@@ -34,9 +34,9 @@ export const onPublishChange = onDocumentWritten("tanam-documents/{documentId}",
     return publishQueue.enqueue({documentId});
   }
 
-  if (documentBefore.status === "published") {
+  if (documentAfter.status === "unpublished" && documentBefore.status === "published") {
     logger.info("Document was unpublished", documentAfter.toJson());
-    await unpublishQueue.enqueue({documentId});
+    return unpublishQueue.enqueue({documentId});
   }
 
   const publishedAt = documentAfter.publishedAt?.toDate();
