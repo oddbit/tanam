@@ -2,7 +2,7 @@
 import {TanamRole} from "@tanam/domain-frontend";
 import {User} from "firebase/auth";
 import {redirect, usePathname} from "next/navigation";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {firebaseAuth} from "../plugins/firebase";
 
 export function useAuthentication() {
@@ -13,31 +13,33 @@ export function useAuthentication() {
   const [userRole, setUserRole] = useState<TanamRole | null>(null);
   const [isSignedIn, setIsSignedIn] = useState<boolean | null>(null);
 
-  useEffect(() => {
-    const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
-      console.log("[onAuthStateChanged]", {user});
-      setUser(user);
-      setIsSignedIn(!!user);
-      fetchUserRole();
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  async function fetchUserRole() {
+  const fetchUserRole = useCallback(async () => {
     try {
       const idTokenResult = await firebaseAuth.currentUser?.getIdTokenResult();
+      const role = (idTokenResult?.claims as {tanamRole: TanamRole})?.tanamRole;
 
-      setUserRole((idTokenResult?.claims as {tanamRole: TanamRole}).tanamRole);
+      setUserRole(role || null);
 
-      // Redirect when user doesnt have claims
-      if (pathname !== "/error/insufficient-role" && (userRole === null || !userRole)) {
+      if (pathname !== "/error/insufficient-role" && !role) {
         redirect("/error/insufficient-role");
       }
     } catch (error) {
       setError(error as Error);
     }
-  }
+  }, [pathname]);
+
+  useEffect(() => {
+    const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
+      console.log("[onAuthStateChanged]", {user});
+
+      setUser(user);
+      setIsSignedIn(!!user);
+
+      if (user) fetchUserRole();
+    });
+
+    return () => unsubscribe();
+  }, [fetchUserRole]);
 
   async function signout() {
     console.log("[signout]");

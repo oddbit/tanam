@@ -11,7 +11,6 @@ export interface DropzoneProps {
   onChange?: (fileString: string | null, fileBlob: File | null) => void;
 }
 
-// TODO: DELETE it
 /**
  * Dropzone component for handling file uploads and sending data to parent without preview.
  * @param {DropzoneProps} props - The properties for the dropzone component.
@@ -25,9 +24,11 @@ export function Dropzone({value, disabled, accept = AcceptFileType.AllFiles, onC
    * useEffect hook that resets the file input value when the component unmounts.
    */
   useEffect(() => {
+    const inputElement = inputRef.current;
+
     return () => {
-      if (inputRef.current) {
-        inputRef.current.value = "";
+      if (inputElement) {
+        inputElement.value = "";
       }
     };
   }, [value]);

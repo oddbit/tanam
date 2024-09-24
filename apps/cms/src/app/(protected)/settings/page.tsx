@@ -26,31 +26,6 @@ export default function Settings() {
   const [profilePicture, setProfilePicture] = useState<string>(defaultImage);
 
   /**
-   * Initializes component by setting the required state.
-   * Loads the profile picture if upload path is available.
-   * @return {Promise<void>}
-   */
-  const init = useCallback(async () => {
-    if (!pathUpload) {
-      setPathUpload(`tanam-users/${tanamUser?.id}`);
-      return;
-    }
-
-    await resetChanges();
-  }, [pathUpload, tanamUser, resetChanges]);
-
-  /**
-   * Resets upload and crop image-related states.
-   * @return {Promise<void>}
-   */
-  async function resetChanges(): Promise<void> {
-    setFileUploadContentType(undefined);
-    resetCropImage();
-
-    await fetchProfilePicture();
-  }
-
-  /**
    * Resets the crop image states.
    */
   function resetCropImage() {
@@ -64,12 +39,12 @@ export default function Settings() {
    * Uses a default image if none is found.
    * @return {Promise<void>}
    */
-  async function fetchProfilePicture(): Promise<void> {
+  const fetchProfilePicture = useCallback(async () => {
     const profilePictureUrl = await getFile(`${pathUpload}/profile.png`);
 
     setProfilePicture(profilePictureUrl ?? defaultImage);
     setBeforeCropImage(profilePicture);
-  }
+  }, [getFile, pathUpload, profilePicture]);
 
   /**
    * Handles the submission of the personal information form.
@@ -105,6 +80,17 @@ export default function Settings() {
   }
 
   /**
+   * Resets upload and crop image-related states.
+   * @return {Promise<void>}
+   */
+  const resetChanges = useCallback(async () => {
+    setFileUploadContentType(undefined);
+    resetCropImage();
+
+    await fetchProfilePicture();
+  }, [fetchProfilePicture]);
+
+  /**
    * Modal actions for saving or canceling profile picture changes.
    * @constant
    * @type {JSX.Element}
@@ -138,6 +124,20 @@ export default function Settings() {
       {/* End button to save changes to the profile picture after cropping */}
     </div>
   );
+
+  /**
+   * Initializes component by setting the required state.
+   * Loads the profile picture if upload path is available.
+   * @return {Promise<void>}
+   */
+  const init = useCallback(async () => {
+    if (!pathUpload) {
+      setPathUpload(`tanam-users/${tanamUser?.id}`);
+      return;
+    }
+
+    await resetChanges();
+  }, [pathUpload, tanamUser, resetChanges]);
 
   useEffect(() => {
     if (!tanamUser) {

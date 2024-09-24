@@ -1,6 +1,6 @@
 "use client";
 import {TanamSpeechRecognition} from "@tanam/domain-frontend";
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 
 interface VoiceRecorderProps {
   title?: string;
@@ -29,67 +29,8 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
   const recognitionRef = useRef<TanamSpeechRecognition | undefined>();
   const streamRef = useRef<MediaStream | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const peaksInstanceRef = useRef<any>(null);
-
-  /**
-   * Effect to trigger onChange whenever the value prop changes.
-   */
-  useEffect(() => {
-    if (value) {
-      onChange(value);
-    }
-  }, [value, onChange]);
-
-  /**
-   * Effect to trigger onLoadingChange whenever the isRecording prop changes.
-   */
-  useEffect(() => {
-    if (onLoadingChange) {
-      onLoadingChange(isRecording);
-    }
-  }, [isRecording, onLoadingChange]);
-
-  /**
-   * Effect to trigger initSoundWave whenever the audioUrl changes.
-   */
-  useEffect(() => {
-    if (audioUrl) {
-      initSoundWave();
-    }
-
-    return () => {
-      resetSoundWave();
-    };
-  }, [audioUrl]);
-
-  /**
-   * Effect hook that sets up the SpeechRecognition instance and its event handlers.
-   * It handles starting, stopping, and restarting the speech recognition process.
-   */
-  useEffect(() => {
-    const SpeechRecognition = new TanamSpeechRecognition();
-
-    if (SpeechRecognition) {
-      recognitionRef.current = SpeechRecognition;
-      const recognition = recognitionRef.current;
-
-      if (!recognition) return;
-
-      // Handle the event when speech recognition returns results
-      recognition.onresult = (event: any) => {
-        const transcript = Array.from(event.results)
-          .map((result: any) => result[0])
-          .map((result) => result.transcript)
-          .join("");
-
-        setTranscript(transcript); // Update local state with the transcript
-
-        if (onTranscriptChange) {
-          onTranscriptChange(transcript);
-        }
-      };
-    }
-  }, [onTranscriptChange, isRecording]);
 
   /**
    * Starts recording audio using the user"s microphone.
@@ -169,7 +110,7 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
   /**
    * Loads the audio buffer and initializes Peak.js with the given options.
    */
-  async function initSoundWave() {
+  const initSoundWave = useCallback(async () => {
     resetSoundWave();
 
     // SSR Compatability (https://github.com/bbc/peaks.js/issues/335#issuecomment-682223058)
@@ -209,6 +150,7 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
       axisGridlineColor: "#ccc",
       axisLabelColor: "#aaa",
       randomizeSegmentColor: true,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any;
 
     peaksInstanceRef.current = Peaks.init(options, (err) => {
@@ -217,13 +159,75 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
         return;
       }
     });
-  }
+  }, []);
 
   function resetSoundWave() {
     if (!peaksInstanceRef.current) return;
 
     peaksInstanceRef.current.destroy();
   }
+
+  /**
+   * Effect to trigger onChange whenever the value prop changes.
+   */
+  useEffect(() => {
+    if (value) {
+      onChange(value);
+    }
+  }, [value, onChange]);
+
+  /**
+   * Effect to trigger onLoadingChange whenever the isRecording prop changes.
+   */
+  useEffect(() => {
+    if (onLoadingChange) {
+      onLoadingChange(isRecording);
+    }
+  }, [isRecording, onLoadingChange]);
+
+  /**
+   * Effect to trigger initSoundWave whenever the audioUrl changes.
+   */
+  useEffect(() => {
+    if (audioUrl) {
+      initSoundWave();
+    }
+
+    return () => {
+      resetSoundWave();
+    };
+  }, [audioUrl, initSoundWave]);
+
+  /**
+   * Effect hook that sets up the SpeechRecognition instance and its event handlers.
+   * It handles starting, stopping, and restarting the speech recognition process.
+   */
+  useEffect(() => {
+    const SpeechRecognition = new TanamSpeechRecognition();
+
+    if (SpeechRecognition) {
+      recognitionRef.current = SpeechRecognition;
+      const recognition = recognitionRef.current;
+
+      if (!recognition) return;
+
+      // Handle the event when speech recognition returns results
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      recognition.onresult = (event: any) => {
+        const transcript = Array.from(event.results)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .map((result: any) => result[0])
+          .map((result) => result.transcript)
+          .join("");
+
+        setTranscript(transcript); // Update local state with the transcript
+
+        if (onTranscriptChange) {
+          onTranscriptChange(transcript);
+        }
+      };
+    }
+  }, [onTranscriptChange, isRecording]);
 
   return (
     <div className="relative w-full">

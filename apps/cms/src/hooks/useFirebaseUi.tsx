@@ -2,7 +2,7 @@
 import {AuthCredential, GoogleAuthProvider} from "firebase/auth";
 import {auth as firebaseAuthUi} from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {firebaseAuth} from "../plugins/firebase";
 
 const firebaseUi = firebaseAuthUi.AuthUI.getInstance() || new firebaseAuthUi.AuthUI(firebaseAuth);
@@ -11,17 +11,8 @@ export function useFirebaseUi() {
   const [isSignUp, setIsSignup] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    renderFirebaseUi();
-
-    return () => {
-      setIsLoading(false);
-      setIsSignup(false);
-    };
-  }, []);
-
-  function renderFirebaseUi() {
-    if (!window || typeof window === "undefined") return;
+  const renderFirebaseUi = useCallback(() => {
+    if (typeof window === "undefined") return;
 
     const selector = "#firebaseuiAuthContainer";
 
@@ -50,7 +41,17 @@ export function useFirebaseUi() {
         },
       },
     });
-  }
+  }, [isSignUp]);
+
+  useEffect(() => {
+    renderFirebaseUi();
+
+    return () => {
+      firebaseUi.reset();
+      setIsLoading(false);
+      setIsSignup(false);
+    };
+  }, [renderFirebaseUi]);
 
   return {
     isLoading,
