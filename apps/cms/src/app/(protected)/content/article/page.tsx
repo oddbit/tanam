@@ -138,7 +138,6 @@ export default function DocumentTypeDocumentsPage() {
       <Suspense fallback={<Loader />}>
         {documentType ? (
           <>
-            documentType :: {JSON.stringify(documentType)}
             <DocumentTypeGenericList isLoading={isLoading} documents={documents} documentType={documentType} />
             {isDialogOpen && (
               <Modal
