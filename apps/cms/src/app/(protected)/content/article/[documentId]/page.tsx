@@ -31,7 +31,7 @@ export default function DocumentDetailsPage() {
   useEffect(() => {
     if (updateMetadata) return;
 
-    onDocumentTitleChange(title);
+    fetchDocumentUpdate(title, description);
   }, [updateMetadata]);
 
   useEffect(() => {
@@ -53,13 +53,14 @@ export default function DocumentDetailsPage() {
     setTags([]);
   }
 
-  async function onDocumentTitleChange(title: string) {
-    console.log("[onDocumentTitleChange]", title);
+  async function fetchDocumentUpdate(title: string, blurb: string) {
+    console.log("[fetchDocumentUpdate]", title);
     if (!document) {
       return;
     }
 
     document.data.title = title;
+    document.data.blurb = blurb;
     await update(document);
   }
 
