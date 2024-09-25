@@ -41,12 +41,11 @@ export default function DocumentDetailsPage() {
   useEffect(() => {
     if (updateMetadata) return;
 
-    fetchDocumentUpdate(title, description);
+    fetchDocumentUpdate(title, description, tags);
   }, [updateMetadata]);
 
   useEffect(() => {
     if (document) {
-      console.info("document :: ", document);
       setTitle(document.data.title as string);
       setDescription(document.data.blurb as string);
       setTags(document.data.tags as string[]);
@@ -63,7 +62,7 @@ export default function DocumentDetailsPage() {
     setTags([]);
   }
 
-  async function fetchDocumentUpdate(title: string, blurb: string) {
+  async function fetchDocumentUpdate(title: string, blurb: string, tags: string[]) {
     console.log("[fetchDocumentUpdate]", title);
     if (!document) {
       return;
@@ -71,6 +70,7 @@ export default function DocumentDetailsPage() {
 
     document.data.title = title;
     document.data.blurb = blurb;
+    document.data.tags = tags;
     await update(document);
   }
 
