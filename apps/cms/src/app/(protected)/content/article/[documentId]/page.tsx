@@ -27,11 +27,15 @@ export default function DocumentDetailsPage() {
   }, [documentError, writeError]);
 
   useEffect(() => {
-    if (!document) {
-      return;
-    }
+    if (updateTitleShown) return;
 
-    setTitle(document.data.title as string);
+    onDocumentTitleChange(title);
+  }, [updateTitleShown]);
+
+  useEffect(() => {
+    if (document) {
+      setTitle(document.data.title as string);
+    }
 
     return () => setTitle("");
   }, [document]);
@@ -75,7 +79,7 @@ export default function DocumentDetailsPage() {
                   placeholder="Title"
                   disabled={readonlyMode}
                   value={title || ""}
-                  onChange={(e) => onDocumentTitleChange(e.target.value)}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
               )}
 
