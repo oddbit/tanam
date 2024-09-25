@@ -50,6 +50,8 @@ echo $NEXT_PUBLIC_FIREBASE_PROJECT_ID | firebase apphosting:secrets:set --force 
 echo $NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET | firebase apphosting:secrets:set --force --data-file - tanamStorageBucket
 echo $NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID | firebase apphosting:secrets:set --force --data-file - tanamMessagingSenderId
 echo $NEXT_PUBLIC_FIREBASE_APP_ID | firebase apphosting:secrets:set --force --data-file - tanamAppId
+echo $NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID | firebase apphosting:secrets:set --force --data-file - tanamMeasurementId
+echo $GOOGLE_GENAI_API_KEY | firebase apphosting:secrets:set --force --data-file - tanamGenAiApiKey
 ```
 
 You will need to grant access to your app-hosting backend if this is the first time you are setting the variables
@@ -64,6 +66,8 @@ firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND tanamProj
 firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND tanamStorageBucket
 firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND tanamMessagingSenderId
 firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND tanamAppId
+firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND tanamMeasurementId
+firebase apphosting:secrets:grantaccess --backend $APP_HOSTING_BACKEND tanamGenAiApiKey
 ```
 
 # License

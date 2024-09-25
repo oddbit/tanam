@@ -26,5 +26,6 @@ env:
 
   - variable: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
     secret: tanamMeasurementId
+    
   - variable: GOOGLE_GENAI_API_KEY
     secret: tanamGenAiApiKey
