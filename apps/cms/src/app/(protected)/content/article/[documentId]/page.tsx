@@ -1,6 +1,16 @@
 "use client";
 import {UserNotification} from "@tanam/domain-frontend";
-import {Badge, Button, Input, Loader, Notification, PageHeader, TextArea, TiptapEditor} from "@tanam/ui-components";
+import {
+  Badge,
+  Button,
+  Input,
+  Loader,
+  MultipleText,
+  Notification,
+  PageHeader,
+  TextArea,
+  TiptapEditor,
+} from "@tanam/ui-components";
 import {useParams, useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
 import {useCrudTanamDocument, useTanamDocument} from "../../../../../hooks/useTanamDocuments";
@@ -126,6 +136,10 @@ export default function DocumentDetailsPage() {
 
               <div className="relative w-full flex flex-row gap-2">
                 {!updateMetadata && tags.length > 0 && tags.map((tag, index) => <Badge key={index} title={tag} />)}
+
+                {updateMetadata && (
+                  <MultipleText placeholder="Add tags" value={tags} onChange={(value) => setTags(value)} />
+                )}
               </div>
 
               <hr className="mt-4" />
