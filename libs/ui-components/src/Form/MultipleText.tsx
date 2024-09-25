@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {Badge} from "../Badge";
 import {Button} from "./../Button";
 import {Input} from "./Input";
 
@@ -50,18 +51,10 @@ export function MultipleText(props: MultipleTextProps) {
         <Button title="Add" onClick={handleAddItem} style="rounded" />
       </div>
 
-      {entries.length > 0 && (
-        <ul className="space-y-2">
-          {entries.map((value, index) => (
-            <li key={index} className="flex items-center justify-between p-2 bg-gray-100 rounded">
-              <span className="text-gray-700">{value}</span>
-              <button onClick={() => handleRemoveItem(index)} className="text-red-500 hover:text-red-700">
-                Remove
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <div className="relative w-full flex flex-row gap-2">
+        {entries.length > 0 &&
+          entries.map((value, index) => <Badge key={index} title={value} onRemove={() => handleRemoveItem(index)} />)}
+      </div>
     </div>
   );
 }
