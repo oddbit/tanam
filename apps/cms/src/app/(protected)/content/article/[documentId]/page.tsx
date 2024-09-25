@@ -1,6 +1,6 @@
 "use client";
 import {UserNotification} from "@tanam/domain-frontend";
-import {Badge, Button, Input, Loader, Notification, PageHeader, TiptapEditor} from "@tanam/ui-components";
+import {Badge, Button, Input, Loader, Notification, PageHeader, TextArea, TiptapEditor} from "@tanam/ui-components";
 import {useParams, useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
 import {useCrudTanamDocument, useTanamDocument} from "../../../../../hooks/useTanamDocuments";
@@ -12,6 +12,7 @@ export default function DocumentDetailsPage() {
   const {update, error: writeError} = useCrudTanamDocument();
 
   const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
   const [readonlyMode] = useState<boolean>(false);
   const [updateMetadata, setUpdateMetadata] = useState<boolean>(false);
@@ -37,14 +38,20 @@ export default function DocumentDetailsPage() {
     if (document) {
       console.info("document :: ", document);
       setTitle(document.data.title as string);
+      setDescription(document.data.blurb as string);
       setTags(document.data.tags as string[]);
     }
 
     return () => {
-      setTitle("");
-      setTags([]);
+      pruneState();
     };
   }, [document]);
+
+  function pruneState() {
+    setTitle("");
+    setDescription("");
+    setTags([]);
+  }
 
   async function onDocumentTitleChange(title: string) {
     console.log("[onDocumentTitleChange]", title);
@@ -101,8 +108,23 @@ export default function DocumentDetailsPage() {
                 )}
               </div>
 
+              <div className="relative w-full flex flex-row mb-4">
+                {!updateMetadata && <p>{document.data.blurb as string}</p>}
+
+                {updateMetadata && (
+                  <TextArea
+                    key="descriptionArticle"
+                    placeholder="Description"
+                    rows={3}
+                    disabled={readonlyMode}
+                    value={description || ""}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                )}
+              </div>
+
               <div className="relative w-full flex flex-row gap-2">
-                {tags && tags.map((tag, index) => <Badge key={index} title={tag} />)}
+                {!updateMetadata && tags.length > 0 && tags.map((tag, index) => <Badge key={index} title={tag} />)}
               </div>
 
               <hr className="mt-4" />
