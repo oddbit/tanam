@@ -1,6 +1,6 @@
 "use client";
 import {UserNotification} from "@tanam/domain-frontend";
-import {Button, Input, Loader, Notification, PageHeader, TiptapEditor} from "@tanam/ui-components";
+import {Badge, Button, Input, Loader, Notification, PageHeader, TiptapEditor} from "@tanam/ui-components";
 import {useParams, useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
 import {useCrudTanamDocument, useTanamDocument} from "../../../../../hooks/useTanamDocuments";
@@ -12,8 +12,9 @@ export default function DocumentDetailsPage() {
   const {update, error: writeError} = useCrudTanamDocument();
 
   const [title, setTitle] = useState<string>("");
+  const [tags, setTags] = useState<string[]>([]);
   const [readonlyMode] = useState<boolean>(false);
-  const [updateTitleShown, setUpdateTitleShown] = useState<boolean>(false);
+  const [updateMetadata, setUpdateMetadata] = useState<boolean>(false);
   const [notification, setNotification] = useState<UserNotification | null>(null);
 
   useEffect(() => {
@@ -27,17 +28,22 @@ export default function DocumentDetailsPage() {
   }, [documentError, writeError]);
 
   useEffect(() => {
-    if (updateTitleShown) return;
+    if (updateMetadata) return;
 
     onDocumentTitleChange(title);
-  }, [updateTitleShown]);
+  }, [updateMetadata]);
 
   useEffect(() => {
     if (document) {
+      console.info("document :: ", document);
       setTitle(document.data.title as string);
+      setTags(document.data.tags as string[]);
     }
 
-    return () => setTitle("");
+    return () => {
+      setTitle("");
+      setTags([]);
+    };
   }, [document]);
 
   async function onDocumentTitleChange(title: string) {
@@ -69,27 +75,37 @@ export default function DocumentDetailsPage() {
       <Suspense fallback={<Loader />}>
         {document ? (
           <>
-            <div className="relative w-full flex flex-row gap-3">
-              {!updateTitleShown && <PageHeader pageName={document.data.title as string} />}
+            <div className="relative w-full pr-5 pl-5">
+              <div className="relative w-full flex flex-row mb-4">
+                <Button
+                  title={updateMetadata ? "Save Changes" : "Edit Metadata"}
+                  onClick={() => setUpdateMetadata(!updateMetadata)}
+                  style="rounded"
+                >
+                  <span className="i-ic-outline-edit mr-2" />
+                </Button>
+              </div>
 
-              {updateTitleShown && (
-                <Input
-                  key="titleArticle"
-                  type="text"
-                  placeholder="Title"
-                  disabled={readonlyMode}
-                  value={title || ""}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              )}
+              <div className="relative w-full flex flex-row mb-4">
+                {!updateMetadata && <PageHeader pageName={document.data.title as string} />}
 
-              <Button
-                title={updateTitleShown ? "Save Changes" : "Edit Title"}
-                onClick={() => setUpdateTitleShown(!updateTitleShown)}
-                style="rounded"
-              >
-                <span className="i-ic-outline-edit mr-2" />
-              </Button>
+                {updateMetadata && (
+                  <Input
+                    key="titleArticle"
+                    type="text"
+                    placeholder="Title"
+                    disabled={readonlyMode}
+                    value={title || ""}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                )}
+              </div>
+
+              <div className="relative w-full flex flex-row gap-2">
+                {tags && tags.map((tag, index) => <Badge key={index} title={tag} />)}
+              </div>
+
+              <hr className="mt-4" />
             </div>
 
             {document?.data.content && (
