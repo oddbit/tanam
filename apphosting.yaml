@@ -23,3 +23,6 @@ env:
 
   - variable: NEXT_PUBLIC_FIREBASE_APP_ID
     secret: tanamAppId
+
+  - variable: GOOGLE_GENAI_API_KEY
+    secret: tanamGenAiApiKey

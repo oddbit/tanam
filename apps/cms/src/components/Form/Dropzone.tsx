@@ -1,8 +1,8 @@
 "use client";
-import "./styles/dropzone.scss";
-import {getAcceptDescription, isFileAccepted} from "../../utils/fileUpload";
 import {AcceptFileType} from "@tanam/domain-frontend";
 import React, {useEffect, useRef, useState} from "react";
+import {getAcceptDescription, isFileAccepted} from "./../../utils/fileUpload";
+import "./styles/dropzone.scss";
 
 export interface DropzoneProps {
   value?: string;
@@ -24,9 +24,11 @@ export function Dropzone({value, disabled, accept = AcceptFileType.AllFiles, onC
    * useEffect hook that resets the file input value when the component unmounts.
    */
   useEffect(() => {
+    const inputElement = inputRef.current;
+
     return () => {
-      if (inputRef.current) {
-        inputRef.current.value = "";
+      if (inputElement) {
+        inputElement.value = "";
       }
     };
   }, [value]);

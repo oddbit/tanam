@@ -27,27 +27,24 @@ export default function DocumentDetailsPage() {
   }, [documentError, writeError]);
 
   useEffect(() => {
-    if (updateTitleShown) return;
-    async function onDocumentTitleChange(title: string) {
-      console.log("[onDocumentTitleChange]", title);
-      if (!document) {
-        return;
-      }
-
-      document.data.title = title;
-      await update(document);
+    if (!document) {
+      return;
     }
 
-    onDocumentTitleChange(title);
-  }, [document, title, update, updateTitleShown]);
-
-  useEffect(() => {
-    if (document) {
-      setTitle(document.data.title as string);
-    }
+    setTitle(document.data.title as string);
 
     return () => setTitle("");
   }, [document]);
+
+  async function onDocumentTitleChange(title: string) {
+    console.log("[onDocumentTitleChange]", title);
+    if (!document) {
+      return;
+    }
+
+    document.data.title = title;
+    await update(document);
+  }
 
   async function onDocumentContentChange(content: string) {
     console.log("[onDocumentContentChange]", content);
@@ -78,7 +75,7 @@ export default function DocumentDetailsPage() {
                   placeholder="Title"
                   disabled={readonlyMode}
                   value={title || ""}
-                  onChange={(e) => setTitle(e.target.value)}
+                  onChange={(e) => onDocumentTitleChange(e.target.value)}
                 />
               )}
 
@@ -90,18 +87,20 @@ export default function DocumentDetailsPage() {
                 <span className="i-ic-outline-edit mr-2" />
               </Button>
             </div>
+
+            {document?.data.content && (
+              <TiptapEditor
+                key={"article-content"}
+                value={document?.data.content as string}
+                disabled={readonlyMode}
+                onChange={onDocumentContentChange}
+              />
+            )}
           </>
         ) : (
           <Loader />
         )}
       </Suspense>
-
-      <TiptapEditor
-        key={"article-content"}
-        value={document?.data.content as string}
-        disabled={readonlyMode}
-        onChange={onDocumentContentChange}
-      />
     </>
   );
 }

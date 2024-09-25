@@ -1,30 +1,15 @@
 "use client";
-
-import {UserNotification} from "@tanam/domain-frontend";
-import {
-  Button,
-  DocumentTypeGenericList,
-  FilePicker,
-  Loader,
-  Modal,
-  Notification,
-  PageHeader,
-} from "@tanam/ui-components";
-import dynamic from "next/dynamic";
+import {AcceptFileType, UserNotification} from "@tanam/domain-frontend";
+import {Button, DocumentTypeGenericList, Loader, Modal, Notification, PageHeader} from "@tanam/ui-components";
 import {useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
+import {Dropzone} from "../../../../components/Form/Dropzone";
+import VoiceRecorder from "../../../../components/VoiceRecorder";
 import {useAuthentication} from "../../../../hooks/useAuthentication";
 import {ProcessingState, useGenkitArticle} from "../../../../hooks/useGenkitArticle";
 import {useCrudTanamDocument, useTanamDocuments} from "../../../../hooks/useTanamDocuments";
 import {useTanamDocumentType} from "../../../../hooks/useTanamDocumentTypes";
 import {base64ToFile} from "../../../../plugins/fileUpload";
-
-// NOTE(Dennis)
-// The VoiceRecorder is using `navigator` to access the microphone, which creates issues with server-side rendering.
-// The module must be dynamically imported to avoid problems when statically rendered components are generated.
-const VoiceRecorder = dynamic(() => import("../../../../components/VoiceRecorder").then((mod) => mod.default), {
-  ssr: false,
-});
 
 export default function DocumentTypeDocumentsPage() {
   const router = useRouter();
@@ -154,7 +139,6 @@ export default function DocumentTypeDocumentsPage() {
         {documentType ? (
           <>
             <DocumentTypeGenericList isLoading={isLoading} documents={documents} documentType={documentType} />
-
             {isDialogOpen && (
               <Modal
                 isOpen={isDialogOpen}
@@ -171,7 +155,14 @@ export default function DocumentTypeDocumentsPage() {
                       <>
                         <div className="relative w-full text-center mt-4 mb-4">Or</div>
 
-                        <FilePicker onFileSelect={handleFileSelect} />
+                        <Dropzone
+                          accept={AcceptFileType.Audios}
+                          onChange={(_, fileBlob) => {
+                            if (!fileBlob) return;
+
+                            handleFileSelect(fileBlob);
+                          }}
+                        />
                       </>
                     )}
                   </>

@@ -6,12 +6,12 @@ const SignoutUser: React.FC = () => {
   const {signout} = useAuthentication();
 
   useEffect(() => {
-    actionSignout();
-  }, []);
+    const actionSignout = () => {
+      signout();
+    };
 
-  function actionSignout() {
-    signout();
-  }
+    actionSignout();
+  }, [signout]);
 
   return null;
 };
