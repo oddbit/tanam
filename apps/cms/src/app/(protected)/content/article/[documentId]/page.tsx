@@ -91,18 +91,20 @@ export default function DocumentDetailsPage() {
                 <span className="i-ic-outline-edit mr-2" />
               </Button>
             </div>
+
+            {document?.data.content && (
+              <TiptapEditor
+                key={"article-content"}
+                value={document?.data.content as string}
+                disabled={readonlyMode}
+                onChange={onDocumentContentChange}
+              />
+            )}
           </>
         ) : (
           <Loader />
         )}
       </Suspense>
-
-      <TiptapEditor
-        key={"article-content"}
-        value={document?.data.content as string}
-        disabled={readonlyMode}
-        onChange={onDocumentContentChange}
-      />
     </>
   );
 }

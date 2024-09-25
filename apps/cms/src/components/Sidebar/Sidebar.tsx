@@ -32,12 +32,14 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
     };
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
-  });
+  }, [sidebarOpen, setSidebarOpen]);
 
   // close sidebar when page is changed or window resize
   useEffect(() => {
-    setSidebarOpen(false);
-  }, [pathname, windowSize]);
+    if (sidebarOpen) {
+      setSidebarOpen(false);
+    }
+  }, [sidebarOpen, pathname, windowSize, setSidebarOpen]);
 
   useEffect(() => {
     // Handler to call on window resize

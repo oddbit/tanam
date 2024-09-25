@@ -1,3 +1,4 @@
+"use client";
 import {NodeViewContent, NodeViewWrapper} from "@tiptap/react";
 import "./styles/code-block.scss";
 
