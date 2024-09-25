@@ -28,18 +28,9 @@ export default function DocumentDetailsPage() {
 
   useEffect(() => {
     if (updateTitleShown) return;
-    async function onDocumentTitleChange(title: string) {
-      console.log("[onDocumentTitleChange]", title);
-      if (!document) {
-        return;
-      }
-
-      document.data.title = title;
-      await update(document);
-    }
 
     onDocumentTitleChange(title);
-  }, [document, title, update, updateTitleShown]);
+  }, [updateTitleShown]);
 
   useEffect(() => {
     if (document) {
@@ -48,6 +39,16 @@ export default function DocumentDetailsPage() {
 
     return () => setTitle("");
   }, [document]);
+
+  async function onDocumentTitleChange(title: string) {
+    console.log("[onDocumentTitleChange]", title);
+    if (!document) {
+      return;
+    }
+
+    document.data.title = title;
+    await update(document);
+  }
 
   async function onDocumentContentChange(content: string) {
     console.log("[onDocumentContentChange]", content);
