@@ -20,8 +20,8 @@ export class TanamDocument extends TanamDocumentBase<Timestamp, FieldValue> {
       snap.id,
       data.createdAt,
       data.updatedAt,
-      data.data,
       data.documentType,
+      data.data,
       data.revision,
       data.publishedAt,
     );
