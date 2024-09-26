@@ -203,7 +203,9 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
    * It handles starting, stopping, and restarting the speech recognition process.
    */
   useEffect(() => {
-    const SpeechRecognition = new TanamSpeechRecognition();
+    const SpeechRecognition = new TanamSpeechRecognition({
+      continuous: true,
+    });
 
     if (SpeechRecognition) {
       recognitionRef.current = SpeechRecognition;
