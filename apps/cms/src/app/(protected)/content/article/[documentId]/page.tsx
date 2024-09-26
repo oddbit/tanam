@@ -87,6 +87,8 @@ export default function DocumentDetailsPage() {
   async function onSaveMetadataModal() {
     setLoading(true);
 
+    setNotification(null);
+
     try {
       await fetchDocumentUpdate(title, description, tags);
 
@@ -112,23 +114,23 @@ export default function DocumentDetailsPage() {
   const modalActionMetadata = (
     <div className="flex flex-col sm:flex-row justify-end gap-3">
       {/* Start button to close the metadata modal */}
-      <button
-        className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white sm:w-full sm:text-sm"
+      <Button
+        title="Close"
+        loading={loading}
         disabled={readonlyMode || loading}
         onClick={onCloseMetadataModal}
-      >
-        Close
-      </button>
+        style="outline-rounded"
+      />
       {/* End button to close the metadata modal */}
 
       {/* Start button to save changes metadata */}
-      <button
-        className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90 sm:w-full sm:text-sm"
+      <Button
+        title="Save"
+        loading={loading}
         disabled={readonlyMode || loading}
         onClick={onSaveMetadataModal}
-      >
-        Save
-      </button>
+        style="rounded"
+      />
       {/* End button to save changes metadata */}
     </div>
   );
@@ -144,7 +146,7 @@ export default function DocumentDetailsPage() {
           <>
             <div className="relative w-full">
               <div className="relative w-full flex flex-row mb-4">
-                <Button title="Edit Metadata" onClick={onOpenMetadata} style="rounded">
+                <Button title="Edit Metadata" loading={loading} onClick={onOpenMetadata} style="rounded">
                   <span className="i-ic-outline-edit mr-2" />
                 </Button>
               </div>

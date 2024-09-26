@@ -6,13 +6,14 @@ import {Input} from "./Input";
 interface MultipleTextProps {
   title?: string;
   placeholder?: string;
+  loading?: boolean;
   disabled?: boolean;
   value?: string[];
   onChange?: (value: string[]) => void;
 }
 
 export function MultipleText(props: MultipleTextProps) {
-  const {title, placeholder = "Add something here", disabled, value = [], onChange} = props;
+  const {title, placeholder = "Add something here", disabled, loading, value = [], onChange} = props;
 
   const [entry, setEntry] = useState("");
   const [entries, setEntries] = useState(value);
@@ -48,7 +49,7 @@ export function MultipleText(props: MultipleTextProps) {
           onChange={(e) => setEntry(e.target.value)}
         />
 
-        <Button disabled={disabled} title="Add" onClick={handleAddItem} style="rounded" />
+        <Button loading={loading} disabled={disabled} title="Add" onClick={handleAddItem} style="rounded" />
       </div>
 
       <div className="relative w-full flex flex-wrap gap-2">
