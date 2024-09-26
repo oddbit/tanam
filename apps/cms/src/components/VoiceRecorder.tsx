@@ -274,7 +274,7 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
         <div className="text-center">
           <h3 className="text-lg font-medium mb-2">Your Recording:</h3>
           <div className="waveform-container">
-            <div id="overviewContainer" className="w-full h-30"></div>
+            <div id="overviewContainer" className="w-full h-30 bg-white"></div>
           </div>
           <audio controls src={audioUrl} id="audio" className="w-full rounded-md shadow-sm"></audio>
           <button
