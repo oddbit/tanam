@@ -52,6 +52,7 @@ jobs:
         id: load_env
         shell: bash
         run: |
+          eval $(echo "${{ secrets.APP_DOT_ENV }}")
           eval $(echo "${{ secrets.APP_CMS_DOT_ENV }}")
           value=$(eval echo \$${{ matrix.config.variable }})
           if [ -z "$value" ]; then
