@@ -63,21 +63,15 @@ export default function DocumentTypeDocumentsPage() {
   const modalActionAudioInput = (
     <div className="flex flex-col sm:flex-row justify-end gap-3">
       {/* Start button to close the audio input modal */}
-      <button
-        className="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white sm:w-full sm:text-sm"
-        onClick={resetAudioInput}
-      >
+      <Button onClick={resetAudioInput} style="outline-rounded" className={["text-black dark:text-white"]}>
         Close
-      </button>
+      </Button>
       {/* End button to close the audio input modal */}
 
       {/* Start button to save changes audio input */}
-      <button
-        className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90 sm:w-full sm:text-sm"
-        onClick={submitAudio}
-      >
+      <Button onClick={submitAudio} style="rounded" className={["text-black dark:text-white"]}>
         Save
-      </button>
+      </Button>
       {/* End button to save changes audio input */}
     </div>
   );

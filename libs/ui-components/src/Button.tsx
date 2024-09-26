@@ -2,7 +2,7 @@ import clsx from "clsx";
 import React, {useEffect, useState} from "react";
 
 interface ButtonProps {
-  title: string;
+  title?: string;
   onClick?: () => Promise<void> | void;
   style?: "normal" | "plain-text" | "rounded" | "outline" | "outline-rounded" | "icon" | "icon-rounded";
   color?: "primary" | "meta-3" | "black";
