@@ -94,7 +94,7 @@ export default function DocumentTypeDocumentsPage() {
                 </Button>
 
                 <div
-                  className={`${isDropdownCreateOpen ? "block" : "hidden"} absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+                  className={`${isDropdownCreateOpen ? "block" : "hidden"} absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-black shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
                   role="menu"
                   aria-orientation="vertical"
                   aria-labelledby="dropdownCreateArticle"
@@ -102,14 +102,14 @@ export default function DocumentTypeDocumentsPage() {
                 >
                   <div className="py-1" role="none">
                     <button
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-black hover:bg-opacity-5 w-full text-left"
+                      className="block px-4 py-2 text-sm text-black dark:text-white bg-white dark:bg-black hover:opacity-70 dark:hover:opacity-70 w-full text-left"
                       onClick={addNewArticle}
                     >
                       <span className="i-ic-create mr-2" />
                       {`Add New ${documentType.titleSingular.translated}`}
                     </button>
                     <button
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-black hover:bg-opacity-5 w-full text-left"
+                      className="block px-4 py-2 text-sm text-black dark:text-white bg-white dark:bg-black hover:opacity-70 dark:hover:opacity-70 w-full text-left"
                       onClick={() => setIsDialogOpen(true)}
                     >
                       <span className="i-ic-mic mr-2" />
