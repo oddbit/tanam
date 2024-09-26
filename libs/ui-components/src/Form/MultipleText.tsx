@@ -51,7 +51,7 @@ export function MultipleText(props: MultipleTextProps) {
         <Button title="Add" onClick={handleAddItem} style="rounded" />
       </div>
 
-      <div className="relative w-full flex flex-row gap-2">
+      <div className="relative w-full grid gap-2 lg:flex lg:flex-row lg:gap-2">
         {entries.length > 0 &&
           entries.map((value, index) => <Badge key={index} title={value} onRemove={() => handleRemoveItem(index)} />)}
       </div>

@@ -93,7 +93,7 @@ export default function DocumentDetailsPage() {
       <Suspense fallback={<Loader />}>
         {document ? (
           <>
-            <div className="relative w-full pr-5 pl-5">
+            <div className="relative w-full">
               <div className="relative w-full flex flex-row mb-4">
                 <Button
                   title={updateMetadata ? "Save Changes" : "Edit Metadata"}
@@ -134,7 +134,7 @@ export default function DocumentDetailsPage() {
                 )}
               </div>
 
-              <div className="relative w-full flex flex-row gap-2">
+              <div className="relative w-full grid gap-2 lg:flex lg:flex-row lg:gap-2">
                 {!updateMetadata && tags.length > 0 && tags.map((tag, index) => <Badge key={index} title={tag} />)}
 
                 {updateMetadata && (

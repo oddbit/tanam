@@ -7,16 +7,20 @@ interface BadgeProps {
 export function Badge(props: BadgeProps) {
   const {title, className, onRemove} = props;
 
-  const badgeClassName = `block border px-3 py-1 text-xs font-semibold rounded-full ${className}`;
+  let badgeClassName = "border px-3 py-1 text-xs font-semibold rounded-full";
+  badgeClassName = className ? badgeClassName.concat(` ${className}`) : badgeClassName;
 
   return (
-    <span className={badgeClassName}>
-      {title}
-      {onRemove && (
-        <button onClick={onRemove} aria-label="Remove badge" className="ml-2">
-          <span className="i-ic-close w-[10px] h-[10px]" />
-        </button>
-      )}
-    </span>
+    <div className={badgeClassName}>
+      <div className="relative w-full inline-flex items-center justify-between">
+        <span>{title}</span>
+
+        {onRemove && (
+          <button onClick={onRemove} aria-label="Remove badge" className="ml-2">
+            <span className="relative top-[2px] i-ic-close" />
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
