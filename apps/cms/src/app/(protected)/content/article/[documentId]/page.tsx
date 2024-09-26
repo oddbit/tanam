@@ -41,7 +41,7 @@ export default function DocumentDetailsPage() {
   }, [documentError, writeError]);
 
   useEffect(() => {
-    if (document && showModalMetadata) {
+    if (document) {
       setTitle(document.data.title as string);
       setDescription(document.data.blurb as string);
       setTags(document.data.tags as string[]);
