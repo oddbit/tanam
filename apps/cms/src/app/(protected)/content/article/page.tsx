@@ -86,10 +86,10 @@ export default function DocumentTypeDocumentsPage() {
     <>
       <Suspense fallback={<Loader />}>
         {documentType ? (
-          <div className="flex items-center gap-4">
+          <div className="relative w-full flex gap-2 mb-4">
             <PageHeader pageName={documentType.titlePlural.translated} />
 
-            <div className="mb-6">
+            <div className="relative">
               <span className="relative">
                 <Button
                   title={`Create ${documentType.titleSingular.translated}`}

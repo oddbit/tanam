@@ -1,11 +1,12 @@
 interface BadgeProps {
   title: string;
   className?: string;
+  disabled?: boolean;
   onRemove?: () => void;
 }
 
 export function Badge(props: BadgeProps) {
-  const {title, className, onRemove} = props;
+  const {title, className, disabled, onRemove} = props;
 
   let badgeClassName = "border px-3 py-1 text-xs font-semibold rounded-full";
   badgeClassName = className ? badgeClassName.concat(` ${className}`) : badgeClassName;
@@ -16,7 +17,7 @@ export function Badge(props: BadgeProps) {
         <span>{title}</span>
 
         {onRemove && (
-          <button onClick={onRemove} aria-label="Remove badge" className="ml-2">
+          <button disabled={disabled} onClick={onRemove} aria-label="Remove badge" className="ml-2">
             <span className="relative top-[2px] i-ic-close" />
           </button>
         )}
