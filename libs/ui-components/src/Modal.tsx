@@ -8,6 +8,8 @@ interface ModalProps {
   title: string;
   children: React.ReactNode;
   actions?: React.ReactNode;
+  headerRight?: React.ReactNode;
+  headerLeft?: React.ReactNode;
 }
 
 /**
@@ -21,6 +23,8 @@ export function Modal({
   title,
   children,
   actions,
+  headerRight,
+  headerLeft,
   onClose,
 }: ModalProps): JSX.Element | null {
   // If the modal is not open, don't render anything
@@ -44,12 +48,16 @@ export function Modal({
         <div className="inline-block bg-white dark:bg-black rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full">
           {/* Start modal header */}
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-            <h3 className="text-xl font-semibold text-black dark:text-white">{title}</h3>
+            {headerLeft ? headerLeft : <h3 className="text-xl font-semibold text-black dark:text-white">{title}</h3>}
 
-            <Button onClick={onClose} style="plain-text" className={["text-black dark:text-white !p-0"]}>
-              <span className="i-ic-baseline-close w-[22px] h-[22px]" />
-              <span className="sr-only">Close modal</span>
-            </Button>
+            {headerRight ? (
+              headerRight
+            ) : (
+              <Button onClick={onClose} style="plain-text" className={["text-black dark:text-white !p-0"]}>
+                <span className="i-ic-baseline-close w-[22px] h-[22px]" />
+                <span className="sr-only">Close modal</span>
+              </Button>
+            )}
           </div>
           {/* End modal header */}
 

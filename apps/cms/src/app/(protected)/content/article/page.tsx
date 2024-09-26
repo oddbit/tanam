@@ -60,7 +60,9 @@ export default function DocumentTypeDocumentsPage() {
    * @constant
    * @type {JSX.Element}
    */
-  const modalActionAudioInput = (
+  const modalActionAudioInput: JSX.Element = isRecording ? (
+    <span className="animate-pulse">Recording...</span>
+  ) : (
     <div className="flex flex-col sm:flex-row justify-end gap-3">
       {/* Start button to close the audio input modal */}
       <Button onClick={resetAudioInput} style="outline-rounded" className={["text-black dark:text-white"]}>
@@ -74,6 +76,15 @@ export default function DocumentTypeDocumentsPage() {
       </Button>
       {/* End button to save changes audio input */}
     </div>
+  );
+
+  /**
+   * Modal header right.
+   * @constant
+   * @type {JSX.Element}
+   */
+  const headerRight: JSX.Element = (
+    <span className="i-ic-baseline-fiber-manual-record text-red animate-pulse w-[22px] h-[22px]" />
   );
 
   return (
@@ -139,6 +150,7 @@ export default function DocumentTypeDocumentsPage() {
                 disableOverlayClose={true}
                 onClose={resetAudioInput}
                 actions={modalActionAudioInput}
+                headerRight={isRecording ? headerRight : null}
                 title={"Tell your story"}
               >
                 {status === ProcessingState.Ready ? (
