@@ -3,7 +3,7 @@ import {collection, doc, getDocs, limit, orderBy, query, setDoc, where} from "fi
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {useEffect, useState} from "react";
 import {firestore, storage} from "../plugins/firebase";
-import {generateArticle} from "../plugins/genkit/article";
+import {generateArticle} from "@tanam/genkit";
 
 export enum ProcessingState {
   Uploading = "Uploading",

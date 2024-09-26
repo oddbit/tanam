@@ -10,30 +10,17 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2020",
-      "dom"
-    ],
+    "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@tanam/domain-backend": [
-        "libs/domain-backend/src/index.ts"
-      ],
-      "@tanam/domain-frontend": [
-        "libs/domain-frontend/src/index.ts"
-      ],
-      "@tanam/domain-shared": [
-        "libs/domain-shared/src/index.ts"
-      ],
-      "@tanam/ui-components": [
-        "libs/ui-components/src/index.ts"
-      ],
+      "@tanam/domain-backend": ["libs/domain-backend/src/index.ts"],
+      "@tanam/domain-frontend": ["libs/domain-frontend/src/index.ts"],
+      "@tanam/domain-shared": ["libs/domain-shared/src/index.ts"],
+      "@tanam/genkit": ["libs/genkit/src/index.ts"],
+      "@tanam/ui-components": ["libs/ui-components/src/index.ts"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }
