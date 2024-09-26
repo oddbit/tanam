@@ -38,6 +38,7 @@ Read the environment variables from the CMS configuration
 
 ```sh
 source apps/cms/.env
+source .env
 ```
 
 Copy and paste all these to set up. Be patient, it will take a little while to complete all variable configuration.
@@ -51,7 +52,7 @@ echo $NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET | firebase apphosting:secrets:set --fo
 echo $NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID | firebase apphosting:secrets:set --force --data-file - tanamMessagingSenderId
 echo $NEXT_PUBLIC_FIREBASE_APP_ID | firebase apphosting:secrets:set --force --data-file - tanamAppId
 echo $NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID | firebase apphosting:secrets:set --force --data-file - tanamMeasurementId
-echo $GOOGLE_GENAI_API_KEY | firebase apphosting:secrets:set --force --data-file - tanamGenAiApiKey
+echo $GEMINI_API_KEY | firebase apphosting:secrets:set --force --data-file - tanamGenAiApiKey
 ```
 
 You will need to grant access to your app-hosting backend if this is the first time you are setting the variables

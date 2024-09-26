@@ -34,7 +34,7 @@ jobs:
           - secret: tanamMeasurementId
             variable: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
           - secret: tanamGenAiApiKey
-            variable: GOOGLE_GENAI_API_KEY
+            variable: GEMINI_API_KEY
 
     steps:
       - uses: actions/checkout@v4
