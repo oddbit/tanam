@@ -37,7 +37,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "firebase": "^10.13.1",
-    "firebase-admin": "^12.4.0",
+    "firebase-admin": "^12.5.0",
     "firebase-functions": "^5.1.1",
     "firebaseui": "^6.1.0",
     "flatpickr": "^4.6.13",
