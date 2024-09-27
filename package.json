@@ -49,6 +49,7 @@
     "lowlight": "^3.1.0",
     "next": "^14.2.12",
     "next-i18next": "^15.3.1",
+    "next-intl": "^3.20.0",
     "peaks.js": "^3.4.2",
     "react": "^18.3.1",
     "react-apexcharts": "^1.4.1",

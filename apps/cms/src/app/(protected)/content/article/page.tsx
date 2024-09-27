@@ -3,6 +3,7 @@ import {AcceptFileType, UserNotification} from "@tanam/domain-frontend";
 import {Button, DocumentTypeGenericList, Loader, Modal, Notification, PageHeader} from "@tanam/ui-components";
 import {useRouter} from "next/navigation";
 import {Suspense, useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 import {Dropzone} from "../../../../components/Form/Dropzone";
 import VoiceRecorder from "../../../../components/VoiceRecorder";
 import {useAuthentication} from "../../../../hooks/useAuthentication";
@@ -23,6 +24,8 @@ export default function DocumentTypeDocumentsPage() {
   const [isDropdownCreateOpen, setIsDropdownCreateOpen] = useState(false);
   const [audio, setAudio] = useState<string>("");
   const {createFromRecording, status} = useGenkitArticle();
+
+  const {t} = useTranslation();
 
   useEffect(() => {
     setNotification(docsError || crudError);
@@ -87,8 +90,8 @@ export default function DocumentTypeDocumentsPage() {
       <Suspense fallback={<Loader />}>
         {documentType ? (
           <div className="flex items-center gap-4">
+            hello translate :: {t("hello")} <br />
             <PageHeader pageName={documentType.titlePlural.translated} />
-
             <div className="mb-6">
               <span className="relative">
                 <Button
