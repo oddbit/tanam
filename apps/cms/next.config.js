@@ -2,11 +2,12 @@
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const {composePlugins, withNx} = require("@nx/next");
-
+const {i18n} = require("./i18n.config");
 /**
  * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
  **/
 const nextConfig = {
+  i18n,
   images: {
     domains: ["lh3.googleusercontent.com", "firebasestorage.googleapis.com"],
   },
