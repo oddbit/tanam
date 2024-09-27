@@ -26,7 +26,20 @@ jobs:
           cache: "npm"
 
       - run: npm ci --legacy-peer-deps
+
       - uses: nrwl/nx-set-shas@v4
+
+      - run: npm run lint:all:fix
+
+      - name: Check for Lint Fixes
+        run: |
+          if [[ $(git status --porcelain) ]]; then
+            echo "Error: Linting caused changes in files. Please commit these changes."
+            git status --short  # Show which files were changed
+            exit 1  # Exit with error code
+          else
+            echo "Linting completed with no changes."
+          fi
 
       - name: Configure Firebase for CMS app
         run: |

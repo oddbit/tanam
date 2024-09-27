@@ -1,4 +1,4 @@
-name: Configure
+name: Configure App Hosting
 
 on:
   push:
