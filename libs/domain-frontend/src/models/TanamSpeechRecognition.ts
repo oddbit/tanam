@@ -83,8 +83,15 @@ export interface SpeechRecognitionAlternative {
   confidence: number;
 }
 
+export interface TanamSpeechRecognitionOptions {
+  lang?: string;
+  interimResults?: boolean;
+  maxAlternatives?: number;
+  continuous?: boolean;
+}
+
 export class TanamSpeechRecognition implements SpeechRecognition {
-  constructor() {
+  constructor(options: TanamSpeechRecognitionOptions = {}) {
     const SpeechRecognitionConstructor = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognitionConstructor) {
@@ -92,6 +99,16 @@ export class TanamSpeechRecognition implements SpeechRecognition {
     }
 
     this.recognition = new SpeechRecognitionConstructor();
+
+    this.lang = options.lang || "en-US";
+    this.interimResults = options.interimResults ?? false;
+    this.maxAlternatives = options.maxAlternatives ?? 1;
+    this.continuous = options.continuous ?? false;
+
+    this.recognition.lang = this.lang;
+    this.recognition.interimResults = this.interimResults;
+    this.recognition.maxAlternatives = this.maxAlternatives;
+    this.recognition.continuous = this.continuous;
 
     // Bind event handlers
     this.recognition.onstart = this.handleEvent.bind(this, "onstart");
@@ -107,10 +124,10 @@ export class TanamSpeechRecognition implements SpeechRecognition {
     this.recognition.onnomatch = this.handleEvent.bind(this, "onnomatch");
   }
 
-  public lang = "en-US";
-  public interimResults = false;
-  public maxAlternatives = 1;
-  public continuous = false;
+  public lang: string;
+  public interimResults: boolean;
+  public maxAlternatives: number;
+  public continuous: boolean;
 
   public onaudiostart?: (event: Event) => void;
   public onsoundstart?: (event: Event) => void;
