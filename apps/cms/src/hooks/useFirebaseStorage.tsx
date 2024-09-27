@@ -7,7 +7,7 @@ import {base64ToBlob} from "./../utils/fileUpload";
 interface FirebaseStorageHook {
   isLoading: boolean;
   error: UserNotification | null;
-  upload: (folderPath: string, base64: string, contentType: string) => Promise<string | null>;
+  upload: (filePath: string, data: File | string, contentType?: string) => Promise<string | null>;
   getFile: (filePath: string) => Promise<string | null>;
 }
 
@@ -24,22 +24,26 @@ export function useFirebaseStorage(): FirebaseStorageHook {
    * Uploads a base64 encoded file to Firebase Storage.
    * Converts the base64 string to a Blob object and uploads it to the specified folder path.
    * After uploading, retrieves and returns the download URL of the uploaded file.
-   * @param {string} folderPath - The path in Firebase Storage where the file will be saved (e.g., 'images/user_profiles').
-   * @param {string} base64 - The base64 encoded file string to be uploaded.
-   * @param {string} contentType - The MIME type of the file (e.g., 'image/jpeg', 'application/pdf').
+   * @param {string} filePath - The path in Firebase Storage where the file will be saved (e.g., 'images/user_profiles').
+   * @param {string | File} data - The base64 encoded file string or File object to be uploaded.
+   * @param {string?} contentType - Optional MIME type of the file (e.g., 'image/jpeg', 'application/pdf').
    * @return {Promise<string | null>} - A promise that resolves to the download URL of the uploaded file or null if the upload fails.
    */
-  async function upload(folderPath: string, base64: string, contentType: string): Promise<string | null> {
+  async function upload(filePath: string, data: File | string, contentType?: string): Promise<string | null> {
     setIsLoading(true);
     setError(null);
 
     try {
-      const blob = base64ToBlob(base64, contentType);
-      const storageRef = ref(storage, folderPath);
+      const storageRef = ref(storage, filePath);
+      if (typeof data === "string" && contentType) {
+        await uploadBytes(storageRef, base64ToBlob(data, contentType));
+      } else if (data instanceof File) {
+        await uploadBytes(storageRef, data);
+      } else {
+        throw new Error("Invalid file type");
+      }
 
-      await uploadBytes(storageRef, blob);
-
-      const downloadURL = await getFile(folderPath);
+      const downloadURL = await getDownloadURL(storageRef);
       return downloadURL;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
