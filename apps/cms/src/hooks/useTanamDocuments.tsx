@@ -148,8 +148,9 @@ export function useCrudTanamDocument() {
       const docRef = doc(collection(firestore, "tanam-documents"));
       const docId = docRef.id;
 
-      await setDoc(docRef, TanamDocument.new(docId, documentType, {}).toJson());
-      return docId;
+      const document = TanamDocument.new(docId, documentType, {});
+      await setDoc(docRef, document.toJson());
+      return document;
     } catch (err) {
       setError(
         new UserNotification("error", "Error creating document", "An error occurred while creating the document"),
