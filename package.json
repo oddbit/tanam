@@ -10,8 +10,8 @@
     "genkit": "genkit start",
     "lint": "nx affected:lint",
     "lint:fix": "nx affected:lint --fix",
-    "lint:all": " nx run-many --target=lint --all",
-    "lint:all:fix": " nx run-many --target=lint --all --fix"
+    "lint:all": "nx run-many --target=lint --all",
+    "lint:all:fix": "nx run-many --target=lint --all --fix"
   },
   "private": true,
   "dependencies": {
