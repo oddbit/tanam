@@ -1,28 +1,9 @@
-"use server";
-import {definePrompt, generate, renderPrompt} from "@genkit-ai/ai";
-import {configureGenkit} from "@genkit-ai/core";
-import {firebase} from "@genkit-ai/firebase";
-import {defineFlow, runFlow} from "@genkit-ai/flow";
-import googleAI, {gemini15Pro} from "@genkit-ai/googleai";
+import {definePrompt} from "@genkit-ai/ai";
 import {ArticleSchema} from "@tanam/domain-frontend";
-import {z} from "zod";
 import {zodToJsonSchema} from "zod-to-json-schema";
+import {PromptInputSchema} from "./schema";
 
-configureGenkit({
-  plugins: [googleAI(), firebase()],
-});
-
-export async function generateArticle(input: z.infer<typeof PromptInputSchema>) {
-  return runFlow(articleFlow, input);
-}
-
-const PromptInputSchema = z.object({
-  length: z.number().optional().default(3).describe("Length of the article in minutes of reading time"),
-  recordingUrl: z.string().describe("URL to a voice recording"),
-  sampleArticles: z.array(ArticleSchema).default([]).optional().describe("List of sample articles to learn from"),
-});
-
-const articlePrompt = definePrompt(
+export const articlePrompt = definePrompt(
   {
     name: "articlePrompt",
     inputSchema: PromptInputSchema,
@@ -102,39 +83,5 @@ const articlePrompt = definePrompt(
         },
       ],
     };
-  },
-);
-
-const articleFlow = defineFlow(
-  {
-    name: "articleFlow",
-    inputSchema: PromptInputSchema,
-    outputSchema: ArticleSchema,
-    authPolicy: (auth) => {
-      console.log("Genkit Auth", auth);
-      // if (!auth) {
-      //   throw new Error("Authorization required.");
-      // }
-    },
-  },
-  async (input) => {
-    console.log(input);
-
-    const llmResponse = await generate(
-      renderPrompt({
-        prompt: articlePrompt,
-        input: input,
-        model: gemini15Pro,
-        // context: [] use this to provide other articles as style example
-      }),
-    );
-
-    try {
-      const response = llmResponse.output();
-      return ArticleSchema.parse(response || {});
-    } catch (error) {
-      console.error("Failed to parse genkit output:", error);
-      throw new Error("Invalid AI output format");
-    }
   },
 );

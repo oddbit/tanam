@@ -5,25 +5,28 @@ Wow, you're amazing for even considering to contribute.
 It's a scary road ahead. Take this 🦄 to accompany on your adventure with us.
 
 ## Architecture
-The project is using [NX monorepo](https://nx.dev/) for its architecture. 
+
+The project is using [NX monorepo](https://nx.dev/) for its architecture.
 
 You will find the code structured like this
- - Cloud functions: `./apps/cloud-functions`
- - App Hosting CMS application: `./apps/cms`
- - UI components: `./libs/ui-components`
- - Shared definitions and base classes: `./libs/domain-shared`
- - Backend classes: `./libs/domain-backend`
- - Frontend client classes: `./libs/domain-frontend`
+
+- Cloud functions: `./apps/cloud-functions`
+- App Hosting CMS application: `./apps/cms`
+- UI components: `./libs/ui-components`
+- Shared definitions and base classes: `./libs/domain-shared`
+- Backend classes: `./libs/domain-backend`
+- Frontend client classes: `./libs/domain-frontend`
 
 ## Configuration
 
 All configuration values below are populated and injected in Github actions during
 deployment. During development you will need to configure your environment in the
-`.env` files for `cloud-functions` and `hosting` apps. 
+`.env` files for `cloud-functions` and `hosting` apps.
 
 The files are omitted from the repository.
 
 ### CMS app
+
 Create a `.env` file in the CMS app folder.
 
 ```sh
@@ -50,7 +53,7 @@ touch ./apps/cloud-functions/.env
 
 Set the following environment variables
 
-- `GOOGLE_GENAI_API_KEY` - Your Gemini API key. Generate the API key in [Google AI Studio](https://aistudio.google.com/app/apikey).
+- `GEMINI_API_KEY` - Your Gemini API key. Generate the API key in [Google AI Studio](https://aistudio.google.com/app/apikey).
 
 ## Genkit with Local Emulator Suite
 

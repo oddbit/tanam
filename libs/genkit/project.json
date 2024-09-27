@@ -1,0 +1,11 @@
+{
+  "name": "genkit",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/genkit/src",
+  "projectType": "library",
+  "tags": [
+    "lib:frontend"
+  ],
+  "// targets": "to see all targets run: nx show project genkit --web",
+  "targets": {}
+}

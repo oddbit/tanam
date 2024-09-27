@@ -3,20 +3,14 @@ import {collection, doc, getDocs, limit, orderBy, query, setDoc, where} from "fi
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {useEffect, useState} from "react";
 import {firestore, storage} from "../plugins/firebase";
-import {generateArticle} from "../plugins/genkit/article";
+import {generateArticle} from "@tanam/genkit";
 
-// NOTE: (Dennis) For some reason, the enum values are warning for not being used
 export enum ProcessingState {
-  // eslint-disable-next-line no-unused-vars
-  Uploading,
-  // eslint-disable-next-line no-unused-vars
-  Processing,
-  // eslint-disable-next-line no-unused-vars
-  Generating,
-  // eslint-disable-next-line no-unused-vars
-  Finalizing,
-  // eslint-disable-next-line no-unused-vars
-  Ready,
+  Uploading = "Uploading",
+  Processing = "Processing",
+  Generating = "Generating",
+  Finalizing = "Finalizing",
+  Ready = "Ready",
 }
 
 export function useGenkitArticle() {
