@@ -14,6 +14,9 @@
     "lint:all:fix": "nx run-many --target=lint --all --fix"
   },
   "private": true,
+  "engines": {
+    "node": "20"
+  },
   "dependencies": {
     "@egoist/tailwindcss-icons": "^1.8.1",
     "@genkit-ai/ai": "^0.5.13",
