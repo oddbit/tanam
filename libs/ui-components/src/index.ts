@@ -11,6 +11,7 @@ export * from "./Table";
 export * from "./Tiptap/TiptapEditor";
 
 // Other Components
+export * from "./Badge";
 export * from "./Button";
 export * from "./CropImage";
 export * from "./FilePicker";
