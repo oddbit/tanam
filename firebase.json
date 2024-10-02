@@ -6,6 +6,7 @@
   "functions": [
     {
       "source": "apps/cloud-functions",
+      "runtime": "nodejs20",
       "codebase": "tanam",
       "ignore": [
         "node_modules",
