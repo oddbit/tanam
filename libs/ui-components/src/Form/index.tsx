@@ -4,6 +4,7 @@ export {Dropdown} from "./Dropdown";
 export {FileUpload} from "./FileUpload";
 export {FormGroup} from "./FormGroup";
 export {Input} from "./Input";
+export {MultipleText} from "./MultipleText";
 export {RadioButton} from "./RadioButton";
 export {Select} from "./Select";
 export {Switcher} from "./Switcher";
