@@ -12,9 +12,9 @@ export const articleFlow = defineFlow(
     outputSchema: ArticleSchema,
     authPolicy: (auth) => {
       console.log("[articleFlow:authPolicy]", auth);
-      if (!auth) {
-        throw new Error("Authorization required.");
-      }
+      // if (!auth) {
+      //   throw new Error("Authorization required.");
+      // }
     },
   },
   async (input) => {
