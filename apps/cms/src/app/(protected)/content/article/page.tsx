@@ -6,23 +6,33 @@ import {Suspense, useEffect, useState} from "react";
 import {Dropzone} from "../../../../components/Form/Dropzone";
 import VoiceRecorder from "../../../../components/VoiceRecorder";
 import {useAuthentication} from "../../../../hooks/useAuthentication";
-import {ProcessingState, useGenkitArticle} from "../../../../hooks/useGenkitArticle";
+import {useFirebaseStorage} from "../../../../hooks/useFirebaseStorage";
 import {useCrudTanamDocument, useTanamDocuments} from "../../../../hooks/useTanamDocuments";
 import {useTanamDocumentType} from "../../../../hooks/useTanamDocumentTypes";
 import {base64ToFile} from "../../../../plugins/fileUpload";
+import {generateArticle} from "../../../../plugins/genkit";
+
+enum ProcessingState {
+  Uploading = "Uploading",
+  Processing = "Processing",
+  Generating = "Generating",
+  Finalizing = "Finalizing",
+  Ready = "Ready",
+}
 
 export default function DocumentTypeDocumentsPage() {
   const router = useRouter();
-  const {authUser} = useAuthentication();
   const {data: documentType} = useTanamDocumentType("article");
-  const {create, error: crudError} = useCrudTanamDocument();
+  const {create, update, error: crudError} = useCrudTanamDocument();
   const {data: documents, error: docsError, isLoading} = useTanamDocuments("article");
   const [notification, setNotification] = useState<UserNotification | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDropdownCreateOpen, setIsDropdownCreateOpen] = useState(false);
   const [audio, setAudio] = useState<string>("");
-  const {createFromRecording, status} = useGenkitArticle();
+  const [status, setStatus] = useState<ProcessingState>(ProcessingState.Ready);
+  const {upload} = useFirebaseStorage();
+  const {authUser} = useAuthentication();
 
   useEffect(() => {
     setNotification(docsError || crudError);
@@ -34,25 +44,104 @@ export default function DocumentTypeDocumentsPage() {
     setIsRecording(false);
   }
 
+  /**
+   * Adds a new article to the database and navigates to the new article page.
+   *
+   * @return {Promise<void>}
+   */
   async function addNewArticle() {
     if (!documentType) return;
-    const id = await create(documentType.id);
-    if (!id) return;
-    router.push(`article/${id}`);
+    const document = await create(documentType.id);
+    if (!document) {
+      setNotification(
+        new UserNotification(
+          "error",
+          "Problem creating article",
+          "Something went wrong while generating article. Try again.",
+        ),
+      );
+      return;
+    }
+
+    router.push(`article/${document.id}`);
   }
 
+  /**
+   * Submits the audio input to the server for processing.
+   *
+   * @return {Promise<void>}
+   */
   async function submitAudio() {
-    if (!audio) return;
+    if (!audio) {
+      setNotification(
+        new UserNotification(
+          "error",
+          "Problem generating audio file",
+          "Something went wrong while recording audio. Try again.",
+        ),
+      );
+      return;
+    }
 
-    const file = base64ToFile(audio, `audio-${authUser?.uid}`);
+    const file = base64ToFile(audio, `${crypto.randomUUID()}.wav`);
     await handleFileSelect(file);
   }
 
+  /**
+   * Handles the file select event by uploading the file to storage and creating
+   * a new article with LLM.
+   *
+   * @param {File} file - The file to be processed
+   * @return {Promise<void>}
+   */
   async function handleFileSelect(file: File) {
-    console.log(file);
-    const articleId = await createFromRecording(file);
-    setIsDialogOpen(false);
-    if (articleId) router.push(`article/${articleId}`);
+    if (!documentType) return;
+    setStatus(ProcessingState.Processing);
+    try {
+      // Create a new empty article to write the article to
+      const document = await create(documentType.id);
+      if (!document) {
+        throw new Error("Failed to create article");
+      }
+
+      // Make a random file name for the audio file so that it is possible
+      // to upload multiple files without overwriting each other
+      const fileExt = file.name.substring(file.name.lastIndexOf("."));
+      const fileName = crypto.randomUUID();
+      const filePath = `tanam-documents/${document.id}/GenAI/${fileName}${fileExt}`;
+      setStatus(ProcessingState.Uploading);
+
+      // Upload the file to storage and get a download URL for the LLM to use
+      const downloadUrl = await upload(filePath, file);
+      if (!downloadUrl) {
+        throw new Error("Failed to upload file to storage");
+      }
+      setStatus(ProcessingState.Generating);
+
+      // Generate the article with LLM
+      if (!authUser) {
+        throw new Error("User not authenticated");
+      }
+      document.data = await generateArticle(downloadUrl, 3);
+
+      setStatus(ProcessingState.Processing);
+      await update(document);
+
+      // Open the new article page
+      router.push(`article/${document.id}`);
+    } catch (error) {
+      console.error(error);
+      setNotification(
+        new UserNotification(
+          "error",
+          "Problem creating article",
+          "Something went wrong while generating article. Try again.",
+        ),
+      );
+    } finally {
+      setStatus(ProcessingState.Ready);
+      setIsDialogOpen(false);
+    }
   }
 
   /**
@@ -169,8 +258,8 @@ export default function DocumentTypeDocumentsPage() {
                 ) : (
                   <div className="flex flex-col items-center justify-center h-64 space-y-2">
                     <Loader />
-                    {status === ProcessingState.Uploading && <p>Uploading file...</p>}
                     {status === ProcessingState.Processing && <p>Preparing...</p>}
+                    {status === ProcessingState.Uploading && <p>Uploading file...</p>}
                     {status === ProcessingState.Generating && <p>Generating with AI...</p>}
                     {status === ProcessingState.Finalizing && <p>Finalizing...</p>}
                   </div>
