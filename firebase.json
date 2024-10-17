@@ -3,9 +3,15 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
+  "remoteconfig": {
+    "template": "remoteconfig.template.json"
+  },
+  "dataconnect": {
+    "source": "libs/dataconnect/src"
+  },
   "functions": [
     {
-      "source": "apps/cloud-functions",
+      "source": "dist/apps/cloud-functions",
       "runtime": "nodejs20",
       "codebase": "tanam",
       "ignore": [
@@ -61,8 +67,5 @@
       "enabled": true
     },
     "singleProjectMode": true
-  },
-  "remoteconfig": {
-    "template": "remoteconfig.template.json"
   }
 }

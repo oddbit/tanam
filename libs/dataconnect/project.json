@@ -1,0 +1,30 @@
+{
+  "name": "dataconnect",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/dataconnect/src",
+  "projectType": "library",
+  "tags": [
+    "lib:backend",
+    "lib:frontend"
+  ],
+  "targets": {
+    "build": {
+      "executor": "nx:noop"
+    },
+    "e2e": {
+      "executor": "nx:noop"
+    },
+    "test": {
+      "executor": "nx:noop"
+    },
+    "lint": {
+      "executor": "nx:noop"
+    },
+    "codegen": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "firebase dataconnect:sdk:generate"
+      }
+    }
+  }
+}

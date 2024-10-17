@@ -45,6 +45,11 @@
     }
   ],
   "targetDefaults": {
+    "lint": {
+      "dependsOn": [
+        "codegen"
+      ]
+    },
     "build": {
       "dependsOn": ["lint", "^lint", "^build"]
     },
