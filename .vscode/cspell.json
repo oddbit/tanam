@@ -5,6 +5,8 @@
     "apphosting",
     "Buildable",
     "clsx",
+    "codegen",
+    "dataconnect",
     "datepicker",
     "firebaseui",
     "firestore",

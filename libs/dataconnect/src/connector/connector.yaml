@@ -1,0 +1,6 @@
+connectorId: default
+generate:
+  javascriptSdk:
+    outputDir: ../../lib/js
+    package: "@tanam/dataconnect"
+    packageJsonDir: ../../../..

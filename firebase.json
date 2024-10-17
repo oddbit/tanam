@@ -3,6 +3,9 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
+  "dataconnect": {
+    "source": "libs/dataconnect/src"
+  },
   "functions": [
     {
       "source": "dist/apps/cloud-functions",

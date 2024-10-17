@@ -28,6 +28,7 @@
     "@iconify-json/ic": "^1.2.0",
     "@iconify-json/line-md": "^1.2.0",
     "@iconify-json/ri": "^1.2.0",
+    "@tanam/dataconnect": "file:libs/dataconnect/lib/js",
     "@tiptap/extension-code-block-lowlight": "^2.6.6",
     "@tiptap/extension-floating-menu": "^2.6.6",
     "@tiptap/extension-underline": "^2.6.6",
