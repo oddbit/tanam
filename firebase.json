@@ -5,7 +5,7 @@
   },
   "functions": [
     {
-      "source": "apps/cloud-functions",
+      "source": "dist/apps/cloud-functions",
       "runtime": "nodejs20",
       "codebase": "tanam",
       "ignore": [
