@@ -3,6 +3,9 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
+  "remoteconfig": {
+    "template": "remoteconfig.template.json"
+  },
   "dataconnect": {
     "source": "libs/dataconnect/src"
   },
@@ -64,8 +67,5 @@
       "enabled": true
     },
     "singleProjectMode": true
-  },
-  "remoteconfig": {
-    "template": "remoteconfig.template.json"
   }
 }
