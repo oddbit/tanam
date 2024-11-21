@@ -1,6 +1,8 @@
 import {TanamRole, TanamUser} from "@tanam/domain-backend";
 import axios from "axios";
-import * as admin from "firebase-admin";
+import {getAuth} from "firebase-admin/auth";
+import {getFirestore} from "firebase-admin/firestore";
+import {getStorage} from "firebase-admin/storage";
 import {logger} from "firebase-functions/v2";
 import {onDocumentCreated, onDocumentDeleted, onDocumentUpdated} from "firebase-functions/v2/firestore";
 import {onObjectFinalized} from "firebase-functions/v2/storage";
@@ -11,18 +13,18 @@ import sharp from "sharp";
 // and assert that all the document fields are populated.
 export const tanamNewUserInit = onDocumentCreated("tanam-users/{docId}", async (event) => {
   const uid = event.params.docId;
-  const docRef = db.collection("tanam-users").doc(uid);
+  const docRef = getFirestore().collection("tanam-users").doc(uid);
 
   logger.info(`Validating User ID: ${uid}`);
   try {
-    await auth.getUser(uid);
+    await getAuth().getUser(uid);
   } catch (error) {
     console.log("Document ID does not match any Firebase Auth UID, deleting document");
     return docRef.delete();
   }
 
-  const firebaseUser = await auth.getUser(uid);
-  const existingDocs = await db.collection("tanam-users").get();
+  const firebaseUser = await getAuth().getUser(uid);
+  const existingDocs = await getFirestore().collection("tanam-users").get();
   const tanamUser = new TanamUser(
     uid,
     undefined,
@@ -32,7 +34,7 @@ export const tanamNewUserInit = onDocumentCreated("tanam-users/{docId}", async (
   );
   logger.info("Creating User", tanamUser.toJson());
 
-  const customClaimsBefore = (await auth.getUser(uid)).customClaims || {};
+  const customClaimsBefore = (await getAuth().getUser(uid)).customClaims || {};
   const customClaimsAfter = {...customClaimsBefore, tanamRole: tanamUser.role};
 
   logger.info(`Setting custom claims for ${uid}`, {
@@ -40,7 +42,7 @@ export const tanamNewUserInit = onDocumentCreated("tanam-users/{docId}", async (
     customClaimsAfter,
   });
 
-  return Promise.all([auth.setCustomUserClaims(uid, customClaimsAfter), docRef.set(tanamUser.toJson())]);
+  return Promise.all([getAuth().setCustomUserClaims(uid, customClaimsAfter), docRef.set(tanamUser.toJson())]);
 });
 
 // Function to enforce role management on document update
@@ -65,7 +67,7 @@ export const onTanamUserRoleChange = onDocumentUpdated("tanam-users/{docId}", as
   }
 
   logger.info(`Role change detected for ${uid}.`, {before: beforeData.role, after: afterData.role});
-  return auth.setCustomUserClaims(uid, {tanamRole: afterData.role});
+  return getAuth().setCustomUserClaims(uid, {tanamRole: afterData.role});
 });
 
 // Function to remove role on document deletion
@@ -73,14 +75,14 @@ export const onTanamUserDeleted = onDocumentDeleted("tanam-users/{docId}", async
   const uid = event.params.docId;
 
   console.log(`Document deleted: ${uid}, removing custom claims`);
-  const customClaims = (await auth.getUser(uid)).customClaims || {};
+  const customClaims = (await getAuth().getUser(uid)).customClaims || {};
   customClaims.tanamRole = undefined;
 
   logger.info(`Tanam user deleted, removing custom claims for ${uid}`, {
     customClaims,
   });
 
-  await auth.setCustomUserClaims(uid, customClaims);
+  await getAuth().setCustomUserClaims(uid, customClaims);
 });
 
 // Function to download and store user profile image
@@ -88,7 +90,7 @@ export const onTanamUserDeleted = onDocumentDeleted("tanam-users/{docId}", async
 // and store it in Cloud Storage when a new user is created.
 export const tanamNewUserGetImage = onDocumentCreated("tanam-users/{docId}", async (event) => {
   const uid = event.params.docId;
-  const firebaseUser = await auth.getUser(uid);
+  const firebaseUser = await getAuth().getUser(uid);
 
   const imageUrl = firebaseUser.photoURL;
   if (!imageUrl) {
@@ -103,7 +105,7 @@ export const tanamNewUserGetImage = onDocumentCreated("tanam-users/{docId}", asy
 
     // Define the file path in Cloud Storage
     const filePath = `tanam-users/${uid}/new-profile-image`;
-    const file = storage.bucket().file(filePath);
+    const file = getStorage().bucket().file(filePath);
 
     // Upload the image to Cloud Storage
     await file.save(buffer, {
@@ -125,7 +127,7 @@ export const tanamNewUserGetImage = onDocumentCreated("tanam-users/{docId}", asy
 export const processUserProfileImage = onObjectFinalized(async (event) => {
   const filePath = event.data.name;
   const contentType = event.data.contentType;
-  const bucket = storage.bucket(event.bucket);
+  const bucket = getStorage().bucket(event.bucket);
   const promises = [];
   if (!filePath || !contentType) {
     logger.error("File path or content type is missing", {filePath, contentType});
