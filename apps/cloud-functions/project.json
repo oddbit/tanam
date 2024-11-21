@@ -20,7 +20,7 @@
           "cjs"
         ],
         "bundle": false,
-        "main": "apps/cloud-functions/src/main.ts",
+        "main": "apps/cloud-functions/src/index.ts",
         "tsConfig": "apps/cloud-functions/tsconfig.app.json",
         "assets": [
           "apps/cloud-functions/src/assets"
