@@ -6,9 +6,6 @@ import {logger} from "firebase-functions/v2";
 import {onDocumentWritten} from "firebase-functions/v2/firestore";
 import {onTaskDispatched} from "firebase-functions/v2/tasks";
 
-const db = admin.firestore();
-const storage = getStorage().bucket();
-
 // Document publish change handler
 // This function is handling updates when a document is published or unpublished.
 // It will ignore updates that does not change the publish status of the document.

@@ -6,10 +6,6 @@ import {onDocumentCreated, onDocumentDeleted, onDocumentUpdated} from "firebase-
 import {onObjectFinalized} from "firebase-functions/v2/storage";
 import sharp from "sharp";
 
-const auth = admin.auth();
-const db = admin.firestore();
-const storage = admin.storage();
-
 // Function to validate and assign role on document creation
 // This function will scaffold and create a new user document with a role field
 // and assert that all the document fields are populated.
