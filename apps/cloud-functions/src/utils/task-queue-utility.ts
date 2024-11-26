@@ -4,7 +4,6 @@
 // import {TanamConfig} from "../config";
 
 // // Allow `any` in this type since that's the type defined in Firebase Task Queue
-// // eslint-disable-next-line @typescript-eslint/no-explicit-any
 // type TaskQueuePayload = Record<string, any>;
 
 // /**

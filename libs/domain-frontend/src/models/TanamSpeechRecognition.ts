@@ -16,9 +16,6 @@ declare global {
     /**
      * A reference to the custom `SpeechRecognition` implementation or standard implementation.
      * This can be used to access speech recognition features in browsers that support it.
-     *
-     * @type {typeof TanamSpeechRecognition}
-     * @example
      * // Example usage
      * const recognition = new window.SpeechRecognition();
      * recognition.start();
@@ -28,9 +25,7 @@ declare global {
     /**
      * A reference to the Webkit-specific `SpeechRecognition` implementation.
      * This is particularly relevant for browsers that use the `webkit` prefix.
-     *
-     * @type {typeof TanamSpeechRecognition}
-     * @example
+
      * // Example usage
      * const recognition = new window.webkitSpeechRecognition();
      * recognition.start();

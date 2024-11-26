@@ -90,11 +90,6 @@ export default function Settings() {
     await fetchProfilePicture();
   }, [fetchProfilePicture]);
 
-  /**
-   * Modal actions for saving or canceling profile picture changes.
-   * @constant
-   * @type {JSX.Element}
-   */
   const modalActionCropImage = (
     <div className="flex flex-col sm:flex-row justify-end gap-3">
       {/* Start button to close the crop image modal */}

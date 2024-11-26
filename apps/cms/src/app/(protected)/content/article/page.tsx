@@ -144,11 +144,6 @@ export default function DocumentTypeDocumentsPage() {
     }
   }
 
-  /**
-   * Modal actions for saving or canceling audio input.
-   * @constant
-   * @type {JSX.Element}
-   */
   const modalActionAudioInput = (
     <div className="flex flex-col sm:flex-row justify-end gap-3">
       {/* Start button to close the audio input modal */}

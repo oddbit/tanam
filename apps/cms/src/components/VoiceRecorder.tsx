@@ -29,7 +29,6 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
   const recognitionRef = useRef<TanamSpeechRecognition | undefined>();
   const streamRef = useRef<MediaStream | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const peaksInstanceRef = useRef<any>(null);
 
   /**
@@ -150,7 +149,6 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
       axisGridlineColor: "#ccc",
       axisLabelColor: "#aaa",
       randomizeSegmentColor: true,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any;
 
     peaksInstanceRef.current = Peaks.init(options, (err) => {
@@ -212,10 +210,8 @@ export default function VoiceRecorder(props: VoiceRecorderProps): JSX.Element {
       if (!recognition) return;
 
       // Handle the event when speech recognition returns results
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       recognition.onresult = (event: any) => {
         const transcript = Array.from(event.results)
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .map((result: any) => result[0])
           .map((result) => result.transcript)
           .join("");

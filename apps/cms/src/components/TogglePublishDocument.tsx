@@ -67,11 +67,6 @@ export function TogglePublishDocument() {
     }
   }
 
-  /**
-   * Modal actions for saving or canceling schedule publish.
-   * @constant
-   * @type {JSX.Element}
-   */
   const modalActionSchedulePublish = (
     <div className="flex flex-col sm:flex-row justify-end gap-3">
       {/* Start button to close the schedule publish modal */}
