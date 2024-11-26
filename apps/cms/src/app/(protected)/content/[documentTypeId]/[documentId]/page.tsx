@@ -42,7 +42,6 @@ const DocumentDetailsPage = () => {
     }
   }, [document, documentTypeId, router]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderFormElement = (field: TanamDocumentField, value: any) => {
     const formgroupKey = `formgroup-${field.id}`;
     const inputKey = `input-${field.id}`;
