@@ -30,6 +30,8 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
 
       - run: npm run lint:all:fix
+        env:
+          NX_CLOUD_DISTRIBUTED_EXECUTION: false
 
       - name: Check for Lint Fixes
         run: |
