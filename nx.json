@@ -45,6 +45,9 @@
     }
   ],
   "targetDefaults": {
+    "codegen": {
+      "cache": true
+    },
     "lint": {
       "cache": true,
       "dependsOn": [
