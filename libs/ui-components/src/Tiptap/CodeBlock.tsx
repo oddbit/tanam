@@ -5,7 +5,7 @@ import "./styles/code-block.scss";
 interface CodeBlockProps {
   node: {
     attrs: {
-      language: string;
+      language?: string;
     };
   };
   updateAttributes: (attrs: {language: string}) => void;
