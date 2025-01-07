@@ -44,7 +44,7 @@ export default function DocumentDetailsPage() {
     if (document) {
       setTitle(document.data.title as string);
       setDescription(document.data.blurb as string);
-      setTags(document.data.tags as string[]);
+      setTags((document.data.tags ?? []) as string[]);
     }
 
     return () => {
@@ -55,7 +55,7 @@ export default function DocumentDetailsPage() {
   function pruneState() {
     setTitle("");
     setDescription("");
-    setTags((document?.data.tags as string[]) ?? []);
+    setTags((document?.data.tags ?? []) as string[]);
   }
 
   async function fetchDocumentUpdate(title: string, blurb: string, tags: string[]) {

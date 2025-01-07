@@ -1,13 +1,10 @@
 import {TanamDocument} from "@tanam/domain-backend";
-import * as admin from "firebase-admin";
+import {getFirestore} from "firebase-admin/firestore";
 import {getFunctions} from "firebase-admin/functions";
 import {getStorage} from "firebase-admin/storage";
 import {logger} from "firebase-functions/v2";
 import {onDocumentWritten} from "firebase-functions/v2/firestore";
 import {onTaskDispatched} from "firebase-functions/v2/tasks";
-
-const db = admin.firestore();
-const storage = getStorage().bucket();
 
 // Document publish change handler
 // This function is handling updates when a document is published or unpublished.
@@ -73,8 +70,8 @@ export const taskPublishDocument = onTaskDispatched(
   },
   async (req) => {
     const documentId = req.data.documentId;
-    const documentRef = db.collection("tanam-documents").doc(documentId);
-    const publicDocumentRef = db.collection("tanam-public").doc(documentId);
+    const documentRef = getFirestore().collection("tanam-documents").doc(documentId);
+    const publicDocumentRef = getFirestore().collection("tanam-public").doc(documentId);
     const snap = await documentRef.get();
 
     if (!snap.exists) {
@@ -96,10 +93,12 @@ export const taskPublishDocument = onTaskDispatched(
     promises.push(publicDocumentRef.set(document.data));
 
     // Copy associated files to public directory
-    const [files] = await storage.getFiles({prefix: `tanam-documents/${documentId}/`});
+    const [files] = await getStorage()
+      .bucket()
+      .getFiles({prefix: `tanam-documents/${documentId}/`});
     for (const file of files) {
       const publishedFileName = file.name.replace("tanam-documents/", "tanam-public/");
-      promises.push(storage.file(file.name).copy(storage.file(publishedFileName)));
+      promises.push(getStorage().bucket().file(file.name).copy(getStorage().bucket().file(publishedFileName)));
     }
 
     await Promise.all(promises);
@@ -122,8 +121,8 @@ export const taskUnpublishDocument = onTaskDispatched(
   },
   async (req) => {
     const documentId = req.data.documentId;
-    const publicDocumentRef = db.collection("tanam-public").doc(documentId);
-    const documentRef = db.collection("tanam-documents").doc(documentId);
+    const publicDocumentRef = getFirestore().collection("tanam-public").doc(documentId);
+    const documentRef = getFirestore().collection("tanam-documents").doc(documentId);
     const snap = await documentRef.get();
 
     const document = TanamDocument.fromFirestore(snap);
@@ -138,9 +137,11 @@ export const taskUnpublishDocument = onTaskDispatched(
     const promises = [publicDocumentRef.delete()];
 
     // Delete associated files from public directory
-    const [files] = await storage.getFiles({prefix: `tanam-public/${documentId}/`});
+    const [files] = await getStorage()
+      .bucket()
+      .getFiles({prefix: `tanam-public/${documentId}/`});
     for (const file of files) {
-      promises.push(storage.file(file.name).delete().then());
+      promises.push(getStorage().bucket().file(file.name).delete().then());
     }
 
     await Promise.all(promises);

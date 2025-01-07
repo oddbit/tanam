@@ -45,12 +45,17 @@
     }
   ],
   "targetDefaults": {
+    "codegen": {
+      "cache": true
+    },
     "lint": {
+      "cache": true,
       "dependsOn": [
         "codegen"
       ]
     },
     "build": {
+      "cache": true,
       "dependsOn": ["lint", "^lint", "^build"]
     },
     "e2e-ci--**/*": {
